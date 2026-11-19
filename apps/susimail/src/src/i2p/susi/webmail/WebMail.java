@@ -826,21 +826,21 @@ public class WebMail extends HttpServlet {
 
             if (html) {
                 if (!showBlockedImages) {
+                    // each tally is in its own span, so a message with only tracking
+                    // images, or only blocked ones, reports the one it has
                     buf.append("<tr id=blockedImages hidden><td colspan=2><p class=info><span id=webBugs hidden>")
                        .append(_t("Tracking images removed from message: {0}", "<span id=webBugCount></span>")).append("<br></span>")
-                       .append(_t("Blocked images not displayed: {0}", "<span id=blockedImgCount></span>")).append("</p></td></tr>\n");
+                       .append("<span id=blockedImgLine hidden>")
+                       .append(_t("Blocked images not displayed: {0}", "<span id=blockedImgCount></span>")).append("</span>")
+                       .append("</p></td></tr>\n");
                 }
                 buf.append("<tr class=\"mailbody htmlView\"><td colspan=2>");
             }
 
             if (html && allowHtml != HtmlMode.NONE && showBody && "text/html".equals(mailPart.type)) {
                 boolean enableDarkMode = Boolean.parseBoolean(Config.getProperty(CONFIG_HTML_ENABLE_DARKMODE, "true"));
-                buf.append("<iframe src=\"").append(myself).append('?').append(RAW_ATTACHMENT).append('=').append(mailPart.getID())
-                   .append("&amp;").append(B64UIDL).append('=').append(Base64.encode(mailPart.uidl))
-                   .append("\" name=\"mailhtmlframe").append(mailPart.getID()).append("\" id=iframeSusiHtmlView ")
-                   .append("width=100% height=100% scrolling=auto frameborder=0 border=0 allowtransparency=true data-theme=\"")
-                   .append(theme).append("\" class=\"").append((enableDarkMode ? "darkModeActive" : ""))
-                   .append((showBlockedImages ? " showBlockedImages" : "")).append("\"></iframe>\n").append("</td></tr>\n")
+                buf.append(mailFrame(myself, mailPart, theme, enableDarkMode, showBlockedImages))
+                   .append("</td></tr>\n")
                    .append("<tr class=mailbody><td colspan=2>");
             } else if (showBody) {
                 String mdName = mailPart.filename;
@@ -2364,6 +2364,65 @@ public class WebMail extends HttpServlet {
     }
 
     /**
+     * The frame an HTML message body is shown in.
+     *
+     * The sandbox attribute is the load-bearing part. The frame's document is the
+     * message's own markup, served from this origin, so without a sandbox anything
+     * the sender wrote runs as part of the mail session - it can read the form
+     * nonce off the page and every other message that is loaded. Script is taken
+     * away by the sandbox here, and forbidden by the response's
+     * Content-Security-Policy in {@link #attachmentCsp}, so the two do not have to
+     * agree for the message to stay inert. allow-same-origin is what lets this page
+     * read the frame's contentDocument to do the styling, blocking and sizing the
+     * message is no longer trusted to do itself.
+     *
+     * @param myself the URL of this servlet, the base of the frame's src
+     * @param part the HTML part to show, non-null
+     * @param theme the console theme name, written out for the frame's own CSS
+     * @param darkMode whether the dark-mode stylesheet applies inside the frame
+     * @param showBlocked whether blocked remote images are displayed instead of hidden
+     * @return the iframe element, never null
+     * @since 0.9.72+
+     */
+    static String mailFrame(String myself, MailPart part, String theme,
+                            boolean darkMode, boolean showBlocked) {
+        StringBuilder buf = new StringBuilder(512);
+        buf.append("<iframe src=\"").append(myself).append('?').append(RAW_ATTACHMENT).append('=').append(part.getID())
+           .append("&amp;").append(B64UIDL).append('=').append(Base64.encode(part.uidl))
+           .append("\" name=\"mailhtmlframe").append(part.getID()).append("\" id=iframeSusiHtmlView ")
+           .append("sandbox=\"allow-same-origin\" ")
+           .append("width=100% height=100% scrolling=auto frameborder=0 border=0 allowtransparency=true data-theme=\"")
+           .append(theme).append("\" class=\"").append(darkMode ? "darkModeActive" : "")
+           .append(showBlocked ? " showBlockedImages" : "").append("\"></iframe>\n");
+        return buf.toString();
+    }
+
+    /**
+     * The Content-Security-Policy for the response that carries a message's own
+     * HTML, its cid: parts and a draft attachment.
+     *
+     * This is the one response in the webmail whose body is written by somebody
+     * else, so it allows no script at all: default-src 'none' covers script-src
+     * once the allowlist of our own helper scripts is gone, and there is no nonce
+     * for a message's inline script to borrow. The frame carrying the response is
+     * sandboxed to match, in {@link #mailFrame}; the sandbox and the header are two
+     * independent ways of reaching the same result, and the header also says what
+     * the frame is allowed to be, which only the response can say.
+     *
+     * @param me the host and port of this servlet as the request named it
+     * @param myself the URL of this servlet
+     * @return the header value, never null
+     * @since 0.9.72+
+     */
+    static String attachmentCsp(String me, String myself) {
+        return "default-src 'none'; style-src 'self' 'unsafe-inline'; " +
+               "sandbox allow-same-origin; base-uri 'none'; " +
+               "form-action 'none'; frame-ancestors " + me + myself + "; object-src 'none'; " +
+               "media-src 'none'; img-src 'self' " + me + myself + " data:; font-src 'self'; " +
+               "frame-src 'none'; worker-src 'none'";
+    }
+
+    /**
      * The entry point for all web page loads.
      *
      * @param httpRequest the incoming request, read for parameters, headers,
@@ -2415,11 +2474,7 @@ public class WebMail extends HttpServlet {
             httpRequest.getParameter(DRAFT_ATTACHMENT) != null) {
             // img-src allows for cid: urls that were fixed up by RegexOutputStream
             // character encoding will be set in sendAttachment()
-            response.setHeader("Content-Security-Policy", "default-src 'none'; style-src 'self' 'unsafe-inline'; " + "script-src " +
-                               me + "/js/iframeResizer/iframeResizer.contentWindow.js " +
-                               me + "/susimail/js/htmlView.js " + me + "/susimail/js/sanitizeHTML.js 'nonce-" + cspNonce + "'; " +
-                               "form-action 'none'; frame-ancestors " + me + myself + "; object-src 'none'; media-src 'none'; img-src 'self' " +
-                               me + myself + " data:; font-src 'self'; frame-src 'none'; worker-src 'none'");
+            response.setHeader("Content-Security-Policy", attachmentCsp(me, myself));
         } else {
             response.setHeader("Content-Security-Policy", "default-src 'self' " + host + "; base-uri 'self' " + host +
                                "; style-src 'self' 'unsafe-inline'; script-src 'self' 'nonce-" + cspNonce + "'; " +
@@ -2767,12 +2822,10 @@ public class WebMail extends HttpServlet {
             } else if (state == State.LOADING) {
                 buf.append("<noscript><meta http-equiv=refresh content=\"5;url=").append(myself).append("\"></noscript>\n");
             } else if (state == State.SHOW) {
-                buf.append("<script src=\"/js/iframeResizer/iframeResizer.js\"></script>\n")
-                   .append("<script nonce='").append(cspNonce).append("'>\n")
-                   .append("  document.addEventListener('DOMContentLoaded', function(event) {\n")
-                   .append("    iFrameResize({heightCalculationMethod: 'taggedElement'}, '#iframeSusiHtmlView');\n")
-                   .append("  });\n")
-                   .append("</script>\n");
+                // the message frame is sandboxed and runs no script of its own, so the
+                // page does its styling, blocking, counting and sizing from outside
+                buf.append("<script src=\"/susimail/js/mailFrame.js?").append(CoreVersion.VERSION)
+                   .append("\" type=module></script>\n");
             }
 
             // setup noscript style so we can hide js buttons when js is disabled
@@ -3089,15 +3142,13 @@ public class WebMail extends HttpServlet {
                     if ("text/html".equals(part.type)) {
                         I2PAppContext ctx = I2PAppContext.getGlobalContext();
                         String theme = ctx.getProperty(RC_PROP_THEME, DEFAULT_THEME);
-                        // inject the js into iframe
-                        String contentWindowJs =
-                            "\n<span id=endOfPage data-iframe-height></span>\n" +
-                            "<script src=/susimail/js/sanitizeHTML.js></script>\n" +
-                            "<script src=/js/iframeResizer/iframeResizer.contentWindow.js></script>\n";
+                        // mark where the message ends, so the page holding the frame can
+                        // size it; no script is injected, the frame runs none
+                        String frameEnd = "\n<span id=endOfPage data-iframe-height></span>\n";
                         // inject dark mode theme into iframe if dark/midnight theme active
                         boolean enableDarkMode = Boolean.parseBoolean(Config.getProperty(CONFIG_HTML_ENABLE_DARKMODE, "true"));
                         if ((theme.contains("dark") || theme.contains("night")) && enableDarkMode) {
-                            contentWindowJs += "<link rel=stylesheet href=/themes/susimail/darkModeHTML.css>";
+                            frameEnd += "<link rel=stylesheet href=/themes/susimail/darkModeHTML.css>";
                         }
                         String webBug = "<span class=webBug title=\"" + _t("Removed tracking image placeholder") + "\" hidden></span>";
                         out = new RegexOutputStream(out, "src=\"http", "data-src-blocked=\"http", ""); // defang remote images
@@ -3116,7 +3167,7 @@ public class WebMail extends HttpServlet {
                         out = new RegexOutputStream(out, "<img*width:1px\"*>", webBug, ""); // remove tracking images
                         out = new RegexOutputStream(out, "<img*width=\"1\"*>", webBug, ""); // remove tracking images
                         out = new RegexOutputStream(out, "<img*width=1*>", webBug, ""); // remove tracking images
-                        out = new RegexOutputStream(out, "</body>", contentWindowJs + "</body>", contentWindowJs);
+                        out = new RegexOutputStream(out, "</body>", frameEnd + "</body>", frameEnd);
                         // convert cid: urls to /susimail/?cid= urls
                         out = new RegexOutputStream(out, " src=\"cid:", " src=\"/susimail/?msg=" + Base64.encode(part.uidl) + "&amp;cid=", null);
                         // don't set content length, as it may change due to replacements
