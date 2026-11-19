@@ -483,6 +483,29 @@ class OutboundEstablishState {
     public long getIntroSentTime() { return _introSentTime; }
 
     /**
+     * Note that the introduction is still being set up - a RouterInfo lookup we
+     * have sent for an introducer, or a connection to one that has not landed
+     * yet - and schedule the next pass without starting the introduction
+     * deadline or counting another relay request.
+     * <p>
+     * Only a RelayRequest has a deadline to miss. Treating the first lookup as if
+     * it were one gave a lookup with a 10-second timeout a 2.5-second window, so
+     * the attempt at any peer whose introducer RIs we do not already hold ended
+     * before the lookup could answer, and it was retried from scratch.
+     *
+     * @since 0.9.72+
+     */
+    public synchronized void introductionPending() {
+        long now = _context.clock().now();
+        long delay = RETRANSMIT_DELAY;
+        if (_introSentCount > 0)
+            delay = Math.min(delay, _introSentTime + EstablishmentManager.OB_MESSAGE_TIMEOUT - now);
+        _nextSend = now + delay;
+        if (_currentState == OutboundState.OB_STATE_UNKNOWN)
+            _currentState = OutboundState.OB_STATE_PENDING_INTRO;
+    }
+
+    /**
      * Record that the introduction failed.
      */
     public synchronized void introductionFailed() {

@@ -2314,7 +2314,7 @@ public class EstablishmentManager {
      * an {@link OutboundEstablishState2} with at least one valid v2
      * introducer
      */
-    private void handlePendingIntro(OutboundEstablishState state) {
+    void handlePendingIntro(OutboundEstablishState state) {
         long nonce = state.getIntroNonce();
         if (nonce < 0) {
             OutboundEstablishState old;
@@ -2358,7 +2358,6 @@ public class EstablishmentManager {
             }
         }
         // Otherwise, look for ones we already have RIs for, attempt to connect to each.
-        boolean sent = false;
         for (int i = 0; i < count; i++) {
             Hash h = addr.getIntroducerHash(i);
             if (h != null) {
@@ -2381,6 +2380,10 @@ public class EstablishmentManager {
                         if (oes != null) {
                             if (_log.shouldDebug())
                                 _log.debug("[SSU] Awaiting pending connection to Introducer " + oes + " for " + state);
+                            // The connection is in flight, not finished. Left at HAS_RI,
+                            // the rejection below would drop this introducer and the
+                            // pass would expire the whole establishment.
+                            istate = INTRO_STATE_CONNECTING;
                             break;
                         }
                         int version = _transport.getSSUVersion(ra);
@@ -2409,11 +2412,6 @@ public class EstablishmentManager {
                 if (oldState != istate) {state2.setIntroState(h, istate);}
             }
         }
-        if (sent) {
-            // not really
-            state.introSent();
-            return;
-        }
         // Otherwise, look up the RIs first.
         for (int i = 0; i < count; i++) {
             Hash h = addr.getIntroducerHash(i);
@@ -2427,17 +2425,64 @@ public class EstablishmentManager {
                     // No success job: the reply is handled by the next
                     // rescan pass, which re-reads the introducer state and
                     // picks up a RouterInfo that has since arrived. The lookup
-                    // itself is fire-and-forget.
+                    // itself is fire-and-forget, and it does not start the
+                    // introduction deadline - only a relay request has one. The
+                    // lookup keeps the network's own timeout because its result
+                    // is shared: the next attempt at this peer, or another peer
+                    // behind the same introducer, reads the same RouterInfo.
                     _context.netDb().lookupRouterInfo(h, null, null, 10*1000L);
-                    sent = true;
                 }
             }
         }
-        if (sent) {state.introSent();} // not really
+        // Anything still in flight - a lookup just sent, a connection just
+        // started, a relay request awaiting its answer - means the introduction
+        // is progressing, not finished. Expiring here threw away the connection
+        // started a moment ago and marked the peer unreachable for it.
+        if (introductionInFlight(state2, addr))
+            state.introductionPending();
         else {
             if (_log.shouldDebug()) {_log.debug("[SSU] No valid Introducers for " + state);}
             processExpired(state);
         }
+    }
+
+    /**
+     * Is an introduction to this peer still being set up, in the sense that some
+     * introducer is in a state a later pass acts on - a RouterInfo lookup we have
+     * sent, a RouterInfo we hold but have not connected to yet, a connection in
+     * flight, a session we have, a relay request awaiting its response, or an
+     * introduction the introducer has accepted and not finished?
+     * <p>
+     * The alternative is to expire the establishment, which fails every queued
+     * message and marks the peer unreachable, so a lookup or a connection that
+     * simply has not landed yet must not read as a rejection.
+     *
+     * @param istate the per-introducer state to test
+     * @return true if work is outstanding for that introducer
+     * @since 0.9.72+
+     */
+    static boolean isIntroInFlight(OutboundEstablishState2.IntroState istate) {
+        return istate == INTRO_STATE_LOOKUP_SENT || istate == INTRO_STATE_HAS_RI ||
+               istate == INTRO_STATE_CONNECTING || istate == INTRO_STATE_CONNECTED ||
+               istate == INTRO_STATE_RELAY_REQUEST_SENT || istate == INTRO_STATE_RELAY_CHARLIE_ACCEPTED;
+    }
+
+    /**
+     * Is any introducer named in Charlie's address still in flight?
+     *
+     * @param state2 the outbound state, whose per-introducer states are read
+     * @param addr Charlie's address, whose introducer list is walked
+     * @return true if any introducer has outstanding work
+     * @since 0.9.72+
+     */
+    static boolean introductionInFlight(OutboundEstablishState2 state2, UDPAddress addr) {
+        int count = addr.getIntroducerCount();
+        for (int i = 0; i < count; i++) {
+            Hash h = addr.getIntroducerHash(i);
+            if (h != null && isIntroInFlight(state2.getIntroState(h)))
+                return true;
+        }
+        return false;
     }
 
     /**
