@@ -912,8 +912,13 @@ public class BuildExecutor implements Runnable {
      */
     public synchronized void restart() {
         synchronized (_recentBuildIds) {_recentBuildIds.clear();}
-        _currentlyBuildingMap.clear();
-        _recentlyBuildingMap.clear();
+        // Both maps under the monitor the building and expiry paths use, so a
+        // restart cannot interleave with a claim and leave a build in the
+        // recently-building map that this restart meant to forget.
+        synchronized (_currentlyBuilding) {
+            _currentlyBuildingMap.clear();
+            _recentlyBuildingMap.clear();
+        }
     }
 
     /**
@@ -2240,9 +2245,11 @@ public class BuildExecutor implements Runnable {
          first hop had no creation timestamp, and a reply id already present in
          _recentlyBuildingMap. A build held past its deadline subtracts from the
          dispatch budget on every pass, so the vetoes walked the budget to zero
-         and starved every pool. Now the move to _recentlyBuildingMap is plain
-         bookkeeping and never gates the removal; the two veto reasons are counted
-         so a later window can say which one was firing.
+         and starved every pool. Neither reason can refuse the eviction now; both
+         are counted so a later window can say which one was firing. What the
+         eviction does have to survive is the race with the reply thread: the
+         entry is claimed, not assumed, so a build whose reply arrived while this
+         iterator was in flight is not also charged a timeout.
          */
         // Invariant across the scan below: only length and direction vary per config
         final int cpuLoad = SystemVersion.getCPULoadAvg();
@@ -2255,12 +2262,12 @@ public class BuildExecutor implements Runnable {
             }
             countExpiryVeto(cfg);
             Long key = Long.valueOf(cfg.getReplyMessageId());
-            boolean idCollision = _recentlyBuildingMap.containsKey(key);
-            _recentlyBuildingMap.put(key, cfg);
-            if (idCollision) {
-                _context.statManager().addRateData("tunnel.buildExpire.idCollision", 1);
+            if (!claimExpiredBuild(key, cfg)) {
+                // The reply thread took this exact build out of the building map
+                // between this iterator reading it and the claim above: it joined,
+                // so it is not a timeout and it must not be put back.
+                continue;
             }
-            iter.remove();
             if (expired == null) {
                 expired = new ArrayList<>();
             }
@@ -3495,25 +3502,65 @@ public class BuildExecutor implements Runnable {
      */
     PooledTunnelCreatorConfig removeFromBuilding(long id) {
         Long key = Long.valueOf(id);
-        PooledTunnelCreatorConfig rv = _currentlyBuildingMap.remove(key);
-        if (rv != null) {
-            if (_log.shouldDebug()) {
-                long rtt = _context.clock().now() - rv.getConfig(0).getCreation();
-                if (rtt < 0) {rtt = 0;}
-                _log.debug("Removing from building map -> Reply received (RTT: " + rtt + "ms), map size: " +
-                          _currentlyBuildingMap.size() + ", for: " + rv);
-            }
-            return rv;
+        PooledTunnelCreatorConfig rv;
+        boolean late;
+        // The same monitor the expiry scan claims under, so one build cannot be
+        // claimed as timed out and taken out as answered at the same time.
+        synchronized (_currentlyBuilding) {
+            rv = _currentlyBuildingMap.remove(key);
+            late = rv == null;
+            if (late)
+                rv = _recentlyBuildingMap.remove(key);
         }
-        rv = _recentlyBuildingMap.remove(key);
         if (rv != null) {
-            if (_log.shouldInfo()) {
-                long rtt = _context.clock().now() - rv.getConfig(0).getCreation();
-                if (rtt < 0) {rtt = 0;}
-                _log.info("Received late reply (RTT: " + rtt + "ms) for: " + rv);
+            if (late) {
+                if (_log.shouldInfo()) {
+                    long rtt = _context.clock().now() - rv.getConfig(0).getCreation();
+                    if (rtt < 0) {rtt = 0;}
+                    _log.info("Received late reply (RTT: " + rtt + "ms) for: " + rv);
+                }
+            } else {
+                if (_log.shouldDebug()) {
+                    long rtt = _context.clock().now() - rv.getConfig(0).getCreation();
+                    if (rtt < 0) {rtt = 0;}
+                    _log.debug("Removing from building map -> Reply received (RTT: " + rtt + "ms), map size: " +
+                               _currentlyBuildingMap.size() + ", for: " + rv);
+                }
             }
         }
         return rv;
+    }
+
+    /**
+     * Claim one expired build: take this exact entry out of the building map and
+     * park it in the recently-building map, as one step.
+     * <p>
+     * The reply thread removes the same entry from the other direction, and the
+     * expiry scan reaches a config through a weakly consistent iterator, so the
+     * entry can be gone by the time the scan gets to it. Claiming rather than
+     * assuming is what keeps the two from both winning: a build that joined must
+     * not also pay a timeout - the contacted hop cooled down and penalized for a
+     * tunnel that actually built - and the scan's put must not resurrect an entry
+     * the reply thread had already taken out of both maps, where it then sat until
+     * the ten-minute sweep and made wasRecentlyBuilding() answer for a success.
+     * <p>
+     * A reply id already in the recently-building map is counted, not a veto: the
+     * eviction still happens.
+     *
+     * @param key the build's reply message id
+     * @param cfg the config the scan found past its deadline
+     * @return true if this exact entry was still in the building map and is now in
+     *         the recently-building map; false if the reply thread got there first
+     * @since 0.9.72+
+     */
+    boolean claimExpiredBuild(Long key, PooledTunnelCreatorConfig cfg) {
+        synchronized (_currentlyBuilding) {
+            if (!_currentlyBuildingMap.remove(key, cfg))
+                return false;
+            if (_recentlyBuildingMap.putIfAbsent(key, cfg) != null)
+                _context.statManager().addRateData("tunnel.buildExpire.idCollision", 1);
+            return true;
+        }
     }
 
     /**
