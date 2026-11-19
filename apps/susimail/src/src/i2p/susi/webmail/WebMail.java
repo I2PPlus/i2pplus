@@ -46,6 +46,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import javax.servlet.ServletException;
@@ -1466,16 +1467,10 @@ public class WebMail extends HttpServlet {
         else if (buttonPressed(request, FORWARD)) {forward = true;}
         if (reply || replyAll || forward) {
             state = State.NEW;
-            // Try to find message
-            String uidl = null;
-            if (state == State.LIST) {
-                List<String> items = getCheckedItems(request);
-                if (!items.isEmpty()) {
-                    String b64UIDL = items.get(0);
-                    // This is the I2P Base64, not the encoder
-                    uidl = Base64.decodeToString(b64UIDL);
-                }
-            } else {uidl = Base64.decodeToString(request.getParameter(B64UIDL));}
+            // Try to find message. The state was set to NEW just above, so this is
+            // never the list page and its checked items are not in this request:
+            // the reply and forward buttons carry the message themselves.
+            String uidl = Base64.decodeToString(request.getParameter(B64UIDL));
 
             if (uidl != null) {
                 MailCache mc = getCurrentMailCache(sessionObject, request);
@@ -1669,10 +1664,29 @@ public class WebMail extends HttpServlet {
      * @return non-null List of Base64 UIDLs, or attachment numbers as Strings
      */
     private static List<String> getCheckedItems(RequestWrapper request) {
+        return checkedItems(request.getParameterNames(), request::getParameter);
+    }
+
+    /**
+     * The checkN parameters that are set to 1, split out of the request so it can
+     * be answered without one.
+     * <p>
+     * The value is compared with the constant on the left because a name can be
+     * enumerated and still have no value: the XSS filter drops a value that fails
+     * its character whitelist and returns null for it, while the name stays in the
+     * list, and dereferencing that killed the page with a 500.
+     *
+     * @param names the parameter names, as the request enumerates them
+     * @param values the value of one parameter, or null if it has none or its value
+     *               was dropped
+     * @return non-null List of Base64 UIDLs, or attachment numbers as Strings
+     * @since 0.9.72+
+     */
+    static List<String> checkedItems(Enumeration<String> names, Function<String, String> values) {
         List<String> rv = new ArrayList<>(8);
-        for (Enumeration<String> e = request.getParameterNames(); e.hasMoreElements();) {
-            String parameter = e.nextElement();
-            if (parameter.startsWith("check") && request.getParameter(parameter).equals("1")) {
+        while (names.hasMoreElements()) {
+            String parameter = names.nextElement();
+            if (parameter.startsWith("check") && "1".equals(values.apply(parameter))) {
                 String item = parameter.substring(5);
                 rv.add(item);
             }
