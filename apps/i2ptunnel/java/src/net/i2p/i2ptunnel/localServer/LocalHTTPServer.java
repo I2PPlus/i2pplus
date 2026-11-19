@@ -377,8 +377,7 @@ public abstract class LocalHTTPServer {
                         bd = new BlindData(context, spk, bt, secret, authType, privateKey);
                         long now = context.clock().now();
                         bd.setDate(now);
-                        long exp = now + ((bd.getAuthRequired() || bd.getSecretRequired()) ? 365*24*60*60*1000L
-                                                                                           :  90*24*68*60*1000L);
+                        long exp = now + BlindData.lifetime(bd.getAuthRequired(), bd.getSecretRequired());
                         bd.setExpiration(exp);
                         I2PSession sess = sockMgr.getSession();
                         sess.sendBlindingInfo(bd);

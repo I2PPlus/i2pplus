@@ -125,8 +125,7 @@ class LookupDestJob extends JobImpl {
                             } else {
                                 long now = getContext().clock().now();
                                 bd.setDate(now);
-                                long exp = now + ((bd.getAuthRequired() || bd.getSecretRequired()) ? 365*24*60*60*1000L
-                                                                                                   :  90*24*68*60*1000L);
+                                long exp = now + BlindData.lifetime(bd.getAuthRequired(), bd.getSecretRequired());
                                 bd.setExpiration(exp);
                                 getContext().netDb().setBlindData(bd);
                             }

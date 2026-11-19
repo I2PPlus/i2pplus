@@ -112,6 +112,38 @@ public class BlindData {
     public static final int AUTH_ON = 999;
 
     /**
+     * How long a blinded destination is kept once it has been looked up, when using
+     * it takes something the client has to hold - a private key or a lookup password.
+     * A year, so a destination the operator keeps is not re-blinded every few months.
+     *
+     * @since 0.9.72+
+     */
+    public static final long AUTHENTICATED_LIFETIME = 365L * 24 * 60 * 60 * 1000;
+
+    /**
+     * How long a blinded destination is kept once it has been looked up, when nothing
+     * has to be held to use it. Three months, so a destination whose key or secret the
+     * operator rotates is retired without a manual flush.
+     *
+     * @since 0.9.72+
+     */
+    public static final long UNAUTHENTICATED_LIFETIME = 90L * 24 * 60 * 60 * 1000;
+
+    /**
+     * How long a freshly minted BlindData should be kept, so the two places that mint
+     * one - the console's blinding-info form and a name lookup of a b32 address -
+     * stamp the same lifetime.
+     *
+     * @param authRequired whether a private key is needed to use the destination
+     * @param secretRequired whether a lookup password is needed
+     * @return the lifetime in ms, one of the two constants above
+     * @since 0.9.72+
+     */
+    public static long lifetime(boolean authRequired, boolean secretRequired) {
+        return authRequired || secretRequired ? AUTHENTICATED_LIFETIME : UNAUTHENTICATED_LIFETIME;
+    }
+
+    /**
      * Creates a new BlindData instance for the given destination.
      *
      * @param ctx the application context
