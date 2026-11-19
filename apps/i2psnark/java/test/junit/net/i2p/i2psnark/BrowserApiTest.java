@@ -67,11 +67,12 @@ public class BrowserApiTest {
     }
 
     @Test
-    public void testAllowOriginRefusesTheSandboxedOrigin() {
-        // what a sandboxed iframe, a data: URL or a blob: page sends, and any site
-        // can put one of those on its own origin
-        assertFalse(I2PSnarkServlet.allowOrigin("null", "127.0.0.1:7657", false));
-        assertFalse(I2PSnarkServlet.allowOrigin("NULL", "127.0.0.1:7657", false));
+    public void testAllowOriginAllowsTheSandboxedOrigin() {
+        // what a sandboxed iframe, a data: URL or a blob: page sends, and what a
+        // privacy-hardened browser sends for its own same-origin form POSTs, so it
+        // proves nothing - the form's own nonce is what guards the POST
+        assertTrue(I2PSnarkServlet.allowOrigin("null", "127.0.0.1:7657", false));
+        assertTrue(I2PSnarkServlet.allowOrigin("NULL", "127.0.0.1:7657", false));
     }
 
     @Test

@@ -148,17 +148,20 @@ public class OriginCheckDecisionTest {
     }
 
     /**
-     * Origin: null is what a sandboxed frame, a data: URL or a blob: page sends,
-     * and any foreign page can put its form in one of those to post here without
-     * naming itself, so it is refused. A POST that carries no Origin header at
-     * all is not a browser POST and stays allowed for the nonce and password
+     * Origin: null names no origin. A sandboxed frame, a data: URL or a blob: page
+     * sends it, and so does a privacy-hardened browser on a plain same-origin form
+     * POST - LibreWolf with uMatrix, and Firefox's tracking-protection origin
+     * string cleanup, both send it for a request to the console's own host. It is
+     * allowed here because the CSRF token the form carries is what decides, and
+     * refusing it locks the operator's own forms out. A POST with no Origin header
+     * at all is not a browser POST and stays allowed for the nonce and password
      * checks behind this one.
      */
     @Test
-    public void testNullOriginRejected() {
-        assertFalse(OriginCheck.isAllowed("null", "127.0.0.1:7657", false));
-        assertFalse(OriginCheck.isAllowed("NULL", "localhost:7657", false));
-        assertFalse(OriginCheck.isAllowed("null", "localhost:7657", false));
+    public void testNullOriginAllowed() {
+        assertTrue(OriginCheck.isAllowed("null", "127.0.0.1:7657", false));
+        assertTrue(OriginCheck.isAllowed("NULL", "localhost:7657", false));
+        assertTrue(OriginCheck.isAllowed("null", "localhost:7657", false));
     }
 
     /** An absent Host header cannot be judged, and is allowed as before. */

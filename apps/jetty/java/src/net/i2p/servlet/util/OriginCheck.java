@@ -34,10 +34,13 @@ public class OriginCheck {
      * Host header. Same-origin is allowed, as is a request where both sides are
      * loopback <em>and</em> the ports match; anything else is rejected.
      * <p>
-     * An Origin of "null" - what a sandboxed frame, a data: URL or a blob: page
-     * sends - names no origin at all and is rejected. A request that carries no
-     * Origin at all is not a browser POST and is left to the nonce and password
-     * checks behind this one.
+     * An Origin of "null" names no origin at all - a sandboxed frame, a data: URL
+     * or a blob: page send it, and so does a browser with origin-string cleanup or
+     * a header-spoofing privacy extension, on a plain same-origin form POST. It is
+     * allowed, because refusing it locks the operator's own forms out and it proves
+     * nothing about where the form came from; the CSRF token the form carries is
+     * what decides. A request that carries no Origin at all is not a browser POST
+     * and is left to the nonce and password checks behind this one.
      * <p>
      * Both sides are compared as literal text. Neither header is ever resolved
      * through DNS: a hostname whose A record points at 127.0.0.1 (DNS rebinding)
@@ -61,12 +64,16 @@ public class OriginCheck {
             return true;
         }
 
-        // A sandboxed frame, a data: URL or a blob: page all send this, and any
-        // page can put one of those on an origin of its own, so it names no page
-        // at all - which is exactly what a foreign page's form looks like when it
-        // posts to the console through the operator's own browser. Refuse it.
+        // A sandboxed frame, a data: URL or a blob: page sends this, and so does a
+        // privacy-hardened browser: LibreWolf with uMatrix, and Firefox's tracking
+        // protection "origin string cleanup", both send Origin: null for a plain
+        // same-origin form POST. It names no origin, so this layer cannot decide
+        // the request either way, and refusing it locks the operator's own forms
+        // out. The CSRF token the form carries is what decides - a foreign page
+        // cannot read it, and every POST form in the console and the three webapps
+        // carries one.
         if ("null".equalsIgnoreCase(origin)) {
-            return false;
+            return true;
         }
 
         // Extract origin host:port
