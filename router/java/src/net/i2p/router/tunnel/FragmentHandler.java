@@ -526,10 +526,7 @@ class FragmentHandler {
             // i2pd 2.19 bug? see above
             if (_log.shouldWarn())
                 _log.warnThrottled("fh-delivery-to-tunnel-0",
-                                   "Dropping messages at the tunnel endpoint -> Delivery instruction to tunnel 0" +
-                                   "\n* Gateway: [" + router.toShortBase32() + "] * Fragmented: " + fragmented +
-                                   " [MsgID " + messageId + "] * Size: " + size + " bytes" +
-                                   " * Type: " + (preprocessed[offset] & 0xff));
+                                   deliveryToTunnel0(router, fragmented, messageId, size, _isInbound));
             _context.statManager().addRateData("tunnel.corruptMessage", 1);
         } else if (fragmented) {
             final long fMessageId = messageId;
@@ -574,6 +571,39 @@ class FragmentHandler {
         offset += size;
 
         return offset;
+    }
+
+    /**
+     * The warning for a delivery instruction that names tunnel 0, which no tunnel
+     * has and no peer should send - the comment above the caller attributes it to
+     * an i2pd 2.19 bug. It is throttled to one line per window, so what it prints
+     * is all the operator gets.
+     * <p>
+     * The delivery type is left out on purpose: the caller only reaches here for
+     * {@link #TYPE_TUNNEL}, so printing it says nothing, and printing the byte at
+     * the current offset - which is what this used to do - prints whatever the
+     * peer's payload happened to contain. The hash is the 6-character base64 form,
+     * because that is the form the console log viewer links as a router; the
+     * 8-character base32 form links as a lease set, which is a different object.
+     * The label follows the endpoint: at an inbound gateway the hash is the
+     * gateway we are delivering on behalf of, at an outbound endpoint it is the
+     * destination we are delivering to.
+     *
+     * @param router the router the instruction names, never null here
+     * @param fragmented whether the fragment carries a message id
+     * @param messageId the reassembly id, only meaningful when fragmented
+     * @param size the fragment's payload size in bytes
+     * @param inbound true at an inbound gateway, false at an outbound endpoint
+     * @return the two-line entry, with each line under 100 characters
+     * @since 0.9.72+
+     */
+    static String deliveryToTunnel0(Hash router, boolean fragmented, long messageId, int size,
+                                    boolean inbound) {
+        return "Dropping messages at the tunnel endpoint -> Delivery instruction to tunnel 0" +
+               "\n* " + (inbound ? "Gateway" : "Target") + ": [" + router.toShortBase64() + "]" +
+               " * Fragmented: " + fragmented +
+               (fragmented ? " * Message ID: " + messageId : "") +
+               " * Size: " + size + " bytes";
     }
 
     /**
