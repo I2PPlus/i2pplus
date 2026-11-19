@@ -71,6 +71,12 @@ public class TunnelController implements Logging {
     private volatile long _startupDelayEndTime;
     /** Suppress log messages during tunnel restart. Volatile: toggled by the restarting thread, read by log callers. */
     private volatile boolean _suppressLog;
+    /**
+     * Count of the stops and destroys that have taken effect on this tunnel.
+     * Volatile: read by a restart thread waiting out its delay while the console
+     * request thread, or another restart, stops the tunnel underneath it.
+     */
+    private volatile long _lifecycleGeneration;
 
     /**
      * The tunnel state.
@@ -508,6 +514,13 @@ public class TunnelController implements Logging {
     }
 
     /**
+     * Passed to {@link #startTunnelBackground(long)} by a caller that has no
+     * pending start to invalidate and wants the tunnel started whatever has
+     * happened to it since.
+     */
+    private static final long ANY_GENERATION = -1;
+
+    /**
      * Starts the tunnel in a background thread.
      * <p>
      * This method spawns a new thread to start the tunnel, allowing
@@ -519,12 +532,67 @@ public class TunnelController implements Logging {
      * @see #startTunnel()
      */
     public void startTunnelBackground() {
+        startTunnelBackground(ANY_GENERATION);
+    }
+
+    /**
+     * Starts the tunnel in a background thread unless a stop or a destroy has
+     * taken effect since the caller read {@link #getLifecycleGeneration()}.
+     * <p>
+     * A restart is a stop, a delay for the sockets to close, then a start, and
+     * the delay is not on the caller's thread any more, so the start is queued
+     * against state that another request may have changed in the meantime - a
+     * stop, a delete or a second restart committed from a different console tab.
+     * Without this check the stale start wins and the tunnel comes back up after
+     * the operator took it down.
+     *
+     * @param generation the generation the caller stopped the tunnel at, or
+     *                   {@link #ANY_GENERATION} to start regardless
+     * @since 0.9.72+
+     */
+    public void startTunnelBackground(long generation) {
         synchronized (this) {
+            if (!isStartStillValid(generation, _lifecycleGeneration)) {
+                if (_log.shouldInfo())
+                    _log.info("Skipping the start of " + getName() +
+                              " -> Superseded by a stop or a destroy");
+                return;
+            }
             if (_state != TunnelState.STOPPED && _state != TunnelState.START_ON_LOAD && _state != TunnelState.DELAYED_START_PENDING)
                 return;
             changeState(TunnelState.STARTING);
         }
         new I2PAppThread(new Runnable() { public void run() { startTunnel(); } }, "TunStart").start();
+    }
+
+    /**
+     * Whether a start queued against a lifecycle generation still describes what
+     * the caller asked for. A start is queued behind a delay, and anything that
+     * stops or destroys the tunnel during that delay supersedes it.
+     *
+     * @param requested the generation the caller stopped the tunnel at, or
+     *                  {@link #ANY_GENERATION} for a caller with nothing to
+     *                  invalidate
+     * @param current the tunnel's generation right now
+     * @return true to go ahead with the start, false to drop it
+     * @since 0.9.72+
+     */
+    public static boolean isStartStillValid(long requested, long current) {
+        return requested == ANY_GENERATION || requested == current;
+    }
+
+    /**
+     * How many times this tunnel has been stopped or destroyed. Read it before
+     * stopping the tunnel and hand it to
+     * {@link #startTunnelBackground(long)} to have a queued start dropped if
+     * anything else has taken the tunnel down since.
+     *
+     * @return the lifecycle generation, starting at zero and incremented by each
+     *         stop and each destroy
+     * @since 0.9.72+
+     */
+    public long getLifecycleGeneration() {
+        return _lifecycleGeneration;
     }
 
     /**
@@ -907,10 +975,12 @@ public class TunnelController implements Logging {
     public void stopTunnel() {
         synchronized (this) {
             if (_state == TunnelState.DELAYED_START_PENDING) {
+                _lifecycleGeneration++;
                 changeState(TunnelState.STOPPED);
                 return;
             }
             if (_state != TunnelState.STARTING && _state != TunnelState.RUNNING) {return;}
+            _lifecycleGeneration++;
             changeState(TunnelState.STOPPING);
         }
         if (_pkfc != null) {
@@ -1007,6 +1077,7 @@ public class TunnelController implements Logging {
         synchronized (this) {
             if (!mayDestroy(_state))
                 return;
+            _lifecycleGeneration++;
             changeState(TunnelState.DESTROYING);
         }
         if (_pkfc != null) {
@@ -1042,11 +1113,22 @@ public class TunnelController implements Logging {
     }
 
     /**
+     * How long a restart waits after stopping the tunnel before starting it
+     * again - long enough for the localhost sockets to close and the old
+     * listeners to go away, so the new tunnel can bind the same port. Used by
+     * every restart path that does not block waiting for the stop to finish.
+     */
+    public static final long RESTART_DELAY_MS = 1000;
+
+    /**
      * Stops and restarts the tunnel.
      * <p>
      * This method stops the tunnel if running, waits briefly,
      * then starts the tunnel again. The restart is performed
-     * synchronously, blocking until complete.
+     * synchronously, blocking until complete - up to the ten second stop
+     * deadline plus the whole tunnel build. A caller with a thread it cannot
+     * afford to hold, such as a console request, wants
+     * {@link #startTunnelBackground(long)} after its own stop instead.
      * </p>
      *
      * @see #startTunnel()

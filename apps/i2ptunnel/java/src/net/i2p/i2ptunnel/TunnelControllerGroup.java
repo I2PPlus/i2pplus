@@ -1470,17 +1470,75 @@ public class TunnelControllerGroup implements ClientApp {
     }
 
     /**
+     * Which tunnels a bulk restart pass covers: every running tunnel.
+     *
+     * @see #isRestartable(TunnelController, int)
+     * @since 0.9.72+
+     */
+    public static final int RESTART_ALL = 0;
+    /**
+     * Which tunnels a bulk restart pass covers: the running client tunnels only.
+     *
+     * @since 0.9.72+
+     */
+    public static final int RESTART_CLIENTS = 1;
+    /**
+     * Which tunnels a bulk restart pass covers: the running server tunnels only.
+     *
+     * @since 0.9.72+
+     */
+    public static final int RESTART_SERVERS = 2;
+
+    /**
+     * Whether a tunnel takes part in a bulk restart pass. Only a running tunnel
+     * is restarted - one the operator stopped stays stopped, or the pass would
+     * undo a deliberate stop. The client and server scopes do not overlap, so
+     * half of a busy router can be restarted without dropping the other half.
+     *
+     * @param controller the tunnel to consider, null to skip
+     * @param scope one of {@link #RESTART_ALL}, {@link #RESTART_CLIENTS} or
+     *              {@link #RESTART_SERVERS}
+     * @return true if the tunnel is running and in scope for the pass
+     * @since 0.9.72+
+     */
+    public static boolean isRestartable(TunnelController controller, int scope) {
+        if (controller == null || !controller.getIsRunning()) {return false;}
+        switch (scope) {
+            case RESTART_CLIENTS: return controller.isClient();
+            case RESTART_SERVERS: return !controller.isClient();
+            default: return true;
+        }
+    }
+
+    /**
      * Restart all tunnels.
      * Side effect - clears all messages from all controllers.
+     * <p>
+     * The stops happen here, the starts on one background thread after the usual
+     * restart delay, so the caller is not held for a serial restart of every
+     * tunnel. This method is synchronized on the group, so a stall in it also
+     * blocks addController(), saveConfig(), reloadControllers() and
+     * unloadControllers() behind it. Each start carries the generation its own
+     * stop produced, so a stopAllControllers(), unloadControllers() or a second
+     * restart committed while the starts are pending cancels them.
      *
-     * @return list of messages the tunnels generate when restarted
+     * @return list of messages the tunnels generate as they stop
      */
     public synchronized List<String> restartAllControllers() {
         List<String> msgs = new ArrayList<>();
+        List<TunnelController> controllers;
+        long[] generations;
         _controllersLock.readLock().lock();
         try {
-            for (TunnelController controller : _controllers) {
-                controller.restartTunnel();
+            controllers = new ArrayList<>(_controllers);
+            int size = controllers.size();
+            generations = new long[size];
+            for (int i = 0; i < size; i++) {
+                TunnelController controller = controllers.get(i);
+                controller.stopTunnel();
+                generations[i] = controller.getLifecycleGeneration();
+            }
+            for (TunnelController controller : controllers) {
                 msgs.addAll(controller.clearMessages());
             }
             if (_log.shouldInfo())
@@ -1488,6 +1546,20 @@ public class TunnelControllerGroup implements ClientApp {
         } finally {
             _controllersLock.readLock().unlock();
         }
+        new I2PAppThread(new Runnable() {
+            public void run() {
+                try {
+                    Thread.sleep(TunnelController.RESTART_DELAY_MS);
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                    return;
+                }
+                int size = controllers.size();
+                for (int i = 0; i < size; i++) {
+                    controllers.get(i).startTunnelBackground(generations[i]);
+                }
+            }
+        }, "Tunnel restart").start();
         return msgs;
     }
 

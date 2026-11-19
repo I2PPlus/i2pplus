@@ -49,6 +49,7 @@ import net.i2p.i2ptunnel.ui.GeneralHelper;
 import net.i2p.i2ptunnel.ui.Messages;
 import net.i2p.i2ptunnel.ui.TunnelConfig;
 import net.i2p.util.Addresses;
+import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
 import net.i2p.util.UIMessages;
 
@@ -404,36 +405,103 @@ public class IndexBean {
      * @since 0.9.67+
      */
     private String restartAll() {
+        return restartTunnels(TunnelControllerGroup.RESTART_ALL,
+                              _t("No services configured, cannot restart!"));
+    }
+
+    /**
+     * Restart the running tunnels in scope on one background thread.
+     * <p>
+     * The pass used to run on the request thread and slept a second between
+     * stopping and starting each tunnel, so "Restart all" held the browser on a
+     * spinner for a second per tunnel - twelve seconds for a dozen tunnels - and
+     * the pending start of one tunnel could be overtaken by a stop or a delete
+     * committed from another request during that second, which the start ignored.
+     * The stops happen here, the delay and the starts happen on one thread, and
+     * each start carries the generation its stop produced so a superseded start
+     * is dropped. The progress strings go through the same message queue the
+     * console polls, so the page still shows the pass going through the tunnels.
+     *
+     * @param scope which tunnels take part
+     * @param noneMsg shown when there are no controllers at all
+     * @return empty string, or an error message if no services are configured
+     */
+    private String restartTunnels(int scope, String noneMsg) {
         List<TunnelController> controllers = _group.getControllers();
-        if (controllers == null) {return "✖ " + _t("No services configured, cannot restart!");}
-        int running = 0;
-
+        if (controllers == null) {return "✖ " + noneMsg;}
+        List<TunnelController> selected = new ArrayList<>(controllers.size());
         for (TunnelController controller : controllers) {
-            if (controller.getIsRunning()) {
-                running++;
-                String name = controller.getName();
-                String stoppingMsg = "‣ " + _t("Stopping tunnel") + ": " + name + "...";
-                _timestampedMessages.add(new TimestampedMessage(stoppingMsg));
-
-                try {
-                    controller.stopTunnel();
-                    Thread.sleep(1000); // short delay to ensure clean stop
-                    String startingMsg = "‣ " + _t("Starting tunnel") + ": " + name + "...";
-                    _timestampedMessages.add(new TimestampedMessage(startingMsg));
-                    controller.startTunnelBackground();
-                } catch (Exception e) {
-                    _log.error("Error restarting tunnel" + name + " - " + e.getMessage());
-                    String errorMsg = "! " + _t("Error restarting tunnel") + ": " + name + " - " + e.getMessage();
-                    _timestampedMessages.add(new TimestampedMessage(errorMsg));
-                }
-            }
+            if (TunnelControllerGroup.isRestartable(controller, scope)) {selected.add(controller);}
         }
-
-        if (running >= 1) {
-            String doneMsg = "✔ " +_t("Restarted all running tunnels");
-            _timestampedMessages.add(new TimestampedMessage(doneMsg));
+        if (!selected.isEmpty()) {
+            new I2PAppThread(new Runnable() {
+                public void run() { restartPass(selected, scope); }
+            }, "Tunnel restart").start();
         }
         return "";
+    }
+
+    /**
+     * One restart pass: stop every tunnel in the pass, wait once for the sockets
+     * to close, then start each one that has not been taken down since.
+     *
+     * @param controllers the tunnels in the pass, already narrowed to running
+     *                    ones in scope
+     * @param scope which kind of tunnel the pass covers, for the closing message
+     */
+    private void restartPass(List<TunnelController> controllers, int scope) {
+        int size = controllers.size();
+        long[] generations = new long[size];
+        for (int i = 0; i < size; i++) {
+            TunnelController controller = controllers.get(i);
+            String name = controller.getName();
+            _timestampedMessages.add(new TimestampedMessage("‣ " + _t("Stopping tunnel") + ": " + name + "..."));
+            try {
+                controller.stopTunnel();
+            } catch (RuntimeException e) {
+                _log.error("Restarting the tunnel failed -> Could not stop it * Tunnel: " + name, e);
+                _timestampedMessages.add(new TimestampedMessage("✖ " + _t("Error restarting tunnel") + ": " + name));
+            }
+            generations[i] = controller.getLifecycleGeneration();
+        }
+        try {
+            Thread.sleep(TunnelController.RESTART_DELAY_MS);
+        } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
+            return;
+        }
+        int started = 0;
+        for (int i = 0; i < size; i++) {
+            TunnelController controller = controllers.get(i);
+            String name = controller.getName();
+            _timestampedMessages.add(new TimestampedMessage("‣ " + _t("Starting tunnel") + ": " + name + "..."));
+            try {
+                controller.startTunnelBackground(generations[i]);
+                started++;
+            } catch (RuntimeException e) {
+                _log.error("Restarting the tunnel failed -> Could not start it * Tunnel: " + name, e);
+                _timestampedMessages.add(new TimestampedMessage("✖ " + _t("Error restarting tunnel") + ": " + name));
+            }
+        }
+        if (started >= 1) {
+            _timestampedMessages.add(new TimestampedMessage("✔ " + restartDoneMessage(scope, started)));
+        }
+    }
+
+    /**
+     * The message a restart pass ends with.
+     *
+     * @param scope which kind of tunnel the pass covered
+     * @param started how many tunnels the pass handed off a start for
+     * @return the message text, without the leading mark
+     */
+    private String restartDoneMessage(int scope, int started) {
+        switch (scope) {
+            case TunnelControllerGroup.RESTART_CLIENTS: return _t("Restarted all running client tunnels");
+            case TunnelControllerGroup.RESTART_SERVERS: return "Restarted " + started + " running server " +
+                                         (started > 1 ? "tunnels" : "tunnel");
+            default: return _t("Restarted all running tunnels");
+        }
     }
 
     /**
@@ -443,38 +511,8 @@ public class IndexBean {
      * @since 0.9.67+
      */
     private String restartAllClients() {
-        List<TunnelController> controllers = _group.getControllers();
-        if (controllers == null) {return "✖ " + _t("No clients configured, cannot restart!");}
-        int running = 0;
-
-        for (TunnelController controller : controllers) {
-            if (controller.isClient() && controller.getIsRunning()) {
-                running++;
-                String name = controller.getName();
-                String stoppingMsg = "‣ " + _t("Stopping tunnel") + ": " + name + "...";
-                _timestampedMessages.add(new TimestampedMessage(stoppingMsg));
-
-                try {
-                    controller.stopTunnel();
-                    Thread.sleep(1000); // short delay to ensure clean stop
-
-                    String startingMsg = "‣ " + _t("Starting tunnel") + ": " + name + "...";
-                    _timestampedMessages.add(new TimestampedMessage(startingMsg));
-
-                    controller.startTunnelBackground();
-                } catch (Exception e) {
-                    _log.error("Error restarting client tunnel: " + name + " - " + e.getMessage());
-                    String errorMsg = "✖ " + _t("Error restarting tunnel") + ": " + name  + " - " + e.getMessage();
-                    _timestampedMessages.add(new TimestampedMessage(errorMsg));
-                }
-            }
-        }
-
-        if (running >= 1) {
-            String doneMsg = ("✔ " + _t("Restarted all running client tunnels"));
-            _timestampedMessages.add(new TimestampedMessage(doneMsg));
-        }
-        return "";
+        return restartTunnels(TunnelControllerGroup.RESTART_CLIENTS,
+                              _t("No clients configured, cannot restart!"));
     }
 
     /**
@@ -484,48 +522,8 @@ public class IndexBean {
      * @since 0.9.67+
      */
     private String restartAllServers() {
-        List<TunnelController> controllers = _group.getControllers();
-        if (controllers == null || controllers.isEmpty()) {return "";}
-
-        int restarted = 0;
-        int serversToRestart = 0;
-
-        for (TunnelController controller : controllers) {
-            if (!controller.isClient() && controller.getIsRunning()) {
-                serversToRestart++;
-                String name = controller.getName();
-
-                String stoppingMsg = "• " + _t("Stopping tunnel") + ": " + name + "...";
-                _timestampedMessages.add(new TimestampedMessage(stoppingMsg));
-
-                try {
-                    controller.stopTunnel();
-                    Thread.sleep(100); // short delay to ensure clean stop
-
-                    String startingMsg = "‣ " + _t("Starting tunnel") + ": " + name + "...";
-                    _timestampedMessages.add(new TimestampedMessage(startingMsg));
-
-                    Thread.sleep(50); // additional delay before restart
-                    controller.startTunnelBackground();
-                    restarted++;
-
-                } catch (Exception e) {
-                    String failMsg = "Error restarting server tunnel";
-                    _log.error(failMsg + ": " + name + " - " + e.getMessage());
-                    String errorMsg = "✖ " + _t(failMsg) + ": " + name + " - " + e.getMessage();
-                    _timestampedMessages.add(new TimestampedMessage(errorMsg));
-                }
-            }
-        }
-
-        String count = String.valueOf(restarted);
-        String doneMsg = "";
-
-        if (serversToRestart == restarted && restarted >= 1) {
-            doneMsg = "✔ Restarted " + count + " running server " + (restarted > 1 ? "tunnels" : "tunnel");
-            _timestampedMessages.add(new TimestampedMessage(doneMsg));
-        }
-        return "";
+        return restartTunnels(TunnelControllerGroup.RESTART_SERVERS,
+                              _t("No servers configured, cannot restart!"));
     }
 
     /**
@@ -574,6 +572,12 @@ public class IndexBean {
 
     /**
      * Restart the selected tunnel (stop then start).
+     * <p>
+     * The start is queued on a background thread rather than run inline, so the
+     * request is not held for the tunnel's stop plus the whole blocking tunnel
+     * build - up to ten seconds and more for a tunnel that is struggling to
+     * come up. The queued start carries the generation this stop produced, so a
+     * stop, edit or delete committed while it waits cancels it.
      *
      * @return empty string on success, error message on failure
      */
@@ -586,8 +590,19 @@ public class IndexBean {
         String msg = "‣ " + _t("Restarting tunnel") + ": " + getTunnelName(_tunnel) + "...";
         _timestampedMessages.add(new TimestampedMessage(msg));
         controller.suppressLog();
-        controller.restartTunnel();
-        controller.restoreLog();
+        controller.stopTunnel();
+        final long generation = controller.getLifecycleGeneration();
+        new I2PAppThread(new Runnable() {
+            public void run() {
+                try {
+                    Thread.sleep(TunnelController.RESTART_DELAY_MS);
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                }
+                controller.startTunnelBackground(generation);
+                controller.restoreLog();
+            }
+        }, "Tunnel restart").start();
         return "";
     }
 

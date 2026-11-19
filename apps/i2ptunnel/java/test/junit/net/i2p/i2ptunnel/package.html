@@ -21,10 +21,12 @@
     The pool and capacity decisions: runner and server executor overflow, the
     runner and IO pool sizing, handler allocation and demand, the warm slot,
     the runner's elevation, and the client's maximum connections. The console
-    side: the tunnel controller and whether it may destroy a tunnel, the
-    tunnel snapshot list, the proxy target blocklist, the blocklist manager,
-    the auth log redaction, the IRC client's retry, and the body-resume budget
-    and its scaling. {@code TestI2PClientFactory} is the fixture that stands in
+    side: the tunnel controller and whether it may destroy a tunnel, which
+    tunnels a restart pass covers and whether a start queued behind the restart
+    delay is still the one that was asked for, the tunnel snapshot list, the
+    proxy target blocklist, the blocklist manager, the auth log redaction, the
+    IRC client's retry, and the body-resume budget and its scaling.
+    {@code TestI2PClientFactory} is the fixture that stands in
     for a real client, not a suite. Run by <code>ant test</code> in
     <code>apps/i2ptunnel</code>.
 </p>
