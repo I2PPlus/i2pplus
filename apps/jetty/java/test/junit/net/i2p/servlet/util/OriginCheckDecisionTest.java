@@ -1,10 +1,13 @@
 package net.i2p.servlet.util;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -237,17 +240,18 @@ public class OriginCheckDecisionTest {
     }
 
     /**
-     * A refusal is reported at error level, with the pair that failed beside it,
-     * so an operator can tell a browser from a proxy from a foreign page without
-     * the source open.
+     * A refusal is reported as a throttled warning, with the pair that failed
+     * beside it, so an operator can tell a browser from a proxy from a foreign
+     * page without the source open. Not an error: one line per refused POST is a
+     * rate the sender sets, and error is the level an operator watches.
      */
     @Test
-    public void testDenialIsLoggedAtErrorLevel() {
+    public void testDenialIsAThrottledWarning() {
         Log log = mock(Log.class);
-        when(log.shouldLog(Log.ERROR)).thenReturn(true);
         OriginCheck.logDenial(log, request("http://evil.example:80", "localhost:7657", false));
         ArgumentCaptor<String> msg = ArgumentCaptor.forClass(String.class);
-        verify(log).error(msg.capture());
+        verify(log).warnThrottled(anyString(), msg.capture());
+        verify(log, never()).error(anyString());
         assertTrue("the Origin was not echoed", msg.getValue().contains("http://evil.example:80"));
         assertTrue("the Host was not echoed", msg.getValue().contains("localhost:7657"));
         assertTrue("the path was not echoed", msg.getValue().contains("/susidns/config"));
@@ -261,28 +265,52 @@ public class OriginCheckDecisionTest {
     @Test
     public void testDenialStripsMarkupAndNamesMissingHeaders() {
         Log log = mock(Log.class);
-        when(log.shouldLog(Log.ERROR)).thenReturn(true);
         OriginCheck.logDenial(log, request("<script>x</script>", null, false));
         ArgumentCaptor<String> msg = ArgumentCaptor.forClass(String.class);
-        verify(log).error(msg.capture());
+        verify(log).warnThrottled(anyString(), msg.capture());
         assertFalse("markup reached the log", msg.getValue().contains("<script>"));
         assertTrue("an absent Host was printed as null", msg.getValue().contains("not sent"));
     }
 
     /**
-     * A refusal at the level the log is not keeping is not written at all, so
-     * the guard matches the call.
+     * The collapse is keyed on the sending address, not on the Origin: the
+     * Origin is attacker-chosen, so a sender that varies it would name a new
+     * condition per request and defeat the suppression altogether, leaving the
+     * ERROR-rate flood this replaced.
      */
     @Test
-    public void testDenialSkippedBelowTheLoggedLevel() {
+    public void testDenialCollapseIsKeyedBySendingAddressNotByOrigin() {
         Log log = mock(Log.class);
-        when(log.shouldLog(Log.ERROR)).thenReturn(false);
-        OriginCheck.logDenial(log, request("http://evil.example:80", "localhost:7657", false));
-        verify(log, never()).error(anyString());
+        OriginCheck.logDenial(log, request("http://a.example:80", "localhost:7657", false));
+        OriginCheck.logDenial(log, request("http://b.example:80", "localhost:7657", false));
+        ArgumentCaptor<String> key = ArgumentCaptor.forClass(String.class);
+        verify(log, times(2)).warnThrottled(key.capture(), anyString());
+        assertEquals("the collapse key varies with the Origin",
+                     key.getAllValues().get(0), key.getAllValues().get(1));
+        assertTrue("the key does not name the sending address: " + key.getAllValues().get(0),
+                   key.getAllValues().get(0).contains("10.0.0.7"));
     }
 
     /**
-     * A request carrying the three values the check reads.
+     * Two senders are collapsed apart from each other, so one page flooding a
+     * tunnel cannot hide another sender's refusal.
+     */
+    @Test
+    public void testDifferentSendersGetDifferentKeys() {
+        Log log = mock(Log.class);
+        HttpServletRequest here = request("http://a.example:80", "localhost:7657", false);
+        HttpServletRequest there =
+                request("http://a.example:80", "localhost:7657", false, "10.0.0.8");
+        OriginCheck.logDenial(log, here);
+        OriginCheck.logDenial(log, there);
+        ArgumentCaptor<String> key = ArgumentCaptor.forClass(String.class);
+        verify(log, times(2)).warnThrottled(key.capture(), anyString());
+        assertNotEquals(key.getAllValues().get(0), key.getAllValues().get(1));
+    }
+
+    /**
+     * A request carrying the three values the check reads, from the default
+     * sending address.
      *
      * @param origin the Origin header, null for a header that was not sent
      * @param host the Host header
@@ -290,11 +318,26 @@ public class OriginCheckDecisionTest {
      * @return the request to hand to the check
      */
     private static HttpServletRequest request(String origin, String host, boolean secure) {
+        return request(origin, host, secure, "10.0.0.7");
+    }
+
+    /**
+     * A request carrying the three values the check reads, from a given address.
+     *
+     * @param origin the Origin header, null for a header that was not sent
+     * @param host the Host header
+     * @param secure whether the request arrived over TLS
+     * @param remoteAddr the address the request arrived from
+     * @return the request to hand to the check
+     */
+    private static HttpServletRequest request(String origin, String host, boolean secure,
+                                              String remoteAddr) {
         HttpServletRequest req = mock(HttpServletRequest.class);
         when(req.getHeader("Origin")).thenReturn(origin);
         when(req.getHeader("Host")).thenReturn(host);
         when(req.getRequestURI()).thenReturn("/susidns/config");
         when(req.isSecure()).thenReturn(secure);
+        when(req.getRemoteAddr()).thenReturn(remoteAddr);
         return req;
     }
 }

@@ -137,6 +137,13 @@ public class OriginCheck {
      * log page. The two headers are echoed because the pair that failed, not the
      * fact of the refusal, is what says whether a browser, a proxy or a foreign
      * page sent the request.
+     * <p>
+     * WARN, throttled per sending address, not ERROR: one refusal is one line per
+     * request, so the sender sets the rate, and the three webapps logged nothing
+     * on this path before. ERROR is the level an operator watches, and a page
+     * POSTing at a tunnel it cannot reach would fill it. The suppressor writes the
+     * first refusal for an address and then collapses the repeats with how many it
+     * hid, so the finding stays.
      *
      * @param request the POST that was refused
      * @since 0.9.72+
@@ -154,12 +161,15 @@ public class OriginCheck {
      * @param request the POST that was refused
      */
     static void logDenial(Log log, HttpServletRequest request) {
-        if (log.shouldLog(Log.ERROR)) {
-            log.error("POST denied -> Origin does not match Host" +
-                      "\n* Origin: " + logged(request.getHeader("Origin")) +
-                      "\n* Host: " + logged(request.getHeader("Host")) +
-                      "\n* Path: " + logged(request.getRequestURI()));
-        }
+        // The address, not the Origin: the Origin is attacker-chosen, so keying on
+        // it would let one sender defeat the collapse with a new value per
+        // request. Log.throttled() checks the level itself, so there is no guard
+        // here to keep in step with the call.
+        log.warnThrottled("origin-denied " + request.getRemoteAddr(),
+                          "POST denied -> Origin does not match Host" +
+                          "\n* Origin: " + logged(request.getHeader("Origin")) +
+                          "\n* Host: " + logged(request.getHeader("Host")) +
+                          "\n* Path: " + logged(request.getRequestURI()));
     }
 
     /**
