@@ -111,7 +111,13 @@ public class HostCheckHandler extends GzipHandler
         if (allowedHostsProp != null) {
             StringTokenizer tok = new StringTokenizer(allowedHostsProp, " ,");
             while (tok.hasMoreTokens()) {
-                rv.add(tok.nextToken().toLowerCase(Locale.US));
+                // Normalized the way the header is normalized, or an entry written
+                // with a port - as the name sits in the browser's address bar - is
+                // in the set and never matched, because the port comes off the
+                // header before the comparison. An unbracketed IPv6 entry loses
+                // everything after its first colon here as it does in the header,
+                // which costs nothing: numeric addresses are allowed anyway.
+                rv.add(getHost(tok.nextToken()).toLowerCase(Locale.US));
             }
         }
         return rv;

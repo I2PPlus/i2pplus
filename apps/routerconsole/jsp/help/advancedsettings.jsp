@@ -38,6 +38,9 @@
 <tr class=config><th id=advancedconsole>routerconsole.advanced={true|false}</th></tr>
 <tr><td><%=intl._t("When set to true, additional functionality will be enabled in the console and the user will be able to edit settings directly on the <a href=/configadvanced>Advanced Configuration page</a>. Extra display options are provided in the <a href=/netdb>Network Database section</a>, including the <a href='/netdb?show=sybils'>Sybil Analysis tool</a>, and there are additional configuration options on the <a href=/configclients>Clients Configuration page</a>. This will also enable the installation of unsigned updates, manual configuration of the news URL, and additional sections on the sidebar.")%></td></tr>
 
+<tr class=config><th>routerconsole.allowedHosts={hostname,hostname2}</th></tr>
+<tr><td><%=intl._t("Additional host names the console answers to, beside the address it is bound to and the localhost names, which are always accepted. Separate several with spaces or commas. This matters when the console is bound to a wildcard address such as <code>0.0.0.0</code> to reach it from the local network: browsing by a host name then requires naming that host name here, or every page is refused with a 403, while reaching it by numeric address always works. A name written with a port is matched on its name alone. A restart is required. [Default is none]")%></td></tr>
+
 <tr class=config><th>routerconsole.allowUntrustedPlugins={true|false}</th></tr>
 <tr><td><%=intl._t("Plugins signed with the cryptographic key of the developer are the recommended format, but if you wish to install unsigned plugins (.zip) you can set this to true. Note that you may still encounter issues attempting to install an unsigned plugin if the developer has included additional checks in the plugin build process.")%></td></tr>
 

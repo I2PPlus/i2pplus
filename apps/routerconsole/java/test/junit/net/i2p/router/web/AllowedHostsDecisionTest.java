@@ -75,6 +75,21 @@ public class AllowedHostsDecisionTest {
     }
 
     /**
+     * An entry written with a port still matches. The header is compared with its
+     * port removed, so an entry that keeps one - the name as it sits in the browser's
+     * address bar - is in the set and matches nothing, and the operator who copies it
+     * off the URL is refused with no hint why.
+     */
+    @Test
+    public void testAnEntryWrittenWithAPortStillMatches() {
+        Set<String> allowed = HostCheckHandler.listenHosts(
+            Collections.singleton("0.0.0.0"), "router.lan:7657, lan-2.lan:8080");
+        assertTrue("the name copied out of the address bar was refused",
+                   HostCheckHandler.hostAllowed("router.lan:7657", allowed));
+        assertTrue(HostCheckHandler.hostAllowed("LAN-2.LAN:8080", allowed));
+    }
+
+    /**
      * A plain loopback bind keeps the names it always kept, so the fix is not a
      * change to the ordinary configuration.
      */
