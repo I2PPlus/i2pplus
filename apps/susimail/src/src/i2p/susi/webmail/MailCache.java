@@ -397,6 +397,23 @@ class MailCache {
     }
 
     /**
+     * Whether a refresh should download this message's body, given the size the
+     * server listed for it. The reader refuses a body bigger than
+     * {@link POP3MailBox#MAX_BODY_BYTES}, so fetching one costs the transfer, costs
+     * the temporary file, leaves the message without a body, and costs the same
+     * transfer again on every later refresh. The header is still worth fetching, so
+     * the message stays listed.
+     *
+     * @param size the size the server listed for the message, in bytes, 0 if it
+     *             listed none
+     * @return true if the body is worth downloading
+     * @since 0.9.72+
+     */
+    static boolean bodyWorthFetching(long size) {
+        return size <= POP3MailBox.MAX_BODY_BYTES;
+    }
+
+    /**
      * Fetch any needed data from pop3 server, unless mode is CACHE_ONLY or HEADER_CACHE_ONLY,
      * or this isn't the Inbox.
      * Blocking for a long time unless mode is CACHE_ONLY or HEADER_CACHE_ONLY.
@@ -508,6 +525,9 @@ class MailCache {
      * {@link FetchBudget#BATCH_SIZE}, and leaves the rest for the next refresh. What it
      * left behind is reported by {@link #getFetchNote()}.
      *
+     * <p>A message the server lists as bigger than the body the reader will store is
+     * not fetched at all - see {@link #bodyWorthFetching(long)}.
+     *
      * @param mode HEADER or ALL only
      * @return true if any were fetched
      * @since 0.9.13
@@ -531,6 +551,7 @@ class MailCache {
         List<POP3Request> fetches = new ArrayList<>();
         FetchBudget budget = new FetchBudget(_context.getTempDir());
         int skipped = 0;
+        int tooLarge = 0;
         //  Fill in the answers from the cache and make a list of
         //  requests.to send off
         for (String uidl : popKnown) {
@@ -558,6 +579,21 @@ class MailCache {
             long sz = mail.getSize();
             if (sz > 0 && sz <= FETCH_ALL_SIZE)
                 headerOnly = false;
+            // A body bigger than the reader will store is downloaded, refused by the
+            // reader, and downloaded again by every later refresh, so the download
+            // buys nothing. Ask for the header instead, and the message is still
+            // listed with its subject and size. Where the server cannot send headers
+            // only, even that costs the whole body, so leave the message out of the
+            // refresh rather than pay for it every time.
+            if (!headerOnly && !bodyWorthFetching(sz)) {
+                tooLarge++;
+                if (mailbox.supportsTOP()) {
+                    headerOnly = true;
+                } else {
+                    unlist(uidl, newMail);
+                    continue;
+                }
+            }
             if( headerOnly ) {
                 if(!mail.hasHeader()) {
                     // load the body too if we have it cached and want to free server space
@@ -682,6 +718,11 @@ class MailCache {
                     }
                 }
             }
+        }
+        if (tooLarge > 0 && _log.shouldInfo()) {
+            _log.info("Left oversized messages out of the fetch -> Past the body the reader stores" +
+                      "\n* Messages: " + tooLarge + " * Limit: " + POP3MailBox.MAX_BODY_BYTES + " bytes" +
+                      "\n* Folder: " + getFolderName());
         }
         if (skipped > 0) {
             FetchBudget.Reason reason = budget.getReason();

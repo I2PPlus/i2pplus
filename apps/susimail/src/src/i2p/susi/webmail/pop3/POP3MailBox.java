@@ -45,7 +45,7 @@ public class POP3MailBox implements NewMailListener {
      * is a full disk. This is well above the largest message the SMTP client will
      * accept, so a real message is never refused for being too big.
      */
-    static final int MAX_BODY_BYTES = 16 * 1024 * 1024;
+    public static final int MAX_BODY_BYTES = 16 * 1024 * 1024;
     /**
      * Most lines one UIDL or LIST reply may have. Each line becomes a String held
      * in memory for the life of the session, and a mailbox with more messages than
@@ -352,6 +352,20 @@ public class POP3MailBox implements NewMailListener {
             if (id < 0) {return 0;}
             return getSize(id);
         }
+    }
+
+    /**
+     * Whether the server will send a message's headers without its body (TOP). A
+     * header-only request that the server cannot answer with TOP is answered with
+     * RETR instead, so on such a server even listing one message costs downloading
+     * it in full - which is why a message bigger than {@link #MAX_BODY_BYTES} is left
+     * out of a refresh entirely there, rather than asked for by header.
+     *
+     * @return true if the server advertised TOP
+     * @since 0.9.72+
+     */
+    public boolean supportsTOP() {
+        return supportsTOP;
     }
 
     /**
