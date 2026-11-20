@@ -116,12 +116,15 @@ class PersistentMailCache {
     /**
      * Cache-encryption keys, one per account, keyed like the account locks, and
      * holding the password each was derived from so a different password re-derives
-     * it instead of reusing a key that cannot open the cache.
+     * it instead of reusing a key that cannot open the cache. The key the previous
+     * password derived is kept beside it, long enough to re-seal the cache with the
+     * new one, so changing the password on the server does not throw the mailbox away.
      */
     private static final ConcurrentHashMap<String, CacheKey> _keys = new ConcurrentHashMap<>();
 
     /**
-     * A derived cache key with the password it came from.
+     * A derived cache key with the password it came from, and the key the password
+     * before that derived.
      *
      * @since 0.9.72+
      */
@@ -130,14 +133,21 @@ class PersistentMailCache {
         private final String _pass;
         /** The derived key. */
         private final SecretKey _key;
+        /**
+         * The key the previous password derived, or null if this is the first password
+         * this account has had since the router started.
+         */
+        private final SecretKey _previous;
 
         /**
          * @param pass the mailbox password the key was derived from
          * @param key the derived key
+         * @param previous the key the previous password derived, null if there was none
          */
-        CacheKey(String pass, SecretKey key) {
+        CacheKey(String pass, SecretKey key, SecretKey previous) {
             _pass = pass;
             _key = key;
+            _previous = previous;
         }
     }
 
@@ -164,8 +174,19 @@ class PersistentMailCache {
         _lock = getLock(host, port, user);
         synchronized(_lock) {
             _cacheDir = makeCacheDirs(host, port, user, folder);
-            _key = cacheKey(_cacheDir.getParentFile(), host, port, user, pass);
+            File accountDir = _cacheDir.getParentFile();
+            _key = cacheKey(accountDir, host, port, user, pass);
             if (_key != null) {
+                // Once per account, not once per folder: the pass walks every folder the
+                // account has, and takePreviousKey() hands the old key over only the
+                // first time. The account lock is held, as it is for all folders.
+                SecretKey previous = takePreviousKey(accountName(host, port, user));
+                if (previous != null) {
+                    int rekeyed = rekey(accountDir, previous, _key, _log);
+                    if (rekeyed > 0 && _log.shouldInfo())
+                        _log.info("Cache files re-sealed -> Written with the previous mailbox password" +
+                                  "\n* Files: " + rekeyed);
+                }
                 int sealed = sealLegacy(_cacheDir, _key, _log);
                 if (sealed > 0 && _log.shouldInfo())
                     _log.info("Cache files re-sealed -> Messages no longer readable in plaintext\n* Files: " + sealed);
@@ -435,6 +456,20 @@ class PersistentMailCache {
     }
 
     /**
+     * The name one account's lock and its cache key are both stored under. Both maps
+     * have to agree on it or a folder's cache is guarded by another account's lock.
+     *
+     * @param host the mail host
+     * @param port the mail port
+     * @param user the user name
+     * @return the name used as the key of both maps
+     * @since 0.9.72+
+     */
+    static String accountName(String host, int port, String user) {
+        return user + host + port;
+    }
+
+    /**
      * Returns the lock shared by one account.
      *
      * @param host the mail host
@@ -444,7 +479,7 @@ class PersistentMailCache {
      */
     private static Object getLock(String host, int port, String user) {
         Object lock = new Object();
-        Object old = _locks.putIfAbsent(user + host + port, lock);
+        Object old = _locks.putIfAbsent(accountName(host, port, user), lock);
         return (old != null) ? old : lock;
     }
 
@@ -464,7 +499,7 @@ class PersistentMailCache {
         if (!f.exists() && !f.mkdir()) {throw new IOException("Cannot create " + f);}
         f = new SecureDirectory(f, DIR_CACHE);
         if (!f.exists() && !f.mkdir()) {throw new IOException("Cannot create " + f);}
-        f = new SecureDirectory(f, CACHE_PREFIX + Base64.encode(user + host + port));
+        f = new SecureDirectory(f, CACHE_PREFIX + Base64.encode(accountName(host, port, user)));
         if (!f.exists() && !f.mkdir()) {throw new IOException("Cannot create " + f);}
         File base = new SecureDirectory(f, folder);
         if (!base.exists() && !base.mkdir()) {throw new IOException("Cannot create " + base);}
@@ -497,19 +532,40 @@ class PersistentMailCache {
             return null;
         if (!Boolean.parseBoolean(Config.getProperty(CONFIG_CACHE_ENCRYPT, "true")))
             return null;
-        String account = user + host + port;
+        String account = accountName(host, port, user);
         CacheKey ck = _keys.get(account);
         if (ck != null && pass.equals(ck._pass))
             return ck._key;
         try {
             byte[] salt = readOrCreateSalt(accountDir);
             SecretKey key = SealedFileBuffer.deriveKey(pass, salt);
-            _keys.put(account, new CacheKey(pass, key));
+            // The key the old password derived is kept beside the new one, long enough
+            // for takePreviousKey() to hand it to the re-key pass and clear it.
+            _keys.put(account, new CacheKey(pass, key, ck != null ? ck._key : null));
             return key;
         } catch (IOException ioe) {
             _log.error("Cache key could not be derived -> Messages stored in plaintext", ioe);
             return null;
         }
+    }
+
+    /**
+     * The key the previous mailbox password derived for this account, taken out of the
+     * map in the same step so the re-key pass runs once per account and not once per
+     * folder. The caller holds the account lock.
+     *
+     * @param account the account name, as {@link #accountName} builds it
+     * @return the previous key, or null if the password has not changed since this
+     *         account's key was first derived, or the change happened while the router
+     *         was down and no previous key was ever derived in this run
+     * @since 0.9.72+
+     */
+    static SecretKey takePreviousKey(String account) {
+        CacheKey ck = _keys.get(account);
+        if (ck == null || ck._previous == null)
+            return null;
+        _keys.put(account, new CacheKey(ck._pass, ck._key, null));
+        return ck._previous;
     }
 
     /**
@@ -610,6 +666,98 @@ class PersistentMailCache {
             }
             legacy.readComplete(false);
             sealed.writeComplete(false);
+            if (!done)
+                tmp.delete();
+        }
+        return done;
+    }
+
+    /**
+     * Re-seal the cache files an earlier mailbox password wrote, under the current one.
+     *
+     * The cache is sealed with a key derived from the password the user types at login,
+     * so changing it on the server leaves every cached message sealed under a key
+     * nothing holds any more: the folder loads empty, and on a server that deletes mail
+     * there is nothing to re-fetch. The previous key is still in memory, so the files
+     * can be opened with it and written back under the new one.
+     *
+     * Unlike the legacy pass this one walks the whole account directory, because the
+     * password changes once and all five folders were written with the old key.
+     *
+     * @param dir the account directory to walk, holding every folder
+     * @param from the key the files are sealed with now
+     * @param to the key to seal them with
+     * @param log the cache's log, for a file that could not be re-sealed
+     * @return the number of files re-sealed
+     * @since 0.9.72+
+     */
+    static int rekey(File dir, SecretKey from, SecretKey to, Log log) {
+        File[] entries = dir.listFiles();
+        if (entries == null)
+            return 0;
+        int rekeyed = 0;
+        for (File f : entries) {
+            if (f.isDirectory())
+                rekeyed += rekey(f, from, to, log);
+            else if (f.getName().startsWith(FILE_PREFIX) && SealedFileBuffer.isSealed(f) &&
+                     rekeyOne(f, from, to, log))
+                rekeyed++;
+        }
+        return rekeyed;
+    }
+
+    /**
+     * Re-seal one cache file under a new key: open it with the old one, write it back
+     * through the new under a temporary name, then rename it into place.
+     *
+     * @param f the cache file, already sealed
+     * @param from the key it is sealed with now
+     * @param to the key to seal it with
+     * @param log the cache's log
+     * @return true if the file now carries the new key
+     */
+    private static boolean rekeyOne(File f, SecretKey from, SecretKey to, Log log) {
+        if (f.length() > MAX_SEAL_BYTES) {
+            if (log.shouldWarn())
+                log.warn("Cache file left under the old key -> Larger than the re-seal limit" +
+                         "\n* File: " + f.getName());
+            return false;
+        }
+        File tmp = new SecureFile(f.getParentFile(), f.getName() + SEALING_SUFFIX);
+        Buffer old = new SealedFileBuffer(f, from);
+        SealedFileBuffer fresh = new SealedFileBuffer(tmp, to, f.getName());
+        InputStream in = null;
+        OutputStream out = null;
+        boolean done = false;
+        try {
+            in = old.getInputStream();
+            out = fresh.getOutputStream();
+            DataHelper.copy(in, out);
+            out.close();
+            out = null;
+            old.readComplete(true);
+            fresh.writeComplete(true);
+            done = tmp.renameTo(f);
+            if (!done && log.shouldWarn())
+                log.warn("Cache file left under the old key -> The re-sealed copy could not take its place" +
+                         "\n* File: " + f.getName());
+        } catch (IOException ioe) {
+            // Usually a tag that does not match, meaning the file was not written with
+            // this key at all. It may be the only copy of the message, so it is left
+            // exactly as it is rather than replaced by a copy that failed to open.
+            if (log.shouldWarn())
+                log.warn("Re-sealing a cache file failed -> Left under the old key\n* File: " + f.getName(), ioe);
+        } finally {
+            if (in != null) {
+                try {in.close();}
+                catch (IOException ioe) { /* ignored */ }
+            }
+            if (out != null) {
+                try {out.close();}
+                catch (IOException ioe) { /* ignored */ }
+            }
+            old.readComplete(false);
+            fresh.writeComplete(false);
             if (!done)
                 tmp.delete();
         }
