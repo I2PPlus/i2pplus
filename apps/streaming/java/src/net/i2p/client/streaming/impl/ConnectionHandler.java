@@ -903,6 +903,11 @@ class ConnectionHandler {
      * caller has been parked through a close into a new listening period, so it
      * never returns a connection for a handler that is still running.
      *
+     * <p>Those two cases are not the same job. When the handler is inactive the
+     * queues are ours to clean up. When it is running again, only the period this
+     * caller entered has ended, and both queues belong to the new listener: taking
+     * from them here resets SYNs its workers are about to serve.
+     *
      * @param state the listening period the caller entered, which carries the
      *              reason that period stopped
      * @return a connection a worker queued before the shutdown, if any
@@ -910,6 +915,13 @@ class ConnectionHandler {
      * @throws ConnectException if the server socket is simply closed
      */
     private Connection handlerInactive(ListenState state) throws RouterRestartException, ConnectException {
+        if (_active) {
+            // Reopened while this caller was parked. Leave the new period's queues
+            // alone and report the reason this caller is leaving.
+            if (state.restartPending)
+                throw new RouterRestartException();
+            throw new ConnectException("ServerSocket closed");
+        }
         // Drain any remaining results
         Connection con = _resultQueue.poll();
         if (con != null) return con;

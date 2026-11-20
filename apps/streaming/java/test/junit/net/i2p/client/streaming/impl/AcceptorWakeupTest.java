@@ -253,6 +253,38 @@ public class AcceptorWakeupTest {
     }
 
     /**
+     * The SYNs queued after a reopen belong to the new listener. A stale acceptor
+     * waking into that reopened handler used to drain the queue as if the handler
+     * were stopping: every SYN that arrived within one poll interval of the reopen
+     * was reset and released against a healthy listener whose accept workers were
+     * live, and the client behind it had to reconnect.
+     *
+     * @throws Exception if the accept thread cannot be started or joined
+     */
+    @Test(timeout = 20000)
+    public void testAReopenLeavesTheNewPeriodsSynsAlone() throws Exception {
+        _handler.setActive(true);
+        AtomicReference<Throwable> thrown = new AtomicReference<>();
+        Thread waiter = parkAccept(0, null, thrown);
+        // inside the poll interval the waiter is parked in, so the SYN below is
+        // already queued by the time it wakes
+        Thread.sleep(200);
+        _handler.setActive(false);
+        _handler.setActive(true);
+        Packet syn = mock(Packet.class);
+        // unverifiable -> sendReset() gives up without touching the packet queue
+        when(syn.verifySignature(any(I2PAppContext.class), any(byte[].class))).thenReturn(false);
+        synQueue().offer(syn);
+        waiter.join(WAKEUP_LIMIT);
+        assertFalse("accept(0) stayed parked through the close", waiter.isAlive());
+        assertTrue("expected a ConnectException, got " + thrown.get(),
+                   thrown.get() instanceof ConnectException);
+        verify(syn, never()).releasePayload();
+        assertTrue("the stale acceptor took the new period's SYN off its queue",
+                   synQueue().contains(syn));
+    }
+
+    /**
      * A SYN still on the accept queue when the handler stops is reset and
      * released by the stop itself. setActive(false) used to clear the queue
      * before anything could drain it, so the RESET that handlerInactive()
