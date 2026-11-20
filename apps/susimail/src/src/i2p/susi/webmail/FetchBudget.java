@@ -143,6 +143,35 @@ class FetchBudget {
     }
 
     /**
+     * Whether the temp directory can still hold another batch of this refresh.
+     *
+     * The message and byte ceilings are asked before a fetch is queued. The loop that
+     * then sends what was queued asks only this: those fetches are already charged
+     * against the ceilings, so re-asking the count would refuse the very messages the
+     * queueing loop admitted, and at exactly the ceiling a refresh would queue its
+     * whole allowance and send none of it. What can still go wrong while the bodies are
+     * arriving is the disk filling up, and that is what is asked here.
+     *
+     * @return true if the next batch may go out
+     */
+    boolean hasDiskSpace() {
+        return hasDiskSpace(freeSpace(), MIN_FREE_BYTES);
+    }
+
+    /**
+     * The disk half of {@link #stopReason} on its own, with the numbers handed to it
+     * rather than read from fields, so the boundary is testable without a mailbox.
+     *
+     * @param free bytes available in the temp directory, Long.MAX_VALUE if there is no
+     *             directory to ask
+     * @param minFree the free space the directory must be left with
+     * @return true if the space is there
+     */
+    static boolean hasDiskSpace(long free, long minFree) {
+        return free >= minFree;
+    }
+
+    /**
      * How much space the temp directory has left.
      *
      * @return the bytes available, or Long.MAX_VALUE if there is no directory to ask,
@@ -180,7 +209,7 @@ class FetchBudget {
         long want = size > 0 ? size : 0;
         if (bytes + want > maxBytes)
             return Reason.BYTES;
-        if (free < minFree + want)
+        if (!hasDiskSpace(free, minFree + want))
             return Reason.DISK;
         return Reason.NONE;
     }

@@ -167,6 +167,43 @@ public class FetchBudgetTest {
     }
 
     /**
+     * The loop that sends the queued fetches asks only whether the temp directory can
+     * still hold what is coming. Every fetch in it was already allowed and charged, so
+     * re-asking the message ceiling would refuse the very messages the queueing loop
+     * admitted: at exactly the ceiling a refresh would queue 500, send none of them, and
+     * the folder would never load, however often the user refreshed.
+     */
+    @Test
+    public void testTheSendLoopIsNotGatedOnTheMessageCount() {
+        FetchBudget budget = new FetchBudget(folder.getRoot());
+        for (int i = 0; i < FetchBudget.MAX_MESSAGES; i++) {
+            assertTrue("queued at " + i, budget.allows(FetchBudget.HEADER_BYTES));
+            budget.queued(FetchBudget.HEADER_BYTES);
+        }
+        assertEquals(FetchBudget.MAX_MESSAGES, budget.getMessages());
+        // the queueing loop is closed, and that is right
+        assertFalse(budget.allows(0));
+        // the fetches already queued still have to go out, and that is the fix
+        assertTrue(budget.hasDiskSpace());
+    }
+
+    /**
+     * The disk half on its own, at its boundary: a directory exactly at the floor may
+     * send another batch, one byte below it may not, and neither answer depends on how
+     * many messages have already been fetched.
+     */
+    @Test
+    public void testTheDiskHalfStandsAlone() {
+        long floor = FetchBudget.MIN_FREE_BYTES;
+        assertTrue(FetchBudget.hasDiskSpace(floor, floor));
+        assertFalse(FetchBudget.hasDiskSpace(floor - 1, floor));
+        // a directory the router cannot read does not stop every fetch
+        assertTrue(FetchBudget.hasDiskSpace(Long.MAX_VALUE, floor));
+        FetchBudget missing = new FetchBudget(new File(folder.getRoot(), "not-there"));
+        assertTrue(missing.hasDiskSpace());
+    }
+
+    /**
      * The constants have to be usable together: a refresh is several batches, and the
      * disk floor has to leave room for a message inside the byte allowance.
      */

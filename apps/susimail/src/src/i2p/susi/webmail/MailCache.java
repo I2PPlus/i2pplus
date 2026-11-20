@@ -622,9 +622,11 @@ class MailCache {
             //  Send off the fetches, a batch at a time. One round trip for the whole
             //  list meant nothing could be kept if the fetch had to stop, and the free
             //  space check below is what stops a temp directory that filled up during
-            //  the refresh.
+            //  the refresh. Only the disk is asked here: these fetches were each allowed
+            //  and charged before they were queued, so asking the message or byte ceiling
+            //  again would refuse the whole list the moment it reached the ceiling.
             int sent = 0;
-            while (sent < fetches.size() && budget.allows(0)) {
+            while (sent < fetches.size() && budget.hasDiskSpace()) {
                 int to = Math.min(sent + FetchBudget.BATCH_SIZE, fetches.size());
                 // gaah compiler
                 List foo = fetches.subList(sent, to);
