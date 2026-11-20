@@ -160,6 +160,27 @@ public class ConnectCheckerInboundMaskTest {
     }
 
     /**
+     * Our own published port is not judged by the heuristic for other routers.
+     * TransportUtil.isValidPort() rejects a list of ports a remote peer should
+     * not be using - Tor's 9030, the standard I2P range 7650-7668, 9100 - and
+     * the transports validate only the bind port, so a NAT that maps our socket
+     * into one of those ranges published a route we then refused to count. The
+     * inbound mask went to 0, every peer we were not already connected to was
+     * excluded as the closest hop of an inbound tunnel, and inbound tunnels were
+     * built out of the few peers we had sessions with.
+     */
+    @Test
+    public void ourOwnPortIsNotJudgedByTheRemotePeerHeuristic() {
+        List<RouterAddress> addrs = Collections.singletonList(ssu2("4", "1.2.3.4", 9030, null));
+        assertEquals("a NAT mapping onto Tor's port hid our inbound route",
+                     ConnectChecker.SSU2_V4, ConnectChecker.getConnectMask(addrs, true));
+
+        addrs = Collections.singletonList(ntcp2("1.2.3.4", 7650));
+        assertEquals("a NAT mapping inside the standard I2P range hid our inbound route",
+                     ConnectChecker.NTCP_V4, ConnectChecker.getConnectMask(addrs, true));
+    }
+
+    /**
      * An SSU address with no host but an introducer tag is reachable - the
      * introducer dials us on the peer's behalf - so it stays an inbound route.
      * An SSU v1 introducer host counts the same way.

@@ -7,7 +7,6 @@ import net.i2p.data.router.RouterInfo;
 import net.i2p.router.CommSystemFacade.Status;
 import net.i2p.router.RouterContext;
 import net.i2p.router.transport.TransportManager;
-import net.i2p.router.transport.TransportUtil;
 import net.i2p.util.Log;
 
     /**
@@ -357,7 +356,10 @@ import net.i2p.util.Log;
      * The bitmask of supported transports for the given addresses, counting only
      * what could be dialed from outside when {@code inbound} is set.
      * <p>
-     * An address with no host, or no usable port, cannot be dialed, and the
+     * An address with no host, or with no port published at all, cannot be
+     * dialed; our own addresses are not judged by the port heuristic applied to
+     * other routers', which rejects ports a NAT mapping of ours may well land on.
+     * The
      * {@code caps} option that a hostless address carries says what the peer
      * could reach, not what can reach it. Our own transports publish exactly that
      * form for an outbound-only listener, so reading the families out of
@@ -375,9 +377,14 @@ import net.i2p.util.Log;
         for (RouterAddress ra : addrs) {
             String style = ra.getTransportStyle();
             String host = ra.getHost();
-            // A host with no port, or a port that is not one, is not a route
-            // either - the transport writes -1 when it has no bind port.
-            boolean dialable = host != null && TransportUtil.isValidPort(ra.getPort());
+            // A host with no port is not a route - the transports write no port
+            // when they have no bind port. These are our own published addresses,
+            // so the only question is whether a port was published at all.
+            // TransportUtil.isValidPort() is the heuristic for judging somebody
+            // else's address, and its blocklist of ports other routers should not
+            // use - 9030, 7650-7668, 9100 - is a NAT mapping our own external
+            // port can land in, which would then hide our inbound route.
+            boolean dialable = host != null && ra.getPort() > 0;
             if ("NTCP2".equals(style)) {
                 if (host != null) {
                     if (inbound && !dialable)
