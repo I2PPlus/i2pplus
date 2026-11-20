@@ -117,8 +117,11 @@ class ConnectionHandler {
      * every SYN behind it waits the full accept timeout.
      */
     private static final int DEFAULT_ACCEPT_WORKERS = 4;
-    /** Ceiling for scale-up under SYN queue pressure, see {@code SynReaper}. */
-    private static final int MAX_ACCEPT_WORKERS = 16;
+    /**
+     * Ceiling for scale-up under SYN queue pressure, see {@code SynReaper}.
+     * Package-visible so the scale-up decision can be tested against its ceiling.
+     */
+    static final int MAX_ACCEPT_WORKERS = 16;
     /**
      * How long a blocked {@link #accept} waits for one result before it re-checks
      * whether the handler is still active (ms). Nothing is offered to the result
@@ -188,6 +191,43 @@ class ConnectionHandler {
     static String synQueueLimitText(int max) {
         return max > 0 ? "Limit: " + max + " SYNs"
                        : "Uncapped, at the backstop of " + SYN_QUEUE_BACKSTOP + " SYNs";
+    }
+
+    /**
+     * The depth the accept queue really stops at, which is what the pressure rules
+     * have to be keyed on. A configured cap of 0 or less means uncapped for
+     * admission, but the queue is still hard-bounded at
+     * {@link #SYN_QUEUE_BACKSTOP}, so that backstop is the depth it will reach; a
+     * rule keyed on the configured cap alone switches itself off precisely where
+     * the queue can grow the most.
+     *
+     * @param max the configured soft cap, 0 or less when uncapped
+     * @return the depth to key queue-pressure rules on, always positive
+     * @since 0.9.72+
+     */
+    static int effectiveQueueLimit(int max) {
+        return max > 0 ? max : SYN_QUEUE_BACKSTOP;
+    }
+
+    /**
+     * Whether the accept queue is deep enough to be worth another worker. One
+     * worker draining a deep queue leaves every SYN behind it waiting the full
+     * accept timeout, so the pool grows once the queue passes a quarter of the
+     * depth it will stop at - the configured cap, or the backstop when the cap says
+     * uncapped.
+     *
+     * <p>Keyed on the configured cap and gated on it being positive, a router
+     * running uncapped never added a worker at all: the one setting with no ceiling
+     * on the queue was the one the scale-up refused to serve.
+     *
+     * @param queued SYNs waiting now
+     * @param max the configured soft cap, 0 or less when uncapped
+     * @param workers accept workers running now
+     * @return true to start one more accept worker
+     * @since 0.9.72+
+     */
+    static boolean acceptQueueNeedsWorker(int queued, int max, int workers) {
+        return queued > effectiveQueueLimit(max) / 4 && workers < MAX_ACCEPT_WORKERS;
     }
 
     /**
@@ -1186,9 +1226,10 @@ class ConnectionHandler {
             // Scale up under pressure before draining: a deep queue drained
             // by one worker still leaves every SYN waiting the full timeout.
             int max = getMaxQueueSize();
-            if (_active && max > 0 && _synQueue.size() > max / 4 && _activeWorkerCount.get() < MAX_ACCEPT_WORKERS) {
+            if (_active && acceptQueueNeedsWorker(_synQueue.size(), max, _activeWorkerCount.get())) {
                 startAcceptWorker();
-                _log.info("SYN queue busy (" + _synQueue.size() + '/' + max + ") -> Added accept worker (" + _activeWorkerCount.get() + " total)");
+                _log.info("SYN queue busy (" + _synQueue.size() + '/' + effectiveQueueLimit(max) +
+                          ") -> Added accept worker (" + _activeWorkerCount.get() + " total)");
             }
             long now = _context.clock().now();
             int expired = 0;

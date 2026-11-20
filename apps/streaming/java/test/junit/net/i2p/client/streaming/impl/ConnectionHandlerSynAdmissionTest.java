@@ -16,6 +16,12 @@ import org.junit.Test;
  * Tuner write or a config change applies without a restart, which is what makes the
  * trap live: one write of 0 stops the router accepting any inbound stream at all.
  *
+ * <p>The same sentinel decides whether the accept pool grows under pressure, and
+ * there it was gated on the cap being positive, so the uncapped queue - the one
+ * that grows deepest - never got another worker. Both halves are now keyed on the
+ * depth the queue really stops at: the configured cap, or the hard backstop when the
+ * cap says uncapped.
+ *
  * @since 0.9.72+
  */
 public class ConnectionHandlerSynAdmissionTest {
@@ -64,6 +70,55 @@ public class ConnectionHandlerSynAdmissionTest {
         assertTrue(ConnectionHandler.synAdmitted(CONFIGURED - 1, CONFIGURED));
         assertFalse(ConnectionHandler.synAdmitted(CONFIGURED, CONFIGURED));
         assertFalse(ConnectionHandler.synAdmitted(CONFIGURED + 1, CONFIGURED));
+    }
+
+    /**
+     * Uncapped still has a depth the queue stops at, and the pressure rules have to
+     * be keyed on that: the queue is hard-bounded at the backstop whatever the
+     * property says, so "uncapped" means uncapped of the configured kind only.
+     */
+    @Test
+    public void testUncappedStillHasADepthItStopsAt() {
+        int backstop = ConnectionHandler.SYN_QUEUE_BACKSTOP;
+        assertEquals(backstop, ConnectionHandler.effectiveQueueLimit(0));
+        assertEquals(backstop, ConnectionHandler.effectiveQueueLimit(-1));
+        assertEquals(256, ConnectionHandler.effectiveQueueLimit(256));
+    }
+
+    /**
+     * A capped queue is handed another worker past a quarter of the cap and not
+     * before it: one worker draining a deep queue leaves every SYN behind it waiting
+     * the full accept timeout.
+     */
+    @Test
+    public void testACappedQueueGrowsWorkersPastAQuarterOfTheCap() {
+        assertTrue(ConnectionHandler.acceptQueueNeedsWorker(65, 256, 4));
+        assertFalse(ConnectionHandler.acceptQueueNeedsWorker(64, 256, 4));
+        assertFalse(ConnectionHandler.acceptQueueNeedsWorker(20, 256, 4));
+    }
+
+    /**
+     * The defect: uncapped was the one setting the scale-up refused to serve. The
+     * gate required a positive cap, so a router running with no ceiling on the accept
+     * queue - the setting that lets that queue grow deepest - never added a worker.
+     */
+    @Test
+    public void testAnUncappedQueueStillGrowsWorkers() {
+        int backstop = ConnectionHandler.SYN_QUEUE_BACKSTOP;
+        assertTrue(ConnectionHandler.acceptQueueNeedsWorker(backstop / 4 + 1, 0, 4));
+        assertTrue(ConnectionHandler.acceptQueueNeedsWorker(backstop / 4 + 1, -1, 4));
+        assertFalse(ConnectionHandler.acceptQueueNeedsWorker(backstop / 4, 0, 4));
+    }
+
+    /**
+     * The pool stops growing at the module's ceiling, capped or uncapped.
+     */
+    @Test
+    public void testThePoolStopsAtTheCeiling() {
+        int ceiling = ConnectionHandler.MAX_ACCEPT_WORKERS;
+        assertFalse(ConnectionHandler.acceptQueueNeedsWorker(ConnectionHandler.SYN_QUEUE_BACKSTOP,
+                                                             0, ceiling));
+        assertFalse(ConnectionHandler.acceptQueueNeedsWorker(100000, 256, ceiling));
     }
 
     /**
