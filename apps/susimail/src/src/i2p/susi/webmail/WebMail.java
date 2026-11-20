@@ -4273,6 +4273,18 @@ public class WebMail extends HttpServlet {
           .append("<span id=msgcount>").append(ngettext("1 Message", "{0} Messages", folder.getSize()))
           .append("</span>").append(button(LOGOUT, _t("Logout"))).append("</span>");
 
+        // A folder that loaded short says so. The messages are on disk but would not
+        // open, usually because the mailbox password changed while the router was
+        // stopped, and an inbox that is simply empty reads as lost mail.
+        int unreadable = mc.getUnreadableMessages();
+        if (unreadable > 0) {
+            sb.append("<p class=error id=unreadable>")
+              .append(ngettext("One cached message could not be opened and is not listed. It is still on disk.",
+                               "{0} cached messages could not be opened and are not listed. They are still on disk.",
+                               unreadable))
+              .append("</p>\n");
+        }
+
         int page = 1;
         if (folder.getPages() > 1) {
             String sp = request.getParameter(CUR_PAGE);

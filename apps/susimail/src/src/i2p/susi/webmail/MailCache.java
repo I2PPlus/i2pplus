@@ -279,6 +279,18 @@ class MailCache {
     }
 
     /**
+     * How many of this folder's cached messages the last load could not open, so the
+     * page listing the folder can say why it is short. A cache with nothing on disk to
+     * open has none.
+     *
+     * @return the count from the last load, 0 if every file opened
+     * @since 0.9.72+
+     */
+    public int getUnreadableMessages() {
+        return 0;
+    }
+
+    /**
      * Threaded. Returns immediately.
      * This will not access the mailbox. Mailbox need not be ready.
      *

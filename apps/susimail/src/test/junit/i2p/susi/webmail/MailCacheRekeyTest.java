@@ -36,7 +36,10 @@ import org.junit.rules.TemporaryFolder;
  * server deletes mail after fetching it there is nothing to re-fetch - the message
  * is simply gone from view. These cases pin the pass that re-seals the files with
  * the new key while the old one is still in memory, and in particular that it never
- * destroys a file it could not open.
+ * destroys a file it could not open. The case that pass cannot reach - the password
+ * changed while the router was stopped, so no previous key is in memory - is pinned to
+ * leave those files on disk untouched and counted, so the folder says why it is short
+ * instead of looking empty.
  *
  * @since 0.9.72+
  */
@@ -227,6 +230,48 @@ public class MailCacheRekeyTest {
             assertTrue("the cache could not be opened with the new password", later.hasBody());
             assertNull(PersistentMailCache.takePreviousKey(
                        PersistentMailCache.accountName("rekey.example", 995, "user")));
+        } finally {
+            if (saved != null)
+                System.setProperty("i2p.dir.config", saved);
+        }
+    }
+
+    /**
+     * The case the re-key pass cannot reach: the mailbox password changed while the
+     * router was stopped, so no previous key is in memory and every cached file fails
+     * its tag. The folder still has to load, the files have to survive untouched, what
+     * does open still has to be listed, and the count the page shows has to say how many
+     * messages are missing rather than leaving an empty folder unexplained.
+     *
+     * @throws IOException if the fixture cache directory cannot be created
+     */
+    @Test
+    public void testFilesUnderALostKeyAreCountedAndLeftAlone() throws IOException {
+        File cfg = folder.newFolder("config-dir-3");
+        String saved = System.getProperty("i2p.dir.config");
+        System.setProperty("i2p.dir.config", cfg.getAbsolutePath());
+        try {
+            I2PAppContext ctx = new I2PAppContext();
+            PersistentMailCache mc = new PersistentMailCache(ctx, "lost-key.example", 995,
+                                                    "user", "the-new-password", WebMail.DIR_FOLDER);
+            File full = mc.getFullFile("uidl-lost");
+            File hdr = mc.getHeaderFile("uidl-lost");
+            File only = mc.getFullFile("uidl-lost-2");
+            seal(full, OTHER);
+            seal(hdr, OTHER);
+            seal(only, OTHER);
+            byte[] raw = MARKER.getBytes(StandardCharsets.UTF_8);
+            Mail good = new Mail("uidl-good");
+            good.setBody(new ReadBuffer(raw, 0, raw.length));
+            assertTrue(mc.saveMail(good));
+            assertEquals(1, mc.getMails(WebMail.DIR_FOLDER).size());
+            // Two files, one message: the header and the full copy of uidl-lost are
+            // counted once, and uidl-lost-2 once more.
+            assertEquals(2, mc.getUnreadableMessages());
+            assertTrue(full.canRead());
+            assertTrue(hdr.canRead());
+            assertTrue(only.canRead());
+            assertEquals(MARKER, unseal(full, OTHER));
         } finally {
             if (saved != null)
                 System.setProperty("i2p.dir.config", saved);

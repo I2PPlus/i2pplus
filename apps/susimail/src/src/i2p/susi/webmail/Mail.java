@@ -137,13 +137,17 @@ class Mail {
      * Record the header bytes fetched from the server.
      *
      * @param rb buffer containing header data
-    */
-    public synchronized void setHeader(Buffer rb) {
-        try {setHeader(rb, rb.getInputStream(), true);}
+     * @return true if the header was read and the fields parsed out of it; false if the
+     *         buffer could not be read or the fields could not be parsed out of it,
+     *         which leaves the message with no sender and no subject
+     */
+    public synchronized boolean setHeader(Buffer rb) {
+        try {return setHeader(rb, rb.getInputStream(), true) != null;}
         catch (IOException ioe) { // TODO...
             if (_log.shouldWarn()) {
                 _log.warn("Reading the message header for [" + LogHelper.head(uidl) + "] failed\n* Error: " + ioe);
             }
+            return false;
         }
     }
 

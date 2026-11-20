@@ -18,6 +18,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Queue;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 import javax.crypto.SecretKey;
@@ -79,6 +80,14 @@ class PersistentMailCache {
      * tree always did: gzip only.
      */
     private final SecretKey _key;
+
+    /**
+     * How many of this folder's cached messages the last load could not open, written
+     * when that load finished so the page listing the folder can say why it is short of
+     * messages. A message with both a header and a full file is counted once. Zero until
+     * the first load, and rewritten by each one.
+     */
+    private volatile int _unreadable;
 
     /** Name of the mail data directory. */
     private static final String DIR_SUSI = "susimail";
@@ -217,6 +226,20 @@ class PersistentMailCache {
     }
 
     /**
+     * How many of this folder's cached messages the last load could not open. A sealed
+     * file that does not authenticate is the usual case: it was written with a mailbox
+     * password no longer in hand, because the password changed while the router was
+     * stopped. Those files are still on disk and untouched, and the folder shown is
+     * short by this many messages.
+     *
+     * @return the count from the last load, 0 if every file opened
+     * @since 0.9.72+
+     */
+    public int getUnreadableMessages() {
+        return _unreadable;
+    }
+
+    /**
      * Lists the cached mails, lock held.
      *
      * @param folder the folder to list
@@ -240,10 +263,12 @@ class PersistentMailCache {
         // thread the read-in
         long begin = _context.clock().now();
         Queue<Mail> rv = new LinkedBlockingQueue<>();
+        Set<String> unreadable = ConcurrentHashMap.newKeySet();
         int tcnt = Math.max(1, Math.min(sz / 4, Math.min(SystemVersion.getCores(), 16)));
         List<Thread> threads = new ArrayList<>(tcnt);
         for (int i = 0; i < tcnt; i++) {
-            Thread t = new I2PAppThread(new Loader(fq, rv, _isDrafts, _attachmentDir, _key, _log),
+            Thread t = new I2PAppThread(new Loader(fq, rv, _isDrafts, _attachmentDir, _key, _log,
+                                                    unreadable),
                                         "MailLd" + ThreadNames.idx(i));
             t.start();
             threads.add(t);
@@ -253,6 +278,12 @@ class PersistentMailCache {
             catch (InterruptedException ie) {break;}
         }
         long end = _context.clock().now();
+        int failed = unreadable.size();
+        _unreadable = failed;
+        if (failed > 0 && _log.shouldWarn()) {
+            _log.warn("Cached messages could not be opened -> Left out of the folder" +
+                      " * Folder: " + folder + " * Messages: " + failed);
+        }
         if (_log.shouldDebug()) {
             _log.debug("Loaded the folder from disk in " + DataHelper.formatDuration(end - begin) +
                        " -> Folder: " + folder + " * Messages: " + sz + " * Threads: " + tcnt);
@@ -277,6 +308,13 @@ class PersistentMailCache {
         private final SecretKey _key;
         /** Logger for this loader, handed down from the cache. */
         private final Log _log;
+        /**
+         * Where this loader reports a message it could not open, shared by every loader
+         * thread draining one folder, so the folder gets one tally for the pass. Keyed on
+         * the cache file name without its suffix, so a message with both a header and a
+         * full file is reported once.
+         */
+        private final Set<String> _unreadable;
 
         /**
          * Take the queues to drain and whether the files are drafts, so the
@@ -289,13 +327,16 @@ class PersistentMailCache {
          *                  to accept an attachment path as the draft wrote it
          * @param key the key a sealed cache file needs, null for a plaintext cache
          * @param log the cache's log, for reporting a file that cannot be loaded
+         * @param unreadable where to report a message that could not be opened
          */
-        public Loader(Queue<File> in, Queue<Mail> out, boolean isDrafts, File attachDir, SecretKey key, Log log) {
+        public Loader(Queue<File> in, Queue<Mail> out, boolean isDrafts, File attachDir, SecretKey key,
+                      Log log, Set<String> unreadable) {
             _in = in; _out = out;
             _isD = isDrafts;
             _attachDir = attachDir;
             _key = key;
             _log = log;
+            _unreadable = unreadable;
         }
 
         @Override
@@ -319,9 +360,30 @@ class PersistentMailCache {
                     }
                     mail = null;
                 }
+                // load() reports a message it could not open by returning null as well as
+                // by throwing, so both ways are counted here and the folder gets one tally
+                // for the pass rather than one line per message.
                 if (mail != null) {_out.offer(mail);}
+                else {_unreadable.add(messageKey(f));}
             }
         }
+    }
+
+    /**
+     * The name the cache files of one message share, so a message with both a header and
+     * a full file is counted once and not twice.
+     *
+     * @param f the cache file
+     * @return the file name without its full or header suffix, or the name itself if it
+     *         has neither
+     */
+    private static String messageKey(File f) {
+        String name = f.getName();
+        if (name.endsWith(FULL_SUFFIX))
+            return name.substring(0, name.length() - FULL_SUFFIX.length());
+        if (name.endsWith(HDR_SUFFIX))
+            return name.substring(0, name.length() - HDR_SUFFIX.length());
+        return name;
     }
 
     /**
@@ -919,8 +981,12 @@ class PersistentMailCache {
         Mail mail;
         if (isDrafts) {mail = new Draft(uidl, attachDir);}
         else {mail = new Mail(uidl);}
-        if (headerOnly) {mail.setHeader(rb);}
-        else if (isDrafts) {
+        // The header read is what opens the file, so it is also where a cache file that
+        // does not authenticate fails: setHeader() says so, and the message is skipped
+        // rather than listed with no sender and no subject.
+        if (headerOnly) {
+            if (!mail.setHeader(rb)) {return null;}
+        } else if (isDrafts) {
             // drafts always have FULL_SUFFIX but may not actually have a real body or part.
             // If we don't call setBody(), it has a null part and we NPE on the compose page.
             // Attachments are stored in separate files so these are all small.
@@ -929,7 +995,7 @@ class PersistentMailCache {
             // Deferred loading, body will be loaded on-demand in MailCache.getMail()
             // We set the size of the gzipped file to be the size so the UI doesn't have ?? in it.
             // The size will be corrected if and when the body is read.
-            mail.setHeader(rb);
+            if (!mail.setHeader(rb)) {return null;}
             mail.setSize(f.length());
         }
         return mail;
