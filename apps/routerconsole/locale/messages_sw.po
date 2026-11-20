@@ -139,22 +139,16 @@ msgid "Tier promotions held back for a peer with no usable address"
 msgstr "Kupandwa ngazi kimeshikiliwa kwa peer bila anwani inayotumika"
 
 msgid "RouterInfo refreshes issued for peers held out of the tiers"
-msgstr ""
-"Masasisho ya RouterInfo yaliyotolewa kwa peer walioshikiliwa nje ya "
-"ngazi"
+msgstr "Masasisho ya RouterInfo yaliyotolewa kwa peer walioshikiliwa nje ya ngazi"
 
 msgid "Tier scans that left the fast or high-capacity tier short of target"
-msgstr ""
-"Ukaguzi wa ngazi ulioacha ngazi ya haraka au yenye uwezo mkubwa chini ya "
-"lengo"
+msgstr "Ukaguzi wa ngazi ulioacha ngazi ya haraka au yenye uwezo mkubwa chini ya lengo"
 
 msgid "RouterInfos requested for stored profiles that had none"
-msgstr ""
-"RouterInfo ziliombwa kwa wasifu uliohifadhiwa ambao haukuwa na yoyote"
+msgstr "RouterInfo ziliombwa kwa wasifu uliohifadhiwa ambao haukuwa na yoyote"
 
 msgid "Build timeouts recorded against a peer as a ghost mark"
-msgstr ""
-"Muda wa kujenga ukikwama uliorekodiwa dhidi ya peer kama alama ya mzimu"
+msgstr "Muda wa kujenga ukikwama uliorekodiwa dhidi ya peer kama alama ya mzimu"
 
 msgid "Ghost marks cleared by a successful build reply"
 msgstr "Alama za mzimu zilizofutwa na jibu la kujenga lililofanikiwa"
@@ -2186,8 +2180,7 @@ msgid "RTT"
 msgstr "RTT"
 
 msgid "End-to-end client message round trip"
-msgstr ""
-"Safari ya kwenda-na-kurudi ya ujumbe wa mteja mwisho-hadi-mwisho"
+msgstr "Safari ya kwenda-na-kurudi ya ujumbe wa mteja mwisho-hadi-mwisho"
 
 msgid "Timeout"
 msgstr "Muda wa kusubiri"
@@ -5361,9 +5354,7 @@ msgid "Per-connection inbound buffer cap (bytes)."
 msgstr "Kikomo cha buffer ya kuingia kwa kila muunganisho (baiti)."
 
 msgid "Timer worker threads; higher reduces event delay."
-msgstr ""
-"Nyuzi-kazi za kipima-muda; thamani kubwa hupunguza ucheleweshaji wa "
-"matukio."
+msgstr "Nyuzi-kazi za kipima-muda; thamani kubwa hupunguza ucheleweshaji wa matukio."
 
 msgid "Dynamic cap on concurrent streams per destination."
 msgstr "Kikomo cha kurekebisha kwa mtiririko unaoendelea kwa kila lengo."
@@ -7770,17 +7761,10 @@ msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longe
 msgstr "Kipindi cha kubwa cha jaribio la tuneli kwa ms. Majaribio ya tuneli hayasubiri kwa muda mrefu kuliko huu kupata jibu, hata kwenye njia za latensi kubwa. [Default ni 50000 (sekunde 50)]"
 
 msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
-msgstr ""
-"Idadi ya kukwama kwa muda wa kujenga tuneli kabla ya peer kuwekwa alama "
-"ya mzimu (kuondolewa kushiriki tuneli). Thamani kubwa zinavumilia makosa "
-"ya muda mfupi zaidi. [Chaguo-msingi ni 1]"
+msgstr "Idadi ya kukwama kwa muda wa kujenga tuneli kabla ya peer kuwekwa alama ya mzimu (kuondolewa kushiriki tuneli). Thamani kubwa zinavumilia makosa ya muda mfupi zaidi. [Chaguo-msingi ni 1]"
 
 msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
-msgstr ""
-"Muda wa kupoza kwa milisekunde kabla ya peer aliyewekwa alama ya mzimu "
-"kupandwa tena kwenye ngazi za peer za tuneli. Thamani fupi zinarudisha "
-"peer waliopona kwenye huduma haraka zaidi. [Chaguo-msingi ni 90000 "
-"(sekunde 90)]"
+msgstr "Muda wa kupoza kwa milisekunde kabla ya peer aliyewekwa alama ya mzimu kupandwa tena kwenye ngazi za peer za tuneli. Thamani fupi zinarudisha peer waliopona kwenye huduma haraka zaidi. [Chaguo-msingi ni 90000 (sekunde 90)]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "Idadi ya chini ya maombi ya kujenga tuneli yanayoingia yakikaribishwa kwa kila peer kwa kila dirisha safi. Inazuia peer kuzongwa wakati wa vipindi vya trafiki ndogo. [Default ni 10]"
@@ -10210,35 +10194,3 @@ msgstr "Ifuatayo"
 
 msgid "Finished"
 msgstr "Imeisha"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

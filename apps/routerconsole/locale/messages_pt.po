@@ -131,25 +131,19 @@ msgid "Tier promotions held back for a peer with no usable address"
 msgstr "Promoções de nível retidas para um peer sem endereço utilizável"
 
 msgid "RouterInfo refreshes issued for peers held out of the tiers"
-msgstr ""
-"Atualizações de RouterInfo emitidas para peers mantidos fora dos níveis"
+msgstr "Atualizações de RouterInfo emitidas para peers mantidos fora dos níveis"
 
 msgid "Tier scans that left the fast or high-capacity tier short of target"
-msgstr ""
-"Análises de nível que deixaram o nível rápido ou de alta capacidade "
-"abaixo do alvo"
+msgstr "Análises de nível que deixaram o nível rápido ou de alta capacidade abaixo do alvo"
 
 msgid "RouterInfos requested for stored profiles that had none"
-msgstr ""
-"RouterInfos solicitadas para perfis armazenados que não tinham nenhuma"
+msgstr "RouterInfos solicitadas para perfis armazenados que não tinham nenhuma"
 
 msgid "Build timeouts recorded against a peer as a ghost mark"
-msgstr ""
-"Tempos limite de construção registrados para um peer como marca fantasma"
+msgstr "Tempos limite de construção registrados para um peer como marca fantasma"
 
 msgid "Ghost marks cleared by a successful build reply"
-msgstr ""
-"Marcas fantasma limpas após uma resposta de construção bem-sucedida"
+msgstr "Marcas fantasma limpas após uma resposta de construção bem-sucedida"
 
 msgid "Peers currently excluded as ghosts"
 msgstr "Peers atualmente excluídos como fantasmas"
@@ -5410,9 +5404,7 @@ msgid "Per-connection inbound buffer cap (bytes)."
 msgstr "Limite do buffer de entrada por conexão (bytes)."
 
 msgid "Timer worker threads; higher reduces event delay."
-msgstr ""
-"Threads de trabalho do temporizador; um valor mais alto reduz o atraso "
-"de eventos."
+msgstr "Threads de trabalho do temporizador; um valor mais alto reduz o atraso de eventos."
 
 msgid "Dynamic cap on concurrent streams per destination."
 msgstr "Limite dinâmico de fluxos simultâneos por destino."
@@ -7835,17 +7827,10 @@ msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longe
 msgstr "Período máximo de teste de túnel em milissegundos. Testes de túnel nunca esperam mais que isto por uma resposta, mesmo em caminhos de alta latência. [Padrão é 50000 (50 segundos)]"
 
 msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
-msgstr ""
-"Número de tempos limite de construção de túnel antes que um peer seja "
-"marcado como fantasma (excluído da participação em túneis). Valores mais "
-"altos toleram mais falhas transitórias. [O valor padrão é 1]"
+msgstr "Número de tempos limite de construção de túnel antes que um peer seja marcado como fantasma (excluído da participação em túneis). Valores mais altos toleram mais falhas transitórias. [O valor padrão é 1]"
 
 msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
-msgstr ""
-"Período de espera em milissegundos antes que um peer marcado como "
-"fantasma possa ser promovido novamente aos níveis de peers de túnel. "
-"Valores mais curtos devolvem os peers recuperados ao serviço mais "
-"rapidamente. [O valor padrão é 90000 (90 segundos)]"
+msgstr "Período de espera em milissegundos antes que um peer marcado como fantasma possa ser promovido novamente aos níveis de peers de túnel. Valores mais curtos devolvem os peers recuperados ao serviço mais rapidamente. [O valor padrão é 90000 (90 segundos)]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "Número mínimo de solicitações de construção de túnel recebidas aceitas por peer por janela limpa. Previne a falta de peers durante períodos de baixo tráfego. [Padrão é 10]"
@@ -10276,52 +10261,3 @@ msgstr "Seguinte"
 
 msgid "Finished"
 msgstr "Terminada"
-
-
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:240
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:244
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:315
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:317
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:319
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:380
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:382
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:384
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:390
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:394
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:455
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:457
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:459
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:463
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:465
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:467
-
-
-
-
-
-
-
-
-
-
-
-# /java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:74
-
-
-

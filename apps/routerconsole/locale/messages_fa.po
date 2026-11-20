@@ -130,15 +130,13 @@ msgid "Tier promotions held back for a peer with no usable address"
 msgstr "ارتقای سطح به تعویق افتاده برای همتایی با نشانی قابل استفاده"
 
 msgid "RouterInfo refreshes issued for peers held out of the tiers"
-msgstr ""
-"نوسازی‌های RouterInfo صادر شده برای همتایان نگه‌داشته‌شده بیرون از سطوح"
+msgstr "نوسازی‌های RouterInfo صادر شده برای همتایان نگه‌داشته‌شده بیرون از سطوح"
 
 msgid "Tier scans that left the fast or high-capacity tier short of target"
 msgstr "پویش‌های سطحی که سطح سریع یا باظرفیت بالا را زیر هدف باقی گذاشت"
 
 msgid "RouterInfos requested for stored profiles that had none"
-msgstr ""
-"درخواست‌های RouterInfo برای نمایه‌های ذخیره‌شده‌ای که هیچ‌کدام نداشتند"
+msgstr "درخواست‌های RouterInfo برای نمایه‌های ذخیره‌شده‌ای که هیچ‌کدام نداشتند"
 
 msgid "Build timeouts recorded against a peer as a ghost mark"
 msgstr "مهلت‌های ساخت ثبت‌شده برای یک همتا به‌عنوان علامت شبح"
@@ -7754,17 +7752,10 @@ msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longe
 msgstr "حداکثر دوره آزمایش تونل برحسب میلی‌ثانیه. آزمایش‌های تونل هرگز بیش از این مدت صبر نمی‌کنند. [پیش‌فرض 50000 (50 ثانیه)]"
 
 msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
-msgstr ""
-"تعداد مهلت‌های ساخت تونل پیش از آن‌که یک همتا به‌عنوان شبح علامت بخورد "
-"(از مشارکت تونلی کنار گذاشته شود). مقادیر بالاتر خطاهای گذرا را بیشتر "
-"تحمل می‌کنند. [پیش‌فرض ۱ است]"
+msgstr "تعداد مهلت‌های ساخت تونل پیش از آن‌که یک همتا به‌عنوان شبح علامت بخورد (از مشارکت تونلی کنار گذاشته شود). مقادیر بالاتر خطاهای گذرا را بیشتر تحمل می‌کنند. [پیش‌فرض ۱ است]"
 
 msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
-msgstr ""
-"دوره سرد شدن به میلی‌ثانیه پیش از آن‌که همتای علامت‌شبح‌دار بتواند "
-"دوباره به سطوح همتای تونل ارتقا یابد. مقادیر کوتاه‌تر همتایان "
-"بازیابی‌شده را سریع‌تر به سرویس بازمی‌گردانند. [پیش‌فرض ۹۰۰۰۰ (۹۰ ثانیه) "
-"است]"
+msgstr "دوره سرد شدن به میلی‌ثانیه پیش از آن‌که همتای علامت‌شبح‌دار بتواند دوباره به سطوح همتای تونل ارتقا یابد. مقادیر کوتاه‌تر همتایان بازیابی‌شده را سریع‌تر به سرویس بازمی‌گردانند. [پیش‌فرض ۹۰۰۰۰ (۹۰ ثانیه) است]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "حداقل تعداد درخواست های ساخت تونل ورودی به ازای هر همتا در هر پنجره تمیز پذیرفته می شود. از گرسنگی همسالان در دوره های کم تردد جلوگیری می کند. [پیش‌فرض 10 است]"
@@ -10194,35 +10185,3 @@ msgstr "بعدی"
 
 msgid "Finished"
 msgstr "به پایان رسیده"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

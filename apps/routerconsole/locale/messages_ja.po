@@ -7741,14 +7741,10 @@ msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longe
 msgstr "トンネル テストの最大期間 (ミリ秒)。トンネル テストは、待ち時間が長いパスであっても、応答をこれより長く待つことはありません。 [デフォルトは50000(50秒)]"
 
 msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
-msgstr ""
-"ピアがゴーストとしてマークされる（トンネル参加から除外される）までのトンネルビルドタイムアウトの数。大きな値ほど一時的な障害を許容します。[既定値は "
-"1]"
+msgstr "ピアがゴーストとしてマークされる（トンネル参加から除外される）までのトンネルビルドタイムアウトの数。大きな値ほど一時的な障害を許容します。[既定値は 1]"
 
 msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
-msgstr ""
-"ゴーストマークされたピアがトンネルピアのティアに再昇格できるまでのクールダウン期間（ミリ秒）。小さい値ほど回復したピアを早く運用に戻します。[既定値は "
-"90000（90 秒）]"
+msgstr "ゴーストマークされたピアがトンネルピアのティアに再昇格できるまでのクールダウン期間（ミリ秒）。小さい値ほど回復したピアを早く運用に戻します。[既定値は 90000（90 秒）]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "クリーン ウィンドウごとのピアごとに受け入れられる受信トンネル構築リクエストの最小数。トラフィックが少ない時間帯にピアが不足するのを防ぎます。 [デフォルトは10]"
@@ -10178,35 +10174,3 @@ msgstr "次へ"
 
 msgid "Finished"
 msgstr "完了"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -128,15 +128,13 @@ msgid "Average tunnel build success (%)"
 msgstr "Gjennomsnittlig tunnelbyggingssuksess %"
 
 msgid "Tier promotions held back for a peer with no usable address"
-msgstr ""
-"Tier-forfremmelser holdt tilbake for en node uten brukbar adresse"
+msgstr "Tier-forfremmelser holdt tilbake for en node uten brukbar adresse"
 
 msgid "RouterInfo refreshes issued for peers held out of the tiers"
 msgstr "RouterInfo-oppdateringer utstedt for noder holdt utenfor tierne"
 
 msgid "Tier scans that left the fast or high-capacity tier short of target"
-msgstr ""
-"Tier-scan som lot den raske eller høykapasitete tieren bli under målet"
+msgstr "Tier-scan som lot den raske eller høykapasitete tieren bli under målet"
 
 msgid "RouterInfos requested for stored profiles that had none"
 msgstr "RouterInfos forespurt for lagrede profiler som ikke hadde noen"
@@ -3693,9 +3691,7 @@ msgid "Low Latency"
 msgstr "Lav ventetid"
 
 msgid "Round trip time to this peer on the direct link, as measured by the transport"
-msgstr ""
-"Tur-retur-tid til denne noden over den direkte lenken, målt av "
-"transporten"
+msgstr "Tur-retur-tid til denne noden over den direkte lenken, målt av transporten"
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
 msgstr "Omsendte pakker / sendte pakker, slik det rapporteres av UDP-transporten"
@@ -5408,8 +5404,7 @@ msgid "Per-connection inbound buffer cap (bytes)."
 msgstr "Tak på innkommende buffer per tilkobling (byte)."
 
 msgid "Timer worker threads; higher reduces event delay."
-msgstr ""
-"Timer-arbeidstråder; høyere verdi reduserer hendelsesforsinkelsen."
+msgstr "Timer-arbeidstråder; høyere verdi reduserer hendelsesforsinkelsen."
 
 msgid "Dynamic cap on concurrent streams per destination."
 msgstr "Dynamisk tak på samtidige strømmer per destinasjon."
@@ -5655,13 +5650,10 @@ msgid "Min time between retransmissions (ms)."
 msgstr "Minste tid mellom omsendinger (ms)."
 
 msgid "Window growth per RTT after slow start; higher recovers faster."
-msgstr ""
-"Vindusvekst per RTT etter langsom start; høyere verdi gjenoppretter "
-"raskere."
+msgstr "Vindusvekst per RTT etter langsom start; høyere verdi gjenoppretter raskere."
 
 msgid "Window growth per ACK during slow start; higher ramps faster."
-msgstr ""
-"Vindusvekst per ACK under langsom start; høyere verdi øker raskere."
+msgstr "Vindusvekst per ACK under langsom start; høyere verdi øker raskere."
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
 msgstr "Minimum sendehastighet før pacing starter (KB/s)."
@@ -5790,8 +5782,7 @@ msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "TCP-socket-tilkoblingstidsavbrudd for tunneltjener-behandlingstråder (ms)."
 
 msgid "IV dedup filter size; too small drops valid tunnel data."
-msgstr ""
-"Størrelse på IV-duplikatfilter; for lite forkaster gyldige tunneldata."
+msgstr "Størrelse på IV-duplikatfilter; for lite forkaster gyldige tunneldata."
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "Maks gjennomsnittlig meldingsforsinkelse før avvisning av transitt (ms)."
@@ -7836,16 +7827,10 @@ msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longe
 msgstr "Maksimum tunneltestperiode i millisekunder. Tunneltester venter aldri lenger enn dette på et svar, selv på høylatente stier. [Standard 50000 (50 sekunder)"
 
 msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
-msgstr ""
-"Antall byggetidsavbrudd for tunneler før en node markeres som spøkelse "
-"(utelukkes fra deltakelse i tunneler). Høyere verdier tolererer flere "
-"forbigående feil. [Standard er 1]"
+msgstr "Antall byggetidsavbrudd for tunneler før en node markeres som spøkelse (utelukkes fra deltakelse i tunneler). Høyere verdier tolererer flere forbigående feil. [Standard er 1]"
 
 msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
-msgstr ""
-"Nedkjølingsperiode i millisekunder før en spøkelsesmerket node igjen kan "
-"forfremmes til tunnelpeer-tierne. Kortere verdier setter gjenopprettede "
-"noder raskere i drift igjen. [Standard er 90000 (90 sekunder)]"
+msgstr "Nedkjølingsperiode i millisekunder før en spøkelsesmerket node igjen kan forfremmes til tunnelpeer-tierne. Kortere verdier setter gjenopprettede noder raskere i drift igjen. [Standard er 90000 (90 sekunder)]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "Minimum antall innkommende tunnelbyggingsforespørsler akseptert per jevnaldrende per rent vindu. Forhindrer utsulting av jevnaldrende under lavtrafikkperioder. [Standard 10"
@@ -10276,52 +10261,3 @@ msgstr "Neste"
 
 msgid "Finished"
 msgstr "Sluttført"
-
-
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:240
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:244
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:315
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:317
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:319
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:380
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:382
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:384
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:390
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:394
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:455
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:457
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:459
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:463
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:465
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:467
-
-
-
-
-
-
-
-
-
-
-
-# /java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:74
-
-
-

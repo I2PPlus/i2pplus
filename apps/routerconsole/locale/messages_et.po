@@ -128,23 +128,16 @@ msgid "Average tunnel build success (%)"
 msgstr "tunneli ehitamise keskmine edu %"
 
 msgid "Tier promotions held back for a peer with no usable address"
-msgstr ""
-"Taseme tõused kinni peetud eakaaslase jaoks, kellel pole kasutatavat "
-"aadressi"
+msgstr "Taseme tõused kinni peetud eakaaslase jaoks, kellel pole kasutatavat aadressi"
 
 msgid "RouterInfo refreshes issued for peers held out of the tiers"
-msgstr ""
-"RouterInfo uuendused, mis väljastati tasemetest eemale hoitud "
-"eakaaslastele"
+msgstr "RouterInfo uuendused, mis väljastati tasemetest eemale hoitud eakaaslastele"
 
 msgid "Tier scans that left the fast or high-capacity tier short of target"
-msgstr ""
-"Taseme skannid, mille järel kiire või suure mahutavusega tase jäi alla "
-"sihi"
+msgstr "Taseme skannid, mille järel kiire või suure mahutavusega tase jäi alla sihi"
 
 msgid "RouterInfos requested for stored profiles that had none"
-msgstr ""
-"Salvestatud profiilide jaoks küsitud RouterInfo'd, millel neid polnud"
+msgstr "Salvestatud profiilide jaoks küsitud RouterInfo'd, millel neid polnud"
 
 msgid "Build timeouts recorded against a peer as a ghost mark"
 msgstr "Eakaaslasele kirja pandud ehitamise üleaegade (kummitusmärgina)"
@@ -7760,17 +7753,10 @@ msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longe
 msgstr "Maksimaalne tunnelitesti periood millisekundites. Tunnelitestid ei oota kunagi kauem kui see aeg. [Vaikeväärtus 50000 (50 sekundit)]"
 
 msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
-msgstr ""
-"Tunneliehituse üleaegade arv, enne kui eakaaslane märgitakse kummituseks "
-"(välistatakse tunneliosalusest). Suuremad väärtused taluvad rohkem "
-"mööduvaid tõrkeid. [Vaikimisi on 1]"
+msgstr "Tunneliehituse üleaegade arv, enne kui eakaaslane märgitakse kummituseks (välistatakse tunneliosalusest). Suuremad väärtused taluvad rohkem mööduvaid tõrkeid. [Vaikimisi on 1]"
 
 msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
-msgstr ""
-"Jahutusaeg millisekundites, enne kui kummituseks märgitud eakaaslane "
-"saab uuesti tõusta tunneli eakaaslaste tasemetesse. Lühemad väärtused "
-"toovad taastunud eakaaslased kiiremini teenistusse. [Vaikimisi on 90000 "
-"(90 sekundit)]"
+msgstr "Jahutusaeg millisekundites, enne kui kummituseks märgitud eakaaslane saab uuesti tõusta tunneli eakaaslaste tasemetesse. Lühemad väärtused toovad taastunud eakaaslased kiiremini teenistusse. [Vaikimisi on 90000 (90 sekundit)]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "Minimaalne vastuvõetud sissetulevate tunneliehituse taotluste arv kaaslase kohta puhta akna kohta. Hoiab ära kaaslaste nälgimise. [Vaikeväärtus 10]"
@@ -10200,35 +10186,3 @@ msgstr "Järgmine"
 
 msgid "Finished"
 msgstr "Lõppenud"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

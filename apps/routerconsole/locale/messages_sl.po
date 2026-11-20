@@ -131,16 +131,13 @@ msgid "Average tunnel build success (%)"
 msgstr "Povprečen uspeh izgradnje tunela (%)"
 
 msgid "Tier promotions held back for a peer with no usable address"
-msgstr ""
-"Napredovanja v sloj zadržana za parterja brez uporabnega naslova"
+msgstr "Napredovanja v sloj zadržana za parterja brez uporabnega naslova"
 
 msgid "RouterInfo refreshes issued for peers held out of the tiers"
 msgstr "Osvežitve RouterInfo za parterje, držane zunaj slojev"
 
 msgid "Tier scans that left the fast or high-capacity tier short of target"
-msgstr ""
-"Pregledi slojev, po katerih hitri ali visokozmogljivi sloj ni dosegel "
-"cilja"
+msgstr "Pregledi slojev, po katerih hitri ali visokozmogljivi sloj ni dosegel cilja"
 
 msgid "RouterInfos requested for stored profiles that had none"
 msgstr "RouterInfo zahtevani za shranjene profile, ki jih niso imeli"
@@ -5370,8 +5367,7 @@ msgid "Per-connection inbound buffer cap (bytes)."
 msgstr "Omejitev dohodnega medpomnilnika na povezavo (bajti)."
 
 msgid "Timer worker threads; higher reduces event delay."
-msgstr ""
-"Delovne niti časovnika; višja vrednost zmanjša zakasnitev dogodkov."
+msgstr "Delovne niti časovnika; višja vrednost zmanjša zakasnitev dogodkov."
 
 msgid "Dynamic cap on concurrent streams per destination."
 msgstr "Dinamična omejitev sočasnih pretokov na cilj."
@@ -7778,16 +7774,10 @@ msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longe
 msgstr "Največje obdobje testiranja predora v milisekundah. Testi predorov nikoli ne čakajo na odgovor dlje od tega, tudi na poteh z visoko zakasnitvijo. [Privzeto 50000 (50 sekund)"
 
 msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
-msgstr ""
-"Število zamud izgradnje predora, preden je parter označen kot duh "
-"(izključen iz sodelovanja v predorih). Višje vrednosti prenesejo več "
-"prehodnih napak. [Privzeta je 1]"
+msgstr "Število zamud izgradnje predora, preden je parter označen kot duh (izključen iz sodelovanja v predorih). Višje vrednosti prenesejo več prehodnih napak. [Privzeta je 1]"
 
 msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
-msgstr ""
-"Obdobje ohlajanja v milisekundah, preden je parter, označen kot duh, "
-"spet napredovan v sloje parterjev predora. Krajše vrednosti hitreje "
-"vrnejo okrepane parterje v storitev. [Privzeta je 90000 (90 sekund)]"
+msgstr "Obdobje ohlajanja v milisekundah, preden je parter, označen kot duh, spet napredovan v sloje parterjev predora. Krajše vrednosti hitreje vrnejo okrepane parterje v storitev. [Privzeta je 90000 (90 sekund)]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "Najmanjše število dohodnih zahtevkov za gradnjo predorov, sprejetih na enakovrednega na čisto okno. Preprečuje stradanje enakovrednih med obdobji nizkega prometa. [Privzeto 10"
@@ -10217,35 +10207,3 @@ msgstr "Naslednje"
 
 msgid "Finished"
 msgstr "Končano"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

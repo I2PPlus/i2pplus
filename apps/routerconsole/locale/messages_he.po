@@ -142,8 +142,7 @@ msgid "RouterInfo refreshes issued for peers held out of the tiers"
 msgstr "רענוני RouterInfo שהונפקו עבור peers שנשמרו מחוץ לרמות"
 
 msgid "Tier scans that left the fast or high-capacity tier short of target"
-msgstr ""
-"סריקות רמה שהשאירו את הרמה המהירה או בעלת הקיבולת הגבוהה מתחת ליעד"
+msgstr "סריקות רמה שהשאירו את הרמה המהירה או בעלת הקיבולת הגבוהה מתחת ליעד"
 
 msgid "RouterInfos requested for stored profiles that had none"
 msgstr "בקשות RouterInfo עבור פרופילים שמורים שלא היו להם"
@@ -7762,16 +7761,10 @@ msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longe
 msgstr "תקופת בדיקת המנהור המרבית במילישניות. בדיקות מנהורים לעולם אינן ממתינות יותר מכך לתשובה, גם בנתיבים בעלי השהייה גבוהה. [ברירת המחדל היא 50000 (50 שניות)]"
 
 msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
-msgstr ""
-"מספר פקיעות זמן בניית מנהור לפני ש-peer מסומן כ-ghost (נפסל מהשתתפות "
-"במנהורים). ערכים גבוהים יותר סובלים יותר כשלונות זמניים. [ברירת המחדל "
-"היא 1]"
+msgstr "מספר פקיעות זמן בניית מנהור לפני ש-peer מסומן כ-ghost (נפסל מהשתתפות במנהורים). ערכים גבוהים יותר סובלים יותר כשלונות זמניים. [ברירת המחדל היא 1]"
 
 msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
-msgstr ""
-"תקופת קירור במילישניות לפני ש-peer שסומן כ-ghost יוכל לחזור להתקדם לרמות "
-"ה-peers של המנהור. ערכים קצרים יותר מחזירים peers שהתאוששו לשירות מהר "
-"יותר. [ברירת המחדל היא 90000 (90 שניות)]"
+msgstr "תקופת קירור במילישניות לפני ש-peer שסומן כ-ghost יוכל לחזור להתקדם לרמות ה-peers של המנהור. ערכים קצרים יותר מחזירים peers שהתאוששו לשירות מהר יותר. [ברירת המחדל היא 90000 (90 שניות)]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "המספר המזערי של בקשות בניית מנהורים נכנסות המתקבלות לכל peer בכל חלון נקי. מונע מלעילת peers בתקופות תעבורה נמוכה. [ברירת המחדל היא 10]"
@@ -10201,35 +10194,3 @@ msgstr "הבא"
 
 msgid "Finished"
 msgstr "סיים"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

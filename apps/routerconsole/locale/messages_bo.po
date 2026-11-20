@@ -125,25 +125,19 @@ msgid "Average tunnel build success (%)"
 msgstr "གདོང་ལམ་བཟོ་སྐྲུན་ལེགས་གྲུབ་ཀྱི་ཆ་སྙོམས། %"
 
 msgid "Tier promotions held back for a peer with no usable address"
-msgstr ""
-"སྤྱོད་རུང་ཁ་ཙམ་མེད་པའི་མཐུད་སྣེ་ཞིག་གི་ཆེད་དུ་བཀག་འགོག་བྱས་པའི་རིམ་པའི་འཕར་སྤྲོད།"
+msgstr "སྤྱོད་རུང་ཁ་ཙམ་མེད་པའི་མཐུད་སྣེ་ཞིག་གི་ཆེད་དུ་བཀག་འགོག་བྱས་པའི་རིམ་པའི་འཕར་སྤྲོད།"
 
 msgid "RouterInfo refreshes issued for peers held out of the tiers"
-msgstr ""
-"རིམ་པའི་ཕྱིར་བཞག་པའི་མཐུད་སྣེ་ཚོར་བཏང་བའི་RouterInfo གསར་བསྐོང་།"
+msgstr "རིམ་པའི་ཕྱིར་བཞག་པའི་མཐུད་སྣེ་ཚོར་བཏང་བའི་RouterInfo གསར་བསྐོང་།"
 
 msgid "Tier scans that left the fast or high-capacity tier short of target"
-msgstr ""
-"མགྱོགས་པོའི་རིམ་པ་ཡང་ན་ཆེས་ཆེན་གྱི་རིམ་པ་དམིགས་ཚད་ལས་ཉུང་དུ་བཏང་བའི་རིམ་པའི་འཚོལ་བཤེར།"
+msgstr "མགྱོགས་པོའི་རིམ་པ་ཡང་ན་ཆེས་ཆེན་གྱི་རིམ་པ་དམིགས་ཚད་ལས་ཉུང་དུ་བཏང་བའི་རིམ་པའི་འཚོལ་བཤེར།"
 
 msgid "RouterInfos requested for stored profiles that had none"
-msgstr ""
-"RouterInfo མེད་པའི་ཉར་ཚགས་བྱས་པའི་སྒྲིག་གཞི་ཚོར་ཞུས་པའི་RouterInfo "
-"གོ་སྐོར།"
+msgstr "RouterInfo མེད་པའི་ཉར་ཚགས་བྱས་པའི་སྒྲིག་གཞི་ཚོར་ཞུས་པའི་RouterInfo གོ་སྐོར།"
 
 msgid "Build timeouts recorded against a peer as a ghost mark"
-msgstr ""
-"མཐུད་སྣེ་ཞིག་གི་སྟེང་གདོན་པའི་རྟགས་སུ་ཐོ་འགོད་བྱས་པའི་བཟོ་སྐྲུན་དུས་ཡུན་འདས་པ།"
+msgstr "མཐུད་སྣེ་ཞིག་གི་སྟེང་གདོན་པའི་རྟགས་སུ་ཐོ་འགོད་བྱས་པའི་བཟོ་སྐྲུན་དུས་ཡུན་འདས་པ།"
 
 msgid "Ghost marks cleared by a successful build reply"
 msgstr "བཟོ་སྐྲུན་གྱི་ལན་ལེགས་གྲུབ་ཀྱིས་སུབ་པའི་གདོན་པའི་རྟགས།"
@@ -5340,9 +5334,7 @@ msgid "Per-connection inbound buffer cap (bytes)."
 msgstr "འབྲེལ་བ་རེ་རེའི་ནང་འབྲེལ་མཛུབ་སྟོང་མཐའ་ཚད། (བྷེ་ཐང)་"
 
 msgid "Timer worker threads; higher reduces event delay."
-msgstr ""
-"དུས་འཁོར་གྱི་ལས་སྒྲུབ་སྲོལ་ཁག། "
-"ཚད་མཐོན་པོས་དོན་རྐྱེན་ཕྱིར་འགྱངས་ཆུང་དུ་གཏོང་།"
+msgstr "དུས་འཁོར་གྱི་ལས་སྒྲུབ་སྲོལ་ཁག། ཚད་མཐོན་པོས་དོན་རྐྱེན་ཕྱིར་འགྱངས་ཆུང་དུ་གཏོང་།"
 
 msgid "Dynamic cap on concurrent streams per destination."
 msgstr "འདོད་ཡུལ་རེ་རེའི་མཉམ་འགྲོགས་རྩོམ་འགྲུལ་གྱི་རྣམ་རྒྱུགས་ཀྱི་མཐའ་ཚད།"
@@ -7749,16 +7741,10 @@ msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longe
 msgstr "ཆེ་ཤོས་འབྲེལ་ལམ་ཚོད་ལྟའི་དུས་ཚོད། བརྒྱུད་དུས་མཐོ་བའི་དྲ་བ་ཡིན་ནའང་འབྲེལ་ལམ་ཚོད་ལྟའི་ལན་ལེན་པར་དུས་ཚོད་འདི་ལས་སྒུག་མི་དགོས།. Tunnel tests never wait longer than this for a reply, even on high-latency paths [Default is 50000 (50 seconds)]. Tunnel tests never wait longer than this for a reply, even on high-latency paths [Default is 50000 (50 seconds)]. Tunnel tests never wait longer than this for a reply, even on high-latency paths [Default is 50000 (50 seconds)]. Tunnel tests never wait longer than this for a reply, even on high-latency paths [Default is 50000 (50 seconds)]"
 
 msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
-msgstr ""
-"མཐུད་སྣེ་ཞིག་གདོན་པར་རྟགས་མ་བཀོད་གོང་གི་གདོང་ལམ་བཟོ་སྐྲུན་དུས་ཡུན་འདས་པའི་གྲངས། "
-"(གདོང་ལམ་མཉམ་ཞུགས་ལས་ཕྱིར་འཐེན།) "
-"ཚད་མཐོན་པོས་སྐབས་རེའི་འཕྲད་གདོང་མང་བ་བཟོད། [གོ་མཆིད་ནི་ ༡]"
+msgstr "མཐུད་སྣེ་ཞིག་གདོན་པར་རྟགས་མ་བཀོད་གོང་གི་གདོང་ལམ་བཟོ་སྐྲུན་དུས་ཡུན་འདས་པའི་གྲངས། (གདོང་ལམ་མཉམ་ཞུགས་ལས་ཕྱིར་འཐེན།) ཚད་མཐོན་པོས་སྐབས་རེའི་འཕྲད་གདོང་མང་བ་བཟོད། [གོ་མཆིད་ནི་ ༡]"
 
 msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
-msgstr ""
-"གདོན་པར་རྟགས་བཀོད་པའི་མཐུད་སྣེ་ཞིག་གདོང་ལམ་མཐུད་སྣེའི་རིམ་པར་སླར་འཕར་ཐུབ་ཀྱི་བར་གྱི་གྲང་བཞག་དུས་ཡུན "
-"(མི་ལི་སྐར་ཆ)། ཚད་ཐུང་བས་གསོན་པའི་མཐུད་སྣེ་མགྱོགས་པོར་ཞབས་ཞུར་ལོག་འབྱོར། "
-"[གོ་མཆིད་ནི་ ༩༠༠༠༠ (སྐར་ཆ ༩༠)]"
+msgstr "གདོན་པར་རྟགས་བཀོད་པའི་མཐུད་སྣེ་ཞིག་གདོང་ལམ་མཐུད་སྣེའི་རིམ་པར་སླར་འཕར་ཐུབ་ཀྱི་བར་གྱི་གྲང་བཞག་དུས་ཡུན (མི་ལི་སྐར་ཆ)། ཚད་ཐུང་བས་གསོན་པའི་མཐུད་སྣེ་མགྱོགས་པོར་ཞབས་ཞུར་ལོག་འབྱོར། [གོ་མཆིད་ནི་ ༩༠༠༠༠ (སྐར་ཆ ༩༠)]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "གཙང་མའི་སྒོ་ཁྱིམ་རེ་རེའི་ནང་དུ་གྲོགས་པོ་རེ་རེ་ནས་ལེན་པའི་ནང་འཛུལ་འབྲེལ་ལམ་འཛུགས་སྐྲུན་རེ་སྐུལ་གྱི་མཐའ་མ། རེ་སྐུལ་དམའ་སྐབས་གྲོགས་པོ་བཀྲེས་པར་སྔོག་པ།. Prevents starving peers during low-traffic periods [Default is 10]. Prevents starving peers during low-traffic periods [Default is 10]. Prevents starving peers during low-traffic periods [Default is 10]. Prevents starving peers during low-traffic periods [Default is 10]"
@@ -10188,35 +10174,3 @@ msgstr "རྗེས་མ།"
 
 msgid "Finished"
 msgstr "མཇུག་རྫོགས།"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

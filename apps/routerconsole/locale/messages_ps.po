@@ -139,19 +139,16 @@ msgid "Tier promotions held back for a peer with no usable address"
 msgstr "د کار وړ پته نه لرونکي peer لپاره کچه لوړونه ودرول شول"
 
 msgid "RouterInfo refreshes issued for peers held out of the tiers"
-msgstr ""
-"د کچو څخه بهر ساتل شویو peerانو لپاره صادر شوي RouterInfo نوي کول"
+msgstr "د کچو څخه بهر ساتل شویو peerانو لپاره صادر شوي RouterInfo نوي کول"
 
 msgid "Tier scans that left the fast or high-capacity tier short of target"
 msgstr "د کچو سکانونه چې چټکه یا لوړ ظرفیته کچه یې له موخې ټیټه پریښوده"
 
 msgid "RouterInfos requested for stored profiles that had none"
-msgstr ""
-"د ساتل شویو پروفایلونو لپاره غوښتل شوي RouterInfo چې هیڅ یې نه درلود"
+msgstr "د ساتل شویو پروفایلونو لپاره غوښتل شوي RouterInfo چې هیڅ یې نه درلود"
 
 msgid "Build timeouts recorded against a peer as a ghost mark"
-msgstr ""
-"د جوړونې وخت تېرېدنه چې د peer پر وړاندې د پرېت نښې په توګه ثبت شوې"
+msgstr "د جوړونې وخت تېرېدنه چې د peer پر وړاندې د پرېت نښې په توګه ثبت شوې"
 
 msgid "Ghost marks cleared by a successful build reply"
 msgstr "پرېت نښې چې د بریالۍ جوړونې ځواب سره پاکې شوې"
@@ -3653,9 +3650,7 @@ msgid "Low Latency"
 msgstr "ټیټ لیټنسی"
 
 msgid "Round trip time to this peer on the direct link, as measured by the transport"
-msgstr ""
-"د دې peer پورې د مستقیمې اړیکې له لارې د تګ راتګ وخت، لکه څنګه چې لیږد "
-"اندازه کوي"
+msgstr "د دې peer پورې د مستقیمې اړیکې له لارې د تګ راتګ وخت، لکه څنګه چې لیږد اندازه کوي"
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
 msgstr "بیا لېږل شوی پکټونه / لېږل شوی پکټونه، لکه څنګه چې UDP ټرانسپورټ راګوروی"
@@ -5605,12 +5600,10 @@ msgid "Min time between retransmissions (ms)."
 msgstr "د بیا لېږلو ترمنځ تر ټولو ټیټ وخت (ms)۔"
 
 msgid "Window growth per RTT after slow start; higher recovers faster."
-msgstr ""
-"د ورو پیل وروسته د هر RTT پر کچه کړکۍ زیاتوالی؛ لوړ ارزښت ژر بېرته راځي."
+msgstr "د ورو پیل وروسته د هر RTT پر کچه کړکۍ زیاتوالی؛ لوړ ارزښت ژر بېرته راځي."
 
 msgid "Window growth per ACK during slow start; higher ramps faster."
-msgstr ""
-"د ورو پیل پر مهال د هر ACK پر کچه کړکۍ زیاتوالی؛ لوړ ارزښت ژر پورته ځي."
+msgstr "د ورو پیل پر مهال د هر ACK پر کچه کړکۍ زیاتوالی؛ لوړ ارزښت ژر پورته ځي."
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
 msgstr "د وېرې له فعالېدو مخکې تر ټولو ټیټ لېږلو سرعت (KB/s)۔"
@@ -5649,8 +5642,7 @@ msgid "Default cap on server handler threads for each server tunnel."
 msgstr "پر هر سرور ټونل د سرور د پرازونکو تارونو ابدی حد۔"
 
 msgid "Dedicated pool for Server→Client transfers, unblocks handlers."
-msgstr ""
-"د پالودونکي→پیرودونکي لیږدونو لپاره ځانګړی حوض، پروسس کوونکي خلاصوي."
+msgstr "د پالودونکي→پیرودونکي لیږدونو لپاره ځانګړی حوض، پروسس کوونکي خلاصوي."
 
 msgid "Stall timeout for Server→Client data transfers (ms)."
 msgstr "د Server→Client د ډیټا د لېږلو د ودرېدو وخت پې (ms)۔"
@@ -7769,16 +7761,10 @@ msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longe
 msgstr "د ټونل د ازمونو تر ټولو لوړ دوره په ملی ثانیو کې۔ ټونل د ازمونې هیڅکله د ځواب د انتظار لپاره تر دې څخه ډېر نه پاتې کېږی، حتی په لوړو لیټنسی لارو کې۔ [ابدی 50000 (50 ثانیې) ده]"
 
 msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
-msgstr ""
-"هغه شمېر چې د ټونل جوړونې وخت تېرېدنه مخکې له دې چې peer د پرېت په توګه "
-"نښه شي (د ټونل ګډون څخه وباسل شي). لوړ ارزښتونه ډېر لنډمهاله ناکامۍ "
-"زغمي. [تاسیس شوی ۱ دی]"
+msgstr "هغه شمېر چې د ټونل جوړونې وخت تېرېدنه مخکې له دې چې peer د پرېت په توګه نښه شي (د ټونل ګډون څخه وباسل شي). لوړ ارزښتونه ډېر لنډمهاله ناکامۍ زغمي. [تاسیس شوی ۱ دی]"
 
 msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
-msgstr ""
-"د یخېدو موده ملي ثانیو کې مخکې له دې چې پرېت نښه شوی peer بیا د ټونل د "
-"peerانو کچو ته لوړ شي. لنډ ارزښتونه بېرته راغلي peerان ژر خدمت ته راولي. "
-"[تاسیس شوی ۹۰۰۰۰ (۹۰ ثانیې) دی]"
+msgstr "د یخېدو موده ملي ثانیو کې مخکې له دې چې پرېت نښه شوی peer بیا د ټونل د peerانو کچو ته لوړ شي. لنډ ارزښتونه بېرته راغلي peerان ژر خدمت ته راولي. [تاسیس شوی ۹۰۰۰۰ (۹۰ ثانیې) دی]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "په هر peer او هره پاکې کښکۼ کې د راتلونکیو ټونل د جوړولو له منلو مخکې تر ټولو لږ شمېر۔ دا له ټیټ ترافیک وختونو پر مهال د بېغوره peerونو څخه ساتنه کوی۔ [ابدی 10 ده]"
@@ -10208,35 +10194,3 @@ msgstr "راتلونکی"
 
 msgid "Finished"
 msgstr "بشپړ"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

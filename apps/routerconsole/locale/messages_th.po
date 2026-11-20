@@ -7761,17 +7761,10 @@ msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longe
 msgstr "ระยะเวลาทดสอบอุโมงคมสูงสุดเป็นมิลลิวินาทีการทดสอบอุโมงคมจะไม่รอการตอบรับนานกว่านี้แม้บนเส้นทางที่มีความล่าช้าสูง[ค่าเริ่มต้นคือ50000(50วินาที)]"
 
 msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
-msgstr ""
-"จำนวนครั้งที่เกินเวลาในการสร้างอุโมงค์ก่อนที่ peer จะถูกทำเครื่องหมายผี "
-"(ถูกตัดออกจากการมีส่วนร่วมในอุโมงค์) "
-"ค่าที่สูงกว่ายอมให้ข้อขัดข้องชั่วครู่ได้มากขึ้น [ค่าเริ่มต้นคือ 1]"
+msgstr "จำนวนครั้งที่เกินเวลาในการสร้างอุโมงค์ก่อนที่ peer จะถูกทำเครื่องหมายผี (ถูกตัดออกจากการมีส่วนร่วมในอุโมงค์) ค่าที่สูงกว่ายอมให้ข้อขัดข้องชั่วครู่ได้มากขึ้น [ค่าเริ่มต้นคือ 1]"
 
 msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
-msgstr ""
-"ช่วงเวลารอให้เย็นลงเป็นมิลลิวินาทีก่อนที่ peer "
-"ที่ถูกทำเครื่องหมายผีจะเลื่อนกลับเข้าสู่ระดับ peer ของอุโมงค์ได้ "
-"ค่าที่สั้นกว่านำ peer ที่ฟื้นตัวกลับมารับใช้เร็วขึ้น [ค่าเริ่มต้นคือ "
-"90000 (90 วินาที)]"
+msgstr "ช่วงเวลารอให้เย็นลงเป็นมิลลิวินาทีก่อนที่ peer ที่ถูกทำเครื่องหมายผีจะเลื่อนกลับเข้าสู่ระดับ peer ของอุโมงค์ได้ ค่าที่สั้นกว่านำ peer ที่ฟื้นตัวกลับมารับใช้เร็วขึ้น [ค่าเริ่มต้นคือ 90000 (90 วินาที)]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "จำนวนคำขอสร้างอุโมงคมขาเข้าขั้นต่ำที่ยอมรับต่อหนึ่งpeerต่อหนึ่งช่วงที่สะอาดป้องกันไม่ให้peerอยู่อย่างมากในช่วงที่ทราฟฟิกน้อย[ค่าเริ่มต้นคือ10]"
@@ -10201,35 +10194,3 @@ msgstr "ถัดไป"
 
 msgid "Finished"
 msgstr "เสร็จสิ้น"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

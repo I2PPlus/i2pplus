@@ -132,12 +132,10 @@ msgid "Tier promotions held back for a peer with no usable address"
 msgstr "Підвищення в рівні, відкладені для вузла без придатної адреси"
 
 msgid "RouterInfo refreshes issued for peers held out of the tiers"
-msgstr ""
-"Оновлення RouterInfo, надіслані для вузлів, утримуваних поза рівнями"
+msgstr "Оновлення RouterInfo, надіслані для вузлів, утримуваних поза рівнями"
 
 msgid "Tier scans that left the fast or high-capacity tier short of target"
-msgstr ""
-"Сканування рівнів, після яких швидкий або ємний рівень не досяг мети"
+msgstr "Сканування рівнів, після яких швидкий або ємний рівень не досяг мети"
 
 msgid "RouterInfos requested for stored profiles that had none"
 msgstr "Запити RouterInfo для збережених профілів, у яких їх не було"
@@ -7765,16 +7763,10 @@ msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longe
 msgstr "Максимальний період тесту тунелю в мілісекундах. Тести тунелів ніколи не чекають довше цього на відповідь, навіть на шляхах з високою затримкою. [Стандартно 50000 (50 секунд)]"
 
 msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
-msgstr ""
-"Число тайм-аутів збирання тунелю, після яких вузол позначається як "
-"привид (виключається з участі в тунелях). Більші значення допускають "
-"більше тимчасових збоїв. [Типове — 1]"
+msgstr "Число тайм-аутів збирання тунелю, після яких вузол позначається як привид (виключається з участі в тунелях). Більші значення допускають більше тимчасових збоїв. [Типове — 1]"
 
 msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
-msgstr ""
-"Період охолодження в мілісекундах, перш ніж позначений як привид вузол "
-"зможе знову бути підвищеним до рівнів вузлів тунелю. Менші значення "
-"швидше повертають відновлені вузли в стрій. [Типове — 90000 (90 секунд)]"
+msgstr "Період охолодження в мілісекундах, перш ніж позначений як привид вузол зможе знову бути підвищеним до рівнів вузлів тунелю. Менші значення швидше повертають відновлені вузли в стрій. [Типове — 90000 (90 секунд)]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "Мінімальна кількість вхідних запитів на побудову тунелю, прийнятих на вузол за чисте вікно. Запобігає голодуванню вузлів у періоди низького трафіку. [Стандартно 10]"
@@ -10204,35 +10196,3 @@ msgstr "Наступна"
 
 msgid "Finished"
 msgstr "Готово"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

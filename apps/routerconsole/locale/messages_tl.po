@@ -136,22 +136,16 @@ msgid "Average tunnel build success (%)"
 msgstr "Karaniwang % ng tagumpay ng paggawa ng tunnel"
 
 msgid "Tier promotions held back for a peer with no usable address"
-msgstr ""
-"Itinigil ang pagtaas ng tier para sa peer na walang magamiting address"
+msgstr "Itinigil ang pagtaas ng tier para sa peer na walang magamiting address"
 
 msgid "RouterInfo refreshes issued for peers held out of the tiers"
-msgstr ""
-"Mga RouterInfo refresh na inisyu para sa mga peer na inilalagay sa labas "
-"ng mga tier"
+msgstr "Mga RouterInfo refresh na inisyu para sa mga peer na inilalagay sa labas ng mga tier"
 
 msgid "Tier scans that left the fast or high-capacity tier short of target"
-msgstr ""
-"Mga tier scan na naiwan ang mabilis o mataas na kapasidad na tier sa "
-"ibaba ng target"
+msgstr "Mga tier scan na naiwan ang mabilis o mataas na kapasidad na tier sa ibaba ng target"
 
 msgid "RouterInfos requested for stored profiles that had none"
-msgstr ""
-"Mga RouterInfo na hiniling para sa mga naka-save na profile na wala nito"
+msgstr "Mga RouterInfo na hiniling para sa mga naka-save na profile na wala nito"
 
 msgid "Build timeouts recorded against a peer as a ghost mark"
 msgstr "Mga build timeout na naitala laban sa peer bilang ghost mark"
@@ -3656,9 +3650,7 @@ msgid "Low Latency"
 msgstr "Mababang Latensiya"
 
 msgid "Round trip time to this peer on the direct link, as measured by the transport"
-msgstr ""
-"Round trip time sa peer na ito sa direktang link, ayon sa sukat ng "
-"transport"
+msgstr "Round trip time sa peer na ito sa direktang link, ayon sa sukat ng transport"
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
 msgstr "Mga ipinag-ulit na packet / ipinadalang packet, ayon sa tinukoy ng UDP transport"
@@ -5362,9 +5354,7 @@ msgid "Per-connection inbound buffer cap (bytes)."
 msgstr "Limitasyon ng inbound buffer kada koneksyon (bytes)."
 
 msgid "Timer worker threads; higher reduces event delay."
-msgstr ""
-"Mga worker thread ng timer; mas mataas na halaga, mas mababa ang delay "
-"ng pangyayari."
+msgstr "Mga worker thread ng timer; mas mataas na halaga, mas mababa ang delay ng pangyayari."
 
 msgid "Dynamic cap on concurrent streams per destination."
 msgstr "Dinamikong limitasyon ng kasabay na stream kada destination."
@@ -5610,14 +5600,10 @@ msgid "Min time between retransmissions (ms)."
 msgstr "Min na oras sa pagitan ng mga retransmission (ms)."
 
 msgid "Window growth per RTT after slow start; higher recovers faster."
-msgstr ""
-"Paglago ng window bawat RTT pagkatapos ng slow start; mas mataas, mas "
-"mabilis makabangon."
+msgstr "Paglago ng window bawat RTT pagkatapos ng slow start; mas mataas, mas mabilis makabangon."
 
 msgid "Window growth per ACK during slow start; higher ramps faster."
-msgstr ""
-"Paglago ng window bawat ACK habang nasa slow start; mas mataas, mas "
-"mabilis umakyat."
+msgstr "Paglago ng window bawat ACK habang nasa slow start; mas mataas, mas mabilis umakyat."
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
 msgstr "Min na bilis ng pagpapadala bago mailapat ang pacing (KB/s)."
@@ -5656,8 +5642,7 @@ msgid "Default cap on server handler threads for each server tunnel."
 msgstr "Default na limitasyon ng server handler thread para sa bawat server tunnel."
 
 msgid "Dedicated pool for Server→Client transfers, unblocks handlers."
-msgstr ""
-"Nakalaang pool para sa Server→Client transfer, binubuksan ang handler."
+msgstr "Nakalaang pool para sa Server→Client transfer, binubuksan ang handler."
 
 msgid "Stall timeout for Server→Client data transfers (ms)."
 msgstr "Timeout ng pagkakahinto para sa Server→Client na paglipat ng data (ms)."
@@ -5708,9 +5693,7 @@ msgid "Duration of moderate load before declining requests (ms)."
 msgstr "Tagal ng moderate load bago magtanggihan ng mga request (ms)."
 
 msgid "Widens the peer recency window when fast peers run short."
-msgstr ""
-"Pinapalawak ang window ng kamakailan ng peer kapag nauubos ang mabilis "
-"na peer."
+msgstr "Pinapalawak ang window ng kamakailan ng peer kapag nauubos ang mabilis na peer."
 
 msgid "Consecutive failures before pool backoff."
 msgstr "Magkasunod na failure bago mag-backoff ang pool."
@@ -5749,9 +5732,7 @@ msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "Timeout ng koneksyon ng TCP socket para sa tunnel server handler thread (ms)."
 
 msgid "IV dedup filter size; too small drops valid tunnel data."
-msgstr ""
-"Laki ng IV dedup filter; kung masyadong maliit, itinatapon ang wastong "
-"tunnel data."
+msgstr "Laki ng IV dedup filter; kung masyadong maliit, itinatapon ang wastong tunnel data."
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "Max na katamtamang pagkaelay ng mensahe bago magtanggihan ng transit (ms)."
@@ -7780,17 +7761,10 @@ msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longe
 msgstr "Max na panahon ng tunnel test sa millisecond. Hindi kailanman naghihintay ang tunnel test ng mas mahabang panahon para sa isang reply, kahit sa mga landas na may mataas na latensiya. [Default ay 50000 (50 segundo)]"
 
 msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
-msgstr ""
-"Bilang ng tunnel build timeout bago markahan ang peer bilang multo "
-"(tinatanggal sa pakikilahok sa tunnel). Mas mataas na halaga, mas "
-"matitiis ang pansamantalang kabiguan. [Ang default ay 1]"
+msgstr "Bilang ng tunnel build timeout bago markahan ang peer bilang multo (tinatanggal sa pakikilahok sa tunnel). Mas mataas na halaga, mas matitiis ang pansamantalang kabiguan. [Ang default ay 1]"
 
 msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
-msgstr ""
-"Cooldown period sa milisegundo bago ma-promote muli sa mga tier ng "
-"tunnel peer ang peer na may ghost mark. Mas maikling halaga, mas mabilis "
-"ibalik sa serbisyo ang naibangon na peer. [Ang default ay 90000 (90 "
-"segundo)]"
+msgstr "Cooldown period sa milisegundo bago ma-promote muli sa mga tier ng tunnel peer ang peer na may ghost mark. Mas maikling halaga, mas mabilis ibalik sa serbisyo ang naibangon na peer. [Ang default ay 90000 (90 segundo)]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "Min na bilang ng tinatanggap na inbound na kahilingang paggawa ng tunnel kada peer kada malinis na window. Pinipigilan nito na magutusan ang mga peer sa panahon ng mababang traffic. [Default ay 10]"
@@ -10220,35 +10194,3 @@ msgstr "Susunod"
 
 msgid "Finished"
 msgstr "Tapos na"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

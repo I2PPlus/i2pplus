@@ -125,26 +125,19 @@ msgid "Average tunnel build success (%)"
 msgstr "Rata-rata keberhasilan pembangunan terowongan %"
 
 msgid "Tier promotions held back for a peer with no usable address"
-msgstr ""
-"Kenaikan tingkat ditahan untuk rekan tanpa alamat yang dapat dipakai"
+msgstr "Kenaikan tingkat ditahan untuk rekan tanpa alamat yang dapat dipakai"
 
 msgid "RouterInfo refreshes issued for peers held out of the tiers"
-msgstr ""
-"Penyegaran RouterInfo yang dikeluarkan untuk rekan yang ditahan di luar "
-"tingkat"
+msgstr "Penyegaran RouterInfo yang dikeluarkan untuk rekan yang ditahan di luar tingkat"
 
 msgid "Tier scans that left the fast or high-capacity tier short of target"
-msgstr ""
-"Pemindaian tingkat yang membuat tingkat cepat atau berkapasitas tinggi "
-"kurang dari target"
+msgstr "Pemindaian tingkat yang membuat tingkat cepat atau berkapasitas tinggi kurang dari target"
 
 msgid "RouterInfos requested for stored profiles that had none"
-msgstr ""
-"RouterInfo yang diminta untuk profil tersimpan yang tidak memilikinya"
+msgstr "RouterInfo yang diminta untuk profil tersimpan yang tidak memilikinya"
 
 msgid "Build timeouts recorded against a peer as a ghost mark"
-msgstr ""
-"Waktu tunggu pembuatan yang dicatat terhadap rekan sebagai tanda hantu"
+msgstr "Waktu tunggu pembuatan yang dicatat terhadap rekan sebagai tanda hantu"
 
 msgid "Ghost marks cleared by a successful build reply"
 msgstr "Tanda hantu yang dihapus oleh balasan pembuatan yang berhasil"
@@ -3640,9 +3633,7 @@ msgid "Low Latency"
 msgstr "Latensi Rendah"
 
 msgid "Round trip time to this peer on the direct link, as measured by the transport"
-msgstr ""
-"Waktu pulang-pergi ke rekan ini melalui tautan langsung, sebagaimana "
-"diukur oleh transport"
+msgstr "Waktu pulang-pergi ke rekan ini melalui tautan langsung, sebagaimana diukur oleh transport"
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
 msgstr "Paket yang dikirim ulang / paket yang dikirim, sebagaimana dilaporkan oleh transportasi UDP"
@@ -5343,8 +5334,7 @@ msgid "Per-connection inbound buffer cap (bytes)."
 msgstr "Batas buffer masuk per koneksi (byte)."
 
 msgid "Timer worker threads; higher reduces event delay."
-msgstr ""
-"Thread pekerja timer; nilai lebih tinggi mengurangi penundaan kejadian."
+msgstr "Thread pekerja timer; nilai lebih tinggi mengurangi penundaan kejadian."
 
 msgid "Dynamic cap on concurrent streams per destination."
 msgstr "Batas dinamis stream konkuren per tujuan."
@@ -5590,14 +5580,10 @@ msgid "Min time between retransmissions (ms)."
 msgstr "Waktu minimum antar pengiriman ulang (ms)."
 
 msgid "Window growth per RTT after slow start; higher recovers faster."
-msgstr ""
-"Pertumbuhan jendela per RTT setelah slow start; nilai lebih tinggi pulih "
-"lebih cepat."
+msgstr "Pertumbuhan jendela per RTT setelah slow start; nilai lebih tinggi pulih lebih cepat."
 
 msgid "Window growth per ACK during slow start; higher ramps faster."
-msgstr ""
-"Pertumbuhan jendela per ACK selama slow start; nilai lebih tinggi naik "
-"lebih cepat."
+msgstr "Pertumbuhan jendela per ACK selama slow start; nilai lebih tinggi naik lebih cepat."
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
 msgstr "Kecepatan pengiriman minimum sebelum tempo dimulai (KB/dtk)."
@@ -5636,8 +5622,7 @@ msgid "Default cap on server handler threads for each server tunnel."
 msgstr "Batas default utas penangan server untuk setiap terowongan server."
 
 msgid "Dedicated pool for Server→Client transfers, unblocks handlers."
-msgstr ""
-"Pool khusus untuk transfer server→klien, membuka blokir pengendali."
+msgstr "Pool khusus untuk transfer server→klien, membuka blokir pengendali."
 
 msgid "Stall timeout for Server→Client data transfers (ms)."
 msgstr "Waktu habis stall untuk transfer data Server→Klien (ms)."
@@ -5727,9 +5712,7 @@ msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "Waktu habis koneksi soket TCP untuk utas penangan server terowongan (ms)."
 
 msgid "IV dedup filter size; too small drops valid tunnel data."
-msgstr ""
-"Ukuran filter deduplikasi IV; terlalu kecil membuang data terowongan "
-"yang sah."
+msgstr "Ukuran filter deduplikasi IV; terlalu kecil membuang data terowongan yang sah."
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "Penundaan pesan rata-rata maksimum sebelum menolak transit (ms)."
@@ -7758,17 +7741,10 @@ msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longe
 msgstr "Periode tes terowongan maksimum dalam milidetik. Tes terowongan tidak pernah menunggu balasan lebih lama dari ini, bahkan pada jalur latensi tinggi. [Default 50000 (50 detik)"
 
 msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
-msgstr ""
-"Jumlah waktu tunggu pembuatan terowongan sebelum seorang rekan ditandai "
-"sebagai hantu (dikeluarkan dari keikutsertaan terowongan). Nilai lebih "
-"tinggi mentoleransi lebih banyak kegagalan sementara. [Bawaan adalah 1]"
+msgstr "Jumlah waktu tunggu pembuatan terowongan sebelum seorang rekan ditandai sebagai hantu (dikeluarkan dari keikutsertaan terowongan). Nilai lebih tinggi mentoleransi lebih banyak kegagalan sementara. [Bawaan adalah 1]"
 
 msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
-msgstr ""
-"Periode pendinginan dalam milidetik sebelum rekan bertanda hantu dapat "
-"dipromosikan kembali ke tingkat rekan terowongan. Nilai lebih pendek "
-"mengembalikan rekan pulih ke layanan lebih cepat. [Bawaan adalah 90000 "
-"(90 detik)]"
+msgstr "Periode pendinginan dalam milidetik sebelum rekan bertanda hantu dapat dipromosikan kembali ke tingkat rekan terowongan. Nilai lebih pendek mengembalikan rekan pulih ke layanan lebih cepat. [Bawaan adalah 90000 (90 detik)]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "Jumlah minimum permintaan pembangunan terowongan masuk yang diterima per peer per jendela bersih. Mencegah peer kelaparan selama periode lalu lintas rendah. [Default 10"
@@ -10198,35 +10174,3 @@ msgstr "Selanjutnya"
 
 msgid "Finished"
 msgstr "Selesai"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

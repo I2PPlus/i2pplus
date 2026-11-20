@@ -132,21 +132,16 @@ msgid "Tier promotions held back for a peer with no usable address"
 msgstr "Повышения в уровни, отложенные для пира без пригодного адреса"
 
 msgid "RouterInfo refreshes issued for peers held out of the tiers"
-msgstr ""
-"Обновления RouterInfo, запрошенные для пиров, удерживаемых вне уровней"
+msgstr "Обновления RouterInfo, запрошенные для пиров, удерживаемых вне уровней"
 
 msgid "Tier scans that left the fast or high-capacity tier short of target"
-msgstr ""
-"Сканирования уровней, после которых быстрый или ёмкий уровень не достиг "
-"цели"
+msgstr "Сканирования уровней, после которых быстрый или ёмкий уровень не достиг цели"
 
 msgid "RouterInfos requested for stored profiles that had none"
-msgstr ""
-"Запросы RouterInfo для сохранённых профилей, у которых их не было"
+msgstr "Запросы RouterInfo для сохранённых профилей, у которых их не было"
 
 msgid "Build timeouts recorded against a peer as a ghost mark"
-msgstr ""
-"Тайм-ауты сборки, зафиксированные за пиром как пометка «призрак»"
+msgstr "Тайм-ауты сборки, зафиксированные за пиром как пометка «призрак»"
 
 msgid "Ghost marks cleared by a successful build reply"
 msgstr "Пометки «призрак», снятые успешным ответом сборки"
@@ -5361,8 +5356,7 @@ msgid "Per-connection inbound buffer cap (bytes)."
 msgstr "Предел входящего буфера на соединение (байт)."
 
 msgid "Timer worker threads; higher reduces event delay."
-msgstr ""
-"Рабочие потоки таймера; большее значение уменьшает задержку событий."
+msgstr "Рабочие потоки таймера; большее значение уменьшает задержку событий."
 
 msgid "Dynamic cap on concurrent streams per destination."
 msgstr "Динамический предел одновременных потоков для каждого пункта назначения."
@@ -7769,17 +7763,10 @@ msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longe
 msgstr "Максимальный период тестирования туннеля в миллисекундах. Тесты туннелей никогда не ждут ответа дольше этого времени, даже на высоколатентных путях. [По умолчанию 50000 (50 секунд)]"
 
 msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
-msgstr ""
-"Число тайм-аутов сборки туннеля, после которых пир помечается как "
-"призрак (исключается из участия в туннелях). Большие значения допускают "
-"больше временных сбоев. [По умолчанию 1]"
+msgstr "Число тайм-аутов сборки туннеля, после которых пир помечается как призрак (исключается из участия в туннелях). Большие значения допускают больше временных сбоев. [По умолчанию 1]"
 
 msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
-msgstr ""
-"Период охлаждения в миллисекундах, прежде чем пир, помеченный как "
-"призрак, снова сможет попасть в уровни пиров туннеля. Меньшие значения "
-"быстрее возвращают восстановившиеся пиры в строй. [По умолчанию 90000 "
-"(90 секунд)]"
+msgstr "Период охлаждения в миллисекундах, прежде чем пир, помеченный как призрак, снова сможет попасть в уровни пиров туннеля. Меньшие значения быстрее возвращают восстановившиеся пиры в строй. [По умолчанию 90000 (90 секунд)]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "Минимальное количество входящих запросов на построение туннелей, принимаемых от каждого пира за окно очистки. Предотвращает истощение пиров в периоды низкого трафика. [По умолчанию 10]"
@@ -10209,35 +10196,3 @@ msgstr "Далее"
 
 msgid "Finished"
 msgstr "Завершено"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

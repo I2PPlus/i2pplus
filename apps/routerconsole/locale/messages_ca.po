@@ -127,30 +127,22 @@ msgid "Average tunnel build success (%)"
 msgstr "Percentatge mitjà d’èxit de construcció de túnels"
 
 msgid "Tier promotions held back for a peer with no usable address"
-msgstr ""
-"Promocions de nivell retingudes per a un peer sense adreça utilitzable"
+msgstr "Promocions de nivell retingudes per a un peer sense adreça utilitzable"
 
 msgid "RouterInfo refreshes issued for peers held out of the tiers"
-msgstr ""
-"Actualitzacions de RouterInfo emeses per a peers mantinguts fora dels "
-"nivells"
+msgstr "Actualitzacions de RouterInfo emeses per a peers mantinguts fora dels nivells"
 
 msgid "Tier scans that left the fast or high-capacity tier short of target"
-msgstr ""
-"Anàlisis de nivell que van deixar el nivell ràpid o d'alta capacitat per "
-"sota de l'objectiu"
+msgstr "Anàlisis de nivell que van deixar el nivell ràpid o d'alta capacitat per sota de l'objectiu"
 
 msgid "RouterInfos requested for stored profiles that had none"
-msgstr ""
-"RouterInfo demanades per a perfils emmagatzemats que no en tenien"
+msgstr "RouterInfo demanades per a perfils emmagatzemats que no en tenien"
 
 msgid "Build timeouts recorded against a peer as a ghost mark"
-msgstr ""
-"Temps d'espera de construcció registrats a un peer com a marca fantasma"
+msgstr "Temps d'espera de construcció registrats a un peer com a marca fantasma"
 
 msgid "Ghost marks cleared by a successful build reply"
-msgstr ""
-"Marques fantasma esborrades per una resposta de construcció reeixida"
+msgstr "Marques fantasma esborrades per una resposta de construcció reeixida"
 
 msgid "Peers currently excluded as ghosts"
 msgstr "Peers exclosos actualment com a fantasmes"
@@ -5353,9 +5345,7 @@ msgid "Per-connection inbound buffer cap (bytes)."
 msgstr "Límit del buffer d’entrada per connexió (bytes)."
 
 msgid "Timer worker threads; higher reduces event delay."
-msgstr ""
-"Fils de treball del temporitzador; un valor més alt redueix el retard "
-"d'esdeveniments."
+msgstr "Fils de treball del temporitzador; un valor més alt redueix el retard d'esdeveniments."
 
 msgid "Dynamic cap on concurrent streams per destination."
 msgstr "Límit dinàmic de fluxos concurrents per destinació."
@@ -7762,18 +7752,10 @@ msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longe
 msgstr "Període màxim de prova de túnel en mil·lisegons. Les proves de túnel mai esperen més temps que aquest per una resposta, ni tan sols en rutes amb molta latència. [Per defecte: 50000 (50 segons)]"
 
 msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
-msgstr ""
-"Nombre de temps d'espera de construcció de túnels abans que un peer "
-"sigui marcat com a fantasma (exclòs de la participació en túnels). "
-"Valors més alts toleren més fallades transitòries. [El valor per defecte "
-"és 1]"
+msgstr "Nombre de temps d'espera de construcció de túnels abans que un peer sigui marcat com a fantasma (exclòs de la participació en túnels). Valors més alts toleren més fallades transitòries. [El valor per defecte és 1]"
 
 msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
-msgstr ""
-"Període de refredament en mil·lisegons abans que un peer marcat com a "
-"fantasma pugui tornar a pujar als nivells de peers de túnel. Els valors "
-"més curts tornen els peers restablerts al servei més ràpidament. [El "
-"valor per defecte és 90000 (90 segons)]"
+msgstr "Període de refredament en mil·lisegons abans que un peer marcat com a fantasma pugui tornar a pujar als nivells de peers de túnel. Els valors més curts tornen els peers restablerts al servei més ràpidament. [El valor per defecte és 90000 (90 segons)]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "Nombre mínim de peticions de construcció de túnel entrants acceptades per peer i finestra neta. Evita que els peers es quedin sense servei durant períodes de poc tràfic. [Per defecte: 10]"
@@ -10203,35 +10185,3 @@ msgstr "Següent"
 
 msgid "Finished"
 msgstr "Finalitzat"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

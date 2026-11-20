@@ -127,27 +127,19 @@ msgid "Average tunnel build success (%)"
 msgstr "Orta tunel qurma uğuru %"
 
 msgid "Tier promotions held back for a peer with no usable address"
-msgstr ""
-"İşlək adresi olmayan həmkar üçün səviyyəyə yüksəltmələr geri saxlanıldı"
+msgstr "İşlək adresi olmayan həmkar üçün səviyyəyə yüksəltmələr geri saxlanıldı"
 
 msgid "RouterInfo refreshes issued for peers held out of the tiers"
-msgstr ""
-"Səviyyələrdən kənarda saxlanılan həmkarlar üçün buraxılan RouterInfo "
-"yeniləmələri"
+msgstr "Səviyyələrdən kənarda saxlanılan həmkarlar üçün buraxılan RouterInfo yeniləmələri"
 
 msgid "Tier scans that left the fast or high-capacity tier short of target"
-msgstr ""
-"Sürətli və ya yüksək tutumlu səviyyəni hədəfdən aşağı qoyan səviyyə "
-"skanları"
+msgstr "Sürətli və ya yüksək tutumlu səviyyəni hədəfdən aşağı qoyan səviyyə skanları"
 
 msgid "RouterInfos requested for stored profiles that had none"
-msgstr ""
-"Heç bir RouterInfo-su olmayan saxlanmış profillər üçün sorğulanan "
-"RouterInfo-lar"
+msgstr "Heç bir RouterInfo-su olmayan saxlanmış profillər üçün sorğulanan RouterInfo-lar"
 
 msgid "Build timeouts recorded against a peer as a ghost mark"
-msgstr ""
-"Həmkar əleyhinə ghost işarəsi kimi qeydə alınan qurma vaxtının keçmələri"
+msgstr "Həmkar əleyhinə ghost işarəsi kimi qeydə alınan qurma vaxtının keçmələri"
 
 msgid "Ghost marks cleared by a successful build reply"
 msgstr "Uğurlu qurma cavabı ilə silinən ghost işarələri"
@@ -3649,9 +3641,7 @@ msgid "Low Latency"
 msgstr "Aşağı gecikmə"
 
 msgid "Round trip time to this peer on the direct link, as measured by the transport"
-msgstr ""
-"Nəqliyyatın ölçdüyü kimi, bu həmkara birbaşa bağlantı üzərindən get-gəl "
-"vaxtı"
+msgstr "Nəqliyyatın ölçdüyü kimi, bu həmkara birbaşa bağlantı üzərindən get-gəl vaxtı"
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
 msgstr "Yenidən göndərilən paketlər / göndərilən paketlər, UDP nəqliyyatı tərəfindən bildirildiyi kimi"
@@ -5601,14 +5591,10 @@ msgid "Min time between retransmissions (ms)."
 msgstr "Təkrar ötürmələr arasındakı minimum vaxt (ms)."
 
 msgid "Window growth per RTT after slow start; higher recovers faster."
-msgstr ""
-"Yavaş başlatmadan sonra hər RTT-də pəncərə artımı; yüksək dəyər daha tez "
-"bərpa olunur."
+msgstr "Yavaş başlatmadan sonra hər RTT-də pəncərə artımı; yüksək dəyər daha tez bərpa olunur."
 
 msgid "Window growth per ACK during slow start; higher ramps faster."
-msgstr ""
-"Yavaş başlatma zamanı hər ACK-da pəncərə artımı; yüksək dəyər daha tez "
-"yüksəlir."
+msgstr "Yavaş başlatma zamanı hər ACK-da pəncərə artımı; yüksək dəyər daha tez yüksəlir."
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
 msgstr "Pacing başlamazdan əvvəl minimum göndərmə sürəti (KB/s)."
@@ -5698,9 +5684,7 @@ msgid "Duration of moderate load before declining requests (ms)."
 msgstr "Sorğular rədd edilmədən əvvəlki orta yüklü müddət (ms)."
 
 msgid "Widens the peer recency window when fast peers run short."
-msgstr ""
-"Sürətli həmkarlar çatışmadıqda həmkar təzəliyi pəncərəsini "
-"genişləndirir."
+msgstr "Sürətli həmkarlar çatışmadıqda həmkar təzəliyi pəncərəsini genişləndirir."
 
 msgid "Consecutive failures before pool backoff."
 msgstr "Hovuz geri çəkilməsindən əvvəlki ardıcıl uğursuzluqlar."
@@ -5739,9 +5723,7 @@ msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "Tunel server işləyici mövzuları üçün TCP soket qoşulma vaxtı (ms)."
 
 msgid "IV dedup filter size; too small drops valid tunnel data."
-msgstr ""
-"IV təkrarlıq filtrinin ölçüsü; çox kiçik olsa, etibarlı tunel "
-"məlumatlarını silir."
+msgstr "IV təkrarlıq filtrinin ölçüsü; çox kiçik olsa, etibarlı tunel məlumatlarını silir."
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "Tranzitdən imtina etməzdən əvvəl maksimum orta mesaj gecikməsi (ms)."
@@ -7770,17 +7752,10 @@ msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longe
 msgstr "Maksimum tunnel test müddəti millisaniyələrlə. Tunnel testləri yüksək gecikməli şəbəkələrdə belə cavab üçün bundan artıq gözləmir. [Standart 60000]"
 
 msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
-msgstr ""
-"Həmkar ghost kimi işarələnməzdən əvvəl (tunel iştirakından "
-"kənarlaşdırılır) tunel qurma vaxt keçmələrinin sayı. Yüksək dəyərlər "
-"müvəqqəti xətaları daha çox döyür. [İlkin dəyər 1-dir]"
+msgstr "Həmkar ghost kimi işarələnməzdən əvvəl (tunel iştirakından kənarlaşdırılır) tunel qurma vaxt keçmələrinin sayı. Yüksək dəyərlər müvəqqəti xətaları daha çox döyür. [İlkin dəyər 1-dir]"
 
 msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
-msgstr ""
-"Ghost kimi işarələnmiş həmkarın tunel həmkar səviyyələrinə yenidən "
-"yüksəldilə bilməsinə qədər soyuma müddəti (millisaniyə). Qısa dəyərlər "
-"bərpa olunmuş həmkarları xidmətə daha tez qaytarır. [İlkin dəyər "
-"90000-dir (90 saniyə)]"
+msgstr "Ghost kimi işarələnmiş həmkarın tunel həmkar səviyyələrinə yenidən yüksəldilə bilməsinə qədər soyuma müddəti (millisaniyə). Qısa dəyərlər bərpa olunmuş həmkarları xidmətə daha tez qaytarır. [İlkin dəyər 90000-dir (90 saniyə)]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "Təmiz pəncərə başına hər həmyaşıddan qəbul edilən minimum daxil olan tunnel qurma sorğu sayı. Aşağı tələb dövrlərində həmyaşıdların ac qalmasının qarşısını alır. [Standart 1]"
@@ -10210,35 +10185,3 @@ msgstr "Növbəti"
 
 msgid "Finished"
 msgstr "Bitdi"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

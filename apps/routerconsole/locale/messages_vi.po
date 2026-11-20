@@ -131,16 +131,13 @@ msgid "RouterInfo refreshes issued for peers held out of the tiers"
 msgstr "Cập nhật RouterInfo phát cho các đồng nghiệp bị giữ ngoài bậc"
 
 msgid "Tier scans that left the fast or high-capacity tier short of target"
-msgstr ""
-"Lượt quét bậc khiến bậc nhanh hoặc dung lượng cao không đạt mục tiêu"
+msgstr "Lượt quét bậc khiến bậc nhanh hoặc dung lượng cao không đạt mục tiêu"
 
 msgid "RouterInfos requested for stored profiles that had none"
 msgstr "RouterInfo được yêu cầu cho hồ sơ đã lưu mà chưa có"
 
 msgid "Build timeouts recorded against a peer as a ghost mark"
-msgstr ""
-"Thời gian xây dựng vượt mức ghi nhận cho một đồng nghiệp dưới dạng dấu "
-"ghost"
+msgstr "Thời gian xây dựng vượt mức ghi nhận cho một đồng nghiệp dưới dạng dấu ghost"
 
 msgid "Ghost marks cleared by a successful build reply"
 msgstr "Dấu ghost được xóa nhờ phản hồi xây dựng thành công"
@@ -7744,17 +7741,10 @@ msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longe
 msgstr "Thời gian kiểm tra đường hầm tối đa tính bằng mili giây. Các bài kiểm tra đường hầm không bao giờ chờ phản hồi lâu hơn thời gian này, ngay cả trên các đường có độ trễ cao. [Mặc định 50000 (50 giây)]"
 
 msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
-msgstr ""
-"Số lần vượt thời gian xây dựng đường hầm trước khi một đồng nghiệp bị "
-"đánh dấu ghost (bị loại khỏi tham gia đường hầm). Giá trị cao hơn dung "
-"thứ nhiều hơn cho lỗi tạm thời. [Mặc định là 1]"
+msgstr "Số lần vượt thời gian xây dựng đường hầm trước khi một đồng nghiệp bị đánh dấu ghost (bị loại khỏi tham gia đường hầm). Giá trị cao hơn dung thứ nhiều hơn cho lỗi tạm thời. [Mặc định là 1]"
 
 msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
-msgstr ""
-"Thời gian nguội tính bằng mili giây trước khi đồng nghiệp bị đánh dấu ma "
-"có thể được lên các bậc đồng nghiệp đường hầm trở lại. Giá trị ngắn hơn "
-"đưa đồng nghiệp đã hồi phục trở lại phục vụ nhanh hơn. [Mặc định là "
-"90000 (90 giây)]"
+msgstr "Thời gian nguội tính bằng mili giây trước khi đồng nghiệp bị đánh dấu ma có thể được lên các bậc đồng nghiệp đường hầm trở lại. Giá trị ngắn hơn đưa đồng nghiệp đã hồi phục trở lại phục vụ nhanh hơn. [Mặc định là 90000 (90 giây)]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "Số lượng yêu cầu xây dựng đường hầm đến tối thiểu được chấp nhận trên mỗi peer trên mỗi cửa sổ sạch. Ngăn chặn peer bị đói trong thời gian lưu lượng thấp. [Mặc định 10]"
@@ -10184,35 +10174,3 @@ msgstr "Kế tiếp"
 
 msgid "Finished"
 msgstr "Đã kết thúc"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

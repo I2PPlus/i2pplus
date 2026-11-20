@@ -128,30 +128,22 @@ msgid "Average tunnel build success (%)"
 msgstr "% riuscita media della costruzione del tunnel"
 
 msgid "Tier promotions held back for a peer with no usable address"
-msgstr ""
-"Promozioni di livello trattenute per un peer senza indirizzo "
-"utilizzabile"
+msgstr "Promozioni di livello trattenute per un peer senza indirizzo utilizzabile"
 
 msgid "RouterInfo refreshes issued for peers held out of the tiers"
-msgstr ""
-"Aggiornamenti RouterInfo emessi per peer tenuti fuori dai livelli"
+msgstr "Aggiornamenti RouterInfo emessi per peer tenuti fuori dai livelli"
 
 msgid "Tier scans that left the fast or high-capacity tier short of target"
-msgstr ""
-"Scansioni di livello che hanno lasciato il livello veloce o ad alta "
-"capacità sotto l'obiettivo"
+msgstr "Scansioni di livello che hanno lasciato il livello veloce o ad alta capacità sotto l'obiettivo"
 
 msgid "RouterInfos requested for stored profiles that had none"
 msgstr "RouterInfo richieste per profili memorizzati che non ne avevano"
 
 msgid "Build timeouts recorded against a peer as a ghost mark"
-msgstr ""
-"Timeout di costruzione registrati a carico di un peer come marca "
-"fantasma"
+msgstr "Timeout di costruzione registrati a carico di un peer come marca fantasma"
 
 msgid "Ghost marks cleared by a successful build reply"
-msgstr ""
-"Marche fantasma cancellate da una risposta di costruzione riuscita"
+msgstr "Marche fantasma cancellate da una risposta di costruzione riuscita"
 
 msgid "Peers currently excluded as ghosts"
 msgstr "Peer attualmente esclusi come fantasmi"
@@ -5354,9 +5346,7 @@ msgid "Per-connection inbound buffer cap (bytes)."
 msgstr "Limite del buffer in ingresso per connessione (byte)."
 
 msgid "Timer worker threads; higher reduces event delay."
-msgstr ""
-"Thread di lavoro del timer; un valore più alto riduce il ritardo degli "
-"eventi."
+msgstr "Thread di lavoro del timer; un valore più alto riduce il ritardo degli eventi."
 
 msgid "Dynamic cap on concurrent streams per destination."
 msgstr "Limite dinamico degli stream simultanei per destinazione."
@@ -7763,17 +7753,10 @@ msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longe
 msgstr "Periodo massimo di test tunnel in millisecondi. I test tunnel non aspettanomai più di questo per una risposta, anche su percorsi ad alta latenza. [Ilvalore predefinito è 50000 (50 secondi)]"
 
 msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
-msgstr ""
-"Numero di timeout di costruzione del tunnel prima che un peer sia "
-"marcato come fantasma (escluso dalla partecipazione ai tunnel). Valori "
-"più alti tollerano più guasti transitori. [Il valore predefinito è 1]"
+msgstr "Numero di timeout di costruzione del tunnel prima che un peer sia marcato come fantasma (escluso dalla partecipazione ai tunnel). Valori più alti tollerano più guasti transitori. [Il valore predefinito è 1]"
 
 msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
-msgstr ""
-"Periodo di raffreddamento in millisecondi prima che un peer marcato come "
-"fantasma possa essere promosso di nuovo nei livelli dei peer del tunnel. "
-"Valori più brevi restituiscono più rapidamente al servizio i peer "
-"recuperati. [Il valore predefinito è 90000 (90 secondi)]"
+msgstr "Periodo di raffreddamento in millisecondi prima che un peer marcato come fantasma possa essere promosso di nuovo nei livelli dei peer del tunnel. Valori più brevi restituiscono più rapidamente al servizio i peer recuperati. [Il valore predefinito è 90000 (90 secondi)]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "Numero minimo di richieste di costruzione tunnel in entrata accettate perpeer per finestra pulita. Previene l’affamamento dei peer durante periodi abasso traffico. [Il valore predefinito è 10]"
@@ -10203,35 +10186,3 @@ msgstr "Successivo"
 
 msgid "Finished"
 msgstr "Finito"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

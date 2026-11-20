@@ -127,36 +127,28 @@ msgid "Average tunnel build success (%)"
 msgstr "Μέση % επιτυχίας κατασκευής σήραγγας"
 
 msgid "Tier promotions held back for a peer with no usable address"
-msgstr ""
-"Προαγωγές επιπέδου που κρατήθηκαν για συνομήλικο χωρίς χρήσιμη διεύθυνση"
+msgstr "Προαγωγές επιπέδου που κρατήθηκαν για συνομήλικο χωρίς χρήσιμη διεύθυνση"
 
 msgid "RouterInfo refreshes issued for peers held out of the tiers"
-msgstr ""
-"Ανανεώσεις RouterInfo που εκδόθηκαν για συνομήλικους κρατούμενους εκτός "
-"επιπέδων"
+msgstr "Ανανεώσεις RouterInfo που εκδόθηκαν για συνομήλικους κρατούμενους εκτός επιπέδων"
 
 msgid "Tier scans that left the fast or high-capacity tier short of target"
-msgstr ""
-"Σαρώσεις επιπέδου που άφησαν το γρήγορο ή υψηλής χωρητικότητας επίπεδο "
-"κάτω από τον στόχο"
+msgstr "Σαρώσεις επιπέδου που άφησαν το γρήγορο ή υψηλής χωρητικότητας επίπεδο κάτω από τον στόχο"
 
 msgid "RouterInfos requested for stored profiles that had none"
 msgstr "Αιτήματα RouterInfo για αποθηκευμένα προφίλ που δεν είχαν"
 
 msgid "Build timeouts recorded against a peer as a ghost mark"
-msgstr ""
-"Λήξεις δόμησης που καταγράφηκαν κατά συνομήλικου ως στίγμα φαντάσματος"
+msgstr "Λήξεις δόμησης που καταγράφηκαν κατά συνομήλικου ως στίγμα φαντάσματος"
 
 msgid "Ghost marks cleared by a successful build reply"
-msgstr ""
-"Στίγματα φαντάσματος που διαγράφηκαν από επιτυχημένη απάντηση δόμησης"
+msgstr "Στίγματα φαντάσματος που διαγράφηκαν από επιτυχημένη απάντηση δόμησης"
 
 msgid "Peers currently excluded as ghosts"
 msgstr "Συνομήλικοι που αποκλείονται προς το παρόν ως φαντάσματα"
 
 msgid "Ghost peers in the fast or high-capacity tiers"
-msgstr ""
-"Συνομήλικοι-φαντάσματα στα επίπεδα γρήγορο ή υψηλής χωρητικότητας"
+msgstr "Συνομήλικοι-φαντάσματα στα επίπεδα γρήγορο ή υψηλής χωρητικότητας"
 
 msgid "Duplicate CLOSE safety-net messages sent"
 msgstr "Διπλότυπα μηνύματα δικτύου ασφαλείας CLOSE εστάλησαν"
@@ -5353,9 +5345,7 @@ msgid "Per-connection inbound buffer cap (bytes)."
 msgstr "Όριο του εισερχόμενου buffer ανά σύνδεση (bytes)."
 
 msgid "Timer worker threads; higher reduces event delay."
-msgstr ""
-"Νήματα εργασίας χρονομέτρητη· υψηλότερη τιμή μειώνει την καθυστέρηση "
-"συμβάντων."
+msgstr "Νήματα εργασίας χρονομέτρητη· υψηλότερη τιμή μειώνει την καθυστέρηση συμβάντων."
 
 msgid "Dynamic cap on concurrent streams per destination."
 msgstr "Δυναμικό όριο ταυτόχρονων ροών ανά προορισμό."
@@ -7762,18 +7752,10 @@ msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longe
 msgstr "Μέγιστη περίοδος δοκιμής σήραγγας σε χιλιοστά του δευτερολέπτου. Οι δοκιμές σήραγγας δεν περιμένουν ποτέ περισσότερο από αυτό το χρόνο για απάντηση. [Προεπιλογή 50000 (50 δευτερόλεπτα)]"
 
 msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
-msgstr ""
-"Αριθμός λήξεων δόμησης σήραγγας πριν ένας συνομήλικος σημειωθεί ως "
-"φάντασμα (αποκλείεται από συμμετοχή σε σήραγγες). Υψηλότερες τιμές "
-"ανέχονται περισσότερες παροδικές βλάβες. [Η προεπιλογή είναι 1]"
+msgstr "Αριθμός λήξεων δόμησης σήραγγας πριν ένας συνομήλικος σημειωθεί ως φάντασμα (αποκλείεται από συμμετοχή σε σήραγγες). Υψηλότερες τιμές ανέχονται περισσότερες παροδικές βλάβες. [Η προεπιλογή είναι 1]"
 
 msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
-msgstr ""
-"Περίοδος ψύξης σε χιλιοστά του δευτερολέπτου πριν ένας συνομήλικος "
-"σημειωμένος ως φάντασμα μπορεί να προαχθεί και πάλι στα επίπεδα "
-"συνομήλικων σηράγγας. Μικρότερες τιμές επαναφέρουν γρηγορότερα τους "
-"ανακτημένους συνομήλικους σε υπηρεσία. [Η προεπιλογή είναι 90000 (90 "
-"δευτερόλεπτα)]"
+msgstr "Περίοδος ψύξης σε χιλιοστά του δευτερολέπτου πριν ένας συνομήλικος σημειωμένος ως φάντασμα μπορεί να προαχθεί και πάλι στα επίπεδα συνομήλικων σηράγγας. Μικρότερες τιμές επαναφέρουν γρηγορότερα τους ανακτημένους συνομήλικους σε υπηρεσία. [Η προεπιλογή είναι 90000 (90 δευτερόλεπτα)]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "Ελάχιστος αριθμός εισερχόμενων αιτημάτων κατασκευής σήραγγας που γίνονται αποδεκτά ανά συνομήλικο ανά καθαρό παράθυρο. Αποτρέπει την ασιτία συνομηλίκων κατά περιόδους χαμηλής κίνησης. [Προεπιλογή 10]"
@@ -10203,35 +10185,3 @@ msgstr "Επόμενο"
 
 msgid "Finished"
 msgstr "Τελειωμέν"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

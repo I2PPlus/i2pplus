@@ -7741,14 +7741,10 @@ msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longe
 msgstr "최대 터널 테스트 기간(밀리초). 터널 테스트는 고지연 경로에서도 응답을 이보다 더 오래 기다리지 않습니다. [기본값 50000(50초)]"
 
 msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
-msgstr ""
-"피어가 고스트로 표시되어 터널 참여에서 제외되기까지의 터널 빌드 시간 초과 횟수. 값이 클수록 일시적 장애를 더 허용합니다. "
-"[기본값은 1]"
+msgstr "피어가 고스트로 표시되어 터널 참여에서 제외되기까지의 터널 빌드 시간 초과 횟수. 값이 클수록 일시적 장애를 더 허용합니다. [기본값은 1]"
 
 msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
-msgstr ""
-"고스트로 표시된 피어가 터널 피어 티어로 다시 승격될 수 있을 때까지의 쿨다운 기간(밀리초). 값이 짧을수록 복구된 피어를 더 "
-"빨리 서비스로 복귀시킵니다. [기본값은 90000(90초)]"
+msgstr "고스트로 표시된 피어가 터널 피어 티어로 다시 승격될 수 있을 때까지의 쿨다운 기간(밀리초). 값이 짧을수록 복구된 피어를 더 빨리 서비스로 복귀시킵니다. [기본값은 90000(90초)]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "정리 창당 피어당 수락되는 최소 인바운드 터널 구축 요청 수. 낮은 트래픽 기간 중 피어 부족을 방지합니다. [기본값 10]"
@@ -10178,35 +10174,3 @@ msgstr "다음"
 
 msgid "Finished"
 msgstr "완료됨"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

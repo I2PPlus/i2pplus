@@ -135,8 +135,7 @@ msgid "RouterInfo refreshes issued for peers held out of the tiers"
 msgstr "Obnovy RouterInfo vydané pro peerové držené mimo tier"
 
 msgid "Tier scans that left the fast or high-capacity tier short of target"
-msgstr ""
-"Skeny tieru, po kterých rychlý nebo vysoce kapacitní tier nedosáhl cíle"
+msgstr "Skeny tieru, po kterých rychlý nebo vysoce kapacitní tier nedosáhl cíle"
 
 msgid "RouterInfos requested for stored profiles that had none"
 msgstr "RouterInfo vyžádané pro uložené profily, které žádné neměly"
@@ -3650,8 +3649,7 @@ msgid "Low Latency"
 msgstr "Nízká latence"
 
 msgid "Round trip time to this peer on the direct link, as measured by the transport"
-msgstr ""
-"Okružní doba k tomuto peerovi po přímém spojení, měřená transportem"
+msgstr "Okružní doba k tomuto peerovi po přímém spojení, měřená transportem"
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
 msgstr "Pakety přenesené opakovaně / odeslané pakety, jak hlásí transport UDP"
@@ -5358,8 +5356,7 @@ msgid "Per-connection inbound buffer cap (bytes)."
 msgstr "Strop příchozího bufferu na jedno připojení (bajty)."
 
 msgid "Timer worker threads; higher reduces event delay."
-msgstr ""
-"Pracovní vlákna časovače; vyšší hodnota snižuje zpoždění událostí."
+msgstr "Pracovní vlákna časovače; vyšší hodnota snižuje zpoždění událostí."
 
 msgid "Dynamic cap on concurrent streams per destination."
 msgstr "Dynamický strop souběžných streamů na jeden cíl."
@@ -5605,12 +5602,10 @@ msgid "Min time between retransmissions (ms)."
 msgstr "Minimální čas mezi opakovanými přenosy (ms)."
 
 msgid "Window growth per RTT after slow start; higher recovers faster."
-msgstr ""
-"Růst okna na RTT po pomalém startu; vyšší hodnota se zotaví rychleji."
+msgstr "Růst okna na RTT po pomalém startu; vyšší hodnota se zotaví rychleji."
 
 msgid "Window growth per ACK during slow start; higher ramps faster."
-msgstr ""
-"Růst okna na ACK během pomalého startu; vyšší hodnota nabíhá rychleji."
+msgstr "Růst okna na ACK během pomalého startu; vyšší hodnota nabíhá rychleji."
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
 msgstr "Minimální rychlost odesílání před zahájením stimulace (kB/s)."
@@ -5739,9 +5734,7 @@ msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "Časový limit připojení TCP socketu pro obslužná vlákna serveru tunelů (ms)."
 
 msgid "IV dedup filter size; too small drops valid tunnel data."
-msgstr ""
-"Velikost filtru deduplikace IV; příliš malý zahazuje platná tunnelová "
-"data."
+msgstr "Velikost filtru deduplikace IV; příliš malý zahazuje platná tunnelová data."
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "Maximální průměrné zpoždění zprávy před odmítnutím přenosu (ms)."
@@ -7770,16 +7763,10 @@ msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longe
 msgstr "Maximální doba testu tunelu v milisekundách. Testy tunelů nikdy nečekají na odpověď déle než toto, ani na sítích s vysokou latencí. [Výchozí je 60000]"
 
 msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
-msgstr ""
-"Počet časových limitů sestavení tunelu, po kterých je peer označen jako "
-"ghost (vyloučen z účasti v tunelech). Vyšší hodnoty snášejí více "
-"dočasných výpadků. [Výchozí je 1]"
+msgstr "Počet časových limitů sestavení tunelu, po kterých je peer označen jako ghost (vyloučen z účasti v tunelech). Vyšší hodnoty snášejí více dočasných výpadků. [Výchozí je 1]"
 
 msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
-msgstr ""
-"Doba ochlazení v milisekundách, než může být peer označený jako ghost "
-"opět povýšen do tierů peerů tunelu. Nižší hodnoty rychleji vracejí "
-"uzdravené peer do služby. [Výchozí je 90000 (90 sekund)]"
+msgstr "Doba ochlazení v milisekundách, než může být peer označený jako ghost opět povýšen do tierů peerů tunelu. Nižší hodnoty rychleji vracejí uzdravené peer do služby. [Výchozí je 90000 (90 sekund)]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "Minimální počet přijatých příchozích požadavků na stavbu tunelu na peer na čisté okno. Zabraňuje hladovění peerů během období nízké poptávky. [Výchozí je 1]"
@@ -10215,35 +10202,3 @@ msgstr "Další"
 
 msgid "Finished"
 msgstr "Hotové"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

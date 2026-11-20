@@ -132,17 +132,13 @@ msgid "Tier promotions held back for a peer with no usable address"
 msgstr "Awanse do tieru wstrzymane dla równika bez użytecznego adresu"
 
 msgid "RouterInfo refreshes issued for peers held out of the tiers"
-msgstr ""
-"Odświeżenia RouterInfo wydane dla równików trzymanych poza tierami"
+msgstr "Odświeżenia RouterInfo wydane dla równików trzymanych poza tierami"
 
 msgid "Tier scans that left the fast or high-capacity tier short of target"
-msgstr ""
-"Skanowania tierów, po których szybki lub wysokoprzepustowy tier nie "
-"osiągnął celu"
+msgstr "Skanowania tierów, po których szybki lub wysokoprzepustowy tier nie osiągnął celu"
 
 msgid "RouterInfos requested for stored profiles that had none"
-msgstr ""
-"RouterInfo zamówione dla zapisanych profili, które ich nie miały"
+msgstr "RouterInfo zamówione dla zapisanych profili, które ich nie miały"
 
 msgid "Build timeouts recorded against a peer as a ghost mark"
 msgstr "Przekroczenia czasu budowy zapisane równikowi jako znak widma"
@@ -5360,8 +5356,7 @@ msgid "Per-connection inbound buffer cap (bytes)."
 msgstr "Limit bufora przychodzącego na połączenie (bajty)."
 
 msgid "Timer worker threads; higher reduces event delay."
-msgstr ""
-"Wątki robocze timera; wyższa wartość zmniejsza opóźnienie zdarzeń."
+msgstr "Wątki robocze timera; wyższa wartość zmniejsza opóźnienie zdarzeń."
 
 msgid "Dynamic cap on concurrent streams per destination."
 msgstr "Dynamiczny limit równoczesnych strumieni na miejsce docelowe."
@@ -7768,16 +7763,10 @@ msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longe
 msgstr "Maksymalny okres testu tunelu w milisekundach. Testy tuneli nigdy nie czekają dłużej niż to na odpowiedź, nawet na ścieżkach o wysokim opóźnieniu. [Domyślnie 50000 (50 sekund)]"
 
 msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
-msgstr ""
-"Liczba przekroczeń czasu budowy tunelu, po których równik jest oznaczany "
-"jako widmo (wykluczany z udziału w tunelach). Wyższe wartości tolerują "
-"więcej przemijających awarii. [Domyślnie 1]"
+msgstr "Liczba przekroczeń czasu budowy tunelu, po których równik jest oznaczany jako widmo (wykluczany z udziału w tunelach). Wyższe wartości tolerują więcej przemijających awarii. [Domyślnie 1]"
 
 msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
-msgstr ""
-"Okres ochłodzenia w milisekundach, po którym równik oznaczony jako widmo "
-"może znów awansować do tierów równików tunelu. Krótsze wartości szybciej "
-"przywracają do usługi odzyskane równiki. [Domyślnie 90000 (90 sekund)]"
+msgstr "Okres ochłodzenia w milisekundach, po którym równik oznaczony jako widmo może znów awansować do tierów równików tunelu. Krótsze wartości szybciej przywracają do usługi odzyskane równiki. [Domyślnie 90000 (90 sekund)]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "Minimalna liczba przychodzących żądań budowy tuneli przyjętych na równorzędnego na okno czyste. Zapobiega głodzeniu równorzędnych w okresach niskiego ruchu. [Domyślnie 10]"
@@ -10207,35 +10196,3 @@ msgstr "Dalej"
 
 msgid "Finished"
 msgstr "Koniec"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

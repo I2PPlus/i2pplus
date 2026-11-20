@@ -133,12 +133,10 @@ msgid "RouterInfo refreshes issued for peers held out of the tiers"
 msgstr "टियर से बाहर रखे गए पीयर के लिए जारी की गई RouterInfo रीफ्रेश"
 
 msgid "Tier scans that left the fast or high-capacity tier short of target"
-msgstr ""
-"टियर स्कैन जिनमें तेज़ या उच्च-क्षमता टियर लक्ष्य तक नहीं पहुँचा"
+msgstr "टियर स्कैन जिनमें तेज़ या उच्च-क्षमता टियर लक्ष्य तक नहीं पहुँचा"
 
 msgid "RouterInfos requested for stored profiles that had none"
-msgstr ""
-"संग्रहीत प्रोफ़ाइल के लिए अनुरोधित RouterInfo जिनके पास कोई नहीं थी"
+msgstr "संग्रहीत प्रोफ़ाइल के लिए अनुरोधित RouterInfo जिनके पास कोई नहीं थी"
 
 msgid "Build timeouts recorded against a peer as a ghost mark"
 msgstr "भूत-चिह्न के रूप में पीयर के विरुद्ध दर्ज किए गए बिल्ड टाइमआउट"
@@ -3643,8 +3641,7 @@ msgid "Low Latency"
 msgstr "कम लैटेंसी"
 
 msgid "Round trip time to this peer on the direct link, as measured by the transport"
-msgstr ""
-"डायरेक्ट लिंक पर इस पीयर तक का राउंड ट्रिप समय, परिवहन द्वारा मापा गया"
+msgstr "डायरेक्ट लिंक पर इस पीयर तक का राउंड ट्रिप समय, परिवहन द्वारा मापा गया"
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
 msgstr "UDP परिवहन द्वारा रिपोर्ट किए गए अनुसार पुनःप्रसारित पैकेट / भेजे गए पैकेट"
@@ -5594,14 +5591,10 @@ msgid "Min time between retransmissions (ms)."
 msgstr "पुनःप्रसारणों के बीच न्यूनतम समय (ms)।"
 
 msgid "Window growth per RTT after slow start; higher recovers faster."
-msgstr ""
-"स्लो स्टार्ट के बाद प्रति RTT विंडो वृद्धि; उच्च मान से विंडो तेज़ी से "
-"उबरती है।"
+msgstr "स्लो स्टार्ट के बाद प्रति RTT विंडो वृद्धि; उच्च मान से विंडो तेज़ी से उबरती है।"
 
 msgid "Window growth per ACK during slow start; higher ramps faster."
-msgstr ""
-"स्लो स्टार्ट के दौरान प्रति ACK विंडो वृद्धि; उच्च मान तेज़ी से बढ़ाता "
-"है।"
+msgstr "स्लो स्टार्ट के दौरान प्रति ACK विंडो वृद्धि; उच्च मान तेज़ी से बढ़ाता है।"
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
 msgstr "पेसिंग किक शुरू होने से पहले न्यूनतम भेजने की दर (KB/s)।"
@@ -5640,8 +5633,7 @@ msgid "Default cap on server handler threads for each server tunnel."
 msgstr "प्रत्येक सर्वर टंनल के लिए सर्वर हैंडलर थ्रेडों की डिफ़ॉल्ट सीमा।"
 
 msgid "Dedicated pool for Server→Client transfers, unblocks handlers."
-msgstr ""
-"सर्वर→क्लाइंट स्थानांतरण हेतु समर्पित पूल, हैंडलर को खुला करता है।"
+msgstr "सर्वर→क्लाइंट स्थानांतरण हेतु समर्पित पूल, हैंडलर को खुला करता है।"
 
 msgid "Stall timeout for Server→Client data transfers (ms)."
 msgstr "सर्वर→क्लाइंट डेटा स्थानांतरण हेतु स्टॉल समय समाप्ति (ms)।"
@@ -5731,9 +5723,7 @@ msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "टनल सर्वर हैंडलर थ्रेड के लिए TCP सॉकेट कनेक्ट समय समाप्ति (ms)।"
 
 msgid "IV dedup filter size; too small drops valid tunnel data."
-msgstr ""
-"IV डुप्लिकेट-निवारण फ़िल्टर का आकार; बहुत छोटा मान्य टनेल डेटा गिरा देता "
-"है।"
+msgstr "IV डुप्लिकेट-निवारण फ़िल्टर का आकार; बहुत छोटा मान्य टनेल डेटा गिरा देता है।"
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "ट्रांज़िट (एमएस) को अस्वीकार करने से पहले अधिकतम औसत संदेश विलंब।"
@@ -7762,16 +7752,10 @@ msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longe
 msgstr "मिलीसेकंड में अधिकतम सुरंग परीक्षण अवधि। सुरंग परीक्षण उच्च-विलंबता पथों पर भी उत्तर के लिए इससे अधिक प्रतीक्षा नहीं करता है। [डिफ़ॉल्ट 50000 (50 सेकंड)]"
 
 msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
-msgstr ""
-"टनेल बिल्ड टाइमआउट की संख्या जिसके बाद पीयर को भूत चिह्नित कर दिया जाता "
-"है (टनेल भागीदारी से बाहर)। उच्च मान क्षणिक विफलताओं को अधिक सहन करते "
-"हैं। [पूर्वनिर्धारित 1 है]"
+msgstr "टनेल बिल्ड टाइमआउट की संख्या जिसके बाद पीयर को भूत चिह्नित कर दिया जाता है (टनेल भागीदारी से बाहर)। उच्च मान क्षणिक विफलताओं को अधिक सहन करते हैं। [पूर्वनिर्धारित 1 है]"
 
 msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
-msgstr ""
-"मिलीसेकंड में शीतकाल अवधि, इससे पहले कि भूत-चिह्नित पीयर फिर से टनेल "
-"पीयर टियर में पदोन्नत हो सके। छोटे मान पुनर्प्राप्त पीयर को सेवा में "
-"लौटाना तेज़ करते हैं। [पूर्वनिर्धारित 90000 (90 सेकंड) है]"
+msgstr "मिलीसेकंड में शीतकाल अवधि, इससे पहले कि भूत-चिह्नित पीयर फिर से टनेल पीयर टियर में पदोन्नत हो सके। छोटे मान पुनर्प्राप्त पीयर को सेवा में लौटाना तेज़ करते हैं। [पूर्वनिर्धारित 90000 (90 सेकंड) है]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "प्रति साफ विंडो प्रति पीयर स्वीकृत न्यूनतम इनबाउंड सुरंग निर्माण अनुरोध। कम ट्रैफ़िक अवधियों के दौरान पीयर को भूखा रहने से रोकता है। [डिफ़ॉल्ट 10]"
@@ -10201,35 +10185,3 @@ msgstr "अगला"
 
 msgid "Finished"
 msgstr "समाप्त"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

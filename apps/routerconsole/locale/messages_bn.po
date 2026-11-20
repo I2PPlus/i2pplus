@@ -127,20 +127,16 @@ msgid "Average tunnel build success (%)"
 msgstr "গড় টানেল নির্মাণ সাফল্যের হার %"
 
 msgid "Tier promotions held back for a peer with no usable address"
-msgstr ""
-"ব্যবহারযোগ্য ঠিকানা না থাকা পিয়ারের জন্য টিয়ার পদোন্নতি আটকে রাখা "
-"হয়েছে"
+msgstr "ব্যবহারযোগ্য ঠিকানা না থাকা পিয়ারের জন্য টিয়ার পদোন্নতি আটকে রাখা হয়েছে"
 
 msgid "RouterInfo refreshes issued for peers held out of the tiers"
 msgstr "টিয়ারের বাইরে রাখা পিয়ারের জন্য জারি করা RouterInfo রিফ্রেশ"
 
 msgid "Tier scans that left the fast or high-capacity tier short of target"
-msgstr ""
-"যে স্ক্যানে দ্রুত বা উচ্চ-ক্ষমতার টিয়ার লক্ষ্যমাত্রায় পৌঁছাতে পারেনি"
+msgstr "যে স্ক্যানে দ্রুত বা উচ্চ-ক্ষমতার টিয়ার লক্ষ্যমাত্রায় পৌঁছাতে পারেনি"
 
 msgid "RouterInfos requested for stored profiles that had none"
-msgstr ""
-"সংরক্ষিত প্রোফাইলের জন্য অনুরোধ করা RouterInfo যার কোনোটি ছিল না"
+msgstr "সংরক্ষিত প্রোফাইলের জন্য অনুরোধ করা RouterInfo যার কোনোটি ছিল না"
 
 msgid "Build timeouts recorded against a peer as a ghost mark"
 msgstr "ভূত-চিহ্ন হিসেবে পিয়ারের বিরুদ্ধে রেকর্ড করা বিল্ড টাইমআউট"
@@ -3645,9 +3641,7 @@ msgid "Low Latency"
 msgstr "নিম্ন বিলম্ব"
 
 msgid "Round trip time to this peer on the direct link, as measured by the transport"
-msgstr ""
-"প্রত্যক্ষ লিংকে এই পিয়ারের রাউন্ড ট্রিপ সময় (ট্রান্সপোর্ট স্তরের মাপ "
-"অনুযায়ী)"
+msgstr "প্রত্যক্ষ লিংকে এই পিয়ারের রাউন্ড ট্রিপ সময় (ট্রান্সপোর্ট স্তরের মাপ অনুযায়ী)"
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
 msgstr "UDP ট্রান্সপোর্ট অনুসারে পুনঃপ্রেরিত প্যাকেট / প্রেরিত প্যাকেট"
@@ -5597,13 +5591,10 @@ msgid "Min time between retransmissions (ms)."
 msgstr "পুনঃপ্রেরণগুলির মধ্যে সর্বনিম্ন সময় (ms)।"
 
 msgid "Window growth per RTT after slow start; higher recovers faster."
-msgstr ""
-"স্লো স্টার্টের পর প্রতি RTT-তে উইন্ডো বৃদ্ধি; বেশি মান দ্রুত পুনরুদ্ধার "
-"করে।"
+msgstr "স্লো স্টার্টের পর প্রতি RTT-তে উইন্ডো বৃদ্ধি; বেশি মান দ্রুত পুনরুদ্ধার করে।"
 
 msgid "Window growth per ACK during slow start; higher ramps faster."
-msgstr ""
-"স্লো স্টার্টের সময় প্রতি ACK-তে উইন্ডো বৃদ্ধি; বেশি মান দ্রুত বাড়ায়।"
+msgstr "স্লো স্টার্টের সময় প্রতি ACK-তে উইন্ডো বৃদ্ধি; বেশি মান দ্রুত বাড়ায়।"
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
 msgstr "পেসিং কিক ইন (KB/s) আগে ন্যূনতম প্রেরণ হার।"
@@ -5642,9 +5633,7 @@ msgid "Default cap on server handler threads for each server tunnel."
 msgstr "প্রতিটি সার্ভার টানেলের জন্য সার্ভার হ্যান্ডলার থ্রেডের ডিফল্ট ক্যাপ।"
 
 msgid "Dedicated pool for Server→Client transfers, unblocks handlers."
-msgstr ""
-"সার্ভার→ক্লায়েন্ট স্থানান্তরের জন্য নিবেদিত পুল, হ্যান্ডলারের আটকানি "
-"দূর করে।"
+msgstr "সার্ভার→ক্লায়েন্ট স্থানান্তরের জন্য নিবেদিত পুল, হ্যান্ডলারের আটকানি দূর করে।"
 
 msgid "Stall timeout for Server→Client data transfers (ms)."
 msgstr "সার্ভার→ক্লায়েন্ট ডেটা ট্রান্সফারের জন্য স্টল টাইমআউট (ms)।"
@@ -5734,9 +5723,7 @@ msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "টানেল সার্ভার হ্যান্ডলার থ্রেডের জন্য TCP সকেট সংযোগ সময়সীমা (ms)।"
 
 msgid "IV dedup filter size; too small drops valid tunnel data."
-msgstr ""
-"IV ডুপ্লিকেট-নিবারণ ফিল্টারের আকার; খুব ছোট হলে বৈধ টানেল ডেটা ফেলে "
-"দেয়।"
+msgstr "IV ডুপ্লিকেট-নিবারণ ফিল্টারের আকার; খুব ছোট হলে বৈধ টানেল ডেটা ফেলে দেয়।"
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "ট্রানজিট প্রত্যাখ্যান করার আগে সর্বাধিক গড় বার্তা বিলম্ব (ms)"
@@ -7765,15 +7752,10 @@ msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longe
 msgstr "সর্বোচ্চ টানেল পরীক্ষার সময়কাল মিলিসেকেন্ডে। টানেল পরীক্ষা উচ্চ-লেটেন্সি পথেও উত্তরের জন্য এর চেয়ে বেশি অপেক্ষা করে না। [ডিফল্ট 50000 (50 সেকেন্ড)]"
 
 msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
-msgstr ""
-"পিয়ারকে ভূত চিহ্নিত (টানেল অংশগ্রহণ থেকে বাদ) করার আগে টানেল বিল্ড "
-"টাইমআউটের সংখ্যা। বেশি মান ক্ষণিক ব্যর্থতা বেশি সহ্য করে। [ডিফল্ট ১]"
+msgstr "পিয়ারকে ভূত চিহ্নিত (টানেল অংশগ্রহণ থেকে বাদ) করার আগে টানেল বিল্ড টাইমআউটের সংখ্যা। বেশি মান ক্ষণিক ব্যর্থতা বেশি সহ্য করে। [ডিফল্ট ১]"
 
 msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
-msgstr ""
-"ভূত-চিহ্নিত পিয়ার আবার টানেল পিয়ার টিয়ারে পদোন্নত হতে পারার আগে "
-"পর্যন্ত মিলিসেকেন্ডে কুলডাউন সময়। কম মান পুনরুদ্ধার পিয়ারদের দ্রুত "
-"সেবায় ফেরায়। [ডিফল্ট ৯০০০০ (৯০ সেকেন্ড)]"
+msgstr "ভূত-চিহ্নিত পিয়ার আবার টানেল পিয়ার টিয়ারে পদোন্নত হতে পারার আগে পর্যন্ত মিলিসেকেন্ডে কুলডাউন সময়। কম মান পুনরুদ্ধার পিয়ারদের দ্রুত সেবায় ফেরায়। [ডিফল্ট ৯০০০০ (৯০ সেকেন্ড)]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "প্রতি ক্লিন উইন্ডোতে প্রতি পিয়ার থেকে গৃহীত ইনকামিং টানেল বিল্ড অনুরোধের ন্যূনতম সংখ্যা। কম-ট্রাফিক সময়ে পিয়ারদের অনাহার রোধ করে। [ডিফল্ট 10]"
@@ -10203,35 +10185,3 @@ msgstr "পরবর্তী"
 
 msgid "Finished"
 msgstr "সমাপ্ত"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

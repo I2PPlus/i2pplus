@@ -7744,8 +7744,7 @@ msgid "Number of tunnel build timeouts before a peer is marked as a ghost (exclu
 msgstr "对等节点被标记为幽灵（被排除出隧道参与）之前累计的隧道构建超时次数。较高的值可容忍更多瞬时故障。[默认值为 1]"
 
 msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
-msgstr ""
-"被标记为幽灵的对等节点重新晋升到隧道对等层级之前的冷却时间（毫秒）。较短的值能让恢复的对等节点更快回到服务。[默认值为 90000（90 秒）]"
+msgstr "被标记为幽灵的对等节点重新晋升到隧道对等层级之前的冷却时间（毫秒）。较短的值能让恢复的对等节点更快回到服务。[默认值为 90000（90 秒）]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "每个清洗窗口每个对等点接受的最小入站隧道构建请求数。防止低流量期间对等点饥饿。[默认为10]"
@@ -10175,35 +10174,3 @@ msgstr "下一步"
 
 msgid "Finished"
 msgstr "完成"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

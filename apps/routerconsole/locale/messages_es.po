@@ -127,31 +127,22 @@ msgid "Average tunnel build success (%)"
 msgstr "% de éxito promedio en la construcción de túneles"
 
 msgid "Tier promotions held back for a peer with no usable address"
-msgstr ""
-"Promociones de nivel retenidas para un compañero sin dirección "
-"utilizable"
+msgstr "Promociones de nivel retenidas para un compañero sin dirección utilizable"
 
 msgid "RouterInfo refreshes issued for peers held out of the tiers"
-msgstr ""
-"Actualizaciones de RouterInfo emitidas para compañeros mantenidos fuera "
-"de los niveles"
+msgstr "Actualizaciones de RouterInfo emitidas para compañeros mantenidos fuera de los niveles"
 
 msgid "Tier scans that left the fast or high-capacity tier short of target"
-msgstr ""
-"Análisis de niveles que dejaron al nivel rápido o de alta capacidad por "
-"debajo del objetivo"
+msgstr "Análisis de niveles que dejaron al nivel rápido o de alta capacidad por debajo del objetivo"
 
 msgid "RouterInfos requested for stored profiles that had none"
 msgstr "RouterInfos solicitadas para perfiles almacenados que no tenían"
 
 msgid "Build timeouts recorded against a peer as a ghost mark"
-msgstr ""
-"Tiempos de espera de construcción registrados a un compañero como marca "
-"fantasma"
+msgstr "Tiempos de espera de construcción registrados a un compañero como marca fantasma"
 
 msgid "Ghost marks cleared by a successful build reply"
-msgstr ""
-"Marcas fantasma borradas tras una respuesta de construcción exitosa"
+msgstr "Marcas fantasma borradas tras una respuesta de construcción exitosa"
 
 msgid "Peers currently excluded as ghosts"
 msgstr "Compañeros excluidos actualmente como fantasmas"
@@ -5354,9 +5345,7 @@ msgid "Per-connection inbound buffer cap (bytes)."
 msgstr "Límite de búfer entrante por conexión (bytes)."
 
 msgid "Timer worker threads; higher reduces event delay."
-msgstr ""
-"Hilos de trabajo del temporizador; un valor más alto reduce el retraso "
-"de eventos."
+msgstr "Hilos de trabajo del temporizador; un valor más alto reduce el retraso de eventos."
 
 msgid "Dynamic cap on concurrent streams per destination."
 msgstr "Límite dinámico de flujos concurrentes por destino."
@@ -7763,19 +7752,10 @@ msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longe
 msgstr "Periodo maximo de prueba de túnel en milisegundos. Las pruebas de túnel nunca esperan mas de este tiempo para una respuesta, incluso en rutas de alta latencia. [Por defecto es 50000 (50 segundos)]"
 
 msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
-msgstr ""
-"Número de tiempos de espera de construcción de túneles antes de que un "
-"compañero sea marcado como fantasma (excluido de la participación en "
-"túneles). Valores más altos toleran más fallos transitorios. [El valor "
-"predeterminado es 1]"
+msgstr "Número de tiempos de espera de construcción de túneles antes de que un compañero sea marcado como fantasma (excluido de la participación en túneles). Valores más altos toleran más fallos transitorios. [El valor predeterminado es 1]"
 
 msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
-msgstr ""
-"Período de enfriamiento en milisegundos antes de que un compañero "
-"marcado como fantasma pueda volver a ascender a los niveles de "
-"compañeros de túnel. Valores más cortos devuelven antes al servicio a "
-"los compañeros recuperados. [El valor predeterminado es 90000 (90 "
-"segundos)]"
+msgstr "Período de enfriamiento en milisegundos antes de que un compañero marcado como fantasma pueda volver a ascender a los niveles de compañeros de túnel. Valores más cortos devuelven antes al servicio a los compañeros recuperados. [El valor predeterminado es 90000 (90 segundos)]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "Numero minimo de solicitudes de construccion de túnel entrantes aceptadas por par por ventana limpia. Evita privar a los pares durante periodos de bajo trafico. [Por defecto es 10]"
@@ -10205,35 +10185,3 @@ msgstr "Siguiente"
 
 msgid "Finished"
 msgstr "Terminado"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

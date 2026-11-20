@@ -128,16 +128,13 @@ msgid "Average tunnel build success (%)"
 msgstr "Gennemsnitlig tunnelbygningssucces %"
 
 msgid "Tier promotions held back for a peer with no usable address"
-msgstr ""
-"Tier-forfremmelser tilbageholdt for en peer uden brugbar adresse"
+msgstr "Tier-forfremmelser tilbageholdt for en peer uden brugbar adresse"
 
 msgid "RouterInfo refreshes issued for peers held out of the tiers"
 msgstr "RouterInfo-opdateringer udsendt for peers holdt uden for tiers"
 
 msgid "Tier scans that left the fast or high-capacity tier short of target"
-msgstr ""
-"Tier-scanninger, der efterlod den hurtige eller højkapacitive tier under "
-"målet"
+msgstr "Tier-scanninger, der efterlod den hurtige eller højkapacitive tier under målet"
 
 msgid "RouterInfos requested for stored profiles that had none"
 msgstr "RouterInfos bedt om for gemte profiler, der ikke havde nogen"
@@ -5407,9 +5404,7 @@ msgid "Per-connection inbound buffer cap (bytes)."
 msgstr "Loft for indgående buffer pr. forbindelse (bytes)."
 
 msgid "Timer worker threads; higher reduces event delay."
-msgstr ""
-"Timer-arbeidstråder; en højere værdi reducerer forsinkelsen på "
-"hændelser."
+msgstr "Timer-arbeidstråder; en højere værdi reducerer forsinkelsen på hændelser."
 
 msgid "Dynamic cap on concurrent streams per destination."
 msgstr "Dynamisk loft for samtidige streams pr. destination."
@@ -7832,16 +7827,10 @@ msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longe
 msgstr "Maksimum tunneltestperiode i millisekunder. Tunneltests venter aldrig længere end dette på et svar, selv på høj-latency-netværk. [Standard er 60000]"
 
 msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
-msgstr ""
-"Antal tunnelbuild-timeouts før en peer markeres som ghost (udelukkes fra "
-"deltagelse i tunneler). Højere værdier tolererer flere forbigående fejl. "
-"[Standard er 1]"
+msgstr "Antal tunnelbuild-timeouts før en peer markeres som ghost (udelukkes fra deltagelse i tunneler). Højere værdier tolererer flere forbigående fejl. [Standard er 1]"
 
 msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
-msgstr ""
-"Nedkølingsperiode i millisekunder før en ghost-markeret peer igen kan "
-"forfremmes til tunnelpeer-tiers. Kortere værdier bringer genoprettede "
-"peers hurtigere tilbage i drift. [Standard er 90000 (90 sekunder)]"
+msgstr "Nedkølingsperiode i millisekunder før en ghost-markeret peer igen kan forfremmes til tunnelpeer-tiers. Kortere værdier bringer genoprettede peers hurtigere tilbage i drift. [Standard er 90000 (90 sekunder)]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "Minimum antal indgående tunnelbygningsanmodninger accepteret per peer per rent vindue. Forhindrer peers i at sulte under lav-efterspørgselsperioder. [Standard er 1]"
@@ -10272,52 +10261,3 @@ msgstr "Næste"
 
 msgid "Finished"
 msgstr "Færdig"
-
-
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:240
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:244
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:315
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:317
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:319
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:380
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:382
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:384
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:390
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:394
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:455
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:457
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:459
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:463
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:465
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:467
-
-
-
-
-
-
-
-
-
-
-
-# /java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:74
-
-
-

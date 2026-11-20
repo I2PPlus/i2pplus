@@ -135,9 +135,7 @@ msgid "RouterInfo refreshes issued for peers held out of the tiers"
 msgstr "Obnovy RouterInfo vydané pre peerov držaných mimo tier"
 
 msgid "Tier scans that left the fast or high-capacity tier short of target"
-msgstr ""
-"Skeny tieru, po ktorých rýchly alebo vysokokapacitný tier nedosiahol "
-"cieľ"
+msgstr "Skeny tieru, po ktorých rýchly alebo vysokokapacitný tier nedosiahol cieľ"
 
 msgid "RouterInfos requested for stored profiles that had none"
 msgstr "RouterInfo vyžiadané pre uložené profily, ktoré žiadne nemali"
@@ -5358,8 +5356,7 @@ msgid "Per-connection inbound buffer cap (bytes)."
 msgstr "Limit prichádzajúcej vyrovnávacej pamäte na pripojenie (bajty)."
 
 msgid "Timer worker threads; higher reduces event delay."
-msgstr ""
-"Pracovné vlákna časovača; vyššia hodnota znižuje oneskorenie udalostí."
+msgstr "Pracovné vlákna časovača; vyššia hodnota znižuje oneskorenie udalostí."
 
 msgid "Dynamic cap on concurrent streams per destination."
 msgstr "Dynamický limit súbežných streamov na jeden cieľ."
@@ -7766,16 +7763,10 @@ msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longe
 msgstr "Maximálna doba testu tunela v milisekundách. Tunelové testy nikdy nečakajú na odpoveď dlhšie, a to ani na cestách s vysokou latenciou. [Predvolená hodnota je 50 000 (50 sekúnd)]"
 
 msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
-msgstr ""
-"Počet časových limitov zostavenia tunela, po ktorom je peer označený ako "
-"ghost (vylúčený z účasti v tuneloch). Vyššie hodnoty strpia viac "
-"dočasných výpadkov. [Predvolená je 1]"
+msgstr "Počet časových limitov zostavenia tunela, po ktorom je peer označený ako ghost (vylúčený z účasti v tuneloch). Vyššie hodnoty strpia viac dočasných výpadkov. [Predvolená je 1]"
 
 msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
-msgstr ""
-"Doba ochladenia v milisekundách, kým môže byť peer označený ako ghost "
-"opäť povýšený do tierov peerov tunela. Nižšie hodnoty rýchlejšie vracajú "
-"zotavených peerov do služby. [Predvolená je 90000 (90 sekúnd)]"
+msgstr "Doba ochladenia v milisekundách, kým môže byť peer označený ako ghost opäť povýšený do tierov peerov tunela. Nižšie hodnoty rýchlejšie vracajú zotavených peerov do služby. [Predvolená je 90000 (90 sekúnd)]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "Minimális számú bejövő alagútépítési kérés elfogadva társanként tisztítási ablakonként. [Alapértelmezés 10] [Default is 10]"
@@ -10205,35 +10196,3 @@ msgstr "Következő"
 
 msgid "Finished"
 msgstr "Befejeződött"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -127,28 +127,19 @@ msgid "Average tunnel build success (%)"
 msgstr "Keskimääräinen tunnelin rakentamisen onnistuminen %"
 
 msgid "Tier promotions held back for a peer with no usable address"
-msgstr ""
-"Tasonnostot pidätetty vertaiselta, jolla ei ole käyttökelpoista "
-"osoitetta"
+msgstr "Tasonnostot pidätetty vertaiselta, jolla ei ole käyttökelpoista osoitetta"
 
 msgid "RouterInfo refreshes issued for peers held out of the tiers"
-msgstr ""
-"RouterInfo-päivitykset, joita pyydettiin tasoilta pidätetyille "
-"vertaisille"
+msgstr "RouterInfo-päivitykset, joita pyydettiin tasoilta pidätetyille vertaisille"
 
 msgid "Tier scans that left the fast or high-capacity tier short of target"
-msgstr ""
-"Tasoskannaukset, joissa nopea tai suurikapasiteettinen taso jäi alle "
-"tavoitteen"
+msgstr "Tasoskannaukset, joissa nopea tai suurikapasiteettinen taso jäi alle tavoitteen"
 
 msgid "RouterInfos requested for stored profiles that had none"
-msgstr ""
-"Tallennetuille profiileille pyydetyt RouterInfo-tiedostot, joilta "
-"puuttui sellainen"
+msgstr "Tallennetuille profiileille pyydetyt RouterInfo-tiedostot, joilta puuttui sellainen"
 
 msgid "Build timeouts recorded against a peer as a ghost mark"
-msgstr ""
-"Vertaista vastaan kirjatut rakennusaikakatkaisut kummitusmerkintöinä"
+msgstr "Vertaista vastaan kirjatut rakennusaikakatkaisut kummitusmerkintöinä"
 
 msgid "Ghost marks cleared by a successful build reply"
 msgstr "Onnistuneen rakennusvastauksen poistamat kummitusmerkinnät"
@@ -4607,8 +4598,7 @@ msgid "Throughput"
 msgstr "Läpimeno"
 
 msgid "Mean rate of streams closed in the last minute"
-msgstr ""
-"Viime minuutin aikana suljettujen striimien keskimääräinen tahti"
+msgstr "Viime minuutin aikana suljettujen striimien keskimääräinen tahti"
 
 msgid "sent"
 msgstr "lähetetty"
@@ -7762,17 +7752,10 @@ msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longe
 msgstr "Enimmäis tunnelitestausaika. [Oletus 50000 (50s)] [Default is 50000 (50 seconds)] [Oletus on 50 000 (50 sekuntia)] [Oletus on 50 000 (50 sekuntia)] [Oletus on 50 000 (50 sekuntia)]. [Oletus on 50 000 (50 sekuntia)"
 
 msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
-msgstr ""
-"Rakennusaikakatkaisujen lukumäärä, ennen kuin vertainen merkitään "
-"kummitukseksi (suljetaan tunneliyhteistyöstä). Suuremmat arvot sietävät "
-"enemmän hetkellisiä virheitä. [Oletus on 1]"
+msgstr "Rakennusaikakatkaisujen lukumäärä, ennen kuin vertainen merkitään kummitukseksi (suljetaan tunneliyhteistyöstä). Suuremmat arvot sietävät enemmän hetkellisiä virheitä. [Oletus on 1]"
 
 msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
-msgstr ""
-"Jäähdytysaika millisekunteina, ennen kuin kummitukseksi merkitty "
-"vertainen voidaan nostaa takaisin tunnelin vertaistasoille. Lyhyemmät "
-"arvot palauttavat parantuneet vertaiset palveluun nopeammin. [Oletus on "
-"90000 (90 sekuntia)]"
+msgstr "Jäähdytysaika millisekunteina, ennen kuin kummitukseksi merkitty vertainen voidaan nostaa takaisin tunnelin vertaistasoille. Lyhyemmät arvot palauttavat parantuneet vertaiset palveluun nopeammin. [Oletus on 90000 (90 sekuntia)]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "Vähimmäismäärä saapuvia rakennuspyyntöjä per vertainen per ikkuna. [Oletus 10] [Default is 10] [Oletusarvo on 10] [Oletusarvo on 10] [Oletusarvo on 10]. [Oletus on 10"
@@ -10202,35 +10185,3 @@ msgstr "Seuraava"
 
 msgid "Finished"
 msgstr "Valmistunut"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

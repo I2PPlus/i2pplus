@@ -127,17 +127,13 @@ msgid "Average tunnel build success (%)"
 msgstr "Átlagos alagútépítési siker %"
 
 msgid "Tier promotions held back for a peer with no usable address"
-msgstr ""
-"Szintre lépések visszatartása használható cím nélküli társ esetén"
+msgstr "Szintre lépések visszatartása használható cím nélküli társ esetén"
 
 msgid "RouterInfo refreshes issued for peers held out of the tiers"
-msgstr ""
-"Kiadott RouterInfo-frissítések szinteken kívül tartott társakhoz"
+msgstr "Kiadott RouterInfo-frissítések szinteken kívül tartott társakhoz"
 
 msgid "Tier scans that left the fast or high-capacity tier short of target"
-msgstr ""
-"Szintvizsgálatok, amelyek a gyors vagy nagy kapacitású szintet a cél "
-"alatt hagyták"
+msgstr "Szintvizsgálatok, amelyek a gyors vagy nagy kapacitású szintet a cél alatt hagyták"
 
 msgid "RouterInfos requested for stored profiles that had none"
 msgstr "Lekért RouterInfo-k mentett profilokhoz, amelyeknek nem volt"
@@ -7756,17 +7752,10 @@ msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longe
 msgstr "Az alagútteszt maximális időtartama ezredmásodpercben. Az alagúttesztek soha nem várnak ennél tovább a válaszra, még nagy késleltetésű útvonalakon sem. [Az alapértelmezett 50000 (50 másodperc)]"
 
 msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
-msgstr ""
-"Az alagút-építési időtúllépések száma, mielőtt egy társ szellemnek "
-"jelölődik (kizárják az alagút-résztvételeből). Magasabb értékek több "
-"átmeneti hibát tűrnek. [Az alapértelmezés 1]"
+msgstr "Az alagút-építési időtúllépések száma, mielőtt egy társ szellemnek jelölődik (kizárják az alagút-résztvételeből). Magasabb értékek több átmeneti hibát tűrnek. [Az alapértelmezés 1]"
 
 msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
-msgstr ""
-"Lehűlési idő ezredmásodpercben, mielőtt egy szellemnek jelölt társ újra "
-"szintre léphetne az alagút társ-szintjeire. Rövidebb értékek gyorsabb "
-"visszaállítják a meggyógyult társokat a szolgálatba. [Az alapértelmezés "
-"90000 (90 másodperc)]"
+msgstr "Lehűlési idő ezredmásodpercben, mielőtt egy szellemnek jelölt társ újra szintre léphetne az alagút társ-szintjeire. Rövidebb értékek gyorsabb visszaállítják a meggyógyult társokat a szolgálatba. [Az alapértelmezés 90000 (90 másodperc)]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "Minimális számú bejövő alagútépítési kérés elfogadva társanként tisztítási ablakonként. [Alapértelmezés 10] [Default is 10]"
@@ -10196,35 +10185,3 @@ msgstr "Következő"
 
 msgid "Finished"
 msgstr "Befejeződött"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

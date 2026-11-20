@@ -127,27 +127,19 @@ msgid "Average tunnel build success (%)"
 msgstr "Ortalama tünel inşa başarısı %"
 
 msgid "Tier promotions held back for a peer with no usable address"
-msgstr ""
-"Kullanılabilir adresi olmayan akran için bekletilen kademe yükseltmeleri"
+msgstr "Kullanılabilir adresi olmayan akran için bekletilen kademe yükseltmeleri"
 
 msgid "RouterInfo refreshes issued for peers held out of the tiers"
-msgstr ""
-"Kademelerin dışında tutulan akranlar için çıkarılan RouterInfo "
-"yenilemeleri"
+msgstr "Kademelerin dışında tutulan akranlar için çıkarılan RouterInfo yenilemeleri"
 
 msgid "Tier scans that left the fast or high-capacity tier short of target"
-msgstr ""
-"Hızlı veya yüksek kapasiteli kademenin hedefin altında kaldığı kademe "
-"taramaları"
+msgstr "Hızlı veya yüksek kapasiteli kademenin hedefin altında kaldığı kademe taramaları"
 
 msgid "RouterInfos requested for stored profiles that had none"
-msgstr ""
-"Hiç RouterInfo'su olmayan saklı profiller için istenen RouterInfo'lar"
+msgstr "Hiç RouterInfo'su olmayan saklı profiller için istenen RouterInfo'lar"
 
 msgid "Build timeouts recorded against a peer as a ghost mark"
-msgstr ""
-"Bir akran aleyhine hayalet işareti olarak kaydedilen derleme zaman "
-"aşımları"
+msgstr "Bir akran aleyhine hayalet işareti olarak kaydedilen derleme zaman aşımları"
 
 msgid "Ghost marks cleared by a successful build reply"
 msgstr "Başarılı derleme yanıtıyla temizlenen hayalet işaretleri"
@@ -5353,8 +5345,7 @@ msgid "Per-connection inbound buffer cap (bytes)."
 msgstr "Bağlantı başına gelen arabellek sınırı (bayt)."
 
 msgid "Timer worker threads; higher reduces event delay."
-msgstr ""
-"Zamanlayıcı işçi izlekleri; yüksek değer olay gecikmesini azaltır."
+msgstr "Zamanlayıcı işçi izlekleri; yüksek değer olay gecikmesini azaltır."
 
 msgid "Dynamic cap on concurrent streams per destination."
 msgstr "Hedef başına eşzamanlı akışlara dinamik sınır."
@@ -7761,17 +7752,10 @@ msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longe
 msgstr "Maksimum tünel test süresi (milisaniye). Tünel testleri, yüksek gecikmeli yollarda bile bir yanıt için bundan daha uzun süre beklemez. [Varsayılan 50000 (50 saniye)]"
 
 msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
-msgstr ""
-"Bir akran hayalet olarak işaretlenmeden (tünel katılımından dışlanmadan) "
-"önceki tünel kurulum zaman aşımı sayısı. Yüksek değerler geçici "
-"arızalara daha fazla tolerans gösterir. [Varsayılan 1]"
+msgstr "Bir akran hayalet olarak işaretlenmeden (tünel katılımından dışlanmadan) önceki tünel kurulum zaman aşımı sayısı. Yüksek değerler geçici arızalara daha fazla tolerans gösterir. [Varsayılan 1]"
 
 msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
-msgstr ""
-"Hayalet işaretli bir akranın tünel akran kademelerine yeniden "
-"yükselebilmesinden önceki soğuma süresi (milisaniye). Kısa değerler "
-"iyileşen akranları servise daha hızlı döndürür. [Varsayılan 90000 (90 "
-"saniye)]"
+msgstr "Hayalet işaretli bir akranın tünel akran kademelerine yeniden yükselebilmesinden önceki soğuma süresi (milisaniye). Kısa değerler iyileşen akranları servise daha hızlı döndürür. [Varsayılan 90000 (90 saniye)]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "Temiz pencere başına eş başına kabul edilen minimum gelen tünel oluşturma isteği sayısı. Düşük trafik dönemlerinde eşlerin aç kalmasını önler. [Varsayılan 10]"
@@ -10201,35 +10185,3 @@ msgstr "Sonraki"
 
 msgid "Finished"
 msgstr "Tamamlandı"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

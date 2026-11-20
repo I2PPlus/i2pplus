@@ -139,16 +139,13 @@ msgid "Tier promotions held back for a peer with no usable address"
 msgstr "قابلِ استعمال پتے کے بغیر peer کے لیے سطح ترقیاں روک لی گئیں"
 
 msgid "RouterInfo refreshes issued for peers held out of the tiers"
-msgstr ""
-"سطحوں سے باہر رکھے گئے peers کے لیے جاری کیے گئے RouterInfo ریفریش"
+msgstr "سطحوں سے باہر رکھے گئے peers کے لیے جاری کیے گئے RouterInfo ریفریش"
 
 msgid "Tier scans that left the fast or high-capacity tier short of target"
 msgstr "سطح اسکین جن میں تیز یا اعلیٰ صلاحیت والی سطح ہدف سے کم رہ گئی"
 
 msgid "RouterInfos requested for stored profiles that had none"
-msgstr ""
-"محفوظ شدہ پروفائلز کے لیے درخواست کیے گئے RouterInfo جن کے پاس کوئی نہ "
-"تھا"
+msgstr "محفوظ شدہ پروفائلز کے لیے درخواست کیے گئے RouterInfo جن کے پاس کوئی نہ تھا"
 
 msgid "Build timeouts recorded against a peer as a ghost mark"
 msgstr "بھوت علامت کے طور پر peer کے خلاف درج کیے گئے بلڈ ٹائم آؤٹ"
@@ -7764,16 +7761,10 @@ msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longe
 msgstr "ٹنل ٹیسٹ کی زیادہ سے زیادہ مدت ملی سیکنڈ میں۔ ٹنل ٹیسٹ بلند لیٹنسی راستوں پر بھی جواب کے لیے اس سے زیادہ نہیں انتظار کرتے۔ [طے شدہ 50000 (50 سیکنڈ)]"
 
 msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
-msgstr ""
-"ٹنل بلڈ ٹائم آؤٹ کی تعداد جس کے بعد peer کو بھوت علامت زدہ کر دیا جاتا "
-"ہے (ٹنل شرکت سے خارج)۔ اعلیٰ قدر عارضی ناکامیوں کو زیادہ برداشت کرتی "
-"ہیں۔ [طے شدہ 1 ہے]"
+msgstr "ٹنل بلڈ ٹائم آؤٹ کی تعداد جس کے بعد peer کو بھوت علامت زدہ کر دیا جاتا ہے (ٹنل شرکت سے خارج)۔ اعلیٰ قدر عارضی ناکامیوں کو زیادہ برداشت کرتی ہیں۔ [طے شدہ 1 ہے]"
 
 msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
-msgstr ""
-"ملی سیکنڈز میں ٹھنڈک مدت، اس سے پہلے کہ بھوت علامت زدہ peer دوبارہ ٹنل "
-"peer سطحوں میں ترقی پا سکے۔ چھوٹی قدریں بحال ہوئے peers کو خدمت میں جلدی "
-"واپس لاتی ہیں۔ [طے شدہ 90000 (90 سیکنڈ) ہے]"
+msgstr "ملی سیکنڈز میں ٹھنڈک مدت، اس سے پہلے کہ بھوت علامت زدہ peer دوبارہ ٹنل peer سطحوں میں ترقی پا سکے۔ چھوٹی قدریں بحال ہوئے peers کو خدمت میں جلدی واپس لاتی ہیں۔ [طے شدہ 90000 (90 سیکنڈ) ہے]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "فی peer فی صاف کھڑکی قبول کیے جانے والے آنے والے ٹنل بنانے کی درخواستوں کی کم سے کم تعداد۔ یہ کم ٹریفک کے دوران peer کے بھوکے رہنے سے روکتا ہے۔ [طے شدہ 10]"
@@ -10203,35 +10194,3 @@ msgstr "اگلا"
 
 msgid "Finished"
 msgstr "مکمل"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
