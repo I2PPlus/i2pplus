@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
+import net.i2p.util.Addresses;
 import net.i2p.util.Log;
 
 /**
@@ -174,10 +175,14 @@ public class OriginCheck {
     }
 
     /**
-     * True when the host is a textual loopback name: an IPv4 address in 127/8,
-     * the IPv6 loopback in its written forms, or "localhost". No DNS lookup is
-     * performed, so a hostname that happens to resolve to a loopback address is
-     * not accepted.
+     * True when the host is a textual loopback name: an IPv4 address written in
+     * full inside 127/8, the IPv6 loopback in its written forms, or "localhost".
+     * No DNS lookup is performed, so a hostname that happens to resolve to a
+     * loopback address is not accepted - and neither is one that merely starts
+     * with the digits. A prefix test on the name let any host called
+     * "127.somewhere.example" through beside a real "127.0.0.1", and it is the
+     * name in the header that is compared here, never an address resolved from
+     * it, so the whole dotted quad has to be checked.
      *
      * @param host the host to test, null-safe
      * @return true if the name itself denotes the local host
@@ -188,7 +193,9 @@ public class OriginCheck {
             return false;
         if (host.equalsIgnoreCase("localhost"))
             return true;
-        if (host.startsWith("127."))
+        // 127/8, all four octets: isIPv4Address() is a strict w.x.y.z form check,
+        // so once the form is fixed the leading octet is the whole question
+        if (host.startsWith("127.") && Addresses.isIPv4Address(host))
             return true;
         // Bracketed form, in case a caller passes "[::1]" rather than "::1"
         if (host.startsWith("[") && host.endsWith("]"))

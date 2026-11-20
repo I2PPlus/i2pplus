@@ -104,6 +104,25 @@ public class OriginCheckDecisionTest {
         assertTrue(OriginCheck.isAllowed("http://127.0.0.53:7657", "127.4.4.4:7657", false));
     }
 
+    /**
+     * The allowance is for an address written out in full inside 127/8, not for
+     * any name that begins with those three digits. Somebody else's domain
+     * called "127.somewhere.example" passed beside a real "127.0.0.1" with the
+     * ports matching, and it is the name in the header that is compared here -
+     * nothing resolves it, which is the whole reason rebinding is refused.
+     */
+    @Test
+    public void testHostnameStartingWithLoopbackDigitsIsNotLoopback() {
+        assertFalse(OriginCheck.isLoopbackName("127.somewhere.example"));
+        assertFalse(OriginCheck.isLoopbackName("127.0.0.1.nip.io"));
+        assertFalse(OriginCheck.isLoopbackName("127.1"));
+        assertFalse(OriginCheck.isAllowed("http://127.somewhere.example:7657",
+                                          "127.0.0.1:7657", false));
+        // their own origin still matches their own host, as it should
+        assertTrue(OriginCheck.isAllowed("http://127.somewhere.example:7657",
+                                         "127.somewhere.example:7657", false));
+    }
+
     /** IPv6 loopback in its written forms, including the bracketed form. */
     @Test
     public void testIPv6LoopbackAllowed() {
