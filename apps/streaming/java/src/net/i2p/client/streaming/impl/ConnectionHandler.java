@@ -850,7 +850,14 @@ class ConnectionHandler {
      * @throws SocketTimeoutException if a timeout was previously set with setSoTimeout and the timeout has been reached.
      */
     public Connection accept(long timeoutMs) throws RouterRestartException, ConnectException, SocketTimeoutException {
-        if (_log.shouldDebug()) {_log.debug("Accept with timeout of " + timeoutMs + "ms called");}
+        // One line per accept() call, and a busy proxy's tunnel server calls it
+        // for every connection: 490,854 of these in five hours, every one of
+        // them carrying the same -1. Waiting indefinitely is the steady state
+        // and tells the reader nothing to act on, so only a caller that asked
+        // for a real timeout gets a line.
+        if (timeoutMs >= 1 && _log.shouldDebug()) {
+            _log.debug("Accept called with a " + DataHelper.formatDuration(timeoutMs) + " timeout");
+        }
 
         // The listening period we are accepting for, captured once. If the
         // handler is stopped and started again while we wait, this reference is

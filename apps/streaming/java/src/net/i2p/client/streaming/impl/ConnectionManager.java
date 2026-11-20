@@ -1822,8 +1822,15 @@ class ConnectionManager {
                     _packetHandler.sendResetUnverified(synPacket);
                     return null;
                 }
-                if (sigOk && _log.shouldInfo())
-                    _log.info("Validated SYN NACKS from [" + from.toBase32().substring(0, 8) + "]");
+                if (sigOk && _log.shouldInfo()) {
+                    // Throttled per sender: this is a routine validation that
+                    // passed, and one sender retransmitting a SYN over and over
+                    // writes it once per retransmit. 497,531 lines from 1,115
+                    // senders in five hours made it the largest INFO source in
+                    // the log; the failure case above stays an unthrottled WARN.
+                    _log.infoThrottled("syn-nacks " + fromHash.toShortBase32(),
+                                       "Validated SYN NACKS from [" + fromHash.toShortBase32() + "]");
+                }
             }
         }
         if (!sigOk) {
