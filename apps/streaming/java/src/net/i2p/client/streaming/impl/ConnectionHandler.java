@@ -168,6 +168,29 @@ class ConnectionHandler {
     }
 
     /**
+     * Hard ceiling on {@link #_synQueue}. The effective cap is the configurable
+     * soft max, re-read for every SYN so a Tuner change applies without a
+     * restart; this is only the backstop that stops the queue growing without
+     * bound when that soft max is set to uncapped.
+     */
+    static final int SYN_QUEUE_BACKSTOP = 16384;
+
+    /**
+     * The queue bound as a reader at 3am needs it. A cap of 0 or less means
+     * uncapped - the sentinel {@link #synAdmitted} honours - and printing it
+     * back as <code>Limit: 0 SYNs</code> reads as a zero-sized queue rather
+     * than an uncapped one that ran into {@link #SYN_QUEUE_BACKSTOP}.
+     *
+     * @param max the configured soft cap, 0 or less when uncapped
+     * @return the key: value segment to log, in prose for the sentinel
+     * @since 0.9.72+
+     */
+    static String synQueueLimitText(int max) {
+        return max > 0 ? "Limit: " + max + " SYNs"
+                       : "Uncapped, at the backstop of " + SYN_QUEUE_BACKSTOP + " SYNs";
+    }
+
+    /**
      * Number of accept worker threads, from
      * {@code i2p.streaming.acceptWorkerThreads}. The {@link I2PSocketManagerFull}
      * override is checked first, but the Tuner has no parameter for it and never
@@ -458,7 +481,7 @@ class ConnectionHandler {
         _timer = timer;
         // Hard backstop only; the effective cap is the configurable soft max
         // (getMaxQueueSize) re-read on each SYN so Tuner wins apply live.
-        _synQueue = new LinkedBlockingDeque<>(16384);
+        _synQueue = new LinkedBlockingDeque<>(SYN_QUEUE_BACKSTOP);
         _resultQueue = new LinkedBlockingQueue<>(16384);
         _acceptWorkers = new ArrayList<>();
         _activeWorkerCount = new AtomicInteger(0);
@@ -806,7 +829,7 @@ class ConnectionHandler {
             // time for the server to drain its accept queue.
             _log.warnThrottled("streaming-syn-queue-full",
                                "SYN queue full -> Reset sent to the client" +
-                               " * Queued: " + _synQueue.size() + " SYNs * Limit: " + max + " SYNs");
+                               " * Queued: " + _synQueue.size() + " SYNs * " + synQueueLimitText(max));
             sendReset(packet);
             // Ours to release - the offer failed, so no accept worker will
             // ever pick this packet up.

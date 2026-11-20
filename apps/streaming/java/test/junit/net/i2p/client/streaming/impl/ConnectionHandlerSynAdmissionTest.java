@@ -1,5 +1,6 @@
 package net.i2p.client.streaming.impl;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -78,6 +79,25 @@ public class ConnectionHandlerSynAdmissionTest {
         String uncapped = ConnectionHandler.synExpiryMessage(syn, 5, 0, 60000);
         assertTrue(uncapped, uncapped.contains("depth 5"));
         assertFalse(uncapped, uncapped.contains("5/0"));
+    }
+
+    /**
+     * The reset report names the bound the queue actually hit. For the
+     * uncapped sentinel it says so: printing <code>Limit: 0 SYNs</code> sends a
+     * reader looking for a misconfiguration, when what happened is that an
+     * uncapped queue reached the hard backstop.
+     */
+    @Test
+    public void testTheResetReportNamesTheBoundItHit() {
+        String capped = ConnectionHandler.synQueueLimitText(128);
+        assertTrue(capped, capped.contains("Limit: 128 SYNs"));
+        String uncapped = ConnectionHandler.synQueueLimitText(0);
+        assertTrue(uncapped, uncapped.contains("Uncapped"));
+        String backstop = String.valueOf(ConnectionHandler.SYN_QUEUE_BACKSTOP);
+        assertTrue(uncapped, uncapped.contains(backstop));
+        assertFalse(uncapped, uncapped.contains("Limit: 0"));
+        // a negative cap is the same sentinel, and says the same thing
+        assertEquals(ConnectionHandler.synQueueLimitText(-1), uncapped);
     }
 
     /**
