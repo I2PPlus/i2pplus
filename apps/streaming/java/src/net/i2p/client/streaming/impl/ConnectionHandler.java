@@ -598,15 +598,59 @@ class ConnectionHandler {
      * <p>
      * Dropping them instead leaves the peer holding a half-open connection until
      * its own timeout, and leaves this side's streams holding their buffers.
+     *
+     * <p>The queue is emptied here, on the caller's thread, and the closes are
+     * handed to one {@link OrphanCloser}: a close waits for its CLOSE to be
+     * acknowledged, up to {@code i2p.streaming.disconnectTimeout} - two minutes by
+     * default - and this method runs inside the handler's monitor, which
+     * {@link #setRestartPending()}, a reopen, {@link #setAcceptTimeout(long)} and
+     * the {@link SynReaper}'s scale-up all need. A slow accept loop is exactly what
+     * builds a backlog of these, several of them to peers that never answer.
      */
     private void closeQueuedResults() {
+        List<Connection> orphans = new ArrayList<>();
         Connection con;
         while ((con = _resultQueue.poll()) != null) {
-            try {
-                con.getOutputStream().close();
-            } catch (IOException e) {
-                if (_log.shouldWarn())
-                    _log.warn("Closing an unaccepted connection failed", e);
+            orphans.add(con);
+        }
+        if (orphans.isEmpty()) {
+            return;
+        }
+        Thread t = new Thread(new OrphanCloser(orphans),
+                              "StrmCls" + ThreadNames.seq(_workerId.incrementAndGet()));
+        t.setDaemon(true);
+        t.start();
+    }
+
+    /**
+     * Closes the connections no caller took, away from the handler's monitor. One
+     * thread per stop, closing them in sequence: nothing else needs these
+     * connections, so waiting behind them costs the stop path and nothing else.
+     *
+     * @since 0.9.72+
+     */
+    private class OrphanCloser implements Runnable {
+
+        /** The connections drained off the result queue by the stop, never empty. */
+        private final List<Connection> _orphans;
+
+        /**
+         * Holds what the stop took off the result queue.
+         *
+         * @param orphans the connections to close, never empty
+         */
+        OrphanCloser(List<Connection> orphans) {
+            _orphans = orphans;
+        }
+
+        public void run() {
+            for (Connection con : _orphans) {
+                try {
+                    con.getOutputStream().close();
+                } catch (IOException e) {
+                    if (_log.shouldWarn())
+                        _log.warn("Closing an unaccepted connection failed", e);
+                }
             }
         }
     }

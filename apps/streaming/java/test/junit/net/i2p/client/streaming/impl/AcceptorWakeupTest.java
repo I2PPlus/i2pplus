@@ -40,6 +40,12 @@ public class AcceptorWakeupTest {
     /** How long to wait for a parked accept() to come back. */
     private static final int WAKEUP_LIMIT = 5000;
 
+    /** How long one unaccepted connection's close takes in the slow-close case. */
+    private static final int SLOW_CLOSE_MS = 300;
+
+    /** How many of those slow closes that case queues. */
+    private static final int SLOW_CLOSE_COUNT = 3;
+
     /**
      * Property naming the accept worker threads. Pinned to none for this class:
      * a worker would race the tests that put a SYN on the queue by hand.
@@ -322,6 +328,39 @@ public class AcceptorWakeupTest {
         _handler.setActive(false);
         verify(out).close();
         assertTrue("the unaccepted connection was left behind", resultQueue().isEmpty());
+    }
+
+    /**
+     * The stop must not wait for the closes it starts. One close waits for the CLOSE
+     * to be acknowledged, up to the two-minute disconnect timeout, and a backlog of
+     * them to peers that never answer used to run inside the handler's monitor - the
+     * monitor setRestartPending(), a reopen and the accept workers' scale-up all
+     * need, and a slow accept loop is what builds that backlog.
+     *
+     * @throws Exception if the close cannot be stubbed
+     */
+    @Test(timeout = 20000)
+    public void testStoppingDoesNotWaitForSlowCloses() throws Exception {
+        _handler.setActive(true);
+        MessageOutputStream out = mock(MessageOutputStream.class);
+        doAnswer(inv -> {
+            Thread.sleep(SLOW_CLOSE_MS);
+            return null;
+        }).when(out).close();
+        for (int i = 0; i < SLOW_CLOSE_COUNT; i++) {
+            Connection con = mock(Connection.class);
+            when(con.getOutputStream()).thenReturn(out);
+            resultQueue().offer(con);
+        }
+
+        long started = System.currentTimeMillis();
+        _handler.setActive(false);
+        long elapsed = System.currentTimeMillis() - started;
+
+        assertTrue("the stop waited for the slow closes itself: " + elapsed + "ms",
+                   elapsed < SLOW_CLOSE_MS);
+        verify(out, timeout(WAKEUP_LIMIT).times(SLOW_CLOSE_COUNT)).close();
+        assertTrue("the result queue was left filled", resultQueue().isEmpty());
     }
 
     /**
