@@ -1,5 +1,6 @@
 package net.i2p.servlet.filters;
 
+import java.util.Enumeration;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
@@ -73,7 +74,18 @@ public class SessionManager {
      * @since 0.9.72+
      */
     public static String getSessionCookie(HttpServletRequest req) {
-        return sessionCookieFrom(req.getHeader("Cookie"));
+        // Every Cookie header, not the first one. The servlet spec lets a client
+        // send its cookies over several header lines and getCookies() has always
+        // joined them; getHeader() returns only the first, so a client that
+        // splits them - curl with two -H 'Cookie: …' arguments, or a proxy that
+        // forwards them separately - was read as carrying no session at all.
+        Enumeration<String> headers = req.getHeaders("Cookie");
+        while (headers.hasMoreElements()) {
+            String token = sessionCookieFrom(headers.nextElement());
+            if (token != null)
+                return token;
+        }
+        return null;
     }
 
     /**

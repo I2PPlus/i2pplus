@@ -4,6 +4,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import java.lang.reflect.Proxy;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -131,18 +134,55 @@ public class SessionCookieDecisionTest {
     }
 
     /**
-     * A request that answers only the one header lookup.
+     * A client may send its cookies over more than one <code>Cookie</code>
+     * header line, and the container's own <code>getCookies()</code> has always
+     * joined them. Reading only the first header loses the token for a client
+     * that splits them - <code>curl</code> with two <code>-H 'Cookie: …'</code>
+     * arguments, or a proxy that forwards them separately - and the operator is
+     * bounced to the login page while holding a valid session.
+     */
+    @Test
+    public void tokenInASecondCookieHeaderIsFound() {
+        HttpServletRequest split = requestWithHeaders("Cookie",
+                Arrays.asList("a=1", "I2PAUTH=secret"));
+        assertEquals("secret", SessionManager.getSessionCookie(split));
+        // and a header that carries none does not stop the search
+        HttpServletRequest two = requestWithHeaders("Cookie",
+                Arrays.asList("I2PAUTH=first", "I2PAUTH=second"));
+        assertEquals("first", SessionManager.getSessionCookie(two));
+        HttpServletRequest none = requestWithHeaders("Cookie", Arrays.asList("a=1", "b=2"));
+        assertNull(SessionManager.getSessionCookie(none));
+    }
+
+    /**
+     * A request that answers the one header lookup.
      *
      * @param name the header the request has
      * @param value its value
      * @return a proxy implementing {@link HttpServletRequest}
      */
     private static HttpServletRequest requestWithHeader(String name, String value) {
+        return requestWithHeaders(name, Arrays.asList(value));
+    }
+
+    /**
+     * A request that answers {@code getHeader} with the first value and
+     * {@code getHeaders} with all of them, as the servlet contract says.
+     *
+     * @param name the header the request has
+     * @param values its values, one per header line
+     * @return a proxy implementing {@link HttpServletRequest}
+     */
+    private static HttpServletRequest requestWithHeaders(String name, List<String> values) {
         return (HttpServletRequest) Proxy.newProxyInstance(
                 SessionCookieDecisionTest.class.getClassLoader(),
                 new Class<?>[] {HttpServletRequest.class},
                 (proxy, method, args) -> {
-                    if ("getHeader".equals(method.getName()) && name.equals(args[0])) {return value;}
+                    String m = method.getName();
+                    if ("getHeader".equals(m) && name.equals(args[0])) {return values.get(0);}
+                    if ("getHeaders".equals(m) && name.equals(args[0])) {
+                        return Collections.enumeration(values);
+                    }
                     Class<?> rt = method.getReturnType();
                     if (rt == boolean.class) {return Boolean.FALSE;}
                     if (rt == int.class) {return Integer.valueOf(0);}
