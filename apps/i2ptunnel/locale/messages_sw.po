@@ -253,11 +253,20 @@ msgstr "Hakuna huduma zilizosanidiwa, haiwezi kuanzishwa upya!"
 msgid "Stopping tunnel"
 msgstr "Inasitisha tuneli"
 
+msgid "Error restarting tunnel"
+msgstr "Hitilafu katika kuanzisha upya tuneli"
+
 msgid "Starting tunnel"
 msgstr "Inaanzisha tuneli"
 
-msgid "Error restarting tunnel"
-msgstr "Hitilafu katika kuanzisha upya tuneli"
+msgid "Restarted all running client tunnels"
+msgstr "Tuneli zote za wateja zinazoendesha zimeanzishwa upya"
+
+#, java-format
+msgid "Restarted {0} running server tunnel"
+msgid_plural "Restarted {0} running server tunnels"
+msgstr[0] "Tuneli {0} ya seva inayoendesha imeanzishwa upya"
+msgstr[1] "Tuneli {0} za seva zinazoendesha zimeanzishwa upya"
 
 msgid "Restarted all running tunnels"
 msgstr "Tuneli zote zinazoendesha zimeanzishwa upya"
@@ -265,8 +274,8 @@ msgstr "Tuneli zote zinazoendesha zimeanzishwa upya"
 msgid "No clients configured, cannot restart!"
 msgstr "Hakuna wateja waliosanidiwa, haiwezi kuanzishwa upya!"
 
-msgid "Restarted all running client tunnels"
-msgstr "Tuneli zote za wateja zinazoendesha zimeanzishwa upya"
+msgid "No servers configured, cannot restart!"
+msgstr "Hakuna seva zilizosanidiwa, haiwezi kuanzishwa upya!"
 
 msgid "Configuration reloaded for all tunnels"
 msgstr "Mipangilio yamefunguliwa upya kwa tuneli zote"

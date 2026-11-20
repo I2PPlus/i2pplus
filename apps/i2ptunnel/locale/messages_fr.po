@@ -244,11 +244,20 @@ msgstr "Aucun service configuré, redémarrage impossible !"
 msgid "Stopping tunnel"
 msgstr "Arrêt du tunnel"
 
+msgid "Error restarting tunnel"
+msgstr "Erreur lors du redémarrage du tunnel"
+
 msgid "Starting tunnel"
 msgstr "Démarrage du tunnel"
 
-msgid "Error restarting tunnel"
-msgstr "Erreur lors du redémarrage du tunnel"
+msgid "Restarted all running client tunnels"
+msgstr "Tous les tunnels clients en cours ont été redémarrés"
+
+#, java-format
+msgid "Restarted {0} running server tunnel"
+msgid_plural "Restarted {0} running server tunnels"
+msgstr[0] "{0} tunnel serveur en cours a été redémarré"
+msgstr[1] "{0} tunnels serveur en cours ont été redémarrés"
 
 msgid "Restarted all running tunnels"
 msgstr "Tous les tunnels en cours ont été redémarrés"
@@ -256,8 +265,8 @@ msgstr "Tous les tunnels en cours ont été redémarrés"
 msgid "No clients configured, cannot restart!"
 msgstr "Aucun client configuré, redémarrage impossible !"
 
-msgid "Restarted all running client tunnels"
-msgstr "Tous les tunnels clients en cours ont été redémarrés"
+msgid "No servers configured, cannot restart!"
+msgstr "Aucun serveur configuré, redémarrage impossible !"
 
 msgid "Configuration reloaded for all tunnels"
 msgstr "La configuration a été rechargée pour tous les tunnels"

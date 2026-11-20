@@ -256,11 +256,24 @@ msgstr "لا توجد خدمات محددة، لا يمكن إعادة التش�
 msgid "Stopping tunnel"
 msgstr "توقيف النفق"
 
+msgid "Error restarting tunnel"
+msgstr "خطأ في إعادة تشغيل النفق"
+
 msgid "Starting tunnel"
 msgstr "ابدأ النفق"
 
-msgid "Error restarting tunnel"
-msgstr "خطأ في إعادة تشغيل النفق"
+msgid "Restarted all running client tunnels"
+msgstr "تم إعادة تشغيل جميع أنفاق العملاء النشطة"
+
+#, java-format
+msgid "Restarted {0} running server tunnel"
+msgid_plural "Restarted {0} running server tunnels"
+msgstr[0] "تم إعادة تشغيل {0} من أنفاق الخوادم النشطة"
+msgstr[1] "تم إعادة تشغيل {0} من أنفاق الخوادم النشطة"
+msgstr[2] "تم إعادة تشغيل {0} من أنفاق الخوادم النشطة"
+msgstr[3] "تم إعادة تشغيل {0} من أنفاق الخوادم النشطة"
+msgstr[4] "تم إعادة تشغيل {0} من أنفاق الخوادم النشطة"
+msgstr[5] "تم إعادة تشغيل {0} من أنفاق الخوادم النشطة"
 
 msgid "Restarted all running tunnels"
 msgstr "تم إعادة تشغيل جميع الأنفاق النشطة"
@@ -268,8 +281,8 @@ msgstr "تم إعادة تشغيل جميع الأنفاق النشطة"
 msgid "No clients configured, cannot restart!"
 msgstr "لا يوجد عملاء محددون، لا يمكن إعادة التشغيل!"
 
-msgid "Restarted all running client tunnels"
-msgstr "تم إعادة تشغيل جميع أنفاق العملاء النشطة"
+msgid "No servers configured, cannot restart!"
+msgstr "لا يوجد خوادم محددة، لا يمكن إعادة التشغيل!"
 
 msgid "Configuration reloaded for all tunnels"
 msgstr "تم اعادة تحميل تغيرات الاعدادات"

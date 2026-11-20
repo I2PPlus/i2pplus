@@ -244,11 +244,20 @@ msgstr "Nincs szolgáltatás konfigurálva, nem lehet újraindítani!"
 msgid "Stopping tunnel"
 msgstr "Alagút leállítása"
 
+msgid "Error restarting tunnel"
+msgstr "Hiba az alagút újraindításakor"
+
 msgid "Starting tunnel"
 msgstr "Alagút indítása"
 
-msgid "Error restarting tunnel"
-msgstr "Hiba az alagút újraindításakor"
+msgid "Restarted all running client tunnels"
+msgstr "Minden futó kliens alagút újraindítva"
+
+#, java-format
+msgid "Restarted {0} running server tunnel"
+msgid_plural "Restarted {0} running server tunnels"
+msgstr[0] "{0} futó szerver alagút újraindítva"
+msgstr[1] "{0} futó szerver alagút újraindítva"
 
 msgid "Restarted all running tunnels"
 msgstr "Minden futó alagút újraindítva"
@@ -256,8 +265,8 @@ msgstr "Minden futó alagút újraindítva"
 msgid "No clients configured, cannot restart!"
 msgstr "Nincs kliens konfigurálva, nem lehet újraindítani!"
 
-msgid "Restarted all running client tunnels"
-msgstr "Minden futó kliens alagút újraindítva"
+msgid "No servers configured, cannot restart!"
+msgstr "Nincs szerver konfigurálva, nem lehet újraindítani!"
 
 msgid "Configuration reloaded for all tunnels"
 msgstr "Az összes alagútra vonatkozó beállítás újratöltve"

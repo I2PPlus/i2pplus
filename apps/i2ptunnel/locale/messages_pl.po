@@ -247,11 +247,21 @@ msgstr "Brak skonfigurowanych usług, nie można ponownie uruchomić!"
 msgid "Stopping tunnel"
 msgstr "Zatrzymywanie tunelu"
 
+msgid "Error restarting tunnel"
+msgstr "Błąd podczas ponownego uruchamiania tunelu"
+
 msgid "Starting tunnel"
 msgstr "Uruchamianie tunelu"
 
-msgid "Error restarting tunnel"
-msgstr "Błąd podczas ponownego uruchamiania tunelu"
+msgid "Restarted all running client tunnels"
+msgstr "Uruchomiono ponownie wszystkie działające tunele klientów"
+
+#, java-format
+msgid "Restarted {0} running server tunnel"
+msgid_plural "Restarted {0} running server tunnels"
+msgstr[0] "Uruchomiono ponownie {0} działający tunel serwera"
+msgstr[1] "Uruchomiono ponownie {0} działające tunele serwera"
+msgstr[2] "Uruchomiono ponownie {0} działających tuneli serwera"
 
 msgid "Restarted all running tunnels"
 msgstr "Uruchomiono ponownie wszystkie działające tunele"
@@ -259,8 +269,8 @@ msgstr "Uruchomiono ponownie wszystkie działające tunele"
 msgid "No clients configured, cannot restart!"
 msgstr "Brak skonfigurowanych klientów, nie można ponownie uruchomić!"
 
-msgid "Restarted all running client tunnels"
-msgstr "Uruchomiono ponownie wszystkie działające tunele klientów"
+msgid "No servers configured, cannot restart!"
+msgstr "Brak skonfigurowanych serwerów, nie można ponownie uruchomić!"
 
 msgid "Configuration reloaded for all tunnels"
 msgstr "Konfiguracja przeładowana dla wszystkich tunelii"

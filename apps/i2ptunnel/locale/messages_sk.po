@@ -244,11 +244,20 @@ msgstr "Nie sú nakonfigurované žiadne služby, nie je možné reštartovať!"
 msgid "Stopping tunnel"
 msgstr "Zastavovanie tunela"
 
+msgid "Error restarting tunnel"
+msgstr "Chyba pri reštartovaní tunela"
+
 msgid "Starting tunnel"
 msgstr "Spúšťanie tunela"
 
-msgid "Error restarting tunnel"
-msgstr "Chyba pri reštartovaní tunela"
+msgid "Restarted all running client tunnels"
+msgstr "Všetky spustené klientské tunely boli reštartované"
+
+#, java-format
+msgid "Restarted {0} running server tunnel"
+msgid_plural "Restarted {0} running server tunnels"
+msgstr[0] "{0} spustený serverový tunel bol reštartovaný"
+msgstr[1] "{0} spustené serverové tunely boli reštartované"
 
 msgid "Restarted all running tunnels"
 msgstr "Všetky spustené tunely boli reštartované"
@@ -256,8 +265,8 @@ msgstr "Všetky spustené tunely boli reštartované"
 msgid "No clients configured, cannot restart!"
 msgstr "Nie sú nakonfigurovaní žiadni klienti, nie je možné reštartovať!"
 
-msgid "Restarted all running client tunnels"
-msgstr "Všetky spustené klientské tunely boli reštartované"
+msgid "No servers configured, cannot restart!"
+msgstr "Žiadne servery nie sú nakonfigurované, nie je možné reštartovať!"
 
 msgid "Configuration reloaded for all tunnels"
 msgstr "Konfigurácia pre všetky tunely bola znovu načítaná"

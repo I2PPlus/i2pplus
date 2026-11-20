@@ -244,11 +244,20 @@ msgstr "कोई सेवा कॉन्फ़िगर नहीं है, 
 msgid "Stopping tunnel"
 msgstr "टनल स्थगित कर रहा है"
 
+msgid "Error restarting tunnel"
+msgstr "टनल पुनः आरंभ करने में त्रुटि"
+
 msgid "Starting tunnel"
 msgstr "टनल शुरू कर रहा है"
 
-msgid "Error restarting tunnel"
-msgstr "टनल पुनः आरंभ करने में त्रुटि"
+msgid "Restarted all running client tunnels"
+msgstr "सभी चालू क्लाइंट टनल पुनः आरंभ किए गए"
+
+#, java-format
+msgid "Restarted {0} running server tunnel"
+msgid_plural "Restarted {0} running server tunnels"
+msgstr[0] "{0} चल रहा सर्वर टनल पुनः आरंभ किया गया"
+msgstr[1] "{0} चल रहे सर्वर टनल पुनः आरंभ किए गए"
 
 msgid "Restarted all running tunnels"
 msgstr "सभी चालू टनल पुनः आरंभ किए गए"
@@ -256,8 +265,8 @@ msgstr "सभी चालू टनल पुनः आरंभ किए ग
 msgid "No clients configured, cannot restart!"
 msgstr "कोई क्लाइंट कॉन्फ़िगर नहीं है, पुनः आरंभ नहीं हो सकता!"
 
-msgid "Restarted all running client tunnels"
-msgstr "सभी चालू क्लाइंट टनल पुनः आरंभ किए गए"
+msgid "No servers configured, cannot restart!"
+msgstr "कोई सर्वर कॉन्फ़िगर नहीं है, पुनः आरंभ नहीं हो सकता!"
 
 msgid "Configuration reloaded for all tunnels"
 msgstr "सभी टनल के लिए पुनः लोड की गई सेटिंग"

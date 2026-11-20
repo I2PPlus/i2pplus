@@ -244,11 +244,20 @@ msgstr "¡No hay servicios configurados, no se puede reiniciar!"
 msgid "Stopping tunnel"
 msgstr "Deteniendo túnel"
 
+msgid "Error restarting tunnel"
+msgstr "Error al reiniciar el túnel"
+
 msgid "Starting tunnel"
 msgstr "Iniciando el túnel"
 
-msgid "Error restarting tunnel"
-msgstr "Error al reiniciar el túnel"
+msgid "Restarted all running client tunnels"
+msgstr "Se reiniciaron todos los túneles de cliente en ejecución"
+
+#, java-format
+msgid "Restarted {0} running server tunnel"
+msgid_plural "Restarted {0} running server tunnels"
+msgstr[0] "Se reinició {0} túnel de servidor en ejecución"
+msgstr[1] "Se reiniciaron {0} túneles de servidor en ejecución"
 
 msgid "Restarted all running tunnels"
 msgstr "Se reiniciaron todos los túneles en ejecución"
@@ -256,8 +265,8 @@ msgstr "Se reiniciaron todos los túneles en ejecución"
 msgid "No clients configured, cannot restart!"
 msgstr "¡No hay clientes configurados, no se puede reiniciar!"
 
-msgid "Restarted all running client tunnels"
-msgstr "Se reiniciaron todos los túneles de cliente en ejecución"
+msgid "No servers configured, cannot restart!"
+msgstr "¡No hay servidores configurados, no se puede reiniciar!"
 
 msgid "Configuration reloaded for all tunnels"
 msgstr "La configuración se volvió a cargar para todos los túneles"

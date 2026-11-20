@@ -241,11 +241,19 @@ msgstr "設定されたサービスがないため、再起動できません！
 msgid "Stopping tunnel"
 msgstr "トンネルを停止中"
 
+msgid "Error restarting tunnel"
+msgstr "トンネルの再起動でエラーが発生しました"
+
 msgid "Starting tunnel"
 msgstr "トンネルを開始中"
 
-msgid "Error restarting tunnel"
-msgstr "トンネルの再起動でエラーが発生しました"
+msgid "Restarted all running client tunnels"
+msgstr "すべての実行中クライアントトンネルを再起動しました"
+
+#, java-format
+msgid "Restarted {0} running server tunnel"
+msgid_plural "Restarted {0} running server tunnels"
+msgstr[0] "実行中のサーバートンネル {0} 個を再起動しました"
 
 msgid "Restarted all running tunnels"
 msgstr "すべての実行中トンネルを再起動しました"
@@ -253,8 +261,8 @@ msgstr "すべての実行中トンネルを再起動しました"
 msgid "No clients configured, cannot restart!"
 msgstr "設定されたクライアントがないため、再起動できません！"
 
-msgid "Restarted all running client tunnels"
-msgstr "すべての実行中クライアントトンネルを再起動しました"
+msgid "No servers configured, cannot restart!"
+msgstr "設定されたサーバーがないため、再起動できません！"
 
 msgid "Configuration reloaded for all tunnels"
 msgstr "すべてのトンネルの設定が再読込されました"

@@ -244,11 +244,20 @@ msgstr "No hi ha cap servei configurat, no es pot reiniciar!"
 msgid "Stopping tunnel"
 msgstr "Aturant el túnel"
 
+msgid "Error restarting tunnel"
+msgstr "Error en reiniciar el túnel"
+
 msgid "Starting tunnel"
 msgstr "Iniciant el túnel"
 
-msgid "Error restarting tunnel"
-msgstr "Error en reiniciar el túnel"
+msgid "Restarted all running client tunnels"
+msgstr "S’han reiniciat tots els túnels de client en execució"
+
+#, java-format
+msgid "Restarted {0} running server tunnel"
+msgid_plural "Restarted {0} running server tunnels"
+msgstr[0] "S’ha reiniciat {0} túnel de servidor en execució"
+msgstr[1] "S’han reiniciat {0} túnels de servidor en execució"
 
 msgid "Restarted all running tunnels"
 msgstr "S’han reiniciat tots els túnels en execució"
@@ -256,8 +265,8 @@ msgstr "S’han reiniciat tots els túnels en execució"
 msgid "No clients configured, cannot restart!"
 msgstr "No hi ha cap client configurat, no es pot reiniciar!"
 
-msgid "Restarted all running client tunnels"
-msgstr "S’han reiniciat tots els túnels de client en execució"
+msgid "No servers configured, cannot restart!"
+msgstr "No hi ha cap servidor configurat, no es pot reiniciar!"
 
 msgid "Configuration reloaded for all tunnels"
 msgstr "Configuració recarregada per a tots els túnels"

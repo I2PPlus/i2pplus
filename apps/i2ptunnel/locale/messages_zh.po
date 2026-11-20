@@ -241,11 +241,19 @@ msgstr "未配置服务，无法重启！"
 msgid "Stopping tunnel"
 msgstr "正在关闭隧道"
 
+msgid "Error restarting tunnel"
+msgstr "重启隧道时出错"
+
 msgid "Starting tunnel"
 msgstr "正在启动隧道"
 
-msgid "Error restarting tunnel"
-msgstr "重启隧道时出错"
+msgid "Restarted all running client tunnels"
+msgstr "已重启所有运行的客户端隧道"
+
+#, java-format
+msgid "Restarted {0} running server tunnel"
+msgid_plural "Restarted {0} running server tunnels"
+msgstr[0] "已重启 {0} 个运行的服务器隧道"
 
 msgid "Restarted all running tunnels"
 msgstr "已重启所有运行的隧道"
@@ -253,8 +261,8 @@ msgstr "已重启所有运行的隧道"
 msgid "No clients configured, cannot restart!"
 msgstr "未配置客户端，无法重启！"
 
-msgid "Restarted all running client tunnels"
-msgstr "已重启所有运行的客户端隧道"
+msgid "No servers configured, cannot restart!"
+msgstr "未配置服务器，无法重启！"
 
 msgid "Configuration reloaded for all tunnels"
 msgstr "所有隧道都已根据当前配置重启"

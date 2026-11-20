@@ -244,11 +244,20 @@ msgstr "هیچ سرویسی پیکربندی نشده است، امکان راه
 msgid "Stopping tunnel"
 msgstr "توقف تونل"
 
+msgid "Error restarting tunnel"
+msgstr "خطا در راه‌اندازی مجدد تونل"
+
 msgid "Starting tunnel"
 msgstr "شروع تونل"
 
-msgid "Error restarting tunnel"
-msgstr "خطا در راه‌اندازی مجدد تونل"
+msgid "Restarted all running client tunnels"
+msgstr "همه تونل‌های کلاینت در حال اجرا راه‌اندازی مجدد شدند"
+
+#, java-format
+msgid "Restarted {0} running server tunnel"
+msgid_plural "Restarted {0} running server tunnels"
+msgstr[0] "{0} تونل سرور در حال اجرا راه‌اندازی مجدد شد"
+msgstr[1] "{0} تونل سرور در حال اجرا راه‌اندازی مجدد شدند"
 
 msgid "Restarted all running tunnels"
 msgstr "همه تونل‌های در حال اجرا راه‌اندازی مجدد شدند"
@@ -256,8 +265,8 @@ msgstr "همه تونل‌های در حال اجرا راه‌اندازی مج
 msgid "No clients configured, cannot restart!"
 msgstr "هیچ کلاینتی پیکربندی نشده است، امکان راه‌اندازی مجدد وجود ندارد!"
 
-msgid "Restarted all running client tunnels"
-msgstr "همه تونل‌های کلاینت در حال اجرا راه‌اندازی مجدد شدند"
+msgid "No servers configured, cannot restart!"
+msgstr "هیچ سروری پیکربندی نشده است، امکان راه‌اندازی مجدد وجود ندارد!"
 
 msgid "Configuration reloaded for all tunnels"
 msgstr "پیکربندی برای تمامی تونل ها مجددا بارگذاری شد"

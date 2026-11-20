@@ -244,11 +244,20 @@ msgstr "কোন পরিষেবা কনফিগার করা হয�
 msgid "Stopping tunnel"
 msgstr "টানেল বন্ধ করা হচ্ছে"
 
+msgid "Error restarting tunnel"
+msgstr "টানেল পুনরায় চালু করতে ত্রুটি"
+
 msgid "Starting tunnel"
 msgstr "টানেল শুরু করা হচ্ছে"
 
-msgid "Error restarting tunnel"
-msgstr "টানেল পুনরায় চালু করতে ত্রুটি"
+msgid "Restarted all running client tunnels"
+msgstr "সমস্ত চলমান ক্লায়েন্ট টানেল পুনরায় চালু করা হয়েছে"
+
+#, java-format
+msgid "Restarted {0} running server tunnel"
+msgid_plural "Restarted {0} running server tunnels"
+msgstr[0] "{0}টি চলমান সার্ভার টানেল পুনরায় চালু করা হয়েছে"
+msgstr[1] "{0}টি চলমান সার্ভার টানেল পুনরায় চালু করা হয়েছে"
 
 msgid "Restarted all running tunnels"
 msgstr "সমস্ত চলমান টানেল পুনরায় চালু করা হয়েছে"
@@ -256,8 +265,8 @@ msgstr "সমস্ত চলমান টানেল পুনরায় �
 msgid "No clients configured, cannot restart!"
 msgstr "কোন ক্লায়েন্ট কনফিগার করা হয়নি, পুনরায় চালু করা যাবে না!"
 
-msgid "Restarted all running client tunnels"
-msgstr "সমস্ত চলমান ক্লায়েন্ট টানেল পুনরায় চালু করা হয়েছে"
+msgid "No servers configured, cannot restart!"
+msgstr "কোন সার্ভার কনফিগার করা হয়নি, পুনরায় চালু করা যাবে না!"
 
 msgid "Configuration reloaded for all tunnels"
 msgstr "সমস্ত টানেলের জন্য কনফিগারেশন পুনরায় লোড করা হয়েছে"

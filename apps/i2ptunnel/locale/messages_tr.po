@@ -244,11 +244,20 @@ msgstr "Yapılandırılmış hizmet yok, yeniden başlatılamıyor!"
 msgid "Stopping tunnel"
 msgstr "Tünel durduruluyor"
 
+msgid "Error restarting tunnel"
+msgstr "Tünel yeniden başlatılırken hata oluştu"
+
 msgid "Starting tunnel"
 msgstr "Tünel başlatılıyor"
 
-msgid "Error restarting tunnel"
-msgstr "Tünel yeniden başlatılırken hata oluştu"
+msgid "Restarted all running client tunnels"
+msgstr "Tüm çalışan istemci tünelleri yeniden başlatıldı"
+
+#, java-format
+msgid "Restarted {0} running server tunnel"
+msgid_plural "Restarted {0} running server tunnels"
+msgstr[0] "{0} çalışan sunucu tüneli yeniden başlatıldı"
+msgstr[1] "{0} çalışan sunucu tüneli yeniden başlatıldı"
 
 msgid "Restarted all running tunnels"
 msgstr "Tüm çalışan tüneller yeniden başlatıldı"
@@ -256,8 +265,8 @@ msgstr "Tüm çalışan tüneller yeniden başlatıldı"
 msgid "No clients configured, cannot restart!"
 msgstr "Yapılandırılmış istemci yok, yeniden başlatılamıyor!"
 
-msgid "Restarted all running client tunnels"
-msgstr "Tüm çalışan istemci tünelleri yeniden başlatıldı"
+msgid "No servers configured, cannot restart!"
+msgstr "Yapılandırılmış sunucu yok, yeniden başlatılamıyor!"
 
 msgid "Configuration reloaded for all tunnels"
 msgstr "Tüm tüneller için yapılandırma yeniden yüklendi"

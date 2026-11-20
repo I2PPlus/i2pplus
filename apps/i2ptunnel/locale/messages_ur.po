@@ -253,11 +253,20 @@ msgstr "کوئی سروس ترتیب شدہ نہیں، دوبارہ شروع ن�
 msgid "Stopping tunnel"
 msgstr "ٹنل روکا جا رہا ہے"
 
+msgid "Error restarting tunnel"
+msgstr "ٹنل دوبارہ شروع کرنے میں خرابی"
+
 msgid "Starting tunnel"
 msgstr "ٹنل شروع کیا جا رہا ہے"
 
-msgid "Error restarting tunnel"
-msgstr "ٹنل دوبارہ شروع کرنے میں خرابی"
+msgid "Restarted all running client tunnels"
+msgstr "چلتے ہوئے تمام کلائنٹ ٹنلز دوبارہ شروع کر دیے گئے"
+
+#, java-format
+msgid "Restarted {0} running server tunnel"
+msgid_plural "Restarted {0} running server tunnels"
+msgstr[0] "چلتے ہوئے {0} سرور ٹنلز دوبارہ شروع کر دیے گئے"
+msgstr[1] "چلتے ہوئے {0} سرور ٹنلز دوبارہ شروع کر دیے گئے"
 
 msgid "Restarted all running tunnels"
 msgstr "چلتے ہوئے تمام ٹنلز دوبارہ شروع کر دیے گئے"
@@ -265,8 +274,8 @@ msgstr "چلتے ہوئے تمام ٹنلز دوبارہ شروع کر دیے گ
 msgid "No clients configured, cannot restart!"
 msgstr "کوئی کلائنٹ ترتیب شدہ نہیں، دوبارہ شروع نہیں کر سکتے!"
 
-msgid "Restarted all running client tunnels"
-msgstr "چلتے ہوئے تمام کلائنٹ ٹنلز دوبارہ شروع کر دیے گئے"
+msgid "No servers configured, cannot restart!"
+msgstr "کوئی سرور ترتیب شدہ نہیں، دوبارہ شروع نہیں کر سکتے!"
 
 msgid "Configuration reloaded for all tunnels"
 msgstr "تمام ٹنلز کے لیے ترتیبات دوبارہ لوڈ کی گئیں"

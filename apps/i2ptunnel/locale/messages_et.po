@@ -244,11 +244,20 @@ msgstr "Ühtegi teenust pole seadistatud, ei saa taaskäivitada!"
 msgid "Stopping tunnel"
 msgstr "Tunnel peatatakse"
 
+msgid "Error restarting tunnel"
+msgstr "Viga tunneli taaskäivitamisel"
+
 msgid "Starting tunnel"
 msgstr "Tunnel käivitatakse"
 
-msgid "Error restarting tunnel"
-msgstr "Viga tunneli taaskäivitamisel"
+msgid "Restarted all running client tunnels"
+msgstr "Taaskäivitatud kõik töötavad kliendi tunnelid"
+
+#, java-format
+msgid "Restarted {0} running server tunnel"
+msgid_plural "Restarted {0} running server tunnels"
+msgstr[0] "Taaskäivitatud {0} töötav serveri tunnel"
+msgstr[1] "Taaskäivitatud {0} töötavat serveri tunnelit"
 
 msgid "Restarted all running tunnels"
 msgstr "Taaskäivitatud kõik töötavad tunnelid"
@@ -256,8 +265,8 @@ msgstr "Taaskäivitatud kõik töötavad tunnelid"
 msgid "No clients configured, cannot restart!"
 msgstr "Ühtegi klienti pole seadistatud, ei saa taaskäivitada!"
 
-msgid "Restarted all running client tunnels"
-msgstr "Taaskäivitatud kõik töötavad kliendi tunnelid"
+msgid "No servers configured, cannot restart!"
+msgstr "Ühtegi serverit pole seadistatud, ei saa taaskäivitada!"
 
 msgid "Configuration reloaded for all tunnels"
 msgstr "Kõigile tunnelitele uuesti laetud seaded"

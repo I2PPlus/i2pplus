@@ -253,11 +253,20 @@ msgstr "לא הוגדרו שירותים, לא ניתן להפעיל מחדש!"
 msgid "Stopping tunnel"
 msgstr "עוצר את המנהור"
 
+msgid "Error restarting tunnel"
+msgstr "שגיאה בהפעלה מחדש של המנהור"
+
 msgid "Starting tunnel"
 msgstr "מפעיל את המנהור"
 
-msgid "Error restarting tunnel"
-msgstr "שגיאה בהפעלה מחדש של המנהור"
+msgid "Restarted all running client tunnels"
+msgstr "כל מנהורי הלקוח הפעילים הופעלו מחדש"
+
+#, java-format
+msgid "Restarted {0} running server tunnel"
+msgid_plural "Restarted {0} running server tunnels"
+msgstr[0] "הופעל מחדש {0} מנהור שרת פעיל"
+msgstr[1] "הופעו מחדש {0} מנהורי שרת פעילים"
 
 msgid "Restarted all running tunnels"
 msgstr "כל המנהורים הפעילים הופעלו מחדש"
@@ -265,8 +274,8 @@ msgstr "כל המנהורים הפעילים הופעלו מחדש"
 msgid "No clients configured, cannot restart!"
 msgstr "לא הוגדרו לקוחות, לא ניתן להפעיל מחדש!"
 
-msgid "Restarted all running client tunnels"
-msgstr "כל מנהורי הלקוח הפעילים הופעלו מחדש"
+msgid "No servers configured, cannot restart!"
+msgstr "לא הוגדרו שרתים, לא ניתן להפעיל מחדש!"
 
 msgid "Configuration reloaded for all tunnels"
 msgstr "ההגדרות נטענו מחדש עבור כל המנהורים"

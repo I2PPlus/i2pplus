@@ -244,11 +244,20 @@ msgstr ""
 msgid "Stopping tunnel"
 msgstr ""
 
+msgid "Error restarting tunnel"
+msgstr ""
+
 msgid "Starting tunnel"
 msgstr ""
 
-msgid "Error restarting tunnel"
+msgid "Restarted all running client tunnels"
 msgstr ""
+
+#, java-format
+msgid "Restarted {0} running server tunnel"
+msgid_plural "Restarted {0} running server tunnels"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Restarted all running tunnels"
 msgstr ""
@@ -256,7 +265,7 @@ msgstr ""
 msgid "No clients configured, cannot restart!"
 msgstr ""
 
-msgid "Restarted all running client tunnels"
+msgid "No servers configured, cannot restart!"
 msgstr ""
 
 msgid "Configuration reloaded for all tunnels"

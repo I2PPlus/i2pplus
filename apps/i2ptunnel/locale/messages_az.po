@@ -244,11 +244,20 @@ msgstr "Xidmət konfiqurasiya edilməyib, yenidən başladıla bilmir!"
 msgid "Stopping tunnel"
 msgstr "Tünəlin dayandırılması"
 
+msgid "Error restarting tunnel"
+msgstr "Tunneli yenidən başlatma xətası"
+
 msgid "Starting tunnel"
 msgstr "Tünəl başlamaqdadır"
 
-msgid "Error restarting tunnel"
-msgstr "Tunneli yenidən başlatma xətası"
+msgid "Restarted all running client tunnels"
+msgstr "Bütün işləyən klient tunelləri yenidən başladıldı"
+
+#, java-format
+msgid "Restarted {0} running server tunnel"
+msgid_plural "Restarted {0} running server tunnels"
+msgstr[0] "{0} işləyən server tuneli yenidən başladıldı"
+msgstr[1] "{0} işləyən server tuneli yenidən başladıldı"
 
 msgid "Restarted all running tunnels"
 msgstr "Bütün işləyən tunellər yenidən başladıldı"
@@ -256,8 +265,8 @@ msgstr "Bütün işləyən tunellər yenidən başladıldı"
 msgid "No clients configured, cannot restart!"
 msgstr "Klient konfiqurasiya edilməyib, yenidən başladıla bilmir!"
 
-msgid "Restarted all running client tunnels"
-msgstr "Bütün işləyən klient tunelləri yenidən başladıldı"
+msgid "No servers configured, cannot restart!"
+msgstr "Server konfiqurasiya edilməyib, yenidən başladıla bilmir!"
 
 msgid "Configuration reloaded for all tunnels"
 msgstr "Bütün tünəllər üçün konfigurasiya yenidən yükləndi"

@@ -241,11 +241,19 @@ msgstr "Tidak ada layanan dikonfigurasi, tidak dapat memulai ulang!"
 msgid "Stopping tunnel"
 msgstr "Menghentikan tunnel"
 
+msgid "Error restarting tunnel"
+msgstr "Kesalahan saat memulai ulang tunnel"
+
 msgid "Starting tunnel"
 msgstr "Memulai tunnel"
 
-msgid "Error restarting tunnel"
-msgstr "Kesalahan saat memulai ulang tunnel"
+msgid "Restarted all running client tunnels"
+msgstr "Semua tunnel klien yang berjalan telah dimulai ulang"
+
+#, java-format
+msgid "Restarted {0} running server tunnel"
+msgid_plural "Restarted {0} running server tunnels"
+msgstr[0] "{0} tunnel server yang berjalan telah dimulai ulang"
 
 msgid "Restarted all running tunnels"
 msgstr "Semua tunnel yang berjalan telah dimulai ulang"
@@ -253,8 +261,8 @@ msgstr "Semua tunnel yang berjalan telah dimulai ulang"
 msgid "No clients configured, cannot restart!"
 msgstr "Tidak ada klien dikonfigurasi, tidak dapat memulai ulang!"
 
-msgid "Restarted all running client tunnels"
-msgstr "Semua tunnel klien yang berjalan telah dimulai ulang"
+msgid "No servers configured, cannot restart!"
+msgstr "Tidak ada server dikonfigurasi, tidak dapat memulai ulang!"
 
 msgid "Configuration reloaded for all tunnels"
 msgstr "Konfigurasi dimuat ulang untuk semua tunnel"

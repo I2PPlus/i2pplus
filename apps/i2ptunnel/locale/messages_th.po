@@ -253,11 +253,20 @@ msgstr "ไม่มีบริการที่กำหนดค่าไว
 msgid "Stopping tunnel"
 msgstr "กำลังหยุดอุโมงคม"
 
+msgid "Error restarting tunnel"
+msgstr "ข้อผิดพลาดขณะเริ่มอุโมงคมใหม่"
+
 msgid "Starting tunnel"
 msgstr "กำลังเริ่มอุโมงคม"
 
-msgid "Error restarting tunnel"
-msgstr "ข้อผิดพลาดขณะเริ่มอุโมงคมใหม่"
+msgid "Restarted all running client tunnels"
+msgstr "เริ่มอุโมงคมไคลเอนต์ที่กำลังทำงานทั้งหมดใหม่แล้ว"
+
+#, java-format
+msgid "Restarted {0} running server tunnel"
+msgid_plural "Restarted {0} running server tunnels"
+msgstr[0] "เริ่มอุโมงค์เซิร์ฟเวอร์ที่กำลังทำงาน {0} ใหม่แล้ว"
+msgstr[1] "เริ่มอุโมงค์เซิร์ฟเวอร์ที่กำลังทำงาน {0} ใหม่แล้ว"
 
 msgid "Restarted all running tunnels"
 msgstr "เริ่มอุโมงคมที่กำลังทำงานทั้งหมดใหม่แล้ว"
@@ -265,8 +274,8 @@ msgstr "เริ่มอุโมงคมที่กำลังทำงา
 msgid "No clients configured, cannot restart!"
 msgstr "ไม่มีไคลเอนต์ที่กำหนดค่าไว้ไม่สามารถเริ่มใหม่ได้!"
 
-msgid "Restarted all running client tunnels"
-msgstr "เริ่มอุโมงคมไคลเอนต์ที่กำลังทำงานทั้งหมดใหม่แล้ว"
+msgid "No servers configured, cannot restart!"
+msgstr "ไม่มีเซิร์ฟเวอร์ที่กำหนดค่าไว้ ไม่สามารถเริ่มใหม่ได้!"
 
 msgid "Configuration reloaded for all tunnels"
 msgstr "โหลดการกำหนดค่าใหม่สำหรับอุโมงคมทั้งหมด"

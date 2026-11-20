@@ -244,11 +244,20 @@ msgstr "Δεν έχουν ρυθμιστεί υπηρεσίες, δεν είνα
 msgid "Stopping tunnel"
 msgstr "Σταμάτημα διαδρόμου"
 
+msgid "Error restarting tunnel"
+msgstr "Σφάλμα κατά την επανεκκίνηση διαδρόμου"
+
 msgid "Starting tunnel"
 msgstr "Έναρξη διαδρόμου"
 
-msgid "Error restarting tunnel"
-msgstr "Σφάλμα κατά την επανεκκίνηση διαδρόμου"
+msgid "Restarted all running client tunnels"
+msgstr "Επανεκκινήθηκαν όλοι οι ενεργοί διάδρομοι πελάτη"
+
+#, java-format
+msgid "Restarted {0} running server tunnel"
+msgid_plural "Restarted {0} running server tunnels"
+msgstr[0] "Επανεκκινήθηκε {0} ενεργός διάδρομος διακομιστή"
+msgstr[1] "Επανεκκινήθηκαν {0} ενεργοί διάδρομοι διακομιστή"
 
 msgid "Restarted all running tunnels"
 msgstr "Επανεκκινήθηκαν όλοι οι ενεργοί διάδρομοι"
@@ -256,8 +265,8 @@ msgstr "Επανεκκινήθηκαν όλοι οι ενεργοί διάδρο
 msgid "No clients configured, cannot restart!"
 msgstr "Δεν έχουν ρυθμιστεί πελάτες, δεν είναι δυνατή η επανεκκίνηση!"
 
-msgid "Restarted all running client tunnels"
-msgstr "Επανεκκινήθηκαν όλοι οι ενεργοί διάδρομοι πελάτη"
+msgid "No servers configured, cannot restart!"
+msgstr "Δεν έχουν ρυθμιστεί διακομιστές, δεν είναι δυνατή η επανεκκίνηση!"
 
 msgid "Configuration reloaded for all tunnels"
 msgstr "Η διαμόρφωση μεταφόρτωση για όλους τους διαδρόμους"

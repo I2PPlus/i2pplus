@@ -247,11 +247,21 @@ msgstr "Nu există servicii configurate, nu se poate reporni!"
 msgid "Stopping tunnel"
 msgstr "Oprirea tunelului"
 
+msgid "Error restarting tunnel"
+msgstr "Eroare la repornirea tunelului"
+
 msgid "Starting tunnel"
 msgstr "Pornirea tunelului"
 
-msgid "Error restarting tunnel"
-msgstr "Eroare la repornirea tunelului"
+msgid "Restarted all running client tunnels"
+msgstr "S-au repornit toate tunelurile client în execuție"
+
+#, java-format
+msgid "Restarted {0} running server tunnel"
+msgid_plural "Restarted {0} running server tunnels"
+msgstr[0] "S-a repornit {0} tunnel de server în execuție"
+msgstr[1] "S-au repornit {0} tuneluri de server în execuție"
+msgstr[2] "S-au repornit {0} tuneluri de server în execuție"
 
 msgid "Restarted all running tunnels"
 msgstr "S-au repornit toate tunelurile în execuție"
@@ -259,8 +269,8 @@ msgstr "S-au repornit toate tunelurile în execuție"
 msgid "No clients configured, cannot restart!"
 msgstr "Nu există clienți configurați, nu se poate reporni!"
 
-msgid "Restarted all running client tunnels"
-msgstr "S-au repornit toate tunelurile client în execuție"
+msgid "No servers configured, cannot restart!"
+msgstr "Nu există servere configurate, nu se poate reporni!"
 
 msgid "Configuration reloaded for all tunnels"
 msgstr "Configurare reîncărcata pentru toate tunelurile"

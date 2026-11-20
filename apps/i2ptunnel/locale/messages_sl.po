@@ -250,11 +250,22 @@ msgstr "Ni nastavljenih storitev, ponovnega zagona ni mogoče izvesti!"
 msgid "Stopping tunnel"
 msgstr "Ustavitev tunelja"
 
+msgid "Error restarting tunnel"
+msgstr "Napaka pri ponovnem zagonu predora"
+
 msgid "Starting tunnel"
 msgstr "Zagon tunelja"
 
-msgid "Error restarting tunnel"
-msgstr "Napaka pri ponovnem zagonu predora"
+msgid "Restarted all running client tunnels"
+msgstr "Vsi delujoči odjemalski predori so bili ponovno zagnani"
+
+#, java-format
+msgid "Restarted {0} running server tunnel"
+msgid_plural "Restarted {0} running server tunnels"
+msgstr[0] "Ponovno zagnan {0} delujoč strežniški predor"
+msgstr[1] "Ponovno zagnana {0} delujoča strežniška predora"
+msgstr[2] "Ponovno zagnani {0} delujoči strežniški predori"
+msgstr[3] "Ponovno zagnanih {0} delujočih strežniških predorov"
 
 msgid "Restarted all running tunnels"
 msgstr "Vsi delujoči predori so bili ponovno zagnani"
@@ -262,8 +273,8 @@ msgstr "Vsi delujoči predori so bili ponovno zagnani"
 msgid "No clients configured, cannot restart!"
 msgstr "Ni nastavljenih odjemalcev, ponovnega zagona ni mogoče izvesti!"
 
-msgid "Restarted all running client tunnels"
-msgstr "Vsi delujoči odjemalski predori so bili ponovno zagnani"
+msgid "No servers configured, cannot restart!"
+msgstr "Ni nastavljenih strežnikov, ponovnega zagona ni mogoče izvesti!"
 
 msgid "Configuration reloaded for all tunnels"
 msgstr "Nastavitve ponovno naložene za vse tunelje"

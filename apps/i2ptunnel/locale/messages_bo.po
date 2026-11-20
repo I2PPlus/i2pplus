@@ -244,11 +244,20 @@ msgstr "ཞབས་ཞུ་སྒྲིག་བཀོད་བྱས་མེ
 msgid "Stopping tunnel"
 msgstr "སྒྲོམ་ལམ་བརྒྱབ་བཞིན་པ།"
 
+msgid "Error restarting tunnel"
+msgstr "སྒྲོམ་ལམ་བསྐྱར་འགོ་ཚུགས་པའི་འཆོར་བ།"
+
 msgid "Starting tunnel"
 msgstr "སྒྲོམ་ལམ་འགོ་ཚུགས་བཞིན་པ།"
 
-msgid "Error restarting tunnel"
-msgstr "སྒྲོམ་ལམ་བསྐྱར་འགོ་ཚུགས་པའི་འཆོར་བ།"
+msgid "Restarted all running client tunnels"
+msgstr "སྒྲོམ་ལམ་སྤྱོད་མཁན་ཚང་མ་བསྐྱར་འགོ་ཚུགས་པ།"
+
+#, java-format
+msgid "Restarted {0} running server tunnel"
+msgid_plural "Restarted {0} running server tunnels"
+msgstr[0] "སྒྲོམ་ལམ་ཞབས་ཞུ་གཞོན་པ་ {0} བསྐྱར་འགོ་ཚུགས་པ།"
+msgstr[1] "སྒྲོམ་ལམ་ཞབས་ཞུ་གཞོན་པ་ {0} བསྐྱར་འགོ་ཚུགས་པ།"
 
 msgid "Restarted all running tunnels"
 msgstr "སྒྲོམ་ལམ་ཚང་མ་བསྐྱར་འགོ་ཚུགས་པ།"
@@ -256,8 +265,8 @@ msgstr "སྒྲོམ་ལམ་ཚང་མ་བསྐྱར་འགོ་
 msgid "No clients configured, cannot restart!"
 msgstr "སྒྲིག་བཀོད་བྱས་པའི་སྤྱོད་མཁན་མེད། བསྐྱར་འགོ་ཚུགས་མི་ཐུབ།"
 
-msgid "Restarted all running client tunnels"
-msgstr "སྒྲོམ་ལམ་སྤྱོད་མཁན་ཚང་མ་བསྐྱར་འགོ་ཚུགས་པ།"
+msgid "No servers configured, cannot restart!"
+msgstr "སྒྲིག་བཀོད་བྱས་པའི་ཞབས་ཞུ་གཞོན་པ་མེད། བསྐྱར་འགོ་ཚུགས་མི་ཐུབ།"
 
 msgid "Configuration reloaded for all tunnels"
 msgstr "སྒྲོམ་ལམ་ཚང་མའི་སྒྲིག་བཀོད་ཡང་བསྐྱར་འཇོག་པ།"

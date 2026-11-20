@@ -253,11 +253,20 @@ msgstr "نه دی هیڅ سروسونه ترتیب شوی، نه شئ کولای
 msgid "Stopping tunnel"
 msgstr "ټونل درېدل"
 
+msgid "Error restarting tunnel"
+msgstr "د ټونل بیا پیل کولو کې تېروتنه"
+
 msgid "Starting tunnel"
 msgstr "ټونل جوړول"
 
-msgid "Error restarting tunnel"
-msgstr "د ټونل بیا پیل کولو کې تېروتنه"
+msgid "Restarted all running client tunnels"
+msgstr "ټول چلېږونکی کلآینټ ټونلونه بیا پیل شول"
+
+#, java-format
+msgid "Restarted {0} running server tunnel"
+msgid_plural "Restarted {0} running server tunnels"
+msgstr[0] "{0} روان سرور ټونلونه بیا پیل شول"
+msgstr[1] "{0} روان سرور ټونلونه بیا پیل شول"
 
 msgid "Restarted all running tunnels"
 msgstr "ټول چلېږونکی ټونلونه بیا پیل شول"
@@ -265,8 +274,8 @@ msgstr "ټول چلېږونکی ټونلونه بیا پیل شول"
 msgid "No clients configured, cannot restart!"
 msgstr "نه دی هیڅ کلآینټونه ترتیب شوی، نه شئ کولای بیا پیل وکړئ!"
 
-msgid "Restarted all running client tunnels"
-msgstr "ټول چلېږونکی کلآینټ ټونلونه بیا پیل شول"
+msgid "No servers configured, cannot restart!"
+msgstr "نه دی هیڅ سرور ترتیب شوی، نه شئ کولای بیا پیل وکړئ!"
 
 msgid "Configuration reloaded for all tunnels"
 msgstr "د ټولو ټونلونو لپاره ترتیبات بیا بار شول"

@@ -241,11 +241,19 @@ msgstr " 구성된 서비스가 없어 재시작할 수 없습니다!"
 msgid "Stopping tunnel"
 msgstr "터널 중지중"
 
+msgid "Error restarting tunnel"
+msgstr "터널 재시작 오류"
+
 msgid "Starting tunnel"
 msgstr "터널 시작중"
 
-msgid "Error restarting tunnel"
-msgstr "터널 재시작 오류"
+msgid "Restarted all running client tunnels"
+msgstr "실행 중인 모든 클라이언트 터널 재시작됨"
+
+#, java-format
+msgid "Restarted {0} running server tunnel"
+msgid_plural "Restarted {0} running server tunnels"
+msgstr[0] "실행 중인 서버 터널 {0}개 재시작됨"
 
 msgid "Restarted all running tunnels"
 msgstr "실행 중인 모든 터널 재시작됨"
@@ -253,8 +261,8 @@ msgstr "실행 중인 모든 터널 재시작됨"
 msgid "No clients configured, cannot restart!"
 msgstr " 구성된 클라이언트가 없어 재시작할 수 없습니다!"
 
-msgid "Restarted all running client tunnels"
-msgstr "실행 중인 모든 클라이언트 터널 재시작됨"
+msgid "No servers configured, cannot restart!"
+msgstr "구성된 서버가 없어 재시작할 수 없습니다!"
 
 msgid "Configuration reloaded for all tunnels"
 msgstr "모든 터널에 설정 다시 로드함"

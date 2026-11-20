@@ -244,11 +244,20 @@ msgstr "Nessun servizio configurato, impossibile riavviare!"
 msgid "Stopping tunnel"
 msgstr "Fermando tunnel"
 
+msgid "Error restarting tunnel"
+msgstr "Errore durante il riavvio del tunnel"
+
 msgid "Starting tunnel"
 msgstr "Avviando tunnel"
 
-msgid "Error restarting tunnel"
-msgstr "Errore durante il riavvio del tunnel"
+msgid "Restarted all running client tunnels"
+msgstr "Tutti i tunnel client in esecuzione sono stati riavviati"
+
+#, java-format
+msgid "Restarted {0} running server tunnel"
+msgid_plural "Restarted {0} running server tunnels"
+msgstr[0] "Riavviato {0} tunnel server in esecuzione"
+msgstr[1] "Riavviati {0} tunnel server in esecuzione"
 
 msgid "Restarted all running tunnels"
 msgstr "Tutti i tunnel in esecuzione sono stati riavviati"
@@ -256,8 +265,8 @@ msgstr "Tutti i tunnel in esecuzione sono stati riavviati"
 msgid "No clients configured, cannot restart!"
 msgstr "Nessun client configurato, impossibile riavviare!"
 
-msgid "Restarted all running client tunnels"
-msgstr "Tutti i tunnel client in esecuzione sono stati riavviati"
+msgid "No servers configured, cannot restart!"
+msgstr "Nessun server configurato, impossibile riavviare!"
 
 msgid "Configuration reloaded for all tunnels"
 msgstr "Configurazione ricaricata per tutti i tunnel"

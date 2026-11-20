@@ -244,11 +244,20 @@ msgstr "Yhtään palvelua ei ole määritetty, ei voida käynnistää uudelleen!
 msgid "Stopping tunnel"
 msgstr "Pysäytetään tunneli"
 
+msgid "Error restarting tunnel"
+msgstr "Virhe tunnelin uudelleenkäynnistyksessä"
+
 msgid "Starting tunnel"
 msgstr "Käynnistetään tunneli"
 
-msgid "Error restarting tunnel"
-msgstr "Virhe tunnelin uudelleenkäynnistyksessä"
+msgid "Restarted all running client tunnels"
+msgstr "Käynnistettiin uudelleen kaikki toimivat asiakastunnelit"
+
+#, java-format
+msgid "Restarted {0} running server tunnel"
+msgid_plural "Restarted {0} running server tunnels"
+msgstr[0] "Käynnistettiin uudelleen {0} toimiva palvelintunneli"
+msgstr[1] "Käynnistettiin uudelleen {0} toimivaa palvelintunnelia"
 
 msgid "Restarted all running tunnels"
 msgstr "Käynnistettiin uudelleen kaikki toimivat tunnelit"
@@ -256,8 +265,8 @@ msgstr "Käynnistettiin uudelleen kaikki toimivat tunnelit"
 msgid "No clients configured, cannot restart!"
 msgstr "Yhtään asiakasta ei ole määritetty, ei voida käynnistää uudelleen!"
 
-msgid "Restarted all running client tunnels"
-msgstr "Käynnistettiin uudelleen kaikki toimivat asiakastunnelit"
+msgid "No servers configured, cannot restart!"
+msgstr "Yhtään palvelinta ei ole määritetty, ei voida käynnistää uudelleen!"
 
 msgid "Configuration reloaded for all tunnels"
 msgstr "Asetukset ladattu uudelleen kaikille tunneleille"

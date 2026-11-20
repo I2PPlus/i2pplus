@@ -253,11 +253,20 @@ msgstr "Walang naka-configure na serbisyo, hindi maaaring mag-restart!"
 msgid "Stopping tunnel"
 msgstr "Inihinto ang tunnel"
 
+msgid "Error restarting tunnel"
+msgstr "Error sa pag-restart ng tunnel"
+
 msgid "Starting tunnel"
 msgstr "Sinisimulan ang tunnel"
 
-msgid "Error restarting tunnel"
-msgstr "Error sa pag-restart ng tunnel"
+msgid "Restarted all running client tunnels"
+msgstr "Na-restart ang lahat ng tumatakbong client tunnel"
+
+#, java-format
+msgid "Restarted {0} running server tunnel"
+msgid_plural "Restarted {0} running server tunnels"
+msgstr[0] "Na-restart ang {0} tumatakbong server tunnel"
+msgstr[1] "Na-restart ang {0} tumatakbong server tunnel"
 
 msgid "Restarted all running tunnels"
 msgstr "Na-restart ang lahat ng tumatakbong tunnel"
@@ -265,8 +274,8 @@ msgstr "Na-restart ang lahat ng tumatakbong tunnel"
 msgid "No clients configured, cannot restart!"
 msgstr "Walang naka-configure na client, hindi maaaring mag-restart!"
 
-msgid "Restarted all running client tunnels"
-msgstr "Na-restart ang lahat ng tumatakbong client tunnel"
+msgid "No servers configured, cannot restart!"
+msgstr "Walang naka-configure na server, hindi maaaring mag-restart!"
 
 msgid "Configuration reloaded for all tunnels"
 msgstr "Na-reload ang configuration para sa lahat ng tunnel"

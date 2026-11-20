@@ -241,11 +241,19 @@ msgstr "Không có dịch vụ nào được cấu hình, không thể khởi đ
 msgid "Stopping tunnel"
 msgstr "Ngưng đường hầm"
 
+msgid "Error restarting tunnel"
+msgstr "Lỗi khi khởi động lại đường hầm"
+
 msgid "Starting tunnel"
 msgstr "Bắt đầu đường hầm"
 
-msgid "Error restarting tunnel"
-msgstr "Lỗi khi khởi động lại đường hầm"
+msgid "Restarted all running client tunnels"
+msgstr "Đã khởi động lại tất cả các đường hầm máy khách đang chạy"
+
+#, java-format
+msgid "Restarted {0} running server tunnel"
+msgid_plural "Restarted {0} running server tunnels"
+msgstr[0] "Đã khởi động lại {0} đường hầm máy chủ đang chạy"
 
 msgid "Restarted all running tunnels"
 msgstr "Đã khởi động lại tất cả các đường hầm đang chạy"
@@ -253,8 +261,8 @@ msgstr "Đã khởi động lại tất cả các đường hầm đang chạy"
 msgid "No clients configured, cannot restart!"
 msgstr "Không có máy khách nào được cấu hình, không thể khởi động lại!"
 
-msgid "Restarted all running client tunnels"
-msgstr "Đã khởi động lại tất cả các đường hầm máy khách đang chạy"
+msgid "No servers configured, cannot restart!"
+msgstr "Không có máy chủ nào được cấu hình, không thể khởi động lại!"
 
 msgid "Configuration reloaded for all tunnels"
 msgstr "Nạp lại cấu hình cho mọi đường hầm"

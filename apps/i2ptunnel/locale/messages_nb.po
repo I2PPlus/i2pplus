@@ -244,11 +244,20 @@ msgstr "Ingen tjenester konfigurert, kan ikke starte på nytt!"
 msgid "Stopping tunnel"
 msgstr "Stopper tunnel"
 
+msgid "Error restarting tunnel"
+msgstr "Feil ved omstart av tunnel"
+
 msgid "Starting tunnel"
 msgstr "Starter tunnel"
 
-msgid "Error restarting tunnel"
-msgstr "Feil ved omstart av tunnel"
+msgid "Restarted all running client tunnels"
+msgstr "Startet alle kjørende klienttunneler på nytt"
+
+#, java-format
+msgid "Restarted {0} running server tunnel"
+msgid_plural "Restarted {0} running server tunnels"
+msgstr[0] "Startet {0} kjørende servertunnel på nytt"
+msgstr[1] "Startet {0} kjørende servertunneler på nytt"
 
 msgid "Restarted all running tunnels"
 msgstr "Startet alle kjørende tunneler på nytt"
@@ -256,8 +265,8 @@ msgstr "Startet alle kjørende tunneler på nytt"
 msgid "No clients configured, cannot restart!"
 msgstr "Ingen klienter konfigurert, kan ikke starte på nytt!"
 
-msgid "Restarted all running client tunnels"
-msgstr "Startet alle kjørende klienttunneler på nytt"
+msgid "No servers configured, cannot restart!"
+msgstr "Ingen servere konfigurert, kan ikke starte på nytt!"
 
 msgid "Configuration reloaded for all tunnels"
 msgstr "Oppsett oppdatert for alle tunneler"

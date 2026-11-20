@@ -244,11 +244,20 @@ msgstr "Geen services geconfigureerd, kan niet opnieuw starten!"
 msgid "Stopping tunnel"
 msgstr "Stoppen van tunnel"
 
+msgid "Error restarting tunnel"
+msgstr "Fout bij opnieuw starten tunnel"
+
 msgid "Starting tunnel"
 msgstr "Opstarten van tunnel"
 
-msgid "Error restarting tunnel"
-msgstr "Fout bij opnieuw starten tunnel"
+msgid "Restarted all running client tunnels"
+msgstr "Alle actieve clienttunnels opnieuw gestart"
+
+#, java-format
+msgid "Restarted {0} running server tunnel"
+msgid_plural "Restarted {0} running server tunnels"
+msgstr[0] "{0} actieve servertunnel opnieuw gestart"
+msgstr[1] "{0} actieve servertunnels opnieuw gestart"
 
 msgid "Restarted all running tunnels"
 msgstr "Alle actieve tunnels opnieuw gestart"
@@ -256,8 +265,8 @@ msgstr "Alle actieve tunnels opnieuw gestart"
 msgid "No clients configured, cannot restart!"
 msgstr "Geen clients geconfigureerd, kan niet opnieuw starten!"
 
-msgid "Restarted all running client tunnels"
-msgstr "Alle actieve clienttunnels opnieuw gestart"
+msgid "No servers configured, cannot restart!"
+msgstr "Geen servers geconfigureerd, kan niet opnieuw starten!"
 
 msgid "Configuration reloaded for all tunnels"
 msgstr "Configuratie van alle tunnels opnieuw geladen"

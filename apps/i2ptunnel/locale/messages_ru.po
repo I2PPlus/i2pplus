@@ -247,11 +247,21 @@ msgstr "Нет настроенных сервисов, невозможно п�
 msgid "Stopping tunnel"
 msgstr "Остановка туннеля"
 
+msgid "Error restarting tunnel"
+msgstr "Ошибка при перезапуске туннеля"
+
 msgid "Starting tunnel"
 msgstr "Запуск туннеля"
 
-msgid "Error restarting tunnel"
-msgstr "Ошибка при перезапуске туннеля"
+msgid "Restarted all running client tunnels"
+msgstr "Все запущенные клиентские туннели перезапущены"
+
+#, java-format
+msgid "Restarted {0} running server tunnel"
+msgid_plural "Restarted {0} running server tunnels"
+msgstr[0] "{0} работающий серверный туннель перезапущен"
+msgstr[1] "{0} работающих серверных туннеля перезапущено"
+msgstr[2] "{0} работающих серверных туннелей перезапущено"
 
 msgid "Restarted all running tunnels"
 msgstr "Все запущенные туннели перезапущены"
@@ -259,8 +269,8 @@ msgstr "Все запущенные туннели перезапущены"
 msgid "No clients configured, cannot restart!"
 msgstr "Нет настроенных клиентов, невозможно перезапустить!"
 
-msgid "Restarted all running client tunnels"
-msgstr "Все запущенные клиентские туннели перезапущены"
+msgid "No servers configured, cannot restart!"
+msgstr "Нет настроенных серверов, невозможно перезапустить!"
 
 msgid "Configuration reloaded for all tunnels"
 msgstr "Конфигурация для всех туннелей перечитана"
