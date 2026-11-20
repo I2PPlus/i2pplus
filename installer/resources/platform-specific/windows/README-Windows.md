@@ -17,7 +17,8 @@ Run `i2pinstall.exe` and tick *Windows Service* on the page that lists the
 packs; the installer leaves it unticked. The router then starts at boot and
 the Start Menu gets *Start I2P+ Service* and *Stop I2P+ Service* shortcuts.
 Left unticked, no service is written: run the router with `portable.ps1` as in
-section 2 below, and add a service later with the `-Action Install` command.
+section 2 below, or add the service later from an elevated prompt with
+`.\service.ps1 -Action Install`, the first command listed next.
 
 Manage it from an elevated PowerShell instead of the shortcuts:
 
