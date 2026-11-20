@@ -1,21 +1,27 @@
 <html><body style="margin: 0 8px 5px; font-family: sans-serif">
 <p style="text-align: justify;">
-The I2P+ Windows Service is now installed and should be
-running automatically. To manage the service startup
-properties, run <code style="color: #171; font-weight: bold;">services.msc</code>
+If you left <b>Windows Service</b> ticked on the previous page, the I2P+
+service is installed now and should be running automatically. To manage the
+service startup properties, run
+<code style="color: #171; font-weight: bold;">services.msc</code>
 from the start menu or a command line, and then adjust the I2P+ service
 accordingly, or <a href="http://127.0.0.1:7657/configservice">configure</a>
 from within the <a href="http://127.0.0.1:7657/">Router Console</a>.
 </p>
 <p style="text-align: justify;">
-Additionally, shortcuts are provided to stop and start the service,
-though in normal operation you should use the console to stop the
-service as this will allow the router to honor its networking
-obligations before shutting down or restarting.
+If you left it unticked, I2P+ runs as an ordinary application, started from
+the <code style="color: #171; font-weight: bold;">i2p.exe</code> file in your
+application folder, usually found at
+<code style="color: #171; font-weight: bold;">C:\Program Files\i2p\</code>.
+To run it as a service after all, open a command prompt as Administrator and
+run
+<code style="color: #171; font-weight: bold;">service.ps1 -Action Install</code>
+from that folder.
 </p>
 <p style="text-align: justify;">
-In the unlikely event the Windows service fails to install properly,
-you can run I2P+ as a standard application via the i2p.exe file in
-your application folder, usually found at:
-<code style="color: #171; font-weight: bold;">C:\Program Files\i2p\</code>
+Shortcuts are provided to stop and start the service, though in normal
+operation you should use the console to stop the service as this will allow
+the router to honor its networking obligations before shutting down or
+restarting.
+</p>
 </body></html>

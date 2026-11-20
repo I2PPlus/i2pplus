@@ -404,8 +404,18 @@
         </args>
       </executable>
     </pack>
-    <!-- to disable by default, add preselected="no" -->
-    <pack name="Windows Service" required="yes" preselected="yes">
+    <!--
+      Optional and unchecked by default. Installing the service registers I2P+
+      with the service control manager and runs the router at boot under the
+      config in %PROGRAMDATA%\i2p, which is more than a desktop user asks for by
+      installing I2P+, and it is the part of the install that needs elevated
+      rights. The PacksPanel above is Windows-only, so an operator who wants the
+      service ticks this box; anyone else can add it later with
+      "service.ps1 -Action Install" from an elevated prompt. The Base pack's
+      uninstall step still removes the service, so one installed by hand or by
+      an earlier release is cleaned up whichever way this box is left.
+    -->
+    <pack name="Windows Service" required="no" preselected="no">
       <description>Install I2P+ as a service and run automatically at startup</description>
       <os family="windows"/>
       <executable targetfile="powershell.exe" stage="postinstall" failure="warn" keep="true">

@@ -13,9 +13,11 @@ A 64-bit Java 8 or newer must be installed for either method.
 
 ## 1. Service installation (the usual one)
 
-Run `i2pinstall.exe`, take the defaults, and let it install the service. The
-router then starts at boot and the Start Menu gets *Start I2P+ Service* and
-*Stop I2P+ Service* shortcuts.
+Run `i2pinstall.exe` and tick *Windows Service* on the page that lists the
+packs; the installer leaves it unticked. The router then starts at boot and
+the Start Menu gets *Start I2P+ Service* and *Stop I2P+ Service* shortcuts.
+Left unticked, no service is written, and you can add one later with the
+`-Action Install` command below.
 
 Manage it from an elevated PowerShell instead of the shortcuts:
 
