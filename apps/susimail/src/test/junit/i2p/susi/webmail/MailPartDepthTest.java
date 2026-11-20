@@ -3,7 +3,6 @@ package i2p.susi.webmail;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import i2p.susi.util.ReadBuffer;
@@ -21,6 +20,11 @@ import org.junit.Test;
  * recorded before the parse, so a message nobody could read still counted as
  * fetched: with the default of not leaving mail on the server, that message was
  * deleted from the server and survived only as bytes this tree cannot open.
+ *
+ * <p>The limits stop that without taking the message away: a structure past a limit
+ * is cut where the limit falls, the parts that parsed are kept, the body is kept so
+ * the message can be read and is not fetched again, and the server copy is kept for
+ * the parts that were not parsed.
  *
  * @since 0.9.72+
  */
@@ -43,18 +47,29 @@ public class MailPartDepthTest {
     public MailPartDepthTest() {}
 
     /**
-     * The regression: a message wrapped deeper than the limit is refused as a parse
-     * failure, which the callers already handle. Without a limit the parser recursed
-     * as deep as the message asked and raised a StackOverflowError - an Error, so
-     * none of the callers' catches fired and the thread parsing died partway through
-     * its queue.
+     * The regression: a message wrapped deeper than the limit is cut at the limit
+     * rather than refused outright. Without a limit the parser recursed as deep as
+     * the message asked and raised a StackOverflowError - an Error, so none of the
+     * callers' catches fired and the thread parsing died partway through its queue.
+     * Refusing the whole message was the first fix, and it cost the user the mail:
+     * an unreadable body meant the message was never displayed, never dropped from
+     * the server, and downloaded again on every refresh.
      */
     @Test
-    public void testADeeperThanAllowedNestingIsRefused() {
+    public void testADeeperThanAllowedNestingIsCutAtTheLimit() {
         Mail mail = new Mail("deep-uidl");
         mail.setBody(buffer(wrapped(TOO_DEEP)));
-        assertNull("the parser kept a part it could not finish", mail.getPart());
-        assertFalse("the unreadable body was recorded as fetched", mail.hasBody());
+        MailPart part = mail.getPart();
+        assertNotNull("the parser threw the parts it had parsed away", part);
+        assertTrue("the body of a truncated message was not kept", mail.hasBody());
+        assertTrue("the tree was not marked incomplete", mail.structureTruncated());
+        int depth = 0;
+        while (!part.parts.isEmpty()) {
+            part = part.parts.get(0);
+            depth++;
+        }
+        assertEquals("the parser went deeper than its own limit",
+                     MailPart.MAX_MIME_DEPTH, depth);
     }
 
     /**
@@ -94,15 +109,19 @@ public class MailPartDepthTest {
 
     /**
      * A message that repeats its own boundary line, rather than nesting, is the
-     * other way to make the parser build parts forever: it is refused by the part
-     * count.
+     * other way to make the parser build parts forever: it is cut by the part count,
+     * and the parts that fit are kept.
      */
     @Test
-    public void testTooManyPartsIsRefused() {
+    public void testTooManyPartsIsCutAtTheLimit() {
         Mail mail = new Mail("many-uidl");
         mail.setBody(buffer(flat(TOO_MANY_PARTS)));
-        assertNull("the parser built every part the message asked for", mail.getPart());
-        assertFalse("the unreadable body was recorded as fetched", mail.hasBody());
+        MailPart part = mail.getPart();
+        assertNotNull("the parser built every part the message asked for", part);
+        assertTrue("the body of a truncated message was not kept", mail.hasBody());
+        assertTrue("the tree was not marked incomplete", mail.structureTruncated());
+        assertEquals("the parser kept more parts than its own limit",
+                     MailPart.MAX_MIME_PARTS - 1, part.parts.size());
     }
 
     /**
@@ -119,18 +138,26 @@ public class MailPartDepthTest {
     }
 
     /**
-     * The mail-loss half: a message whose structure could not be parsed is not
-     * offered to the server for deletion, while one that parsed is.
+     * The mail-loss half: a message whose parts were cut short is kept on the
+     * server, because the parts past the cut exist nowhere else, while one that
+     * parsed in full is offered for deletion as usual.
      */
     @Test
-    public void testAMessageThatDidNotParseIsLeftOnTheServer() {
-        Mail unparsed = new Mail("lost-uidl");
-        unparsed.setBody(buffer(wrapped(TOO_DEEP)));
-        assertFalse("the server copy of an unreadable message would be deleted",
-                    MailCache.canDropFromServer(unparsed));
+    public void testATruncatedMessageIsLeftOnTheServer() {
+        Mail cutShort = new Mail("lost-uidl");
+        cutShort.setBody(buffer(wrapped(TOO_DEEP)));
+        assertTrue("the truncated message was not parsed at all", cutShort.hasBody());
+        assertFalse("the server copy of a message with parts still only on it would be deleted",
+                    MailCache.canDropFromServer(cutShort));
+
+        Mail many = new Mail("many-uidl");
+        many.setBody(buffer(flat(TOO_MANY_PARTS)));
+        assertFalse("the server copy of a message with parts still only on it would be deleted",
+                    MailCache.canDropFromServer(many));
 
         Mail parsed = new Mail("kept-uidl");
         parsed.setBody(buffer(nested(3)));
+        assertFalse("an ordinary message was marked incomplete", parsed.structureTruncated());
         assertTrue("an ordinary message stopped being deleted from the server",
                    MailCache.canDropFromServer(parsed));
     }

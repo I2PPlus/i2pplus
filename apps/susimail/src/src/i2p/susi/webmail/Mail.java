@@ -83,6 +83,11 @@ class Mail {
     private Buffer body;
     /** Parsed mail part tree. */
     private MailPart part;
+    /**
+     * True when a MIME safety limit cut the part tree short, so the message on disk
+     * holds fewer parts than the message on the server.
+     */
+    private boolean _structureTruncated;
     /** May be null. Non-empty if non-null. Not HTML escaped. */
     String[] to; // addresses only, enclosed by <>
     /** Addresses only, enclosed by {@code <>}. */
@@ -197,6 +202,9 @@ class Mail {
      * message's MIME structure. The body is kept only if that parse succeeds: a
      * message this tree cannot read is left as a message with no body, so it is not
      * counted as fetched and understood, and nothing drops the server's copy of it.
+     * A message that passes the MIME limits but has more parts, or more nesting,
+     * than the parser allows is kept with the parts that did parse, and
+     * {@link #structureTruncated()} says the tree is incomplete.
      *
      * @param rb buffer containing body data, null for nothing to record
      */
@@ -223,6 +231,7 @@ class Mail {
             if (body != rb) {deleteTempBodyFile(body);}
             body = rb;
             part = parsed;
+            _structureTruncated = parsed.truncated();
             success = true;
         } catch (IOException de) {_log.error("Decoding the message for [" + LogHelper.head(uidl) + "] failed", de);}
         catch (RuntimeException e) {_log.error("Parsing the message for [" + LogHelper.head(uidl) + "] failed", e);}
@@ -253,6 +262,17 @@ class Mail {
      * @return the parsed MailPart, or null
      */
     public synchronized MailPart getPart() {return part;}
+
+    /**
+     * Whether the parsed part tree is complete. A message with more MIME parts, or
+     * more nesting, than the parser allows keeps what it got through: the body is
+     * readable and is not fetched again, but the parts past the cut are only on the
+     * server, so the server copy of such a message is not dropped.
+     *
+     * @return true if a MIME safety limit cut the part tree short
+     * @since 0.9.72+
+     */
+    synchronized boolean structureTruncated() {return _structureTruncated;}
 
     /**
      * Whether the body has been parsed into a MailPart.

@@ -63,6 +63,34 @@ class MailPart {
     static boolean withinLimits(int depth, int parts) {
         return depth <= MAX_MIME_DEPTH && parts < MAX_MIME_PARTS;
     }
+
+    /**
+     * True when one of the safety limits stopped this part from parsing all of its
+     * children, so the parts below the cut are not in the tree. It carries up
+     * through the parents, so the root part reports a cut anywhere in the message.
+     *
+     * <p>This is what keeps such a message on the server: the body is kept so it can
+     * be read and is not fetched again on every refresh, but the copy on the server
+     * is the only copy of the parts that were not parsed.
+     *
+     * @return true if the parsed structure is incomplete
+     * @since 0.9.72+
+     */
+    boolean truncated() {
+        return _truncated;
+    }
+
+    /**
+     * Records that this part stopped parsing children at a limit.
+     *
+     * @since 0.9.72+
+     */
+    private void truncatedHere() {
+        _truncated = true;
+    }
+
+    /** Set when a safety limit cut this part's children short. */
+    private boolean _truncated;
     /**
      * The raw header lines of this part, in the order they were received.
      */
@@ -322,8 +350,26 @@ class MailPart {
                     match = DataHelper.getASCII("\r\n--" + boundary);
                     eofin = new EOFOnMatchInputStream(in, counter, match);
                 }
+                if (!withinLimits(depth + 1, id.get())) {
+                    // Stop here rather than fail the message. The structure is
+                    // written by whoever sent it, and a message with more parts than
+                    // this client will hold, or nested deeper than it will go, used to
+                    // lose its whole body: the throw left the message with no body, so
+                    // it was never displayed, was never dropped from the server, and
+                    // was downloaded again on every refresh. Keep the parts already
+                    // parsed and read the rest of this part as content.
+                    truncatedHere();
+                    DataHelper.copy(eofin, DUMMY_OUTPUT);
+                    if (_log.shouldWarn()) {
+                        _log.warn("Truncating a message's MIME structure -> Past the safety limit" +
+                                  "\n* Parts: " + id.get() + " * Depth: " + (depth + 1) +
+                                  "\n* Limits: " + MAX_MIME_PARTS + " parts * " + MAX_MIME_DEPTH + " levels");
+                    }
+                    break;
+                }
                 MailPart newPart = new MailPart(uidl, id, buffer, eofin, eofin, null, depth + 1);
                 parts.add( newPart);
+                if (newPart._truncated) {truncatedHere();}
                 tmpEnd = (int) eofin.getRead();
                 if (!eofin.wasFound()) {
                     // if MailPart contains a MailPart, we may not have drained to the end
@@ -338,11 +384,24 @@ class MailPart {
             }
         }
         else if (message) {
-            MailPart newPart = new MailPart(uidl, id, buffer, in, counter, null, depth + 1);
-            // TODO newPart doesn't save message headers we might like to display,
-            // like From, To, and Subject
-            parts.add( newPart);
-            tmpEnd = (int) counter.getRead();
+            if (withinLimits(depth + 1, id.get())) {
+                MailPart newPart = new MailPart(uidl, id, buffer, in, counter, null, depth + 1);
+                // TODO newPart doesn't save message headers we might like to display,
+                // like From, To, and Subject
+                parts.add( newPart);
+                if (newPart._truncated) {truncatedHere();}
+                tmpEnd = (int) counter.getRead();
+            } else {
+                // as above: keep what parsed rather than losing the message
+                truncatedHere();
+                DataHelper.copy(in, DUMMY_OUTPUT);
+                tmpEnd = (int) counter.getRead();
+                if (_log.shouldWarn()) {
+                    _log.warn("Truncating a message's MIME structure -> Past the safety limit" +
+                              "\n* Parts: " + id.get() + " * Depth: " + (depth + 1) +
+                              "\n* Limits: " + MAX_MIME_PARTS + " parts * " + MAX_MIME_DEPTH + " levels");
+                }
+            }
         } else {
             // read through to the end
             DataHelper.copy(in, DUMMY_OUTPUT);

@@ -379,10 +379,12 @@ class MailCache {
 
     /**
      * Whether the server's copy of this message may be queued for deletion: we hold
-     * a body we could parse, and the account is not set to leave mail where it is.
-     * Deleting a message whose body never parsed loses the mail - the bytes this
-     * tree wrote to its cache are ones its parser cannot read, and the server copy
-     * was the only other copy there was.
+     * a body we could parse in full, and the account is not set to leave mail where
+     * it is. Deleting a message whose body never parsed loses the mail - the bytes
+     * this tree wrote to its cache are ones its parser cannot read, and the server
+     * copy was the only other copy there was. A message whose MIME structure was cut
+     * short at a safety limit parses, but only up to the cut, so the server copy is
+     * kept for the parts that were not read.
      *
      * @param mail the message the server would be asked to drop
      * @return true if the server copy may go
@@ -390,6 +392,7 @@ class MailCache {
      */
     static boolean canDropFromServer(Mail mail) {
         return mail.hasBody() &&
+               !mail.structureTruncated() &&
                !Boolean.parseBoolean(Config.getProperty(WebMail.CONFIG_LEAVE_ON_SERVER));
     }
 
