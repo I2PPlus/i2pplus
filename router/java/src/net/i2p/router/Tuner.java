@@ -3911,6 +3911,51 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     }
 
     /**
+     * The piggyback-ACK wait the streaming module ships, in ms, and the value the
+     * Tuner treats as this parameter's factory default. The framework heals the
+     * persisted default to it and force-applies it on the first tick, so a literal
+     * here that disagrees with the module replaces a delay the module chose
+     * deliberately — streaming picked 500 ms as a delayed-ACK window for I2P's
+     * high-latency paths, and a floor-valued literal here pinned every install to
+     * a quarter of it.
+     *
+     * @return the initial ACK delay in ms, matching
+     *         {@code ConnectionOptions.getDefaultInitialAckDelay()}
+     * @since 0.9.72+
+     */
+    static int streamingInitialAckDelayDefault() {
+        return 500;
+    }
+
+    /**
+     * The Nagle flush delay the streaming module ships, in ms, and the value the
+     * Tuner treats as this parameter's factory default. Machine-scaled, so a slow
+     * box batches longer than a fast one.
+     *
+     * @return the passive flush delay in ms, matching
+     *         {@code MessageOutputStream.getDefaultPassiveFlushDelay()}
+     * @since 0.9.72+
+     */
+    static int streamingPassiveFlushDelayDefault() {
+        return SystemVersion.isSlow() ? 200 : 100;
+    }
+
+    /**
+     * The window-ceiling floor the streaming module ships, in messages, and the
+     * value the Tuner treats as this parameter's factory default. Machine-scaled:
+     * streaming raised this from 1024 to 2048 on non-slow boxes to use high-BDP
+     * paths, and a Tuner default below it cut that back on every install before
+     * auto-tuning had measured anything.
+     *
+     * @return the global window ceiling in messages, matching
+     *         {@code Connection.MAX_WINDOW_SIZE_DEFAULT}
+     * @since 0.9.72+
+     */
+    static int streamingMaxWindowSizeDefault() {
+        return SystemVersion.isSlow() ? 1024 : 2048;
+    }
+
+    /**
      * Reflection helper for the streaming module's tuned statics.
      * <p>Streaming depends on router, not vice versa, so the calls are reflective.
      * Which streaming class declares a name comes from {@link #_reflectorTargets},
@@ -5855,7 +5900,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("INITIAL_ACK_DELAY", "Piggyback ACK wait (ms)",
                     SUB_STREAMING,
 
-                    25, 500, 25, "stream.sendsBeforeAck", _context, null, 25);
+                    25, 500, 25, "stream.sendsBeforeAck", _context, null,
+                    streamingInitialAckDelayDefault());
         }
 
         protected void applyValue(int value) {
@@ -5864,7 +5910,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         protected int getRuntimeValue() {
             int v = StreamingReflector.invokeGetInt("getDefaultInitialAckDelay");
-            return v >= 0 ? v : 500;
+            return v >= 0 ? v : streamingInitialAckDelayDefault();
         }
 
         protected double getObservedStat(RouterContext ctx) {
@@ -5924,7 +5970,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("PASSIVE_FLUSH_DELAY", "Nagle flush delay (ms)",
                     SUB_STREAMING,
 
-                    50, 500, 50, "stream.rtt", _context, null, 50);
+                    50, 500, 50, "stream.rtt", _context, null,
+                    streamingPassiveFlushDelayDefault());
         }
 
         protected void applyValue(int value) {
@@ -5935,7 +5982,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             int v = StreamingReflector.invokeGetInt("getDefaultPassiveFlushDelay");
             // The stack's default is machine-scaled, and the fallback is what the
             // framework heals the persisted default back to.
-            return v >= 0 ? v : (SystemVersion.isSlow() ? 200 : 100);
+            return v >= 0 ? v : streamingPassiveFlushDelayDefault();
         }
 
         protected double getObservedStat(RouterContext ctx) {
@@ -6613,7 +6660,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                     // reached from the default in four four-step cycles
                     // (~20s), before health dampening.
                     512, 8192, 512, "stream.rtt", _context, null,
-                    SystemVersion.isSlow() ? 768 : 1024);
+                    streamingMaxWindowSizeDefault());
         }
 
         protected void applyValue(int value) {
@@ -6623,8 +6670,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int getRuntimeValue() {
             int v = StreamingReflector.invokeGetInt("getGlobalMaxWindowSize");
             // Connection.MAX_WINDOW_SIZE_DEFAULT is machine-scaled; a flat 1024
-            // healed it down from 2048 on every non-slow box.
-            return v > 0 ? v : (SystemVersion.isSlow() ? 1024 : 2048);
+            // healed it down from 2048 on every non-slow box. The same value is the
+            // factory default the framework heals back to, so both sides read it
+            // from streamingMaxWindowSizeDefault() and cannot drift apart again.
+            return v > 0 ? v : streamingMaxWindowSizeDefault();
         }
 
         protected double getObservedStat(RouterContext ctx) {
