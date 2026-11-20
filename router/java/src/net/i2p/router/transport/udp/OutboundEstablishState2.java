@@ -300,6 +300,34 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     }
 
     /**
+     * The peer's SSU2 static public key, from the {@code s} option of the
+     * RouterAddress we hold for it.
+     *
+     * <p>A fault here is ours, not the peer's doing on the wire: the option is
+     * written by the peer and read out of the NetDB, so an address that lost it or
+     * carries a malformed one is a state fault, and the establishment that cannot
+     * go on is worth more than a debug line. Read on its own so the option can be
+     * checked before a handshake is built on it.
+     *
+     * @param addr the peer's RouterAddress, as we hold it
+     * @return the 32-byte public key, never null
+     * @throws EstablishFaultException if the option is missing, is not base64, or
+     *                                 does not decode to 32 bytes
+     * @since 0.9.72+
+     */
+    static byte[] remoteStaticKey(RouterAddress addr) {
+        String ss = addr.getOption("s");
+        if (ss == null)
+            throw new EstablishFaultException("no SSU2 S");
+        byte[] publicKey = Base64.decode(ss);
+        if (publicKey == null)
+            throw new EstablishFaultException("BAD SSU2 S");
+        if (publicKey.length != 32)
+            throw new EstablishFaultException("BAD SSU2 S length");
+        return publicKey;
+    }
+
+    /**
      * This will be called 0 times if we don't have a token and never get a retry;
      * once if we have a token;
      * and twice if the token we had was bad and we got a retry.
@@ -310,17 +338,11 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
      * caller must synch.
      *
      * @param addr the introducer's RouterAddress carrying the SSU2 keys and token
-     * @throws IllegalArgumentException if the address has no SSU2 static key option
+     * @throws EstablishFaultException if the address has no usable SSU2 static key
+     *                                 option, or our version has no handshake pattern
      */
     private void createNewState(RouterAddress addr) {
-        String ss = addr.getOption("s");
-        if (ss == null)
-            throw new IllegalArgumentException("no SSU2 S");
-        byte[] publicKey = Base64.decode(ss);
-        if (publicKey == null)
-            throw new IllegalArgumentException("BAD SSU2 S");
-        if (publicKey.length != 32)
-            throw new IllegalArgumentException("BAD SSU2 S length");
+        byte[] publicKey = remoteStaticKey(addr);
         try {
             NoiseInit.PatternID pattern;
             KeyFactory hkf;
@@ -340,7 +362,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
                     _handshakeState = new HandshakeState(pattern, HandshakeState.INITIATOR, _transport.getXDHFactory(), hkf);
                     break;
                 default:
-                    throw new IllegalArgumentException("Bad version " + _version);
+                    throw new EstablishFaultException("Bad version " + _version);
             }
         } catch (GeneralSecurityException gse) {
             throw new IllegalStateException("BAD proto", gse);
@@ -830,7 +852,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
                 overhead += pqCreatedExtra(_version);
                 break;
             default:
-                throw new IllegalArgumentException("Bad version " + _version);
+                throw new EstablishFaultException("Bad version " + _version);
         }
         processPayload(data, off + LONG_HEADER_SIZE, len - overhead, true);
         packetReceived();

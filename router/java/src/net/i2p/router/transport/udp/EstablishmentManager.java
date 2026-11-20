@@ -422,6 +422,27 @@ public class EstablishmentManager {
     }
 
     /**
+     * Whether a failed handshake read is a fault in the state we hold for the peer
+     * rather than something the peer did to us.
+     *
+     * <p>The two arrive as the same unchecked type. Curve25519.eval rejects a
+     * low-order X25519 point with a plain IllegalArgumentException (RFC 7748), and
+     * five of those points pass the transport's bit-255 check, so a peer can put
+     * one in its ephemeral key and buy one of those per packet - those stay at
+     * debug and are trended in udp.establishDropped. A fault in our own view of the
+     * peer, an address with no usable SSU2 static key or a version with no
+     * handshake pattern, is not remote-paced, and at debug it leaves the operator
+     * no sign that the address they are trying to reach is unusable.
+     *
+     * @param t the failure out of the handshake read
+     * @return true if the fault is ours and belongs in the log
+     * @since 0.9.72+
+     */
+    static boolean ownEstablishFault(Throwable t) {
+        return t instanceof EstablishFaultException;
+    }
+
+    /**
      * Completion time above which a handshake counts as slow.
      * <p>The recorded {@code udp.*EstablishTime} stats only expose a mean, and the mean is
      * useless for sizing the deadline: measured live, successful outbound handshakes
@@ -1810,12 +1831,21 @@ public class EstablishmentManager {
         }
 
         // A low-order X25519 point in the peer's ephemeral key reaches us as an
-        // IllegalArgumentException - see the inbound sites above.
+        // IllegalArgumentException - see ownEstablishFault() for the split between
+        // that and a fault in our own state.
         try {state.receiveSessionCreated(packet);}
         catch (GeneralSecurityException | IllegalArgumentException gse) {
-            // Debug, not warn: remote junk on a path a peer can trigger per
-            // packet. The guard said shouldDebug() and called _log.warn().
-            if (_log.shouldDebug() && !shouldSuppressException(gse)) {
+            if (ownEstablishFault(gse)) {
+                // Our own state fault: reading the SessionCreated regenerates the
+                // handshake, which needs the SSU2 static key out of the
+                // RouterAddress we hold for this peer. That is not remote junk and
+                // does not belong at debug.
+                if (_log.shouldWarn())
+                    _log.warn("[SSU] SessionCreated could not be read -> " +
+                              DataHelper.messageOf(gse) + " * Peer: " + state);
+            } else if (_log.shouldDebug() && !shouldSuppressException(gse)) {
+                // Debug, not warn: remote junk on a path a peer can trigger per
+                // packet. The guard said shouldDebug() and called _log.warn().
                 _log.debug("[SSU] Corrupt SessionCreated from " + state + " -> " +
                            DataHelper.messageOf(gse), gse);
             }
@@ -1848,10 +1878,20 @@ public class EstablishmentManager {
         }
 
         // A low-order X25519 point in the peer's ephemeral key reaches us as an
-        // IllegalArgumentException - see the inbound sites above.
+        // IllegalArgumentException - see ownEstablishFault() for the split between
+        // that and a fault in our own state. This is the path where an address that
+        // lost its SSU2 static key option between the Session Request and the Retry
+        // shows up.
         try {state.receiveRetry(packet);}
         catch (GeneralSecurityException | IllegalArgumentException gse) {
-            if (_log.shouldDebug() && !shouldSuppressException(gse)) {
+            if (ownEstablishFault(gse)) {
+                // Our own state fault: the Retry regenerates the handshake, which
+                // needs the SSU2 static key out of the RouterAddress we hold for
+                // this peer. That is not remote junk and does not belong at debug.
+                if (_log.shouldWarn())
+                    _log.warn("[SSU] Retry could not be read -> " +
+                              DataHelper.messageOf(gse) + " * Peer: " + state);
+            } else if (_log.shouldDebug() && !shouldSuppressException(gse)) {
                 _log.debug("[SSU] Corrupt Retry from " + state + " -> " + DataHelper.messageOf(gse), gse);
             }
             _outboundStates.remove(state.getRemoteHostId());
