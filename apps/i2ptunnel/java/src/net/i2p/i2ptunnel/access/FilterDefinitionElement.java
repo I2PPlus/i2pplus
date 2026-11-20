@@ -36,7 +36,10 @@ abstract class FilterDefinitionElement {
      *                            definition tests against these
      *                            destinations' attempts, 0 if it has none;
      *                            each tracker retains enough history for
-     *                            that rule as well
+     *                            that rule as well. The filter passes 0 here,
+     *                            because a destination named by an element is
+     *                            never tested by a recorder - only the ones no
+     *                            element names are
      * @throws IOException if the destinations this element names cannot be read,
      * as when a file-backed element cannot be opened
      */

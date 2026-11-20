@@ -183,6 +183,19 @@ class AccessCounter {
     }
 
     /**
+     * How many attempts this counter can hold, the size its ring was allocated
+     * at. Distinct from {@link #retained()}, which counts what is in it: the
+     * allocation is what a large access list costs, and what a recorder rule has
+     * to fit inside.
+     *
+     * @return the capacity, at least 1
+     * @since 0.9.72+
+     */
+    int capacity() {
+        return _ring.length;
+    }
+
+    /**
      * Read one retained attempt.
      *
      * @param index how far from the oldest retained attempt, 0 based

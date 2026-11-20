@@ -272,12 +272,16 @@ class AccessFilter implements StatefulConnectionFilter {
      */
     private void reload() throws IOException {
         Map<Hash, DestTracker> tmp = new HashMap<>();
-        // The trackers built here are also what each recorder tests, so they have
-        // to retain the attempts the widest recorder rule asks for, not only the
-        // ones the admission rule that owns them keeps.
-        int recorderConnections = definition.getMaxRecorderConnections();
+        // A recorder rule is tested only over the destinations no access-list
+        // element names - the loop in checkRecorders() walks unknownDests. A
+        // destination named by a file or explicit element lands in knownDests and
+        // is judged by the rule that names it and nothing else, so its tracker
+        // keeps exactly what that rule asks for. Widening these to the definition's
+        // widest recorder costs a ring per list entry for a list no recorder ever
+        // reads: a 60,000-entry deny file beside a 1000/60 recorder allocates some
+        // 480 MB of rings while the filter is being built.
         for (FilterDefinitionElement element : definition.getElements()) {
-            element.update(tmp, recorderConnections);
+            element.update(tmp, 0);
         }
 
         synchronized(knownDests) {
