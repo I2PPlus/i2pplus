@@ -252,6 +252,18 @@ public final class ByteCache extends TryCache<ByteArray> {
     }
 
     /**
+     * The byte length of every entry this cache holds. A caller that keeps a cache
+     * reference across a size change can check it still matches what it is about to
+     * hand back, rather than have the entry dropped and the reason logged.
+     *
+     * @return the length in bytes of the arrays this cache pools
+     * @since 0.9.72+
+     */
+    public int getEntrySize() {
+        return _entrySize;
+    }
+
+    /**
      * Release the entry back to the cache, optionally zeroing its contents first.
      * @param entry the structure being handed back, ignored if null or the wrong size
      * @param shouldZero true to overwrite the entry's bytes with zeroes before pooling it

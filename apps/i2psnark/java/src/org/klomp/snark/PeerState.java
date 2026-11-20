@@ -211,6 +211,18 @@ class PeerState implements DataLoader {
     private static final Integer PIECE_ALL = Integer.valueOf(-1);
 
     /**
+     * The pooled block buffers for the chunk size in force. Resolved once per chunk
+     * size rather than per block: {@link ByteCache#getInstance} takes a global lock,
+     * and the block path reaches it twice per 16 KB block on every peer thread, so
+     * looking it up each time serialises the uploads behind one static monitor.
+     *
+     * <p>Published before {@link #PARTSIZE} whenever that changes, so a caller that
+     * reads the new chunk size always finds the pool matching it.
+     */
+    private static volatile ByteCache _blockCache =
+            ByteCache.getInstance(BLOCK_CACHE_OBJECTS, DEFAULT_PARTSIZE);
+
+    /**
      * Apply configurable pipeline bounds, chunk size, and per-request cap, clamped to safe
      * limits. Call once at startup; standalone snark reads these from its own config file.
      *
@@ -224,14 +236,16 @@ class PeerState implements DataLoader {
         MAX_PIPELINE = Math.max(1, Math.min(MAX_PIPELINE_CAP, max));
         MIN_PIPELINE = Math.max(1, Math.min(min, MAX_PIPELINE));
         int oldPartsize = PARTSIZE;
-        PARTSIZE = Math.max(1024, Math.min(chunk, 1024 * 1024));
-        MAX_PARTSIZE = Math.max(PARTSIZE, Math.min(maxPart, 1024 * 1024));
-        if (PARTSIZE != oldPartsize) {
-            // Create the pool for the new chunk size up front. The block buffers are
-            // looked up by size at each acquire, so nothing is stranded at the old
-            // size; this only saves the first block after the change an allocation.
-            blockCache(PARTSIZE);
+        int newPartsize = Math.max(1024, Math.min(chunk, 1024 * 1024));
+        MAX_PARTSIZE = Math.max(newPartsize, Math.min(maxPart, 1024 * 1024));
+        if (newPartsize != oldPartsize) {
+            // Resolve the pool for the new chunk size before publishing that size, so
+            // no caller can read the new size and still be handed the old pool: a
+            // buffer of one size handed to a pool of another is dropped, and every
+            // block in flight at the change would cost a WARN and an allocation.
+            _blockCache = ByteCache.getInstance(BLOCK_CACHE_OBJECTS, newPartsize);
         }
+        PARTSIZE = newPartsize;
     }
 
     /**
@@ -251,7 +265,14 @@ class PeerState implements DataLoader {
      * @since 0.9.72+
      */
     static ByteCache blockCache(int size) {
-        return ByteCache.getInstance(BLOCK_CACHE_OBJECTS, size);
+        // The chunk size in force is what nearly every caller asks for, and its pool
+        // is already resolved, so the common path is one volatile read. Any other
+        // size - a buffer acquired before a chunk-size change, being released - goes
+        // the long way round, and lands in the pool its length matches.
+        ByteCache cache = _blockCache;
+        return size == PARTSIZE && cache.getEntrySize() == size
+               ? cache
+               : ByteCache.getInstance(BLOCK_CACHE_OBJECTS, size);
     }
 
     /**

@@ -50,7 +50,6 @@ import net.i2p.I2PAppContext;
 import net.i2p.crypto.SHA1;
 import net.i2p.data.ByteArray;
 import net.i2p.data.DataHelper;
-import net.i2p.util.ByteCache;
 import net.i2p.util.FileUtil;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
@@ -2753,16 +2752,16 @@ public class Storage implements Closeable {
         // Catch a common place for OOMs esp. on 1MB pieces
         ByteArray rv;
         byte[] bs;
-        // The chunk size can change while we run, so the size and the pool for it are
-        // taken once here; the buffer's own length is what decides the release, so a
-        // change between the two drops the buffer instead of putting it in a pool of
-        // a different size.
+        // The chunk size can change while we run, so the size is taken once here; the
+        // buffer's own length is what decides the release, so a change between the two
+        // drops the buffer instead of putting it in a pool of a different size. The
+        // pool itself is only asked for when the request is a whole chunk - resolving
+        // it takes a global lock, and this is the per-request path.
         int partsize = PeerState.PARTSIZE;
-        ByteCache cache = PeerState.blockCache(partsize);
         try {
             // Will be restored to cache in Message.sendMessage()
             if (len == partsize) {
-                rv = cache.acquire();
+                rv = PeerState.blockCache(partsize).acquire();
             } else {
                 rv = new ByteArray(new byte[len]);
             }
@@ -2784,7 +2783,7 @@ public class Storage implements Closeable {
             // Message.sendMessage() on success; a failed read must release
             // it here or every error permanently drains the static cache
             if (bs.length == partsize) {
-                cache.release(rv);
+                PeerState.blockCache(partsize).release(rv);
             }
             throw ioe;
         }
