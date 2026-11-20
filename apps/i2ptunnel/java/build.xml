@@ -641,6 +641,35 @@
     <property name="mockito.home" value="${basedir}/../../../tools/test/mockito"/>
     <!-- junit is on the classpath below, so we do not need the ant runtime
          (includeAntRuntime) which would mask genuinely missing entries -->
+    <path id="i2ptunnel.test.classpath">
+      <pathelement location="${build.dir}/obj"/>
+      <pathelement location="${core.java.build.dir}/i2p.jar"/>
+      <pathelement location="${core.java.build.dir}/i2ptest.jar"/>
+      <pathelement location="${ministreaming.java.build.dir}/mstreaming.jar"/>
+      <pathelement location="${streaming.java.build.dir}/streaming.jar"/>
+      <pathelement location="../../jetty/jettylib/javax.servlet.jar"/>
+      <pathelement location="${junit.home}/junit4.jar"/>
+      <pathelement location="${mockito.home}/mockito-core.jar"/>
+      <pathelement location="${mockito.home}/byte-buddy.jar"/>
+      <pathelement location="${mockito.home}/byte-buddy-agent.jar"/>
+      <pathelement location="${mockito.home}/objenesis.jar"/>
+    </path>
+    <!-- The web/ classes are left out of compile above and out of the module jar,
+         so until now this module's suite could not see them at all: a test of the
+         console's tunnel pages (IndexBean, EditBean) failed to compile rather than
+         failing. Compiled here, into testobj and not obj, so the jar and the war
+         keep exactly the classes they had, and against the test classpath, which
+         already carries the servlet API these three classes use. -->
+    <javac srcdir="./src" includes="net/i2p/i2ptunnel/web/**/*.java"
+      debug="true" source="${javac.version}"
+      target="${javac.version}"
+      release="${javac.release}"
+      includeAntRuntime="false"
+      encoding="UTF-8"
+      deprecation="on" destdir="${build.dir}/testobj">
+      <compilerarg line="${javac.compilerargs}"/>
+      <classpath refid="i2ptunnel.test.classpath"/>
+    </javac>
     <javac srcdir="./test/junit" debug="true" source="${javac.version}"
       target="${javac.version}"
       release="${javac.release}"
@@ -649,17 +678,8 @@
       deprecation="on" destdir="${build.dir}/testobj">
       <compilerarg line="${javac.compilerargs}"/>
       <classpath>
-        <pathelement location="${build.dir}/obj"/>
-        <pathelement location="${core.java.build.dir}/i2p.jar"/>
-        <pathelement location="${core.java.build.dir}/i2ptest.jar"/>
-        <pathelement location="${ministreaming.java.build.dir}/mstreaming.jar"/>
-        <pathelement location="${streaming.java.build.dir}/streaming.jar"/>
-        <pathelement location="../../jetty/jettylib/javax.servlet.jar"/>
-        <pathelement location="${junit.home}/junit4.jar"/>
-        <pathelement location="${mockito.home}/mockito-core.jar"/>
-        <pathelement location="${mockito.home}/byte-buddy.jar"/>
-        <pathelement location="${mockito.home}/byte-buddy-agent.jar"/>
-        <pathelement location="${mockito.home}/objenesis.jar"/>
+        <path refid="i2ptunnel.test.classpath"/>
+        <pathelement location="${build.dir}/testobj"/>
       </classpath>
     </javac>
   </target>
@@ -702,6 +722,9 @@
         <pathelement location="${core.java.build.dir}/i2ptest.jar"/>
         <pathelement location="${ministreaming.java.build.dir}/mstreaming.jar"/>
         <pathelement location="${streaming.java.build.dir}/streaming.jar"/>
+        <!-- the web/ classes compiled for the suite use HttpSession, so the test
+             JVM needs the servlet API too, not only the compile step -->
+        <pathelement location="../../jetty/jettylib/javax.servlet.jar"/>
         <pathelement location="${junit.home}/junit4.jar"/>
         <pathelement location="${hamcrest.home}/hamcrest-core.jar"/>
         <pathelement location="${hamcrest.home}/hamcrest-library.jar"/>
