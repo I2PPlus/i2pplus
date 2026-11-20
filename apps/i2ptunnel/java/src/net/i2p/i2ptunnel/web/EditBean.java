@@ -651,6 +651,17 @@ public class EditBean extends IndexBean {
     }
 
     /**
+     * Returns whether the HTTP client blocks cross-network sub-resource loads.
+     *
+     * @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
+     * @return true if the block is on, which is also the default for a new tunnel
+     * @since 0.9.72+
+     */
+    public boolean getBlockCrossNetwork(int tunnel) {
+        return _helper.getBlockCrossNetwork(tunnel);
+    }
+
+    /**
      * Returns whether internal SSL connections are allowed.
      *
      * @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel

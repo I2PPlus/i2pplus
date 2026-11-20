@@ -788,6 +788,21 @@ public class TunnelConfig {
         else
             _booleanOptions.remove(I2PTunnelHTTPClient.PROP_ACCEPT);
     }
+    /**
+     * Refuse a sub-resource that a page on the other network asked the browser to
+     * load. Unlike the header options above, this one defaults to true, so leaving it
+     * out of the option set turns the block off rather than restoring a default -
+     * the option is written out as true or false either way.
+     *
+     * @param val true to block cross-network sub-resources, false to allow them
+     * @since 0.9.72+
+     */
+    public void setBlockCrossNetwork(boolean val) {
+        if (val)
+            _booleanOptions.add(I2PTunnelHTTPClient.PROP_BLOCK_CROSS_NETWORK);
+        else
+            _booleanOptions.remove(I2PTunnelHTTPClient.PROP_BLOCK_CROSS_NETWORK);
+    }
     /** Allow SSL connections through the HTTP client.
      * @param val true to forward SSL requests, false to leave the setting unset
      */
@@ -1576,6 +1591,7 @@ public class TunnelConfig {
         I2PTunnelHTTPClient.PROP_USER_AGENT,
         I2PTunnelHTTPClient.PROP_REFERER,
         I2PTunnelHTTPClient.PROP_ACCEPT,
+        I2PTunnelHTTPClient.PROP_BLOCK_CROSS_NETWORK,
         I2PTunnelHTTPClient.PROP_INTERNAL_SSL,
         I2PTunnelHTTPClient.PROP_SSL_SET
         };

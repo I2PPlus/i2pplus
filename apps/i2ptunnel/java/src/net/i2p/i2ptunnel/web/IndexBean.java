@@ -1871,6 +1871,17 @@ public class IndexBean {
         _config.setAllowAccept(true);
     }
 
+    /**
+     * Turn the cross-network sub-resource block on for this tunnel. The block
+     * defaults to on, so a form that does not send the field turns it off.
+     *
+     * @param val any value enables the block
+     * @since 0.9.72+
+     */
+    public void setBlockCrossNetwork(String val) {
+        _config.setBlockCrossNetwork(true);
+    }
+
     /** Allow SSL connections through the HTTP client.
      * @param val any value allows internal SSL connections
      * @since 0.9.14

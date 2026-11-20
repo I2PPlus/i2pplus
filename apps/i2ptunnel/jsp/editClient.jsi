@@ -511,6 +511,15 @@ minutes</span>
 </label>
 </td>
 </tr>
+<tr>
+<td>
+<label title="<%=intl._t("Refuse images, scripts, styles and fonts that a page on the other network asked the browser to load, as that load tells the other network the page was visited. Links you click and addresses you type are never blocked.")%>">
+<input value="1" type=checkbox name="blockCrossNetwork"<%=(editBean.getBlockCrossNetwork(curTunnel) ? checked : "")%> class="optbox slider">
+<%=intl._t("Block cross-network sub-resources")%>
+</label>
+</td>
+<td>&nbsp;</td>
+</tr>
 <%        } // if httpclient
           if ("httpclient".equals(tunnelType) || "connectclient".equals(tunnelType) || "sockstunnel".equals(tunnelType) || "socksirctunnel".equals(tunnelType)) {
 %>

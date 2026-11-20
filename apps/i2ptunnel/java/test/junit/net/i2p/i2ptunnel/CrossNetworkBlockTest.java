@@ -11,8 +11,10 @@ import static org.junit.Assert.*;
  * defends against a page on one network reporting the visit to the other by embedding
  * an image, icon, favicon, script, stylesheet or font hosted there.
  *
- * <p>The predicate is pure - four values in, one boolean out - so no tunnel, socket or
- * router context is needed to pin it.
+ * <p>The predicate is pure - five values in, one boolean out - so no tunnel, socket or
+ * router context is needed to pin it. The Accept value is consulted only when the
+ * browser sent neither Fetch Metadata header, so the tests that pin a Fetch Metadata
+ * case pass null for it.
  */
 public class CrossNetworkBlockTest {
 
@@ -36,7 +38,7 @@ public class CrossNetworkBlockTest {
     public void testI2PPageLoadingClearnetFaviconIsBlocked() {
         // <link rel="icon" href="http://tracker.example.com/id.ico"> on an eepsite
         assertTrue(I2PTunnelHTTPClient.isCrossNetworkResourceRequest(
-                "http://secure.i2p/page", "image", "no-cors", CLEARNET));
+                "http://secure.i2p/page", "image", "no-cors", null, CLEARNET));
     }
 
     /**
@@ -45,7 +47,7 @@ public class CrossNetworkBlockTest {
     @Test
     public void testI2PPageLoadingClearnetImageIsBlocked() {
         assertTrue(I2PTunnelHTTPClient.isCrossNetworkResourceRequest(
-                "http://forum.i2p/thread", "image", "no-cors", CLEARNET));
+                "http://forum.i2p/thread", "image", "no-cors", null, CLEARNET));
     }
 
     /**
@@ -55,7 +57,7 @@ public class CrossNetworkBlockTest {
     @Test
     public void testI2PPageLoadingClearnetScriptIsBlocked() {
         assertTrue(I2PTunnelHTTPClient.isCrossNetworkResourceRequest(
-                "http://forum.i2p/thread", "script", "no-cors", CLEARNET));
+                "http://forum.i2p/thread", "script", "no-cors", null, CLEARNET));
     }
 
     /**
@@ -65,7 +67,7 @@ public class CrossNetworkBlockTest {
     @Test
     public void testI2PPageLoadingClearnetFontIsBlocked() {
         assertTrue(I2PTunnelHTTPClient.isCrossNetworkResourceRequest(
-                "http://forum.i2p/thread", "font", "cors", CLEARNET));
+                "http://forum.i2p/thread", "font", "cors", null, CLEARNET));
     }
 
     /**
@@ -76,7 +78,7 @@ public class CrossNetworkBlockTest {
     public void testB32I2PRefererIsRecognised() {
         assertTrue(I2PTunnelHTTPClient.isCrossNetworkResourceRequest(
                 "http://ukeu3k5oycgaauneqgtnvselmt4yemvoilkln7jpvamvfx7dnkdq.b32.i2p/",
-                "image", "no-cors", CLEARNET));
+                "image", "no-cors", null, CLEARNET));
     }
 
     // ---------- the reverse direction: a clearnet page probing an I2P resource ----------
@@ -88,7 +90,7 @@ public class CrossNetworkBlockTest {
     @Test
     public void testClearnetPageLoadingI2PResourceIsBlocked() {
         assertTrue(I2PTunnelHTTPClient.isCrossNetworkResourceRequest(
-                "http://example.com/page", "image", "no-cors", I2P));
+                "http://example.com/page", "image", "no-cors", null, I2P));
     }
 
     // ---------- a navigation the user asked for is always allowed ----------
@@ -99,7 +101,7 @@ public class CrossNetworkBlockTest {
     @Test
     public void testTopLevelNavigationToClearnetFromI2PAllowed() {
         assertFalse(I2PTunnelHTTPClient.isCrossNetworkResourceRequest(
-                "http://forum.i2p/thread", "document", "navigate", CLEARNET));
+                "http://forum.i2p/thread", "document", "navigate", null, CLEARNET));
     }
 
     /**
@@ -109,7 +111,7 @@ public class CrossNetworkBlockTest {
     @Test
     public void testNavigateModeBeatsSubresourceDest() {
         assertFalse(I2PTunnelHTTPClient.isCrossNetworkResourceRequest(
-                "http://forum.i2p/thread", "empty", "navigate", CLEARNET));
+                "http://forum.i2p/thread", "empty", "navigate", null, CLEARNET));
     }
 
     /**
@@ -118,7 +120,7 @@ public class CrossNetworkBlockTest {
     @Test
     public void testNestedNavigateAllowed() {
         assertFalse(I2PTunnelHTTPClient.isCrossNetworkResourceRequest(
-                "http://forum.i2p/thread", "iframe", "nested-navigate", CLEARNET));
+                "http://forum.i2p/thread", "iframe", "nested-navigate", null, CLEARNET));
     }
 
     /**
@@ -127,7 +129,7 @@ public class CrossNetworkBlockTest {
     @Test
     public void testDocumentDestWithoutModeAllowed() {
         assertFalse(I2PTunnelHTTPClient.isCrossNetworkResourceRequest(
-                "http://forum.i2p/thread", "document", null, CLEARNET));
+                "http://forum.i2p/thread", "document", null, null, CLEARNET));
     }
 
     // ---------- same-network loads are always allowed ----------
@@ -138,7 +140,7 @@ public class CrossNetworkBlockTest {
     @Test
     public void testI2PPageLoadingI2PFaviconAllowed() {
         assertFalse(I2PTunnelHTTPClient.isCrossNetworkResourceRequest(
-                "http://secure.i2p/page", "image", "no-cors", I2P));
+                "http://secure.i2p/page", "image", "no-cors", null, I2P));
     }
 
     /**
@@ -148,7 +150,7 @@ public class CrossNetworkBlockTest {
     @Test
     public void testI2PPageLoadingOtherEepsiteResourceAllowed() {
         assertFalse(I2PTunnelHTTPClient.isCrossNetworkResourceRequest(
-                "http://a.i2p/page", "image", "no-cors", I2P));
+                "http://a.i2p/page", "image", "no-cors", null, I2P));
     }
 
     /**
@@ -157,7 +159,7 @@ public class CrossNetworkBlockTest {
     @Test
     public void testClearnetPageLoadingClearnetResourceAllowed() {
         assertFalse(I2PTunnelHTTPClient.isCrossNetworkResourceRequest(
-                "http://example.com/page", "image", "no-cors", CLEARNET));
+                "http://example.com/page", "image", "no-cors", null, CLEARNET));
     }
 
     // ---------- requests that do not reveal a cross-network origin are allowed ----------
@@ -169,7 +171,7 @@ public class CrossNetworkBlockTest {
     @Test
     public void testNoRefererAllowed() {
         assertFalse(I2PTunnelHTTPClient.isCrossNetworkResourceRequest(
-                null, "image", "no-cors", CLEARNET));
+                null, "image", "no-cors", null, CLEARNET));
     }
 
     /**
@@ -180,7 +182,7 @@ public class CrossNetworkBlockTest {
     @Test
     public void testProxyAssetRequestWithoutRefererAllowed() {
         assertFalse(I2PTunnelHTTPClient.isCrossNetworkResourceRequest(
-                null, "style", "no-cors", I2P));
+                null, "style", "no-cors", null, I2P));
     }
 
     /**
@@ -189,7 +191,7 @@ public class CrossNetworkBlockTest {
     @Test
     public void testRelativeRefererAllowed() {
         assertFalse(I2PTunnelHTTPClient.isCrossNetworkResourceRequest(
-                "/page", "image", "no-cors", CLEARNET));
+                "/page", "image", "no-cors", null, CLEARNET));
     }
 
     /**
@@ -199,19 +201,47 @@ public class CrossNetworkBlockTest {
     @Test
     public void testMalformedRefererAllowed() {
         assertFalse(I2PTunnelHTTPClient.isCrossNetworkResourceRequest(
-                "::not a uri::", "image", "no-cors", CLEARNET));
+                "::not a uri::", "image", "no-cors", null, CLEARNET));
     }
 
     // ---------- Referer-only fallback (browsers that send no Fetch Metadata) ----------
 
     /**
-     * A browser that sends no Fetch Metadata at all is still blocked on the Referer
-     * alone, so the protection does not depend on the newer headers.
+     * The defect: a browser that sends no Fetch Metadata - Safari before 16, or any
+     * client or extension that strips the headers - had a link click treated as a
+     * sub-resource load, so the user got a 403 with no way past it. With nothing to
+     * tell the two apart, the request is allowed.
      */
     @Test
-    public void testCrossNetworkBlockedWithoutSecFetch() {
+    public void testCrossNetworkNavigationAllowedWithoutSecFetch() {
+        String browserAccept = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
+        assertFalse(I2PTunnelHTTPClient.isCrossNetworkResourceRequest(
+                "http://secure.i2p/page", null, null, browserAccept, CLEARNET));
+    }
+
+    /**
+     * A client that sends no Accept header either is unknown, and unknown is allowed:
+     * a false 403 costs the user a site, a missed block costs nothing.
+     */
+    @Test
+    public void testCrossNetworkAllowedWithoutSecFetchOrAccept() {
+        assertFalse(I2PTunnelHTTPClient.isCrossNetworkResourceRequest(
+                "http://secure.i2p/page", null, null, null, CLEARNET));
+    }
+
+    /**
+     * What is provably a sub-resource is still blocked without Fetch Metadata, so the
+     * protection is not lost on the older browsers - an image load says so in its own
+     * Accept header.
+     */
+    @Test
+    public void testCrossNetworkSubResourceBlockedWithoutSecFetch() {
+        String imageAccept = "image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8";
         assertTrue(I2PTunnelHTTPClient.isCrossNetworkResourceRequest(
-                "http://secure.i2p/page", null, null, CLEARNET));
+                "http://secure.i2p/page", null, null, imageAccept, CLEARNET));
+        String xhrAccept = "application/json, text/plain, */*";
+        assertTrue(I2PTunnelHTTPClient.isCrossNetworkResourceRequest(
+                "http://secure.i2p/page", null, null, xhrAccept, CLEARNET));
     }
 
     /**
@@ -220,7 +250,39 @@ public class CrossNetworkBlockTest {
     @Test
     public void testSameNetworkAllowedWithoutSecFetch() {
         assertFalse(I2PTunnelHTTPClient.isCrossNetworkResourceRequest(
-                "http://secure.i2p/page", null, null, I2P));
+                "http://secure.i2p/page", null, null, null, I2P));
+    }
+
+    /**
+     * Fetch Metadata outranks the Accept header: a request the browser calls a
+     * sub-resource is refused even when its Accept names HTML, and a navigation is
+     * allowed even when its Accept looks like an image load.
+     */
+    @Test
+    public void testSecFetchOutranksTheAcceptHeader() {
+        String pageAccept = "text/html,application/xhtml+xml";
+        String imageAccept = "image/*";
+        assertTrue(I2PTunnelHTTPClient.isCrossNetworkResourceRequest(
+                "http://secure.i2p/page", "image", "no-cors", pageAccept, CLEARNET));
+        assertFalse(I2PTunnelHTTPClient.isCrossNetworkResourceRequest(
+                "http://secure.i2p/page", "document", "navigate", imageAccept, CLEARNET));
+    }
+
+    /**
+     * The Accept test itself: HTML in any form is a page, everything else is something
+     * the page loaded by itself, and an empty header is treated as a page.
+     */
+    @Test
+    public void testNavigationAcceptClassification() {
+        assertTrue(I2PTunnelHTTPClient.isNavigationAccept(null));
+        assertTrue(I2PTunnelHTTPClient.isNavigationAccept(""));
+        assertTrue(I2PTunnelHTTPClient.isNavigationAccept("text/html,application/xhtml+xml"));
+        assertTrue(I2PTunnelHTTPClient.isNavigationAccept("TEXT/HTML"));
+        assertTrue(I2PTunnelHTTPClient.isNavigationAccept("application/xhtml+xml"));
+        assertFalse(I2PTunnelHTTPClient.isNavigationAccept("image/webp,image/*,*/*;q=0.8"));
+        assertFalse(I2PTunnelHTTPClient.isNavigationAccept("text/css,*/*;q=0.1"));
+        assertFalse(I2PTunnelHTTPClient.isNavigationAccept("*/*"));
+        assertFalse(I2PTunnelHTTPClient.isNavigationAccept("font/woff2"));
     }
 
     // ---------- the network named in the log line ----------

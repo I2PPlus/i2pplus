@@ -1212,6 +1212,19 @@ public class GeneralHelper {
     }
 
     /**
+     * Check whether the HTTP client refuses a sub-resource that a page on the other
+     * network asked the browser to load. As of 0.9.72, defaults to true unless
+     * explicitly disabled, so an old config keeps the block.
+     *
+     * @param tunnel the index of the tunnel in the controller group, or -1 if there is none
+     * @return true if cross-network sub-resource loads are blocked
+     * @since 0.9.72+
+     */
+    public boolean getBlockCrossNetwork(int tunnel) {
+        return getBooleanProperty(tunnel, I2PTunnelHTTPClient.PROP_BLOCK_CROSS_NETWORK, true);
+    }
+
+    /**
      * Check whether internal SSL connections are allowed through the HTTP client.
      * As of 0.9.35, defaults to true unless explicitly disabled.
      *

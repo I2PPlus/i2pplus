@@ -801,6 +801,9 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             // sub-resource the page loaded by itself
             String secFetchDest = null;
             String secFetchMode = null;
+            // the browser's own word for what kind of thing it is asking for, used
+            // only when neither Fetch Metadata header above was sent
+            String accept = null;
             URI origRequestURI = null;
             boolean preserveConnectionHeader = false;
             boolean allowGzip = true;
@@ -1307,6 +1310,9 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                             continue;
                         }
                     } else if (lowercaseLine.startsWith("accept: ")) {
+                        // captured before any spoofing below rewrites it, for the
+                        // cross-network check when no Fetch Metadata was sent
+                        accept = lowercaseLine.substring(8).trim();
                         if (!_sendAccept) {
                             // Replace with a standard one if possible
                             boolean html = lowercaseLine.indexOf("text/html") > 0;
@@ -1512,7 +1518,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             // styling and favicon, so refusing it would strip those pages.
             if (!usingInternalServer && _blockCrossNetwork) {
                 boolean targetIsClearnet = usingWWWProxy || usingInternalOutproxy;
-                if (isCrossNetworkResourceRequest(referer, secFetchDest, secFetchMode, targetIsClearnet)) {
+                if (isCrossNetworkResourceRequest(referer, secFetchDest, secFetchMode, accept, targetIsClearnet)) {
                     if (_log.shouldWarn()) {
                         _log.warn(getPrefix(requestId) +
                                   "Blocked a cross-network sub-resource request" +
@@ -3013,16 +3019,26 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      * address all arrive that way, and none of them crosses a boundary. The decision
      * is deliberately conservative - it refuses only what it can prove crosses.
      *
+     * <p>With no Fetch Metadata at all - Safari before 16, and any client or extension
+     * that strips the headers - there is nothing to tell a link click from an image
+     * load, and the block is a correlation guard, not access control: a false refusal
+     * costs the user a site, a missed block costs nothing. There the request is
+     * refused only when its Accept header says it is a sub-resource, the same test the
+     * Accept spoofing below already runs.
+     *
      * @param referer the raw Referer header value, or null if the browser sent none
      * @param secFetchDest the lowercased Sec-Fetch-Dest value, or null if not sent
      * @param secFetchMode the lowercased Sec-Fetch-Mode value, or null if not sent
+     * @param accept the raw Accept header value, read only when neither Fetch Metadata
+     *               header was sent, null if the browser sent none
      * @param targetIsClearnet true when the request is routed to an outproxy, false
      *                         when it goes to an I2P destination
      * @return true to refuse the request
      * @since 0.9.72+
      */
     static boolean isCrossNetworkResourceRequest(String referer, String secFetchDest,
-                                                 String secFetchMode, boolean targetIsClearnet) {
+                                                 String secFetchMode, String accept,
+                                                 boolean targetIsClearnet) {
         // A navigation is user intent, so it is never refused. Prefer the browser's
         // own word for it when it sends one, and fall back to the destination field
         // for the browsers that send only that.
@@ -3031,6 +3047,10 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 return false;
             }
         } else if (secFetchDest != null && secFetchDest.equals("document")) {
+            return false;
+        } else if (isNavigationAccept(accept)) {
+            // Neither header was sent. Refuse only what the Accept header proves is a
+            // sub-resource; a navigation, and anything we cannot tell, goes through.
             return false;
         }
         // Only the Referer says which page the request came from.
@@ -3050,6 +3070,25 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         boolean refererIsI2P = refererHost.toLowerCase(Locale.US).endsWith(".i2p");
         boolean targetIsI2P = !targetIsClearnet;
         return refererIsI2P != targetIsI2P;
+    }
+
+    /**
+     * Whether a request that sent no Fetch Metadata is a navigation the user asked
+     * for, judged from its Accept header - the same signal the Accept spoofing uses
+     * to tell a page from an image or a stylesheet. A header that names HTML is a
+     * navigation; one that names only images, styles, fonts or <code>*&#47;*</code> is
+     * something the page loaded by itself. No header at all counts as a navigation:
+     * with nothing to go on, refusing the request is the more expensive mistake.
+     *
+     * @param accept the raw Accept header value, null if the browser sent none
+     * @return true unless the header proves this is a sub-resource load
+     * @since 0.9.72+
+     */
+    static boolean isNavigationAccept(String accept) {
+        if (accept == null || accept.isEmpty())
+            return true;
+        String lower = accept.toLowerCase(Locale.US);
+        return lower.contains("text/html") || lower.contains("application/xhtml+xml");
     }
 
     /**
