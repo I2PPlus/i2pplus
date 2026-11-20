@@ -947,6 +947,13 @@ public class TrackerClient implements Runnable {
      * entry, its queued flag and its demand stay owned by the fetch thread that
      * is holding them.
      *
+     * <p>The same rule covers a client the drain has already taken out of the line:
+     * {@link DHTDrain} dequeues a client before it decides anything about it, so
+     * from that moment the drain owns its flags and its demand count, and this
+     * method can only take out a client it finds still in the line. That is what
+     * keeps a cancellation from removing one client while the drain hands out
+     * another.
+     *
      * @return true if a fetch that had not started yet was taken out of the line
      * @since 0.9.72+
      */
@@ -2182,6 +2189,12 @@ public class TrackerClient implements Runnable {
      * task each, so the fetches that do run are in parallel. It stops when the slots are full;
      * the fetch that finishes re-runs it, so a freed slot goes to the next torrent at once.
      *
+     * <p>A client is dequeued before anything is decided about it, so the drain holds it -
+     * its queued flag, its pending DHT and its share of the demand count - from that moment
+     * on. Nothing else may take it out of the line once it has been dequeued, and a client
+     * put back because there was no slot for it goes to the tail, since it is no longer at
+     * the head in this pass.
+     *
      * @since 0.9.72+
      */
     private static class DHTDrain implements Runnable {
@@ -2198,14 +2211,19 @@ public class TrackerClient implements Runnable {
             Thread.interrupted();
             try {
                 while (true) {
-                    TrackerClient client = _dhtFetchQueue.peek();
+                    // Taken out of the line before anything is decided about it. A
+                    // peek-then-poll span let cancelDHTFetch() remove the head client
+                    // between the two, and the poll then handed out the client behind
+                    // it: that one left the line without ever being fetched, its queued
+                    // flag stuck true so it never fetched again, and the cancelled
+                    // client's own fetcher decremented the shared demand a second time.
+                    TrackerClient client = _dhtFetchQueue.poll();
                     if (client == null) {
                         return;
                     }
                     DHT dht = client._pendingDHT;
                     if (client.stop || dht == null) {
                         // halted while it waited; its own halt() reports the stop
-                        _dhtFetchQueue.poll();
                         client._dhtQueued.set(false);
                         client._pendingDHT = null;
                         _dhtFetchDemand.decrementAndGet();
@@ -2215,10 +2233,12 @@ public class TrackerClient implements Runnable {
                     int slots = dhtFetchSlots(rate, _dhtFetchAvgMs.get(),
                                               DHT_FETCH_MIN_SLOTS, DHT_FETCH_MAX_SLOTS);
                     if (_dhtFetchRunning.get() >= slots) {
-                        // full, and the fetch that frees the next slot drains the line again
+                        // full, and the fetch that frees the next slot drains the line
+                        // again; back of the line, because it is out of the line in
+                        // this hand and nobody else can hand it out
+                        _dhtFetchQueue.add(client);
                         return;
                     }
-                    _dhtFetchQueue.poll();
                     try {
                         _dhtFetchers.execute(client.new DHTFetcher(dht, rate));
                     } catch (RejectedExecutionException ree) {
