@@ -9,14 +9,21 @@ accordingly, or <a href="http://127.0.0.1:7657/configservice">configure</a>
 from within the <a href="http://127.0.0.1:7657/">Router Console</a>.
 </p>
 <p style="text-align: justify;">
-If you left it unticked, I2P+ runs as an ordinary application, started from
-the <code style="color: #171; font-weight: bold;">i2p.exe</code> file in your
-application folder, usually found at
-<code style="color: #171; font-weight: bold;">C:\Program Files\i2p\</code>.
-To run it as a service after all, open a command prompt as Administrator and
-run
+If you left it unticked, I2P+ is not registered as a service. Run
+<code style="color: #171; font-weight: bold;">portable.ps1</code>
+from your application folder, usually found at
+<code style="color: #171; font-weight: bold;">C:\Program Files\i2p\</code>,
+and the router runs in that window with its configuration in a
+<code style="color: #171; font-weight: bold;">configuration</code> folder
+inside the application folder. That is a portable installation: the whole
+folder, configuration included, can sit on a USB stick and travel with you.
+Pass it a folder of your own to keep the configuration elsewhere, as in
+<code style="color: #171; font-weight: bold;">portable.ps1 -ConfigDir E:\i2p-profile</code>.
+</p>
+<p style="text-align: justify;">
+To run as a service after all, open a command prompt as Administrator and run
 <code style="color: #171; font-weight: bold;">service.ps1 -Action Install</code>
-from that folder.
+from the application folder.
 </p>
 <p style="text-align: justify;">
 Shortcuts are provided to stop and start the service, though in normal

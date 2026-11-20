@@ -16,8 +16,8 @@ A 64-bit Java 8 or newer must be installed for either method.
 Run `i2pinstall.exe` and tick *Windows Service* on the page that lists the
 packs; the installer leaves it unticked. The router then starts at boot and
 the Start Menu gets *Start I2P+ Service* and *Stop I2P+ Service* shortcuts.
-Left unticked, no service is written, and you can add one later with the
-`-Action Install` command below.
+Left unticked, no service is written: run the router with `portable.ps1` as in
+section 2 below, and add a service later with the `-Action Install` command.
 
 Manage it from an elevated PowerShell instead of the shortcuts:
 
