@@ -122,6 +122,9 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     /** Shared empty array for zero-length values. */
     private static final byte[] ZEROLEN = new byte[0];
 
+    /** Reporting periods for the rejected-next-session-key count. @since 0.9.72+ */
+    private static final long[] KEY_REJECT_RATES = new long[] {60 * 1000L};
+
     /**
      * For the router SKM only.
      *
@@ -165,6 +168,10 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         _replayFilter = new DecayingHashSet(context, (int) ECIESAEADEngine.MAX_NS_AGE, 32, "Ratchet-NS");
         // start the precalc of Elg2 keys if it wasn't already started
         context.eciesEngine().startup();
+        context.statManager().createFrequencyStat("crypto.ratchetKeyRejected",
+                                                  "How often a peer's next-session key was a Curve25519 " +
+                                                  "point the Diffie-Hellman refuses",
+                                                  "Encryption", KEY_REJECT_RATES);
          _alive = true;
         _cleanupEvent = new CleanupEvent();
     }
@@ -182,6 +189,31 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
             _pendingOutboundSessions.clear();
         }
         _replayFilter.stopDecaying();
+    }
+
+    /**
+     * The Diffie-Hellman shared secret for a peer's next-session key, or null when
+     * the peer sent a point the Curve25519 math refuses.
+     * <p>
+     * A NEXTKEY block carries 32 raw bytes and nothing checks that they are a curve
+     * point before they reach the math here, so one crafted packet buys a point the
+     * vendored Curve25519 throws at rather than evaluates (RFC 7748 5) - the points 0
+     * and 1 are the cheap ones. The ratchet cannot advance on such a key, and the
+     * attempt is remote-paced, so the caller keeps the old tag set in force, counts
+     * it, and stays at debug. Without this, the exception escapes to the decrypt
+     * caller, which drops the whole message - the garlic cloves in it included.
+     *
+     * @param priv our private key for this half of the ratchet
+     * @param pub the peer's next-session key
+     * @return the shared secret, null if the point is unusable
+     * @since 0.9.72+
+     */
+    static PrivateKey nextKeySecret(PrivateKey priv, PublicKey pub) {
+        try {
+            return ECIESAEADEngine.doDH(priv, pub);
+        } catch (IllegalArgumentException iae) {
+            return null;
+        }
     }
 
     /** Periodically cleans up stale ratchet sessions. */
@@ -1653,7 +1685,14 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
 
                     // create new OB TS, delete old one
                     PrivateKey priv = nextKeys.getPrivate();
-                    PrivateKey sharedSecret = ECIESAEADEngine.doDH(priv, key);
+                    PrivateKey sharedSecret = nextKeySecret(priv, key);
+                    if (sharedSecret == null) {
+                        _context.statManager().updateFrequency("crypto.ratchetKeyRejected");
+                        if (_log.shouldDebug())
+                            _log.debug("Outbound next-session-key ACK"
+                                       + " -> Skipping it, the peer's key is not a usable Curve25519 point" + key);
+                        return;
+                    }
                     byte[] sk = new byte[32];
                     _hkdf.calculate(sharedSecret.getData(), ZEROLEN, INFO_7, sk);
                     SessionKey ssk = new SessionKey(sk);
@@ -1795,7 +1834,14 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                     }
                     _hisOBKey = receivedKey;
 
-                    PrivateKey sharedSecret = ECIESAEADEngine.doDH(_myIBKeys.getPrivate(), key);
+                    PrivateKey sharedSecret = nextKeySecret(_myIBKeys.getPrivate(), key);
+                    if (sharedSecret == null) {
+                        _context.statManager().updateFrequency("crypto.ratchetKeyRejected");
+                        if (_log.shouldDebug())
+                            _log.debug("Inbound next-session-key ACK"
+                                       + " -> Skipping it, the peer's key is not a usable Curve25519 point" + key);
+                        return;
+                    }
                     int newtsID = oldtsID + 1;
                     _myIBKeySendCount = 0;
                     // create new IB TS
