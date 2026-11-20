@@ -50,10 +50,25 @@ public class RequestFramingDecisionTest {
         assertNotNull(I2PTunnelHTTPServer.framingError(headers("Content-Length", "0x13")));
     }
 
-    /** Two Content-Length lines are two claims about one body. */
+    /** Two Content-Length lines with different values are two claims about one body. */
     @Test
-    public void twoLengthsAreRefused() {
+    public void conflictingLengthsAreRefused() {
         assertNotNull(I2PTunnelHTTPServer.framingError(headers("Content-Length", "13", "14")));
+        Map<String, List<String>> three = headers("Content-Length", "13", "13", "14");
+        assertNotNull(I2PTunnelHTTPServer.framingError(three));
+    }
+
+    /**
+     * The same value on two lines is one message length, not a disagreement -
+     * RFC 9112 6.3.3 - and a client that sends it reached the backend before
+     * this check existed and was accepted there. The shape is still checked, so
+     * two copies of a length parsers disagree about are still refused.
+     */
+    @Test
+    public void repeatedIdenticalLengthIsAccepted() {
+        assertNull(I2PTunnelHTTPServer.framingError(headers("Content-Length", "13", "13")));
+        Map<String, List<String>> signedTwice = headers("Content-Length", "+13", "+13");
+        assertNotNull(I2PTunnelHTTPServer.framingError(signedTwice));
     }
 
     /** A request with no body length at all is fine. */
@@ -81,7 +96,10 @@ public class RequestFramingDecisionTest {
         String signed = I2PTunnelHTTPServer.framingError(headers("Content-Length", "+13"));
         String twice = I2PTunnelHTTPServer.framingError(headers("Content-Length", "13", "14"));
         assertTrue(signed.contains("Content-Length"));
-        assertTrue(twice.contains("More than one"));
+        assertTrue(twice.contains("Content-Length"));
+        // and both claims, so the reader can see what the sender sent
+        assertTrue(twice.contains("\"13\""));
+        assertTrue(twice.contains("\"14\""));
     }
 
     /** Digits only is what counts as a length. */

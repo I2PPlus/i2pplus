@@ -2002,6 +2002,12 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      * reader above already refuses any request header whose name ends in
      * "-encoding" other than Accept-Encoding, so no transfer coding reaches the
      * backend through this tunnel at all.
+     * <p>
+     * Repeating the header is not by itself a disagreement. RFC 9112 6.3.3
+     * treats several <code>Content-Length</code> lines carrying the same value as
+     * one message length, and a backend that accepted the request before this
+     * check existed still accepts it; only differing values are two claims about
+     * one body.
      *
      * @param headers the parsed request headers, as read from the client
      * @return null if the framing is canonical, otherwise why it is not
@@ -2011,12 +2017,14 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         if (headers == null) {return null;}
         List<String> lengths = getValues(headers, "content-length");
         if (lengths == null) {return null;}
-        if (lengths.size() > 1) {
-            return "More than one Content-Length";
+        String first = lengths.get(0);
+        for (String length : lengths) {
+            if (!length.equals(first)) {
+                return "Conflicting Content-Length: \"" + first + "\" and \"" + length + "\"";
+            }
         }
-        String length = lengths.get(0);
-        if (!isCanonicalLength(length)) {
-            return "Non-canonical Content-Length: \"" + length + "\"";
+        if (!isCanonicalLength(first)) {
+            return "Non-canonical Content-Length: \"" + first + "\"";
         }
         return null;
     }
