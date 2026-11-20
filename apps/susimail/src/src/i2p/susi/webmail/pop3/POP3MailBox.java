@@ -1034,6 +1034,19 @@ public class POP3MailBox implements NewMailListener {
                     try {
                         getResultNa(sr.rb);
                         sr.result = true;
+                    } catch (OversizeBodyException obe) {
+                        // The reader took the rest of this body off the wire, so the
+                        // connection and the commands pipelined behind it are still
+                        // good. Closing here is what made one oversized message fail
+                        // the whole batch, on a server that cannot send headers only.
+                        if (_log.shouldWarn()) {
+                            _log.warn("Keeping an oversized message on the server -> Body too large to store" +
+                                      "\n* Message: " + i + " of " + cmds.size() +
+                                      " * Read: " + obe._read + " bytes * Limit: " + MAX_BODY_BYTES + " bytes" +
+                                      "\n* Discarded: " + obe._drained + " bytes");
+                        }
+                        result = false;
+                        sr.result = false;
                     } catch (IOException ioe) {
                         if (_log.shouldDebug()) {
                             _log.debug("Reading the message body failed -> Error: " + ioe);
@@ -1106,6 +1119,18 @@ public class POP3MailBox implements NewMailListener {
     private Buffer sendCmdN(String cmd, Buffer buffer) {
         synchronized (synchronizer) {
             try {return sendCmdNa(cmd, buffer);}
+            catch (OversizeBodyException obe) {
+                // The reader took the rest of the body off the wire, so the
+                // connection is good and a second attempt would download the same
+                // oversized body and fail the same way.
+                lastError = obe.getMessage();
+                if (_log.shouldWarn()) {
+                    _log.warn("Keeping an oversized message on the server -> Body too large to store" +
+                              "\n* Read: " + obe._read + " bytes * Limit: " + MAX_BODY_BYTES + " bytes" +
+                              "\n* Discarded: " + obe._drained + " bytes");
+                }
+                return null;
+            }
             catch (IOException e) {
                 lastError = e.toString();
                 if (_log.shouldDebug()) {
@@ -1188,7 +1213,10 @@ public class POP3MailBox implements NewMailListener {
      * @param buffer non-null
      * @throws IOException if a line cannot be read from the server, the body is
      *                     past {@code MAX_BODY_BYTES}, or the transfer ended
-     *                     without its terminating dot
+     *                     without its terminating dot. An oversized body is
+     *                     reported as {@link OversizeBodyException}, which means
+     *                     the remainder was read off the connection and the
+     *                     connection is still usable.
      */
     private void getResultNa(Buffer buffer) throws IOException {
         InputStream input = socket.getInputStream();
@@ -1221,9 +1249,20 @@ public class POP3MailBox implements NewMailListener {
                 out.write('\n');
                 total += line.length() + 2;
                 if (total > MAX_BODY_BYTES) {
-                    throw new IOException("Message body too large to store" +
-                                          "\n* Read: " + total + " bytes * Limit: " +
-                                          MAX_BODY_BYTES + " bytes");
+                    // One message too big for the client to store, not a broken
+                    // connection. Throwing straight out of here leaves the rest of
+                    // this body, and the server's reply to whatever was pipelined
+                    // behind it, sitting in the stream, so the caller has to close
+                    // the connection and every message behind this one in the batch
+                    // is reported as failed too. Read the remainder off the wire
+                    // without storing it and only this message fails.
+                    long drained = drainToTerminator(input, buf, MAX_BODY_BYTES);
+                    if (drained < 0) {
+                        throw new IOException("Message body too large to store, and its end was not found" +
+                                              "\n* Read: " + total + " bytes * Limit: " + MAX_BODY_BYTES +
+                                              " bytes");
+                    }
+                    throw new OversizeBodyException(total, drained);
                 }
                 buf.setLength(0);
             }
@@ -1237,6 +1276,72 @@ public class POP3MailBox implements NewMailListener {
             // has to be told the transfer failed before its stream is closed.
             buffer.writeComplete(success);
             if (out != null) try { out.close(); } catch (IOException ioe) { /* ignored */ }
+        }
+    }
+
+    /**
+     * Reads and discards body lines until the server's terminating dot, so a
+     * body this client will not store still leaves the connection sitting at a
+     * command boundary. Without it the only safe answer to an oversized body is
+     * to close the connection, and that is what turns one oversized message
+     * into a failed batch.
+     *
+     * @param input the connection's input
+     * @param buf the reader's scratch buffer, cleared before use
+     * @param limit the most bytes this drain may read before giving up
+     * @return the body bytes discarded, not counting the terminating dot, or -1
+     *         if the dot did not arrive within the limit or the connection ended
+     * @throws IOException if the connection fails while draining
+     * @since 0.9.72+
+     */
+    private long drainToTerminator(InputStream input, StringBuilder buf, int limit) throws IOException {
+        buf.setLength(0);
+        long drained = 0;
+        while (DataHelper.readLine(input, buf)) {
+            updateActivity();
+            int len = buf.length();
+            boolean terminated = (len == 2 && buf.charAt(0) == '.' && buf.charAt(1) == '\r') ||
+                                 (len == 1 && buf.charAt(0) == '.');
+            if (terminated) {return drained;}
+            drained += len + 2;
+            buf.setLength(0);
+            // A server that never ends the body must not turn the recovery into a
+            // second unbounded read; giving up here puts the caller back on the
+            // close-the-connection path it already handles.
+            if (drained > limit) {return -1;}
+        }
+        return -1;
+    }
+
+    /**
+     * A body past {@code MAX_BODY_BYTES} whose remainder was read off the
+     * connection. Distinct from any other failure while reading a body, because
+     * the connection and the commands pipelined behind this one are still good.
+     *
+     * @since 0.9.72+
+     */
+    private static class OversizeBodyException extends IOException {
+
+        /** Keeps the serializer from complaining about a missing version tag. */
+        private static final long serialVersionUID = 1L;
+
+        /** How many body bytes were read before the limit was passed. */
+        private final long _read;
+        /** How many more bytes were read off the wire to reach the terminating dot. */
+        private final long _drained;
+
+        /**
+         * Names the message and what was thrown away.
+         *
+         * @param read how many body bytes were read before the limit was passed
+         * @param drained how many more were read off the wire to resync
+         */
+        OversizeBodyException(long read, long drained) {
+            super("Message body too large to store" +
+                  "\n* Read: " + read + " bytes * Limit: " + MAX_BODY_BYTES +
+                  " bytes * Discarded: " + drained + " bytes");
+            _read = read;
+            _drained = drained;
         }
     }
 
