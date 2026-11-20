@@ -450,10 +450,13 @@ public class Banlist {
      * bandwidth tier and no reachability, see
      * {@link #isLowTierUnreachable(String)}.
      * <p>
-     * This covers the ban, the disconnect that goes with it, and the NetDb rule
-     * that skips storing such a peer. It does not cover the wider rule that
-     * keeps unreachable and low-bandwidth RouterInfos off disk: a peer this
-     * switch leaves unbanned is still not persisted while it is unreachable.
+     * This covers the ban and the NetDb rule that skips storing such a peer. It
+     * does not cover the wider rule that keeps unreachable and low-bandwidth
+     * RouterInfos off disk, and it does not cover the disconnect: a peer this
+     * switch leaves unbanned is still not persisted while it is unreachable, and
+     * its session is still dropped once its RouterInfo is rejected. The switch
+     * decides whether we record what the peer published, not whether we stay
+     * connected to it.
      *
      * @return true if LU router bans are enabled
      * @since 0.9.70+
@@ -474,7 +477,9 @@ public class Banlist {
     /**
      * Check the invalid-RouterInfo-version ban is enabled. A RouterInfo
      * publishing a version above every released version is fabricated, so it
-     * can be banned where it is seen rather than only at the handshake.
+     * can be banned where it is seen rather than only at the handshake. The
+     * RouterInfo is rejected and the session dropped either way; the switch
+     * decides only whether the identity is banlisted as well.
      *
      * @return true if fabricated-version bans are enabled
      * @since 0.9.72+

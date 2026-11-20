@@ -98,6 +98,15 @@ public class PersistentDataStore extends TransientDataStore {
     /** How long a low-tier unreachable peer is banned, while the LU ban is on. */
     private static final long LU_BAN_MS = 60L*60*1000;
 
+    /**
+     * How long after a rejected RouterInfo the session is dropped. Long enough for
+     * the peer's own refresh to reach us first, so a peer that fixes what it
+     * publishes keeps its session; short enough that a scanner does not hold one
+     * open. Used whether or not the ban is enabled, see
+     * {@link #rejectDecision(RiFlags, boolean, boolean)}.
+     */
+    private static final long REJECT_DISCONNECT_DELAY_MS = 11L*60*1000;
+
     /** Stat rate periods for NetDb write metrics. */
     private static final long[] RATES = RateConstants.BASIC_RATES;
 
@@ -123,6 +132,8 @@ public class PersistentDataStore extends TransientDataStore {
         ctx.statManager().createRateStat("netDb.writeOut", "Total number of NetDb writes", "NetworkDatabase", RATES);
         ctx.statManager().createRateStat("netDb.writePending", "Number of pending NetDb writes", "NetworkDatabase", RATES);
         ctx.statManager().createRateStat("netDb.writeTime", "Total time used for NetDb writes ", "NetworkDatabase", RATES);
+        ctx.statManager().createRateStat("netDb.luBanKTier", "How many LU bans were earned by a K-tier peer, " +
+                                          "the bandwidth class the unified predicate newly covers", "NetworkDatabase", RATES);
         _writer = new Writer();
         I2PThread writer = new I2PThread(_writer, "DBWriter");
         writer.start();
@@ -416,8 +427,12 @@ public class PersistentDataStore extends TransientDataStore {
         }
     }
 
-    /** Pre-computed classification flags for a RouterInfo being written. */
-    private static class RiFlags {
+    /**
+     * Pre-computed classification flags for a RouterInfo being written.
+     * Package-visible so the reject decision can be tested against a flag set
+     * built directly, without a RouterInfo and a running router.
+     */
+    static class RiFlags {
         /** Version string of the router info. */
         final String version;
         /** Capabilities string of the router info. */
@@ -474,6 +489,125 @@ public class PersistentDataStore extends TransientDataStore {
             this.isOld = isOld; this.isInvalidVersion = isInvalidVersion; this.isLTier = isLTier;
             this.isSlow = isSlow; this.isDegraded = isDegraded; this.isBanned = isBanned;
         }
+    }
+
+    /**
+     * Which rule a RouterInfo the store will not persist fell into. Named rather
+     * than re-derived at each use, because the rule is what picks the log message
+     * and the reason the session is dropped.
+     */
+    static enum RejectRule {
+        /** Nothing to do: the copy on disk is newer, so the file stays. */
+        NONE,
+        /** Publishes a version no release ever reached. */
+        INVALID_VERSION,
+        /** A low bandwidth tier with no reachability. */
+        LOW_TIER_UNREACHABLE,
+        /** Marked unreachable, or publishing no reachability flag at all. */
+        UNREACHABLE,
+        /** A bandwidth tier the store drops at the current netdb size. */
+        SLOW_TIER,
+        /** Published before the oldest version the store keeps. */
+        TOO_OLD
+    }
+
+    /**
+     * What the store owes a RouterInfo it will not persist: whether the identity
+     * is banlisted, whether the session is dropped, and whether the file goes.
+     * <p>
+     * The three are deliberately separate. The ban switches,
+     * {@code router.banlistInvalidVersion} and {@code router.banlistLU}, decide
+     * whether an identity joins the banlist - whether we remember what it did. The
+     * RouterInfo is rejected and the session dropped either way, because both
+     * follow from what the peer published, not from whether we choose to record it.
+     * Nesting the disconnect inside the switch made switching a ban off also keep
+     * the session connected, which is not what either switch names: with
+     * {@code router.banlistInvalidVersion=false} a peer publishing an impossible
+     * version kept its session indefinitely, and with {@code router.banlistLU=false}
+     * an LU peer fell through to the plain unreachable rule and was never
+     * disconnected at all.
+     *
+     * @see #rejectDecision(RiFlags, boolean, boolean)
+     */
+    static final class RejectDecision {
+        /** Which rule the RouterInfo fell into. */
+        final RejectRule _rule;
+        /** Add the identity to the banlist and write the ban log. */
+        final boolean _ban;
+        /** Schedule the delayed disconnect. */
+        final boolean _disconnect;
+        /** Remove the on-disk RouterInfo. */
+        final boolean _delete;
+        /** Why the session is being dropped, for the disconnect log, null if not dropped. */
+        final String _disconnectReason;
+        /** How long the ban runs, in ms, 0 when there is no ban. */
+        final long _banMs;
+        /** How long after the rejection to drop the session, in ms. */
+        final long _disconnectDelayMs;
+
+        /**
+         * The whole decision at once.
+         *
+         * @param rule which rule the RouterInfo fell into
+         * @param ban whether to ban the identity
+         * @param disconnect whether to drop the session
+         * @param delete whether to remove the on-disk RouterInfo
+         * @param disconnectReason why the session is being dropped, null if not dropped
+         * @param banMs how long the ban runs, in ms, 0 when there is no ban
+         * @param disconnectDelayMs how long after the rejection to drop the session, in ms
+         */
+        RejectDecision(RejectRule rule, boolean ban, boolean disconnect, boolean delete,
+                       String disconnectReason, long banMs, long disconnectDelayMs) {
+            this._rule = rule;
+            this._ban = ban;
+            this._disconnect = disconnect;
+            this._delete = delete;
+            this._disconnectReason = disconnectReason;
+            this._banMs = banMs;
+            this._disconnectDelayMs = disconnectDelayMs;
+        }
+    }
+
+    /**
+     * Decide what a RouterInfo the store will not persist has earned, touching
+     * neither the banlist nor the timer, so the rule can be tested without a
+     * running router.
+     *
+     * @param f the pre-computed classification flags for the peer
+     * @param invalidVersionBanOn {@code router.banlistInvalidVersion}
+     * @param luBanOn {@code router.banlistLU}
+     * @return the decision, never null
+     * @since 0.9.72+
+     */
+    static RejectDecision rejectDecision(RiFlags f, boolean invalidVersionBanOn, boolean luBanOn) {
+        if (f.isInvalidVersion)
+            return new RejectDecision(RejectRule.INVALID_VERSION, invalidVersionBanOn, true, true,
+                                      "Invalid version", INVALID_VERSION_BAN_MS, REJECT_DISCONNECT_DELAY_MS);
+        if (Banlist.isLowTierUnreachable(f.caps))
+            return new RejectDecision(RejectRule.LOW_TIER_UNREACHABLE, luBanOn, true, true,
+                                      "LU Router", LU_BAN_MS, REJECT_DISCONNECT_DELAY_MS);
+        if (f.unreachable)
+            return new RejectDecision(RejectRule.UNREACHABLE, false, false, true, null, 0, 0);
+        if (f.isSlow)
+            return new RejectDecision(RejectRule.SLOW_TIER, false, false, true, null, 0, 0);
+        if (f.isOld)
+            return new RejectDecision(RejectRule.TOO_OLD, false, false, true, null, 0, 0);
+        return new RejectDecision(RejectRule.NONE, false, false, false, null, 0, 0);
+    }
+
+    /**
+     * Whether a capability string publishes the K bandwidth tier and no other
+     * bandwidth tier. The LU predicate has covered K and L since the two were
+     * unified, and K is the class this path did not ban before, so the count of
+     * K-only peers says what the widening costs on a running router.
+     *
+     * @param caps the capability string, may be null
+     * @return true if the only bandwidth tier published is K
+     * @since 0.9.72+
+     */
+    static boolean isKTierOnly(String caps) {
+        return caps != null && caps.indexOf(Router.CAPABILITY_BW12) >= 0 &&
+               caps.indexOf(Router.CAPABILITY_BW32) < 0;
     }
 
     /**
@@ -534,6 +668,8 @@ public class PersistentDataStore extends TransientDataStore {
     /**
      * Detect IP spoofing and apply ban decisions for non-storeable peers.
      * Called only for peers that failed {@link #shouldStoreRi(RiFlags)} and are not banned.
+     * What each rule earns comes from {@link #rejectDecision(RiFlags, boolean, boolean)};
+     * this method applies it, and logs it.
      *
      * @param key the hash of the peer being checked
      * @param ri the peer's router info, used for the spoof check and ban logging
@@ -558,59 +694,69 @@ public class PersistentDataStore extends TransientDataStore {
             }
         }
 
-        if (f.isInvalidVersion) {
-            if (_log.shouldDebug()) {
-                _log.debug("Not writing RouterInfo [" + key.toShortBase64() + "] to disk -> Invalid version in RouterInfo (" + f.version + ")");
-            }
-            // The RouterInfo is rejected either way; the switch decides only
-            // whether the identity behind it is also banlisted.
-            if (_context.banlist().isInvalidVersionBanEnabled()) {
-                if (_log.shouldWarn()) {
-                    _log.warn("Banning and disconnecting from Router [" + key.toShortBase64() + "]" +
-                              " -> Invalid version " + f.version + " / " + f.bw + (f.unreachable ? "U" : "") +
-                              " * Ban: " + DataHelper.formatDuration(INVALID_VERSION_BAN_MS));
+        RejectDecision d = rejectDecision(f, _context.banlist().isInvalidVersionBanEnabled(),
+                                          _context.banlist().isLuBanEnabled());
+        switch (d._rule) {
+            case INVALID_VERSION:
+                if (_log.shouldDebug()) {
+                    _log.debug("Not writing RouterInfo [" + key.toShortBase64() + "] to disk -> Invalid version in RouterInfo (" + f.version + ")");
                 }
-                _banLogger.logBan(key, f.ip != null ? f.ip : "UNKNOWN", "Invalid Router version (" + f.version + " / " + f.bw + ")",
-                                  INVALID_VERSION_BAN_MS, ri);
-                String flag = f.unreachable ? "U" : f.reachable ? "R" : "";
-                _context.banlist().banlistRouter(key, "Invalid Router version (" + f.version + " / " + f.bw +
-                                                 flag + ")", null, null, _context.clock().now() + INVALID_VERSION_BAN_MS);
-                _context.simpleTimer2().addEvent(new Disconnector(key, "Invalid version"), 11L*60*1000);
-            }
-            shouldDelete = true;
-        } else if (Banlist.isLowTierUnreachable(f.caps) && _context.banlist().isLuBanEnabled()) {
-            if (_log.shouldDebug()) {
-                _log.debug("Not writing RouterInfo [" + key.toShortBase64() + "] to disk -> LU Router");
-            }
-            if (_log.shouldInfo()) {
-                _log.info("Banning Router [" + key.toShortBase64() + "] -> Low bandwidth tier and unreachable " +
-                          "* Ban: " + DataHelper.formatDuration(LU_BAN_MS));
-            }
-            _banLogger.logBan(key, f.ip != null ? f.ip : "UNKNOWN", "LU Router", LU_BAN_MS, ri);
-            _context.banlist().banlistRouter(key, "LU Router", null, null, _context.clock().now() + LU_BAN_MS);
-            _context.simpleTimer2().addEvent(new Disconnector(key, "LU Router"), 11L*60*1000);
-            shouldDelete = true;
-        } else if (f.unreachable) {
-            if (_log.shouldDebug()) {
-                _log.debug("Not writing RouterInfo [" + key.toShortBase64() + "] to disk -> Unreachable");
-            }
-            shouldDelete = true;
-        } else if (f.isSlow) {
-            if (_log.shouldDebug()) {
-                _log.debug("Not writing RouterInfo [" + key.toShortBase64() + "] to disk -> K, L, M or N tier");
-            }
-            shouldDelete = true;
-        } else if (f.isOld) {
-            if (_log.shouldDebug()) {
-                _log.debug("Not writing RouterInfo [" + key.toShortBase64() + "] to disk -> Older than " + MIN_VERSION);
-            }
-            shouldDelete = true;
-        } else {
-            if (_log.shouldDebug()) {
-                _log.debug("Not writing RouterInfo [" + key.toShortBase64() + "] to disk -> Local copy is newer");
-            }
+                // The RouterInfo is rejected and the session dropped either way; the
+                // switch decides only whether the identity is banlisted as well.
+                if (d._ban) {
+                    if (_log.shouldWarn()) {
+                        _log.warn("Banning and disconnecting from Router [" + key.toShortBase64() + "]" +
+                                  " -> Invalid version " + f.version + " / " + f.bw + (f.unreachable ? "U" : "") +
+                                  " * Ban: " + DataHelper.formatDuration(d._banMs));
+                    }
+                    _banLogger.logBan(key, f.ip != null ? f.ip : "UNKNOWN", "Invalid Router version (" + f.version + " / " + f.bw + ")",
+                                      d._banMs, ri);
+                    String flag = f.unreachable ? "U" : f.reachable ? "R" : "";
+                    _context.banlist().banlistRouter(key, "Invalid Router version (" + f.version + " / " + f.bw +
+                                                     flag + ")", null, null, _context.clock().now() + d._banMs);
+                }
+                break;
+            case LOW_TIER_UNREACHABLE:
+                if (_log.shouldDebug()) {
+                    _log.debug("Not writing RouterInfo [" + key.toShortBase64() + "] to disk -> LU Router");
+                }
+                if (d._ban) {
+                    if (_log.shouldInfo()) {
+                        _log.info("Banning Router [" + key.toShortBase64() + "] -> Low bandwidth tier and unreachable " +
+                                  "* Ban: " + DataHelper.formatDuration(d._banMs));
+                    }
+                    // K is the tier this path did not ban before the predicates were
+                    // unified, so the count says what the widening costs here.
+                    if (isKTierOnly(f.caps))
+                        _context.statManager().addRateData("netDb.luBanKTier", 1);
+                    _banLogger.logBan(key, f.ip != null ? f.ip : "UNKNOWN", "LU Router", d._banMs, ri);
+                    _context.banlist().banlistRouter(key, "LU Router", null, null, _context.clock().now() + d._banMs);
+                }
+                break;
+            case UNREACHABLE:
+                if (_log.shouldDebug()) {
+                    _log.debug("Not writing RouterInfo [" + key.toShortBase64() + "] to disk -> Unreachable");
+                }
+                break;
+            case SLOW_TIER:
+                if (_log.shouldDebug()) {
+                    _log.debug("Not writing RouterInfo [" + key.toShortBase64() + "] to disk -> K, L, M or N tier");
+                }
+                break;
+            case TOO_OLD:
+                if (_log.shouldDebug()) {
+                    _log.debug("Not writing RouterInfo [" + key.toShortBase64() + "] to disk -> Older than " + MIN_VERSION);
+                }
+                break;
+            default:
+                if (_log.shouldDebug()) {
+                    _log.debug("Not writing RouterInfo [" + key.toShortBase64() + "] to disk -> Local copy is newer");
+                }
+                break;
         }
-        return shouldDelete;
+        if (d._disconnect)
+            _context.simpleTimer2().addEvent(new Disconnector(key, d._disconnectReason), d._disconnectDelayMs);
+        return shouldDelete || d._delete;
     }
 
     /**
