@@ -1,6 +1,9 @@
 package net.i2p.router;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Assume;
 import org.junit.Before;
@@ -21,6 +24,11 @@ import org.junit.Test;
  * Those params answer false to {@link Tuner.BaseParam#restorePersistedValue()}
  * and start from the configured value instead.
  *
+ * <p>A value the operator pinned is a third thing again. It travels in its own
+ * {@code .override} key and is applied whatever the restore policy says, because
+ * that policy is about a limit remote peers drove, not about a value this router
+ * was told to hold.
+ *
  * @since 0.9.72+
  */
 public class TunerBootRestoreDecisionTest {
@@ -35,6 +43,12 @@ public class TunerBootRestoreDecisionTest {
     private static final int PERSISTED = 937;
     /** The value the runtime starts at, from config or code. */
     private static final int CONFIGURED = 100;
+
+    /**
+     * A pin the operator set through the console, as opposed to a value the
+     * tuner settled on by itself.
+     */
+    private static final int PINNED = 800;
 
     /** Unique per test case, so one case's persisted value cannot leak into another. */
     private String _param;
@@ -102,6 +116,76 @@ public class TunerBootRestoreDecisionTest {
         ProbeParam param = new ProbeParam(_param, false, _ctx, _autotune);
         param.update();
         assertEquals(String.valueOf(PERSISTED), _autotune.getProperty(_param + ".value"));
+    }
+
+    /**
+     * A value the operator pinned is restored even by a param that refuses to
+     * restore what auto-tuning left behind. The two are different things in
+     * autotune.config: the refusal is about a limit remote peers drove during a
+     * flood that is not there at boot, not about a value this router was told to
+     * hold. Pre-fix the pin was only ever a {@code .value} key, the refusal threw
+     * it away, and the only trace was one INFO line at startup.
+     */
+    @Test
+    public void aPinnedValueIsRestoredEvenForAPeerDrivenParam() {
+        _autotune.setProperty(_param + ".override", String.valueOf(PINNED));
+        ProbeParam param = new ProbeParam(_param, false, _ctx, _autotune);
+        param.update();
+        assertEquals(PINNED, param.getRuntimeValue());
+    }
+
+    /**
+     * A pin also takes the param off the auto-tuning path, so the next pass does
+     * not move what the operator set. Pre-fix nothing was read back, so
+     * auto-tuning stayed on and the pin was tuned away.
+     */
+    @Test
+    public void aPinnedValueKeepsAutoTuningOff() {
+        _autotune.setProperty(_param + ".override", String.valueOf(PINNED));
+        ProbeParam param = new ProbeParam(_param, false, _ctx, _autotune);
+        param.update();
+        param._tune = true;
+        param.update();
+        assertFalse("a pinned param kept tuning", param._autoTuning);
+        assertEquals(PINNED, param.getRuntimeValue());
+    }
+
+    /** No pin key means no pin: the param reads as auto-tuning and tunes. */
+    @Test
+    public void noPinKeyLeavesAutoTuningOn() {
+        ProbeParam param = new ProbeParam(_param, false, _ctx, _autotune);
+        param.update();
+        assertEquals(-1, param._override);
+        assertTrue(param._autoTuning);
+    }
+
+    /**
+     * Setting an override writes its own key, and clearing it drops that key -
+     * otherwise the next restart re-pins a value nobody asked for any more.
+     */
+    @Test
+    public void clearingAnOverrideDropsItsKey() {
+        ProbeParam param = new ProbeParam(_param, true, _ctx, _autotune);
+        param.setOverride(500);
+        assertEquals("500", _autotune.getProperty(_param + ".override"));
+        param.setOverride(-1);
+        assertNull(_autotune.getProperty(_param + ".override"));
+        assertEquals(-1, param._override);
+        assertTrue(param._autoTuning);
+    }
+
+    /**
+     * A pin outside the range the param has now - the range scales with the
+     * hardware - is clamped into it, and the clamped value is what the next
+     * restart reads back rather than the stale one.
+     */
+    @Test
+    public void aPinOutsideTheRangeIsClamped() {
+        _autotune.setProperty(_param + ".override", "999999");
+        ProbeParam param = new ProbeParam(_param, false, _ctx, _autotune);
+        param.update();
+        assertEquals(param._max, param.getRuntimeValue());
+        assertEquals(String.valueOf(param._max), _autotune.getProperty(_param + ".override"));
     }
 
     /**

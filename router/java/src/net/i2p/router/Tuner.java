@@ -1182,6 +1182,19 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         /**
+         * Property to drop from the tuner config, so a cleared manual override
+         * does not linger as a key the next restart reads back as a pin.
+         *
+         * @param key the property key to drop
+         * @since 0.9.72+
+         */
+        public void removeProperty(String key) {
+            if (_props.remove(key) != null) {
+                _dirty = true;
+            }
+        }
+
+        /**
          * Autotune config file.
          *
          * @return the backing file, which need not exist until the first save
@@ -1997,6 +2010,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 int prev = bp.getRuntimeValue();
                 bp._autotune.setProperty(bp._keyValue, String.valueOf(factory));
                 bp._autotune.setProperty(bp._keyDefault, String.valueOf(factory));
+                bp._autotune.removeProperty(bp._keyOverride);
                 bp.applyValue(factory);
                 bp._defaultValue = factory;
                 bp._autoTuning = true;
@@ -2215,6 +2229,16 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         private final String _keyStep;
         /** Config key the tuned value is stored under. */
         private final String _keyValue;
+        /**
+         * Config key a manual override is stored under, on its own. The shared
+         * {@code .value} key carries whatever auto-tuning last wrote as well, so
+         * it cannot tell a value the operator pinned from one the tuner settled
+         * on - and the params that refuse to restore a peer-driven value at boot
+         * would throw the pin away with it.
+         *
+         * @since 0.9.72+
+         */
+        private final String _keyOverride;
         /** Config key the original default is remembered under. */
         private final String _keyDefault;
         /** Default minimum value from code or config. */
@@ -2248,7 +2272,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * @since 0.9.71+
          */
         private boolean _staleDefaultLogged;
-        /** User-set override value, or Integer.MIN_VALUE if unset. */
+        /** User-set override value, or -1 when there is none. */
         protected volatile int _override;
         /** Whether autotuning is active for this parameter. */
         protected volatile boolean _autoTuning;
@@ -2364,6 +2388,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             _keyMax = name + ".max";
             _keyStep = name + ".step";
             _keyValue = name + ".value";
+            _keyOverride = name + ".override";
             _keyDefault = name + ".default";
             _statName = statName;
             _defaultMin = defaultMin;
@@ -2464,8 +2489,23 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             }
             if (changed)
                 _autotune.forceSave();
-            _override = -1;
-            _autoTuning = true;
+            // A manual override outlives the session only as its own key. Read it
+            // back here so the pin also keeps the param off the auto-tuning path:
+            // with _autoTuning true the first pass moves the value the operator
+            // pinned, and the shared .value key cannot tell a pinned value from
+            // an auto-tuned one. A pin outside the current range - the range
+            // scales with the hardware - is clamped and rewritten.
+            int pinned = _autotune.getInt(_keyOverride, -1);
+            if (pinned >= 0) {
+                int clamped = Math.max(_min, Math.min(_max, pinned));
+                if (clamped != pinned)
+                    _autotune.setProperty(_keyOverride, String.valueOf(clamped));
+                _override = clamped;
+                _autoTuning = false;
+            } else {
+                _override = -1;
+                _autoTuning = true;
+            }
             _valueHistory = new int[MAX_HISTORY];
             _statHistory = new double[MAX_HISTORY];
             _historyCount = 0;
@@ -2676,7 +2716,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * <p>Called from the console form handler when a user manually
          * sets a param value. Setting value &lt; 0 re-enables auto-tuning.
          * The override is applied immediately via {@link #applyValue} and
-         * persisted to autotune.config.
+         * persisted to autotune.config under its own {@code .override} key, so a
+         * restart still knows the value was pinned by the operator and not
+         * settled on by the tuner; clearing it drops that key.
          *
          * @param value the override value, or &lt; 0 to re-enable auto-tuning
          * @since 0.9.70+
@@ -2692,6 +2734,13 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                               " (value: " + value + ", range " + _min + "-" + _max + ")");
                 applyValue(clamped);
                 persistValue(_ctx, clamped);
+                // Its own key, so the pin is still recognisable as a pin after a
+                // restart, whatever auto-tuning writes to .value afterwards.
+                _autotune.setProperty(_keyOverride, String.valueOf(clamped));
+            } else {
+                // Clearing the override must clear the key too, or the next
+                // restart re-pins a value nobody asked for.
+                _autotune.removeProperty(_keyOverride);
             }
         }
 
@@ -3201,7 +3250,20 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (_firstTick) {
                 _firstTick = false;
                 int current = getRuntimeValue();
-                if (_initialValue != current) {
+                if (_override >= 0) {
+                    // The operator pinned this value, so it is applied whatever
+                    // the param's restore policy is: that policy is about a value
+                    // remote peers drove, not about one this router was told to
+                    // hold.
+                    if (_override != current) {
+                        applyValue(_override);
+                        persistValue(_ctx, _override);
+                        if (_log.shouldInfo())
+                            _log.info("Restoring the pinned value for " + _name +
+                                      " -> Operator override" +
+                                      "\n* Pinned: " + _override + " * Runtime: " + current);
+                    }
+                } else if (_initialValue != current) {
                     if (restorePersistedValue()) {
                         if (_log.shouldInfo())
                             _log.info("Restoring persisted value " + _initialValue + " for " + _name +
