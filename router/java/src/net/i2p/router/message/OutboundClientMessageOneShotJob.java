@@ -556,11 +556,18 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 getContext().statManager().addRateData(cooling ? "client.leaseSetSkipCooldown"
                                                                : "client.leaseSetSkipInFlight", 1);
                 if (_log.shouldInfo()) {
-                    _log.info("Skipping send to " + _toString +
-                              (cooling ? " -> LeaseSet fail cooldown active, "
-                                       + DataHelper.formatDuration(cooldownEnd - now) + " remaining"
-                                       : " -> LeaseSet lookup in flight, "
-                                       + DataHelper.formatDuration(inFlightEnd - now) + " remaining"));
+                    // Throttled per destination: one destination that cannot be
+                    // resolved writes this once per message aimed at it, and the
+                    // live log held 209,764 of these lines for a single
+                    // destination - 133,338 cooldown and 76,426 in-flight -
+                    // while the router was doing nothing else interesting.
+                    String why = cooling
+                        ? "LeaseSet fail cooldown active, "
+                          + DataHelper.formatDuration(cooldownEnd - now)
+                        : "LeaseSet lookup in flight, "
+                          + DataHelper.formatDuration(inFlightEnd - now);
+                    _log.infoThrottled("ls-skip " + toHash.toShortBase32(),
+                                       "Skipping send to " + _toString + " -> " + why + " remaining");
                 }
                 dieFatal(MessageStatusMessage.STATUS_SEND_FAILURE_NO_LEASESET);
                 return;
