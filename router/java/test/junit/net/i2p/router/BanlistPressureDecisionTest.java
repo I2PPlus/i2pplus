@@ -66,8 +66,21 @@ public class BanlistPressureDecisionTest {
         assertTrue(Banlist.isPermanentBan(permanent));
         // anything the relief exempts has to be out of reach of a peer that
         // only wants to fill the list up
-        assertTrue(Banlist.BANLIST_PERMANENT_REMAINING > cheapest);
-        assertTrue(Banlist.BANLIST_PERMANENT_REMAINING <= permanent);
+        assertTrue(Banlist.BANLIST_PERMANENT_MIN_DURATION > cheapest);
+        assertTrue(Banlist.BANLIST_PERMANENT_MIN_DURATION <= permanent);
+    }
+
+    /**
+     * An entry whose start time is unknown is judged on the time left, so a
+     * dateless entry is not exempted for an age nobody can show.
+     */
+    @Test
+    public void unknownStartFallsBackToTheTimeLeft() {
+        long forever = NOW + Banlist.BANLIST_DURATION_FOREVER;
+        assertEquals(Banlist.BANLIST_DURATION_FOREVER, Banlist.banDuration(forever, 0, NOW));
+        long month = 30L*24*60*60*1000L;
+        assertEquals(month, Banlist.banDuration(NOW + month, 0, NOW));
+        assertFalse(Banlist.isPermanentBan(Banlist.banDuration(NOW + month, 0, NOW)));
     }
 
     // ---- halvedExpiry -------------------------------------------------------
@@ -76,7 +89,7 @@ public class BanlistPressureDecisionTest {
     @Test
     public void aggressivePassSparesPermanentBans() {
         long expireOn = NOW + Banlist.BANLIST_DURATION_FOREVER;
-        assertEquals(expireOn, Banlist.halvedExpiry(expireOn, NOW));
+        assertEquals(expireOn, Banlist.halvedExpiry(expireOn, NOW, NOW));
     }
 
     /** A permanent ban survives as many passes as the flood keeps bringing. */
@@ -84,11 +97,49 @@ public class BanlistPressureDecisionTest {
     public void permanentBanSurvivesRepeatedPasses() {
         long expireOn = NOW + Banlist.BANLIST_DURATION_FOREVER;
         for (int i = 0; i < 12; i++) {
-            expireOn = Banlist.halvedExpiry(expireOn, NOW);
+            expireOn = Banlist.halvedExpiry(expireOn, NOW, NOW);
         }
         long remaining = expireOn - NOW;
         assertEquals(Banlist.BANLIST_DURATION_FOREVER, remaining);
         assertTrue("still a hard ban", Banlist.isPermanentBan(remaining));
+    }
+
+    /**
+     * A permanent ban is exempt for the whole of its life, not for the first 91
+     * days of it. The pass judged it by the time left, so on its 100th day a
+     * 181-day ban had 81 days left, fell under the threshold, and the halving
+     * took it to under an hour in about 40 minutes of passes - the exact
+     * failure the exemption exists to prevent.
+     */
+    @Test
+    public void permanentBanStaysPermanentAsItAges() {
+        long addedOn = NOW - 100L*24*60*60*1000L;
+        long expireOn = addedOn + Banlist.BANLIST_DURATION_FOREVER;
+        long current = expireOn;
+        for (int i = 0; i < 12; i++) {
+            current = Banlist.halvedExpiry(current, addedOn, NOW);
+        }
+        assertEquals("halved an aged permanent ban", expireOn, current);
+        assertTrue("no longer a hard ban",
+                   Banlist.isPermanentBan(Banlist.banDuration(current, addedOn, NOW)));
+    }
+
+    /**
+     * The proportional pass spares an aged permanent ban for the same reason,
+     * even once its remaining time has fallen inside the window that pass
+     * shortens - which is what shows it is the age that saves it, not the
+     * window.
+     */
+    @Test
+    public void proportionalPassSparesAnAgedPermanentBan() {
+        long addedOn = NOW - 178L*24*60*60*1000L;
+        long expireOn = addedOn + Banlist.BANLIST_DURATION_FOREVER;
+        long remaining = expireOn - NOW;
+        long min = Banlist.BAN_REDUCTION_MIN;
+        long max = Banlist.BAN_REDUCTION_MAX;
+        assertTrue("the fixture is not inside the eligible window",
+                   remaining >= min && remaining < max);
+        assertEquals(expireOn, Banlist.scaledExpiry(expireOn, addedOn, NOW, 0.25));
     }
 
     /** The flood's own 30-day bans are halved, which is what the pass is for. */
@@ -96,16 +147,16 @@ public class BanlistPressureDecisionTest {
     public void aggressivePassHalvesCheapBans() {
         long expireOn = NOW + Banlist.BANLIST_DURATION_NO_NETWORK;
         assertEquals(NOW + Banlist.BANLIST_DURATION_NO_NETWORK / 2,
-                     Banlist.halvedExpiry(expireOn, NOW));
+                     Banlist.halvedExpiry(expireOn, NOW, NOW));
     }
 
     /** A ban at the cutoff is not over it, so the pass leaves it alone. */
     @Test
     public void aggressivePassStartsAboveTheCutoff() {
         assertEquals(NOW + Banlist.BAN_HALVE_CUTOFF,
-                     Banlist.halvedExpiry(NOW + Banlist.BAN_HALVE_CUTOFF, NOW));
+                     Banlist.halvedExpiry(NOW + Banlist.BAN_HALVE_CUTOFF, NOW, NOW));
         assertEquals(NOW + (Banlist.BAN_HALVE_CUTOFF + 1) / 2,
-                     Banlist.halvedExpiry(NOW + Banlist.BAN_HALVE_CUTOFF + 1, NOW));
+                     Banlist.halvedExpiry(NOW + Banlist.BAN_HALVE_CUTOFF + 1, NOW, NOW));
     }
 
     // ---- scaledExpiry -------------------------------------------------------
@@ -115,7 +166,7 @@ public class BanlistPressureDecisionTest {
     public void proportionalPassScalesEligibleBans() {
         long expireOn = NOW + 2 * Banlist.BAN_REDUCTION_MAX / 3;
         assertEquals(NOW + Banlist.BAN_REDUCTION_MAX / 6,
-                     Banlist.scaledExpiry(expireOn, NOW, 0.25));
+                     Banlist.scaledExpiry(expireOn, NOW, NOW, 0.25));
     }
 
     /** Scaling never takes a ban below half the eligibility floor. */
@@ -123,7 +174,7 @@ public class BanlistPressureDecisionTest {
     public void proportionalPassFloorsAtHalfTheMinimum() {
         long expireOn = NOW + Banlist.BAN_REDUCTION_MIN;
         assertEquals(NOW + Banlist.BAN_REDUCTION_MIN / 2,
-                     Banlist.scaledExpiry(expireOn, NOW, 0.25));
+                     Banlist.scaledExpiry(expireOn, NOW, NOW, 0.25));
     }
 
     /**
@@ -134,11 +185,11 @@ public class BanlistPressureDecisionTest {
     @Test
     public void proportionalPassSparesBansOutsideTheWindow() {
         long shortBan = NOW + Banlist.BAN_REDUCTION_MIN - 1;
-        assertEquals(shortBan, Banlist.scaledExpiry(shortBan, NOW, 0.25));
+        assertEquals(shortBan, Banlist.scaledExpiry(shortBan, NOW, NOW, 0.25));
         long week = NOW + Banlist.BAN_REDUCTION_MAX;
-        assertEquals(week, Banlist.scaledExpiry(week, NOW, 0.25));
+        assertEquals(week, Banlist.scaledExpiry(week, NOW, NOW, 0.25));
         long forever = NOW + Banlist.BANLIST_DURATION_FOREVER;
-        assertEquals(forever, Banlist.scaledExpiry(forever, NOW, 0.25));
+        assertEquals(forever, Banlist.scaledExpiry(forever, NOW, NOW, 0.25));
     }
 
     // ---- the ceiling --------------------------------------------------------
@@ -192,6 +243,18 @@ public class BanlistPressureDecisionTest {
     public void trimHasNoCandidatesWhenEveryBanIsPermanent() {
         Map<Hash, Banlist.Entry> entries = new LinkedHashMap<Hash, Banlist.Entry>();
         entries.put(hash((byte) 4), entry(NOW + Banlist.BANLIST_DURATION_FOREVER, NOW - 1000L));
+        assertTrue(Banlist.droppableBans(entries, NOW).isEmpty());
+    }
+
+    /**
+     * A permanent ban the list has been holding for over 90 days is still not a
+     * trim candidate once the time left on it falls under the threshold.
+     */
+    @Test
+    public void trimSparesAnAgedPermanentBan() {
+        long addedOn = NOW - 100L*24*60*60*1000L;
+        Map<Hash, Banlist.Entry> entries = new LinkedHashMap<Hash, Banlist.Entry>();
+        entries.put(hash((byte) 5), entry(addedOn + Banlist.BANLIST_DURATION_FOREVER, addedOn));
         assertTrue(Banlist.droppableBans(entries, NOW).isEmpty());
     }
 

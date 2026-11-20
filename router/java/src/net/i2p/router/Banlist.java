@@ -259,22 +259,30 @@ public class Banlist {
     static final long BAN_HALVE_CUTOFF = 60 * 60 * 1000L;
 
     /**
-     * A ban with at least this much time left is one of the permanent ones: a
-     * signed feed's list, a country ban, the operator's bans on
+     * A ban is one of the permanent ones when it has run, or was minted to run,
+     * for at least this long. Measured from the moment the banlist first
+     * recorded the peer to the furthest expiry it holds, so it does not slip
+     * below the threshold as the ban ages — the same measure the ceiling check
+     * uses when admitting a new ban. These are the bans the pressure relief in
+     * {@link #reduceDurations} and the ceiling enforced by {@link #pruneExcess}
+     * leave alone: a signed feed's list, a country ban, the operator's bans on
      * /configpeer, our own previous identity, a peer on another network. The
-     * pressure relief in {@link #reduceDurations} and the ceiling enforced by
-     * {@link #pruneExcess} leave those alone. The threshold is above the
-     * longest ban a peer can buy for itself - 30 days, the
-     * unspecified-network class any peer earns with one RouterInfo - and below
-     * {@link #BANLIST_DURATION_FOREVER}, so a flood of cheap bans is still
-     * shortened and dropped while the bans that matter are not.
+     * threshold is above the longest ban a peer can buy for itself - 30 days,
+     * the unspecified-network class any peer earns with one RouterInfo - and
+     * below {@link #BANLIST_DURATION_FOREVER}, so a flood of cheap bans is
+     * still shortened and dropped while the bans that matter are not.
+     * <p>
+     * Measuring the time left instead, as this did, makes a 181-day ban stop
+     * being permanent on its 91st day: the halving pass then took it from 81
+     * days to under an hour in about 40 minutes of passes, which is the exact
+     * failure the exemption exists to prevent.
      * <p>
      * This is not the question {@link #isBanlistedForever(Hash)} asks: that one
      * is whether a ban is hard enough to refuse an inbound handshake.
      *
      * @since 0.9.72+
      */
-    static final long BANLIST_PERMANENT_REMAINING = 90L*24*60*60*1000L;
+    static final long BANLIST_PERMANENT_MIN_DURATION = 90L*24*60*60*1000L;
 
     /**
      * Banlist ceiling for a slow router, the size upstream gives it. It is
@@ -715,10 +723,11 @@ public class Banlist {
         int halvedCount = 0;
         for (Entry e : _entries.values()) {
             long expireOn = e.expireOn;
-            long newExpireOn = scaledExpiry(expireOn, now, scale);
+            long addedOn = e.addedOn;
+            long newExpireOn = scaledExpiry(expireOn, addedOn, now, scale);
             if (newExpireOn != expireOn) {scaledCount++;}
             if (halving) {
-                long halvedOn = halvedExpiry(newExpireOn, now);
+                long halvedOn = halvedExpiry(newExpireOn, addedOn, now);
                 if (halvedOn != newExpireOn) {halvedCount++;}
                 newExpireOn = halvedOn;
             }
@@ -738,14 +747,33 @@ public class Banlist {
     }
 
     /**
+     * How long a ban has run, or was minted to run: from the moment the banlist
+     * first recorded the peer to the furthest expiry it is holding. An entry
+     * whose start time is unknown, from before the field existed, is measured
+     * from now, so it is judged on the time left rather than exempted for an
+     * age nobody can show.
+     *
+     * @param expireOn when the ban currently expires
+     * @param addedOn when the ban was first recorded, 0 when unknown
+     * @param now the current time in ms
+     * @return the ban's duration in ms
+     * @since 0.9.72+
+     */
+    static long banDuration(long expireOn, long addedOn, long now) {
+        return expireOn - (addedOn > 0 ? addedOn : now);
+    }
+
+    /**
      * Is this a permanent ban, one the pressure relief must not undo?
      *
-     * @param remaining ms left on the ban, negative if it has already expired
+     * @param duration the ban's duration, from {@link #banDuration}, not the
+     *                 time left on it — the time left falls below the
+     *                 threshold in the middle of every permanent ban's life
      * @return true if the ban is long enough to be one of the permanent ones
      * @since 0.9.72+
      */
-    static boolean isPermanentBan(long remaining) {
-        return remaining >= BANLIST_PERMANENT_REMAINING;
+    static boolean isPermanentBan(long duration) {
+        return duration >= BANLIST_PERMANENT_MIN_DURATION;
     }
 
     /**
@@ -755,15 +783,17 @@ public class Banlist {
      * Anything else, and any permanent ban, keeps its expiry.
      *
      * @param expireOn when the ban currently expires
+     * @param addedOn when the ban was first recorded, 0 when unknown
      * @param now the current time in ms
      * @param scale the factor for the current count, between
      *              {@link #MIN_BAN_SCALE} and 1
      * @return the expiry to use, expireOn if the ban is not eligible
      * @since 0.9.72+
      */
-    static long scaledExpiry(long expireOn, long now, double scale) {
+    static long scaledExpiry(long expireOn, long addedOn, long now, double scale) {
         long remaining = expireOn - now;
-        if (isPermanentBan(remaining) || remaining < BAN_REDUCTION_MIN || remaining >= BAN_REDUCTION_MAX) {
+        if (isPermanentBan(banDuration(expireOn, addedOn, now))
+                || remaining < BAN_REDUCTION_MIN || remaining >= BAN_REDUCTION_MAX) {
             return expireOn;
         }
         long minRemaining = BAN_REDUCTION_MIN / 2;
@@ -781,13 +811,14 @@ public class Banlist {
      * under an hour.
      *
      * @param expireOn when the ban currently expires
+     * @param addedOn when the ban was first recorded, 0 when unknown
      * @param now the current time in ms
      * @return the expiry to use, expireOn if the ban is not eligible
      * @since 0.9.72+
      */
-    static long halvedExpiry(long expireOn, long now) {
+    static long halvedExpiry(long expireOn, long addedOn, long now) {
         long remaining = expireOn - now;
-        if (isPermanentBan(remaining) || remaining <= BAN_HALVE_CUTOFF) {
+        if (isPermanentBan(banDuration(expireOn, addedOn, now)) || remaining <= BAN_HALVE_CUTOFF) {
             return expireOn;
         }
         return now + remaining / 2;
@@ -852,8 +883,7 @@ public class Banlist {
      * longest are what stays. A permanent ban is never a candidate.
      *
      * @param entries the bans being trimmed
-     * @param now the current time in ms, the reference for each entry's
-     *            remaining duration
+     * @param now the current time in ms, the reference for each entry's duration
      * @return the droppable entries, newest first; empty if none may go
      * @since 0.9.72+
      */
@@ -861,7 +891,8 @@ public class Banlist {
         List<Map.Entry<Hash, Entry>> droppable = new ArrayList<>(entries.size());
         try {
             for (Map.Entry<Hash, Entry> e : entries.entrySet()) {
-                if (!isPermanentBan(e.getValue().expireOn - now)) {
+                Entry entry = e.getValue();
+                if (!isPermanentBan(banDuration(entry.expireOn, entry.addedOn, now))) {
                     droppable.add(e);
                 }
             }
