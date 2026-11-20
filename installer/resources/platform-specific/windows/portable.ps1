@@ -29,10 +29,20 @@
   Drop the remembered configuration folder and exit. The next run starts the
   choice over.
 
+.PARAMETER ShowProfile
+  Open the configuration folder in Explorer and exit without starting the
+  router: the folder an earlier run remembered, or "<install>\configuration"
+  if none was. Nothing is remembered or rewritten, so asking where the profile
+  is cannot change where it is.
+
 .EXAMPLE
   .\portable.ps1
   First run: creates "<install>\configuration" and starts the router on it.
   Later runs: start the router on whatever was chosen before.
+
+.EXAMPLE
+  .\portable.ps1 -ShowProfile
+  Open the folder the router keeps its profile in, without starting it.
 
 .EXAMPLE
   .\portable.ps1 -Portable
@@ -59,7 +69,8 @@
 param(
     [string]$ConfigDir,
     [switch]$Portable,
-    [switch]$Forget
+    [switch]$Forget,
+    [switch]$ShowProfile
 )
 
 $ErrorActionPreference = 'Stop'
@@ -68,6 +79,37 @@ $ErrorActionPreference = 'Stop'
 # wherever the script was copied to, which is what makes a stick work.
 $dir = $PSScriptRoot
 $state = Join-Path $dir 'portable.config'
+$portableDefault = Join-Path $dir 'configuration'
+
+# The folder the router keeps its profile in, and why that one. Precedence: an
+# explicit -ConfigDir, then -Portable, then whatever an earlier run remembered,
+# then the portable default. Both starting the router and just looking for the
+# folder go through here, so asking where the profile is cannot change where it
+# is: only -ConfigDir, -Portable and the fallback create a folder, and nothing
+# here reads or writes portable.config.
+function Get-ProfileDir {
+    if ($ConfigDir) {
+        $made = New-Item -ItemType Directory -Force -Path $ConfigDir
+        return [pscustomobject]@{ Path = $made.FullName; Why = '-ConfigDir' }
+    }
+    if ($Portable) {
+        New-Item -ItemType Directory -Force -Path $portableDefault | Out-Null
+        return [pscustomobject]@{ Path = $portableDefault; Why = '-Portable' }
+    }
+    if (Test-Path -LiteralPath $state) {
+        $saved = (Get-Content -LiteralPath $state | Where-Object { $_ -match '^configDir=' } |
+                  Select-Object -First 1)
+        if ($saved) {
+            $savedDir = $saved.Substring('configDir='.Length)
+            if (Test-Path -LiteralPath $savedDir) {
+                return [pscustomobject]@{ Path = $savedDir; Why = "remembered in $(Split-Path -Leaf $state)" }
+            }
+            Write-Host "The remembered folder is gone: $savedDir" -ForegroundColor Yellow
+        }
+    }
+    New-Item -ItemType Directory -Force -Path $portableDefault | Out-Null
+    return [pscustomobject]@{ Path = $portableDefault; Why = 'default for a portable install' }
+}
 
 if ($ConfigDir -and $Portable) {
     Write-Host 'Choose either -ConfigDir or -Portable, not both.' -ForegroundColor Red
@@ -80,6 +122,29 @@ if ($Forget) {
         Write-Host "Forgot the remembered configuration folder ($state)." -ForegroundColor Green
     } else {
         Write-Host "Nothing remembered ($state does not exist)." -ForegroundColor Yellow
+    }
+    exit 0
+}
+
+if ($ShowProfile) {
+    $profDir = Get-ProfileDir
+    Write-Host "Configuration dir : $($profDir.Path)  ($($profDir.Why))"
+    # The service keeps its profile somewhere else entirely, and a machine can
+    # have both, so say which folder this one is. The check is best effort: a
+    # host without a Service Controller still gets its folder.
+    $asvc = $null
+    try {
+        $asvc = Get-Service -Name 'I2P+' -ErrorAction SilentlyContinue
+    } catch {
+        $asvc = $null
+    }
+    if ($asvc) {
+        Write-Host 'The I2P+ service is installed and keeps its profile in %PROGRAMDATA%\i2p instead.' -ForegroundColor Yellow
+    }
+    try {
+        Start-Process explorer.exe -ArgumentList "`"$($profDir.Path)`"" | Out-Null
+    } catch {
+        Write-Host "Could not open a window for it ($($_.Exception.Message))." -ForegroundColor Yellow
     }
     exit 0
 }
@@ -230,39 +295,12 @@ if (-not $java) {
 # ---------------------------------------------------------------------------
 # 3. The configuration folder
 #
-# Precedence: an explicit -ConfigDir, then -Portable, then whatever an earlier
-# run remembered, then the portable default. The choice is written to
-# portable.config so the next bare run just starts the router.
+# Resolved by Get-ProfileDir, above. The choice is written to portable.config
+# here, so the next bare run just starts the router.
 # ---------------------------------------------------------------------------
-$portableDefault = Join-Path $dir 'configuration'
-$chosen = $null
-$why = $null
-
-if ($ConfigDir) {
-    $chosen = (New-Item -ItemType Directory -Force -Path $ConfigDir).FullName
-    $why = '-ConfigDir'
-} elseif ($Portable) {
-    $chosen = $portableDefault
-    $why = '-Portable'
-} elseif (Test-Path -LiteralPath $state) {
-    $saved = (Get-Content -LiteralPath $state | Where-Object { $_ -match '^configDir=' } |
-              Select-Object -First 1)
-    if ($saved) {
-        $savedDir = $saved.Substring('configDir='.Length)
-        if (Test-Path -LiteralPath $savedDir) {
-            $chosen = $savedDir
-            $why = "remembered in $(Split-Path -Leaf $state)"
-        } else {
-            Write-Host "The remembered folder is gone: $savedDir" -ForegroundColor Yellow
-        }
-    }
-}
-
-if (-not $chosen) {
-    New-Item -ItemType Directory -Force -Path $portableDefault | Out-Null
-    $chosen = $portableDefault
-    $why = 'default for a portable install'
-}
+$profDir = Get-ProfileDir
+$chosen = $profDir.Path
+$why = $profDir.Why
 
 # Remember it. A read-only install directory (Program Files without extra
 # rights) is not an error: the router still runs, it just has to be told

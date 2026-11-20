@@ -143,7 +143,9 @@
         </args>
       </executable>
 
-      <!-- create the Start Menu and desktop shortcuts -->
+      <!-- the Start Menu and desktop shortcuts every install needs: the console,
+           the portable run, and the folder that run keeps its profile in. The
+           service pair comes from the Windows Service pack's own step below. -->
       <executable targetfile="powershell.exe" stage="postinstall" keep="true" failure="warn">
         <os family="windows"/>
         <args>
@@ -279,6 +281,21 @@
           <arg value="$INSTALL_PATH\service.ps1"/>
           <arg value="-Action"/>
           <arg value="Start"/>
+        </args>
+      </executable>
+      <!-- The Start/Stop Service shortcuts belong to this pack: the Base pack's
+           'Shortcuts' step creates only the three every install needs, so
+           declining this pack leaves no shortcut pointing at a service that was
+           never installed. -->
+      <executable targetfile="powershell.exe" stage="postinstall" failure="warn" keep="true">
+        <args>
+          <arg value="-NoProfile"/>
+          <arg value="-ExecutionPolicy"/>
+          <arg value="Bypass"/>
+          <arg value="-File"/>
+          <arg value="$INSTALL_PATH\service.ps1"/>
+          <arg value="-Action"/>
+          <arg value="ServiceShortcuts"/>
         </args>
       </executable>
     </pack>

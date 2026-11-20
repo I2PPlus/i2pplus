@@ -26,9 +26,13 @@ To run as a service after all, open a command prompt as Administrator and run
 from the application folder.
 </p>
 <p style="text-align: justify;">
-Shortcuts are provided to stop and start the service, though in normal
-operation you should use the console to stop the service as this will allow
-the router to honor its networking obligations before shutting down or
-restarting.
+The <b>Start I2P+ Service</b> and <b>Stop I2P+ Service</b> shortcuts are created
+only when <b>Windows Service</b> was ticked, and in normal operation you should
+use the console to stop the service as this will allow the router to honor its
+networking obligations before shutting down or restarting. The
+<b>Open I2P+ Profile Folder</b> shortcut asks <b>portable.ps1</b> which folder
+it would use, so it opens the profile that is really in use rather than a
+default; for a service install the profile is <b>%PROGRAMDATA%\i2p</b> instead,
+and the shortcut says so.
 </p>
 </body></html>

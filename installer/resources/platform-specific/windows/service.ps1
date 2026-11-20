@@ -7,20 +7,24 @@
   service through the bundled Tanuki wrapper (I2Psvc.exe), creates
   Start Menu / Desktop shortcuts, or repairs filesystem permissions.
 
-  All actions except 'Shortcuts' require Administrator rights; the
-  script self-elevates when run from a non-elevated session. Every
-  operation is logged to install.log next to this script.
+  All actions except 'Shortcuts' and 'ServiceShortcuts' require
+  Administrator rights; the script self-elevates when run from a
+  non-elevated session. Every operation is logged to install.log next to
+  this script.
 
 .PARAMETER Action
   The operation to perform. One of:
-    Install    - install or upgrade the service
-    Uninstall  - remove the service and strip the config override
-    Start      - start the service (no-op if already running)
-    Stop       - stop the service (no-op if already stopped)
-    Enable     - set the service to auto-start
-    Disable    - set the service to manual start
-    Shortcuts  - (re)create Start Menu and Desktop shortcuts
-    FixPerms   - grant the current user full control over -Target
+    Install          - install or upgrade the service
+    Uninstall        - remove the service and strip the config override
+    Start            - start the service (no-op if already running)
+    Stop             - stop the service (no-op if already stopped)
+    Enable           - set the service to auto-start
+    Disable          - set the service to manual start
+    Shortcuts        - (re)create the shortcuts every install needs:
+                       the console, the portable run, and its profile folder
+    ServiceShortcuts - (re)create the Start / Stop Service shortcuts, which
+                       only make sense once a service has been installed
+    FixPerms         - grant the current user full control over -Target
 
 .PARAMETER Target
   Directory to grant permissions to. Used by the FixPerms action only.
@@ -40,7 +44,8 @@
 [CmdletBinding()]
 param(
     [Parameter(Mandatory = $true)]
-    [ValidateSet('Install', 'Uninstall', 'Start', 'Stop', 'Enable', 'Disable', 'Shortcuts', 'FixPerms')]
+    [ValidateSet('Install', 'Uninstall', 'Start', 'Stop', 'Enable', 'Disable',
+                 'Shortcuts', 'ServiceShortcuts', 'FixPerms')]
     [string]$Action,
     [string]$Target
 )
@@ -64,9 +69,10 @@ function Assert-Admin {
     }
 }
 
-# Self-elevate when required. All actions except Shortcuts modify the
-# system service store or ACLs, so they need an elevated process.
-$needsAdmin = $Action -ne 'Shortcuts'
+# Self-elevate when required. Only the two shortcut actions write to the
+# current user's Start Menu and Desktop; everything else modifies the system
+# service store or ACLs, so it needs an elevated process.
+$needsAdmin = $Action -ne 'Shortcuts' -and $Action -ne 'ServiceShortcuts'
 if ($needsAdmin -and -not (Test-IsAdmin)) {
     # Pin to the legacy Windows PowerShell host: all callers (izpack,
     # ConfigServiceHandler, shortcuts) launch this script with
@@ -228,6 +234,56 @@ switch ($Action) {
         Write-Host "Service '$svcName' set to manual start." -ForegroundColor Green
     }
     'Shortcuts' {
+        # The shortcuts every install needs, whoever was ticked on the packs
+        # page. The service pair is 'ServiceShortcuts', run by the Windows
+        # Service pack, so declining that pack leaves no shortcut behind that
+        # points at a service which was never installed.
+        $shell = $null
+        try {
+            $shell = New-Object -ComObject WScript.Shell
+            $group = Join-Path ([Environment]::GetFolderPath('Programs')) 'I2P+'
+            $desktop = [Environment]::GetFolderPath('Desktop')
+            New-Item -ItemType Directory -Force -Path $group | Out-Null
+
+            $psExe = Join-Path $env:SystemRoot 'System32\WindowsPowerShell\v1.0\powershell.exe'
+            $psArgs = '-NoProfile -ExecutionPolicy Bypass -File'
+            $runScript = Join-Path $dir 'portable.ps1'
+
+            New-Shortcut $shell (Join-Path $group 'Run I2P+ (portable).lnk') $psExe "$psArgs `"$runScript`"" $dir (Join-Path $dir 'docs\start.ico') 0
+            # portable.ps1 resolves the profile folder the way a run does, so
+            # this opens the folder actually in use rather than the %PROGRAMDATA%
+            # default, which a portable install never touches.
+            $profileArgs = '-NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File "{0}" -ShowProfile' -f $runScript
+            New-Shortcut $shell (Join-Path $group 'Open I2P+ Profile Folder.lnk') $psExe $profileArgs $dir "$env:SystemRoot\System32\shell32.dll" 3
+            New-Shortcut $shell (Join-Path $group 'I2P+ Router Console.lnk') (Join-Path $dir 'docs\startconsole.html') '' $dir (Join-Path $dir 'docs\console.ico') 0
+            New-Shortcut $shell (Join-Path $desktop 'I2P+ Router Console.lnk') (Join-Path $dir 'docs\startconsole.html') '' $dir (Join-Path $dir 'docs\console.ico') 0
+
+            # An earlier release, or a service installed by hand and later
+            # removed, leaves the service pair behind pointing at a service
+            # that is not there, and clicking it only answers that it is not
+            # installed. Nothing else in the install or the uninstaller takes
+            # them out, so this does.
+            if (-not (Get-I2PService)) {
+                foreach ($stale in @((Join-Path $group 'Start I2P+ Service.lnk'),
+                                     (Join-Path $group 'Stop I2P+ Service.lnk'),
+                                     (Join-Path $desktop 'Start I2P+ Service.lnk'),
+                                     (Join-Path $desktop 'Stop I2P+ Service.lnk'))) {
+                    if (Test-Path -LiteralPath $stale) {
+                        Remove-Item -LiteralPath $stale
+                        Write-Log "Removed stale service shortcut: $stale"
+                    }
+                }
+            }
+            Write-Host "Shortcuts created." -ForegroundColor Green
+        } finally {
+            if ($shell -ne $null) {
+                [System.Runtime.InteropServices.Marshal]::ReleaseComObject($shell) | Out-Null
+            }
+        }
+    }
+    'ServiceShortcuts' {
+        # Run by the Windows Service pack only: without a service installed
+        # there is nothing for these two to start or stop.
         $shell = $null
         try {
             $shell = New-Object -ComObject WScript.Shell
@@ -239,14 +295,11 @@ switch ($Action) {
             $psArgs = '-NoProfile -ExecutionPolicy Bypass -File'
             $svcScript = Join-Path $dir 'service.ps1'
 
-            New-Shortcut $shell (Join-Path $group 'Open I2P+ Profile Folder.lnk') "$env:SystemRoot\System32\explorer.exe" '"%programdata%\i2p"' $dir "$env:SystemRoot\System32\shell32.dll" 3
-            New-Shortcut $shell (Join-Path $group 'I2P+ Router Console.lnk') (Join-Path $dir 'docs\startconsole.html') '' $dir (Join-Path $dir 'docs\console.ico') 0
             New-Shortcut $shell (Join-Path $group 'Start I2P+ Service.lnk') $psExe "$psArgs `"$svcScript`" -Action Start" $dir (Join-Path $dir 'docs\start.ico') 0
             New-Shortcut $shell (Join-Path $group 'Stop I2P+ Service.lnk') $psExe "$psArgs `"$svcScript`" -Action Stop" $dir (Join-Path $dir 'docs\stop.ico') 0
-            New-Shortcut $shell (Join-Path $desktop 'I2P+ Router Console.lnk') (Join-Path $dir 'docs\startconsole.html') '' $dir (Join-Path $dir 'docs\console.ico') 0
             New-Shortcut $shell (Join-Path $desktop 'Start I2P+ Service.lnk') $psExe "$psArgs `"$svcScript`" -Action Start" $dir (Join-Path $dir 'docs\start.ico') 0
             New-Shortcut $shell (Join-Path $desktop 'Stop I2P+ Service.lnk') $psExe "$psArgs `"$svcScript`" -Action Stop" $dir (Join-Path $dir 'docs\stop.ico') 0
-            Write-Host "Shortcuts created." -ForegroundColor Green
+            Write-Host "Service shortcuts created." -ForegroundColor Green
         } finally {
             if ($shell -ne $null) {
                 [System.Runtime.InteropServices.Marshal]::ReleaseComObject($shell) | Out-Null

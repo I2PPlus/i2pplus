@@ -189,6 +189,14 @@
       <string>${SYSTEM[sun.arch.data.model]}</string>
       <value>64</value>
     </condition>
+    <!-- The Windows Service pack is optional and unticked by default, and the
+         Start/Stop Service shortcuts are only meaningful once a service exists;
+         shortcutSpec.xml gates those two on this. IzPack 4 has no ShortcutPanel
+         and gets the same split from service.ps1 -Action ServiceShortcuts, run
+         by that pack's own postinstall step. -->
+    <condition type="packselection" id="winservice.selected">
+      <name>Windows Service</name>
+    </condition>
   </conditions>
 
   <!-- 32-bit Windows is unsupported; the message shows as an error dialog. -->

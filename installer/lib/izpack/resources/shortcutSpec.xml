@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <!--
   Windows shortcuts for the IzPack 5 ShortcutPanel. IzPack 4 created these from
-  service.ps1 instead, so this file is only referenced by install5.xml.
+  service.ps1 instead, so this file is only referenced by install5.xml; the
+  matching split there is service.ps1 -Action Shortcuts (the three below that
+  every install needs) and -Action ServiceShortcuts (the pair gated here).
 
   The resource id in install5.xml must stay "shortcutSpec.xml": that is the
   default name the panel looks for, and the panel skips itself entirely when it
@@ -14,6 +16,17 @@
   Start menu; shortcuts also need at least one of programGroup/desktop/
   applications/startMenu/startup, which is why every one below sets it.
 
+  The Windows Service pack is optional and unticked by default, so the two
+  service shortcuts carry condition="winservice.selected", the packselection
+  condition declared in install5.xml. Without it a machine that never installed
+  a service gets a Start Menu entry that answers "Service 'I2P+' is not
+  installed. Run -Action Install first." when clicked.
+
+  The profile-folder shortcut runs portable.ps1 -ShowProfile rather than
+  pointing at a fixed path: the folder a portable run keeps its profile in is
+  remembered in portable.config, or moved elsewhere with -ConfigDir, and only
+  the script knows which.
+
   The commented-out blocks are alternatives that need a launcher we no longer
   ship (I2P.exe) or an uninstaller path that does not exist, kept for reference.
 -->
@@ -24,9 +37,21 @@
 
   <programGroup defaultName="I2P+" location="startMenu"/>
 
+  <shortcut name="Run I2P+ (portable)"
+            target="%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe"
+            commandLine="-NoProfile -ExecutionPolicy Bypass -File &quot;$INSTALL_PATH\portable.ps1&quot;"
+            workingDirectory="$INSTALL_PATH"
+            iconFile="$INSTALL_PATH\docs\start.ico"
+            initialState="normal"
+            programGroup="yes"
+            desktop="no"
+            startMenu="no"
+            startup="no"/>
+
   <shortcut name="Open I2P+ Profile Folder"
-            target="explorer"
-            commandLine="&quot;%programdata%\i2p&quot;"
+            target="%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe"
+            commandLine="-NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File &quot;$INSTALL_PATH\portable.ps1&quot; -ShowProfile"
+            workingDirectory="$INSTALL_PATH"
             iconFile="%systemroot%\system32\shell32.dll"
             iconIndex="3"
             initialState="normal"
@@ -55,7 +80,8 @@
             programGroup="yes"
             desktop="yes"
             startMenu="no"
-            startup="no"/>
+            startup="no"
+            condition="winservice.selected"/>
 
   <shortcut name="Stop I2P+ Service"
             target="%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe"
@@ -66,7 +92,8 @@
             programGroup="yes"
             desktop="yes"
             startMenu="no"
-            startup="no"/>
+            startup="no"
+            condition="winservice.selected"/>
 
   <!--
     <shortcut name="Start I2P+ (no window)"

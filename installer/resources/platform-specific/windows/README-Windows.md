@@ -16,22 +16,27 @@ A 64-bit Java 8 or newer must be installed for either method.
 Run `i2pinstall.exe` and tick *Windows Service* on the page that lists the
 packs; the installer leaves it unticked. The router then starts at boot and
 the Start Menu gets *Start I2P+ Service* and *Stop I2P+ Service* shortcuts.
-Left unticked, no service is written: run the router with `portable.ps1` as in
-section 2 below, or add the service later from an elevated prompt with
-`.\service.ps1 -Action Install`, the first command listed next.
+Left unticked, no service is written and those two shortcuts are not created
+either, so nothing in the Start Menu points at a service this machine does not
+have; every install gets *Run I2P+ (portable)*, *Open I2P+ Profile Folder* and
+*I2P+ Router Console* whichever way the box is left. With the box unticked, run
+the router with `portable.ps1` as in section 2 below, or add the service later
+from an elevated prompt with `.\service.ps1 -Action Install`, the first command
+listed next.
 
 Manage it from an elevated PowerShell instead of the shortcuts:
 
 ```powershell
 cd 'C:\Program Files\I2P+'
-.\service.ps1 -Action Install     # install or upgrade the service
+.\service.ps1 -Action Install           # install or upgrade the service
 .\service.ps1 -Action Start
 .\service.ps1 -Action Stop
-.\service.ps1 -Action Enable      # start at boot
-.\service.ps1 -Action Disable     # start by hand
+.\service.ps1 -Action Enable            # start at boot
+.\service.ps1 -Action Disable           # start by hand
 .\service.ps1 -Action Uninstall
-.\service.ps1 -Action Shortcuts   # recreate the Start Menu and Desktop links
-.\service.ps1 -Action FixPerms    # grant your user write access to the folders
+.\service.ps1 -Action Shortcuts         # the console, portable run, profile links
+.\service.ps1 -Action ServiceShortcuts  # the Start / Stop Service links
+.\service.ps1 -Action FixPerms          # grant your user write access to the folders
 ```
 
 `service.ps1` asks for elevation itself when it needs it. The profile lives in
@@ -65,6 +70,7 @@ with the folder.
 .\portable.ps1 -Portable                # force configuration\ inside the I2P+ folder
 .\portable.ps1 -ConfigDir 'E:\i2p-keys' # keep the profile somewhere else
 .\portable.ps1 -Forget                  # drop the remembered folder and exit
+.\portable.ps1 -ShowProfile             # open the profile folder, do not start
 ```
 
 If your Windows blocks the script, run it once with:
@@ -138,7 +144,11 @@ memory limits and the logger override in that file stay in force.
 ## Which profile am I using?
 
 - Service: `%PROGRAMDATA%\i2p`.
-- Portable: the `configDir=` line in `portable.config` next to `portable.ps1`.
+- Portable: the `configDir=` line in `portable.config` next to `portable.ps1`,
+  or `configuration` inside the I2P+ folder if that file does not exist yet.
+  The *Open I2P+ Profile Folder* shortcut, or `.\portable.ps1 -ShowProfile` from
+  a prompt, opens that folder and says which of the three it resolved to,
+  without starting the router.
 
 Moving a profile between the two means copying that folder while the router is
 stopped, then pointing the other method at it (`-Action FixPerms` for the
