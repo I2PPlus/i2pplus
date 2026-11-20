@@ -11,6 +11,9 @@
 #
 # -m module   which module's test suite to run (default: i2psnark). The javadoc, log,
 #             whitespace and compile gates always cover exactly the files given.
+# --test-roots  print the directories the suite-recompile touch pass walks, each marked
+#             ok or MISSING, and stop. A module wired without its test root shows up
+#             as MISSING there, or prints nothing at all.
 #
 # Scratch output goes under $TMPDIR_BASE (default /tmp/opencode), never the repo tree.
 # Generalize the compile classpath per module as needed; the snark one is what is wired up.
@@ -22,14 +25,29 @@ MODULE="i2psnark"
 # extra -D properties a module's ant build needs (jetty's version pins);
 # empty for every module that takes none
 ANTPROPS=""
+# test roots the module keeps outside SOURCEPATH, colon-separated; empty when
+# SOURCEPATH already carries them. Only the suite-recompile touch pass needs
+# them - the compile gate deliberately sees main sources only.
+TESTPATH=""
+# set by --test-roots: print the touch pass's directories and stop
+TESTROOTS=""
 
-while [ "${1:-}" = "-m" ]; do
-    MODULE="$2"
-    shift 2
+while [ $# -gt 0 ]; do
+    case "$1" in
+        -m)
+            MODULE="$2"
+            shift 2
+            ;;
+        --test-roots)
+            TESTROOTS=1
+            shift
+            ;;
+        *) break ;;
+    esac
 done
 
-if [ $# -eq 0 ]; then
-    sed -n '2,16p' "$0"
+if [ $# -eq 0 ] && [ -z "$TESTROOTS" ]; then
+    sed -n '2,18p' "$0"
     exit 1
 fi
 
@@ -47,6 +65,7 @@ case "$MODULE" in
         BUILD="apps/i2psnark/java/build.xml"
         REPORTS="/tmp/build-i2p/reports/i2psnark/junit"
         SOURCEPATH="apps/i2psnark/java/src:core/java/src:router/java/src:apps/streaming/java/src:apps/ministreaming/java/src:apps/jetty/java/src"
+        TESTPATH="apps/i2psnark/java/test/junit"
         CP="$(find apps/jetty -name '*.jar' | tr '\n' ':')"
         LOGSCOPE="apps/i2psnark/java/src"
         ;;
@@ -125,6 +144,7 @@ case "$MODULE" in
         REPORTS="/tmp/build-i2p/reports/i2pcontrol/junit"
         # the jsonrpc2 and jbcrypt sources are vendored under this module's java dir
         SOURCEPATH="apps/i2pcontrol/java:core/java/src:router/java/src:apps/streaming/java/src:apps/ministreaming/java/src"
+        TESTPATH="apps/i2pcontrol/java/test/junit"
         CP="$(find tools/test apps/jetty/jettylib installer/lib/wrapper -name '*.jar' | tr '\n' ':')"
         LOGSCOPE="apps/i2pcontrol/java/net"
         ;;
@@ -152,6 +172,27 @@ case "$MODULE" in
         exit 1
         ;;
 esac
+
+# The directories whose .java files must be recompiled when a main source
+# changes: the test roots carried in SOURCEPATH, plus TESTPATH. One per line.
+test_roots() {
+    local d
+    IFS=':' read -ra _sp <<< "$SOURCEPATH"
+    for d in "${_sp[@]}"; do
+        case "$d" in *test*) printf '%s\n' "$d" ;; esac
+    done
+    IFS=':' read -ra _tp <<< "$TESTPATH"
+    for d in "${_tp[@]}"; do
+        [ -n "$d" ] && printf '%s\n' "$d"
+    done
+}
+
+if [ -n "$TESTROOTS" ]; then
+    while IFS= read -r d; do
+        printf '%-8s %s\n' "$([ -d "$d" ] && echo ok || echo MISSING)" "$d"
+    done < <(test_roots)
+    exit 0
+fi
 
 echo "=== javadoc (doclint -package)"
 bash .opencode/skills/javadoc-audit/jdcheck.sh "${FILES[@]}" 2>&1 | tail -4
@@ -188,14 +229,13 @@ echo "=== $MODULE suite"
 # staleness check only compares a .java against its own .class — so a test class compiled
 # against the old value keeps the old number and fails for a reason that is not in the
 # test. Touch the module's test sources whenever a main source was touched, so the suite
-# compiles against the constants it asserts on.
+# compiles against the constants it asserts on. Test roots outside SOURCEPATH go in
+# TESTPATH — i2psnark and i2pcontrol keep them there, so walking SOURCEPATH alone leaves
+# those two modules' suites stale.
 if [ ${#SRC[@]} -gt 0 ]; then
-    IFS=':' read -ra SP <<< "$SOURCEPATH"
-    for d in "${SP[@]}"; do
-        case "$d" in
-            *test*) [ -d "$d" ] && find "$d" -name '*.java' -exec touch {} + ;;
-        esac
-    done
+    while IFS= read -r d; do
+        [ -d "$d" ] && find "$d" -name '*.java' -exec touch {} +
+    done < <(test_roots)
 fi
 ant -q -f "$BUILD" $ANTPROPS "${TARGET:-junit.test}" 2>&1 | rg -n 'error:|BUILD' | head -12
 REPORTS="$REPORTS" python3 - <<'EOF'
