@@ -1629,13 +1629,9 @@ public class WebMail extends HttpServlet {
         // Set state if unknown
         if (state == null) {
             if (request.getParameter(CONFIG_TEXT) != null || buttonPressed(request, CONFIGURE)) {
-                String why = configPageRejection(sessionObject.user != null, Config.hasConfigFile());
-                if (why != null) {
-                    sessionObject.error += why + '\n';
-                    state = sessionObject.user != null ? State.LIST : State.AUTH;
-                } else {
-                    state = State.CONFIG;
-                }
+                // Reading the settings is open to every session, the login page's own
+                // Settings link included; the save is what asks for proof.
+                state = State.CONFIG;
             }
             else if (request.getParameter(SHOW) != null) {state = State.SHOW;}
             else if (request.getParameter(NEW_UIDL) != null) {state = State.NEW;}
@@ -2172,12 +2168,6 @@ public class WebMail extends HttpServlet {
      */
     private static State processConfigButtons(SessionObject sessionObject, RequestWrapper request, boolean isPOST, State state) {
         if (buttonPressed(request, CONFIGURE)) {
-            String why = configPageRejection(sessionObject.user != null, Config.hasConfigFile());
-            if (why != null) {
-                sessionObject.error += why + '\n';
-                Folder<String> folder = getCurrentFolder(sessionObject, request);
-                return folder != null ? State.LIST : State.AUTH;
-            }
             return state.CONFIG;
         }
         // If no config text, we can't be on the config page, and we don't want to process
@@ -2250,49 +2240,84 @@ public class WebMail extends HttpServlet {
     } // End state change and button processing
 
     /**
-     * Why this session may not open the settings page, or null if it may.
+     * The message for a session that may read the settings but has no mailbox in hand to
+     * prove a save of them.
      *
-     * The settings are global: they say which host and ports mail goes to, whether the
-     * sender address is pinned, and whether HTML messages are rendered at all. Before
-     * anyone has signed in, none of that has been proved to the webmail, so the page is
-     * only open while there is no config file on disk to bootstrap from - a first run
-     * with nothing to read yet.
-     *
-     * @param signedIn true if a mailbox is open in this session
-     * @param haveConfig true if the on-disk config file already exists
-     * @return the message to show, null if the page may be opened
+     * @return the message to show
      * @since 0.9.72+
      */
-    static String configPageRejection(boolean signedIn, boolean haveConfig) {
-        if (signedIn || !haveConfig)
+    private static String noMailboxNotice() {
+        return _t("Sign in to the mailbox before saving the settings");
+    }
+
+    /**
+     * Why this session may read the settings page but not save it, or null if the save is
+     * open to it.
+     *
+     * The page is open to every session on purpose: an operator whose mailbox password
+     * changed on the server cannot sign in, and the settings are what they need to read
+     * and change. The page holds no secret - the mail host, the ports, the sender domain
+     * and the display options - and the login page already shows the host and ports
+     * whenever they are not fixed.
+     *
+     * @param haveMailbox true if this session has a mailbox signed into it
+     * @param haveConfig true if the on-disk config file already exists; with no file to
+     *                   protect the save is open, since it is what creates it
+     * @return the message to show above the save button, null if the save is open
+     * @since 0.9.72+
+     */
+    static String configSaveNotice(boolean haveMailbox, boolean haveConfig) {
+        if (haveMailbox || !haveConfig)
             return null;
-        return _t("Sign in to the mailbox before opening the settings");
+        return noMailboxNotice();
+    }
+
+    /**
+     * The notice shown above the settings save button, if there is one to show.
+     *
+     * @param notice why the save is closed to this session, null if it is open
+     * @return the markup to render, empty if there is nothing to say
+     * @since 0.9.72+
+     */
+    static String configSaveNoticeHTML(String notice) {
+        if (notice == null)
+            return "";
+        return "<p class=error id=savenotice>" + quoteHTML(notice) + "</p>\n";
     }
 
     /**
      * Why this request may not rewrite the on-disk settings, or null if it may.
      *
-     * The form nonce the request carries proves the click came from this webmail, not
-     * from another page; it does not prove the click came from anyone entitled to change
-     * where every session's mail goes. The password signed in with is the only secret
-     * this tree holds that the page cannot read back off the DOM, so the save asks for
-     * it again.
+     * The settings are global: they say which host and ports mail goes to, whether the
+     * sender address is pinned, and whether HTML messages are rendered at all, for every
+     * session and across restarts. The form nonce the request carries proves the click
+     * came from this webmail, not from another page; it does not prove the click came
+     * from anyone entitled to move where the next cleartext login is sent. Two things
+     * can: a mailbox this session has signed into, and for an account that has a mailbox
+     * password, that password typed back again, the one secret a page that is not this
+     * one cannot read off the form.
      *
-     * @param signedIn true if a mailbox is open in this session
-     * @param hasPassword true if that login had a password to check against
+     * @param haveMailbox true if this session has a mailbox signed into it
+     * @param hasPassword true if that mailbox has a password to check against
      * @param supplied the password the request carried, null if it carried none
      * @param matches true if the supplied password is the one signed in with
      * @param failures changes refused for want of the password in this session
+     * @param haveConfig true if the on-disk config file already exists
      * @return the message to show, null if the change may go ahead
      * @since 0.9.72+
      */
-    static String configWriteRejection(boolean signedIn, boolean hasPassword, String supplied,
-                                       boolean matches, int failures) {
-        if (!signedIn)
-            return _t("Sign in to the mailbox before saving the settings");
+    static String configWriteRejection(boolean haveMailbox, boolean hasPassword, String supplied,
+                                       boolean matches, int failures, boolean haveConfig) {
         if (failures >= MAX_CONFIG_ATTEMPTS)
             return _t("Too many failed attempts, sign in again before saving the settings");
+        if (!haveMailbox)
+            // A first run has no file on disk to protect yet, and no mailbox to sign
+            // into with, so the save is what creates the file.
+            return configSaveNotice(haveMailbox, haveConfig);
         if (!hasPassword)
+            // An account signed into without a password has no secret to ask back. The
+            // mailbox in hand is the proof, and a logout or an expired session takes it
+            // away, which is what used to let either write the file with nothing at all.
             return null;
         if (supplied == null || supplied.isEmpty())
             return _t("Enter the mailbox password to save the settings");
@@ -2313,8 +2338,9 @@ public class WebMail extends HttpServlet {
     private static String authorizeConfigChange(SessionObject sessionObject, RequestWrapper request) {
         String supplied = request.getParameter(CONFIG_PASSWORD);
         boolean matches = sessionObject.hasLocalPassword() && sessionObject.verifyLocalPassword(supplied);
-        String why = configWriteRejection(sessionObject.user != null, sessionObject.hasLocalPassword(),
-                                          supplied, matches, sessionObject.getConfigFailures());
+        String why = configWriteRejection(sessionObject.mailbox != null, sessionObject.hasLocalPassword(),
+                                          supplied, matches, sessionObject.getConfigFailures(),
+                                          Config.hasConfigFile());
         if (why == null)
             return null;
         // Only a wrong password counts. A save that never offered one is the page being
@@ -3153,7 +3179,10 @@ public class WebMail extends HttpServlet {
                    .append("<script src=\"/susimail/js/HtmlSanitizer.js?").append(CoreVersion.VERSION).append("\"></script>\n")
                    .append("<script src=\"/susimail/js/markdown.js?").append(CoreVersion.VERSION).append("\"></script>\n");
             } else if (state == State.NEW) {showCompose(out, sessionObject, request);}
-            else if (state == State.CONFIG) {showConfig(out, folder);}
+            else if (state == State.CONFIG) {
+                showConfig(out, folder, configSaveNotice(sessionObject.mailbox != null,
+                                                        Config.hasConfigFile()));
+            }
 
             if (isLogin) {
                 buf.append("\n<div class=footer>\n<script src=/js/togglePassword.js></script>\n<p class=footer>")
@@ -4767,13 +4796,16 @@ public class WebMail extends HttpServlet {
     }
 
     /**
-     * Simple configure page.
+     * The settings page: the whole on-disk configuration in a text area, the folder page
+     * size control, and the save that rewrites the file.
      *
      * @param out where the page is written
      * @param folder the folder whose page size is shown, null before login
+     * @param saveNotice why this session may not save, shown above the button so the
+     *                   operator is not left to lose what they typed, null if it may
      * @since 0.9.13
      */
-    private static void showConfig(PrintWriter out, Folder<String> folder) {
+    private static void showConfig(PrintWriter out, Folder<String> folder, String saveNotice) {
         int sz;
         if (folder != null)
             sz = folder.getPageSize();
@@ -4793,6 +4825,7 @@ public class WebMail extends HttpServlet {
         }
         out.print("\n</textarea>\n");
         out.print("<div id=prefsave>");
+        out.print(configSaveNoticeHTML(saveNotice));
         // The settings say where every session's mail goes, so saving them asks again
         // for the secret a page that is not this one cannot read off the form
         out.print("<b>" + _t("Mailbox password") + ":</b>&nbsp;<input type=password name=\"" + CONFIG_PASSWORD +

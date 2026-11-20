@@ -19,6 +19,14 @@ import org.junit.Test;
  * and across restarts. The nonce proves the click came from this webmail, not that
  * whoever clicked is entitled to move where the next cleartext login is sent.
  *
+ * <p>The gate that replaced it had two defects of its own, pinned below. It closed the
+ * page as well as the save, so an operator whose mailbox password changed on the server
+ * could not reach the settings they needed to change; and it let any session with no
+ * mailbox password write the file with nothing to prove, which is what a logged-out
+ * session has, since logging out drops the hashed password while the user name stays.
+ * Reading the page is open now and the save carries the proof: a mailbox in hand, plus
+ * that mailbox's password typed back again when it has one.
+ *
  * @since 0.9.72+
  */
 public class WebMailConfigGateTest {
@@ -49,33 +57,63 @@ public class WebMailConfigGateTest {
     }
 
     /**
-     * The page is closed to a session that has not signed into a mailbox, and the reason
-     * says what to do about it.
+     * The defect: a session that cannot sign in - the mailbox password changed on the
+     * server - was refused the settings page outright, and the only way to change
+     * anything was to hand-edit susimail.config. The page is open to it now, and says
+     * what the save will need instead of refusing to show anything.
      */
     @Test
-    public void testThePageNeedsASignedInMailbox() {
-        String why = WebMail.configPageRejection(false, true);
+    public void testASessionThatCannotSignInStillSeesTheSettings() {
+        String why = WebMail.configSaveNotice(false, true);
         assertNotNull(why);
         assertTrue(why, why.toLowerCase().contains("sign in"));
-        assertNull(WebMail.configPageRejection(true, true));
+        String html = WebMail.configSaveNoticeHTML(why);
+        assertTrue(html, html.contains("Sign in to the mailbox"));
+        assertTrue(html, html.contains("id=savenotice"));
     }
 
     /**
-     * A first run with no config file on disk can still open the page, or there would be
-     * no way to set the host up at all.
+     * The notice is escaped like any other text on the page, and is absent when the save
+     * is open to the session.
      */
     @Test
-    public void testAFirstRunMayOpenThePage() {
-        assertNull(WebMail.configPageRejection(false, false));
+    public void testTheNoticeIsEscapedAndAbsentWhenTheSaveIsOpen() {
+        assertEquals("", WebMail.configSaveNoticeHTML(null));
+        String html = WebMail.configSaveNoticeHTML("A & B <c>");
+        assertTrue(html, html.contains("&amp;"));
+        assertTrue(html, html.contains("&lt;c&gt;"));
+        assertNull(WebMail.configSaveNotice(true, true));
     }
 
     /**
-     * A save from a session that never signed in is refused even when it carries a
+     * A first run has no file on disk to protect and no mailbox to sign into, so the
+     * save that creates the file is open.
+     */
+    @Test
+    public void testAFirstRunMaySave() {
+        assertNull(WebMail.configSaveNotice(false, false));
+        assertNull(WebMail.configWriteRejection(false, false, null, false, 0, false));
+    }
+
+    /**
+     * A save from a session with no mailbox in hand is refused even when it carries a
      * password, because there is no login to check it against.
      */
     @Test
-    public void testAnUnsignedInSessionCannotSave() {
-        String why = WebMail.configWriteRejection(false, true, "hunter2", true, 0);
+    public void testASessionWithNoMailboxCannotSave() {
+        String why = WebMail.configWriteRejection(false, true, "hunter2", true, 0, true);
+        assertNotNull(why);
+        assertTrue(why, why.toLowerCase().contains("sign in"));
+    }
+
+    /**
+     * The defect: a session that signed in and then logged out kept its user name, lost
+     * its hashed password, and could rewrite the global settings with nothing to prove.
+     * The mailbox in hand is the proof now, and a logout takes it away.
+     */
+    @Test
+    public void testALoggedOutSessionCannotSave() {
+        String why = WebMail.configWriteRejection(false, false, null, false, 0, true);
         assertNotNull(why);
         assertTrue(why, why.toLowerCase().contains("sign in"));
     }
@@ -86,8 +124,8 @@ public class WebMailConfigGateTest {
      */
     @Test
     public void testASaveNeedsThePassword() {
-        assertNotNull(WebMail.configWriteRejection(true, true, null, false, 0));
-        assertNotNull(WebMail.configWriteRejection(true, true, "", false, 0));
+        assertNotNull(WebMail.configWriteRejection(true, true, null, false, 0, true));
+        assertNotNull(WebMail.configWriteRejection(true, true, "", false, 0, true));
     }
 
     /**
@@ -95,19 +133,20 @@ public class WebMailConfigGateTest {
      */
     @Test
     public void testTheRightPasswordSavesAndTheWrongOneDoesNot() {
-        assertNull(WebMail.configWriteRejection(true, true, "hunter2", true, 0));
-        String why = WebMail.configWriteRejection(true, true, "wrong", false, 0);
+        assertNull(WebMail.configWriteRejection(true, true, "hunter2", true, 0, true));
+        String why = WebMail.configWriteRejection(true, true, "wrong", false, 0, true);
         assertNotNull(why);
         assertTrue(why, why.toLowerCase().contains("password"));
     }
 
     /**
-     * A mailbox signed into without a password has no secret to re-ask for, and the
-     * sign-in it did present is enough.
+     * A mailbox signed into without a password has no secret to ask back, so the mailbox
+     * in hand is the proof - which is only worth anything while the mailbox is there, as
+     * the case above shows.
      */
     @Test
     public void testASessionWithNoLoginPasswordIsSignedInEnough() {
-        assertNull(WebMail.configWriteRejection(true, false, null, false, 0));
+        assertNull(WebMail.configWriteRejection(true, false, null, false, 0, true));
     }
 
     /**
@@ -116,10 +155,11 @@ public class WebMailConfigGateTest {
      */
     @Test
     public void testGuessingLocksTheSave() {
+        int max = WebMail.MAX_CONFIG_ATTEMPTS;
         assertNotNull(WebMail.configWriteRejection(true, true, "guess", false,
-                                                   WebMail.MAX_CONFIG_ATTEMPTS - 1));
+                                                   max - 1, true));
         String why = WebMail.configWriteRejection(true, true, "hunter2", true,
-                                                  WebMail.MAX_CONFIG_ATTEMPTS);
+                                                  max, true);
         assertNotNull(why);
         assertTrue(why, why.toLowerCase().contains("sign in again"));
     }
