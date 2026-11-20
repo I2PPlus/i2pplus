@@ -184,17 +184,52 @@ class NodeInfo extends SimpleDataStructure {
     }
 
     /**
+     * Whether a node id is the one {@link #generateNID(Hash, int, RandomSource)} would
+     * have made for a destination hash and a port: the first four bytes equal to the
+     * hash, the next two equal to the hash XOR the port. {@link #verify()} asks the same
+     * question and throws; a caller deciding what to do with a node id a peer named
+     * itself with asks it here instead, so the answer is a decision and not an
+     * exception through the receive path.
+     *
+     * @param nid the node id to test
+     * @param h the destination hash the id is meant to name
+     * @param p the port the id is meant to name
+     * @return true if the id belongs to that hash and port
+     * @since 0.9.72+
+     */
+    static boolean nidMatches(NID nid, Hash h, int p) {
+        if (!KRPC.SECURE_NID) return true;
+        byte[] nb = nid.getData();
+        byte[] hb = h.getData();
+        return DataHelper.eq(nb, 0, hb, 0, 4)
+                && ((nb[4] ^ (p >> 8)) & 0xff) == (hb[4] & 0xff)
+                && ((nb[5] ^ p) & 0xff) == (hb[5] & 0xff);
+    }
+
+    /**
+     * The port a node id claims, decoded from the two bytes {@link #generateNID} XORs it
+     * into. Where an id matches a hash but not the port the query arrived from, this is
+     * the port the peer computed its id from, and the only half of the answer a reader
+     * can act on.
+     *
+     * @param nid the node id to read
+     * @param h the destination hash the id is meant to name
+     * @return the port the id encodes, 0-65535
+     * @since 0.9.72+
+     */
+    static int nidPort(NID nid, Hash h) {
+        byte[] nb = nid.getData();
+        byte[] hb = h.getData();
+        return ((nb[4] ^ hb[4]) & 0xff) << 8 | (nb[5] ^ hb[5]) & 0xff;
+    }
+
+    /**
      * Verify the NID matches the Hash. See {@link #generateNID(Hash, int, RandomSource)} for requirements.
      *
      * @throws IllegalArgumentException if the NID does not match the hash, per generateNID()
      */
     private void verify() {
-        if (!KRPC.SECURE_NID) return;
-        byte[] nb = nID.getData();
-        byte[] hb = hash.getData();
-        if ((!DataHelper.eq(nb, 0, hb, 0, 4))
-                || ((nb[4] ^ (port >> 8)) & 0xff) != (hb[4] & 0xff)
-                || ((nb[5] ^ port) & 0xff) != (hb[5] & 0xff))
+        if (!nidMatches(nID, hash, port))
             throw new IllegalArgumentException("NID/Hash mismatch");
     }
 

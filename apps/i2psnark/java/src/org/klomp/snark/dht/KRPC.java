@@ -1857,7 +1857,34 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         byte[] nid = args.get("id").getBytes();
         NodeInfo nInfo;
         if (dest != null) {
-            nInfo = new NodeInfo(new NID(nid), dest, fromPort);
+            NID nID = new NID(nid);
+            Hash from = dest.calculateHash();
+            // The sender's destination is authenticated by the session that carried the
+            // datagram, so the destination hash is the trustworthy half of the pair and
+            // the node id is what is in question. The constructor used to throw on the
+            // mismatch, out of here and into receiveMessage()'s catch-all, where it read
+            // as "Processing a received DHT message failed * Error: NID/Hash mismatch" -
+            // no node, no method, no reason, and it spent the once-a-minute stack-trace
+            // allowance that a real parse failure needs. Same answer, stated: the query
+            // is dropped and the node is not added.
+            if (!NodeInfo.nidMatches(nID, from, fromPort)) {
+                if (_log.shouldWarn()) {
+                    if (DataHelper.eq(nID.getData(), 0, from.getData(), 0, 4)) {
+                        _log.warn("Refused a DHT query -> The node id names another port"
+                                  + "\n* From: " + SnarkLogFormatter.dest(from)
+                                  + " * Method: " + method
+                                  + " * Named port: " + NodeInfo.nidPort(nID, from)
+                                  + " * Received port: " + fromPort);
+                    } else {
+                        _log.warn("Refused a DHT query -> The node id names another destination"
+                                  + "\n* From: " + SnarkLogFormatter.dest(from)
+                                  + " * Method: " + method
+                                  + " * Port: " + fromPort);
+                    }
+                }
+                return;
+            }
+            nInfo = new NodeInfo(nID, dest, fromPort);
             nInfo = heardFrom(nInfo);
             nInfo.setDestination(dest);
         } else {
