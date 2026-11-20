@@ -1023,6 +1023,24 @@ public class EstablishmentManager {
     }
 
     /**
+     * Is the endpoint a hole punch wants to move an attempt onto already held by
+     * a different attempt? The establishment maps keep one state per endpoint,
+     * so re-keying onto a taken endpoint silently drops the holder out of the
+     * main map while leaving it in the byHash and byClaimedAddress maps, where
+     * it is found by lookups that then miss the handshake and is reaped only by
+     * the failsafe sweep. A punch that repeats for our own attempt is not a
+     * collision — the holder is the state being moved.
+     *
+     * @param incumbent the state keyed at that endpoint, null when nothing is
+     * @param ours the attempt the punch is for
+     * @return true if another attempt owns the endpoint
+     * @since 0.9.72+
+     */
+    static boolean endpointTaken(OutboundEstablishState incumbent, OutboundEstablishState ours) {
+        return incumbent != null && incumbent != ours;
+    }
+
+    /**
      * Is the claimed relay address unacceptable, meaning Charlie asked us to
      * connect somewhere invalid, too close, on our own network, or a
      * blocklisted address? Finding the introducer's own IP in the claim is
@@ -3022,8 +3040,24 @@ public class EstablishmentManager {
             }
             return;
         }
+        // Another live attempt can already be keyed at the endpoint the punch
+        // names - we are establishing to Charlie's mapped address directly as
+        // well. The map holds one state per endpoint and every other mutation of
+        // it is value-checked; moving ours on top of the other one drops it from
+        // this map while leaving it in the byHash and byClaimedAddress maps, so
+        // it lingers until the failsafe sweep and misses every SessionCreated
+        // and Retry aimed at it. That attempt is already keyed exactly where the
+        // endpoint's packets arrive, so it keeps the endpoint and ours times out
+        // as if the punch had never come.
+        RemoteHostId newId = new RemoteHostId(ip, port);
+        if (endpointTaken(_outboundStates.get(newId), state)) {
+            if (_log.shouldInfo()) {
+                _log.info("[SSU] HolePunch named another endpoint -> Endpoint already held" +
+                          " * Punch: " + Addresses.toString(ip, port));
+            }
+            return;
+        }
         state2.holePunchAddress(ip, port);
-        RemoteHostId newId = state.getRemoteHostId();
         _outboundStates.remove(oldId, state);  // only if == state
         _outboundStates.put(newId, state);
         // The token is keyed by the address we connect from, so a later attempt

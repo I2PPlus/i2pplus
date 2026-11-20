@@ -151,4 +151,25 @@ public class HolePunchOrderingTest {
         assertFalse(EstablishmentManager.canRepointEndpoint(OB_STATE_RETRY_RECEIVED));
         assertFalse(EstablishmentManager.canRepointEndpoint(OB_STATE_REQUEST_SENT_NEW_TOKEN));
     }
+
+    /**
+     * A punch may move an attempt onto an endpoint nothing else holds, and onto
+     * the endpoint the attempt already holds - a punch that repeats for our own
+     * attempt is not a collision. It may not move it on top of a different
+     * attempt: the establishment maps keep one state per endpoint, so the holder
+     * would be dropped from the main map while staying in the byHash and
+     * byClaimedAddress maps, missing every SessionCreated and Retry aimed at it
+     * until the failsafe sweep removes it.
+     */
+    @Test
+    public void testEndpointIsNotTakenByOurOwnAttempt() {
+        OutboundEstablishState ours = mock(OutboundEstablishState.class);
+        OutboundEstablishState other = mock(OutboundEstablishState.class);
+        assertFalse("a free endpoint counted as taken",
+                    EstablishmentManager.endpointTaken(null, ours));
+        assertFalse("our own attempt counted as someone else's",
+                    EstablishmentManager.endpointTaken(ours, ours));
+        assertTrue("another attempt did not count as holding the endpoint",
+                   EstablishmentManager.endpointTaken(other, ours));
+    }
 }
