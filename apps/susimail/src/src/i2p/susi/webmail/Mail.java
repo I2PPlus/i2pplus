@@ -368,11 +368,19 @@ class Mail {
     /**
      * Remove the characters that let a display name hide or reverse text: the
      * zero-width spaces and joiners, the bidi embeddings, overrides and isolates,
-     * the word joiner and invisible operators, the byte-order mark, and combining
-     * diacritical marks. A name built as "paypal" plus the right-to-left override
-     * plus "leap.com" otherwise renders reversed, and a subject can carry characters
-     * that take up no width at all, so what the operator reads is not the string
-     * that was sent.
+     * the word joiner and invisible operators, and the byte-order mark. A name built
+     * as "paypal" plus the right-to-left override plus "leap.com" otherwise renders
+     * reversed, and a subject can carry characters that take up no width at all, so
+     * what the operator reads is not the string that was sent.
+     * <p>
+     * Combining diacritical marks are deliberately not in that list. They take up
+     * width and they carry the word: text sent in the decomposed form - the usual
+     * case from macOS, and what RFC 2231 encoded parameters often arrive as - is a
+     * base letter plus its mark, so stripping the range silently rewrites the
+     * sender, the subject, the reply header and any draft saved from them. "Cafe"
+     * plus U+0301 came in as "Café" and went out as "Cafe". Nothing about a mark
+     * hides or reverses what is around it, which is the only thing this filter is
+     * for.
      * <p>
      * This is not an escaper - the caller still has to escape the result. It runs
      * before escaping and before any truncation, so an invisible run cannot eat the
@@ -393,7 +401,6 @@ class Mail {
                 (c >= 0x202a && c <= 0x202e) ||   // bidi embeddings and overrides
                 (c >= 0x2060 && c <= 0x2064) ||   // word joiner, invisible operators
                 (c >= 0x2066 && c <= 0x2069) ||   // bidi isolates
-                (c >= 0x0300 && c <= 0x036f) ||   // combining diacritical marks
                 c == 0xfeff) {                    // byte-order mark
                 continue;
             }

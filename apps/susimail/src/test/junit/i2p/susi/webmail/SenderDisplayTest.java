@@ -20,6 +20,11 @@ import org.junit.Test;
  * and on a reply that name is handed back into the From box as if it were the
  * correspondent's own.
  *
+ * <p>The other half is the opposite mistake: a filter written to remove what is
+ * invisible also removed what merely looks odd, and combining diacritical marks are
+ * ordinary text sent in the decomposed form. Both directions are pinned here, at the
+ * filter and through the header parser that feeds the list rows.
+ *
  * @since 0.9.72+
  */
 public class SenderDisplayTest {
@@ -58,12 +63,16 @@ public class SenderDisplayTest {
     }
 
     /**
-     * A combining mark can hang a glyph off a character that was not meant to carry
-     * it, so it goes too.
+     * A combining mark is the word, not a hidden character. Text sent in the
+     * decomposed form - the usual case from macOS - is a base letter plus its mark,
+     * and stripping that range rewrote the sender and the subject, handed the
+     * mangled form back into the reply header, and saved it into the draft. The mark
+     * is left exactly as it was sent; nothing here composes it.
      */
     @Test
-    public void testACombiningMarkIsRemoved() {
-        assertEquals("e", Mail.displayable("e\u0301"));
+    public void testACombiningMarkSurvives() {
+        assertEquals("cafe\u0301", Mail.displayable("cafe\u0301"));
+        assertEquals("u\u0308ber", Mail.displayable("u\u0308ber"));
     }
 
     /**
@@ -107,18 +116,10 @@ public class SenderDisplayTest {
      */
     @Test
     public void testAParsedHeaderCarriesNoHiddenCharacters() throws IOException {
-        String raw = "From: \"a\u202Eb\" <x@y.i2p>\r\n" +
-                     "Subject: hi\u200Bthere\u202E\r\n" +
-                     "Date: Sun, 16 Nov 2026 12:00:00 +0000\r\n" +
-                     "\r\n";
-        MemoryBuffer buf = new MemoryBuffer(raw.length() + 16);
-        OutputStream out = buf.getOutputStream();
-        out.write(raw.getBytes(StandardCharsets.UTF_8));
-        out.close();
-        buf.writeComplete(true);
-
-        Mail mail = new Mail("1");
-        mail.setHeader(buf);
+        Mail mail = mailWith("From: \"a\u202Eb\" <x@y.i2p>\r\n" +
+                             "Subject: hi\u200Bthere\u202E\r\n" +
+                             "Date: Sun, 16 Nov 2026 12:00:00 +0000\r\n" +
+                             "\r\n");
 
         assertEquals("ab", mail.shortSender);
         assertEquals("hithere", mail.shortSubject);
@@ -127,7 +128,49 @@ public class SenderDisplayTest {
     }
 
     /**
+     * The same path on a name and a subject sent in the decomposed form, which is
+     * what macOS and many mobile keyboards produce: the mark is part of the word, and
+     * it used to be stripped out of the strings the reply header and any saved draft
+     * are built from, so "Renée" arrived, rendered as "Renee", and went back out that
+     * way.
+     *
+     * @throws IOException on a buffer error in the fixture
+     */
+    @Test
+    public void testAParsedHeaderKeepsADecomposedNameAndSubject() throws IOException {
+        Mail mail = mailWith("From: \"Rene\u0301e\" <x@y.i2p>\r\n" +
+                             "Subject: cafe\u0301 morning\r\n" +
+                             "Date: Sun, 16 Nov 2026 12:00:00 +0000\r\n" +
+                             "\r\n");
+
+        assertEquals("\"Rene\u0301e\" <x@y.i2p>", mail.sender);
+        assertEquals("cafe\u0301 morning", mail.subject);
+        assertFalse("the subject kept a formatting character", hasFormatting(mail.subject));
+    }
+
+    /**
+     * A message parsed from the header lines as they arrive from the server.
+     *
+     * @param raw the header lines, terminated by a blank line
+     * @return the parsed message, never null
+     * @throws IOException on a buffer error in the fixture
+     */
+    private static Mail mailWith(String raw) throws IOException {
+        MemoryBuffer buf = new MemoryBuffer(raw.length() + 16);
+        OutputStream out = buf.getOutputStream();
+        out.write(raw.getBytes(StandardCharsets.UTF_8));
+        out.close();
+        buf.writeComplete(true);
+
+        Mail mail = new Mail("1");
+        mail.setHeader(buf);
+        return mail;
+    }
+
+    /**
      * Whether any character in the invisible or directional ranges survives in text.
+     * Combining marks are not one of them - they are the word, and they are expected
+     * to survive.
      *
      * @param s the text to check, may be null
      * @return true if it still holds one of them
@@ -138,7 +181,7 @@ public class SenderDisplayTest {
             char c = s.charAt(i);
             if ((c >= 0x200b && c <= 0x200f) || (c >= 0x202a && c <= 0x202e) ||
                 (c >= 0x2060 && c <= 0x2064) || (c >= 0x2066 && c <= 0x2069) ||
-                (c >= 0x0300 && c <= 0x036f) || c == 0xfeff)
+                c == 0xfeff)
                 return true;
         }
         return false;
