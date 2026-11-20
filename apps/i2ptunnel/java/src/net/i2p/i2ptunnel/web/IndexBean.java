@@ -27,6 +27,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import javax.servlet.http.HttpSession;
 
@@ -442,50 +443,69 @@ public class IndexBean {
     }
 
     /**
-     * One restart pass: stop every tunnel in the pass, wait once for the sockets
-     * to close, then start each one that has not been taken down since.
+     * One restart pass: for each tunnel in the pass, stop it, wait for the
+     * sockets to close, then start it again unless it has been taken down since.
+     *
+     * <p>One tunnel at a time. A stop drops every stream running over that
+     * tunnel, so stopping the whole list before starting anything takes down
+     * every live set of streams at once and rebuilds a dozen tunnels in
+     * parallel; interleaved, at most one tunnel is ever down.
      *
      * @param controllers the tunnels in the pass, already narrowed to running
      *                    ones in scope
      * @param scope which kind of tunnel the pass covers, for the closing message
      */
-    private void restartPass(List<TunnelController> controllers, int scope) {
-        int size = controllers.size();
-        long[] generations = new long[size];
-        for (int i = 0; i < size; i++) {
-            TunnelController controller = controllers.get(i);
+    void restartPass(List<TunnelController> controllers, int scope) {
+        int started = restartPass(controllers, TunnelController.RESTART_DELAY_MS,
+                                  msg -> _timestampedMessages.add(new TimestampedMessage(msg)));
+        if (started >= 1) {
+            _timestampedMessages.add(new TimestampedMessage("✔ " + restartDoneMessage(scope, started)));
+        }
+    }
+
+    /**
+     * The pass itself, with the delay and the message sink handed to it, so the
+     * order the tunnels are touched in, and what counts as started, can be tested
+     * without waiting a second per tunnel or reading the page's message list.
+     *
+     * @param controllers the tunnels in the pass, already narrowed to running
+     *                    ones in scope
+     * @param delayMs how long to wait after stopping a tunnel for its sockets to
+     *                close before starting it again
+     * @param sink where each line the operator sees goes
+     * @return how many tunnels were handed a start, 0 if none of them was
+     */
+    int restartPass(List<TunnelController> controllers, long delayMs, Consumer<String> sink) {
+        int started = 0;
+        for (TunnelController controller : controllers) {
             String name = controller.getName();
-            _timestampedMessages.add(new TimestampedMessage("‣ " + _t("Stopping tunnel") + ": " + name + "..."));
+            sink.accept("‣ " + _t("Stopping tunnel") + ": " + name + "...");
             try {
                 controller.stopTunnel();
             } catch (RuntimeException e) {
                 _log.error("Restarting the tunnel failed -> Could not stop it * Tunnel: " + name, e);
-                _timestampedMessages.add(new TimestampedMessage("✖ " + _t("Error restarting tunnel") + ": " + name));
+                sink.accept("✖ " + _t("Error restarting tunnel") + ": " + name);
             }
-            generations[i] = controller.getLifecycleGeneration();
-        }
-        try {
-            Thread.sleep(TunnelController.RESTART_DELAY_MS);
-        } catch (InterruptedException ie) {
-            Thread.currentThread().interrupt();
-            return;
-        }
-        int started = 0;
-        for (int i = 0; i < size; i++) {
-            TunnelController controller = controllers.get(i);
-            String name = controller.getName();
-            _timestampedMessages.add(new TimestampedMessage("‣ " + _t("Starting tunnel") + ": " + name + "..."));
+            long generation = controller.getLifecycleGeneration();
             try {
-                controller.startTunnelBackground(generations[i]);
-                started++;
+                Thread.sleep(delayMs);
+            } catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+                break;
+            }
+            sink.accept("‣ " + _t("Starting tunnel") + ": " + name + "...");
+            try {
+                // Only a start that was actually handed off counts: a stale
+                // generation or a tunnel that is no longer stopped starts nothing,
+                // and the closing line must not claim it did.
+                if (controller.startTunnelBackground(generation))
+                    started++;
             } catch (RuntimeException e) {
                 _log.error("Restarting the tunnel failed -> Could not start it * Tunnel: " + name, e);
-                _timestampedMessages.add(new TimestampedMessage("✖ " + _t("Error restarting tunnel") + ": " + name));
+                sink.accept("✖ " + _t("Error restarting tunnel") + ": " + name);
             }
         }
-        if (started >= 1) {
-            _timestampedMessages.add(new TimestampedMessage("✔ " + restartDoneMessage(scope, started)));
-        }
+        return started;
     }
 
     /**

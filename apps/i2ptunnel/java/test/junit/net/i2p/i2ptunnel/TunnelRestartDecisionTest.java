@@ -4,11 +4,16 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import java.util.Properties;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
 
 /**
- * Pins the two decisions a tunnel restart pass makes.
+ * Pins the decisions a tunnel restart pass makes: which tunnels it takes, whether
+ * a start queued behind the delay is still valid, and whether a start it handed
+ * off actually started anything - the pass reports that count to the operator as
+ * "Restarted N tunnels".
  *
  * <p>Every restart path the console offers ran on the servlet request thread: it
  * slept a second between stopping and starting each tunnel, so "Restart all" held
@@ -130,17 +135,57 @@ public class TunnelRestartDecisionTest {
     /**
      * The guard is wired into the start, not only available beside it: a start
      * handed a generation the tunnel has moved past leaves the tunnel exactly as
-     * it was, with nothing started in the background.
+     * it was, with nothing started in the background, and says so - a restart pass
+     * that counted this call would tell the operator it restarted a tunnel it
+     * never started.
      */
     @Test
     public void testAStaleStartLeavesTheTunnelAlone() {
         TunnelController tc = newController();
         tc.changeState(TunnelController.TunnelState.STOPPED);
         long current = tc.getLifecycleGeneration();
-        tc.startTunnelBackground(current + 3);
+        assertFalse("a superseded start was reported as handed off",
+                    tc.startTunnelBackground(current + 3));
         assertEquals("a superseded start changed the state",
                      TunnelController.TunnelState.STOPPED, tc.getState());
         assertFalse("a superseded start marked the tunnel starting", tc.getIsStarting());
+    }
+
+    /**
+     * A tunnel that is not stopped takes no start: the pass may reach a tunnel
+     * another request has already brought back up, and starting it again would
+     * both drop its streams and be counted as a restart.
+     */
+    @Test
+    public void testAStartOfATunnelThatIsNotStoppedIsNotHandedOff() {
+        TunnelController tc = newController();
+        tc.changeState(TunnelController.TunnelState.RUNNING);
+        assertFalse("a running tunnel was handed a start",
+                    tc.startTunnelBackground(tc.getLifecycleGeneration()));
+        assertEquals(TunnelController.TunnelState.RUNNING, tc.getState());
+    }
+
+    /**
+     * A start that is accepted is reported as handed off, which is the only kind
+     * the restart pass may count, and the tunnel is on its way up.
+     *
+     * @throws Exception if the background start does not run
+     */
+    @Test(timeout = 20000)
+    public void testAStartThatIsHandedOffIsReported() throws Exception {
+        CountDownLatch started = new CountDownLatch(1);
+        TunnelController tc = spy(newController());
+        doAnswer(inv -> {
+            started.countDown();
+            return null;
+        }).when(tc).startTunnel();
+        tc.changeState(TunnelController.TunnelState.STOPPED);
+
+        assertTrue("an accepted start was not reported",
+                   tc.startTunnelBackground(tc.getLifecycleGeneration()));
+        assertTrue("the start was never handed to the background thread",
+                   started.await(5, TimeUnit.SECONDS));
+        assertEquals(TunnelController.TunnelState.STARTING, tc.getState());
     }
 
     /**

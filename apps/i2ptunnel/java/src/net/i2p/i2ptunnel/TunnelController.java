@@ -548,21 +548,24 @@ public class TunnelController implements Logging {
      *
      * @param generation the generation the caller stopped the tunnel at, or
      *                   {@link #ANY_GENERATION} to start regardless
+     * @return true if the tunnel was handed a start, false if it was superseded
+     *         or was not stopped in the first place
      * @since 0.9.72+
      */
-    public void startTunnelBackground(long generation) {
+    public boolean startTunnelBackground(long generation) {
         synchronized (this) {
             if (!isStartStillValid(generation, _lifecycleGeneration)) {
                 if (_log.shouldInfo())
                     _log.info("Skipping the start of " + getName() +
                               " -> Superseded by a stop or a destroy");
-                return;
+                return false;
             }
             if (_state != TunnelState.STOPPED && _state != TunnelState.START_ON_LOAD && _state != TunnelState.DELAYED_START_PENDING)
-                return;
+                return false;
             changeState(TunnelState.STARTING);
         }
         new I2PAppThread(new Runnable() { public void run() { startTunnel(); } }, "TunStart").start();
+        return true;
     }
 
     /**
