@@ -953,8 +953,15 @@ public class EncryptedLeaseSet extends LeaseSet2 {
         }
         _log.info("Encrypted LeaseSet2 outer signature verification succeeded");
         if (_unblindedSPK == null) {
-            if (_log.shouldWarn())
-                _log.warn("Encrypted LeaseSet2 -> No destination / SigningPrivateKey to decrypt with");
+            // Not a finding: an encrypted lease set is encrypted for whoever
+            // asked for it, so a router storing or relaying one normally has no
+            // key to open it and keeps it exactly as published. This was a
+            // WARN, which read as a fault about once a minute on a busy
+            // router - 129 times in 133 minutes in one live log.
+            if (_log.shouldDebug()) {
+                _log.debug("Encrypted LeaseSet2 has no signing key to decrypt with" +
+                           " -> Kept as published");
+            }
             return true;
         }
         try {
