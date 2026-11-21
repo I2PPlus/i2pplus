@@ -1,10 +1,10 @@
 package net.i2p.router;
 
 import java.io.Writer;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
+import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.i2np.DatabaseLookupMessage;
 import net.i2p.stat.RateConstants;
@@ -174,7 +174,7 @@ public class InNetMessagePool implements Service {
             _log.debug("Received " + messageBody.getClass().getSimpleName() +
                 " [MsgID " + messageBody.getUniqueId() + "] " +
                 " [XOR MsgID " + messageBody.getUniqueId(msgIDBloomXor) + "]" +
-                "\n* Expires: " + new Date(exp));
+                expiryClause(exp, _context.clock().now()));
         }
 
         int type = messageBody.getType();
@@ -239,6 +239,25 @@ public class InNetMessagePool implements Service {
     }
 
     /**
+     * The message's expiry as a duration from now, for a log segment.
+     * <p>A wall-clock date asks the reader to subtract the log line's own
+     * timestamp by hand, and it reads as the cause of the drop even when the
+     * reason is a duplicate: 160 of these lines in one live router's 133-minute
+     * window carried dates such as {@code Expires: Sat Nov 21 14:23:59 GMT 2026}
+     * seven seconds in the future, beside a reason of "Duplicate message".
+     *
+     * @param expiration the message expiry, in ms since the epoch
+     * @param now the current time from the router clock, in ms since the epoch
+     * @return a {@code " * key: duration"} segment, never null
+     * @since 0.9.72+
+     */
+    static String expiryClause(long expiration, long now) {
+        return expiration >= now
+            ? " * Expires in: " + DataHelper.formatDuration(expiration - now)
+            : " * Expired: " + DataHelper.formatDuration(now - expiration) + " ago";
+    }
+
+    /**
      * Handles invalid or duplicate messages by logging, statistics updates,
      * and history recording.
      *
@@ -253,10 +272,12 @@ public class InNetMessagePool implements Service {
     private void handleInvalidMessage(I2NPMessage messageBody, String invalidReason, RouterIdentity fromRouter, Hash fromRouterHash, boolean doHistory, long msgIDBloomXor) {
         String reason = invalidReason.substring(0, 1).toUpperCase() + invalidReason.substring(1);
         long msgID = messageBody.getUniqueId(msgIDBloomXor);
+        long exp = messageBody.getMessageExpiration();
+        long now = _context.clock().now();
         if (_log.shouldInfo()) {
             _log.info("Dropping DbLookupMessage [XOR MsgID " + msgID + "] -> " + reason
                       + "\n* " + messageBody.getClass().getSimpleName()
-                      + " * Expires: " + new Date(messageBody.getMessageExpiration()));
+                      + expiryClause(exp, now));
         } else if (_log.shouldWarn()) {
             // Name the message by its class, not its toString(): a
             // TunnelGatewayMessage's toString is multi-line and carries the wrapped
@@ -264,7 +285,7 @@ public class InNetMessagePool implements Service {
             // line ran to three.
             _log.warn("Dropping DbLookupMessage for " + messageBody.getClass().getSimpleName()
                       + " -> " + reason
-                      + "\n* MsgID: " + msgID + " * Expires: " + new Date(messageBody.getMessageExpiration()));
+                      + "\n* MsgID: " + msgID + expiryClause(exp, now));
         }
         _context.statManager().addRateData("inNetPool.dropped", 1);
         _context.statManager().addRateData("inNetPool.droppedDbLookupResponseMessage", 1);

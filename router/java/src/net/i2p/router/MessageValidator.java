@@ -74,9 +74,10 @@ public class MessageValidator {
         long now = _context.clock().now();
         if (now - (Router.CLOCK_FUDGE_FACTOR * 3 / 2) >= expiration) {
             if (_log.shouldInfo())
-                _log.info("Rejecting message expired " + (now-expiration) + "ms ago");
+                _log.info("Rejecting message -> Expired " +
+                          DataHelper.formatDuration(now - expiration) + " ago");
             _context.statManager().addRateData("router.invalidMessageTime", (now-expiration));
-            return "Expired " + (now-expiration) + "ms ago";
+            return "Expired " + DataHelper.formatDuration(now - expiration) + " ago";
         } else if (now + 4*Router.CLOCK_FUDGE_FACTOR < expiration) {
             long future = expiration - now;
             // WARN and throttled, not INFO: a peer just outside this window has
@@ -89,7 +90,8 @@ public class MessageValidator {
                                " * Expires in: " + DataHelper.formatDuration(future) +
                                " * Window: " + DataHelper.formatDuration(4*Router.CLOCK_FUDGE_FACTOR));
             _context.statManager().addRateData("router.invalidMessageTime", -future);
-            return "Expires too far in the future (" + future + "ms)";
+            return "Expires too far in the future * Expires in: " +
+                   DataHelper.formatDuration(future);
         }
         return null;
     }
