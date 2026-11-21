@@ -2929,6 +2929,15 @@ class Connection {
      * pushes. One connection wrote 31,301 of the timer fires on its own. Each
      * condition is still reported, per connection, once a burst or a window
      * instead of once a packet.
+     * <p>The connect-phase lines go through here too. Measured in a later
+     * 80-minute window, with the seven conditions above already collapsed, the
+     * SYN-phase pair still wrote 38,961 lines on its own - 20,234 rotations to a
+     * fresh outbound tunnel and 18,727 give-ups - almost all of them one client
+     * tunnel dialing peers that never answer.
+     * <p>A line that carries a full packet report cannot use this helper: the
+     * report has to be built before the call, so the caller checks
+     * {@link Log#shouldDebug()} itself and calls
+     * {@link Log#debugThrottled(String, String)} with {@link #periodicDebugKey}.
      *
      * @param condition a fixed name for the recurring event, part of the key
      * @param msg the line to write
@@ -3121,7 +3130,14 @@ class Connection {
         // if we don't have anything to retransmit, send a small ACK
         // this calls sendPacket() below
         packet = _receiver.send(null, 0, 0);
-        if (_log.shouldDebug()) {_log.debug("Sending new ACK: " + packet);}
+        // One of these per ACK, and the packet report opens a second line on top of it:
+        // 6,188 records wrote 13,368 physical lines in one 80-minute window of a live
+        // router's log. The dump is kept, it just rides a burst rather than a packet.
+        if (_log.shouldDebug()) {
+            _log.debugThrottled(periodicDebugKey(shortLabel(), "ack-sent"),
+                                shortLabel() + " -> Sending a new ACK * Sequence: " +
+                                packet.getSequenceNum() + packet.formatAsString(false));
+        }
     }
 
     /**
@@ -3495,9 +3511,16 @@ class Connection {
                         // ack beats the paced queue flush), and negative
                         // resends would skew the loss-recovery accounting.
                         _activeResends.updateAndGet(v -> Math.max(0, v - 1));
+                        // The packet report opens its own continuation line, so the tally
+                        // has to precede it, and the volume is a per-burst fact, not a
+                        // per-packet one: 28,199 of these wrote 63,061 physical lines, 7.2%
+                        // of everything the router logged in one 80-minute window.
                         if (_log.shouldDebug()) {
-                            _log.debug("Active resend of " + p + " successful -> " +
-                                       _activeResends + " resends remaining");
+                            _log.debugThrottled(periodicDebugKey(shortLabel(), "resend-acked"),
+                                                shortLabel() + " -> Resent packet acknowledged" +
+                                                " * Sequence: " + p.getSequenceNum() +
+                                                " * Active resends: " + _activeResends.get() +
+                                                p.formatAsString(false));
                         }
                     }
                 }
@@ -5537,9 +5560,9 @@ class Connection {
                     // Record an accurate error *before* the error-free disconnect, so
                     // waitForConnect() returns "Connection timed out: SYN not
                     // acknowledged" instead of the generic "Connection failed".
-                    if (_log.shouldDebug()) {
-                        _log.debug(shortLabel() + " -> SYN not acknowledged, closing");
-                    }
+                    // 18,727 of these in one 80-minute window, 2.1% of the whole log, and
+                    // they repeat per connect attempt against the same unreachable peer.
+                    debugPeriodic("syn-give-up", shortLabel() + " -> SYN not acknowledged, closing");
                     packet.cancelled();
                     if (_connectionError == null) {setConnectionError(ERR_SYN_NOT_ACKNOWLEDGED);}
                     disconnect(false);
@@ -5582,11 +5605,11 @@ class Connection {
                                                   SYN_RESEND_ROTATION_SENDS)
                         && claimSynRotation()) {
                         setNextSendFreshConnection();
-                        if (_log.shouldDebug()) {
-                            _log.debug(shortLabel() + " -> SYN unacked after " +
-                                       packet.getNumSends() + " sends, rotating to a " +
-                                       "fresh outbound tunnel");
-                        }
+                        // 20,234 of these in one 80-minute window, 2.3% of the whole log,
+                        // nearly all of them one client tunnel dialing peers that never answer.
+                        debugPeriodic("syn-rotate", shortLabel() + " -> SYN unacked after " +
+                                      packet.getNumSends() + " sends, rotating to a " +
+                                      "fresh outbound tunnel");
                     }
 
                     packet.setResendDelay(_options.getResendDelay() / 1000);

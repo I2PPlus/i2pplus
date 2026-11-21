@@ -2,6 +2,9 @@ package net.i2p.client.streaming.impl;
 
 import static org.junit.Assert.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.junit.Test;
 
 import net.i2p.util.LogSuppressor;
@@ -19,7 +22,11 @@ import net.i2p.util.LogSuppressor;
  *
  * <p>The rest of the tests cover the recurring lines: when a resend line carries
  * the full packet dump, and the suppressor keys that let the router collapse the
- * repeats of a condition it reports once a burst rather than once a packet.
+ * repeats of a condition it reports once a burst rather than once a packet. That
+ * covers the connect-phase pair as well - in a later 80-minute window, with the
+ * per-packet conditions already collapsed, the SYN rotations and give-ups still
+ * wrote 38,961 lines and the acked-resend and ACK lines another 76,429, together
+ * 13.1% of everything logged.
  *
  * @since 0.9.72+
  */
@@ -156,5 +163,80 @@ public class ResendLogCadenceTest {
         assertEquals(48, written);
         assertTrue("at least a 600-fold cut",
                    written * 600 <= 31_301);
+    }
+
+    /**
+     * The connect-phase and ACK lines added after that first sweep each need
+     * their own key, and a key per connection: a client tunnel that dialed
+     * hundreds of peers that never answer must report each peer's failure once,
+     * not lose the later peers behind one shared counter.
+     */
+    @Test
+    public void testConnectPhaseConditionsHaveTheirOwnKeys() {
+        String label = "From: [by7luzwh] * To: [o3nim53d]";
+        Set<String> keys = new HashSet<>();
+        String[] conditions = {"ack-sent", "resend-acked", "syn-give-up",
+                               "syn-rotate"};
+        for (String cond : conditions) {
+            assertTrue("one key per condition: " + cond,
+                       keys.add(Connection.periodicDebugKey(label, cond)));
+        }
+        assertEquals(conditions.length, keys.size());
+    }
+
+    /**
+     * The second measured window, taken after the first seven conditions were
+     * already collapsed: 28,199 acked-resend records, 20,234 SYN rotations,
+     * 18,727 SYN give-ups and 6,188 ACK records - 73,348 records, and 115,390
+     * physical lines once the packet reports are counted, 13.1% of everything
+     * the router logged in 80 minutes. Run through the suppressor at that rate
+     * they collapse to a couple of lines a minute per condition, and every
+     * condition still reports.
+     */
+    @Test
+    public void testSuppressorCollapsesTheMeasuredSecondWindow() {
+        int[] occurrences = {28_199, 20_234, 18_727, 6_188};
+        String[] conditions = {"resend-acked", "syn-rotate", "syn-give-up",
+                               "ack-sent"};
+        String label = "From: [by7luzwh] * To: [o3nim53d]";
+        long windowMs = 80 * 60 * 1000L;
+        int written = 0;
+        for (int c = 0; c < conditions.length; c++) {
+            LogSuppressor sup = new LogSuppressor();
+            String key = Connection.periodicDebugKey(label, conditions[c]);
+            long now = 1_700_000_000_000L;
+            long spacing = windowMs / occurrences[c];
+            for (int i = 0; i < occurrences[c]; i++) {
+                now += spacing;
+                if (sup.record(key, now).log) {written++;}
+            }
+        }
+        assertTrue("every condition stays reportable",
+                   written >= conditions.length);
+        assertTrue("a 100-fold cut at least, got " + written + " of 73,348",
+                   written * 100 <= 73_348);
+    }
+
+    /**
+     * A collapsed run has to say how big it was on the line that survives it, or
+     * a reader cannot tell a suppressed flood from a quiet connection.
+     */
+    @Test
+    public void testCollapsedRunsCarryTheirCount() {
+        LogSuppressor sup = new LogSuppressor();
+        String label = "From: [by7luzwh] * To: [o3nim53d]";
+        String key = Connection.periodicDebugKey(label, "syn-rotate");
+        long now = 1_700_000_000_000L;
+        long largest = 0;
+        // The measured rate: 20,234 rotations over 80 minutes of a live log.
+        for (int i = 0; i < 20_234; i++) {
+            now += 237;
+            LogSuppressor.Decision d = sup.record(key, now);
+            if (d.log && d.suppressed > largest) {largest = d.suppressed;}
+        }
+        // At that rate the 60-second window, not the 1,000-message burst, ends
+        // a suppression run, so a surviving line stands for some 250 of them.
+        assertTrue("the surviving line reports the run it stands for, got " +
+                   largest, largest >= 200);
     }
 }
