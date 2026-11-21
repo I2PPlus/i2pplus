@@ -107,7 +107,7 @@ public class DummyTunnelManagerFacade implements TunnelManagerFacade {
     }
 
     @Override
-    public void reportSendFailure(TunnelInfo tunnel, int status) { /* no-op */ }
+    public void reportSendFailure(TunnelInfo tunnel, int status, Hash dest) { /* no-op */ }
 
     @Override
     public int ensurePoolsFor(Hash client) { return 0; /* Intentionally empty - dummy implementation */ }

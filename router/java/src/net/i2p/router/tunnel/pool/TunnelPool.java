@@ -209,8 +209,12 @@ public class TunnelPool {
     private long _lastLastResortLogTime;
     /** When the last selectPeers failure warning was logged. */
     private long _lastSelectPeersFailureWarnTime;
-            /** Rate-limit stamps for the data-phase failure / condemnation log lines. */
+    /** Rate-limit stamps for the data-phase failure / condemnation log lines. */
     private long _lastSendFailureLogTime;
+    /** When the last destination-attribution line was logged. */
+    private long _lastAttributionLogTime;
+    /** Recent soft send failures per destination, so one dead peer cannot retire the pool. */
+    private final SoftFailureAttribution _softAttribution = new SoftFailureAttribution();
     /** When the last condemn warning was logged. */
     private long _lastCondemnWarnTime;
     /**
@@ -4244,10 +4248,36 @@ public class TunnelPool {
      * @since 0.9.71+
      */
     void reportSendFailure(TunnelInfo cfg, int status) {
+        reportSendFailure(cfg, status, null);
+    }
+
+    /**
+     * Report a data-phase dispatch failure, naming the destination the message
+     * was addressed to so a soft timeout can be attributed.
+     *
+     * @param cfg the tunnel that carried the failed message
+     * @param status the I2CP MessageStatusMessage failure code
+     * @param dest the destination the message was sent to, or null if unknown
+     * @since 0.9.72+
+     */
+    void reportSendFailure(TunnelInfo cfg, int status, Hash dest) {
         if (cfg == null || cfg.getTunnelFailed()) {return;}
         boolean soft = isSoftSendFailure(status);
+        long now = _context.clock().now();
+        // A status-3 timeout is only evidence against the tunnel if the
+        // destination is not the common factor. See SoftFailureAttribution.
+        boolean chargeDest = soft && !_softAttribution.countsAgainstTunnel(dest, now);
         if (soft) {
-            cfg.incrementSoftFailures();
+            if (chargeDest) {
+                if (_log.shouldInfo() && shouldLogSendFailure(now, _lastAttributionLogTime)) {
+                    _lastAttributionLogTime = now;
+                    _log.info(toString() + " -> Soft send failure charged to the destination, "
+                              + "not the tunnel * Destination: [" + dest.toShortBase32() +
+                              "] * Timeouts from it: " + _softAttribution.failuresFrom(dest, now));
+                }
+            } else {
+                cfg.incrementSoftFailures();
+            }
         } else {
             cfg.incrementTestFailures();
         }
@@ -4257,8 +4287,7 @@ public class TunnelPool {
         // event into a status-3 timeout on each of them, and the resulting
         // log flood costs more than the signal is worth: the counters and the
         // pool state already carry the story.
-        long now = _context.clock().now();
-        if (_log.shouldInfo() && shouldLogSendFailure(now, _lastSendFailureLogTime)) {
+        if (_log.shouldInfo() && !chargeDest && shouldLogSendFailure(now, _lastSendFailureLogTime)) {
             _lastSendFailureLogTime = now;
             // The pool prefix is the destination, so the subject of the verb
             // after the arrow is the tunnel: naming the destination a second

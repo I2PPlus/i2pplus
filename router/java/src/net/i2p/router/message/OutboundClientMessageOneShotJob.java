@@ -1678,12 +1678,15 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         // rotate away from failing tunnels faster than TestJob alone.
         // Hard dispatch statuses and soft send timeouts (3) are reported;
         // remote-destination failures (bad LS, bad encryption) are not the
-          // tunnel's fault.  Soft timeouts use a higher removal bar inside
-          // reportSendFailure so congestion cannot mass-remove healthy tunnels.
-          if (_outTunnel != null &&
-              shouldBlameOutboundTunnel(status, isLocallyHostedDestination(_to))) {
-              getContext().tunnelManager().reportSendFailure(_outTunnel, status);
-          }
+        // tunnel's fault.  Soft timeouts use a higher removal bar inside
+        // reportSendFailure so congestion cannot mass-remove healthy tunnels,
+        // and the destination travels with the report so one peer that times
+        // out for every tunnel cannot spend the whole pool.
+        if (_outTunnel != null &&
+            shouldBlameOutboundTunnel(status, isLocallyHostedDestination(_to))) {
+            getContext().tunnelManager().reportSendFailure(
+                    _outTunnel, status, _to != null ? _to.calculateHash() : null);
+        }
         // Pool-empty liveness signal: 14 (expired while queued) and 16 (no
         // tunnels) mean OUR pools were starving when the data phase needed
         // them — nudge them now instead of waiting for the next build-timer

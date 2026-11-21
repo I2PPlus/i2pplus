@@ -398,9 +398,12 @@ public interface TunnelManagerFacade extends Service {
      *
      * @param tunnel the outbound tunnel that carried the failed message
      * @param status the I2CP MessageStatusMessage failure code
+     * @param dest the destination the message was addressed to, or null if the
+     *             caller cannot say — a soft failure with no destination is
+     *             charged to the tunnel, as before
      * @since 0.9.71+
      */
-     public void reportSendFailure(TunnelInfo tunnel, int status);
+     public void reportSendFailure(TunnelInfo tunnel, int status, Hash dest);
 
     /**
      * Force a tunnel to fail immediately and trigger a replacement build.

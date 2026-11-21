@@ -236,6 +236,90 @@ public class TunnelPoolReportSendFailureTest {
         assertTrue(TunnelPool.passesScanGates(clean, 1_000_000L, false));
     }
 
+    // ---------- destination attribution ----------
+
+    /**
+     * A distinct unreachable peer per index — the attribution tally is keyed by
+     * Hash, so the instances must not be equal.
+     */
+    private static Hash peer(int i) {
+        byte[] data = new byte[Hash.HASH_LENGTH];
+        data[0] = (byte) i;
+        data[1] = (byte) (i >>> 8);
+        return new Hash(data);
+    }
+
+    /**
+     * The spiral fix: once one destination has spent its allowance of soft
+     * timeouts, further timeouts to it must not keep charging the tunnel, or a
+     * peer that never ACKs retires every egress tunnel that ever tried it while
+     * replacement builds succeed only two thirds of the time.
+     */
+    @Test
+    public void repeatedSoftTimeoutsToSamePeerStopChargingTheTunnel() {
+        TunnelPool pool = createPool();
+        AtomicBoolean failed = new AtomicBoolean(false);
+        AtomicInteger failures = new AtomicInteger(0);
+        AtomicInteger soft = new AtomicInteger(0);
+        TunnelInfo tunnel = stubTunnel(failed, failures, soft, 1);
+        Hash peer = peer(1);
+
+        for (int i = 0; i < SoftFailureAttribution.DEST_CONTRIBUTION_CAP; i++) {
+            pool.reportSendFailure(tunnel, MessageStatusMessage.STATUS_SEND_BEST_EFFORT_FAILURE, peer);
+        }
+        assertEquals(SoftFailureAttribution.DEST_CONTRIBUTION_CAP, soft.get());
+
+        for (int i = 0; i < 40; i++) {
+            pool.reportSendFailure(tunnel, MessageStatusMessage.STATUS_SEND_BEST_EFFORT_FAILURE, peer);
+        }
+        assertEquals("the peer is the common factor, not the tunnel",
+                     SoftFailureAttribution.DEST_CONTRIBUTION_CAP, soft.get());
+        assertEquals(0, failures.get());
+        assertFalse(failed.get());
+    }
+
+    /**
+     * A tunnel that times out against many different peers is still condemned:
+     * the allowance is per destination, so spreading the failures across peers
+     * spends the soft bar exactly as before.
+     */
+    @Test
+    public void softTimeoutsToDifferentPeersStillReachTheSoftBar() {
+        TunnelPool pool = createPool();
+        AtomicBoolean failed = new AtomicBoolean(false);
+        AtomicInteger failures = new AtomicInteger(0);
+        AtomicInteger soft = new AtomicInteger(0);
+        TunnelInfo tunnel = stubTunnel(failed, failures, soft, 1);
+
+        int n = TunnelPool.SOFT_REMOVAL_THRESHOLD + 1;
+        for (int i = 0; i < n; i++) {
+            pool.reportSendFailure(tunnel, MessageStatusMessage.STATUS_SEND_BEST_EFFORT_FAILURE, peer(i));
+        }
+        assertEquals(n, soft.get());
+        assertTrue(TunnelPool.exceedsRemovalThreshold(soft.get(), true));
+    }
+
+    /**
+     * A hard dispatch failure is never attributed to the destination — the
+     * message never left us, so the tunnel is the only actor that can be at
+     * fault.
+     */
+    @Test
+    public void hardFailureIsChargedToTheTunnelWhateverThePeer() {
+        TunnelPool pool = createPool();
+        AtomicBoolean failed = new AtomicBoolean(false);
+        AtomicInteger failures = new AtomicInteger(0);
+        AtomicInteger soft = new AtomicInteger(0);
+        TunnelInfo tunnel = stubTunnel(failed, failures, soft, 1);
+        Hash peer = peer(2);
+
+        for (int i = 0; i < SoftFailureAttribution.DEST_CONTRIBUTION_CAP + 3; i++) {
+            pool.reportSendFailure(tunnel, MessageStatusMessage.STATUS_SEND_FAILURE_LOCAL, peer);
+        }
+        assertEquals(SoftFailureAttribution.DEST_CONTRIBUTION_CAP + 3, failures.get());
+        assertEquals(0, soft.get());
+    }
+
     // ---------- LS thrash pure helpers ----------
 
     @Test

@@ -1850,20 +1850,24 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      *
      * @param tunnel the outbound tunnel that carried the failed message
      * @param status the I2CP MessageStatusMessage failure code
+     * @param dest the remote destination the message was addressed to, or null
+     *             if unknown. This is not {@code tunnel.getDestination()},
+     *             which names the pool's owner, not the peer we were trying
+     *             to reach.
      * @since 0.9.71+
      */
     @Override
-     public void reportSendFailure(TunnelInfo tunnel, int status) {
+     public void reportSendFailure(TunnelInfo tunnel, int status, Hash dest) {
         if (tunnel == null) {return;}
-        Hash dest = tunnel.getDestination();
+        Hash owner = tunnel.getDestination();
         TunnelPool pool;
-        if (dest != null) {
-            pool = _clientOutboundPools.get(dest);
+        if (owner != null) {
+            pool = _clientOutboundPools.get(owner);
         } else {
             pool = _outboundExploratory;
         }
         if (pool != null) {
-            pool.reportSendFailure(tunnel, status);
+            pool.reportSendFailure(tunnel, status, dest);
         }
     }
 
