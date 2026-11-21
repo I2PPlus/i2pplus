@@ -601,7 +601,8 @@ public abstract class TransportImpl implements Transport {
             _log.warn("Severe send latency -> " + DataHelper.formatDuration(allTime) + " from creation to completion"
                       + "\n* Type: " + msg.getMessageType() + " * MsgID: " + msg.getMessageId()
                       + durationClause("Send", sendTime)
-                      + " * Queued: " + DataHelper.formatDuration(queueTime));
+                      + " * Queued: " + DataHelper.formatDuration(queueTime)
+                      + outboundQueueClause());
             _context.messageHistory().messageProcessingError(msg.getMessageId(), msg.getMessageType(),
                                                              "Took too long to send [" + allTime + "ms]");
         }
@@ -656,6 +657,42 @@ public abstract class TransportImpl implements Transport {
      */
     static String durationClause(String label, long duration) {
         return duration >= 0 ? " * " + label + ": " + DataHelper.formatDuration(duration) : "";
+    }
+
+    /**
+     * The transport's own outbound queue, as log segments, for a subclass that
+     * holds packets before the wire.
+     * <p>The base transport has no such queue: an {@link OutNetMessage} waits in
+     * the router's send pool, and that wait is already on the line as
+     * {@code Queued}. SSU adds a second wait below it - the per-endpoint packet
+     * queue - and a backlog there delays everyone's transit traffic, so the
+     * severe-latency line has to say which of the two waits it found.
+     *
+     * @return {@code " * key: value"} segments, or an empty string when this
+     *         transport queues nothing of its own
+     * @since 0.9.72+
+     */
+    protected String outboundQueueClause() {
+        return "";
+    }
+
+    /**
+     * Renders one transport's outbound packet queue for the log.
+     * <p>An empty queue is not a finding, so it contributes nothing: the depth
+     * and the delay are only worth a reader's eye when packets are actually
+     * waiting. The delay is the wait of the packet next onto the wire, the
+     * figure CoDel controls on, and it carries its unit from the house
+     * formatter, because a bare count of seconds is a number to interpret.
+     *
+     * @param packets packets waiting now
+     * @param delayMs how long the packet next onto the wire has waited, in ms
+     * @return the segments to concatenate, never null
+     * @since 0.9.72+
+     */
+    protected static String queueClause(int packets, long delayMs) {
+        if (packets <= 0) {return "";}
+        return " * Sender queue: " + packets + " packets * Queue delay: " +
+               DataHelper.formatDuration(delayMs);
     }
 
     /**

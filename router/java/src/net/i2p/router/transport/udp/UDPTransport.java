@@ -850,6 +850,32 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
+     * The outbound packet queue across every SSU sender, for the severe-latency
+     * line written by {@link TransportImpl}.
+     * <p>Each endpoint has its own sender and its own CoDel queue, so a backlog
+     * on one address delays that address's transit traffic while the others look
+     * healthy. The depth is summed because the router's send pool feeds all of
+     * them; the delay is the worst of them, because that is the queue a message
+     * that waited a minute actually met.
+     *
+     * @return {@code " * key: value"} segments, empty when nothing is queued
+     * @since 0.9.72+
+     */
+    @Override
+    protected String outboundQueueClause() {
+        int packets = 0;
+        long delay = 0;
+        for (UDPEndpoint endpoint : _endpoints) {
+            UDPSender sender = endpoint.getSender();
+            if (sender == null) {continue;}
+            packets += sender.getQueueSize();
+            long senderDelay = sender.getQueueDelay();
+            if (senderDelay > delay) {delay = senderDelay;}
+        }
+        return queueClause(packets, delay);
+    }
+
+    /**
      * Initializes establishment and handler managers if missing.
      */
     private void initializeManagers() {

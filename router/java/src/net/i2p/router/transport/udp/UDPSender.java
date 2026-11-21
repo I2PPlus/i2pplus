@@ -112,6 +112,7 @@ public class UDPSender {
 
         _context.statManager().createRequiredRateStat("udp.pushTime", "Time taken for a UDP packet get pushed out", "Transport [UDP]", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRateStat("udp.sendQueueSize", "Number of packets queued on the UDP sender", "Transport [UDP]", RATES);
+        _context.statManager().createRateStat("udp.sendQueueDelay", "How long the packet next onto the wire has waited in the UDP sender queue (ms)", "Transport [UDP]", RATES);
         _context.statManager().createRateStat("udp.sendQueueTrimmed", "Stale packets removed from queue", "Transport [UDP]", RATES);
         _context.statManager().createRequiredRateStat("udp.sendPacketSize", "Size of sent packets (bytes)", "Transport [UDP]", RATES);
         _context.statManager().createRateStat("udp.sendBWThrottleTime", "How long send is blocked by bandwidth throttle", "Transport [UDP]", RATES);
@@ -226,6 +227,36 @@ public class UDPSender {
     }
 
     /**
+     * Packets waiting in this sender's queue right now.
+     *
+     * @return the queue depth, 0 when nothing is waiting
+     * @since 0.9.72+
+     */
+    int getQueueSize() {
+        return _outboundQueue.size();
+    }
+
+    /**
+     * The queueing delay this sender is imposing now: how long the packet at the
+     * head of the queue has been waiting, in ms.
+     * <p>The queue is ordered by CoDel priority rather than by arrival, so the
+     * head is not the oldest packet to arrive - it is the next one onto the wire,
+     * and its sojourn time is the delay CoDel itself controls on.
+     *
+     * @return the delay in ms, 0 when the queue is empty or the packet carries
+     *         no enqueue time
+     * @since 0.9.72+
+     */
+    int getQueueDelay() {
+        UDPPacket packet = _outboundQueue.peek();
+        if (packet == null) {return 0;}
+        long enqueued = packet.getEnqueueTime();
+        if (enqueued <= 0) {return 0;}
+        long now = _context.clock().now();
+        return now > enqueued ? (int) Math.min(now - enqueued, Integer.MAX_VALUE) : 0;
+    }
+
+    /**
      * Internal runner class responsible for dequeuing and sending UDP packets.
      * This class runs on its own dedicated high-priority thread.
      */
@@ -287,6 +318,10 @@ public class UDPSender {
                         // is the thing that stalls. Read per packet so the figure tracks
                         // the queue rather than sampling it on some other clock.
                         _context.statManager().addRateData("udp.sendQueueSize", _outboundQueue.size());
+                        // The depth alone cannot show whether a backlog is shallow and
+                        // wide or deep and slow, and the depth cap is not the limit that
+                        // hurts - the delay is. Read with the depth, for the same reason.
+                        _context.statManager().addRateData("udp.sendQueueDelay", getQueueDelay());
                     } catch (IOException ioe) {
                         String ipaddress = packet.getPacket().getAddress().toString().replace("/", "");
                         // Throttled: one per failed packet on a send path that can spin.
