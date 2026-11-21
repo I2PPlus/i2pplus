@@ -1,98 +1,84 @@
 /**
  * @module toggleAllHosts
- * @file I2P+ SusiDNS toggle-all-hosts utility.
- * Provides a master checkbox to select/deselect all hosts for deletion
- * when the "dead hosts" filter is active.
+ * @file I2P+ SusiDNS select-all box for the address book.
+ * Writes a master checkbox into the dead-hosts header cell, so every host the
+ * dead-hosts filter lists can be marked for deletion at once. The address book
+ * emits that cell, and this script, only while the dead-hosts filter is active
+ * - see the deadHosts flag in addressbook.jsp.
  * @author dr|z3d
  * @license AGPL3 or later
  */
 (function toggleAllHosts() {
 
+  /** The per-row boxes that mark a host for deletion, one per listed host. */
+  const ROW_BOXES = "td.checkbox input[type=checkbox]";
+
   /**
-   * Toggles every host checkbox to the given state and updates the
-   * master "select all" checkbox accordingly.
-   * @function toggleAll
-   * @param {boolean} selectAll - True to check all boxes, false to uncheck.
+   * Puts the master box in step with the rows: checked when every host is
+   * marked, indeterminate when only some are, clear when none are.
+   *
    * @returns {void}
-   * @example
-   * toggleAll(true);  // select all hosts
-   * toggleAll(false); // deselect all hosts
    */
-  function toggleAll(selectAll) {
-      const deadFilterActive = document.getElementById("deadHosts");
-      if (!deadFilterActive) { return; }
-
-      const targetCheckboxes = [
-          ...document.querySelectorAll("td.checkbox input[type='checkbox']")
-      ];
-
-      targetCheckboxes.forEach(checkbox => {
-          checkbox.checked = selectAll;
-          const event = new Event("change", { bubbles: true });
-          checkbox.dispatchEvent(event);
-      });
-
-      const toggleAllCheckbox = document.getElementById("toggleAllHosts");
-      if (toggleAllCheckbox) {
-          toggleAllCheckbox.checked = selectAll;
-          toggleAllCheckbox.indeterminate = false;
-      }
+  function syncMaster() {
+    const boxes = [...document.querySelectorAll(ROW_BOXES)];
+    const marked = boxes.filter((box) => box.checked).length;
+    const master = document.getElementById("toggleAllHosts");
+    if (master) {
+      master.checked = marked > 0 && marked === boxes.length;
+      master.indeterminate = marked > 0 && marked < boxes.length;
+    }
   }
 
   /**
-   * Creates and injects a "select all" checkbox into the dead-hosts header cell.
-   * Sets up change listeners to keep the master checkbox in sync with
-   * individual host checkboxes.
-   * @function createSelectAllCheckbox
+   * Marks or clears every host checkbox and leaves the master box checked,
+   * never indeterminate, whatever the state was before.
+   *
+   * No change event is dispatched from here. Nothing else on the page listens
+   * for one on these boxes, and dispatching one per row re-ran the master-box
+   * recount once per row - a pass per host, for a box this function already set.
+   *
+   * @param {boolean} selectAll true to mark every host, false to clear them
+   * @returns {void}
+   */
+  function toggleAll(selectAll) {
+    for (const box of document.querySelectorAll(ROW_BOXES)) {
+      box.checked = selectAll;
+    }
+    const master = document.getElementById("toggleAllHosts");
+    if (master) {
+      master.checked = selectAll;
+      master.indeterminate = false;
+    }
+  }
+
+  /**
+   * Writes the master box into the dead-hosts header cell and wires it to the
+   * rows. A page without that cell has no dead-hosts filter in force, which is
+   * the normal state of the address book, so it is left alone quietly.
+   *
+   * @listens DOMContentLoaded
    * @returns {void}
    */
   function createSelectAllCheckbox() {
-      if (document.getElementById("toggleAllHosts")) { return; }
+    // The id is what marks the cell out, and ids are unique, so it needs no
+    // table or class qualifiers to find it.
+    const cell = document.getElementById("deadHosts");
+    if (!cell) { return; }
 
-      const targetCell = document.querySelector("#host_list th.checkbox#deadHosts");
-      if (!targetCell) {
-          console.warn("Could not find target cell: #host_list th.checkbox#deadHosts");
-          return;
+    const master = document.createElement("input");
+    master.type = "checkbox";
+    master.id = "toggleAllHosts";
+    cell.appendChild(master);
+
+    master.addEventListener("change", () => toggleAll(master.checked));
+
+    document.addEventListener("change", (e) => {
+      const box = e.target;
+      if (box instanceof HTMLInputElement && box.type === "checkbox" && box.closest("td.checkbox")) {
+        syncMaster();
       }
-
-      targetCell.innerHTML = "";
-
-      const checkbox = document.createElement("input");
-      checkbox.type = "checkbox";
-      checkbox.id = "toggleAllHosts";
-
-      targetCell.appendChild(checkbox);
-
-      checkbox.addEventListener("change", () => {
-          toggleAll(checkbox.checked);
-      });
-
-      document.addEventListener("change", e => {
-          const target = e.target;
-          if (!(target instanceof HTMLInputElement) || target.type !== "checkbox") { return; }
-
-          const isMarkedForDeletion = target.name && target.name.startsWith("markedForDeletion");
-          const isTableCellCheckbox = target.closest("td.checkbox");
-
-          if (!isMarkedForDeletion && !isTableCellCheckbox) { return; }
-
-          const checkboxes = [
-              ...document.querySelectorAll("input[type='checkbox'][name^='markedForDeletion']"),
-              ...document.querySelectorAll("td.checkbox input[type='checkbox']")
-          ];
-
-          const checkedCount = checkboxes.filter(cb => cb.checked).length;
-
-          const masterCheckbox = document.getElementById("toggleAllHosts");
-          if (masterCheckbox) {
-              masterCheckbox.checked = checkedCount > 0;
-              masterCheckbox.indeterminate = checkedCount > 0 && checkedCount < checkboxes.length;
-          }
-      });
+    });
   }
 
-  document.addEventListener("DOMContentLoaded", () => {
-      createSelectAllCheckbox();
-  });
-
+  document.addEventListener("DOMContentLoaded", createSelectAllCheckbox);
 }());
