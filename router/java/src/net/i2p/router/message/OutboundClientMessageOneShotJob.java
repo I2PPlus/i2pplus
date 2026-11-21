@@ -455,6 +455,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         ctx.statManager().createRequiredRateStat("client.leaseSetFailedRemoteTime", "Time to look for a remote LeaseSet (when we failed)", "ClientMessages", RATES);
         ctx.statManager().createRequiredRateStat("client.leaseSetFoundRemoteTime", "Time to look for a remote LeaseSet (when we succeeded)", "ClientMessages", RATES);
         ctx.statManager().createRateStat("client.leaseSetSkipNegCache", "Send skipped (LS negatively cached; no real search)", "ClientMessages", RATES);
+        ctx.statManager().createRateStat("client.leaseSetSkipStoreReject", "Send skipped (LS just failed store validation; no re-probe)", "ClientMessages", RATES);
         ctx.statManager().createRateStat("client.leaseSetSkipCooldown", "Send skipped (LS fail cooldown active)", "ClientMessages", RATES);
         ctx.statManager().createRateStat("client.leaseSetSkipInFlight", "Send skipped (LS lookup already running for this dest)", "ClientMessages", RATES);
         ctx.statManager().createRequiredRateStat("client.sendAckTime", "Message round trip time (ms)", "ClientMessages", RATES);
@@ -608,6 +609,21 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 // Fail job sees _leaseSetLookupBegin == 0 and will not record
                 // leaseSetFailedRemoteTime; permanent negatives still map to
                 // UNSUPPORTED_ENCRYPTION inside the fail job.
+                LookupLeaseSetFailedJob failed = new LookupLeaseSetFailedJob(getContext());
+                getContext().jobQueue().addJob(failed);
+                return;
+            }
+            // A LeaseSet that failed store validation under this key is refused by
+            // the same check the next time too, so a re-probe buys another copy of
+            // the entry that was just rejected. This gate runs before the
+            // "recently valid" re-probe below, which clears the negative cache and
+            // would otherwise start a fresh search every probe interval - 1,639 of
+            // them for one destination in 133 minutes.
+            if (!isLocalDest && kndf.storeRejectedRecently(toHash)) {
+                getContext().statManager().addRateData("client.leaseSetSkipStoreReject", 1);
+                _log.infoThrottled(debugKey(_toString, "leaseset-store-rejected"),
+                                   "Skipping send to " + _toString +
+                                   " -> LeaseSet rejected by store validation");
                 LookupLeaseSetFailedJob failed = new LookupLeaseSetFailedJob(getContext());
                 getContext().jobQueue().addJob(failed);
                 return;

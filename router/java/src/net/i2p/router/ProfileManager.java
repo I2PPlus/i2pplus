@@ -197,6 +197,17 @@ public interface ProfileManager {
     void dbStoreFailed(Hash peer);
 
     /**
+     * Note that the peer handed us NetDb data that failed validation - a
+     * LeaseSet or RouterInfo that does not belong under the key it was stored
+     * for, or that does not verify. Counted against the peer's bad-reply rate,
+     * the same one a lookup reply is counted against.
+     *
+     * @param peer hash of the peer that served the unusable data
+     * @since 0.9.72+
+     */
+    void dbStoreInvalid(Hash peer);
+
+    /**
      * Note that the local router received a reference to the given peer, either
      * through an explicit dbStore or in a dbLookupReply.
      *

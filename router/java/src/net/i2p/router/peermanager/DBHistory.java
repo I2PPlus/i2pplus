@@ -211,6 +211,18 @@ public class DBHistory {
     }
 
     /**
+     * Note that the peer served us NetDb data we could not use - a LeaseSet or
+     * RouterInfo that failed validation - without dressing it up as a lookup
+     * reply. Counts toward the same one-hour rate {@link #lookupReply} feeds, so
+     * the bad-reply threshold in ProfileOrganizer sees it.
+     *
+     * @since 0.9.72+
+     */
+    public void invalidReply() {
+        _invalidReplyRate.addData(1);
+    }
+
+    /**
      * Note that the peer sent us a data point without us asking for it.
      *
      * @param wasNew whether we already knew about this data point or not

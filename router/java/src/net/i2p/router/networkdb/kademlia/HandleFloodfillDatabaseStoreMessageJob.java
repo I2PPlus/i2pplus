@@ -601,12 +601,18 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                                    KademliaNetworkDatabaseFacade
                                    .stripStoreWrapper(invalidMessage));
                     }
-                // Should we record in the profile?
-                } else if (_log.shouldDebug()) {
-                    _log.debug("Invalid data packet from [" +
-                               _fromHash.toShortBase64() + "] -> " +
-                               KademliaNetworkDatabaseFacade
-                               .stripStoreWrapper(invalidMessage) + _from);
+                } else {
+                    // The data was unusable and it was his fault: count it against
+                    // the peer's bad-reply rate, the counter a bad lookup reply
+                    // already feeds, so a peer that keeps serving us entries that
+                    // do not belong under their key stops being used for db work.
+                    getContext().profileManager().dbStoreInvalid(_fromHash);
+                    if (_log.shouldDebug()) {
+                        _log.debug("Invalid data packet from [" +
+                                   _fromHash.toShortBase64() + "] -> " +
+                                   KademliaNetworkDatabaseFacade
+                                   .stripStoreWrapper(invalidMessage) + _from);
+                    }
                 }
             }
         } else if (invalidMessage != null && !dontBlamePeer) {

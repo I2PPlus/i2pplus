@@ -404,6 +404,28 @@ public class ProfileManagerImpl implements ProfileManager {
     }
 
     /**
+     * Note that the peer handed us NetDb data that failed validation.
+     * <p>Counted like a bad lookup reply, so a peer that keeps serving us
+     * LeaseSets that do not belong under their key crosses the bad-reply
+     * threshold and stops being used for db queries. Expands the profile the way
+     * {@link #dbStoreFailed(Hash)} does, because the offender is usually a peer
+     * we have never done db work with before.
+     *
+     * @param peer hash of the peer that served the unusable data
+     * @since 0.9.72+
+     */
+    @Override
+    public void dbStoreInvalid(Hash peer) {
+        PeerProfile data = getProfile(peer);
+        if (data == null) return;
+        if (!data.getIsExpandedDB())
+            data.expandDBProfile();
+        DBHistory hist = data.getDBHistory();
+        hist.invalidReply();
+        updateFloodfillReliability(data);
+    }
+
+    /**
      * Note that the local router received a reference to the given peer, either
      * through an explicit dbStore or in a dbLookupReply
      * Non-blocking. Will not update the profile if we can't get the lock.

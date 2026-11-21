@@ -226,6 +226,26 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     /** Cooldown before a floodfill can be queried again in ms. */
     private static final long RECENTLY_QUERIED_COOLDOWN = 60*1000L;
 
+    /**
+     * Keys whose LeaseSet was just rejected by store validation, mapped to when
+     * the rejection lapses, in ms since the epoch.
+     * <p>A rejected store leaves the NetDb empty, so the next send to that
+     * destination re-probes and usually gets the same bad entry back: one live
+     * router re-fetched one destination 1,639 times in 133 minutes. The window
+     * is long enough to stop that loop and short enough that a destination which
+     * republishes cleanly is reachable again well inside its own LeaseSet
+     * lifetime. Swept when full, like {@link #_unverifiedPeers}.
+     *
+     * @since 0.9.72+
+     */
+    private final ConcurrentHashMap<Hash, Long> _storeRejectedUntil = new ConcurrentHashMap<>(64);
+
+    /** How long a key stays rejected after a failed store validation, in ms. */
+    static final long STORE_REJECT_MS = 30 * 60 * 1000L;
+
+    /** Cap on {@link #_storeRejectedUntil}; the map is swept when it is reached. */
+    private static final int STORE_REJECT_MAX = 512;
+
     /** Cached set of blocked countries - lazily initialized. */
     private volatile Set<String> _blockedCountries;
 
@@ -2388,8 +2408,15 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
         String err = validate(key, leaseSet);
         if (err != null) {
+            long now = _context.clock().now();
+            // A LeaseSet that fails validation under this key does not become
+            // valid by being fetched again. The store leaves the NetDb empty,
+            // so the next send re-probes and the same bad entry comes back:
+            // 1,639 re-fetches of one destination in 133 minutes of one live
+            // router. Hold the key rejected for a bounded window and count one
+            // definitive lookup failure against it.
+            rejectStore(key, now);
             if (_log.shouldWarn()) {
-                long now = _context.clock().now();
                 // The reason is the fact, and it was only in the exception. The
                 // dates are relative to now, because the log line's own timestamp
                 // is the reference and a 13-digit epoch value makes the reader do
@@ -2397,6 +2424,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                 // dates, which belong together. The lease-date range is only
                 // worth naming when the leases have dates - with none, both
                 // bounds are unset and saying so twice says nothing.
+                // Collapsed per key: the condition belongs to the destination,
+                // and an application that keeps sending at it writes one line
+                // per attempt.
                 StringBuilder sb = new StringBuilder(128);
                 sb.append("Store validation failed [").append(key.toShortBase32()).append("] -> ").append(err);
                 sb.append("\n* ").append(leaseSetName(leaseSet.getType()))
@@ -2412,7 +2442,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                     sb.append(", published ").append(leaseDate(ls2.getPublished(), now))
                       .append(", expires ").append(leaseDate(ls2.getExpires(), now));
                 }
-                _log.warn(sb.toString());
+                sb.append(fullHashClause(key, leaseSet.getHash()));
+                _log.warnThrottled(storeRejectKey(key), sb.toString());
             }
             throw new IllegalArgumentException("Invalid NetDbStore attempt -> " + err);
         }
@@ -3950,6 +3981,92 @@ return false;
      */
     public boolean peekNegativeCached(Hash key) {
         return key != null && _negativeCache.isCached(key);
+    }
+
+    /**
+     * Hold a key as rejected because its LeaseSet failed store validation, and
+     * count one definitive lookup failure against it.
+     * <p>The failed store leaves the NetDb empty, so the next send re-probes and
+     * the same bad entry usually comes back. The window is what breaks that
+     * loop; {@link #storeRejectedRecently(Hash)} reads it.
+     *
+     * @param key the key the LeaseSet was rejected under
+     * @param now the current time, in ms since the epoch
+     */
+    private void rejectStore(Hash key, long now) {
+        if (_storeRejectedUntil.size() >= STORE_REJECT_MAX) {
+            _storeRejectedUntil.entrySet().removeIf(e -> e.getValue().longValue() < now);
+            if (_storeRejectedUntil.size() >= STORE_REJECT_MAX) {return;}
+        }
+        _storeRejectedUntil.put(key, Long.valueOf(now + STORE_REJECT_MS));
+        _negativeCache.lookupFailed(key);
+    }
+
+    /**
+     * Is this key still held rejected from a LeaseSet that failed store
+     * validation? A caller that is about to re-probe such a key should not: the
+     * entry it fetches is the one that was just refused.
+     *
+     * @param key the destination hash, may be null
+     * @return true while the rejection window is open
+     * @since 0.9.72+
+     */
+    public boolean storeRejectedRecently(Hash key) {
+        if (key == null) {return false;}
+        long now = _context.clock().now();
+        Long until = _storeRejectedUntil.get(key);
+        if (storeRejected(until, now)) {return true;}
+        if (until != null) {_storeRejectedUntil.remove(key, until);}
+        return false;
+    }
+
+    /**
+     * Pure decision: is the rejection window for a key still open?
+     *
+     * @param until when the window lapses, in ms since the epoch, or null if the
+     *              key was never rejected
+     * @param now the current time, in ms since the epoch
+     * @return true while the key is held rejected
+     * @since 0.9.72+
+     */
+    static boolean storeRejected(Long until, long now) {
+        return until != null && until.longValue() > now;
+    }
+
+    /**
+     * The suppressor key for one destination's store rejections: the rejection
+     * belongs to the destination, so one destination's bad LeaseSet never hides
+     * behind another's counter.
+     *
+     * @param key the key the LeaseSet was rejected under
+     * @return the throttler key, never null
+     * @since 0.9.72+
+     */
+    static String storeRejectKey(Hash key) {
+        return "netdb-store-reject-" + key.toShortBase32();
+    }
+
+    /**
+     * The full base32 forms of the key and of the LeaseSet that was refused, on
+     * continuation lines, but only when the two 8-character forms the failure
+     * line already prints are identical.
+     * <p>A line reading "failed [i5dnly7y] -> Key does not match the LeaseSet
+     * destination [i5dnly7y]" contradicts itself to anyone who cannot see the
+     * rest of the hash; the measured case printed the same 8 characters on both
+     * sides 1,639 times. The full forms show where the two hashes part company.
+     *
+     * @param key the key the LeaseSet was stored under
+     * @param lsHash the hash the LeaseSet itself carries, may be null
+     * @return {@code "\n* "} continuation lines, or an empty string when the
+     *         short forms already tell the story
+     * @since 0.9.72+
+     */
+    static String fullHashClause(Hash key, Hash lsHash) {
+        if (key == null || lsHash == null) {return "";}
+        String a = key.toShortBase32();
+        String b = lsHash.toShortBase32();
+        if (a == null || b == null || !a.equals(b)) {return "";}
+        return "\n* Key: " + key.toBase32() + "\n* LeaseSet: " + lsHash.toBase32();
     }
 
     /**
