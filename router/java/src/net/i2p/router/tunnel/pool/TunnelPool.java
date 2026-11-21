@@ -213,6 +213,8 @@ public class TunnelPool {
     private long _lastSendFailureLogTime;
     /** When the last destination-attribution line was logged. */
     private long _lastAttributionLogTime;
+    /** When the last "tunnel kept because builds are failing" warning was logged. */
+    private long _lastStressSpareWarnTime;
     /** Recent soft send failures per destination, so one dead peer cannot retire the pool. */
     private final SoftFailureAttribution _softAttribution = new SoftFailureAttribution();
     /** When the last condemn warning was logged. */
@@ -259,6 +261,31 @@ public class TunnelPool {
      * @since 0.9.71+
      */
     static final int SOFT_REMOVAL_THRESHOLD = 7;
+    /**
+     * Soft removal bar while recent tunnel builds are failing.
+     * <p>Condemning a tunnel only helps if another one takes its place. On a
+     * live router running 64% build success, the mark-and-cannot-replace loop
+     * was self-defeating: 30 outbound tunnels were condemned as "failing after
+     * N soft failures" in three hours, the pool fell to 2-3 of 8, congestion
+     * concentrated on the survivors, and their sends timed out too. Doubling
+     * the bar keeps the tunnel that demonstrably still gets some sends through
+     * in service until a replacement actually exists.
+     * <p>Stays below {@code TunnelCreatorConfig.MAX_SOFT_FAILURES} (32), the
+     * point where the soft count saturates and stops being a measurement.
+     *
+     * @since 0.9.72+
+     */
+    static final int SOFT_REMOVAL_THRESHOLD_STRESSED = SOFT_REMOVAL_THRESHOLD * 2;
+    /**
+     * Build-success ratio below which removing a tunnel makes the pool shorter
+     * rather than healthier. Well under a healthy router's 85-95%, and above
+     * the 64-70% measured on a router whose egress pools had drained to 2-3 of
+     * 8. Higher than the 0.40 that switches off profile pre-qualification:
+     * that gate protects peer selection, this one protects the pool's size.
+     *
+     * @since 0.9.72+
+     */
+    static final double BUILD_STRESS_RATIO = 0.75;
     /**
      * Pre-emergency threshold: fraction of target below which builds start immediately.
      * <p>Half, not a quarter: at 0.25 a 4-tunnel pool only burst at zero healthy, so
@@ -4299,7 +4326,12 @@ public class TunnelPool {
                       "), failures now " + failures +
                       describeHops(cfg));
         }
-        boolean overBar = exceedsRemovalThreshold(failures, soft);
+        // Condemning a tunnel only helps if another one is coming. Cached by
+        // ProfileOrganizer, so reading it per report is a map hit, not six
+        // RateStat lookups.
+        double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
+        boolean buildStressed = isBuildStressed(buildSuccess);
+        boolean overBar = exceedsRemovalThreshold(failures, soft, buildStressed);
         if (overBar) {
             if (_log.shouldWarn() && shouldLogSendFailure(now, _lastCondemnWarnTime)) {
                 _lastCondemnWarnTime = now;
@@ -4310,6 +4342,17 @@ public class TunnelPool {
             }
             failWithCount(cfg, failures);
             tellProfileFailed(cfg);
+        } else if (soft && buildStressed && failures > SOFT_REMOVAL_THRESHOLD) {
+            // Past the bar we would normally use, held back because the pool
+            // has no replacement coming. Say so: an operator looking at a short
+            // pool needs to know the tunnels in it were not left there by
+            // accident.
+            if (_log.shouldWarn() && shouldLogSendFailure(now, _lastStressSpareWarnTime)) {
+                _lastStressSpareWarnTime = now;
+                _log.warn(toString() + " -> Kept a soft-failing tunnel in service"
+                          + " * Build success: " + Math.round(buildSuccess * 100) +
+                          "% * Soft failures: " + failures);
+            }
         }
         // Data-phase failure is a liveness signal, but only the signals that
         // actually change pool composition bypass the ensure throttle: a hard
@@ -4428,9 +4471,57 @@ public class TunnelPool {
      * @since 0.9.71+
      */
     static boolean exceedsRemovalThreshold(int failures, boolean soft) {
-        int bar = soft ? SOFT_REMOVAL_THRESHOLD
+        return exceedsRemovalThreshold(failures, soft, false);
+    }
+
+    /**
+     * Whether the given failure class exceeds its marking bar, with the soft bar
+     * raised while the network is not replacing what this pool condemns.
+     *
+     * @param failures hard (test+data) or soft failure count
+     * @param soft true when the reporting status was a soft send timeout
+     * @param buildStressed true when recent builds fail often enough that a
+     *                      removed tunnel has no replacement coming; see
+     *                      {@link #isBuildStressed(double)}
+     * @return true if the tunnel should be marked and retained rather than
+     *         left selectable
+     * @since 0.9.72+
+     */
+    static boolean exceedsRemovalThreshold(int failures, boolean soft, boolean buildStressed) {
+        int bar = soft ? effectiveSoftRemovalBar(buildStressed)
                        : TunnelCreatorConfig.MAX_CONSECUTIVE_TEST_FAILURES;
         return failures > bar;
+    }
+
+    /**
+     * The soft marking bar in force: the normal one, or the doubled one while
+     * builds are failing. Kept as a function of the stress flag so the two bars
+     * cannot drift apart and the pre-emptive build window
+     * ({@link #SOFT_DEGRADED_FOR_ENSURE} to the removal bar) stays visible.
+     *
+     * @param buildStressed true when recent builds fail often enough that a
+     *                      removed tunnel has no replacement coming
+     * @return the soft failure count at which a tunnel is marked
+     */
+    static int effectiveSoftRemovalBar(boolean buildStressed) {
+        return buildStressed ? SOFT_REMOVAL_THRESHOLD_STRESSED : SOFT_REMOVAL_THRESHOLD;
+    }
+
+    /**
+     * Whether recent tunnel builds fail often enough that condemning a tunnel
+     * makes the pool shorter rather than healthier.
+     * <p>An unknown ratio (no builds settled in the window) is not stress: a
+     * router that has not built anything yet has no evidence to act on, and
+     * treating silence as failure would hold every pool at the raised bar.
+     *
+     * @param buildSuccess build-success ratio [0.0, 1.0], NaN when unknown
+     * @return true if removal should be held back
+     * @since 0.9.72+
+     */
+    static boolean isBuildStressed(double buildSuccess) {
+        return !Double.isNaN(buildSuccess) &&
+               buildSuccess > 0 &&
+               buildSuccess < BUILD_STRESS_RATIO;
     }
 
     /**

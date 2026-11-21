@@ -17,6 +17,7 @@ import net.i2p.router.RouterTestHelper;
 import net.i2p.router.TunnelInfo;
 import net.i2p.router.TunnelPoolSettings;
 import net.i2p.router.TunnelTestStatus;
+import net.i2p.router.peermanager.ProfileOrganizer;
 import net.i2p.router.tunnel.TunnelCreatorConfig;
 
 /**
@@ -352,6 +353,107 @@ public class TunnelPoolReportSendFailureTest {
         assertFalse(TunnelPool.shouldSkipAsyncPublish(false, -throttle, now, throttle));
         // LS null + throttle expired → publish again
         assertFalse(TunnelPool.shouldSkipAsyncPublish(false, now - throttle, now, throttle));
+    }
+
+    // ---------- build-stress gate ----------
+
+    /**
+     * A pool whose recent tunnel builds succeed at the given ratio.
+     *
+     * @param buildSuccess the ratio ProfileOrganizer reports for this pool's
+     *                     context, [0.0, 1.0]
+     * @return a pool wired to that build success
+     */
+    private TunnelPool createPool(double buildSuccess) {
+        RouterContext ctx = spy(_ctx);
+        ProfileOrganizer org = mock(ProfileOrganizer.class);
+        when(org.getTunnelBuildSuccess()).thenReturn(buildSuccess);
+        doReturn(org).when(ctx).profileOrganizer();
+        TunnelPoolManager mgr = mock(TunnelPoolManager.class);
+        TunnelPeerSelector sel = mock(TunnelPeerSelector.class);
+        return new TunnelPool(ctx, mgr, _settings, sel);
+    }
+
+    /**
+     * Unknown build success, a healthy ratio, and the neutral 1.0 are not
+     * stress; the measured 64-70% of a drained router is.
+     */
+    @Test
+    public void stressFlagIgnoresUnknownAndHealthyBuildSuccess() {
+        assertFalse(TunnelPool.isBuildStressed(Double.NaN));
+        assertFalse(TunnelPool.isBuildStressed(0));
+        assertFalse(TunnelPool.isBuildStressed(1.0));
+        assertFalse(TunnelPool.isBuildStressed(0.95));
+        assertFalse(TunnelPool.isBuildStressed(TunnelPool.BUILD_STRESS_RATIO));
+        assertTrue(TunnelPool.isBuildStressed(TunnelPool.BUILD_STRESS_RATIO - 0.01));
+        assertTrue(TunnelPool.isBuildStressed(0.64));
+    }
+
+    /**
+     * The stressed bar is double the normal one, still above the pre-emptive
+     * build window's floor and still below the point where the soft count
+     * saturates and stops being a measurement.
+     */
+    @Test
+    public void stressedSoftBarStaysBetweenTheDegradedFloorAndSaturation() {
+        assertEquals(TunnelPool.SOFT_REMOVAL_THRESHOLD, TunnelPool.effectiveSoftRemovalBar(false));
+        assertEquals(TunnelPool.SOFT_REMOVAL_THRESHOLD * 2, TunnelPool.effectiveSoftRemovalBar(true));
+        assertTrue(TunnelPool.effectiveSoftRemovalBar(true) > TunnelPool.SOFT_DEGRADED_FOR_ENSURE);
+        // TunnelCreatorConfig.MAX_SOFT_FAILURES, the saturation point of the count
+        assertTrue(TunnelPool.effectiveSoftRemovalBar(true) < 32);
+    }
+
+    /**
+     * One past the normal soft bar marks a tunnel when builds succeed and does
+     * not when they are failing. Hard failures are never held back: the message
+     * never left us, so a replacement is wanted whatever the build rate is.
+     */
+    @Test
+    public void stressedBarMarksWhereTheNormalOneWouldNot() {
+        int onePast = TunnelPool.SOFT_REMOVAL_THRESHOLD + 1;
+        assertFalse(TunnelPool.exceedsRemovalThreshold(onePast, true, true));
+        assertTrue(TunnelPool.exceedsRemovalThreshold(onePast, true, false));
+        assertTrue(TunnelPool.exceedsRemovalThreshold(onePast, false, true));
+        // Even stressed, a long enough streak still goes — the tunnel is out.
+        assertTrue(TunnelPool.exceedsRemovalThreshold(TunnelPool.SOFT_REMOVAL_THRESHOLD_STRESSED + 1,
+                                                      true, true));
+    }
+
+    /**
+     * The wiring: a tunnel past the normal soft bar is left selectable while
+     * the pool cannot replace it.
+     */
+    @Test
+    public void softBarIsHeldWhileBuildsAreFailing() {
+        TunnelPool pool = createPool(0.64);
+        AtomicBoolean failed = new AtomicBoolean(false);
+        AtomicInteger failures = new AtomicInteger(0);
+        AtomicInteger soft = new AtomicInteger(TunnelPool.SOFT_REMOVAL_THRESHOLD);
+        TunnelInfo tunnel = stubTunnel(failed, failures, soft, 1);
+
+        pool.reportSendFailure(tunnel, MessageStatusMessage.STATUS_SEND_BEST_EFFORT_FAILURE, peer(5));
+
+        assertEquals(TunnelPool.SOFT_REMOVAL_THRESHOLD + 1, soft.get());
+        verify((TunnelCreatorConfig) tunnel, never()).setTestFailing();
+        assertFalse(failed.get());
+    }
+
+    /**
+     * The same report at a healthy build rate does mark the tunnel, so the gate
+     * only applies when removal would leave the pool shorter.
+     */
+    @Test
+    public void softBarStillMarksWhenBuildsSucceed() {
+        TunnelPool pool = createPool(0.95);
+        AtomicBoolean failed = new AtomicBoolean(false);
+        AtomicInteger failures = new AtomicInteger(0);
+        AtomicInteger soft = new AtomicInteger(TunnelPool.SOFT_REMOVAL_THRESHOLD);
+        TunnelInfo tunnel = stubTunnel(failed, failures, soft, 1);
+
+        pool.reportSendFailure(tunnel, MessageStatusMessage.STATUS_SEND_BEST_EFFORT_FAILURE, peer(6));
+
+        assertEquals(TunnelPool.SOFT_REMOVAL_THRESHOLD + 1, soft.get());
+        verify((TunnelCreatorConfig) tunnel).setTestFailing();
     }
 
     private TunnelPool createPool() {
