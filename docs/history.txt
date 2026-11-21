@@ -1,3 +1,148 @@
+2026-11-20 dr|z3d
+  * Router: Hold the streaming defaults the module ships, not the tuning floor;
+    keep an operator's pinned Tuner value across a restart; judge our own
+    published port only by whether one was published; move a hole punch only
+    onto an endpoint nobody else holds; keep a permanent ban permanent for its
+    whole life; keep dropping the session when a ban switch is off; keep one
+    peer's bad ratchet key from discarding a whole message; throttle the
+    LeaseSet skip notice per destination; write a refused NetDb store once; and
+    tell our own SSU2 establishment faults from a peer's junk
+  * Console: Read every Cookie header for the session token; match an
+    `routerconsole.allowedHosts` entry however it is written; accept only an
+    address written out in full inside 127/8 as loopback; write an error page in
+    a type the client can be served; and report a refused cross-origin POST as a
+    throttled warning
+  * I2PTunnel: Restart one tunnel at a time and count only real starts;
+    translate the restart strings in 40 languages; allow a navigation the Fetch
+    Metadata filter cannot name; size an attempt history from its own rule; and
+    accept a repeated Content-Length
+  * SusiMail: Keep the mail cache readable when the mailbox password changes;
+    say when a cached message cannot be opened; let an operator who cannot sign
+    in reach the settings; keep the parts of a message that parsed; let one
+    oversized message fail only itself; send the fetches a refresh had queued;
+    and keep combining marks in mail-supplied text
+  * I2PSnark: Shorten the tracker warnings the standalone app prints to stdout;
+    repair the 41 translations that repeated themselves; refuse a DHT query
+    whose node id names another destination; take the global cache lock off the
+    per-block path; and keep a cancelled fetch from taking the next torrent
+  * Streaming: Serve a SYN queue cap of 0 as uncapped when adding workers; close
+    unaccepted connections off the handler monitor; leave a reopened listener's
+    queues to its own acceptors; and throttle the SYN validation notice
+  * Installer: Leave the Windows service install optional and unticked; give
+    every install a way to run and to find its profile folder; and match the
+    shortcuts to what was installed
+  * Console, I2PSnark: Reflow the translation files so each string is one line
+
+2026-11-18 dr|z3d
+  * Console, Addressbook, Snark, SusiMail: Judge a POST's Origin in one place;
+    draw a fresh 144-bit CSP nonce for every response; and keep the host check
+    on for a wildcard bind
+  * SusiMail: Refuse a session password check that cannot fail; gate the
+    settings page and its save on the signed-in mailbox; re-key the session id
+    when a mailbox opens; seal the mail cache with the mailbox password; sandbox
+    the HTML message frame; escape the compose body; cap the folder page size;
+    open a draft's attachment only if it is that account's own upload; take the
+    invisible and bidi characters out of mail labels; send an AUTH LOGIN
+    credential on one line; and bound MIME nesting, part counts, server replies
+    and what one refresh fetches
+  * I2PSnark: Serve a file from a torrent as data, not as a page of the console;
+    advertise no body on a 416 range answer; make start() and stop() report the
+    real app state; percent-encode the torrent link and the notification's click
+    target; refuse a malformed tracker frame, bencoded container, peer id and
+    DHT node; and tell the tracker client the metadata a magnet resolves
+  * I2PTunnel: Restart tunnels off the console request thread; keep a missing
+    access list's entries in force until it comes back; and bound the disk write
+    queue, a chunk extension, a run of trailer CRs, and a query escape
+  * Router: Measure transit rejection against the bandwidth share, not the whole
+    limit; cap garlic inside garlic at ten levels; and take our inbound routes
+    from published addresses that can be dialed
+  * Core: Count a POST body's content-length in bytes, not characters; bound the
+    inflated body of a gzipped fetch; and keep a blinded destination 90 days
+  * Streaming: Take a SYN queue cap of 0 as uncapped
+  * Address book: Read a subscription's etags and dates without folding their
+    URL keys
+  * HTTP Proxy: Refuse a sub-resource an eepsite auto-loads from the clearnet
+
+2026-11-17 dr|z3d
+  * Router:
+    - Ban and throttle by what a peer actually did, not the name it claims, and
+      decide the low-bandwidth-unreachable and invalid-version bans once in the
+      banlist, where 8,001 cheap 30-day bans halved the real ones every 5 min
+    - Keep the New Session Reply tag window for the rest of the handshake - the
+      first reply took all twelve tags before the AEAD was checked - and treat a
+      low-order X25519 point as the remote junk it is on all four SSU2 reads
+    - Honour `router.reseedDisable` and the `.i2pnoreseed` markers - the check
+      ended in `|| !vmCommSystem`, true on every real router
+    - Cut the fragmented message cap to upstream's 128, where 1,024 pinned 64
+      MB per endpoint, and start the transit limits from what the operator
+      configured, not what `autotune.config` left from the worst session
+    - Accept a router info that lists more than five peers, let a peer's clock
+      be wrong by a minute again, and re-queue a LeaseSet request a client's
+      full I2CP queue refused instead of sleeping on a job queue runner
+  * Console, I2PControl, SAM, SusiDNS, Pack200: Render a news title and the ban
+    table as text, read the session cookie out of the `Cookie` header, not
+    Jetty's parser, require a form token on the password and address book forms,
+    require `HELLO VERSION` first in SAM, and bound the `cp_Utf8` bands
+  * I2PTunnel: Read a client `Host` header without forward-resolving it, stop
+    opening a second empty stream per GET or HEAD, refuse a malformed
+    `Content-Length`, and grant CORS only to the web font that needs it
+  * I2PSnark: Close the browser API's cross-origin add, keep a torrent named
+    `..` inside the download directory, and show a torrent's text file as text
+  * Core: Bound the SDS cache table, delete only our own unused leftovers when
+    sweeping the temp dir, and stop a short `Location:` ending an `EepGet` fetch
+  * Addressbook, Installer: Keep one subscription's response from ending the
+    update loop, make the wrapper scripts an update stages runnable again, and
+    ship the eepsite's CGI context disabled
+  * Streaming, Jetty: Count the blocks held for a gap at the bytes they really
+    cost, 151 MB for one withheld block, and rank no `Accept` on an error page
+
+2026-11-16 dr|z3d
+  * Streaming:
+    - Fix the SYN-phase budget and the pooled connection teardown, and close a
+      hosted handshake the peer never completes
+    - Bound retransmit volume, cool down a path that dies repeatedly, and cap
+      one destination's concurrent streams
+  * Router:
+    - Refresh a lease set that is about to expire before the send pays for the
+      failure, and match the tuner ranges to what their setters accept and to
+      the lease-set send path
+    - Name our destination in the encryption mismatch log and the outbound
+      tunnel count in the send failure log, and skip the tuner heal log when
+      the clamp changed nothing
+  * Performance: Stop the byte cache resizing from shrinking the shared pools
+  * I2PSnark: Cap the destination cache at the lease-set lifetime
+  * Tuner: Document the per-destination stream cap
+  * Installer: Update the Java Service Wrapper to 3.7.4, build the win64 pair on
+    a c23 toolchain, and add the `updaterWithWrapper` targets with manual update
+    scripts
+
+2026-11-15 dr|z3d
+  * I2PSnark:
+    - Scale the DHT fetch budget to the torrents that want peers, and size the
+      destination cache from the heap instead of a fixed 512
+    - Blacklist a deaf DHT node on a run of unanswered queries rather than the
+      first one, drop swarm peers whose destination no longer resolves, and wait
+      ten seconds for a peer's destination instead of a minute
+    - Name identities in the log lines and bracket only real hashes, so the
+      console log viewer links what it can
+  * Console:
+    - Rebuild the procedural snowflakes on real crystal habits, with a card to
+      argue with, and mint the news hide and show nonces into the session
+    - Report the Tomcat Jasper release on the router info page
+  * Build:
+    - Port the ant packaging to gradle, fixing the `pkg-temp` wipes and locale
+      staging it hid, and print a sha256 for every shipped artifact
+    - Add the `updaterWithTomcat` targets and ship `lib/jbigi.jar` and
+      `lib/jcpuid.dll` in the platform packages
+  * Installer:
+    - Add a Windows portable launcher and an install readme, accept a quoted
+      `JAVA_HOME`, and name the port conflict instead of failing with the Java
+      native access warning
+  * Core:
+    - Retry a native library load that an antivirus scan locked
+    - Register the stats the dispatcher and the tuners read as required, so a
+      router with `stat.full` off still resolves them
+
 2026-11-14 dr|z3d
   * Console:
     - Cut the vendored iframe-resizer pair down to what the console uses -
@@ -21155,7 +21300,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       - Try to fix locking to prevent duplicate destinations when using
         the new option new-dest-on-resume. Still not right for shared clients
         but should be better for non-shared.
-    * Router console:
+    * Console:
       - Add jbigi and cpu info to logs.jsp
     * Session key manager:
       - Log before a hang maybe
@@ -22092,7 +22237,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       - Synchronize to prevent concurrent writes (thanks Galen!)
       - Backup keys every 7 days instead of every 5 minutes
     * LoadTestManager: Don't instantiate, it's disabled
-    * Router console: Flag placeholder pages as noncacheable
+    * Console: Flag placeholder pages as noncacheable
     * Streaming lib:
       - Change some logging from WARN to INFO
       - Clean up toString()
@@ -22122,7 +22267,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * FloodfillMonitorJob: Change range from 5-7 to 4-6
     * NTCP: Remove getIsInbound(), duplicate of isInbound()
     * PersistentDataStore: Don't try to remove nonexistent leaseSet files
-    * Router console: add placeholder pages for I2PSnark, I2PTunnel,
+    * Console: add placeholder pages for I2PSnark, I2PTunnel,
       SusiDNS, and SusiMail for use when the .wars are not running
     * Streaming lib: Increase max window size to 128
 
