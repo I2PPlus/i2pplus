@@ -922,6 +922,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
         // handed back unchanged: a shrunken timeout left behind would silently
         // shorten every later connect that reuses these options.
         final long callerTimeoutMs = opt.getConnectTimeout();
+        final long callerMaxMs = opt.getMaxConnectTimeout();
         try {
             for (int i = 0; i < tunnelCount; i++) {
                 long now = System.currentTimeMillis();
@@ -940,6 +941,17 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
                 }
                 if (legTimeoutMs > 0 && legTimeoutMs != opt.getConnectTimeout()) {
                     opt.setConnectTimeout(legTimeoutMs);
+                }
+                // Streaming scales the connect timeout by the Tuner's
+                // connect-timeout multiplier, up to 200%, and the cap is applied
+                // after that scaling. Measured on a live router: the 30s this
+                // class asks for became a 57,950ms wait, so a single leg ate
+                // half the request's connect budget and the retry loop never
+                // ran. Pinning the cap to the leg's budget is what makes the
+                // caller's deadline the deadline.
+                long legCapMs = legConnectCapMs(legTimeoutMs, callerMaxMs);
+                if (legCapMs > 0 && legCapMs != opt.getMaxConnectTimeout()) {
+                    opt.setMaxConnectTimeout(legCapMs);
                 }
                 try {
                     I2PSocket s = sockMgr.connect(dest, opt);
@@ -969,6 +981,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
             }
         } finally {
             opt.setConnectTimeout(callerTimeoutMs);
+            opt.setMaxConnectTimeout(callerMaxMs);
         }
         if (legsFailed > 0 && _log.shouldInfo()) {
             _log.info("Connect failed after " + legsFailed + "/" + tunnelCount + " tunnel legs" +
@@ -1175,20 +1188,40 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     }
 
     /**
-     * Ceiling on the wall time one request spends on connect attempts.
+     * Ceiling on the wall time one request spends on connect attempts, and the
+     * budget each attempt is given by {@link #attemptDeadlineMs(long, long)}.
      * <p>The shared request deadline is
      * {@link I2PTunnelHTTPClient#REQUEST_CONNECT_DEADLINE_MS} (120s), which is
      * far more than a browser should wait for the first byte of a small asset:
      * sizing the retry ceiling against it allowed four 4s give-ups plus backoff,
      * measured end-to-end at 25s for a single image, against a 10.9s p90 before
-     * the give-up existed. 15s keeps the worst case near that old p90 while
-     * still paying for three attempts, which is what the evidence says a
-     * destination needs — the fourth attempt in the measured trace opened in
-     * 596ms, so the attempts that work are cheap.
+     * the give-up existed.
+     * <p>Raised from 15s to 30s on a router whose outbound pools had drained to
+     * 2-3 of 8 tunnels: there a handshake does not fail in 4s, it fails at the
+     * connect-window floor after 10-15s, and a 15s budget bought exactly one
+     * attempt — the retry ceiling it sizes came out at zero, so the request
+     * died on a single handshake. 30s pays for two of the short attempts the
+     * evidence says actually work, and the hard attempt ceiling
+     * {@link #MAX_TIMEOUT_CONNECT_RETRIES} still bounds the total.
      *
      * @since 0.9.72+
      */
-    static final long MAX_CONNECT_SPEND_MS = 15000;
+    static final long MAX_CONNECT_SPEND_MS = 30 * 1000;
+
+    /**
+     * Wall time one failover walk may take, capped out of the request's
+     * {@link #MAX_CONNECT_SPEND_MS} budget by {@link #attemptDeadlineMs(long, long)}.
+     * <p>15s: above the slowest healthy handshake measured on a warm router
+     * (1.7s) and above streaming's 10s connect-window floor, so a real attempt
+     * still gets its full window, and small enough that the request keeps a
+     * second and third attempt in hand. With the SYN interval now sized from the
+     * window (see {@code Connection#fitSynBudgetToWindow}), a 15s attempt sends
+     * the full configured twelve SYNs across four or five different outbound
+     * tunnels before giving up.
+     *
+     * @since 0.9.72+
+     */
+    static final long MAX_CONNECT_ATTEMPT_MS = 15 * 1000;
 
     /**
      * Smallest per-attempt cost (ms) charged against the remaining deadline by
@@ -1301,6 +1334,50 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
         if (remainingMs < MIN_CONNECT_LEG_MS) {return -1;}
         long budgeted = requestedMs > 0 ? requestedMs : DEFAULT_CONNECT_TIMEOUT;
         return Math.min(budgeted, remainingMs);
+    }
+
+    /**
+     * The per-socket cap on the connect window for one failover leg. Pure
+     * decision. No clock access, safe for unit tests.
+     * <p>Streaming derives the window as {@code connectTimeout x Tuner
+     * multiplier}, then clamps it to the per-socket cap when one is set,
+     * otherwise to the router-wide {@code i2p.streaming.maxConnectTimeout}. A
+     * leg budget on its own is therefore advisory: the multiplier can double it.
+     * Returning the leg budget as the cap is what makes the budget real.
+     * <p>A caller that set its own cap keeps it when it is tighter, so an
+     * explicit per-tunnel ceiling is never loosened here.
+     *
+     * @param legTimeoutMs the connect timeout chosen for this leg, {@code <= 0}
+     *                     when none was requested
+     * @param callerMaxMs the cap the caller's options already carry, 0 when they
+     *                    defer to the router-wide default
+     * @return the cap to apply to the options, 0 to leave the default in force
+     * @since 0.9.72+
+     */
+    static long legConnectCapMs(long legTimeoutMs, long callerMaxMs) {
+        if (legTimeoutMs <= 0) {return callerMaxMs;}
+        if (callerMaxMs > 0) {return Math.min(callerMaxMs, legTimeoutMs);}
+        return legTimeoutMs;
+    }
+
+    /**
+     * The deadline for one failover walk, as opposed to the whole request. Pure
+     * decision. No clock access, safe for unit tests.
+     * <p>A walk that runs to the request deadline leaves the retry loop nothing
+     * to spend, so a request whose first handshake failed reports failure after
+     * one long wait instead of several short ones. Capping the walk at
+     * {@link #MAX_CONNECT_ATTEMPT_MS} leaves the rest of the budget for
+     * attempts made against fresh tunnels and a fresh pool state.
+     *
+     * @param requestDeadlineMs the request's absolute deadline, or
+     *                          {@link #NO_DEADLINE}
+     * @param attemptStartMs wall clock at which this attempt started
+     * @return the absolute deadline for this attempt
+     * @since 0.9.72+
+     */
+    static long attemptDeadlineMs(long requestDeadlineMs, long attemptStartMs) {
+        if (requestDeadlineMs == NO_DEADLINE) {return NO_DEADLINE;}
+        return Math.min(requestDeadlineMs, attemptStartMs + MAX_CONNECT_ATTEMPT_MS);
     }
 
     /**

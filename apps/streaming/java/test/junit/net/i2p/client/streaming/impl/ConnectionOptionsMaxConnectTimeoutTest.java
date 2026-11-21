@@ -23,6 +23,20 @@ public class ConnectionOptionsMaxConnectTimeoutTest {
         assertEquals("default must mean 'use global', i.e. 0", 0, opts.getMaxConnectTimeout());
     }
 
+    /**
+     * The cap travels through a copy of the options. The i2ptunnel failover walk
+     * pins it per leg to the leg's budget and hands the caller's value back
+     * afterwards, and both directions go through option copies.
+     */
+    @Test
+    public void testCapSurvivesACopy() {
+        ConnectionOptions src = new ConnectionOptions();
+        src.setMaxConnectTimeout(15000);
+        assertEquals(15000, new ConnectionOptions(src).getMaxConnectTimeout());
+        I2PSocketOptions asInterface = src;
+        assertEquals(15000, new ConnectionOptions(asInterface).getMaxConnectTimeout());
+    }
+
     @Test
     public void testSetAndGet() {
         ConnectionOptions opts = new ConnectionOptions();

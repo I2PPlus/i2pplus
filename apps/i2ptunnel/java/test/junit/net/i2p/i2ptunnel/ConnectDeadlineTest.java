@@ -130,6 +130,55 @@ public class ConnectDeadlineTest {
         assertEquals(-1, I2PTunnelClientBase.legConnectTimeoutMs(0, 10_000, 12_000));
     }
 
+    // ---------- per-leg cap and per-attempt budget ----------
+
+    /**
+     * The leg budget only becomes the real connect window if it is also the
+     * cap: streaming scales the timeout by the Tuner's multiplier (up to 200%)
+     * and applies the cap afterwards. Measured on a live router, the 30s this
+     * class asks for ran as a 57,950ms wait.
+     */
+    @Test
+    public void testLegCapPinsTheWindowToTheBudget() {
+        assertEquals(15_000, I2PTunnelClientBase.legConnectCapMs(15_000, 0));
+        // a router-wide-style default cap is pulled down to the leg budget
+        assertEquals(15_000, I2PTunnelClientBase.legConnectCapMs(15_000, 75_000));
+        // an explicit tighter cap is never loosened
+        assertEquals(8_000, I2PTunnelClientBase.legConnectCapMs(15_000, 8_000));
+        // no leg budget: leave whatever the caller carries, including 0 = "use the default"
+        assertEquals(75_000, I2PTunnelClientBase.legConnectCapMs(0, 75_000));
+        assertEquals(0, I2PTunnelClientBase.legConnectCapMs(-1, 0));
+    }
+
+    /**
+     * One failover walk may not spend the whole request budget, or the retry
+     * loop that follows it has nothing to spend and the request dies on a single
+     * long handshake.
+     */
+    @Test
+    public void testAttemptDeadlineCapsOneWalk() {
+        long start = 100_000;
+        long request = start + 120_000;
+        assertEquals(start + I2PTunnelClientBase.MAX_CONNECT_ATTEMPT_MS,
+                     I2PTunnelClientBase.attemptDeadlineMs(request, start));
+        // a request already nearer its end is not extended by the attempt cap
+        assertEquals(start + 5_000, I2PTunnelClientBase.attemptDeadlineMs(start + 5_000, start));
+        assertEquals(I2PTunnelClientBase.NO_DEADLINE,
+                     I2PTunnelClientBase.attemptDeadlineMs(I2PTunnelClientBase.NO_DEADLINE, start));
+    }
+
+    /**
+     * The attempt budget has to leave a startable leg: streaming floors a
+     * connect window at 10s and the walk skips a leg with less than that left.
+     */
+    @Test
+    public void testAttemptBudgetStillBuysALeg() {
+        assertTrue(I2PTunnelClientBase.MAX_CONNECT_ATTEMPT_MS >= I2PTunnelClientBase.MIN_CONNECT_LEG_MS);
+        assertTrue(I2PTunnelClientBase.MAX_CONNECT_ATTEMPT_MS <= I2PTunnelClientBase.MAX_CONNECT_SPEND_MS);
+        // 30s of spend, 15s per attempt: the sizing must pay for the second try
+        assertEquals(2, I2PTunnelClientBase.maxTimeoutConnectRetries(105_000, 15_000, false));
+    }
+
     // ---------- pool-building grace ----------
 
     @Test

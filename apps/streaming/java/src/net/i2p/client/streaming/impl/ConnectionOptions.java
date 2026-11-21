@@ -35,8 +35,6 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     private volatile int _windowSize;
     /** Connection traffic profile (only bulk supported). */
     private int _profile;
-    /** Max connect timeout override in ms, 0 = use global {@code i2p.streaming.maxConnectTimeout}. */
-    private long _maxConnectTimeout;
     /** Smoothed rtt. Volatile: read from the throttle/retransmit hot path
      * (writer thread, timer thread, reader thread) without the monitor the
      * compound methods still use. */
@@ -1041,27 +1039,6 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      * @param delayMs delay before starting connection, in ms
      */
     public void setConnectDelay(int delayMs) {_connectDelay = delayMs;}
-
-    /**
-     * Absolute cap on the time an outbound connect waits for a SYN ACK.
-     * 0 (the default) is not a real cap; the router-wide
-     * {@link #PROP_MAX_CONNECT_TIMEOUT} value is used instead.
-     *
-     * @return cap in ms, or 0 to use the global default
-     * @since 0.9.71+
-     */
-    public long getMaxConnectTimeout() {return _maxConnectTimeout;}
-
-    /**
-     * Set an absolute cap on the time an outbound connect waits for a SYN ACK.
-     * Overrides the router-wide {@link #PROP_MAX_CONNECT_TIMEOUT} value for
-     * this connection.  This is what lets per-tunnel client options (e.g. the
-     * IRC client tunnel) raise the ceiling above the global default.
-     *
-     * @param maxConnectTimeoutMs cap in ms, or &lt;= 0 to use the global default
-     * @since 0.9.71+
-     */
-    public void setMaxConnectTimeout(long maxConnectTimeoutMs) {_maxConnectTimeout = maxConnectTimeoutMs;}
 
     /**
      * Whether every packet on this connection must be signed, or only

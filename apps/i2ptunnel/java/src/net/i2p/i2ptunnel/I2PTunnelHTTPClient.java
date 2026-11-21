@@ -1873,7 +1873,12 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 while (true) {
                     try {
                         attemptStartMs = System.currentTimeMillis();
-                        i2ps = createI2PSocket(clientDest, sktOpts, connectDeadline);
+                        // One failover walk may not spend the whole connect
+                        // budget: cap the walk so a handshake that fails leaves
+                        // the retry loop attempts to make against fresh tunnels
+                        // and a fresh pool state.
+                        i2ps = createI2PSocket(clientDest, sktOpts,
+                                               attemptDeadlineMs(connectDeadline, attemptStartMs));
                         break;
                     } catch (IOException ioe) {
                         connectAttempts++;

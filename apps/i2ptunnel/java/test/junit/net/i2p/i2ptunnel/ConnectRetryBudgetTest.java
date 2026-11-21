@@ -49,10 +49,14 @@ public class ConnectRetryBudgetTest {
      * brings that to three attempts.
      */
     @Test
-    public void testFastGiveUpBuysThreeAttempts() {
+    public void testFastGiveUpBuysTheFullAttemptCeiling() {
         long remaining = DEADLINE_MS - 4_000;
-        assertEquals(3, I2PTunnelClientBase.maxTimeoutConnectRetries(remaining, 4_000, false));
-        // Without the cap, the deadline alone buys the full ceiling.
+        // A 4s give-up is cheap enough that the 30s spend budget no longer
+        // binds: the hard ceiling MAX_TIMEOUT_CONNECT_RETRIES is what stops the
+        // loop. It did bind at the old 15s cap, which is why this read 3.
+        assertEquals(I2PTunnelClientBase.MAX_TIMEOUT_CONNECT_RETRIES,
+                     I2PTunnelClientBase.maxTimeoutConnectRetries(remaining, 4_000, false));
+        // Without the cap, the deadline alone buys the same full ceiling.
         assertEquals(I2PTunnelClientBase.MAX_TIMEOUT_CONNECT_RETRIES,
                      I2PTunnelClientBase.maxTimeoutConnectRetries(remaining, 4_000, false, 0));
     }
@@ -188,8 +192,23 @@ public class ConnectRetryBudgetTest {
     /** The 3-arg overload applies the production cap. */
     @Test
     public void testLegacyOverloadAppliesTheCap() {
-        assertEquals(3, I2PTunnelClientBase.maxTimeoutConnectRetries(DEADLINE_MS - 4_000, 4_000, false));
-        assertEquals(15_000, I2PTunnelClientBase.MAX_CONNECT_SPEND_MS);
+        // 4s attempts: the 30s spend cap leaves the hard ceiling in charge
+        assertEquals(4, I2PTunnelClientBase.maxTimeoutConnectRetries(DEADLINE_MS - 4_000, 4_000, false));
+        // a cap that does bind still binds
+        assertEquals(3, I2PTunnelClientBase.maxTimeoutConnectRetries(DEADLINE_MS - 4_000, 4_000, false, 15_000));
+        assertEquals(30_000, I2PTunnelClientBase.MAX_CONNECT_SPEND_MS);
+    }
+
+    /**
+     * A handshake on a drained router fails at the connect-window floor, not in
+     * 4s: with the attempt now capped at 15s, a 15s attempt must still leave
+     * the request a second one. Under the old 15s cap this came out at zero,
+     * which is why a request died on a single 58s handshake.
+     */
+    @Test
+    public void testSlowAttemptStillBuysARetry() {
+        assertEquals(1, I2PTunnelClientBase.maxTimeoutConnectRetries(120_000, 15_000, false, 15_000));
+        assertEquals(2, I2PTunnelClientBase.maxTimeoutConnectRetries(120_000, 15_000, false, 30_000));
     }
 
     /** A cap tighter than one attempt still allows the historical floor. */

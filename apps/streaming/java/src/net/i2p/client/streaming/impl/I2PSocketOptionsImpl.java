@@ -11,6 +11,11 @@ import net.i2p.util.SystemVersion;
 class I2PSocketOptionsImpl implements I2PSocketOptions {
     /** How long a connect may wait, in ms. */
     private long _connectTimeout;
+    /**
+     * Absolute cap on the connect wait, in ms; 0 means use the router-wide
+     * {@link I2PSocketOptions#PROP_MAX_CONNECT_TIMEOUT} default.
+     */
+    private long _maxConnectTimeout;
     /** How long a read may wait, in ms. */
     private long _readTimeout;
     /** How long a write may wait, in ms. */
@@ -61,6 +66,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
         this(System.getProperties());
         if (opts != null) {
             _connectTimeout = opts.getConnectTimeout();
+            _maxConnectTimeout = opts.getMaxConnectTimeout();
             _readTimeout = opts.getReadTimeout();
             _writeTimeout = opts.getWriteTimeout();
             _maxBufferSize = opts.getMaxBufferSize();
@@ -191,6 +197,37 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
     @Override
     public void setConnectTimeout(long ms) {
         _connectTimeout = ms;
+    }
+
+    /**
+     * Absolute cap on the time an outbound connect waits for a SYN ACK, in ms.
+     * <p>
+     * 0 (the default) is not a real cap: the router-wide
+     * {@link I2PSocketOptions#PROP_MAX_CONNECT_TIMEOUT} value is used instead.
+     * A positive value overrides that for this socket, which is what lets
+     * per-tunnel client options raise — or hold down — the ceiling. The cap is
+     * applied after the connect-timeout multiplier, so a caller that must not
+     * wait longer than its own budget sets both this and the connect timeout.
+     *
+     * @return cap in ms, or 0 to use the router-wide default
+     * @since 0.9.72+
+     */
+    @Override
+    public long getMaxConnectTimeout() {
+        return _maxConnectTimeout;
+    }
+
+    /**
+     * Set an absolute cap on the time an outbound connect waits for a SYN ACK.
+     * Overrides the router-wide {@link I2PSocketOptions#PROP_MAX_CONNECT_TIMEOUT}
+     * value for this socket.
+     *
+     * @param maxConnectTimeoutMs cap in ms, or &lt;= 0 to use the router-wide default
+     * @since 0.9.72+
+     */
+    @Override
+    public void setMaxConnectTimeout(long maxConnectTimeoutMs) {
+        _maxConnectTimeout = maxConnectTimeoutMs;
     }
 
     /**

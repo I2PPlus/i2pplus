@@ -73,6 +73,31 @@ public interface I2PSocketOptions {
     public void setConnectTimeout(long ms);
 
     /**
+     * The absolute cap on how long an outbound connect waits for the ACK of its
+     * SYN, in milliseconds. The effective window is the connect timeout scaled
+     * by the router's connect-timeout multiplier, then held down by this cap —
+     * so a caller that must not wait longer than its own budget sets both, and
+     * the scaling cannot walk past the cap.
+     *
+     * <p>0 (the default) is not a cap: the router-wide
+     * {@link #PROP_MAX_CONNECT_TIMEOUT} value applies instead.
+     *
+     * @return cap in ms, or 0 to use the router-wide default
+     * @since 0.9.72+
+     */
+    public long getMaxConnectTimeout();
+
+    /**
+     * Set the absolute cap on how long an outbound connect waits for the ACK of
+     * its SYN. Overrides the router-wide {@link #PROP_MAX_CONNECT_TIMEOUT}
+     * value for this socket.
+     *
+     * @param ms cap in ms, or &lt;= 0 to use the router-wide default
+     * @since 0.9.72+
+     */
+    public void setMaxConnectTimeout(long ms);
+
+    /**
      * What is the longest we'll block on the input stream while waiting
      * for more data.  If this value is exceeded, the read() throws
      * SocketTimeoutException.
