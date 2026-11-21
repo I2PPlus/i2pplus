@@ -249,6 +249,88 @@ class ConnectionManager {
     }
 
     /**
+     * The error a connect carries when the destination's own connect cooldown
+     * has grown too long to sit out: the attempt was refused before a SYN went
+     * out, not rejected by the peer.
+     * <p>Measured on a live router: 539 failed connects to 24 destinations in
+     * 133 minutes, 371 of them within a minute of the previous failure to the
+     * same destination. Waiting out the cooldown parked every thread dialing
+     * that peer and then let all of them send at once, so the escalation bought
+     * a burst of attempts rather than one attempt per window - each paying three
+     * SYNs, a fresh outbound tunnel and the full connect timeout. Refusing the
+     * extras is what makes the escalation cost anything.
+     *
+     * @since 0.9.72+
+     */
+    static final String ERR_CONNECT_BACKOFF = "Connect deferred: destination in connect cooldown";
+
+    /**
+     * Pure decision: should this connect refuse the destination's remaining
+     * cooldown rather than sit it out?
+     * <p>Waiting is right while the window is short: the application expects
+     * connect() to block, and a peer that lost one connect should be retried
+     * promptly. Once the escalating window runs to tens of seconds, waiting
+     * buys nothing - every thread dialing the peer parks for the same window
+     * and they all send the moment it lapses.
+     *
+     * @param remainingMs the cooldown left before an attempt may run, in ms
+     * @param refuseAfterMs the cooldown length past which waiting is abandoned,
+     *                      non-positive to always wait it out
+     * @return true if the connect should be refused now instead of delayed
+     * @since 0.9.72+
+     */
+    static boolean refuseCooldown(long remainingMs, long refuseAfterMs) {
+        return refuseAfterMs > 0 && remainingMs > refuseAfterMs;
+    }
+
+    /**
+     * Pure decision: is a destination's cooldown still running when an attempt
+     * arrives this long after the failure that armed it?
+     * <p>A negative elapsed means the clock moved backwards under us; the record
+     * is then treated as spent rather than armed, so a clock adjustment cannot
+     * hold a healthy destination out of connect for a full window.
+     *
+     * @param elapsedMs ms since the failure that armed the cooldown
+     * @param cooldownMs the window that failure armed, in ms
+     * @return true if an attempt now is still inside the cooldown
+     * @since 0.9.72+
+     */
+    static boolean cooldownRunning(long elapsedMs, long cooldownMs) {
+        return elapsedMs >= 0 && elapsedMs < cooldownMs;
+    }
+
+    /**
+     * Is this connection error our own refusal to connect, rather than a
+     * failure the peer caused? A refusal must not be recorded as a strike: the
+     * attempt never ran, so counting refusals would escalate the window on
+     * refusals alone, without the peer ever being reached.
+     *
+     * @param error the connection's error, may be null
+     * @return true if the connect was deferred by the destination's cooldown
+     * @since 0.9.72+
+     */
+    static boolean isBackoffRefusal(String error) {
+        return ERR_CONNECT_BACKOFF.equals(error);
+    }
+
+    /**
+     * The log line for a refused connect: which destination, how much of its
+     * cooldown is left, and how many failures put it there.
+     *
+     * @param dest the destination whose cooldown refused the connect
+     * @param remainingMs the cooldown left, in ms
+     * @param strikes the consecutive failures recorded against it
+     * @return the line, never null
+     * @since 0.9.72+
+     */
+    static String backoffRefusal(Hash dest, long remainingMs, int strikes) {
+        return "Refusing connect to [" + dest.toShortBase64() +
+               "] -> Still cooling down * Cooldown left: " +
+               DataHelper.formatDuration(remainingMs) +
+               " * Consecutive failures: " + strikes;
+    }
+
+    /**
      * Stream connection pool — reuses established streams to the same destination.
      * Key: destination Hash, Value: deque of pooled connections.
      * @since 0.9.71+
@@ -312,6 +394,21 @@ class ConnectionManager {
      */
     private long getDestCooldownMaxMs() {
         return _context.getProperty("i2p.streaming.destinationCooldownMaxMs", 5*60*1000);
+    }
+
+    /**
+     * How long a connect will sit out a destination's cooldown before it
+     * refuses instead. Below this the caller waits, as it always has; above it
+     * the connect fails at once, with no SYN sent and no outbound tunnel used.
+     * Tunable via {@code i2p.streaming.destinationCooldownRefuseMs}
+     * (default: 30000). Non-positive always waits, which restores the behaviour
+     * of waiting out even a multi-minute cooldown.
+     *
+     * @return the cooldown length past which a connect is refused, in ms
+     * @since 0.9.72+
+     */
+    private long getDestCooldownRefuseMs() {
+        return _context.getProperty("i2p.streaming.destinationCooldownRefuseMs", 30*1000);
     }
 
     /**
@@ -1568,6 +1665,7 @@ class ConnectionManager {
         _context.statManager().createRateStat("stream.con.synExpireRate", "Percent of queued SYNs that expired un-accepted during the sample window", "Stream", RATES);
         _context.statManager().createRequiredRateStat("stream.connectionCreated", "Number of outbound stream connections created", "Stream", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRequiredRateStat("stream.connectFailed", "Elapsed time (ms) of a failed outbound connect attempt", "Stream", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
+        _context.statManager().createRequiredRateStat("stream.connectBackoffRefused", "Outbound connects refused by the destination's connect cooldown (no SYN sent)", "Stream", RATES);
         _context.statManager().createRequiredRateStat("stream.connectTime", "Elapsed time (ms) of a successful outbound connect", "Stream", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
           _context.statManager().createRequiredRateStat("stream.chokeSizeBegin", "Number of outstanding messages when we started to choke", "Stream", RATES);
           _context.statManager().createRequiredRateStat("stream.chokeSizeEnd", "Number of outstanding messages when we stopped being choked", "Stream", RATES);
@@ -2412,7 +2510,9 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
 
       /**
        * Common post-creation setup for both pooled and new connections.
-       * Handles cooldown, waitForConnect, stats recording.
+       * Handles cooldown, waitForConnect, stats recording. A destination whose
+       * cooldown has outgrown the refusal threshold is refused here, before any
+       * SYN is queued - see {@link #refuseCooldown(long, long)}.
        *
        * @param con the new or pooled connection being set up, non-null
        * @param peer the remote destination, used for the per-dest cooldown and
@@ -2423,7 +2523,9 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
        *                     the elapsed-time stats
        * @param fromPool if true, skip cooldown delay (connection already established)
        * @return the same con, after waitForConnect; a failed connect is
-       *         reported through getConnectionError(), not a null return
+       *         reported through getConnectionError(), not a null return. A
+       *         refused connect carries {@link #ERR_CONNECT_BACKOFF} and never
+       *         reached the peer.
        */
       private Connection finalizeConnection(Connection con, Destination peer,
                                              ConnectionOptions opts, long connectStart,
@@ -2437,17 +2539,28 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
                   int strikes = (int) Math.max(1, failure[1]);
                   long cooldown = destCooldownMs(strikes, getDestCooldownMs(), getDestCooldownMaxMs());
                   long elapsed = _context.clock().now() - failure[0];
-                  if (elapsed < cooldown && elapsed >= 0) {
+                  if (cooldownRunning(elapsed, cooldown)) {
                       long delay = cooldown - elapsed;
                       long now = _context.clock().now();
+                      if (refuseCooldown(delay, getDestCooldownRefuseMs())) {
+                          // Refused before eventOccurred(), so no SYN is queued and
+                          // no outbound tunnel is used. The caller closes the
+                          // connection, as it does for any connect that comes back
+                          // with an error.
+                          con.setConnectionError(ERR_CONNECT_BACKOFF);
+                          _log.warnThrottled("connect-backoff-" + destHash.toShortBase64(),
+                                             backoffRefusal(destHash, delay, strikes));
+                          return con;
+                      }
                       Long lw = _cooldownWarned.get(destHash);
                       long lastWarn = lw == null ? 0 : lw.longValue();
                       if (shouldLogCooldownWarn(lastWarn, now, cooldown)) {
                           _cooldownWarned.put(destHash, Long.valueOf(now));
                           if (_log.shouldDebug())
                               _log.debug("Delaying connect to [" + destHash.toShortBase64() +
-                                         "] -> Cooling down for " + delay +
-                                         "ms * Consecutive failures: " + strikes);
+                                         "] -> Cooling down for " +
+                                         DataHelper.formatDuration(delay) +
+                                         " * Consecutive failures: " + strikes);
                       }
                       awaitCooldown(_cooldownLock, delay, _context.clock());
                   } else {
@@ -2486,7 +2599,15 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
           }
            // Record failure for cooldown; a success forgets the record only if the
            // failure was a connect that never established - see forgetsOnConnectSuccess()
-           if (con.getConnectionError() != null) {
+           String err = con.getConnectionError();
+           if (isBackoffRefusal(err)) {
+              // Not a failure and not a strike: nothing reached the peer, and
+              // counting a refusal would escalate the window on refusals alone.
+              // Counted separately so the deferrals show up beside the attempts
+              // that did run, and still counted as a created connection, since a
+              // Connection object was made and torn down like any other.
+              _context.statManager().addRateData("stream.connectBackoffRefused", 1);
+           } else if (err != null) {
               _context.statManager().addRateData("stream.connectFailed", connectElapsed, connectElapsed);
               _destFailures.compute(destHash, (k, prior) -> recordFailure(prior, _context.clock().now(), false));
               // Opportunistic trim: prevent unbounded growth from abandoned destinations
