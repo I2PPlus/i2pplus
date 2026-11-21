@@ -3,7 +3,7 @@
  * identicon renderer the susidns address book and details pages load.
  *
  * Those pages never call the library: this fork dropped the UMD export, so the
- * only reachable path is the declarative one — <svg data-jdenticon-value=...>
+ * only reachable path is the declarative one — <svg data-jid=...>
  * markup plus a window.jdenticon_config, painted by the script's own startup
  * pass. That is what these tests pin, because it is exactly what susidns
  * exercises:
@@ -16,7 +16,9 @@
  *     full saturation through it, and a fork that loses that fallback silently
  *     renders every icon with the library defaults;
  *   - an element with no value and no hash is left alone rather than painted
- *     blank.
+ *     blank;
+ *   - an element with no size attributes, which is how the susidns pages ship
+ *     them, is drawn in the 100-unit space the theme CSS then scales.
  *
  * @license AGPL3 or later
  */
@@ -68,15 +70,17 @@ function render(body, config) {
 }
 
 /**
- * One identicon element as the susidns pages render it.
+ * One identicon element as the susidns pages render it: no size attributes,
+ * because the theme CSS sizes it and the viewBox the script sets scales it.
  *
  * @param {string} value the address the icon stands for
- * @param {number} size pixel edge
+ * @param {number} [size] pixel edge, given as attributes only where a page does
+ *   size the element that way
  * @returns {string} the element markup
  */
-function icon(value, size = 24) {
-  return `<svg class=identicon width=${size} height=${size} ` +
-    `data-jdenticon-value="${value}" xmlns=http://www.w3.org/2000/svg></svg>`;
+function icon(value, size) {
+  const box = size === undefined ? "" : `width=${size} height=${size} `;
+  return `<svg class=jid ${box}data-jid="${value}"></svg>`;
 }
 
 /**
@@ -99,9 +103,10 @@ function fills(html) {
   return [...html.matchAll(/fill="([^"]+)"/g)].map(m => m[1]).join("|");
 }
 
-test("jdenticon paints a data-jdenticon-value element with an SVG shape", () => {
+test("jdenticon paints a data-jid element with an SVG shape", () => {
   const {html, els} = render(icon("8pkgIP-YKExBOoyB"));
-  assert.match(html, /<svg[^>]*viewBox="0 0 24 24"/, "the icon keeps its 24px box");
+  assert.match(html, /<svg[^>]*viewBox="0 0 100 100"/, "a CSS-sized icon gets the 100-unit box");
+  assert.ok(!/preserveAspectRatio/.test(html), "the SVG default is not restated");
   assert.match(html, /<path d="[^"]+"/, "a shape is painted");
   assert.match(html, /fill="#[0-9a-f]{6}"/, "with a resolved colour");
   assert.equal(els[0].jdenticonRendered, true, "the element is flagged as painted");
@@ -115,9 +120,9 @@ test("jdenticon renders the same value identically and different values differen
   assert.notEqual(shapes(a), shapes(other), "two addresses do not get the same icon");
 });
 
-test("jdenticon honours the size attribute", () => {
-  const {html} = render(icon("test", 256));
-  assert.match(html, /viewBox="0 0 256 256"/);
+test("jdenticon honours the size attributes, and a 100-unit box without them", () => {
+  assert.match(render(icon("test", 256)).html, /viewBox="0 0 256 256"/, "attributes set the drawing space");
+  assert.match(render(icon("test")).html, /viewBox="0 0 100 100"/, "a CSS-sized element gets the fallback space");
 });
 
 test("jdenticon applies the padding and saturation the susidns pages set", () => {
@@ -130,13 +135,13 @@ test("jdenticon applies the padding and saturation the susidns pages set", () =>
 });
 
 test("jdenticon leaves an element with neither value nor hash alone", () => {
-  const {html, els} = render('<svg class=identicon width=24 height=24 xmlns=http://www.w3.org/2000/svg></svg>');
+  const {html, els} = render('<svg class=jid></svg>');
   assert.ok(!/<path/.test(html), "no shape is added");
   assert.equal(els[0].jdenticonRendered, undefined, "and nothing is flagged as painted");
 });
 
 test("jdenticon paints an element that carries a hash instead of a value", () => {
-  const {html} = render('<svg width=32 height=32 data-jdenticon-hash="0123456789abcdef0123456789abcdef0123"></svg>');
+  const {html} = render('<svg width=32 height=32 data-jid-hash="0123456789abcdef0123456789abcdef0123"></svg>');
   assert.match(html, /<path d="[^"]+"/);
 });
 

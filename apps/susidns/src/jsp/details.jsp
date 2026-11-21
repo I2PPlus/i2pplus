@@ -36,6 +36,8 @@
 <%  if (base.useSoraFont()) { %><link href="<%=base.getTheme()%>../../fonts/Sora.css" rel=stylesheet><% } else { %>
 <link href="<%=base.getTheme()%>../../fonts/OpenSans.css" rel=stylesheet><% } %>
 <% if (overrideCssActive) { %><link rel=stylesheet href="<%=base.getTheme()%>override.css"><% } %>
+<% /* one copy for the page: with scripting off the svg is never painted, so hide it and let the imagegen img show */ %>
+<noscript><style>.jid{display:none!important}</style></noscript>
 <%  String query = request.getQueryString(); %>
 <script nonce="<%=cspNonce%>">const theme = <%=theme%>;</script>
 </head>
@@ -151,7 +153,7 @@
 <h3><%=intl._t("Visual Identification for")%>&nbsp;<span id=idAddress><%=addr.getName()%></span></h3>
 <table>
 <tr>
-<td><svg class=identicon width="256" height="256" data-jdenticon-value="<%=addr.getB32()%>" xmlns="http://www.w3.org/2000/svg"></svg><noscript><img src="/imagegen/id?s=256&amp;c=<%=addr.getB64().replace("=", "%3d")%>" width=256 height=256></noscript></td>
+<td><svg class=jid data-jid="<%=addr.getB32()%>"></svg><noscript><img src="/imagegen/id?s=256&amp;c=<%=addr.getB64().replace("=", "%3d")%>" width=256 height=256></noscript></td>
 <td><img src="/imagegen/qr?s=256&amp;t=<%=addr.getName()%>&amp;c=http%3a%2f%2f<%=addr.getName()%>%2f%3fi2paddresshelper%3d<%=addr.getDestination()%>"></td>
 </tr>
 <tr>

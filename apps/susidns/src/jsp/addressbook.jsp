@@ -62,6 +62,8 @@
 <%  if (base.useSoraFont()) { %><link href="<%=base.getTheme()%>../../fonts/Sora.css" rel=stylesheet><% } else { %>
 <link href="<%=base.getTheme()%>../../fonts/OpenSans.css" rel=stylesheet><% } %>
 <%  if (overrideCssActive) { %><link rel=stylesheet href="<%=base.getTheme()%>override.css"><% } %>
+<% /* one copy for the page: with scripting off the svg is never painted, so hide it and let the imagegen img show */ %>
+<noscript><style>.jid{display:none!important}</style></noscript>
 <script nonce="<%=cspNonce%>">const theme = <%=theme%>;</script>
 </head>
 <body id=bk class="<%=book.getThemeName()%>" style=display:none;pointer-events:none>
@@ -239,11 +241,11 @@
 <c:forEach items="${book.entries}" var="addr" begin="${book.resultBegin}" end="${book.resultEnd}">
 <tr class=lazy>
 <td class=info>
-<a href="details?h=${addr.name}&amp;book=${book.book}" title="<%=intl._t("More information on this entry")%>"><svg width="24" height="24" class=identicon data-jdenticon-value="${addr.b32}" xmlns="http://www.w3.org/2000/svg"></svg>
+<a href="details?h=${addr.name}&amp;book=${book.book}" title="<%=intl._t("More information on this entry")%>"><svg class=jid data-jid="${addr.b32}"></svg>
 <%      boolean haveImagegen = book.haveImagegen();
         if (haveImagegen) {
 %>
-<noscript><img src="/imagegen/id?s=24&amp;c=${addr.b32}" loading=lazy><style>.identicon{display:none!important}</style></noscript>
+<noscript><img src="/imagegen/id?s=24&amp;c=${addr.b32}" loading=lazy></noscript>
 <%      } %>
 </a>
 </td>

@@ -1,489 +1,486 @@
 /**
  * @module jdenticon
- * Jdenticon 3.3.0
- * http://jdenticon.com
- * MIT License (https://mit-license.org/)
- * Copyright (c) 2014-2024 Daniel Mester Pirttijärvi
- * @file Jdenticon - SVG/Canvas identicon generator.
- * Generates unique visual identifiers (identicons) from hash values.
- * Supports configurable icon size, color palette, and rendering backends.
+ * @file Identicons for the susidns address book and details pages.
+ * @description An I2P+ fork of jdenticon 3.3.0, kept for the one path those
+ * pages use - paint the `<svg data-jid="…">` they ship, once, when the
+ * document is ready. A `data-jid-hash` attribute holds a hash the page computed
+ * itself, and skips the SHA-1 pass.
+ *
+ * Page config: `padding`, `saturation`, `lightness`, `hues` on `window.jdenticon_config`.
+ *
+ * An icon is a function of its hash alone: a 4x4 cell grid where three colour
+ * groups each draw one hash-picked shape across their cells at hash-picked
+ * rotations, at a hue from the hash. That is an address's visual identity.
+ * @author Daniel Mester Pirttijärvi
+ * @copyright 2014-2024
+ * @see {@link https://jdenticon.com}
+ * @license MIT
  */
 
 (function (global) {
   'use strict';
 
-  function parseHex(hash, startPosition, octets) {
-    return parseInt(hash.substr(startPosition, octets), 16);
+  /** Attribute carrying a hash the page already computed. */
+  const ATTR_HASH = 'data-jid-hash';
+
+  /** Attribute carrying an arbitrary value, hashed here with SHA-1. */
+  const ATTR_VALUE = 'data-jid';
+
+  /** Page-level config object the JSPs set before this loads. */
+  const CONFIG_KEY = 'jdenticon_config';
+
+  /** JS property, not an attribute, marking an element as painted. */
+  const PAINTED = 'jdenticonRendered';
+
+  /** Every element this script looks at. */
+  const SELECTOR = `[${ATTR_HASH}],[${ATTR_VALUE}]`;
+
+  /** Namespace every painted element and its children belong to. */
+  const XMLNS = 'http://www.w3.org/2000/svg';
+
+  /** Fraction of the icon edge left as padding when the page sets none. */
+  const PAD = 0.08;
+
+  /** Hue-dependent brightness correction per hue sector, without which the
+   * greens and yellows of a palette read far brighter than the blues. */
+  const CORRECT = [0.55, 0.5, 0.5, 0.46, 0.6, 0.55, 0.55];
+
+  /** The cells of the 4x4 grid as x, y pairs, in the order each group draws
+   * them: the eight edge cells, the four corners, the four centre cells. */
+  const EDGE = [1, 0, 2, 0, 2, 3, 1, 3, 0, 1, 3, 1, 3, 2, 0, 2];
+  const CORNER = [0, 0, 3, 0, 3, 3, 0, 3];
+  const CENTRE = [1, 1, 2, 1, 2, 2, 1, 2];
+
+  /** Clamps one colour channel to two hex digits, out of range to 00 or ff. */
+  function hexPair(value) {
+    const channel = value | 0;
+    return channel < 0 ? '00' :
+      channel < 16 ? `0${channel.toString(16)}` :
+      channel < 256 ? channel.toString(16) : 'ff';
   }
 
-  function decToHex(v) {
-    v |= 0; // Ensure integer value
-    return v < 0 ? "00" : v < 16 ? "0" + v.toString(16) : v < 256 ? v.toString(16) : "ff";
-  }
-
+  /** One channel of an HSL-to-RGB conversion at a hue position, wrapped to 0-6. */
   function hueToRgb(m1, m2, h) {
-    h = h < 0 ? h + 6 : h > 6 ? h - 6 : h;
-    return decToHex(255 * (h < 1 ? m1 + (m2 - m1) * h : h < 3 ? m2 : h < 4 ? m1 + (m2 - m1) * (4 - h) : m1));
+    const w = h < 0 ? h + 6 : h > 6 ? h - 6 : h;
+    return hexPair(255 * (
+      w < 1 ? m1 + (m2 - m1) * w :
+      w < 3 ? m2 :
+      w < 4 ? m1 + (m2 - m1) * (4 - w) : m1));
   }
 
-  function parseColor(color) {
-    if (/^#[0-9a-f]{3,8}$/i.test(color)) {
-      let result;
-      const colorLength = color.length;
-
-      if (colorLength < 6) {
-        const r = color[1],
-          g = color[2],
-          b = color[3],
-          a = color[4] || "";
-        result = "#" + r + r + g + g + b + b + a + a;
-      }
-      if (colorLength === 7 || colorLength > 8) {
-        result = color;
-      }
-      return result;
-    }
-  }
-
-  function toCss3Color(hexColor) {
-    const a = parseHex(hexColor, 7, 2);
-    let result;
-
-    if (isNaN(a)) {
-      result = hexColor;
-    } else {
-      const r = parseHex(hexColor, 1, 2),
-        g = parseHex(hexColor, 3, 2),
-        b = parseHex(hexColor, 5, 2);
-      result = "rgba(" + r + "," + g + "," + b + "," + (a / 255).toFixed(2) + ")";
-    }
-
-    return result;
-  }
-
-  function hsl(hue, saturation, lightness) {
-    let result;
-
+  /** HSL to a CSS hex colour. */
+  function hslToHex(hue, saturation, lightness) {
     if (saturation === 0) {
-      const partialHex = decToHex(lightness * 255);
-      result = partialHex + partialHex + partialHex;
-    } else {
-      const m2 = lightness <= 0.5 ? lightness * (saturation + 1) : lightness + saturation - lightness * saturation,
-        m1 = lightness * 2 - m2;
-      result = hueToRgb(m1, m2, hue * 6 + 2) + hueToRgb(m1, m2, hue * 6) + hueToRgb(m1, m2, hue * 6 - 2);
+      const grey = hexPair(lightness * 255);
+      return `#${grey}${grey}${grey}`;
     }
-
-    return "#" + result;
+    const m2 = lightness <= 0.5 ?
+      lightness * (saturation + 1) :
+      lightness + saturation - lightness * saturation;
+    const m1 = lightness * 2 - m2;
+    return `#${hueToRgb(m1, m2, hue * 6 + 2)}${hueToRgb(m1, m2, hue * 6)}${hueToRgb(m1, m2, hue * 6 - 2)}`;
   }
 
-  function correctedHsl(hue, saturation, lightness) {
-    const correctors = [0.55, 0.5, 0.5, 0.46, 0.6, 0.55, 0.55],
-      corrector = correctors[(hue * 6 + 0.5) | 0];
-    lightness = lightness < 0.5 ? lightness * corrector * 2 : corrector + (lightness - 0.5) * (1 - corrector) * 2;
-    return hsl(hue, saturation, lightness);
+  /** HSL to hex with the brightness correction for the hue's sector. */
+  function hsl(hue, saturation, lightness) {
+    const corrector = CORRECT[(hue * 6 + 0.5) | 0];
+    const corrected = lightness < 0.5 ?
+      lightness * corrector * 2 :
+      corrector + (lightness - 0.5) * (1 - corrector) * 2;
+    return hslToHex(hue, saturation, corrected);
   }
 
-  const CONFIG_PROPERTIES = {
-    G /*GLOBAL*/: "jdenticon_config",
-    n /*MODULE*/: "config",
-  };
+  /**
+   * Flattens a config into the values the renderer reads. The page's
+   * `window.jdenticon_config` is the source, and a passed object wins over it.
+   * This runs once per paint pass, not once per icon.
+   *
+   * @param {Object} [localConfig] config for this pass only
+   * @returns {Object} hue mapper, saturations, lightness mappers and padding
+   */
+  function parseConfig(localConfig) {
+    const config = localConfig || global[CONFIG_KEY] || {};
+    const lightnessConfig = config.lightness || {};
+    const saturation = config.saturation;
+    const objectForm = typeof saturation === 'object' && saturation !== null;
+    const colorSat = objectForm ? saturation.color : saturation;
+    const graySat = objectForm ? saturation.grayscale : undefined;
 
-  let rootConfigurationHolder = {};
-
-  function defineConfigProperty(rootObject) {
-    rootConfigurationHolder = rootObject;
-  }
-
-  function configure(newConfiguration) {
-    if (arguments.length) {
-      rootConfigurationHolder[CONFIG_PROPERTIES.n /*MODULE*/] = newConfiguration;
-    }
-    return rootConfigurationHolder[CONFIG_PROPERTIES.n /*MODULE*/];
-  }
-
-  function getConfiguration(paddingOrLocalConfig, defaultPadding) {
-    // Precedence: a config passed to the API call wins outright, then the one
-    // set through jdenticon.configure(), then the page's window.jdenticon_config
-    // (what addressbook.jsp and details.jsp set).
-    const configObject = (typeof paddingOrLocalConfig == "object" && paddingOrLocalConfig) ||
-      rootConfigurationHolder[CONFIG_PROPERTIES.n /*MODULE*/] ||
-      global[CONFIG_PROPERTIES.G /*GLOBAL*/] ||
-      {},
-      lightnessConfig = configObject["lightness"] || {},
-      saturation = configObject["saturation"] || {},
-      colorSaturation = "color" in saturation ? saturation["color"] : saturation,
-      grayscaleSaturation = saturation["grayscale"],
-      backColor = configObject["backColor"],
-      padding = configObject["padding"];
-
-    function lightness(configName, defaultRange) {
-      let range = lightnessConfig[configName];
-      if (!(range && range.length > 1)) {
-        range = defaultRange;
-      }
-
-      return function (value) {
-        value = range[0] + value * (range[1] - range[0]);
-        return value < 0 ? 0 : value > 1 ? 1 : value;
+    /** Maps a 0-1 palette position onto a lightness inside a configured range. */
+    const range = (name, fallback) => {
+      const span = lightnessConfig[name] && lightnessConfig[name].length > 1 ?
+        lightnessConfig[name] : fallback;
+      return (value) => {
+        const scaled = span[0] + value * (span[1] - span[0]);
+        return scaled < 0 ? 0 : scaled > 1 ? 1 : scaled;
       };
-    }
+    };
 
-    function hueFunction(originalHue) {
-      const hueConfig = configObject["hues"];
-      let hue;
-      if (hueConfig && hueConfig.length > 0) {
-        hue = hueConfig[0 | (0.999 * originalHue * hueConfig.length)];
-      }
-
-      return typeof hue == "number"
-        ? (((hue / 360) % 1) + 1) % 1
-        : originalHue;
-    }
+    /** Snaps the hue the hash produced onto the page's hue list, if it set one. */
+    const hueAt = (originalHue) => {
+      const hues = config.hues;
+      const hue = hues && hues.length > 0 ?
+        hues[0 | (0.999 * originalHue * hues.length)] : undefined;
+      return typeof hue === 'number' ? (((hue / 360) % 1) + 1) % 1 : originalHue;
+    };
 
     return {
-      X /*hue*/: hueFunction,
-      p /*colorSaturation*/: typeof colorSaturation == "number" ? colorSaturation : 0.5,
-      H /*grayscaleSaturation*/: typeof grayscaleSaturation == "number" ? grayscaleSaturation : 0,
-      q /*colorLightness*/: lightness("color", [0.4, 0.8]),
-      I /*grayscaleLightness*/: lightness("grayscale", [0.3, 0.9]),
-      J /*backColor*/: parseColor(backColor),
-      Y /*iconPadding*/: typeof paddingOrLocalConfig == "number" ? paddingOrLocalConfig : typeof padding == "number" ? padding : defaultPadding,
+      hue: hueAt,
+      colorSat: typeof colorSat === 'number' ? colorSat : 0.5,
+      graySat: typeof graySat === 'number' ? graySat : 0,
+      colorLit: range('color', [0.4, 0.8]),
+      grayLit: range('grayscale', [0.3, 0.9]),
+      padding: typeof config.padding === 'number' ? config.padding : PAD,
     };
   }
 
-  const ICON_TYPE_SVG = 1;
-  const ICON_TYPE_CANVAS = 2;
-  const ATTRIBUTES = {
-    t /*HASH*/: "data-jdenticon-hash",
-    o /*VALUE*/: "data-jdenticon-value",
-  };
-  const IS_RENDERED_PROPERTY = "jdenticonRendered";
-  const ICON_SELECTOR = "[" + ATTRIBUTES.t /*HASH*/ + "],[" + ATTRIBUTES.o /*VALUE*/ + "]";
-
-  function getIdenticonType(el) {
-    if (el) {
-      const tagName = el["tagName"];
-
-      if (/^svg$/i.test(tagName)) {
-        return ICON_TYPE_SVG;
-      }
-
-      if (/^canvas$/i.test(tagName) && "getContext" in el) {
-        return ICON_TYPE_CANVAS;
-      }
-    }
-  }
-
-  function whenDocumentIsReady(callback) {
-    if (typeof document !== "undefined" && typeof window !== "undefined") {
-      if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", callback);
-        window.addEventListener("load", callback);
-      } else {
-        callback();
-      }
-    }
-  }
-
-  function observer(updateCallback) {
-    if (typeof MutationObserver != "undefined") {
-      const mutationObserver = new MutationObserver(function onMutation(mutations) {
-        for (let mutationIndex = 0; mutationIndex < mutations.length; mutationIndex++) {
-          const mutation = mutations[mutationIndex];
-          const addedNodes = mutation.addedNodes;
-          for (let addedNodeIndex = 0; addedNodes && addedNodeIndex < addedNodes.length; addedNodeIndex++) {
-            const addedNode = addedNodes[addedNodeIndex];
-            if (addedNode.nodeType === 1) {
-              if (getIdenticonType(addedNode)) {
-                updateCallback(addedNode);
-              } else {
-                const icons = addedNode.querySelectorAll(ICON_SELECTOR);
-                for (let iconIndex = 0; iconIndex < icons.length; iconIndex++) {
-                  updateCallback(icons[iconIndex]);
-                }
-              }
-            }
-          }
-          if (mutation.type == "attributes" && getIdenticonType(mutation.target)) {
-            updateCallback(mutation.target);
-          }
-        }
-      });
-
-      mutationObserver.observe(document.body, {
-        childList: true,
-        attributes: true,
-        attributeFilter: [ATTRIBUTES.o /*VALUE*/, ATTRIBUTES.t /*HASH*/, "width", "height"],
-        subtree: true
-      });
-    }
-  }
-
-  function Point(x, y) {
-    this.x = x;
-    this.y = y;
-  }
-
-  function Transform(x, y, size, rotation) {
-    this.u /*_x*/ = x;
-    this.v /*_y*/ = y;
-    this.K /*_size*/ = size;
-    this.Z /*_rotation*/ = rotation;
-  }
-
-  Transform.prototype.L /*transformIconPoint*/ = function (x, y, w, h) {
-    const right = this.u /*_x*/ + this.K /*_size*/,
-      bottom = this.v /*_y*/ + this.K /*_size*/,
-      rotation = this.Z /*_rotation*/;
-    return rotation === 1 ? new Point(right - y - (h || 0), this.v /*_y*/ + x) : rotation === 2 ? new Point(right - x - (w || 0), bottom - y - (h || 0)) : rotation === 3 ? new Point(this.u /*_x*/ + y, bottom - x - (w || 0)) : new Point(this.u /*_x*/ + x, this.v /*_y*/ + y);
-  };
-
-  const NO_TRANSFORM = new Transform(0, 0, 0, 0);
-
-  function Graphics(renderer) {
-    this.M /*_renderer*/ = renderer;
-    this.A /*currentTransform*/ = NO_TRANSFORM;
-  }
-
-  Graphics.prototype.g /*addPolygon*/ = function (points, invert) {
-    const di = invert ? -2 : 2,
-      transformedPoints = [];
-    for (let i = invert ? points.length - 2 : 0; i < points.length && i >= 0; i += di) {
-      transformedPoints.push(this.A /*currentTransform*/.L(/*transformIconPoint*/ points[i], points[i + 1]));
-    }
-    this.M /*_renderer*/.g(/*addPolygon*/ transformedPoints);
-  };
-
-  Graphics.prototype.h /*addCircle*/ = function (x, y, size, invert) {
-    const p = this.A /*currentTransform*/.L(/*transformIconPoint*/ x, y, size, size);
-    this.M /*_renderer*/.h(/*addCircle*/ p, size, invert);
-  };
-
-  Graphics.prototype.i /*addRectangle*/ = function (x, y, w, h, invert) {
-    this.g(/*addPolygon*/ [x, y, x + w, y, x + w, y + h, x, y + h], invert);
-  };
-
-  Graphics.prototype.j /*addTriangle*/ = function (x, y, w, h, r, invert) {
-    const points = [x + w, y, x + w, y + h, x, y + h, x, y];
-    points.splice(((r || 0) % 4) * 2, 2);
-    this.g(/*addPolygon*/ points, invert);
-  };
-
-  Graphics.prototype.N /*addRhombus*/ = function (x, y, w, h, invert) {
-    this.g(/*addPolygon*/ [x + w / 2, y, x + w, y + h / 2, x + w / 2, y + h, x, y + h / 2], invert);
-  };
-
-  function centerShape(index, g, cell, positionIndex) {
-    index = index % 14;
-
-    let k, m, w, h, inner, outer;
-
-    if (!index) {
-      k = cell * 0.42;
-      g.g(/*addPolygon*/ [0, 0, cell, 0, cell, cell - k * 2, cell - k, cell, 0, cell]);
-    } else if (index === 1) {
-      w = 0 | (cell * 0.5);
-      h = 0 | (cell * 0.8);
-      g.j(/*addTriangle*/ cell - w, 0, w, h, 2);
-    } else if (index === 2) {
-      w = 0 | (cell / 3);
-      g.i(/*addRectangle*/ w, w, cell - w, cell - w);
-    } else if (index === 3) {
-      inner = cell * 0.1;
-      outer = cell < 6 ? 1 : cell < 8 ? 2 : 0 | (cell * 0.25);
-      inner = inner > 1 ? 0 | inner : inner > 0.5 ? 1 : inner;
-      g.i(/*addRectangle*/ outer, outer, cell - inner - outer, cell - inner - outer);
-    } else if (index === 4) {
-      m = 0 | (cell * 0.15);
-      w = 0 | (cell * 0.5);
-      g.h(/*addCircle*/ cell - w - m, cell - w - m, w);
-    } else if (index === 5) {
-      inner = cell * 0.1;
-      outer = inner * 4;
-      outer > 3 && (outer = 0 | outer);
-      g.i(/*addRectangle*/ 0, 0, cell, cell);
-      g.g(/*addPolygon*/ [outer, outer, cell - inner, outer, outer + (cell - outer - inner) / 2, cell - inner], true);
-    } else if (index === 6) {
-      g.g(/*addPolygon*/ [0, 0, cell, 0, cell, cell * 0.7, cell * 0.4, cell * 0.4, cell * 0.7, cell, 0, cell]);
-    } else if (index === 7) {
-      g.j(/*addTriangle*/ cell / 2, cell / 2, cell / 2, cell / 2, 3);
-    } else if (index === 8) {
-      g.i(/*addRectangle*/ 0, 0, cell, cell / 2);
-      g.i(/*addRectangle*/ 0, cell / 2, cell / 2, cell / 2);
-      g.j(/*addTriangle*/ cell / 2, cell / 2, cell / 2, cell / 2, 1);
-    } else if (index === 9) {
-      inner = cell * 0.14;
-      outer = cell < 4 ? 1 : cell < 6 ? 2 : 0 | (cell * 0.35);
-      inner = cell < 8 ? inner : 0 | inner;
-      g.i(/*addRectangle*/ 0, 0, cell, cell);
-      g.i(/*addRectangle*/ outer, outer, cell - outer - inner, cell - outer - inner, true);
-    } else if (index === 10) {
-      inner = cell * 0.12;
-      outer = inner * 3;
-      g.i(/*addRectangle*/ 0, 0, cell, cell);
-      g.h(/*addCircle*/ outer, outer, cell - inner - outer, true);
-    } else if (index === 11) {
-      g.j(/*addTriangle*/ cell / 2, cell / 2, cell / 2, cell / 2, 3);
-    } else if (index === 12) {
-      m = cell * 0.25;
-      g.i(/*addRectangle*/ 0, 0, cell, cell);
-      g.N(/*addRhombus*/ m, m, cell - m, cell - m, true);
-    } else if (!positionIndex) {
-      m = cell * 0.4;
-      w = cell * 1.2;
-      g.h(/*addCircle*/ m, m, w);
-    }
-  }
-
-  function outerShape(index, g, cell) {
-    index = index % 4;
-    let m;
-
-    if (!index) {
-      g.j(/*addTriangle*/ 0, 0, cell, cell, 0);
-    } else if (index === 1) {
-      g.j(/*addTriangle*/ 0, cell / 2, cell, cell / 2, 0);
-    } else if (index === 2) {
-      g.N(/*addRhombus*/ 0, 0, cell, cell);
-    } else {
-      m = cell / 6;
-      g.h(/*addCircle*/ m, m, cell - 2 * m);
-    }
-  }
-
-  function colorTheme(hue, config) {
-    hue = config.X(/*hue*/ hue);
+  /**
+   * The five palette entries: two greys and three colours at three lightnesses,
+   * all at the hue the hash chose. An icon then paints with three of them.
+   */
+  function palette(hue, config) {
+    const h = config.hue(hue);
     return [
-      correctedHsl(hue, config.H /*grayscaleSaturation*/, config.I(/*grayscaleLightness*/ 0)),
-      correctedHsl(hue, config.p /*colorSaturation*/, config.q(/*colorLightness*/ 0.5)),
-      correctedHsl(hue, config.H /*grayscaleSaturation*/, config.I(/*grayscaleLightness*/ 1)),
-      correctedHsl(hue, config.p /*colorSaturation*/, config.q(/*colorLightness*/ 1)),
-      correctedHsl(hue, config.p /*colorSaturation*/, config.q(/*colorLightness*/ 0))
+      hsl(h, config.graySat, config.grayLit(0)),
+      hsl(h, config.colorSat, config.colorLit(0.5)),
+      hsl(h, config.graySat, config.grayLit(1)),
+      hsl(h, config.colorSat, config.colorLit(1)),
+      hsl(h, config.colorSat, config.colorLit(0)),
     ];
   }
 
-  function iconGenerator(renderer, hash, config) {
-    const parsedConfig = getConfiguration(config, 0.08);
-    let size = renderer.k /*iconSize*/;
-    const padding = (0.5 + size * parsedConfig.Y /*iconPadding*/) | 0;
-    size -= padding * 2;
-    const graphics = new Graphics(renderer);
-    const cell = 0 | (size / 4);
-    const x = 0 | (padding + size / 2 - cell * 2);
-    const y = 0 | (padding + size / 2 - cell * 2);
+  /** Palette pairs that must not share an icon: entry 0 and entry 4 are the dark
+   * grey and the dark colour, and 2 and 3 the light pair of the same families. */
+  const DARK_PAIRS = [[0, 4], [2, 3]];
 
-    function renderShape(colorIndex, shapes, index, rotationIndex, positions) {
-      const shapeIndex = parseHex(hash, index, 1);
-      let r = rotationIndex ? parseHex(hash, rotationIndex, 1) : 0;
-      renderer.O(/*beginShape*/ availableColors[selectedColorIndexes[colorIndex]]);
-      for (let i = 0; i < positions.length; i++) {
-        graphics.A /*currentTransform*/ = new Transform(x + positions[i][0] * cell, y + positions[i][1] * cell, cell, r++ % 4);
-        shapes(shapeIndex, graphics, cell, i);
-      }
-      renderer.P /*endShape*/();
-    }
-
-    const hue = parseHex(hash, -7) / 0xfffffff;
-    const availableColors = colorTheme(hue, parsedConfig);
-    const selectedColorIndexes = [];
-    let index;
-
+  /**
+   * The three palette entries one hash paints with. A dark grey next to a dark
+   * colour would read as one flat block, so a hash that asks for such a pairing
+   * gets the mid-tone entry instead.
+   *
+   * @param {Uint8Array} bits the decoded hash
+   * @param {string[]} colors the five palette entries
+   * @returns {number[]} three indexes into colors, one per colour group
+   */
+  function pickColors(bits, colors) {
+    const picked = [];
     for (let i = 0; i < 3; i++) {
-      index = parseHex(hash, 8 + i, 1) % availableColors.length;
-      if (
-        isDuplicate([0, 4]) || // Disallow dark gray and dark color combo
-        isDuplicate([2, 3])
-      ) {
+      let index = bits[8 + i] % colors.length;
+      if (DARK_PAIRS.some((pair) =>
+        pair.includes(index) && pair.some((entry) => picked.includes(entry)))) {
         index = 1;
       }
-      selectedColorIndexes.push(index);
+      picked.push(index);
+    }
+    return picked;
+  }
+
+  /**
+   * Decodes a hex hash into its half-bytes once, so the shape and colour
+   * selectors index it instead of slicing and re-parsing the string per icon.
+   */
+  function toNibbles(hash) {
+    const bits = new Uint8Array(hash.length);
+    for (let i = 0; i < hash.length; i++) {
+      const code = hash.charCodeAt(i);
+      // hex digits only, which isValidHash guarantees: 0-9 then A-F/a-f
+      bits[i] = code < 58 ? code - 48 : (code & ~32) - 55;
+    }
+    return bits;
+  }
+
+  /**
+   * The icon's hue: its hash's last seven half-bytes, scaled into 0-1. The tail
+   * is read because an address book is full of addresses that differ early.
+   */
+  function hueOf(bits) {
+    let value = 0;
+    for (let i = Math.max(bits.length - 7, 0); i < bits.length; i++) {
+      value = value * 16 + bits[i];
+    }
+    return value / 0xfffffff;
+  }
+
+  /**
+   * Draws shapes into one cell of the grid. A cell's position and rotation are
+   * set once per cell and every shape maps through them, so the shape tables
+   * below stay in plain cell coordinates. The three coordinate buffers are
+   * reused from shape to shape: a renderer reads them at once and must not keep
+   * them, which is what keeps a drawn icon allocation-free.
+   */
+  class Cell {
+    /** @param {Object} renderer consumes finished polygons and circles */
+    constructor(renderer) {
+      this._renderer = renderer;
+      // the cell box, with the right and bottom edges kept for _map
+      this._x = 0;
+      this._y = 0;
+      this._size = 0;
+      this._right = 0;
+      this._bottom = 0;
+      this._rotation = 0;
+      // shape corners, mapped icon coordinates, one mapped point
+      this._points = [];
+      this._coords = [];
+      this._point = [];
     }
 
-    function isDuplicate(values) {
-      if (values.indexOf(index) >= 0) {
-        for (let i = 0; i < values.length; i++) {
-          if (selectedColorIndexes.indexOf(values[i]) >= 0) {
-            return true;
-          }
-        }
+    /** Selects the cell the next shapes go into, in icon pixels. */
+    setCell(x, y, size, rotation) {
+      this._x = x;
+      this._y = y;
+      this._size = size;
+      this._rotation = rotation;
+      this._right = x + size;
+      this._bottom = y + size;
+    }
+
+    /**
+     * Maps one cell coordinate into icon coordinates under the cell's rotation.
+     * The rotations that flip an axis need the shape's own extent to stay put.
+     */
+    _map(x, y, w, h, out) {
+      if (this._rotation === 1) {
+        out.push(this._right - y - h, this._y + x);
+      } else if (this._rotation === 2) {
+        out.push(this._right - x - w, this._bottom - y - h);
+      } else if (this._rotation === 3) {
+        out.push(this._x + y, this._bottom - x - w);
+      } else {
+        out.push(this._x + x, this._y + y);
       }
     }
 
-    renderShape(0, outerShape, 2, 3, [
-      [1, 0],
-      [2, 0],
-      [2, 3],
-      [1, 3],
-      [0, 1],
-      [3, 1],
-      [3, 2],
-      [0, 2]
-    ]);
-    renderShape(1, outerShape, 4, 5, [
-      [0, 0],
-      [3, 0],
-      [3, 3],
-      [0, 3]
-    ]);
-    renderShape(2, centerShape, 1, null, [
-      [1, 1],
-      [2, 1],
-      [2, 2],
-      [1, 2]
-    ]);
+    /** @param {number[]} points cell coordinates as x, y pairs
+     *  @param {boolean} [invert] reverses the winding, cutting the shape out of
+     * what was already drawn in this colour group */
+    addPolygon(points, invert) {
+      const coords = this._coords;
+      coords.length = 0;
+      const step = invert ? -2 : 2;
+      for (let i = invert ? points.length - 2 : 0; i < points.length && i >= 0; i += step) {
+        this._map(points[i], points[i + 1], 0, 0, coords);
+      }
+      this._renderer.addPolygon(coords);
+    }
+
+    /** A circle inscribed in a cell square. */
+    addCircle(x, y, diameter, invert) {
+      const point = this._point;
+      point.length = 0;
+      this._map(x, y, diameter, diameter, point);
+      this._renderer.addCircle(point[0], point[1], diameter, invert);
+    }
+
+    /** An axis-aligned rectangle. */
+    addRectangle(x, y, w, h, invert) {
+      const points = this._points;
+      points.length = 0;
+      points.push(x, y, x + w, y, x + w, y + h, x, y + h);
+      this.addPolygon(points, invert);
+    }
+
+    /** A cell square with one corner dropped: the rotation index decides which,
+     * which is how one shape entry covers four orientations. */
+    addTriangle(x, y, w, h, rotation, invert) {
+      const points = this._points;
+      points.length = 0;
+      points.push(x + w, y, x + w, y + h, x, y + h, x, y);
+      points.splice(((rotation || 0) % 4) * 2, 2);
+      this.addPolygon(points, invert);
+    }
+
+    /** A diamond inscribed in a cell square. */
+    addRhombus(x, y, w, h, invert) {
+      const points = this._points;
+      points.length = 0;
+      points.push(x + w / 2, y, x + w, y + h / 2, x + w / 2, y + h, x, y + h / 2);
+      this.addPolygon(points, invert);
+    }
+  }
+
+  /**
+   * The shapes for the four centre cells. `index` picks one out of the hash;
+   * `pos` matters only to the last, which paints in the first centre
+   * cell alone. Sizes are floored where a shape needs whole pixels.
+   */
+  function centreShape(index, cell, size, pos) {
+    const shape = index % 14;
+    let k, m, w, h, inner, outer;
+
+    if (!shape) {
+      k = size * 0.42;
+      cell.addPolygon([0, 0, size, 0, size, size - k * 2, size - k, size, 0, size]);
+    } else if (shape === 1) {
+      w = (size * 0.5) | 0;
+      h = (size * 0.8) | 0;
+      cell.addTriangle(size - w, 0, w, h, 2);
+    } else if (shape === 2) {
+      w = (size / 3) | 0;
+      cell.addRectangle(w, w, size - w, size - w);
+    } else if (shape === 3) {
+      inner = size * 0.1;
+      outer = size < 6 ? 1 : size < 8 ? 2 : (size * 0.25) | 0;
+      inner = inner > 1 ? (inner | 0) : inner > 0.5 ? 1 : inner;
+      cell.addRectangle(outer, outer, size - inner - outer, size - inner - outer);
+    } else if (shape === 4) {
+      m = (size * 0.15) | 0;
+      w = (size * 0.5) | 0;
+      cell.addCircle(size - w - m, size - w - m, w);
+    } else if (shape === 5) {
+      inner = size * 0.1;
+      outer = inner * 4;
+      if (outer > 3) {
+        outer = (outer | 0);
+      }
+      cell.addRectangle(0, 0, size, size);
+      cell.addPolygon([outer, outer, size - inner, outer, outer + (size - outer - inner) / 2, size - inner], true);
+    } else if (shape === 6) {
+      cell.addPolygon([0, 0, size, 0, size, size * 0.7, size * 0.4, size * 0.4, size * 0.7, size, 0, size]);
+    } else if (shape === 7) {
+      cell.addTriangle(size / 2, size / 2, size / 2, size / 2, 3);
+    } else if (shape === 8) {
+      cell.addRectangle(0, 0, size, size / 2);
+      cell.addRectangle(0, size / 2, size / 2, size / 2);
+      cell.addTriangle(size / 2, size / 2, size / 2, size / 2, 1);
+    } else if (shape === 9) {
+      inner = size * 0.14;
+      outer = size < 4 ? 1 : size < 6 ? 2 : (size * 0.35) | 0;
+      inner = size < 8 ? inner : (inner | 0);
+      cell.addRectangle(0, 0, size, size);
+      cell.addRectangle(outer, outer, size - outer - inner, size - outer - inner, true);
+    } else if (shape === 10) {
+      inner = size * 0.12;
+      outer = inner * 3;
+      cell.addRectangle(0, 0, size, size);
+      cell.addCircle(outer, outer, size - inner - outer, true);
+    } else if (shape === 11) {
+      cell.addTriangle(size / 2, size / 2, size / 2, size / 2, 3);
+    } else if (shape === 12) {
+      m = size * 0.25;
+      cell.addRectangle(0, 0, size, size);
+      cell.addRhombus(m, m, size - m, size - m, true);
+    } else if (!pos) {
+      m = size * 0.4;
+      w = size * 1.2;
+      cell.addCircle(m, m, w);
+    }
+  }
+
+  /** The shapes for the eight edge and four corner cells. */
+  function outerShape(index, cell, size) {
+    const shape = index % 4;
+    let m;
+
+    if (!shape) {
+      cell.addTriangle(0, 0, size, size, 0);
+    } else if (shape === 1) {
+      cell.addTriangle(0, size / 2, size, size / 2, 0);
+    } else if (shape === 2) {
+      cell.addRhombus(0, 0, size, size);
+    } else {
+      m = size / 6;
+      cell.addCircle(m, m, size - 2 * m);
+    }
+  }
+
+  /**
+   * Paints one whole icon: three colour groups, each one shape repeated over its
+   * cells at rotations taken from the hash.
+   *
+   * @param {Object} renderer consumes the finished geometry
+   * @param {string} hash at least 11 hex digits
+   * @param {Object} config the parsed config for this pass
+   */
+  function iconGenerator(renderer, hash, config) {
+    const bits = toNibbles(hash);
+    let size = renderer.iconSize;
+    const padding = (0.5 + size * config.padding) | 0;
+    size -= padding * 2;
+    const cell = new Cell(renderer);
+    const gridSize = (size / 4) | 0;
+    // the grid is centred, so both origins are the same value
+    const origin = (padding + size / 2 - gridSize * 2) | 0;
+    const colors = palette(hueOf(bits), config);
+    const picked = pickColors(bits, colors);
+
+    /** Draws one colour group; rotationAt null means every cell unrotated. The
+     * shape and rotation selectors are single half-bytes in the first six, which
+     * every usable hash has. */
+    const renderGroup = (colorIndex, shapes, shapeAt, rotationAt, cells) => {
+      const shapeIndex = bits[shapeAt];
+      let rotation = rotationAt === null ? 0 : bits[rotationAt];
+      renderer.beginShape(colors[picked[colorIndex]]);
+      for (let i = 0; i < cells.length; i += 2) {
+        cell.setCell(origin + cells[i] * gridSize, origin + cells[i + 1] * gridSize, gridSize, rotation++ % 4);
+        shapes(shapeIndex, cell, gridSize, i / 2);
+      }
+    };
+
+    renderGroup(0, outerShape, 2, 3, EDGE);
+    renderGroup(1, outerShape, 4, 5, CORNER);
+    renderGroup(2, centreShape, 1, null, CENTRE);
     renderer.finish();
   }
 
+  /** SHA-1's block size in words, its schedule length, and its output length in
+   * hex digits. */
+  const SHA_BLOCK = 16;
+  const SHA_WORDS = 80;
+  const SHA_HEX = 40;
+
+  /**
+   * The schedule buffer, reused from hash to hash: every word is written by the
+   * block that reads it, so no hash can see another's leftovers.
+   */
+  const SCHEDULE = new Array(SHA_WORDS);
+
+  /** @returns {number} `value` rotated left by `shift` bits */
+  function rotl(value, shift) {
+    return (value << shift) | (value >>> (32 - shift));
+  }
+
+  /**
+   * SHA-1 as a hex string, for a value the page did not pre-hash. Bytes written
+   * as a percent escape are decoded first, so a percent-encoded value hashes to
+   * the same icon as the raw one.
+   *
+   * @param {string} message the value to hash
+   * @returns {string} 40 hex digits
+   */
   function sha1(message) {
-    const HASH_SIZE_HALF_BYTES = 40;
-    const BLOCK_SIZE_WORDS = 16;
-
-    let i = 0,
-      f = 0,
-      data = [],
-      dataSize,
-      hashBuffer = [],
-      a = 0x67452301,
-      b = 0xefcdab89,
-      c = ~a,
-      d = ~b,
-      e = 0xc3d2e1f0,
-      hash = [a, b, c, d, e],
-      blockStartIndex = 0,
-      hexHash = "";
-
-    function rotl(value, shift) {
-      return (value << shift) | (value >>> (32 - shift));
-    }
+    let i = 0;
+    let f = 0;
+    const data = [];
+    let a = 0x67452301;
+    let b = 0xefcdab89;
+    let c = ~a;
+    let d = ~b;
+    let e = 0xc3d2e1f0;
+    const hash = [a, b, c, d, e];
+    let blockStart = 0;
+    let hexHash = '';
 
     for (; i < message.length; f++) {
-      data[f >> 2] =
-        data[f >> 2] |
-        ((message[i] == "%"
+      data[f >> 2] = data[f >> 2] |
+        ((message[i] === '%'
           ? parseInt(message.substring(i + 1, (i += 3)), 16)
-          : message.charCodeAt(i++)) <<
-          ((3 - (f & 3)) * 8));
+          : message.charCodeAt(i++)) << ((3 - (f & 3)) * 8));
     }
 
-    dataSize = (((f + 7) >> 6) + 1) * BLOCK_SIZE_WORDS;
+    const dataSize = (((f + 7) >> 6) + 1) * SHA_BLOCK;
     data[dataSize - 1] = f * 8 - 8;
 
-    for (; blockStartIndex < dataSize; blockStartIndex += BLOCK_SIZE_WORDS) {
-      for (i = 0; i < 80; i++) {
-        f =
-          rotl(a, 5) +
-          e +
-          (i < 20
-            ? ((b & c) ^ (~b & d)) + 0x5a827999
-            : i < 40
-            ? (b ^ c ^ d) + 0x6ed9eba1
-            : i < 60
-            ? ((b & c) ^ (b & d) ^ (c & d)) + 0x8f1bbcdc
-            : (b ^ c ^ d) + 0xca62c1d6) +
-          (hashBuffer[i] =
-            i < BLOCK_SIZE_WORDS
-              ? data[blockStartIndex + i] | 0
-              : rotl(hashBuffer[i - 3] ^ hashBuffer[i - 8] ^ hashBuffer[i - 14] ^ hashBuffer[i - 16], 1));
+    for (; blockStart < dataSize; blockStart += SHA_BLOCK) {
+      for (i = 0; i < SHA_WORDS; i++) {
+        f = rotl(a, 5) + e + (
+          i < 20 ? ((b & c) ^ (~b & d)) + 0x5a827999 :
+          i < 40 ? (b ^ c ^ d) + 0x6ed9eba1 :
+          i < 60 ? ((b & c) ^ (b & d) ^ (c & d)) + 0x8f1bbcdc :
+          (b ^ c ^ d) + 0xca62c1d6) +
+          (SCHEDULE[i] = i < SHA_BLOCK
+            ? data[blockStart + i] | 0
+            : rotl(SCHEDULE[i - 3] ^ SCHEDULE[i - 8] ^ SCHEDULE[i - 14] ^ SCHEDULE[i - 16], 1));
 
         e = d;
         d = c;
@@ -499,283 +496,179 @@
       hash[4] = e = (hash[4] + e) | 0;
     }
 
-    for (i = 0; i < HASH_SIZE_HALF_BYTES; i++) {
-      hexHash += (
-        (hash[i >> 3] >>>
-          ((7 - (i & 7)) * 4)) & // Clamp to half-byte
-        0xf
-      ).toString(16);
+    for (i = 0; i < SHA_HEX; i++) {
+      hexHash += ((hash[i >> 3] >>> ((7 - (i & 7)) * 4)) & 0xf).toString(16);
     }
 
     return hexHash;
   }
 
-  function isValidHash(hashCandidate) {
-    return /^[0-9a-f]{11,}$/i.test(hashCandidate) && hashCandidate;
+  /** The value of a hash attribute when it is a usable hash, else false. */
+  function isValidHash(candidate) {
+    return /^[0-9a-f]{11,}$/i.test(candidate) && candidate;
   }
 
+  /** The hash an icon for this address or label is drawn from. */
   function computeHash(value) {
-    return sha1(value == null ? "" : "" + value);
+    return sha1(value == null ? '' : `${value}`);
   }
 
-  function CanvasRenderer(ctx, iconSize) {
-    const canvas = ctx.canvas;
-    const width = canvas.width;
-    const height = canvas.height;
-    ctx.save();
-    if (!iconSize) {
-      iconSize = Math.min(width, height);
-      ctx.translate(((width - iconSize) / 2) | 0, ((height - iconSize) / 2) | 0);
+  /** Rounds a coordinate to a whole unit of the icon's drawing space - a
+   * quarter of a device pixel at the 100-unit space the susidns pages draw in.
+   * Keeping the fraction costs a decimal digit in every coordinate of every
+   * shape, which is most of the path data and a good part of the paint. */
+  function pathValue(value) {
+    return (value + 0.5) | 0;
+  }
+
+  /** One colour group's geometry, as SVG path data. */
+  class PathData {
+    constructor() {
+      this.data = '';
     }
 
-    this.l /*_ctx*/ = ctx;
-    this.k /*iconSize*/ = iconSize;
-    ctx.clearRect(0, 0, iconSize, iconSize);
-  }
-
-  CanvasRenderer.prototype.m /*setBackground*/ = function (fillColor) {
-    const ctx = this.l /*_ctx*/;
-    const iconSize = this.k /*iconSize*/;
-
-    ctx.fillStyle = toCss3Color(fillColor);
-    ctx.fillRect(0, 0, iconSize, iconSize);
-  };
-
-  CanvasRenderer.prototype.O /*beginShape*/ = function (fillColor) {
-    const ctx = this.l /*_ctx*/;
-    ctx.fillStyle = toCss3Color(fillColor);
-    ctx.beginPath();
-  };
-
-  CanvasRenderer.prototype.P /*endShape*/ = function () {
-    this.l /*_ctx*/
-      .fill();
-  };
-
-  CanvasRenderer.prototype.g /*addPolygon*/ = function (points) {
-    const ctx = this.l /*_ctx*/;
-    ctx.moveTo(points[0].x, points[0].y);
-    for (let i = 1; i < points.length; i++) {
-      ctx.lineTo(points[i].x, points[i].y);
-    }
-    ctx.closePath();
-  };
-
-  CanvasRenderer.prototype.h /*addCircle*/ = function (point, diameter, counterClockwise) {
-    const ctx = this.l /*_ctx*/,
-      radius = diameter / 2;
-    ctx.moveTo(point.x + radius, point.y + radius);
-    ctx.arc(point.x + radius, point.y + radius, radius, 0, Math.PI * 2, counterClockwise);
-    ctx.closePath();
-  };
-
-  CanvasRenderer.prototype.finish = function () {
-    this.l /*_ctx*/
-      .restore();
-  };
-
-  function drawIcon(ctx, hashOrValue, size, config) {
-    if (!ctx) {
-      throw new Error("No canvas specified.");
-    }
-    iconGenerator(new CanvasRenderer(ctx, size), isValidHash(hashOrValue) || computeHash(hashOrValue), config);
-
-    const canvas = ctx.canvas;
-    if (canvas) {
-      canvas[IS_RENDERED_PROPERTY] = true;
-    }
-  }
-
-  function svgValue(value) {
-    return ((value * 10 + 0.5) | 0) / 10;
-  }
-
-  function SvgPath() {
-    this.B /*dataString*/ = "";
-  }
-
-  SvgPath.prototype.g /*addPolygon*/ = function (points) {
-    let dataString = "";
-    for (let i = 0; i < points.length; i++) {
-      dataString += (i ? "L" : "M") + svgValue(points[i].x) + " " + svgValue(points[i].y);
-    }
-    this.B /*dataString*/ += dataString + "Z";
-  };
-
-  SvgPath.prototype.h /*addCircle*/ = function (point, diameter, counterClockwise) {
-    const sweepFlag = counterClockwise ? 0 : 1,
-      svgRadius = svgValue(diameter / 2),
-      svgDiameter = svgValue(diameter),
-      svgArc = "a" + svgRadius + "," + svgRadius + " 0 1," + sweepFlag + " ";
-    this.B /*dataString*/ += "M" + svgValue(point.x) + " " + svgValue(point.y + diameter / 2) + svgArc + svgDiameter + ",0" + svgArc + -svgDiameter + ",0";
-  };
-
-  function SvgRenderer(target) {
-    this.C /*_path*/;
-    this.D /*_pathsByColor*/ = {};
-    this.R /*_target*/ = target;
-    this.k /*iconSize*/ = target.k /*iconSize*/;
-  }
-
-  SvgRenderer.prototype.m /*setBackground*/ = function (fillColor) {
-    const match = /^(#......)(..)?/.exec(fillColor),
-      opacity = match[2] ? parseHex(match[2], 0) / 255 : 1;
-    this.R /*_target*/.m(/*setBackground*/ match[1], opacity);
-  };
-
-  SvgRenderer.prototype.O /*beginShape*/ = function (color) {
-    this.C /*_path*/ = this.D /*_pathsByColor*/[color] || (this.D /*_pathsByColor*/[color] = new SvgPath());
-  };
-
-  SvgRenderer.prototype.P /*endShape*/ = function () {};
-
-  SvgRenderer.prototype.g /*addPolygon*/ = function (points) {
-    this.C /*_path*/.g(/*addPolygon*/ points);
-  };
-
-  SvgRenderer.prototype.h /*addCircle*/ = function (point, diameter, counterClockwise) {
-    this.C /*_path*/.h(/*addCircle*/ point, diameter, counterClockwise);
-  };
-
-  SvgRenderer.prototype.finish = function () {
-    const this$1 = this;
-    const pathsByColor = this.D /*_pathsByColor*/;
-    for (const color in pathsByColor) {
-      if (pathsByColor.hasOwnProperty(color)) {
-        this$1.R /*_target*/.S(/*appendPath*/ color, pathsByColor[color].B /*dataString*/);
+    /** @param {number[]} coords icon coordinates as x, y pairs, read here only */
+    addPolygon(coords) {
+      let d = '';
+      for (let i = 0; i < coords.length; i += 2) {
+        d += `${i ? 'L' : 'M'}${pathValue(coords[i])} ${pathValue(coords[i + 1])}`;
       }
-    }
-  };
-
-  const SVG_CONSTANTS = {
-    T /*XMLNS*/: "http://www.w3.org/2000/svg",
-    U /*WIDTH*/: "width",
-    V /*HEIGHT*/: "height",
-  };
-
-  function SvgWriter(iconSize) {
-    this.k /*iconSize*/ = iconSize;
-    this.F /*_s*/ = '<svg xmlns="' + SVG_CONSTANTS.T /*XMLNS*/ + '" width="' + iconSize + '" height="' + iconSize + '" viewBox="0 0 ' + iconSize + " " + iconSize + '">';
-  }
-
-  SvgWriter.prototype.m /*setBackground*/ = function (fillColor, opacity) {
-    if (opacity) {
-      this.F /*_s*/ += '<rect width="100%" height="100%" fill="' + fillColor + '" opacity="' + opacity.toFixed(2) + '"/>';
-    }
-  };
-
-  SvgWriter.prototype.S /*appendPath*/ = function (color, dataString) {
-    this.F /*_s*/ += '<path fill="' + color + '" d="' + dataString + '"/>';
-  };
-
-  SvgWriter.prototype.toString = function () {
-    return this.F /*_s*/ + "</svg>";
-  };
-
-  function toSvg(hashOrValue, size, config) {
-    const writer = new SvgWriter(size);
-    iconGenerator(new SvgRenderer(writer), isValidHash(hashOrValue) || computeHash(hashOrValue), config);
-    return writer.toString();
-  }
-
-  function SvgElement_append(parentNode, name) {
-    let keyValuePairs = [],
-      len = arguments.length - 2;
-    while (len-- > 0) { keyValuePairs[len] = arguments[len + 2]; }
-
-    const el = document.createElementNS(SVG_CONSTANTS.T /*XMLNS*/, name);
-    for (let i = 0; i + 1 < keyValuePairs.length; i += 2) {
-      el.setAttribute(keyValuePairs[i], keyValuePairs[i + 1]);
+      this.data += `${d}Z`;
     }
 
-    parentNode.appendChild(el);
-  }
-
-  function SvgElement(element) {
-    const iconSize = (this.k /*iconSize*/ = Math.min(Number(element.getAttribute(SVG_CONSTANTS.U /*WIDTH*/)) || 100, Number(element.getAttribute(SVG_CONSTANTS.V /*HEIGHT*/)) || 100));
-    this.W /*_el*/ = element;
-    while (element.firstChild) {
-      element.removeChild(element.firstChild);
+    /** A circle as two arcs, path data having no circle command. A clockwise
+     * sweep is what makes the fill rule keep the circle rather than cut it. */
+    addCircle(x, y, diameter, ccw) {
+      const sweep = ccw ? 0 : 1;
+      const radius = pathValue(diameter / 2);
+      // Each arc is a semicircle, so the chord must be exactly twice the rounded
+      // radius. Rounding the chord on its own can make it longer than the
+      // diameter, and the browser then scales the radii to fit and draws a
+      // different circle from the one the shape asked for.
+      const edge = radius * 2;
+      const arc = `a${radius},${radius} 0 1,${sweep} `;
+      this.data += `M${pathValue(x)} ${pathValue(y + diameter / 2)}${arc}${edge},0${arc}${-edge},0`;
     }
-    element.setAttribute("viewBox", "0 0 " + iconSize + " " + iconSize);
-    element.setAttribute("preserveAspectRatio", "xMidYMid meet");
   }
 
-  SvgElement.prototype.m /*setBackground*/ = function (fillColor, opacity) {
-    if (opacity) {
-      SvgElement_append(this.W /*_el*/, "rect", SVG_CONSTANTS.U /*WIDTH*/, "100%", SVG_CONSTANTS.V /*HEIGHT*/, "100%", "fill", fillColor, "opacity", opacity);
+  /**
+   * Collects path data per colour and hands each finished group to the target.
+   * The same palette entry paints several cells, so one path per colour is what
+   * keeps a painted icon down to three elements.
+   */
+  class SvgRenderer {
+    /** @param {Object} target where finished geometry goes: iconSize, addPath */
+    constructor(target) {
+      this.iconSize = target.iconSize;
+      this._target = target;
+      this._paths = new Map();
+      this._current = null;
     }
-  };
 
-  SvgElement.prototype.S /*appendPath*/ = function (color, dataString) {
-    SvgElement_append(this.W /*_el*/, "path", "fill", color, "d", dataString);
-  };
+    /** Opens a colour group, reusing its path if the colour repeats. */
+    beginShape(colour) {
+      let path = this._paths.get(colour);
+      if (!path) {
+        path = new PathData();
+        this._paths.set(colour, path);
+      }
+      this._current = path;
+    }
 
-  function updateAll() {
-    update(ICON_SELECTOR);
-  }
+    /** @param {number[]} coords forwarded to the group being built */
+    addPolygon(coords) {
+      this._current.addPolygon(coords);
+    }
 
-  function updateAllConditional() {
-    const elements = document.querySelectorAll(ICON_SELECTOR);
-    for (let i = 0; i < elements.length; i++) {
-      const el = elements[i];
-      if (!el[IS_RENDERED_PROPERTY]) {
-        update(el);
+    /** @param {number} x icon x of the bounding square's corner
+     *  @param {number} y icon y of that corner
+     *  @param {number} diameter the square's edge
+     *  @param {boolean} ccw true when the circle cuts a hole */
+    addCircle(x, y, diameter, ccw) {
+      this._current.addCircle(x, y, diameter, ccw);
+    }
+
+    /** Emits one path per colour used, in the order the groups were started. */
+    finish() {
+      for (const [colour, path] of this._paths) {
+        this._target.addPath(colour, path.data);
       }
     }
   }
 
-  function update(el, hashOrValue, config) {
-    renderDomElement(el, hashOrValue, config, function (el, iconType) {
-      if (iconType) {
-        return iconType == ICON_TYPE_SVG ? new SvgRenderer(new SvgElement(el)) : new CanvasRenderer(/** @type {HTMLCanvasElement} */ (el).getContext("2d"));
-      }
-    });
+  /** The `<svg>` element an icon is painted into. */
+  class SvgTarget {
+    /**
+     * Sizes the drawing space, then clears the element, so a repaint cannot
+     * leave the old paths behind. An element carrying width and height
+     * attributes is drawn at that scale, one unit to one device pixel; one
+     * sized only by CSS, as the susidns pages size theirs, is drawn in a
+     * 100-unit space the browser scales.
+     */
+    constructor(element) {
+      this.iconSize = Math.min(
+        Number(element.getAttribute('width')) || 100,
+        Number(element.getAttribute('height')) || 100);
+      this._element = element;
+      element.replaceChildren();
+      element.setAttribute('viewBox', `0 0 ${this.iconSize} ${this.iconSize}`);
+    }
+
+    addPath(fill, data) {
+      const path = document.createElementNS(XMLNS, 'path');
+      path.setAttribute('fill', fill);
+      path.setAttribute('d', data);
+      this._element.appendChild(path);
+    }
   }
 
-  function renderDomElement(el, hashOrValue, config, rendererFactory) {
-    if (typeof el === "string") {
-      const elements = document.querySelectorAll(el);
-      for (let i = 0; i < elements.length; i++) {
-        renderDomElement(elements[i], hashOrValue, config, rendererFactory);
-      }
+  /**
+   * Paints one icon element. A `data-jid-hash` attribute is used as it
+   * stands when it is a usable hash, otherwise a `data-jid` attribute is
+   * hashed. An element with neither, or with a hash too short to
+   * read, is left alone rather than painted blank.
+   *
+   * @param {Element} element an element matched by SELECTOR
+   * @param {Object} config the parsed config for this pass
+   */
+  function paintElement(element, config) {
+    if (!/^svg$/i.test(element.tagName)) {
       return;
     }
-
-    const hash = isValidHash(hashOrValue) || (hashOrValue != null && computeHash(hashOrValue)) || isValidHash(el.getAttribute(ATTRIBUTES.t /*HASH*/)) || (el.hasAttribute(ATTRIBUTES.o /*VALUE*/) && computeHash(el.getAttribute(ATTRIBUTES.o /*VALUE*/)));
+    const hash = isValidHash(element.getAttribute(ATTR_HASH)) ||
+      (element.hasAttribute(ATTR_VALUE) && computeHash(element.getAttribute(ATTR_VALUE)));
     if (!hash) {
       return;
     }
-    const renderer = rendererFactory(el, getIdenticonType(el));
-    if (renderer) {
-      iconGenerator(renderer, hash, config);
-      el[IS_RENDERED_PROPERTY] = true;
-    }
+    iconGenerator(new SvgRenderer(new SvgTarget(element)), hash, config);
+    element[PAINTED] = true;
   }
 
-  const jdenticon = updateAll;
-
-  defineConfigProperty(jdenticon);
-
-  jdenticon.configure = configure;
-  jdenticon.drawIcon = drawIcon;
-  jdenticon.toSvg = toSvg;
-  jdenticon.update = update;
-  jdenticon.updateCanvas = update;
-  jdenticon.updateSvg = update;
-
-  jdenticon.version = "3.3.0";
-  jdenticon.bundle = "browser-umd";
-
-  function jdenticonStartup() {
-    const replaceMode = (jdenticon[CONFIG_PROPERTIES.n /*MODULE*/] || global[CONFIG_PROPERTIES.G /*GLOBAL*/] || {})["replaceMode"];
-    if (replaceMode != "never") {
-      updateAllConditional();
-      if (replaceMode == "observe") {
-        observer(update);
+  /** Paints every icon on the page that has not been painted yet. */
+  function paintPage(config) {
+    for (const element of document.querySelectorAll(SELECTOR)) {
+      if (!element[PAINTED]) {
+        paintElement(element, config);
       }
     }
   }
 
-  whenDocumentIsReady(jdenticonStartup);
-})(typeof self !== "undefined" ? self : this);
+  /** @param {function(): void} callback the paint pass, once the document can be queried */
+  function whenReady(callback) {
+    if (typeof document === 'undefined' || typeof window === 'undefined') {
+      return;
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', callback);
+    } else {
+      callback();
+    }
+  }
+
+  /** What a `<script>` tag runs: read the page config, then paint its icons. */
+  function start() {
+    paintPage(parseConfig());
+  }
+
+  whenReady(start);
+})(typeof self !== 'undefined' ? self : this);
