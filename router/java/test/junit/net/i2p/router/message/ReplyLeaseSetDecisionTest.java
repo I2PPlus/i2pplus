@@ -11,8 +11,9 @@ import net.i2p.data.LeaseSet;
 import net.i2p.data.TunnelId;
 
 /**
- * The pure decision behind the reply-LeaseSet bundle gate,
- * {@link OutboundClientMessageOneShotJob#replyLeaseSetPending}.
+ * The pure decisions behind the reply-LeaseSet bundle gate,
+ * {@link OutboundClientMessageOneShotJob#replyLeaseSetPending} and
+ * {@link OutboundClientMessageOneShotJob#replyLeaseSetRecentlySent}.
  * <p>
  * Every outbound client message offers our own LeaseSet to the peer as a reply, and the
  * offer is declined whenever the peer already holds a copy at least as new as ours. That
@@ -22,6 +23,11 @@ import net.i2p.data.TunnelId;
  * itself is unchanged by that - only where it is reported - so these tests pin the
  * boundary the decision turns on, including the equality case that keeps a re-offer of an
  * unchanged LeaseSet from being sent again.
+ * <p>
+ * The second decision covers the other half: a peer that never acknowledges holds nothing
+ * in the cache, so every message to it carried a fresh copy - 7,606 copies across 1,115
+ * destinations in one live router's 133-minute window, 2,142 of them for one destination.
+ * These tests pin the resend interval that turns that back into one copy a minute.
  *
  * @since 0.9.72+
  */
@@ -122,5 +128,80 @@ public class ReplyLeaseSetDecisionTest {
         assertTrue(OutboundClientMessageOneShotJob.replyLeaseSetPending(delivered, fresh));
         // and once that one is acknowledged, the gate closes again
         assertFalse(OutboundClientMessageOneShotJob.replyLeaseSetPending(fresh, fresh));
+    }
+
+    /**
+     * Nothing has gone out to this pair yet, so the first message has to carry
+     * the LeaseSet: the peer cannot reply to a message it has no reply path for.
+     *
+     * @since 0.9.72+
+     */
+    @Test
+    public void testFirstContactAlwaysSends() {
+        assertFalse(OutboundClientMessageOneShotJob.replyLeaseSetRecentlySent(
+                        null, 1_700_000_000_000L,
+                        OutboundClientMessageOneShotJob.REPLY_LEASESET_RESEND_MS));
+    }
+
+    /**
+     * A copy that went out half an interval ago is either still on its way or in
+     * the peer's hands and simply unacknowledged. Either way a second copy now
+     * is the payload cost the interval exists to remove.
+     *
+     * @since 0.9.72+
+     */
+    @Test
+    public void testWithinTheIntervalHoldsOff() {
+        long now = 1_700_000_000_000L;
+        assertTrue(OutboundClientMessageOneShotJob.replyLeaseSetRecentlySent(
+                       Long.valueOf(now - 30 * 1000L), now,
+                       OutboundClientMessageOneShotJob.REPLY_LEASESET_RESEND_MS));
+    }
+
+    /**
+     * The boundary is the interval itself: one ms short of it holds off, at it
+     * the next copy goes out, so a lost first send is repaired within a minute.
+     *
+     * @since 0.9.72+
+     */
+    @Test
+    public void testBoundaryIsTheInterval() {
+        long now = 1_700_000_000_000L;
+        int interval = OutboundClientMessageOneShotJob.REPLY_LEASESET_RESEND_MS;
+        assertTrue(OutboundClientMessageOneShotJob.replyLeaseSetRecentlySent(
+                       Long.valueOf(now - interval + 1), now, interval));
+        assertFalse(OutboundClientMessageOneShotJob.replyLeaseSetRecentlySent(
+                        Long.valueOf(now - interval), now, interval));
+    }
+
+    /**
+     * The measured flood: 2,142 messages to one destination that never
+     * acknowledged, across the 133-minute window, replayed in order. The answer
+     * that sends a copy also starts the next interval, so the copies fall to at
+     * most one a minute while the destination is still re-offered throughout.
+     *
+     * @since 0.9.72+
+     */
+    @Test
+    public void testMeasuredUnacknowledgedFloodSendsOnePerMinute() {
+        long start = 1_700_000_000_000L;
+        int messages = 2142;
+        long windowMs = 133 * 60 * 1000L;
+        long spacing = windowMs / messages;
+        int interval = OutboundClientMessageOneShotJob.REPLY_LEASESET_RESEND_MS;
+        Long sentOn = null;
+        int sends = 0;
+        long now = start;
+        for (int i = 0; i < messages; i++) {
+            now += spacing;
+            if (!OutboundClientMessageOneShotJob.replyLeaseSetRecentlySent(
+                    sentOn, now, interval)) {
+                sends++;
+                sentOn = Long.valueOf(now);
+            }
+        }
+        assertTrue(messages + " messages became " + sends + " copies",
+                   sends <= windowMs / interval + 1);
+        assertTrue("still re-offered throughout: " + sends, sends >= 100);
     }
 }

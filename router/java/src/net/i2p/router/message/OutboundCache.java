@@ -81,6 +81,20 @@ public class OutboundCache {
     final ConcurrentHashMap<HashPair, LeaseSet> leaseSetCache = new ConcurrentHashMap<>(128, 0.9f, 16);
 
     /**
+     * When we last bundled our own LeaseSet for a source-destination pair that
+     * has not acknowledged it, in ms since the epoch.
+     * <p>Only the ACK path fills {@link #leaseSetCache}, so a pair whose
+     * messages are never ACKed has no entry there and re-sends the same
+     * LeaseSet with every message - 7,606 re-sends across 1,115 destinations in
+     * one live router's 133-minute window, 2,142 of them for one destination.
+     * This lets the sender hold off for one resend interval instead. Pruned by
+     * age alongside the reply cache.
+     *
+     * @since 0.9.72+
+     */
+    final ConcurrentHashMap<HashPair, Long> replyLeaseSetSentOn = new ConcurrentHashMap<>(128, 0.9f, 16);
+
+    /**
      * Lease cache keyed by source-destination pairs.
      * Ensures persistent use of the same inbound lease to minimize out-of-order delivery.
      */
@@ -266,6 +280,7 @@ public class OutboundCache {
     void clearCaches(final HashPair hashPair, final Lease lease, final TunnelInfo inTunnel, final TunnelInfo outTunnel) {
         if (inTunnel != null) {
             leaseSetCache.remove(hashPair);
+            replyLeaseSetSentOn.remove(hashPair);
         }
         if (lease != null) {
             leaseCache.remove(hashPair, lease);
@@ -286,6 +301,7 @@ public class OutboundCache {
      */
     public void clearAllCaches() {
         leaseSetCache.clear();
+        replyLeaseSetSentOn.clear();
         leaseCache.clear();
         backloggedTunnelCache.clear();
         stalledTunnelCache.clear();
@@ -346,11 +362,14 @@ public class OutboundCache {
     }
 
     /**
-     * Removes stale entries from the last reply request cache.
-     * Entries older than CLEAN_INTERVAL are purged.
+     * Removes stale entries from one of the pair-keyed timestamp caches - the
+     * last reply request cache or the last reply LeaseSet send.
+     * Entries older than CLEAN_INTERVAL are purged, which is longer than either
+     * window they guard, so a live entry is never dropped out from under its
+     * user.
      *
      * @param ctx the router context for current time.
-     * @param tc  the last reply request cache to clean.
+     * @param tc  the timestamp cache to clean.
      */
     private static void cleanReplyCache(final RouterContext ctx, final Map<HashPair, Long> tc) {
         final long now = ctx.clock().now();
@@ -582,6 +601,7 @@ public class OutboundCache {
             long warnCutoff = _context.clock().now() - ROTATION_WARN_KEEP_MS;
             rotationWarnTime.entrySet().removeIf(e -> e.getValue() < warnCutoff);
             cleanReplyCache(_context, lastReplyRequestCache);
+            cleanReplyCache(_context, replyLeaseSetSentOn);
             cleanMultihomedCache(_context, multihomedCache);
             cleanLsFailCooldown(_context, lsFailCooldown);
             cleanLsLastValid(_context, lsLastValid);
