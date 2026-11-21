@@ -2531,15 +2531,39 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
     }
 
     /**
+     * How long a destination the tunnel filter blocks is told to wait before it
+     * may retry. The filter is configuration, so a change takes effect well
+     * before this expires; and it is far short of {@link #MAX_TIME}, which means
+     * "do not come back" and is what the blacklist refusals use.
+     *
+     * @since 0.9.72+
+     */
+    static final int FILTER_RETRY_AFTER_S = 3600;
+
+    /**
+     * The refusal handed to a destination the tunnel filter blocks. Kept as a
+     * helper so the retry-after and the wording are stated once and can be
+     * pinned without a SYN and a running connection manager.
+     *
+     * @return the refusal, never null, logged on every occurrence until the
+     *         autoban that accompanies it expires
+     * @since 0.9.72+
+     */
+    static Reason tunnelFilterRefusal() {
+        return new Reason("Destination blocked by Tunnel Filter",
+                          FILTER_RETRY_AFTER_S);
+    }
+
+    /**
      * Encapsulates a connection rejection reason with an optional
      * Retry-After duration in seconds.
      *
      * @since 0.9.49
      */
-    private static class Reason {
+    static class Reason {
         /** The refusal message to log. */
         private final String txt;
-        /** How long the ban lasts. */
+        /** How long the peer is told to wait before retrying, in seconds. */
         private final int seconds;
         /** True to keep the refusal out of the logs. */
         private final boolean silent;
@@ -2703,7 +2727,14 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
         }
 
         if (!_connectionFilter.allowDestination(from)) {
-            return new Reason("Destination blocked by Tunnel Filter", 0);
+            // The only refusal here that carried neither a wait nor a ban: 0
+            // seconds means "omit the header", so the peer was told to retry at
+            // once and every attempt cost a full SYN handshake, a reject
+            // response and a log line - 11,745 of them from two destinations in
+            // 133 minutes. Ban it as the per-minute throttler above does, so the
+            // next SYN takes the silent temp-ban branch.
+            banPeer(h, "blocked by Tunnel Filter", _context.clock().now());
+            return tunnelFilterRefusal();
         }
 
         return null;
