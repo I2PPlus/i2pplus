@@ -231,6 +231,51 @@ class ConnectionHandler {
     }
 
     /**
+     * The line the reaper writes when the accept queue is deep enough to need
+     * another worker: the action it took, then the depth and the bound that depth
+     * is measured against.
+     * <p>Extracted from the reaper so the rendering is testable, and so the depth
+     * and the bound are joined rather than added - see
+     * {@link #synExpiryTally(int, int, int, int)} for what the arithmetic cost.
+     *
+     * @param queued SYNs waiting now
+     * @param max the configured soft cap, 0 or less when uncapped
+     * @param workers accept workers running now, the one just started included
+     * @return the line to log
+     * @since 0.9.72+
+     */
+    static String synQueuePressureText(int queued, int max, int workers) {
+        return "SYN queue busy -> Added an accept worker" +
+               " * Queued: " + queued + " SYNs * " + synQueueLimitText(max) +
+               " * Workers: " + workers;
+    }
+
+    /**
+     * The one line a reaper sweep writes when SYNs waited out their accept window:
+     * how many, the window they waited out, and how deep the queue is now against
+     * the bound it stops at.
+     * <p>Extracted from the reaper so the rendering is testable. The inline form it
+     * replaces joined the depth and the cap with {@code + '/'} instead of
+     * {@code + "/"}: {@code '/'} is a char, so both sides were added as numbers and
+     * a queue 674 deep under a 4,096 cap printed 4817, a figure that reads as a
+     * queue far over its cap. That is how a live router's accept queue came to be
+     * read as saturated when it peaked at 1,028 of 4,096 and never sent a reset.
+     *
+     * @param expired SYNs that waited out their window in this sweep
+     * @param timeoutMs the accept window they were quoted, in ms
+     * @param depth SYNs still queued once the sweep is done
+     * @param max the configured soft cap, 0 or less when uncapped
+     * @return the line to log
+     * @since 0.9.72+
+     */
+    static String synExpiryTally(int expired, int timeoutMs, int depth, int max) {
+        return "SYN queue expired " + expired +
+               (expired == 1 ? " connection" : " connections") +
+               " -> Accept window " + timeoutMs + "ms * Queued: " + depth +
+               " SYNs * " + synQueueLimitText(max);
+    }
+
+    /**
      * Number of accept worker threads, from
      * {@code i2p.streaming.acceptWorkerThreads}. The {@link I2PSocketManagerFull}
      * override is checked first, but the Tuner has no parameter for it and never
@@ -1228,8 +1273,7 @@ class ConnectionHandler {
             int max = getMaxQueueSize();
             if (_active && acceptQueueNeedsWorker(_synQueue.size(), max, _activeWorkerCount.get())) {
                 startAcceptWorker();
-                _log.info("SYN queue busy (" + _synQueue.size() + '/' + effectiveQueueLimit(max) +
-                          ") -> Added accept worker (" + _activeWorkerCount.get() + " total)");
+                _log.info(synQueuePressureText(_synQueue.size(), max, _activeWorkerCount.get()));
             }
             long now = _context.clock().now();
             int expired = 0;
@@ -1263,11 +1307,7 @@ class ConnectionHandler {
             // connections at once; the per-packet lines bury the only fact
             // that matters, which is how many and how deep.
             if (expired > 0 && _log.shouldDebug()) {
-                _log.debug("SYN queue expired " + expired +
-                           (expired == 1 ? " connection" : " connections") +
-                           " (timeout " + timeoutMs + "ms, " +
-                           (max > 0 ? _synQueue.size() + '/' + max
-                                     : "depth " + _synQueue.size()) + ')');
+                _log.debug(synExpiryTally(expired, timeoutMs, _synQueue.size(), max));
             }
             if (_active)
                 _timer.addEvent(this, SYN_SWEEP_INTERVAL);
