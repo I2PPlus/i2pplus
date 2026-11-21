@@ -2887,6 +2887,79 @@ class Connection {
     }
 
     /**
+     * Whether the resend line carries the packet's full dump. Pure decision.
+     * <p>The first send of a packet is the one whose shape is worth reading;
+     * after that the line already carries the send count and the sequence, and
+     * the dump is nine lines of unchanged flags and payload size on a line that
+     * appeared 22,711 times in one 48-minute rotation of a live router's log.
+     *
+     * @param numSends times this packet has been sent, as reported in the line
+     * @return true if the dump should be appended
+     * @since 0.9.72+
+     */
+    static boolean shouldDumpResentPacket(int numSends) {
+        return numSends <= 1;
+    }
+
+    /**
+     * Suppressor key for one of this connection's recurring debug lines. Pure.
+     * <p>The key names the condition, never the occurrence, so the suppressor
+     * can collapse the repeats and print how many it collapsed. A key carrying
+     * a sequence number or a timer delay would let every line through and flood
+     * the log anyway.
+     *
+     * @param label this connection's log label, see {@link #shortLabel()}
+     * @param condition a fixed name for the recurring event
+     * @return the key to hand the suppressor
+     * @since 0.9.72+
+     */
+    static String periodicDebugKey(String label, String condition) {
+        return label + ':' + condition;
+    }
+
+    /**
+     * Write one of this connection's recurring debug lines through the
+     * router-wide suppressor: the first occurrence, then once per burst or once
+     * the window expires, with the collapsed count on the line.
+     * <p>These fire per ACK pass or per timer fire, so a busy stream writes
+     * hundreds of copies of one fact per second. One 100 MB rotation of a live
+     * router's log, 48 minutes of traffic, held 304,699 of these lines: 67,296
+     * delay-request lines, 65,078 timer fires, 64,714 ACK passes, 48,092 window
+     * no-cuts, 28,390 tail loss probes, 16,983 window cuts and 14,146 timer
+     * pushes. One connection wrote 31,301 of the timer fires on its own. Each
+     * condition is still reported, per connection, once a burst or a window
+     * instead of once a packet.
+     *
+     * @param condition a fixed name for the recurring event, part of the key
+     * @param msg the line to write
+     */
+    private void debugPeriodic(String condition, String msg) {
+        if (_log.shouldDebug()) {
+            _log.debugThrottled(periodicDebugKey(shortLabel(), condition), msg);
+        }
+    }
+
+    /**
+     * Write the delay-flag line for one resent packet, through the same
+     * suppressor as {@link #debugPeriodic}.
+     * <p>This one is asked per packet, not per pass - 67,296 lines in one
+     * rotation - so the level is checked before the line is built: at the
+     * default INFO level a bulk stream must not allocate a label and a message
+     * for every packet it retransmits.
+     *
+     * @param condition a fixed name for the recurring event, part of the key
+     * @param action what the line says happened to the packet's send delay
+     * @param packet the packet the flag was set or cleared on
+     */
+    private void debugDelayFlag(String condition, String action, PacketLocal packet) {
+        if (_log.shouldDebug()) {
+            _log.debugThrottled(periodicDebugKey(shortLabel(), condition),
+                                shortLabel() + " -> " + action +
+                                " * Sequence: " + packet.getSequenceNum());
+        }
+    }
+
+    /**
      * Pure decision: should an exhausted per-packet retransmit budget close the
      * connection?
      * <p>Once a connection has made forward progress (any packet acknowledged) it
@@ -3486,14 +3559,12 @@ class Connection {
                 _immediateRtoFired = false;
                 _retransmitEvent.pushBackRTOBounded(pushBackDelay);
             }
-            if (_log.shouldDebug()) {
-                _log.debug(shortLabel() + " -> Not all packets ACKed, pushing timer out " + pushBackDelay + "ms");
-            }
+            debugPeriodic("retx-push", shortLabel() + " -> Not all packets ACKed, pushing timer out " +
+                                             pushBackDelay + "ms");
         } else if (doCancel) {
             _retransmitEvent.cancel();
-            if (_log.shouldDebug()) {
-                _log.debug(shortLabel() + " -> All outstanding packets ACKed, cancelling timer...");
-            }
+            debugPeriodic("retx-cancel", shortLabel() + " -> All outstanding packets ACKed, "
+                                            + "cancelling the retransmit timer");
         }
         return _ackedList;
     }
@@ -4988,10 +5059,8 @@ class Connection {
             // healthy connect, so the SYN-phase decision must be able to exclude
             // it (see synHardSends()).
             oldest.incrementTlpProbes();
-            if (_log.shouldDebug()) {
-                _log.debug(shortLabel() + " -> Re-enqueued the oldest unacked packet as a tail loss probe"
-                        + "\n* Seq: " + oldest.getSequenceNum());
-            }
+            debugPeriodic("tlp-probe", shortLabel() + " -> Re-enqueued the oldest unacked packet as a "
+                                   + "tail loss probe");
         }
     }
 
@@ -5207,9 +5276,7 @@ class Connection {
                     _log.info(shortLabel() + " -> Forward ACK progress resumed");
                 }
             }
-            if (_log.shouldDebug()) {
-                _log.debug(shortLabel() + " -> Retransmit timer fired, starting a retransmit pass");
-            }
+            debugPeriodic("retx-pass", shortLabel() + " -> Retransmit timer fired, starting a retransmit pass");
 
             congestionOccurred();
 
@@ -5285,9 +5352,7 @@ class Connection {
                 // (TLP re-enqueues the same PacketLocal, incrementing numSends).
                 // Cut the window on the first real loss (numSends <= 2).
                 if (oldest.getNumSends() <= 2) {
-                    if (_log.shouldDebug()) {
-                        _log.debug(shortLabel() + " -> Cutting SlowStartThreshold and Window");
-                    }
+                    debugPeriodic("window-cut", shortLabel() + " -> Cutting SlowStartThreshold and Window");
                     int wsize = _options.getWindowSize();
                     long now = _context.clock().now();
                     _lossStrikes = decayLossStrikes(_lossStrikes, _lastLossStrikeTime, now, _options.getRTT());
@@ -5311,8 +5376,8 @@ class Connection {
                     // fast stream's window over its own BDP-derived pipe.
                     _options.setWindowSize(Math.min(ceiling, Math.min(maxSS, graduatedLossWindow(strikes, wsize))));
                     updatePacingRate();
-                } else if (_log.shouldDebug()) {
-                    _log.debug(shortLabel() + " -> Not cutting SlowStartThreshold and Window");
+                } else {
+                    debugPeriodic("window-no-cut", shortLabel() + " -> Not cutting SlowStartThreshold and Window");
                 }
 
                 // The window map is a TreeMap, so values() already returns
@@ -5482,25 +5547,16 @@ class Connection {
                 } else {
 
                     if (_isChoking) {
-                        if (_log.shouldDebug()) {
-                            _log.debug(shortLabel() + " -> Choking the peer, requesting a pause"
-                                       + packet.formatAsString(false));
-                        }
+                        debugDelayFlag("delay-choking", "Choking the peer, requesting a pause", packet);
                         packet.setOptionalDelay(Packet.SEND_DELAY_CHOKE);
                         packet.setFlag(Packet.FLAG_DELAY_REQUESTED);
                     } else if (_unchokesToSend.get() > 0) {
-                        if (_log.shouldDebug()) {
-                            _log.debug(shortLabel() + " -> Unchoke assertion, requesting no delay"
-                                       + packet.formatAsString(false));
-                        }
+                        debugDelayFlag("delay-unchoked", "Unchoke assertion, requesting no delay", packet);
                         // Don't worry about wrapping around
                         packet.setOptionalDelay(0);
                         packet.setFlag(Packet.FLAG_DELAY_REQUESTED);
                     } else {
-                        if (_log.shouldDebug()) {
-                            _log.debug(shortLabel() + " -> Clearing the delay request on the resend"
-                                       + packet.formatAsString(false));
-                        }
+                        debugDelayFlag("delay-cleared", "Clearing the delay request on the resend", packet);
                         // clear flag
                         packet.setFlag(Packet.FLAG_DELAY_REQUESTED, false);
                     }
@@ -5545,8 +5601,10 @@ class Connection {
                             burstCount++;
                             if (softPass) {packet.incrementSoftResends();}
                             if (_log.shouldInfo() && shouldLogResend(packet.getNumSends())) {
-                                _log.info(shortLabel() + " -> Resending packet * Sends so far: " + packet.getNumSends()
-                                          + " * Sequence: " + packet.getSequenceNum() + packet.formatAsString(false));
+                                _log.info(shortLabel() + " -> Resending packet * Sends so far: " +
+                                          packet.getNumSends() + " * Sequence: " + packet.getSequenceNum() +
+                                          (shouldDumpResentPacket(packet.getNumSends())
+                                           ? packet.formatAsString(false) : ""));
                             }
                             if (nResends == 1) {_activeResends.incrementAndGet();}
                             sentAny = true;
@@ -5570,8 +5628,10 @@ class Connection {
                             if (_outboundQueue.enqueue(packet)) {
                                 if (softPass) {packet.incrementSoftResends();}
                                 if (_log.shouldInfo() && shouldLogResend(packet.getNumSends())) {
-                                    _log.info(shortLabel() + " -> Resending packet * Sends so far: " + packet.getNumSends()
-                                              + " * Sequence: " + packet.getSequenceNum() + packet.formatAsString(false));
+                                    _log.info(shortLabel() + " -> Resending packet * Sends so far: " +
+                                              packet.getNumSends() + " * Sequence: " + packet.getSequenceNum() +
+                                              (shouldDumpResentPacket(packet.getNumSends())
+                                               ? packet.formatAsString(false) : ""));
                                 }
                                 if (nResends == 1) {_activeResends.incrementAndGet();}
                                 sentAny = true;

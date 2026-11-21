@@ -4,8 +4,10 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import net.i2p.util.LogSuppressor;
+
 /**
- * Tests the cadence of the per-resend INFO line.
+ * Tests the cadence of this layer's busiest log lines.
  *
  * <p>{@link Connection#shouldLogResend(int)} decides which resends get a log
  * line. One line per send per packet was the single largest producer of log
@@ -14,6 +16,10 @@ import org.junit.Test;
  * single packet. The first sends of a packet are where a stall first becomes
  * visible, so those are logged in full and then every tenth send, which keeps the
  * growing count reportable at a tenth of the volume.
+ *
+ * <p>The rest of the tests cover the recurring lines: when a resend line carries
+ * the full packet dump, and the suppressor keys that let the router collapse the
+ * repeats of a condition it reports once a burst rather than once a packet.
  *
  * @since 0.9.72+
  */
@@ -72,5 +78,83 @@ public class ResendLogCadenceTest {
     public void testNonPositiveSendsLogged() {
         assertTrue(Connection.shouldLogResend(0));
         assertTrue(Connection.shouldLogResend(-1));
+    }
+
+    // ---------- recurring lines ----------
+
+    /**
+     * The packet dump rides the first send of a packet only. The send count and
+     * sequence are on the line either way, and the dump is nine lines: the
+     * resend line appeared 22,711 times in one 48-minute rotation of a live
+     * router's log.
+     */
+    @Test
+    public void testDumpRidesTheFirstSendOnly() {
+        assertTrue(Connection.shouldDumpResentPacket(1));
+        assertFalse(Connection.shouldDumpResentPacket(2));
+        assertFalse(Connection.shouldDumpResentPacket(181));
+        // a packet reported as never sent still gets the dump
+        assertTrue(Connection.shouldDumpResentPacket(0));
+    }
+
+    /**
+     * The two cadences compose: a packet that is logged at all on a later send
+     * is still a one-line entry, so the surviving lines are short.
+     */
+    @Test
+    public void testSurvivingLinesAreShort() {
+        int dumps = 0;
+        int lines = 0;
+        for (int n = 1; n <= 181; n++) {
+            if (Connection.shouldLogResend(n)) {
+                lines++;
+                if (Connection.shouldDumpResentPacket(n)) {dumps++;}
+            }
+        }
+        assertEquals(21, lines);
+        assertEquals("only the first send carries a dump", 1, dumps);
+    }
+
+    // ---------- recurring-line suppressor keys ----------
+
+    /**
+     * A suppressor key has to name the condition, not the occurrence, or every
+     * line passes the suppressor and the flood continues.
+     */
+    @Test
+    public void testPeriodicKeyNamesTheCondition() {
+        String label = "From: [by7luzwh] * To: [ca2njqii]";
+        String other = "From: [by7luzwh] * To: [pi3lt5it]";
+        String pass = Connection.periodicDebugKey(label, "retx-pass");
+        assertEquals(label + ":retx-pass", pass);
+        assertEquals("stable across occurrences", pass,
+                     Connection.periodicDebugKey(label, "retx-pass"));
+        assertNotEquals("one key per condition", pass,
+                        Connection.periodicDebugKey(label, "window-cut"));
+        assertNotEquals("one key per connection", pass,
+                        Connection.periodicDebugKey(other, "retx-pass"));
+    }
+
+    /**
+     * The measured flood run through the house suppressor: one connection wrote
+     * 31,301 timer-fire lines in a single 48-minute rotation of a live router's
+     * log; the same occurrences under a condition key collapse to one line per
+     * thousand, so the condition stays reportable every few seconds instead of
+     * every packet.
+     */
+    @Test
+    public void testSuppressorCollapsesTheMeasuredFlood() {
+        LogSuppressor sup = new LogSuppressor();
+        String label = "From: [by7luzwh] * To: [nnvz55wt]";
+        String key = Connection.periodicDebugKey(label, "retx-pass");
+        long now = 1_700_000_000_000L;
+        int written = 0;
+        for (int i = 0; i < 31_301; i++) {
+            now += 92;
+            if (sup.record(key, now).log) {written++;}
+        }
+        assertEquals(48, written);
+        assertTrue("at least a 600-fold cut",
+                   written * 600 <= 31_301);
     }
 }
