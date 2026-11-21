@@ -7374,19 +7374,19 @@ msgstr "False로 설정되면, 더 느린 또는 도달할 수 없는 라우터�
 msgid "Allocate number of processor threads for building tunnels. If your processor supports hyperthreading or simultaneous multithreading, you may multiply the number of processor cores by 2 to get the maximum number of threads to allocate, otherwise number of processor cores = maximum number of threads available. Note that you may wish to allocate less than the theoretical maximum to ensure you have headroom for other tasks."
 msgstr "터널 구축을 위한 프로세서 스레드 수 할당. 프로세서가 하이퍼스레딩 또는 동시 멀티스레딩을 지원하는 경우, 프로세서 코어 수를 2배로 곱하여 할당할 수 있는 최대 스레드 수를 얻을 수 있습니다. 그렇지 않으면 프로세서 코어 수 = 사용 가능한 최대 스레드 수입니다. 이론적인 최대값보다 적은 값을 할당하여 다른 작업에 대한 여유 공간을 확보하는 것이 좋습니다."
 
-msgid "This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 1000ms. [Restart required]"
+msgid "This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 50ms. [Restart required]"
 msgstr "이 설정은 (밀리초 단위로) 패킷이 CoDel 큐에 머무를 수 있는 시간을 결정합니다. 기본값은 1000ms입니다. [재시작 필요]"
 
-msgid "This setting determines the maximum number of messages in the outbound queue before it is marked as full. [Default is 768]"
+msgid "This setting determines the maximum number of messages in the outbound queue before it is marked as full. [Default is 1024, or 512 on slow systems]"
 msgstr "이 설정은 발신 큐에 포함될 수 있는 최대 메시지 수를 결정합니다. [기본값은 768입니다]"
 
-msgid "This setting determines the maximum number of messages above the maximum queue value before further messages are dropped. [Default is 128]"
+msgid "This setting determines the maximum number of messages above the maximum queue value before further messages are dropped. [Default is 384, or 256 on slow systems]"
 msgstr "이 설정은 추가 메시지가 삭제되기 전에 최대 큐 값보다 많을 수 있는 최대 메시지 수를 결정합니다. [기본값은 128입니다.]"
 
-msgid "This setting (in milliseconds) allows you to manually configure the queue delay target value for the CoDel queue management system. Default is 50ms. [Restart required]"
+msgid "This setting (in milliseconds) allows you to manually configure the queue delay target value for the CoDel queue management system. Default is 5ms. [Restart required]"
 msgstr "이 설정은 (밀리초 단위로) CoDel 큐 관리 시스템의 대기 시간 목표 값을 수동으로 구성할 수 있게 합니다. 기본값은 50ms입니다. [재시작 필요]"
 
-msgid "This setting, in milliseconds, overrides the default message processing time limit (indicated as <i>Message Delay</i> in the Congestion sidebar section) before the router is determined to be congested and transit tunnel requests are rejected. [Default is 750ms or 1500ms if the router is flagged as slow]"
+msgid "This setting, in milliseconds, overrides the default message processing time limit (indicated as <i>Message Delay</i> in the Congestion sidebar section) before the router is determined to be congested and transit tunnel requests are rejected. [Default is 2000ms, or 3000ms if the router is flagged as slow]"
 msgstr "이 설정은 라우터가 혼잡 상태로 판단되고 트랜지트 터널 요청이 거부되기 전에 기본 메시지 처리 시간 제한(혼잡 사이드바 섹션의 <i>메시지 지연</i>으로 표시됨)을 무시합니다. [기본값은 750ms이며, 라우터가 느린 것으로 표시된 경우 1500ms입니다]"
 
 msgid "Periodically test tunnels to determine the average lag, and display the results in the Congestion sidepanel section. To enable, set this value to false. [Default is false]"
@@ -7401,28 +7401,28 @@ msgstr "False로 설정되면, 다른 라우터에서의 터널 생성 요청이
 msgid "This setting determines which <a href=/profiles#profile_defs>peer capabilities</a> will not be used to build your router's tunnels. e.g. <code>router.excludePeerCaps=LMN</code>"
 msgstr "이 설정은 라우터 터널을 구축하는 데 사용되지 않는 <a href=/profiles#profile_defs>피어 기능</a>을 결정합니다. 예를 들어 <code>router.excludePeerCaps=LMN</code>"
 
-msgid "When set to false, unreachable peers may be selected as hops for inbound exploratory tunnels. [Default is true]"
+msgid "When set to false, unreachable peers may be selected as hops for inbound exploratory tunnels. [Default is false]"
 msgstr "false로 설정하면 도달 불가능한 피어가 인바운드 탐색 터널의 홉으로 선택될 수 있습니다. [기본값 true]"
 
-msgid "When set to false, unreachable peers may be selected as hops for outbound exploratory tunnels. [Default is true]"
+msgid "When set to false, unreachable peers may be selected as hops for outbound exploratory tunnels. [Default is false]"
 msgstr "false로 설정하면 도달 불가능한 피어가 아웃바운드 탐색 터널의 홉으로 선택될 수 있습니다. [기본값 true]"
 
-msgid "When set to false, unreachable peers may be selected as hops for inbound client tunnels. [Default is true]"
+msgid "When set to false, unreachable peers may be selected as hops for inbound client tunnels. [Default is false]"
 msgstr "false로 설정하면 도달 불가능한 피어가 인바운드 클라이언트 터널의 홉으로 선택될 수 있습니다. [기본값 true]"
 
-msgid "When set to false, unreachable peers may be selected as hops for outbound client tunnels. [Default is true]"
+msgid "When set to false, unreachable peers may be selected as hops for outbound client tunnels. [Default is false]"
 msgstr "false로 설정하면 도달 불가능한 피어가 아웃바운드 클라이언트 터널의 홉으로 선택될 수 있습니다. [기본값 true]"
 
-msgid "When set to false, slow peers (high tunnel test times) may be selected as hops for inbound exploratory tunnels. [Default is true]"
+msgid "When set to false, slow peers (high tunnel test times) may be selected as hops for inbound exploratory tunnels. [Default is false]"
 msgstr "false로 설정하면 느린 피어(터널 테스트 시간이 긴)가 인바운드 탐색 터널의 홉으로 선택될 수 있습니다. [기본값 true]"
 
-msgid "When set to false, slow peers may be selected as hops for outbound exploratory tunnels. [Default is true]"
+msgid "When set to false, slow peers may be selected as hops for outbound exploratory tunnels. [Default is false]"
 msgstr "false로 설정하면 느린 피어가 아웃바운드 탐색 터널의 홉으로 선택될 수 있습니다. [기본값 true]"
 
-msgid "When set to false, slow peers may be selected as hops for inbound client tunnels. [Default is true]"
+msgid "When set to false, slow peers may be selected as hops for inbound client tunnels. [Default is false]"
 msgstr "false로 설정하면 느린 피어가 인바운드 클라이언트 터널의 홉으로 선택될 수 있습니다. [기본값 true]"
 
-msgid "When set to false, slow peers may be selected as hops for outbound client tunnels. [Default is true]"
+msgid "When set to false, slow peers may be selected as hops for outbound client tunnels. [Default is false]"
 msgstr "false로 설정하면 느린 피어가 아웃바운드 클라이언트 터널의 홉으로 선택될 수 있습니다. [기본값 true]"
 
 msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"
@@ -7458,25 +7458,25 @@ msgstr "병렬 <a href=/jobs>작업 실행기</a>의 최소 수를 정의합니�
 msgid "Enable dynamic scaling of job runners based on queue load. When enabled, the router automatically scales the number of job runner threads up or down based on ready job count and lag. [Default is true]"
 msgstr "대기열 부하에 따라 작업 실행기의 동적 확장을 활성화합니다. 활성화되면 라우터는 준비된 작업 수와 지연에 따라 작업 실행기 스레드를 자동으로 늘리거나 줄입니다. [기본값 true]"
 
-msgid "The job queue lag threshold in milliseconds that triggers scaling up job runners. When max lag exceeds this value, additional runners are started. [Default is 1]"
+msgid "The job queue lag threshold in milliseconds that triggers scaling up job runners. When max lag exceeds this value, additional runners are started. [Default is 10]"
 msgstr "작업 실행기 확장을 트리거하는 밀리초 단위의 대기열 지연 임계값. 최대 지연이 이 값을 초과하면 추가 실행기가 시작됩니다. [기본값 1]"
 
-msgid "The job queue lag threshold in milliseconds that allows scaling down job runners. When max lag stays below this value, excess runners are stopped. [Default is 1]"
+msgid "The job queue lag threshold in milliseconds that allows scaling down job runners. When max lag stays below this value, excess runners are stopped. [Default is 5]"
 msgstr "작업 실행기 축소를 허용하는 밀리초 단위의 대기열 지연 임계값. 최대 지연이 이 값 아래로 유지되면 초과 실행기가 중지됩니다. [기본값 1]"
 
 msgid "The ratio of ready jobs to active runners that triggers scaling up. If readyJobs > activeRunners * ratio, additional runners are started. [Default is 1.2]"
 msgstr "확장을 트리거하는 준비된 작업과 활성 실행기의 비율. readyJobs > activeRunners * ratio이면 추가 실행기가 시작됩니다. [기본값 1.2]"
 
-msgid "The interval in milliseconds between job runner scaling checks. [Default is 1000]"
+msgid "The interval in milliseconds between job runner scaling checks. [Default is 2000 (2s)]"
 msgstr "작업 실행기 확장 확인 간격(밀리초). [기본값 1000]"
 
-msgid "The cooldown period in milliseconds between scale operations. [Default is 5000]"
+msgid "The cooldown period in milliseconds between scale operations. [Default is 10000 (10s)]"
 msgstr "확장 작업 간 쿨다운 기간(밀리초). [기본값 5000]"
 
 msgid "Enable the feedback mechanism that automatically rolls back ineffective scale-up operations. If lag increases after adding runners, they will be removed. [Default is true]"
 msgstr "효과 없는 확장 작업을 자동으로 롤백하는 피드백 메커니즘을 활성화합니다. 실행기 추가 후 지연이 증가하면 제거됩니다. [기본값 true]"
 
-msgid "The maximum number of waiting jobs in the queue before aggressive job dropping is triggered. When exceeded, non-critical jobs are dropped to reduce queue pressure. [Default is 48]"
+msgid "The maximum number of waiting jobs in the queue before aggressive job dropping is triggered. When exceeded, non-critical jobs are dropped to reduce queue pressure. [Default is 48, or 24 on slow systems]"
 msgstr "공격적 작업 드롭이 트리거되기 전 대기열의 최대 대기 작업 수. 초과 시 대기열 압력을 줄이기 위해 비중요 작업이 드롭됩니다. [기본값 48]"
 
 msgid "Maximum number of pending tunnel build jobs in the BuildHandler queue. When the queue exceeds this limit, new build requests are rejected to prevent job queue overload. [Default is 256]"
@@ -7524,22 +7524,22 @@ msgstr "Java BigInteger 라이브러리의 기본이 아닌 소프트웨어 에�
 msgid "This setting determines the number of peer tests to run concurrently, used to determine peer latency. When tunnel build success drops below 50%, concurrency is halved to avoid adding load during a failure cascade. [Default varies: 1 on slow systems, 2 on single/dual-core, 4 otherwise]"
 msgstr "이 설정은 피어 지연 시간을 결정하는 데 사용되는 동시 피어 테스트 수를 결정합니다. 터널 구축 성공률이 50% 아래로 떨어지면 장애 계단 현상 중 부하 추가를 피하기 위해 동시성이 절반으로 줄어듭니다. [기본값 다양: 느린 시스템 1, 싱글/듀얼코어 2, 기타 4]"
 
-msgid "This setting determines the delay between peer test jobs, configured in milliseconds. [Default is 30000 (30s), or 45000 (45s) on slow systems]"
+msgid "This setting determines the delay between peer test jobs, configured in milliseconds. [Default is 300000 (5 min)]"
 msgstr "이 설정은 피어 테스트 작업 간 지연을 밀리초 단위로 결정합니다. [기본값 30000(30초), 느린 시스템 45000(45초)]"
 
-msgid "To determine peer latency, this setting allocates the maximum time a peer test should take before being considered a failure, configured in milliseconds. In the event that the timeout is configured lower than the average successful test, the average successful test value will be used. [Default is 5000]"
+msgid "To determine peer latency, this setting allocates the maximum time a peer test should take before being considered a failure, configured in milliseconds. In the event that the timeout is configured lower than the average successful test, the average successful test value will be used. [Default is 10000 (10s)]"
 msgstr "피어 지연 시간을 결정하기 위해 이 설정은 피어 테스트가 실패로 간주되기 전까지 걸리는 최대 시간을 밀리초 단위로 할당합니다. 시간 제한이 평균 성공 테스트보다 낮게 설정된 경우 평균 성공 테스트 값이 사용됩니다. [기본값 5000]"
 
-msgid "Minimum number of peers to retain in the fast tier during profile reorganization. A higher value ensures more peers are available for tunnel building, at the cost of potentially including slower peers. If more than 3000 routers are known, the default scales to <code>knownRouters / 15</code>. [Default is 400]"
+msgid "Minimum number of peers to retain in the fast tier during profile reorganization. A higher value ensures more peers are available for tunnel building, at the cost of potentially including slower peers. If more than 3000 routers are known, the default scales to <code>knownRouters / 15</code>. [Default is 1000]"
 msgstr "프로필 재구성 중 빠른 등급에 유지할 최소 피어 수. 값이 높을수록 더 많은 피어를 터널 구축에 사용할 수 있지만 느린 피어가 포함될 수 있습니다. 3000개 이상의 라우터가 알려진 경우 기본값은 <code>knownRouters / 15</code>로 확장됩니다. [기본값 400]"
 
-msgid "Minimum number of peers to retain in the high-capacity tier. These are the peers with the highest measured throughput and greatest ability to relay traffic. If more than 3000 routers are known, the default scales to <code>knownRouters / 15</code>. [Default is 500]"
+msgid "Minimum number of peers to retain in the high-capacity tier. These are the peers with the highest measured throughput and greatest ability to relay traffic. If more than 3000 routers are known, the default scales to <code>knownRouters / 15</code>. [Default is 1000]"
 msgstr "고용량 등급에 유지할 최소 피어 수. 이들은 가장 높은 측정 처리량과 트래픽 중계 능력을 가진 피어입니다. 3000개 이상의 라우터가 알려진 경우 기본값은 <code>knownRouters / 15</code>로 확장됩니다. [기본값 500]"
 
 msgid "Maximum number of peer profiles to retain in memory. Older, inactive profiles are expired first when this limit is reached. Values below 100 are clamped to 100. [Default is 8000, or 800 on slow systems]"
 msgstr "메모리에 유지할 최대 피어 프로필 수. 이 제한에 도달하면 오래되고 비활성인 프로필이 먼저 만료됩니다. 100 미만의 값은 100으로 고정됩니다. [기본값 8000, 느린 시스템 800]"
 
-msgid "Maximum age of a RouterInfo (in hours) for a peer to be considered selectable for tunnel building. Peers with RouterInfos older than this threshold are excluded from selection unless they have an active connection. This is particularly relevant for floodfill routers that do not actively explore the NetDB, as their RouterInfos may become stale without periodic refresh. [Default is 3]"
+msgid "Maximum age of a RouterInfo (in hours) for a peer to be considered selectable for tunnel building. Peers with RouterInfos older than this threshold are excluded from selection unless they have an active connection. This is particularly relevant for floodfill routers that do not actively explore the NetDB, as their RouterInfos may become stale without periodic refresh. [Default is 2]"
 msgstr "피어가 터널 구축을 위해 선택 가능한 것으로 간주되는 RouterInfo의 최대 수명(시간)입니다. 이 임계값보다 오래된 RouterInfo를 가진 피어는 활성 연결이 없는 한 선택에서 제외됩니다. 이는 정기적으로 새로 고치지 않으면 RouterInfo가 오래될 수 있으므로 NetDB를 적극적으로 탐색하지 않는 플러드 노드 라우터와 특히 관련이 있습니다. [기본값은 3]"
 
 msgid "This setting determines whether stats about our router are sporadically published to the NetDb. [Default is false]"
@@ -7575,13 +7575,13 @@ msgstr "이 설정은 라우터 갱신 프로세스에서 1시간 동안 운영 
 msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
 msgstr "true로 설정하면, 이 설정은 대역폭 사용량이 높다고 판단될 때 라우터가 혼잡 제한을 게시하는 데 필요한 조건을 완화합니다. 다른 조건, 예를 들어 높은 작업 지연이나 라우터가 느리다고 분류되는 경우에도 여전히 제한이 게시되도록 합니다. [기본값은 false]"
 
-msgid "The period in milliseconds to check for idle tunnels. Tunnels with no traffic for this period may be dropped. [Default is 60000]"
+msgid "The period in milliseconds to check for idle tunnels. Tunnels with no traffic for this period may be dropped. [Default is 300000 (5 min)]"
 msgstr "유휴 터널을 확인하는 밀리초 단위 기간. 이 기간 동안 트래픽이 없는 터널은 드롭될 수 있습니다. [기본값 60000]"
 
-msgid "The minimum number of messages a tunnel must have processed in the detection period to be considered active. Tunnels below this threshold are candidates for removal. [Default is 3]"
+msgid "The minimum number of messages a tunnel must have processed in the detection period to be considered active. Tunnels below this threshold are candidates for removal. [Default is 1]"
 msgstr "감지 기간 동안 터널이 활성으로 간주되기 위해 처리해야 하는 최소 메시지 수. 이 임계값 아래의 터널은 제거 대상입니다. [기본값 3]"
 
-msgid "The interval in milliseconds between scans for idle transit tunnels. [Default is 180000]"
+msgid "The interval in milliseconds between scans for idle transit tunnels. [Default is 60000 (1 min)]"
 msgstr "유휴 트랜짓 터널 스캔 간격(밀리초). [기본값 180000]"
 
 msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
@@ -7623,7 +7623,7 @@ msgstr "<a href=/tunnels>로컬 터널 풀</a>에서 느린 터널을 제거하�
 msgid "The minimum number of tunnels to keep in each pool when removing slow tunnels (minimum 2), overriding the configured tunnel quantity. Set to 0 to use the configured quantity per pool. [Default is 0]"
 msgstr "느린 터널 제거 시 각 풀에 유지할 최소 터널 수(최소 2), 구성된 터널 수량을 재정의합니다. 0으로 설정하면 풀당 구성된 수량을 사용합니다. [기본값 0]"
 
-msgid "The interval in milliseconds between runs of the Remove Slow Tunnels job. Higher values reduce tunnel churn but may keep slow tunnels longer. [Default is 90000 (90s), or 120000 (120s) if under load]"
+msgid "The interval in milliseconds between runs of the Remove Slow Tunnels job. Higher values reduce tunnel churn but may keep slow tunnels longer. [Default is 60000 (60s)]"
 msgstr "느린 터널 제거 작업 실행 간격(밀리초). 값이 높을수록 터널 변동은 줄지만 느린 터널이 더 오래 유지될 수 있습니다. [기본값 90000(90초), 부하 시 120000(120초)]"
 
 msgid "The time in milliseconds before expiration to mark tunnels for early expiry when the Remove Slow Tunnels job prunes slow or excess tunnels. Higher values allow more time for new tunnels to build. [Default is 30000]"
@@ -7812,7 +7812,7 @@ msgstr "이 설정은 활성화되었을 때, <code>i2p.streaming.enablePongDela
 msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are sent a RESET (the client may retry) rather than silently dropped, which keeps the client informed of the refusal. [Default is 256 (128 on slow systems)]"
 msgstr "서버 승인 대기열에서 보류 중인 연결(SYN 및 부분 패킷)의 최대 개수. 대기열이 가득 차면 새 SYN은 조용히 버려지는 대신 RESET을 보내므로(클라이언트는 재시도할 수 있음) 클라이언트가 거절 사실을 알 수 있습니다. [기본값 256(느린 시스템 128)]"
 
-msgid "The maximum retransmission delay in milliseconds. Retransmit interval will not exceed this value regardless of backoff. Increase to allow longer between retries on congested paths. [Default is 30000 (30s)]"
+msgid "The maximum retransmission delay in milliseconds. Retransmit interval will not exceed this value regardless of backoff. Increase to allow longer between retries on congested paths. [Default is 20000 (20s)]"
 msgstr "최대 재전송 지연(밀리초). 백오프와 관계없이 재전송 간격이 이 값을 초과하지 않습니다. 혼잡 경로에서 재시도 간 더 긴 시간을 허용하려면 증가시킵니다. [기본값 30000(30초)]"
 
 msgid "Maximum number of packet retransmissions before giving up on a connection. Higher values improve reliability on lossy links but delay failure detection. [Default is 32]"
@@ -7824,10 +7824,10 @@ msgstr "지수 백오프(두 배) 후 최대 재전송 시간 제한(밀리초).
 msgid "Maximum round-trip time in milliseconds for streaming connections. Caps the computed RTT to prevent pathological timeout values after network disturbances. [Default is 10000 (10 seconds)]"
 msgstr "스트리밍 연결의 최대 왕복 시간(밀리초). 네트워크 방해 이후 비정상적인 제한 시간 값이 발생하지 않도록 계산된 RTT를 제한합니다. [기본값 10000(10초)]"
 
-msgid "Maximum slow start window size for streaming connections. Caps the congestion window during slow start to prevent overwhelming the network. [Default is 256 (32 on slow systems)]"
+msgid "Maximum slow start window size for streaming connections. Caps the congestion window during slow start to prevent overwhelming the network. [Default is 2048 (1024 on slow systems)]"
 msgstr "스트리밍 연결의 최대 슬로우 스타트 창 크기. 네트워크를 압도하지 않도록 슬로우 스타트 중 혼잡 창을 제한합니다. [기본값 256(느린 시스템 32)]"
 
-msgid "Maximum congestion window size (in packets) for streaming connections. Caps the maximum throughput of a single stream. [Default is 512 (384 on slow systems)]"
+msgid "Maximum congestion window size (in packets) for streaming connections. Caps the maximum throughput of a single stream. [Default is 2048 (1024 on slow systems)]"
 msgstr "스트리밍 연결의 최대 혼잡 창 크기(패킷). 단일 스트림의 최대 처리량을 제한합니다. [기본값 512(느린 시스템 384)]"
 
 msgid "The minimum retransmission delay in milliseconds. Packets will not be resent faster than this interval. Lower values allow faster recovery on lossy connections. [Default is 100ms]"
@@ -7854,7 +7854,7 @@ msgstr "자동 LeaseSet 재게시 간격(밀리초). 값이 높을수록 netdb �
 msgid "Threshold in milliseconds for proactive LeaseSet republish. If a lease is expiring within this window, the LeaseSet is republished immediately rather than waiting for the next periodic cycle. [Default is 180000 (3 minutes)]"
 msgstr "선제적 LeaseSet 재게시를 위한 밀리초 단위 임계값. 이 창 내에서 임대가 만료되는 경우 다음 주기적 주기를 기다리지 않고 즉시 LeaseSet이 재게시됩니다. [기본값 180000(3분)]"
 
-msgid "The maximum number of simultaneous I2CP client sessions the router will accept. [Default is 1536 (768 on slow systems)]"
+msgid "The maximum number of simultaneous I2CP client sessions the router will accept. [Default is 16384 (4096 on slow systems), used as 2048 at most]"
 msgstr "라우터가 허용할 최대 동시 I2CP 클라이언트 세션 수. [기본값 1536(느린 시스템 768)]"
 
 msgid "When set to true, disables local-local loopback delivery and forces all traffic through tunnels (outbound tunnel → network → inbound tunnel → local destination). Useful for testing tunnel routing behavior when the source and destination are on the same router. [Disabled by default]"

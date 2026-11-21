@@ -7460,19 +7460,19 @@ msgstr "Når satt til feil, vil routeren ikke blokkere tunnel-byggeforespørsler
 msgid "Allocate number of processor threads for building tunnels. If your processor supports hyperthreading or simultaneous multithreading, you may multiply the number of processor cores by 2 to get the maximum number of threads to allocate, otherwise number of processor cores = maximum number of threads available. Note that you may wish to allocate less than the theoretical maximum to ensure you have headroom for other tasks."
 msgstr "Tilordne antall prosessortråder for å bygge tunneler. Hvis prosessoren din støtter hypertråding eller samtidig multitråding, kan du multiplisere antall prosessorkjerner med 2 for å få det maksimale antallet tråder som skal tildeles, ellers antall prosessorkjerner = maksimalt antall tilgjengelige tråder. Merk at du kanskje ønsker å tildele mindre enn det teoretiske maksimumet for å sikre at du har rom for andre oppgaver"
 
-msgid "This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 1000ms. [Restart required]"
+msgid "This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 50ms. [Restart required]"
 msgstr "Denne innstillingen (i millisekunder) bestemmer hvor lenge en pakke kan ligge i CoDel-køen før den blir droppet. Standard er 1000 ms. [Omstart påkrevd"
 
-msgid "This setting determines the maximum number of messages in the outbound queue before it is marked as full. [Default is 768]"
+msgid "This setting determines the maximum number of messages in the outbound queue before it is marked as full. [Default is 1024, or 512 on slow systems]"
 msgstr "Denne innstillingen bestemmer det maksimale antallet meldinger i utgående kø før den er merket som full. [Standard er 768"
 
-msgid "This setting determines the maximum number of messages above the maximum queue value before further messages are dropped. [Default is 128]"
+msgid "This setting determines the maximum number of messages above the maximum queue value before further messages are dropped. [Default is 384, or 256 on slow systems]"
 msgstr "Denne innstillingen bestemmer det maksimale antallet meldinger over det maksimale kø-verdien før flere meldinger blir droppet. [Standard er 128"
 
-msgid "This setting (in milliseconds) allows you to manually configure the queue delay target value for the CoDel queue management system. Default is 50ms. [Restart required]"
+msgid "This setting (in milliseconds) allows you to manually configure the queue delay target value for the CoDel queue management system. Default is 5ms. [Restart required]"
 msgstr "Denne innstillingen (i millisekunder) lar deg manuelt konfigurere målverdien for ventekøen for CoDel køhåndteringssystemet. Standard er 50 ms. [Oppstart kreves"
 
-msgid "This setting, in milliseconds, overrides the default message processing time limit (indicated as <i>Message Delay</i> in the Congestion sidebar section) before the router is determined to be congested and transit tunnel requests are rejected. [Default is 750ms or 1500ms if the router is flagged as slow]"
+msgid "This setting, in milliseconds, overrides the default message processing time limit (indicated as <i>Message Delay</i> in the Congestion sidebar section) before the router is determined to be congested and transit tunnel requests are rejected. [Default is 2000ms, or 3000ms if the router is flagged as slow]"
 msgstr "Denne innstillingen, i millisekunder, overstyrer standardgrensen for behandlingstid for meldinger (indikert som <i>Meldingsforsinkelse</i> i delen for trafikkork på sidepanelet) før ruteren blir bestemt til å være overbelastet og transittunnelforespørsler blir avvist. [Standardverdien er 750 ms eller 1500 ms hvis ruteren er merket som treg"
 
 msgid "Periodically test tunnels to determine the average lag, and display the results in the Congestion sidepanel section. To enable, set this value to false. [Default is false]"
@@ -7487,28 +7487,28 @@ msgstr "Når satt til feil, vil routeren ikke begrense tunnel-byggeforespørsler
 msgid "This setting determines which <a href=/profiles#profile_defs>peer capabilities</a> will not be used to build your router's tunnels. e.g. <code>router.excludePeerCaps=LMN</code>"
 msgstr "Denne innstillingen bestemmer hvilke <a href=/profiles#profile_defs>peer-evner</a> som ikke blir brukt til å opprette rutens tunneler. F.eks. <code>router.excludePeerCaps=LMN</code</code>"
 
-msgid "When set to false, unreachable peers may be selected as hops for inbound exploratory tunnels. [Default is true]"
+msgid "When set to false, unreachable peers may be selected as hops for inbound exploratory tunnels. [Default is false]"
 msgstr "Når satt til false, kan utilgjengelige jevnaldrende velges som hopp for innkommende utforskende tunneler. [Standard true"
 
-msgid "When set to false, unreachable peers may be selected as hops for outbound exploratory tunnels. [Default is true]"
+msgid "When set to false, unreachable peers may be selected as hops for outbound exploratory tunnels. [Default is false]"
 msgstr "Når satt til false, kan utilgjengelige jevnaldrende velges som hopp for utgående utforskende tunneler. [Standard true"
 
-msgid "When set to false, unreachable peers may be selected as hops for inbound client tunnels. [Default is true]"
+msgid "When set to false, unreachable peers may be selected as hops for inbound client tunnels. [Default is false]"
 msgstr "Når satt til false, kan utilgjengelige jevnaldrende velges som hopp for innkommende klienttunneler. [Standard true"
 
-msgid "When set to false, unreachable peers may be selected as hops for outbound client tunnels. [Default is true]"
+msgid "When set to false, unreachable peers may be selected as hops for outbound client tunnels. [Default is false]"
 msgstr "Når satt til false, kan utilgjengelige jevnaldrende velges som hopp for utgående klienttunneler. [Standard true"
 
-msgid "When set to false, slow peers (high tunnel test times) may be selected as hops for inbound exploratory tunnels. [Default is true]"
+msgid "When set to false, slow peers (high tunnel test times) may be selected as hops for inbound exploratory tunnels. [Default is false]"
 msgstr "Når satt til false, kan trege jevnaldrende (høy tunneltesttid) velges som hopp for innkommende utforskende tunneler. [Standard true"
 
-msgid "When set to false, slow peers may be selected as hops for outbound exploratory tunnels. [Default is true]"
+msgid "When set to false, slow peers may be selected as hops for outbound exploratory tunnels. [Default is false]"
 msgstr "Når satt til false, kan trege jevnaldrende velges som hopp for utgående utforskende tunneler. [Standard true"
 
-msgid "When set to false, slow peers may be selected as hops for inbound client tunnels. [Default is true]"
+msgid "When set to false, slow peers may be selected as hops for inbound client tunnels. [Default is false]"
 msgstr "Når satt til false, kan trege jevnaldrende velges som hopp for innkommende klienttunneler. [Standard true"
 
-msgid "When set to false, slow peers may be selected as hops for outbound client tunnels. [Default is true]"
+msgid "When set to false, slow peers may be selected as hops for outbound client tunnels. [Default is false]"
 msgstr "Når satt til false, kan trege jevnaldrende velges som hopp for utgående klienttunneler. [Standard true"
 
 msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"
@@ -7544,25 +7544,25 @@ msgstr "Definerer minimum antall parallelle <a href=/jobs>jobbkjørere</a>. Rute
 msgid "Enable dynamic scaling of job runners based on queue load. When enabled, the router automatically scales the number of job runner threads up or down based on ready job count and lag. [Default is true]"
 msgstr "Aktiver dynamisk skalering av jobbkjørere basert på købelastning. Når aktivert, skalerer ruteren automatisk antall jobbkjørertråder opp eller ned basert på klare jobber og etterslep. [Standard true"
 
-msgid "The job queue lag threshold in milliseconds that triggers scaling up job runners. When max lag exceeds this value, additional runners are started. [Default is 1]"
+msgid "The job queue lag threshold in milliseconds that triggers scaling up job runners. When max lag exceeds this value, additional runners are started. [Default is 10]"
 msgstr "Køetterslepsterskelen i millisekunder som utløser oppskalering av jobbkjørere. Når maks etterslep overstiger denne verdien, startes flere kjørere. [Standard 1"
 
-msgid "The job queue lag threshold in milliseconds that allows scaling down job runners. When max lag stays below this value, excess runners are stopped. [Default is 1]"
+msgid "The job queue lag threshold in milliseconds that allows scaling down job runners. When max lag stays below this value, excess runners are stopped. [Default is 5]"
 msgstr "Køetterslepsterskelen i millisekunder som tillater nedskalering av jobbkjørere. Når maks etterslep forblir under denne verdien, stoppes overflødige kjørere. [Standard 1"
 
 msgid "The ratio of ready jobs to active runners that triggers scaling up. If readyJobs > activeRunners * ratio, additional runners are started. [Default is 1.2]"
 msgstr "Forholdet mellom klare jobber og aktive kjørere som utløser oppskalering. Hvis readyJobs > activeRunners * ratio, startes flere kjørere. [Standard 1.2"
 
-msgid "The interval in milliseconds between job runner scaling checks. [Default is 1000]"
+msgid "The interval in milliseconds between job runner scaling checks. [Default is 2000 (2s)]"
 msgstr "Intervallet i millisekunder mellom sjekker for skalering av jobbkjørere. [Standard 1000"
 
-msgid "The cooldown period in milliseconds between scale operations. [Default is 5000]"
+msgid "The cooldown period in milliseconds between scale operations. [Default is 10000 (10s)]"
 msgstr "Nedkjølingsperioden i millisekunder mellom skaleringsoperasjoner. [Standard 5000"
 
 msgid "Enable the feedback mechanism that automatically rolls back ineffective scale-up operations. If lag increases after adding runners, they will be removed. [Default is true]"
 msgstr "Aktiver tilbakemeldingsmekanismen som automatisk ruller tilbake ineffektive oppskaleringsoperasjoner. Hvis etterslepet øker etter å ha lagt til kjørere, vil de fjernes. [Standard true"
 
-msgid "The maximum number of waiting jobs in the queue before aggressive job dropping is triggered. When exceeded, non-critical jobs are dropped to reduce queue pressure. [Default is 48]"
+msgid "The maximum number of waiting jobs in the queue before aggressive job dropping is triggered. When exceeded, non-critical jobs are dropped to reduce queue pressure. [Default is 48, or 24 on slow systems]"
 msgstr "Maksimalt antall ventende jobber i køen før aggressiv jobbslipp utløses. Når overskredet, slippes ikke-kritiske jobber for å redusere køtrykk. [Standard 48"
 
 msgid "Maximum number of pending tunnel build jobs in the BuildHandler queue. When the queue exceeds this limit, new build requests are rejected to prevent job queue overload. [Default is 256]"
@@ -7610,22 +7610,22 @@ msgstr "Ruter som kjører en ikke-nativ, programvare-emulert versjon av Java Big
 msgid "This setting determines the number of peer tests to run concurrently, used to determine peer latency. When tunnel build success drops below 50%, concurrency is halved to avoid adding load during a failure cascade. [Default varies: 1 on slow systems, 2 on single/dual-core, 4 otherwise]"
 msgstr "Denne innstillingen bestemmer antall jevnaldrendetester som kjøres samtidig, brukt til å bestemme jevnaldrendeforsinkelse. Når tunnelbyggingssuksess synker under 50%, halveres samtidigheten for å unngå å legge til belastning under en feilkaskade. [Standard varierer: 1 på trege systemer, 2 på enkelt/dobbel-kjerne, 4 ellers"
 
-msgid "This setting determines the delay between peer test jobs, configured in milliseconds. [Default is 30000 (30s), or 45000 (45s) on slow systems]"
+msgid "This setting determines the delay between peer test jobs, configured in milliseconds. [Default is 300000 (5 min)]"
 msgstr "Denne innstillingen bestemmer forsinkelsen mellom jevnaldrendetestjobber, konfigurert i millisekunder. [Standard 30000 (30s), eller 45000 (45s) på trege systemer"
 
-msgid "To determine peer latency, this setting allocates the maximum time a peer test should take before being considered a failure, configured in milliseconds. In the event that the timeout is configured lower than the average successful test, the average successful test value will be used. [Default is 5000]"
+msgid "To determine peer latency, this setting allocates the maximum time a peer test should take before being considered a failure, configured in milliseconds. In the event that the timeout is configured lower than the average successful test, the average successful test value will be used. [Default is 10000 (10s)]"
 msgstr "For å bestemme jevnaldrendeforsinkelse, allokerer denne innstillingen maksimal tid en jevnaldrendetest bør ta før den anses som mislykket, konfigurert i millisekunder. I tilfelle tidsavbruddet er konfigurert lavere enn gjennomsnittlig vellykket test, vil gjennomsnittlig vellykket testverdi brukes. [Standard 5000"
 
-msgid "Minimum number of peers to retain in the fast tier during profile reorganization. A higher value ensures more peers are available for tunnel building, at the cost of potentially including slower peers. If more than 3000 routers are known, the default scales to <code>knownRouters / 15</code>. [Default is 400]"
+msgid "Minimum number of peers to retain in the fast tier during profile reorganization. A higher value ensures more peers are available for tunnel building, at the cost of potentially including slower peers. If more than 3000 routers are known, the default scales to <code>knownRouters / 15</code>. [Default is 1000]"
 msgstr "Minimum antall jevnaldrende å beholde i det raske nivået under profilomorganisering. En høyere verdi sikrer at flere jevnaldrende er tilgjengelige for tunnelbygging, på bekostning av potensielt å inkludere tregere jevnaldrende. Hvis mer enn 3000 rutere er kjent, skaleres standarden til <code>knownRouters / 15</code>. [Standard 400"
 
-msgid "Minimum number of peers to retain in the high-capacity tier. These are the peers with the highest measured throughput and greatest ability to relay traffic. If more than 3000 routers are known, the default scales to <code>knownRouters / 15</code>. [Default is 500]"
+msgid "Minimum number of peers to retain in the high-capacity tier. These are the peers with the highest measured throughput and greatest ability to relay traffic. If more than 3000 routers are known, the default scales to <code>knownRouters / 15</code>. [Default is 1000]"
 msgstr "Minimum antall jevnaldrende å beholde i høykapasitetsnivået. Dette er jevnaldrende med høyest målt gjennomstrømning og størst evne til å videresende trafikk. Hvis mer enn 3000 rutere er kjent, skaleres standarden til <code>knownRouters / 15</code>. [Standard 500"
 
 msgid "Maximum number of peer profiles to retain in memory. Older, inactive profiles are expired first when this limit is reached. Values below 100 are clamped to 100. [Default is 8000, or 800 on slow systems]"
 msgstr "Maksimalt antall jevnaldrendeprofiler å beholde i minnet. Eldre, inaktive profiler utløper først når denne grensen nås. Verdier under 100 begrenses til 100. [Standard 8000, eller 800 på trege systemer"
 
-msgid "Maximum age of a RouterInfo (in hours) for a peer to be considered selectable for tunnel building. Peers with RouterInfos older than this threshold are excluded from selection unless they have an active connection. This is particularly relevant for floodfill routers that do not actively explore the NetDB, as their RouterInfos may become stale without periodic refresh. [Default is 3]"
+msgid "Maximum age of a RouterInfo (in hours) for a peer to be considered selectable for tunnel building. Peers with RouterInfos older than this threshold are excluded from selection unless they have an active connection. This is particularly relevant for floodfill routers that do not actively explore the NetDB, as their RouterInfos may become stale without periodic refresh. [Default is 2]"
 msgstr "Maksimal alder for en RouterInfo (i timer) for at en likeperson skal anses som valgbar for tunnelbygging. Peers med RouterInfos eldre enn denne terskelen er ekskludert fra valg med mindre de har en aktiv tilkobling. Dette er spesielt relevant for flomnode-rutere som ikke aktivt utforsker NetDB, siden deres RouterInfos kan bli foreldet uten periodisk oppdatering. [Standard er 3]"
 
 msgid "This setting determines whether stats about our router are sporadically published to the NetDb. [Default is false]"
@@ -7661,13 +7661,13 @@ msgstr "Denne innstillingen avgjør om rutere som er klassifisert som uinteressa
 msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
 msgstr "Når satt til sann, vil denne innstillingen lempe på betingelsene som kreves for at ruteren din skal publisere tåkebegrensninger, spesifikt når det bestemmes at båndbreddebruken din er høy. Andre forhold, som høy jobbforsinkelse eller en ruter klassifisert som treg, vil fortsatt føre til at grenser publiseres. [Standard er usann"
 
-msgid "The period in milliseconds to check for idle tunnels. Tunnels with no traffic for this period may be dropped. [Default is 60000]"
+msgid "The period in milliseconds to check for idle tunnels. Tunnels with no traffic for this period may be dropped. [Default is 300000 (5 min)]"
 msgstr "Perioden i millisekunder for å sjekke for inaktive tunneler. Tunneler uten trafikk i denne perioden kan droppes. [Standard 60000"
 
-msgid "The minimum number of messages a tunnel must have processed in the detection period to be considered active. Tunnels below this threshold are candidates for removal. [Default is 3]"
+msgid "The minimum number of messages a tunnel must have processed in the detection period to be considered active. Tunnels below this threshold are candidates for removal. [Default is 1]"
 msgstr "Minimum antall meldinger en tunnel må ha behandlet i deteksjonsperioden for å anses som aktiv. Tunneler under denne terskelen er kandidater for fjerning. [Standard 3"
 
-msgid "The interval in milliseconds between scans for idle transit tunnels. [Default is 180000]"
+msgid "The interval in milliseconds between scans for idle transit tunnels. [Default is 60000 (1 min)]"
 msgstr "Intervallet i millisekunder mellom skanninger for inaktive transittunneler. [Standard 180000"
 
 msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
@@ -7709,7 +7709,7 @@ msgstr "Forsinkelsesterskelen i millisekunder for å fjerne trege tunneler fra <
 msgid "The minimum number of tunnels to keep in each pool when removing slow tunnels (minimum 2), overriding the configured tunnel quantity. Set to 0 to use the configured quantity per pool. [Default is 0]"
 msgstr "Minimum antall tunneler å beholde i hver pool når trege tunneler fjernes (minimum 2), som overstyrer den konfigurerte tunnelmengden. Sett til 0 for å bruke konfigurert mengde per pool. [Standard 0"
 
-msgid "The interval in milliseconds between runs of the Remove Slow Tunnels job. Higher values reduce tunnel churn but may keep slow tunnels longer. [Default is 90000 (90s), or 120000 (120s) if under load]"
+msgid "The interval in milliseconds between runs of the Remove Slow Tunnels job. Higher values reduce tunnel churn but may keep slow tunnels longer. [Default is 60000 (60s)]"
 msgstr "Intervallet i millisekunder mellom kjøringer av jobben Fjern trege tunneler. Høyere verdier reduserer tunnelomløp, men kan beholde trege tunneler lenger. [Standard 90000 (90s), eller 120000 (120s) under belastning"
 
 msgid "The time in milliseconds before expiration to mark tunnels for early expiry when the Remove Slow Tunnels job prunes slow or excess tunnels. Higher values allow more time for new tunnels to build. [Default is 30000]"
@@ -7898,7 +7898,7 @@ msgstr "Denne innstillingen, når den er aktivert, endrer den maksimale ekstra t
 msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are sent a RESET (the client may retry) rather than silently dropped, which keeps the client informed of the refusal. [Default is 256 (128 on slow systems)]"
 msgstr "Maksimalt antall ventende tilkoblinger (SYN-er og delvise pakker) i tjenerens akseptkø. Når køen er full, sendes nye SYN-er en RESET (klienten kan prøve igjen) i stedet for å bli forkastet i stillhet, noe som holder klienten informert om avvisningen. [Standard er 256 (128 på trege systemer)]"
 
-msgid "The maximum retransmission delay in milliseconds. Retransmit interval will not exceed this value regardless of backoff. Increase to allow longer between retries on congested paths. [Default is 30000 (30s)]"
+msgid "The maximum retransmission delay in milliseconds. Retransmit interval will not exceed this value regardless of backoff. Increase to allow longer between retries on congested paths. [Default is 20000 (20s)]"
 msgstr "Maksimal overføringsforsinkelse i millisekunder. Overføringsintervall vil ikke overstige denne verdien uavhengig av tilbakeslag. Øk for å tillate lengre tid mellom forsøk på overbelastede stier. [Standard 30000 (30s)"
 
 msgid "Maximum number of packet retransmissions before giving up on a connection. Higher values improve reliability on lossy links but delay failure detection. [Default is 32]"
@@ -7910,10 +7910,10 @@ msgstr "Maksimal overføringstidsavbrudd i millisekunder etter eksponentielt til
 msgid "Maximum round-trip time in milliseconds for streaming connections. Caps the computed RTT to prevent pathological timeout values after network disturbances. [Default is 10000 (10 seconds)]"
 msgstr "Maksimal tur-retur-tid i millisekunder for strømmetilkoblinger. Begrenser den beregnede RTT-en for å unngå patologiske tidsavbruddsverdier etter nettverksforstyrrelser. [Standard er 10000 (10 sekunder)]"
 
-msgid "Maximum slow start window size for streaming connections. Caps the congestion window during slow start to prevent overwhelming the network. [Default is 256 (32 on slow systems)]"
+msgid "Maximum slow start window size for streaming connections. Caps the congestion window during slow start to prevent overwhelming the network. [Default is 2048 (1024 on slow systems)]"
 msgstr "Maksimal størrelse på langsom start-vindu for strømmetilkoblinger. Begrenser overbelastningsvinduet under langsom start for å unngå å overbelaste nettverket. [Standard er 256 (32 på trege systemer)]"
 
-msgid "Maximum congestion window size (in packets) for streaming connections. Caps the maximum throughput of a single stream. [Default is 512 (384 on slow systems)]"
+msgid "Maximum congestion window size (in packets) for streaming connections. Caps the maximum throughput of a single stream. [Default is 2048 (1024 on slow systems)]"
 msgstr "Maksimal størrelse på overbelastningsvindu (i pakker) for strømmetilkoblinger. Begrenser maksimal gjennomstrømning for en enkelt strøm. [Standard er 512 (384 på trege systemer)]"
 
 msgid "The minimum retransmission delay in milliseconds. Packets will not be resent faster than this interval. Lower values allow faster recovery on lossy connections. [Default is 100ms]"
@@ -7940,7 +7940,7 @@ msgstr "Intervall i millisekunder mellom automatiske LeaseSet-utgivelser. Høyer
 msgid "Threshold in milliseconds for proactive LeaseSet republish. If a lease is expiring within this window, the LeaseSet is republished immediately rather than waiting for the next periodic cycle. [Default is 180000 (3 minutes)]"
 msgstr "Terskel i millisekunder for proaktiv LeaseSet-utgivelse. Hvis en leie utløper innenfor dette vinduet, utgis LeaseSet umiddelbart i stedet for å vente på neste periodiske syklus. [Standard 180000 (3 minutter)"
 
-msgid "The maximum number of simultaneous I2CP client sessions the router will accept. [Default is 1536 (768 on slow systems)]"
+msgid "The maximum number of simultaneous I2CP client sessions the router will accept. [Default is 16384 (4096 on slow systems), used as 2048 at most]"
 msgstr "Maksimalt antall samtidige I2CP-klientøkter som ruteren godtar. [Standard er 1536 (768 på trege systemer)]"
 
 msgid "When set to true, disables local-local loopback delivery and forces all traffic through tunnels (outbound tunnel → network → inbound tunnel → local destination). Useful for testing tunnel routing behavior when the source and destination are on the same router. [Disabled by default]"

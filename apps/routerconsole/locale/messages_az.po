@@ -7385,19 +7385,19 @@ msgstr "Yanlış kimi qoyulsa, ruter yavaş və ya çatışmaz olan daha qədim 
 msgid "Allocate number of processor threads for building tunnels. If your processor supports hyperthreading or simultaneous multithreading, you may multiply the number of processor cores by 2 to get the maximum number of threads to allocate, otherwise number of processor cores = maximum number of threads available. Note that you may wish to allocate less than the theoretical maximum to ensure you have headroom for other tasks."
 msgstr "Tunellərin tikilməsi üçün prosessor saplarının sayını ayırın. Prosessorunuz hiperthreading və ya eyni zamanda multithreading-i dəstəkləyirsə, ayırmaq üçün maksimum sayda iplik əldə etmək üçün prosessor nüvələrinin sayını 2-yə vura bilərsiniz, əks halda prosessor nüvələrinin sayı = maksimum sayda mövzu mövcuddur. Nəzərə alın ki, digər tapşırıqlar üçün baş otağınızın olmasını təmin etmək üçün nəzəri maksimumdan daha az ayırmaq istəyə bilərsiniz."
 
-msgid "This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 1000ms. [Restart required]"
+msgid "This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 50ms. [Restart required]"
 msgstr "Bu parametr (millisaniyə ərzində) bir paketin düşməzdən əvvəl CoDel növbəsində nə qədər qala biləcəyini müəyyən edir. Standart 1000 m-dir. [Yenidən başladın tələb olunur]"
 
-msgid "This setting determines the maximum number of messages in the outbound queue before it is marked as full. [Default is 768]"
+msgid "This setting determines the maximum number of messages in the outbound queue before it is marked as full. [Default is 1024, or 512 on slow systems]"
 msgstr "Bu parametr tam olaraq qeyd edilməzdən əvvəl giriş növbəsində maksimum mesaj sayını müəyyən edir. [Standart 768-dir]"
 
-msgid "This setting determines the maximum number of messages above the maximum queue value before further messages are dropped. [Default is 128]"
+msgid "This setting determines the maximum number of messages above the maximum queue value before further messages are dropped. [Default is 384, or 256 on slow systems]"
 msgstr "Bu parametr növbəti mesajlar düşməzdən əvvəl maksimum növbə dəyərindən yuxarı mesajların maksimum sayını müəyyən edir. [Standart 128]"
 
-msgid "This setting (in milliseconds) allows you to manually configure the queue delay target value for the CoDel queue management system. Default is 50ms. [Restart required]"
+msgid "This setting (in milliseconds) allows you to manually configure the queue delay target value for the CoDel queue management system. Default is 5ms. [Restart required]"
 msgstr "Bu parametr (millisaniyə ərzində) CoDel növbə idarəetmə sistemi üçün növbə gecikmə hədəfinin dəyərini əl ilə konfiqurasiya etməyə imkan verir. Standart 50 m-dir. [Yenidən başladın tələb olunur]"
 
-msgid "This setting, in milliseconds, overrides the default message processing time limit (indicated as <i>Message Delay</i> in the Congestion sidebar section) before the router is determined to be congested and transit tunnel requests are rejected. [Default is 750ms or 1500ms if the router is flagged as slow]"
+msgid "This setting, in milliseconds, overrides the default message processing time limit (indicated as <i>Message Delay</i> in the Congestion sidebar section) before the router is determined to be congested and transit tunnel requests are rejected. [Default is 2000ms, or 3000ms if the router is flagged as slow]"
 msgstr "Bu parametr, ruterin sıxışdırılması və tranzit tunel sorğuları rədd edilməzdən əvvəl standart mesaj emalı vaxtı limitini (Konqress yan çubuğu bölməsində <i>Mesaj</i> Gecikməsi kimi göstərilir) ləğv edir. [Router yavaş kimi işarələnibsə, standart 750 m və ya 1500 m-dir]"
 
 msgid "Periodically test tunnels to determine the average lag, and display the results in the Congestion sidepanel section. To enable, set this value to false. [Default is false]"
@@ -7412,28 +7412,28 @@ msgstr "Yanlış kimi qoyulsa, ruter digər ruterlərdən tonnel qurma tələbl�
 msgid "This setting determines which <a href=/profiles#profile_defs>peer capabilities</a> will not be used to build your router's tunnels. e.g. <code>router.excludePeerCaps=LMN</code>"
 msgstr "Bu parametr marşrutlaşdırıcınızın tunellərinin qurulması üçün istifadə olunmayacaq <a href=/profiles#profile_defs>həmyaşıd qabiliyyətlərini</a> müəyyən edir. Məsələn: <code>router.excludePeerCaps=LMN</code>. router excludePeerCaps=LMN. router excludePeerCaps=LMN. marşrutlaşdırıcı excludePeerCaps=LMN"
 
-msgid "When set to false, unreachable peers may be selected as hops for inbound exploratory tunnels. [Default is true]"
+msgid "When set to false, unreachable peers may be selected as hops for inbound exploratory tunnels. [Default is false]"
 msgstr "Yanlış olaraq təyin edildikdə, əlçatmaz həmyaşıdlar daxili kəşfiyyat tunelləri üçün hop olaraq seçilə bilər. [Standart doğrudur]"
 
-msgid "When set to false, unreachable peers may be selected as hops for outbound exploratory tunnels. [Default is true]"
+msgid "When set to false, unreachable peers may be selected as hops for outbound exploratory tunnels. [Default is false]"
 msgstr "Yanlış olaraq təyin edildikdə, əlçatmaz həmyaşıdlar xarici kəşfiyyat tunelləri üçün hop olaraq seçilə bilər. [Standart doğrudur]"
 
-msgid "When set to false, unreachable peers may be selected as hops for inbound client tunnels. [Default is true]"
+msgid "When set to false, unreachable peers may be selected as hops for inbound client tunnels. [Default is false]"
 msgstr "Yanlış olaraq təyin edildikdə, əlçatmaz həmyaşıdlar daxili müştəri tunelləri üçün hop olaraq seçilə bilər. [Standart doğrudur]"
 
-msgid "When set to false, unreachable peers may be selected as hops for outbound client tunnels. [Default is true]"
+msgid "When set to false, unreachable peers may be selected as hops for outbound client tunnels. [Default is false]"
 msgstr "Yanlış olaraq təyin edildikdə, əlçatmaz həmyaşıdlar xarici müştəri tunelləri üçün hop olaraq seçilə bilər. [Standart doğrudur]"
 
-msgid "When set to false, slow peers (high tunnel test times) may be selected as hops for inbound exploratory tunnels. [Default is true]"
+msgid "When set to false, slow peers (high tunnel test times) may be selected as hops for inbound exploratory tunnels. [Default is false]"
 msgstr "Yanlış olaraq təyin edildikdə, yavaş həmyaşıdlar (yüksək tunnel test vaxtları) daxili kəşfiyyat tunelləri üçün hop olaraq seçilə bilər. [Standart doğrudur]"
 
-msgid "When set to false, slow peers may be selected as hops for outbound exploratory tunnels. [Default is true]"
+msgid "When set to false, slow peers may be selected as hops for outbound exploratory tunnels. [Default is false]"
 msgstr "Yanlış olaraq təyin edildikdə, yavaş həmyaşıdlar xarici kəşfiyyat tunelləri üçün hop olaraq seçilə bilər. [Standart doğrudur]"
 
-msgid "When set to false, slow peers may be selected as hops for inbound client tunnels. [Default is true]"
+msgid "When set to false, slow peers may be selected as hops for inbound client tunnels. [Default is false]"
 msgstr "Yanlış olaraq təyin edildikdə, yavaş həmyaşıdlar daxili müştəri tunelləri üçün hop olaraq seçilə bilər. [Standart doğrudur]"
 
-msgid "When set to false, slow peers may be selected as hops for outbound client tunnels. [Default is true]"
+msgid "When set to false, slow peers may be selected as hops for outbound client tunnels. [Default is false]"
 msgstr "Yanlış olaraq təyin edildikdə, yavaş həmyaşıdlar xarici müştəri tunelləri üçün hop olaraq seçilə bilər. [Standart doğrudur]"
 
 msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"
@@ -7469,25 +7469,25 @@ msgstr "Paralel <a href=/jobs>iş çalışdıranların</a> minimum sayını mü�
 msgid "Enable dynamic scaling of job runners based on queue load. When enabled, the router automatically scales the number of job runner threads up or down based on ready job count and lag. [Default is true]"
 msgstr "Növbə yükünə əsasən iş çalışdıranların dinamik miqyaslanmasını aktivləşdirin. Aktiv olduqda, router avtomatik olaraq iş çalışdıranların sayını tənzimləyir. [Standart doğrudur]"
 
-msgid "The job queue lag threshold in milliseconds that triggers scaling up job runners. When max lag exceeds this value, additional runners are started. [Default is 1]"
+msgid "The job queue lag threshold in milliseconds that triggers scaling up job runners. When max lag exceeds this value, additional runners are started. [Default is 10]"
 msgstr "Miqyaslamanı artırmağa səbəb olan iş növbəsi gecikmə həddi millisaniyələrlə. Maks. gecikmə bu dəyəri keçdikdə, əlavə iş çalışdıranlar əlavə edilir. [Standart 5000]"
 
-msgid "The job queue lag threshold in milliseconds that allows scaling down job runners. When max lag stays below this value, excess runners are stopped. [Default is 1]"
+msgid "The job queue lag threshold in milliseconds that allows scaling down job runners. When max lag stays below this value, excess runners are stopped. [Default is 5]"
 msgstr "Miqyaslamanı azaltmağa imkan verən iş növbəsi gecikmə həddi millisaniyələrlə. Maks. gecikmə bu dəyərdən aşağı qaldıqda, əlavə iş çalışdıranlar dayandırılır. [Standart 100]"
 
 msgid "The ratio of ready jobs to active runners that triggers scaling up. If readyJobs > activeRunners * ratio, additional runners are started. [Default is 1.2]"
 msgstr "Hazır işlərin aktiv çalışdıranlara nisbəti miqyaslamanı artırmağa səbəb olur. Hazırİşlər > AktivÇalışdıranlar * nisbət olduqda, əlavə çalışdıranlar əlavə edilir. [Standart 0.7]"
 
-msgid "The interval in milliseconds between job runner scaling checks. [Default is 1000]"
+msgid "The interval in milliseconds between job runner scaling checks. [Default is 2000 (2s)]"
 msgstr "İş çalışdıran miqyaslama yoxlamaları arasında interval millisaniyələrlə. [Standart 1000]"
 
-msgid "The cooldown period in milliseconds between scale operations. [Default is 5000]"
+msgid "The cooldown period in milliseconds between scale operations. [Default is 10000 (10s)]"
 msgstr "Miqlaslama əməliyyatları arasında soyutma dövrü millisaniyələrlə. [Standart 5000]"
 
 msgid "Enable the feedback mechanism that automatically rolls back ineffective scale-up operations. If lag increases after adding runners, they will be removed. [Default is true]"
 msgstr "Səmərəsiz artırma miqyaslamalarını avtomatik geri qaytaran rəy mexanizmini aktivləşdirin. Çalışdıranlar əlavə edildikdən sonra gecikmə artarsa, əlavə edilmiş çalışdıranlar silinir. [Standart doğrudur]"
 
-msgid "The maximum number of waiting jobs in the queue before aggressive job dropping is triggered. When exceeded, non-critical jobs are dropped to reduce queue pressure. [Default is 48]"
+msgid "The maximum number of waiting jobs in the queue before aggressive job dropping is triggered. When exceeded, non-critical jobs are dropped to reduce queue pressure. [Default is 48, or 24 on slow systems]"
 msgstr "Aqressiv iş silinməsi işə salınmazdan əvvəl növbədə gözləyən maksimum iş sayı. Aşıldıqda, qeyri-kritik işlər ləğv edilir. [Standart 256]"
 
 msgid "Maximum number of pending tunnel build jobs in the BuildHandler queue. When the queue exceeds this limit, new build requests are rejected to prevent job queue overload. [Default is 256]"
@@ -7535,22 +7535,22 @@ msgstr "Ruter Java BigInteger kitabxanasının yerli olmayan, proqram təminatı
 msgid "This setting determines the number of peer tests to run concurrently, used to determine peer latency. When tunnel build success drops below 50%, concurrency is halved to avoid adding load during a failure cascade. [Default varies: 1 on slow systems, 2 on single/dual-core, 4 otherwise]"
 msgstr "Bu parametr həmyaşıd gecikməsini təyin etmək üçün istifadə olunan paralel işləyən həmyaşıd testlərinin sayını müəyyən edir. Tunnel qurma testləri işə salındıqda, bu qədər test paralel işləyir. [Standart 10]"
 
-msgid "This setting determines the delay between peer test jobs, configured in milliseconds. [Default is 30000 (30s), or 45000 (45s) on slow systems]"
+msgid "This setting determines the delay between peer test jobs, configured in milliseconds. [Default is 300000 (5 min)]"
 msgstr "Bu parametr həmyaşıd test işləri arasında gecikməni millisaniyələrlə müəyyən edir. [Standart 30000 (30s) və ya 45000"
 
-msgid "To determine peer latency, this setting allocates the maximum time a peer test should take before being considered a failure, configured in milliseconds. In the event that the timeout is configured lower than the average successful test, the average successful test value will be used. [Default is 5000]"
+msgid "To determine peer latency, this setting allocates the maximum time a peer test should take before being considered a failure, configured in milliseconds. In the event that the timeout is configured lower than the average successful test, the average successful test value will be used. [Default is 10000 (10s)]"
 msgstr "Həmyaşıd gecikməsini təyin etmək üçün bu parametr həmyaşıd testinin uğursuz sayılmazdan əvvəl çəkə biləcəyi maksimum vaxtı ayırır. [Standart 60000 (1 dəqiqə)]. [Standart 5000]. [Standart 5000]. [Defolt 5000-dir]"
 
-msgid "Minimum number of peers to retain in the fast tier during profile reorganization. A higher value ensures more peers are available for tunnel building, at the cost of potentially including slower peers. If more than 3000 routers are known, the default scales to <code>knownRouters / 15</code>. [Default is 400]"
+msgid "Minimum number of peers to retain in the fast tier during profile reorganization. A higher value ensures more peers are available for tunnel building, at the cost of potentially including slower peers. If more than 3000 routers are known, the default scales to <code>knownRouters / 15</code>. [Default is 1000]"
 msgstr "Profil yenidən təşkili zamanı sürətli səviyyədə saxlanılacaq minimum həmyaşıd sayı. Daha yüksək dəyər tunnel qurmaq üçün daha çox həmyaşıdın mövcud olmasını təmin edir. [Standart 50]. [Standart 400]. [Standart 400]. [Defolt 400-dür]"
 
-msgid "Minimum number of peers to retain in the high-capacity tier. These are the peers with the highest measured throughput and greatest ability to relay traffic. If more than 3000 routers are known, the default scales to <code>knownRouters / 15</code>. [Default is 500]"
+msgid "Minimum number of peers to retain in the high-capacity tier. These are the peers with the highest measured throughput and greatest ability to relay traffic. If more than 3000 routers are known, the default scales to <code>knownRouters / 15</code>. [Default is 1000]"
 msgstr "Yüksək tutum səviyyəsində saxlanılacaq minimum həmyaşıd sayı. Bunlar ən yüksək ölçülmüş ötürmə qabiliyyəti və bant genişliyinə malik həmyaşıdlardır. [Standart 20]. [Standart 500]. [Standart 500]. [Defolt 500-dür]"
 
 msgid "Maximum number of peer profiles to retain in memory. Older, inactive profiles are expired first when this limit is reached. Values below 100 are clamped to 100. [Default is 8000, or 800 on slow systems]"
 msgstr "Yaddaşda saxlanılacaq maksimum həmyaşıd profil sayı. Bu həddə çatıldıqda, daha köhnə, aktiv olmayan profillər əvvəlcə silinir. [Standart 10000]. [Standart 8000, or 800 on slow systems]. [Standart 8000, or 800 on slow systems]. [Defolt olaraq 8000 və ya yavaş sistemlərdə 800-dür]"
 
-msgid "Maximum age of a RouterInfo (in hours) for a peer to be considered selectable for tunnel building. Peers with RouterInfos older than this threshold are excluded from selection unless they have an active connection. This is particularly relevant for floodfill routers that do not actively explore the NetDB, as their RouterInfos may become stale without periodic refresh. [Default is 3]"
+msgid "Maximum age of a RouterInfo (in hours) for a peer to be considered selectable for tunnel building. Peers with RouterInfos older than this threshold are excluded from selection unless they have an active connection. This is particularly relevant for floodfill routers that do not actively explore the NetDB, as their RouterInfos may become stale without periodic refresh. [Default is 2]"
 msgstr "Tunel tikintisi üçün seçilə bilən həmyaşıd üçün RouterInfo-nun maksimal yaşı (saatlarla). Bu həddən köhnə RouterInfos-lu həmyaşıdlar aktiv əlaqəyə malik olmadıqda seçimdən kənarlaşdırılır. Bu, xüsusilə NetDB-ni aktiv şəkildə tədqiq etməyən daşqın node marşrutlaşdırıcıları üçün aktualdır, çünki onların RouterInfos-u vaxtaşırı təzələnmədən köhnələ bilər. [Defolt 3-dür]"
 
 msgid "This setting determines whether stats about our router are sporadically published to the NetDb. [Default is false]"
@@ -7586,13 +7586,13 @@ msgstr "Bu parametr maraqsız olaraq təsnif edilən marşrutlaşdırıcıların
 msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
 msgstr "Doğru olaraq ayarlandıqda, bu parametr marşrutlaşdırıcınızın sıxlıq hədlərini dərc etməsi üçün tələb olunan şərtləri yumşaldır, xüsusən də bant genişliyi istifadənizin yüksək olduğu müəyyən edildikdə. Yüksək iş gecikməsi və ya yavaş kimi təsnif edilən marşrutlaşdırıcı kimi digər şərtlər hələ də başlıqların dərc edilməsinə səbəb olacaq. [Defolt yanlışdır]"
 
-msgid "The period in milliseconds to check for idle tunnels. Tunnels with no traffic for this period may be dropped. [Default is 60000]"
+msgid "The period in milliseconds to check for idle tunnels. Tunnels with no traffic for this period may be dropped. [Default is 300000 (5 min)]"
 msgstr "Boş tunelləri yoxlamaq üçün dövr millisaniyələrlə. Bu müddət ərzində heç bir trafiki olmayan tunellər silinə bilər. [Standart 10000]"
 
-msgid "The minimum number of messages a tunnel must have processed in the detection period to be considered active. Tunnels below this threshold are candidates for removal. [Default is 3]"
+msgid "The minimum number of messages a tunnel must have processed in the detection period to be considered active. Tunnels below this threshold are candidates for removal. [Default is 1]"
 msgstr "Aktiv sayılmaq üçün aşkarlama dövründə tunnelin emal etməli olduğu minimum mesaj sayı. Bundan az olan tunellər boş sayılır. [Standart 1]"
 
-msgid "The interval in milliseconds between scans for idle transit tunnels. [Default is 180000]"
+msgid "The interval in milliseconds between scans for idle transit tunnels. [Default is 60000 (1 min)]"
 msgstr "Boş tranzit tunellərinin skan edilmələri arasında interval millisaniyələrlə. [Standart 180000]"
 
 msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
@@ -7634,7 +7634,7 @@ msgstr "Yavaş tunelləri <a href=/tunnels>yerli tunnel hovuzlarından</a> çıx
 msgid "The minimum number of tunnels to keep in each pool when removing slow tunnels (minimum 2), overriding the configured tunnel quantity. Set to 0 to use the configured quantity per pool. [Default is 0]"
 msgstr "Yavaş tunelləri çıxararkən hər hovuzda saxlanılacaq minimum tunnel sayı (minimum 2), konfiqurasiya edilmiş tunnel sayını ləğv edir. [Standart 4]. [Standart 0]. [Standart 0]. [Defolt 0-dır]"
 
-msgid "The interval in milliseconds between runs of the Remove Slow Tunnels job. Higher values reduce tunnel churn but may keep slow tunnels longer. [Default is 90000 (90s), or 120000 (120s) if under load]"
+msgid "The interval in milliseconds between runs of the Remove Slow Tunnels job. Higher values reduce tunnel churn but may keep slow tunnels longer. [Default is 60000 (60s)]"
 msgstr "Yavaş Tunelləri Sil işinin işə salınmaları arasında interval millisaniyələrlə. Daha yüksək dəyərlər tunnel dəyişməsini azaldır, lakin yavaş tunelləri daha uzun saxlaya bilər. [Standart 30000]"
 
 msgid "The time in milliseconds before expiration to mark tunnels for early expiry when the Remove Slow Tunnels job prunes slow or excess tunnels. Higher values allow more time for new tunnels to build. [Default is 30000]"
@@ -7823,7 +7823,7 @@ msgstr "Bu parametr aktiv edildikdə, i2p.streaming.enablePongDelay də aktivdir
 msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are sent a RESET (the client may retry) rather than silently dropped, which keeps the client informed of the refusal. [Default is 256 (128 on slow systems)]"
 msgstr "Server qəbul növbəsində gözləyən qoşulmaların (SYN-lər və qismən paketlər) maksimum sayı. Növbə dolduqda yeni SYN-lərə səssizcə atılmak əvəzinə RESET göndərilir (müştəri təkrar cəhd edə bilər), bu da müştərini rəddetmə barədə məlumatlandırır. [Standart 256 (yavaş sistemlərdə 128)]"
 
-msgid "The maximum retransmission delay in milliseconds. Retransmit interval will not exceed this value regardless of backoff. Increase to allow longer between retries on congested paths. [Default is 30000 (30s)]"
+msgid "The maximum retransmission delay in milliseconds. Retransmit interval will not exceed this value regardless of backoff. Increase to allow longer between retries on congested paths. [Default is 20000 (20s)]"
 msgstr "Maksimum yenidən göndərmə gecikməsi millisaniyələrlə. Geri çəkilmədən asılı olmayaraq yenidən göndərmə intervalı bu dəyəri keçməyəcək. [Standart 60000]. [Standart 30000 (30s)]. [Standart 30000 (30s)]. [Defolt 30000 (30s)]"
 
 msgid "Maximum number of packet retransmissions before giving up on a connection. Higher values improve reliability on lossy links but delay failure detection. [Default is 32]"
@@ -7835,10 +7835,10 @@ msgstr "Eksponensial geri çəkilmədən sonra maksimum Yenidən Göndərmə Vax
 msgid "Maximum round-trip time in milliseconds for streaming connections. Caps the computed RTT to prevent pathological timeout values after network disturbances. [Default is 10000 (10 seconds)]"
 msgstr "Axın qoşulmaları üçün millisaniyələrlə maksimum gediş-gəliş vaxtı. şəbəkə pozulmalarından sonra patoloji vaxt aşımı dəyərlərinin qarşısını alaraq hesablanmış RTT-ni məhdudlaşdırır. [Standart 10000 (10 saniyə)]"
 
-msgid "Maximum slow start window size for streaming connections. Caps the congestion window during slow start to prevent overwhelming the network. [Default is 256 (32 on slow systems)]"
+msgid "Maximum slow start window size for streaming connections. Caps the congestion window during slow start to prevent overwhelming the network. [Default is 2048 (1024 on slow systems)]"
 msgstr "Axın qoşulmaları üçün maksimum yavaş başlanğıc pəncərə ölçüsü. şəbəkənin yüklənməsinin qarşısını almaq üçün yavaş başlanğıc zamanı tıxac pəncərəsini məhdudlaşdırır. [Standart 256 (yavaş sistemlərdə 32)]"
 
-msgid "Maximum congestion window size (in packets) for streaming connections. Caps the maximum throughput of a single stream. [Default is 512 (384 on slow systems)]"
+msgid "Maximum congestion window size (in packets) for streaming connections. Caps the maximum throughput of a single stream. [Default is 2048 (1024 on slow systems)]"
 msgstr "Axın qoşulmaları üçün maksimum tıxac pəncərəsi ölçüsü (paketlərdə). Tək bir axının maksimum ötürülmə sürətini məhdudlaşdırır. [Standart 512 (yavaş sistemlərdə 384)]"
 
 msgid "The minimum retransmission delay in milliseconds. Packets will not be resent faster than this interval. Lower values allow faster recovery on lossy connections. [Default is 100ms]"
@@ -7865,7 +7865,7 @@ msgstr "Avtomatik LeaseSet yenidən dərc edilmələri arasında interval millis
 msgid "Threshold in milliseconds for proactive LeaseSet republish. If a lease is expiring within this window, the LeaseSet is republished immediately rather than waiting for the next periodic cycle. [Default is 180000 (3 minutes)]"
 msgstr "Proaktiv LeaseSet yenidən dərci üçün hədd millisaniyələrlə. Bir icarə bu pəncərə ərzində bitərsə, LeaseSet vaxtından əvvəl yenidən dərc edilir. [Standart 60000]"
 
-msgid "The maximum number of simultaneous I2CP client sessions the router will accept. [Default is 1536 (768 on slow systems)]"
+msgid "The maximum number of simultaneous I2CP client sessions the router will accept. [Default is 16384 (4096 on slow systems), used as 2048 at most]"
 msgstr "Routerin qəbul edəcəyi eyni vaxtlı I2CP müştəri sessiyalarının maksimum sayı. [Standart 1536 (yavaş sistemlərdə 768)]"
 
 msgid "When set to true, disables local-local loopback delivery and forces all traffic through tunnels (outbound tunnel → network → inbound tunnel → local destination). Useful for testing tunnel routing behavior when the source and destination are on the same router. [Disabled by default]"

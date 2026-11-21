@@ -7374,19 +7374,19 @@ msgstr "Khi đặt thành false, máy chủ sẽ không chặn yêu cầu xây d
 msgid "Allocate number of processor threads for building tunnels. If your processor supports hyperthreading or simultaneous multithreading, you may multiply the number of processor cores by 2 to get the maximum number of threads to allocate, otherwise number of processor cores = maximum number of threads available. Note that you may wish to allocate less than the theoretical maximum to ensure you have headroom for other tasks."
 msgstr "Phân bổ số luồng xử lý cho xây dựng các đường hầm. Nếu bộ xử lý của bạn hỗ trợ hyperthreading hoặc song song đa luồng đồng thời, bạn có thể nhân số lõi bộ xử lý lên 2 để lấy số luồng tối đa có thể phân bổ, nếu không thì số lõi bộ xử lý bằng với số luồng tối đa khả dụng. Lưu ý rằng bạn có thể muốn phân bổ ít hơn mức tối đa lý thuyết để đảm bảo dành sẵn headroom cho các tác vụ khác."
 
-msgid "This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 1000ms. [Restart required]"
+msgid "This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 50ms. [Restart required]"
 msgstr "Cài đặt này (tính bằng mili giây) xác định thời gian một gói có thể ở trong hàng đợi codel trước khi nó bị loại bỏ. Mặc định là 1000ms. [Khởi động lại yêu cầu]"
 
-msgid "This setting determines the maximum number of messages in the outbound queue before it is marked as full. [Default is 768]"
+msgid "This setting determines the maximum number of messages in the outbound queue before it is marked as full. [Default is 1024, or 512 on slow systems]"
 msgstr "Cài đặt này xác định số lượng tin nhắn tối đa trong hàng đợi bên ngoài trước khi nó được đánh dấu là đầy đủ. [Mặc định là 768]"
 
-msgid "This setting determines the maximum number of messages above the maximum queue value before further messages are dropped. [Default is 128]"
+msgid "This setting determines the maximum number of messages above the maximum queue value before further messages are dropped. [Default is 384, or 256 on slow systems]"
 msgstr "Cài đặt này xác định số lượng tin nhắn tối đa trên giá trị hàng đợi tối đa trước khi bỏ các tin nhắn tiếp theo. [Mặc định là 128]"
 
-msgid "This setting (in milliseconds) allows you to manually configure the queue delay target value for the CoDel queue management system. Default is 50ms. [Restart required]"
+msgid "This setting (in milliseconds) allows you to manually configure the queue delay target value for the CoDel queue management system. Default is 5ms. [Restart required]"
 msgstr "Cài đặt này (tính bằng mili giây) cho phép bạn định cấu hình thủ công giá trị mục tiêu của hàng đợi cho hệ thống quản lý hàng đợi codel. Mặc định là 50ms. [Khởi động lại yêu cầu]"
 
-msgid "This setting, in milliseconds, overrides the default message processing time limit (indicated as <i>Message Delay</i> in the Congestion sidebar section) before the router is determined to be congested and transit tunnel requests are rejected. [Default is 750ms or 1500ms if the router is flagged as slow]"
+msgid "This setting, in milliseconds, overrides the default message processing time limit (indicated as <i>Message Delay</i> in the Congestion sidebar section) before the router is determined to be congested and transit tunnel requests are rejected. [Default is 2000ms, or 3000ms if the router is flagged as slow]"
 msgstr "Cài đặt này, tính bằng miligiây, ghi đè giới hạn thời gian xử lý thông điệp mặc định (được hiển thị là <i>Trễ Thông Điệp</i> trong mục phần phụ Congestion) trước khi bộ định tuyến được xác định là quá tải và các yêu cầu đường hầm quá cảnh bị từ chối. [Mặc định là 750ms hoặc 1500ms nếu bộ định tuyến bị gắn nhãn là chậm chạp]"
 
 msgid "Periodically test tunnels to determine the average lag, and display the results in the Congestion sidepanel section. To enable, set this value to false. [Default is false]"
@@ -7401,28 +7401,28 @@ msgstr "Khi đặt thành false, máy chủ sẽ không giới hạn yêu cầu 
 msgid "This setting determines which <a href=/profiles#profile_defs>peer capabilities</a> will not be used to build your router's tunnels. e.g. <code>router.excludePeerCaps=LMN</code>"
 msgstr "Cài đặt này xác định các <a href=/profiles#profile_defs>khả năng ngang hàng</a> nào sẽ không được sử dụng để xây dựng các đường hầm trên bộ định tuyến của bạn. Ví dụ: <code>router.excludePeerCaps=LMN</code>"
 
-msgid "When set to false, unreachable peers may be selected as hops for inbound exploratory tunnels. [Default is true]"
+msgid "When set to false, unreachable peers may be selected as hops for inbound exploratory tunnels. [Default is false]"
 msgstr "Khi được đặt thành false, các peer không thể truy cập có thể được chọn làm bước nhảy cho các đường hầm thăm dò đầu vào. [Mặc định true]"
 
-msgid "When set to false, unreachable peers may be selected as hops for outbound exploratory tunnels. [Default is true]"
+msgid "When set to false, unreachable peers may be selected as hops for outbound exploratory tunnels. [Default is false]"
 msgstr "Khi được đặt thành false, các peer không thể truy cập có thể được chọn làm bước nhảy cho các đường hầm thăm dò đầu ra. [Mặc định true]"
 
-msgid "When set to false, unreachable peers may be selected as hops for inbound client tunnels. [Default is true]"
+msgid "When set to false, unreachable peers may be selected as hops for inbound client tunnels. [Default is false]"
 msgstr "Khi được đặt thành false, các peer không thể truy cập có thể được chọn làm bước nhảy cho các đường hầm khách đầu vào. [Mặc định true]"
 
-msgid "When set to false, unreachable peers may be selected as hops for outbound client tunnels. [Default is true]"
+msgid "When set to false, unreachable peers may be selected as hops for outbound client tunnels. [Default is false]"
 msgstr "Khi được đặt thành false, các peer không thể truy cập có thể được chọn làm bước nhảy cho các đường hầm khách đầu ra. [Mặc định true]"
 
-msgid "When set to false, slow peers (high tunnel test times) may be selected as hops for inbound exploratory tunnels. [Default is true]"
+msgid "When set to false, slow peers (high tunnel test times) may be selected as hops for inbound exploratory tunnels. [Default is false]"
 msgstr "Khi được đặt thành false, các peer chậm (thời gian kiểm tra đường hầm cao) có thể được chọn làm bước nhảy cho các đường hầm thăm dò đầu vào. [Mặc định true]"
 
-msgid "When set to false, slow peers may be selected as hops for outbound exploratory tunnels. [Default is true]"
+msgid "When set to false, slow peers may be selected as hops for outbound exploratory tunnels. [Default is false]"
 msgstr "Khi được đặt thành false, các peer chậm có thể được chọn làm bước nhảy cho các đường hầm thăm dò đầu ra. [Mặc định true]"
 
-msgid "When set to false, slow peers may be selected as hops for inbound client tunnels. [Default is true]"
+msgid "When set to false, slow peers may be selected as hops for inbound client tunnels. [Default is false]"
 msgstr "Khi được đặt thành false, các peer chậm có thể được chọn làm bước nhảy cho các đường hầm khách đầu vào. [Mặc định true]"
 
-msgid "When set to false, slow peers may be selected as hops for outbound client tunnels. [Default is true]"
+msgid "When set to false, slow peers may be selected as hops for outbound client tunnels. [Default is false]"
 msgstr "Khi được đặt thành false, các peer chậm có thể được chọn làm bước nhảy cho các đường hầm khách đầu ra. [Mặc định true]"
 
 msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"
@@ -7458,25 +7458,25 @@ msgstr "Xác định số lượng tối thiểu <a href=/jobs>trình chạy cô
 msgid "Enable dynamic scaling of job runners based on queue load. When enabled, the router automatically scales the number of job runner threads up or down based on ready job count and lag. [Default is true]"
 msgstr "Bật tính năng mở rộng quy mô động của trình chạy công việc dựa trên tải hàng đợi. Khi được bật, bộ định tuyến tự động tăng hoặc giảm số lượng luồng trình chạy dựa trên số lượng công việc sẵn sàng và độ trễ. [Mặc định true]"
 
-msgid "The job queue lag threshold in milliseconds that triggers scaling up job runners. When max lag exceeds this value, additional runners are started. [Default is 1]"
+msgid "The job queue lag threshold in milliseconds that triggers scaling up job runners. When max lag exceeds this value, additional runners are started. [Default is 10]"
 msgstr "Ngưỡng độ trễ hàng đợi tính bằng mili giây kích hoạt việc mở rộng trình chạy công việc. Khi độ trễ tối đa vượt quá giá trị này, các trình chạy bổ sung được khởi động. [Mặc định 1]"
 
-msgid "The job queue lag threshold in milliseconds that allows scaling down job runners. When max lag stays below this value, excess runners are stopped. [Default is 1]"
+msgid "The job queue lag threshold in milliseconds that allows scaling down job runners. When max lag stays below this value, excess runners are stopped. [Default is 5]"
 msgstr "Ngưỡng độ trễ hàng đợi tính bằng mili giây cho phép thu hẹp trình chạy công việc. Khi độ trễ tối đa duy trì dưới giá trị này, các trình chạy dư thừa sẽ bị dừng. [Mặc định 1]"
 
 msgid "The ratio of ready jobs to active runners that triggers scaling up. If readyJobs > activeRunners * ratio, additional runners are started. [Default is 1.2]"
 msgstr "Tỷ lệ công việc sẵn sàng trên trình chạy đang hoạt động kích hoạt việc mở rộng. Nếu readyJobs > activeRunners * ratio, các trình chạy bổ sung được khởi động. [Mặc định 1.2]"
 
-msgid "The interval in milliseconds between job runner scaling checks. [Default is 1000]"
+msgid "The interval in milliseconds between job runner scaling checks. [Default is 2000 (2s)]"
 msgstr "Khoảng thời gian tính bằng mili giây giữa các lần kiểm tra mở rộng quy mô trình chạy công việc. [Mặc định 1000]"
 
-msgid "The cooldown period in milliseconds between scale operations. [Default is 5000]"
+msgid "The cooldown period in milliseconds between scale operations. [Default is 10000 (10s)]"
 msgstr "Thời gian chờ giữa các thao tác mở rộng quy mô tính bằng mili giây. [Mặc định 5000]"
 
 msgid "Enable the feedback mechanism that automatically rolls back ineffective scale-up operations. If lag increases after adding runners, they will be removed. [Default is true]"
 msgstr "Bật cơ chế phản hồi tự động hoàn tác các thao tác mở rộng quy mô không hiệu quả. Nếu độ trễ tăng sau khi thêm trình chạy, chúng sẽ bị loại bỏ. [Mặc định true]"
 
-msgid "The maximum number of waiting jobs in the queue before aggressive job dropping is triggered. When exceeded, non-critical jobs are dropped to reduce queue pressure. [Default is 48]"
+msgid "The maximum number of waiting jobs in the queue before aggressive job dropping is triggered. When exceeded, non-critical jobs are dropped to reduce queue pressure. [Default is 48, or 24 on slow systems]"
 msgstr "Số lượng công việc chờ tối đa trong hàng đợi trước khi kích hoạt tính năng loại bỏ công việc mạnh mẽ. Khi vượt quá, các công việc không quan trọng sẽ bị loại bỏ để giảm áp lực hàng đợi. [Mặc định 48]"
 
 msgid "Maximum number of pending tunnel build jobs in the BuildHandler queue. When the queue exceeds this limit, new build requests are rejected to prevent job queue overload. [Default is 256]"
@@ -7524,22 +7524,22 @@ msgstr "Bộ định tuyến chạy phiên bản thư viện Java BigInteger kh�
 msgid "This setting determines the number of peer tests to run concurrently, used to determine peer latency. When tunnel build success drops below 50%, concurrency is halved to avoid adding load during a failure cascade. [Default varies: 1 on slow systems, 2 on single/dual-core, 4 otherwise]"
 msgstr "Cài đặt này xác định số lượng bài kiểm tra peer chạy đồng thời, được sử dụng để xác định độ trễ peer. Khi tỷ lệ thành công xây dựng đường hầm giảm xuống dưới 50%, mức đồng thời bị giảm một nửa để tránh thêm tải trong thời gian thác lỗi. [Mặc định thay đổi: 1 trên hệ thống chậm, 2 trên đơn/đa lõi, 4 nếu không]"
 
-msgid "This setting determines the delay between peer test jobs, configured in milliseconds. [Default is 30000 (30s), or 45000 (45s) on slow systems]"
+msgid "This setting determines the delay between peer test jobs, configured in milliseconds. [Default is 300000 (5 min)]"
 msgstr "Cài đặt này xác định độ trễ giữa các công việc kiểm tra peer, được cấu hình bằng mili giây. [Mặc định 30000 (30gi), hoặc 45000 (45gi) trên hệ thống chậm]"
 
-msgid "To determine peer latency, this setting allocates the maximum time a peer test should take before being considered a failure, configured in milliseconds. In the event that the timeout is configured lower than the average successful test, the average successful test value will be used. [Default is 5000]"
+msgid "To determine peer latency, this setting allocates the maximum time a peer test should take before being considered a failure, configured in milliseconds. In the event that the timeout is configured lower than the average successful test, the average successful test value will be used. [Default is 10000 (10s)]"
 msgstr "Để xác định độ trễ peer, cài đặt này phân bổ thời gian tối đa mà bài kiểm tra peer nên thực hiện trước khi được coi là thất bại, được cấu hình bằng mili giây. Trong trường hợp thời gian chờ được cấu hình thấp hơn giá trị kiểm tra thành công trung bình, giá trị kiểm tra thành công trung bình sẽ được sử dụng. [Mặc định 5000]"
 
-msgid "Minimum number of peers to retain in the fast tier during profile reorganization. A higher value ensures more peers are available for tunnel building, at the cost of potentially including slower peers. If more than 3000 routers are known, the default scales to <code>knownRouters / 15</code>. [Default is 400]"
+msgid "Minimum number of peers to retain in the fast tier during profile reorganization. A higher value ensures more peers are available for tunnel building, at the cost of potentially including slower peers. If more than 3000 routers are known, the default scales to <code>knownRouters / 15</code>. [Default is 1000]"
 msgstr "Số lượng peer tối thiểu để giữ lại trong tầng nhanh trong quá trình tổ chức lại hồ sơ. Giá trị cao hơn đảm bảo có nhiều peer hơn cho việc xây dựng đường hầm, với chi phí có thể bao gồm các peer chậm hơn. Nếu biết hơn 3000 bộ định tuyến, mặc định sẽ mở rộng thành <code>knownRouters / 15</code>. [Mặc định 400]"
 
-msgid "Minimum number of peers to retain in the high-capacity tier. These are the peers with the highest measured throughput and greatest ability to relay traffic. If more than 3000 routers are known, the default scales to <code>knownRouters / 15</code>. [Default is 500]"
+msgid "Minimum number of peers to retain in the high-capacity tier. These are the peers with the highest measured throughput and greatest ability to relay traffic. If more than 3000 routers are known, the default scales to <code>knownRouters / 15</code>. [Default is 1000]"
 msgstr "Số lượng peer tối thiểu để giữ lại trong tầng dung lượng cao. Đây là các peer có thông lượng đo được cao nhất và khả năng chuyển tiếp lưu lượng lớn nhất. Nếu biết hơn 3000 bộ định tuyến, mặc định sẽ mở rộng thành <code>knownRouters / 15</code>. [Mặc định 500]"
 
 msgid "Maximum number of peer profiles to retain in memory. Older, inactive profiles are expired first when this limit is reached. Values below 100 are clamped to 100. [Default is 8000, or 800 on slow systems]"
 msgstr "Số lượng hồ sơ peer tối đa được giữ trong bộ nhớ. Các hồ sơ cũ hơn, không hoạt động sẽ hết hạn trước khi đạt đến giới hạn này. Giá trị dưới 100 được kẹp thành 100. [Mặc định 8000, hoặc 800 trên hệ thống chậm]"
 
-msgid "Maximum age of a RouterInfo (in hours) for a peer to be considered selectable for tunnel building. Peers with RouterInfos older than this threshold are excluded from selection unless they have an active connection. This is particularly relevant for floodfill routers that do not actively explore the NetDB, as their RouterInfos may become stale without periodic refresh. [Default is 3]"
+msgid "Maximum age of a RouterInfo (in hours) for a peer to be considered selectable for tunnel building. Peers with RouterInfos older than this threshold are excluded from selection unless they have an active connection. This is particularly relevant for floodfill routers that do not actively explore the NetDB, as their RouterInfos may become stale without periodic refresh. [Default is 2]"
 msgstr "Tuổi tối đa của RouterInfo (tính theo giờ) để một thiết bị ngang hàng được coi là có thể lựa chọn để xây dựng đường hầm. Các thiết bị ngang hàng có RouterInfos cũ hơn ngưỡng này sẽ bị loại khỏi lựa chọn trừ khi chúng có kết nối đang hoạt động. Điều này đặc biệt liên quan đến các bộ định tuyến nút lũ không tích cực khám phá NetDB, vì RouterInfos của chúng có thể trở nên cũ nếu không được làm mới định kỳ. [Mặc định là 3]"
 
 msgid "This setting determines whether stats about our router are sporadically published to the NetDb. [Default is false]"
@@ -7575,13 +7575,13 @@ msgstr "Cài đặt này xác định xem các bộ định tuyến được ph�
 msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
 msgstr "Khi được đặt thành true, cài đặt này sẽ nới lỏng các điều kiện cần thiết để bộ định tuyến của bạn xuất bản giới hạn tắc nghẽn, cụ thể là khi xác định rằng việc sử dụng băng thông của bạn cao. Các điều kiện khác, chẳng hạn như độ trễ công việc cao hoặc bộ định tuyến được phân loại là chậm, vẫn sẽ gây ra việc xuất bản giới hạn. [Mặc định là false]"
 
-msgid "The period in milliseconds to check for idle tunnels. Tunnels with no traffic for this period may be dropped. [Default is 60000]"
+msgid "The period in milliseconds to check for idle tunnels. Tunnels with no traffic for this period may be dropped. [Default is 300000 (5 min)]"
 msgstr "Khoảng thời gian tính bằng mili giây để kiểm tra các đường hầm không hoạt động. Các đường hầm không có lưu lượng trong khoảng thời gian này có thể bị loại bỏ. [Mặc định 60000]"
 
-msgid "The minimum number of messages a tunnel must have processed in the detection period to be considered active. Tunnels below this threshold are candidates for removal. [Default is 3]"
+msgid "The minimum number of messages a tunnel must have processed in the detection period to be considered active. Tunnels below this threshold are candidates for removal. [Default is 1]"
 msgstr "Số lượng tin nhắn tối thiểu mà một đường hầm phải xử lý trong khoảng thời gian phát hiện để được coi là đang hoạt động. Các đường hầm dưới ngưỡng này là ứng viên để loại bỏ. [Mặc định 3]"
 
-msgid "The interval in milliseconds between scans for idle transit tunnels. [Default is 180000]"
+msgid "The interval in milliseconds between scans for idle transit tunnels. [Default is 60000 (1 min)]"
 msgstr "Khoảng thời gian tính bằng mili giây giữa các lần quét tìm các đường hầm trung chuyển không hoạt động. [Mặc định 180000]"
 
 msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
@@ -7623,7 +7623,7 @@ msgstr "Ngưỡng độ trễ tính bằng mili giây để loại bỏ các đ�
 msgid "The minimum number of tunnels to keep in each pool when removing slow tunnels (minimum 2), overriding the configured tunnel quantity. Set to 0 to use the configured quantity per pool. [Default is 0]"
 msgstr "Số lượng đường hầm tối thiểu để giữ trong mỗi nhóm khi loại bỏ các đường hầm chậm (tối thiểu 2), ghi đè số lượng đường hầm đã cấu hình. Đặt thành 0 để sử dụng số lượng đã cấu hình trên mỗi nhóm. [Mặc định 0]"
 
-msgid "The interval in milliseconds between runs of the Remove Slow Tunnels job. Higher values reduce tunnel churn but may keep slow tunnels longer. [Default is 90000 (90s), or 120000 (120s) if under load]"
+msgid "The interval in milliseconds between runs of the Remove Slow Tunnels job. Higher values reduce tunnel churn but may keep slow tunnels longer. [Default is 60000 (60s)]"
 msgstr "Khoảng thời gian tính bằng mili giây giữa các lần chạy công việc Loại bỏ Đường hầm Chậm. Giá trị cao hơn làm giảm sự luân chuyển đường hầm nhưng có thể giữ các đường hầm chậm lâu hơn. [Mặc định 90000 (90gi), hoặc 120000 (120gi) nếu dưới tải]"
 
 msgid "The time in milliseconds before expiration to mark tunnels for early expiry when the Remove Slow Tunnels job prunes slow or excess tunnels. Higher values allow more time for new tunnels to build. [Default is 30000]"
@@ -7812,7 +7812,7 @@ msgstr "Thiết lập này, khi được bật, sẽ sửa đổi độ trễ ph
 msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are sent a RESET (the client may retry) rather than silently dropped, which keeps the client informed of the refusal. [Default is 256 (128 on slow systems)]"
 msgstr "Số kết nối đang chờ tối đa (SYN và các gói tin dở dang) trong hàng đợi chấp nhận của máy chủ. Khi hàng đợi đầy, các SYN mới sẽ nhận được một RESET (client có thể thử lại) thay vì bị âm thầm loại bỏ, nhờ đó client vẫn biết mình bị từ chối. [Mặc định 256 (128 trên hệ thống chậm)]"
 
-msgid "The maximum retransmission delay in milliseconds. Retransmit interval will not exceed this value regardless of backoff. Increase to allow longer between retries on congested paths. [Default is 30000 (30s)]"
+msgid "The maximum retransmission delay in milliseconds. Retransmit interval will not exceed this value regardless of backoff. Increase to allow longer between retries on congested paths. [Default is 20000 (20s)]"
 msgstr "Độ trễ truyền lại tối đa tính bằng mili giây. Khoảng thời gian truyền lại sẽ không vượt quá giá trị này bất kể backoff. Tăng để cho phép thời gian dài hơn giữa các lần thử trên các đường bị tắc nghẽn. [Mặc định 30000 (30gi)]"
 
 msgid "Maximum number of packet retransmissions before giving up on a connection. Higher values improve reliability on lossy links but delay failure detection. [Default is 32]"
@@ -7824,10 +7824,10 @@ msgstr "Thời gian chờ truyền lại tối đa tính bằng mili giây sau b
 msgid "Maximum round-trip time in milliseconds for streaming connections. Caps the computed RTT to prevent pathological timeout values after network disturbances. [Default is 10000 (10 seconds)]"
 msgstr "Thời gian khứ hồi tối đa tính bằng mili giây cho các kết nối truyền phát. Giới hạn RTT được tính toán để tránh các giá trị thời gian chờ bất thường sau khi mạng bị gián đoạn. [Mặc định 10000 (10 giây)]"
 
-msgid "Maximum slow start window size for streaming connections. Caps the congestion window during slow start to prevent overwhelming the network. [Default is 256 (32 on slow systems)]"
+msgid "Maximum slow start window size for streaming connections. Caps the congestion window during slow start to prevent overwhelming the network. [Default is 2048 (1024 on slow systems)]"
 msgstr "Kích thước cửa sổ khởi động chậm tối đa cho các kết nối truyền phát. Giới hạn cửa sổ tắc nghẽn trong quá trình khởi động chậm để tránh làm quá tải mạng. [Mặc định 256 (32 trên hệ thống chậm)]"
 
-msgid "Maximum congestion window size (in packets) for streaming connections. Caps the maximum throughput of a single stream. [Default is 512 (384 on slow systems)]"
+msgid "Maximum congestion window size (in packets) for streaming connections. Caps the maximum throughput of a single stream. [Default is 2048 (1024 on slow systems)]"
 msgstr "Kích thước cửa sổ tắc nghẽn tối đa (tính bằng gói tin) cho các kết nối truyền phát. Giới hạn thông lượng tối đa của một luồng đơn lẻ. [Mặc định 512 (384 trên hệ thống chậm)]"
 
 msgid "The minimum retransmission delay in milliseconds. Packets will not be resent faster than this interval. Lower values allow faster recovery on lossy connections. [Default is 100ms]"
@@ -7854,7 +7854,7 @@ msgstr "Khoảng thời gian tính bằng mili giây giữa các lần xuất b�
 msgid "Threshold in milliseconds for proactive LeaseSet republish. If a lease is expiring within this window, the LeaseSet is republished immediately rather than waiting for the next periodic cycle. [Default is 180000 (3 minutes)]"
 msgstr "Ngưỡng tính bằng mili giây để xuất bản lại LeaseSet chủ động. Nếu hợp đồng thuê sắp hết hạn trong cửa sổ này, LeaseSet được xuất bản lại ngay lập tức thay vì chờ chu kỳ định kỳ tiếp theo. [Mặc định 180000 (3 phút)]"
 
-msgid "The maximum number of simultaneous I2CP client sessions the router will accept. [Default is 1536 (768 on slow systems)]"
+msgid "The maximum number of simultaneous I2CP client sessions the router will accept. [Default is 16384 (4096 on slow systems), used as 2048 at most]"
 msgstr "Số phiên khách I2CP đồng thời tối đa mà bộ định tuyến sẽ chấp nhận. [Mặc định 1536 (768 trên hệ thống chậm)]"
 
 msgid "When set to true, disables local-local loopback delivery and forces all traffic through tunnels (outbound tunnel → network → inbound tunnel → local destination). Useful for testing tunnel routing behavior when the source and destination are on the same router. [Disabled by default]"

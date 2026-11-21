@@ -7385,19 +7385,19 @@ msgstr "Quand défini sur fausse, le routeur ne bloquera pas les demandes de con
 msgid "Allocate number of processor threads for building tunnels. If your processor supports hyperthreading or simultaneous multithreading, you may multiply the number of processor cores by 2 to get the maximum number of threads to allocate, otherwise number of processor cores = maximum number of threads available. Note that you may wish to allocate less than the theoretical maximum to ensure you have headroom for other tasks."
 msgstr "Allouer le nombre de threads de processeur pour la construction de tunnels. Si votre processeur prend en charge l''hyperthreading ou le multithreading simultané, vous pouvez multiplier le nombre de cœurs de processeur par 2 pour obtenir le nombre maximal de threads à allouer, sinon le nombre de cœurs de processeur = le nombre maximal de threads disponibles. Notez que vous souhaiterez peut-être allouer moins que le maximum théorique pour vous assurer d''avoir une marge de manœuvre pour d''autres tâches."
 
-msgid "This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 1000ms. [Restart required]"
+msgid "This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 50ms. [Restart required]"
 msgstr "Ce paramètre (en millisecondes) détermine la durée de conservation maximale d''un paquet dans la file d''attente CoDel avant qu''il ne soit supprimé. La valeur par défaut est de 1000ms. [Redémarrage requis]"
 
-msgid "This setting determines the maximum number of messages in the outbound queue before it is marked as full. [Default is 768]"
+msgid "This setting determines the maximum number of messages in the outbound queue before it is marked as full. [Default is 1024, or 512 on slow systems]"
 msgstr "Ce paramètre détermine le nombre maximal de messages dans la file d''attente de sortie avant qu''elle ne soit marquée comme pleine. [La valeur par défaut est 768]"
 
-msgid "This setting determines the maximum number of messages above the maximum queue value before further messages are dropped. [Default is 128]"
+msgid "This setting determines the maximum number of messages above the maximum queue value before further messages are dropped. [Default is 384, or 256 on slow systems]"
 msgstr "Ce paramètre détermine le nombre maximal de messages au-dessus de la valeur de file d''attente maximale avant que davantage de messages ne soient supprimés. [La valeur par défaut est 128]"
 
-msgid "This setting (in milliseconds) allows you to manually configure the queue delay target value for the CoDel queue management system. Default is 50ms. [Restart required]"
+msgid "This setting (in milliseconds) allows you to manually configure the queue delay target value for the CoDel queue management system. Default is 5ms. [Restart required]"
 msgstr "Ce paramètre (en millisecondes) vous permet de configurer manuellement la valeur cible de délai de file d''attente pour le système de gestion de file d''attente CoDel. La valeur par défaut est de 50ms. [Redémarrage requis]"
 
-msgid "This setting, in milliseconds, overrides the default message processing time limit (indicated as <i>Message Delay</i> in the Congestion sidebar section) before the router is determined to be congested and transit tunnel requests are rejected. [Default is 750ms or 1500ms if the router is flagged as slow]"
+msgid "This setting, in milliseconds, overrides the default message processing time limit (indicated as <i>Message Delay</i> in the Congestion sidebar section) before the router is determined to be congested and transit tunnel requests are rejected. [Default is 2000ms, or 3000ms if the router is flagged as slow]"
 msgstr "Ce paramètre, en millisecondes, remplace la limite de temps de traitement des messages par défaut (indiquée comme <i>Délai de message</i> dans la section latérale de congestion) avant que le routeur ne soit déterminé comme congestionné et que les demandes de tunnels de transit ne soient rejetées. [Valeur par défaut 750ms ou 1500ms si le routeur est signalé comme lent]"
 
 msgid "Periodically test tunnels to determine the average lag, and display the results in the Congestion sidepanel section. To enable, set this value to false. [Default is false]"
@@ -7412,28 +7412,28 @@ msgstr "Quand défini sur fausse, le routeur ne limitera pas les demandes de con
 msgid "This setting determines which <a href=/profiles#profile_defs>peer capabilities</a> will not be used to build your router's tunnels. e.g. <code>router.excludePeerCaps=LMN</code>"
 msgstr "Ce paramètre détermine quelles <a href=/profiles#profile_defs>capacités des pairs</a> ne seront pas utilisées pour construire les tunnels de votre routeur. Par exemple : <code>router.excludePeerCaps=LMN</code> router excludePeerCaps=LMN router excludePeerCaps=LMN router excludePeerCaps=LMN router excludePeerCaps=LMN. routeur exclurePeerCaps=LMN"
 
-msgid "When set to false, unreachable peers may be selected as hops for inbound exploratory tunnels. [Default is true]"
+msgid "When set to false, unreachable peers may be selected as hops for inbound exploratory tunnels. [Default is false]"
 msgstr "Lorsque défini sur faux, les pairs injoignables peuvent être sélectionnés comme sauts pour les tunnels exploratoires entrants. [Par défaut : vrai]"
 
-msgid "When set to false, unreachable peers may be selected as hops for outbound exploratory tunnels. [Default is true]"
+msgid "When set to false, unreachable peers may be selected as hops for outbound exploratory tunnels. [Default is false]"
 msgstr "Lorsque défini sur faux, les pairs injoignables peuvent être sélectionnés comme sauts pour les tunnels exploratoires sortants. [Par défaut : vrai]"
 
-msgid "When set to false, unreachable peers may be selected as hops for inbound client tunnels. [Default is true]"
+msgid "When set to false, unreachable peers may be selected as hops for inbound client tunnels. [Default is false]"
 msgstr "Lorsque défini sur faux, les pairs injoignables peuvent être sélectionnés comme sauts pour les tunnels clients entrants. [Par défaut : vrai]"
 
-msgid "When set to false, unreachable peers may be selected as hops for outbound client tunnels. [Default is true]"
+msgid "When set to false, unreachable peers may be selected as hops for outbound client tunnels. [Default is false]"
 msgstr "Lorsque défini sur faux, les pairs injoignables peuvent être sélectionnés comme sauts pour les tunnels clients sortants. [Par défaut : vrai]"
 
-msgid "When set to false, slow peers (high tunnel test times) may be selected as hops for inbound exploratory tunnels. [Default is true]"
+msgid "When set to false, slow peers (high tunnel test times) may be selected as hops for inbound exploratory tunnels. [Default is false]"
 msgstr "Lorsque défini sur faux, les pairs lents (temps de test de tunnel élevés) peuvent être sélectionnés comme sauts pour les tunnels exploratoires entrants. [Par défaut : vrai]"
 
-msgid "When set to false, slow peers may be selected as hops for outbound exploratory tunnels. [Default is true]"
+msgid "When set to false, slow peers may be selected as hops for outbound exploratory tunnels. [Default is false]"
 msgstr "Lorsque défini sur faux, les pairs lents peuvent être sélectionnés comme sauts pour les tunnels exploratoires sortants. [Par défaut : vrai]"
 
-msgid "When set to false, slow peers may be selected as hops for inbound client tunnels. [Default is true]"
+msgid "When set to false, slow peers may be selected as hops for inbound client tunnels. [Default is false]"
 msgstr "Lorsque défini sur faux, les pairs lents peuvent être sélectionnés comme sauts pour les tunnels clients entrants. [Par défaut : vrai]"
 
-msgid "When set to false, slow peers may be selected as hops for outbound client tunnels. [Default is true]"
+msgid "When set to false, slow peers may be selected as hops for outbound client tunnels. [Default is false]"
 msgstr "Lorsque défini sur faux, les pairs lents peuvent être sélectionnés comme sauts pour les tunnels clients sortants. [Par défaut : vrai]"
 
 msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"
@@ -7469,25 +7469,25 @@ msgstr "Définit le nombre minimum de <a href=/jobs>exécuteurs de tâches</a> p
 msgid "Enable dynamic scaling of job runners based on queue load. When enabled, the router automatically scales the number of job runner threads up or down based on ready job count and lag. [Default is true]"
 msgstr "Activer la mise à l''échelle dynamique des exécuteurs de tâches en fonction de la charge de la file d''attente. Lorsqu''activé, le routeur ajuste automatiquement le nombre de threads exécuteurs à la hausse ou à la baisse en fonction du nombre de tâches prêtes et du retard. [Par défaut : vrai]"
 
-msgid "The job queue lag threshold in milliseconds that triggers scaling up job runners. When max lag exceeds this value, additional runners are started. [Default is 1]"
+msgid "The job queue lag threshold in milliseconds that triggers scaling up job runners. When max lag exceeds this value, additional runners are started. [Default is 10]"
 msgstr "Le seuil de retard de la file d''attente en millisecondes qui déclenche l''augmentation du nombre d''exécuteurs. Lorsque le retard maximum dépasse cette valeur, des exécuteurs supplémentaires sont démarrés. [Par défaut : 1]"
 
-msgid "The job queue lag threshold in milliseconds that allows scaling down job runners. When max lag stays below this value, excess runners are stopped. [Default is 1]"
+msgid "The job queue lag threshold in milliseconds that allows scaling down job runners. When max lag stays below this value, excess runners are stopped. [Default is 5]"
 msgstr "Le seuil de retard de la file d''attente en millisecondes qui permet de réduire le nombre d''exécuteurs. Lorsque le retard maximum reste en dessous de cette valeur, les exécuteurs en excès sont arrêtés. [Par défaut : 1]"
 
 msgid "The ratio of ready jobs to active runners that triggers scaling up. If readyJobs > activeRunners * ratio, additional runners are started. [Default is 1.2]"
 msgstr "Le ratio de tâches prêtes par rapport aux exécuteurs actifs qui déclenche la montée en charge. Si readyJobs > activeRunners * ratio, des exécuteurs supplémentaires sont démarrés. [Par défaut : 1,2] 2] 2] 2] 2]. 2]"
 
-msgid "The interval in milliseconds between job runner scaling checks. [Default is 1000]"
+msgid "The interval in milliseconds between job runner scaling checks. [Default is 2000 (2s)]"
 msgstr "L''intervalle en millisecondes entre les vérifications de mise à l''échelle des exécuteurs de tâches. [Par défaut : 1000]"
 
-msgid "The cooldown period in milliseconds between scale operations. [Default is 5000]"
+msgid "The cooldown period in milliseconds between scale operations. [Default is 10000 (10s)]"
 msgstr "La période de refroidissement en millisecondes entre les opérations de mise à l''échelle. [Par défaut : 5000]"
 
 msgid "Enable the feedback mechanism that automatically rolls back ineffective scale-up operations. If lag increases after adding runners, they will be removed. [Default is true]"
 msgstr "Activer le mécanisme de rétroaction qui annule automatiquement les opérations de montée en charge inefficaces. Si le retard augmente après l''ajout d''exécuteurs, ils seront supprimés. [Par défaut : vrai]"
 
-msgid "The maximum number of waiting jobs in the queue before aggressive job dropping is triggered. When exceeded, non-critical jobs are dropped to reduce queue pressure. [Default is 48]"
+msgid "The maximum number of waiting jobs in the queue before aggressive job dropping is triggered. When exceeded, non-critical jobs are dropped to reduce queue pressure. [Default is 48, or 24 on slow systems]"
 msgstr "Le nombre maximum de tâches en attente dans la file avant le déclenchement de l''abandon agressif de tâches. Lorsqu''il est dépassé, les tâches non critiques sont abandonnées pour réduire la pression sur la file. [Par défaut : 48]"
 
 msgid "Maximum number of pending tunnel build jobs in the BuildHandler queue. When the queue exceeds this limit, new build requests are rejected to prevent job queue overload. [Default is 256]"
@@ -7535,22 +7535,22 @@ msgstr "Routeur exécutant une version logicielle émulée non native de la bibl
 msgid "This setting determines the number of peer tests to run concurrently, used to determine peer latency. When tunnel build success drops below 50%, concurrency is halved to avoid adding load during a failure cascade. [Default varies: 1 on slow systems, 2 on single/dual-core, 4 otherwise]"
 msgstr "Multiplicateur appliqué au taux de construction de base des tunnels. Le taux effectif est baseBuildRate * multiplicateur, limité par maxConcurrentBuilds. Des valeurs plus élevées accélèrent la récupération du pool mais augmentent la charge réseau. [Par défaut : 1,0]"
 
-msgid "This setting determines the delay between peer test jobs, configured in milliseconds. [Default is 30000 (30s), or 45000 (45s) on slow systems]"
+msgid "This setting determines the delay between peer test jobs, configured in milliseconds. [Default is 300000 (5 min)]"
 msgstr "Ce paramètre détermine le nombre de tests de pairs à exécuter simultanément, utilisé pour déterminer la latence des pairs. Lorsque le succès de construction de tunnel tombe sous 50 %, la concurrence est réduite de moitié pour éviter d''ajouter de la charge pendant une cascade d''échecs. [Par défaut variable : 1 sur les systèmes lents, 2 sur les systèmes mono/dual-cœur, 4 sinon]"
 
-msgid "To determine peer latency, this setting allocates the maximum time a peer test should take before being considered a failure, configured in milliseconds. In the event that the timeout is configured lower than the average successful test, the average successful test value will be used. [Default is 5000]"
+msgid "To determine peer latency, this setting allocates the maximum time a peer test should take before being considered a failure, configured in milliseconds. In the event that the timeout is configured lower than the average successful test, the average successful test value will be used. [Default is 10000 (10s)]"
 msgstr "Ce paramètre détermine le délai entre les tâches de test de pairs, configuré en millisecondes. [Par défaut : 30000 (30 s), ou 45000 (45 s) sur les systèmes lents] [Default is 5000] [La valeur par défaut est 5 000] [La valeur par défaut est 5 000] [La valeur par défaut est 5 000]. [La valeur par défaut est 5 000]"
 
-msgid "Minimum number of peers to retain in the fast tier during profile reorganization. A higher value ensures more peers are available for tunnel building, at the cost of potentially including slower peers. If more than 3000 routers are known, the default scales to <code>knownRouters / 15</code>. [Default is 400]"
+msgid "Minimum number of peers to retain in the fast tier during profile reorganization. A higher value ensures more peers are available for tunnel building, at the cost of potentially including slower peers. If more than 3000 routers are known, the default scales to <code>knownRouters / 15</code>. [Default is 1000]"
 msgstr "Pour déterminer la latence des pairs, ce paramètre alloue le temps maximum qu''un test de pair devrait prendre avant d''être considéré comme un échec, configuré en millisecondes. Si le délai d''attente est configuré plus bas que la moyenne des tests réussis, la valeur moyenne des tests réussis sera utilisée. [Par défaut : 5000] [Default is 400] [La valeur par défaut est 400] [La valeur par défaut est 400] [La valeur par défaut est 400]. [La valeur par défaut est 400]"
 
-msgid "Minimum number of peers to retain in the high-capacity tier. These are the peers with the highest measured throughput and greatest ability to relay traffic. If more than 3000 routers are known, the default scales to <code>knownRouters / 15</code>. [Default is 500]"
+msgid "Minimum number of peers to retain in the high-capacity tier. These are the peers with the highest measured throughput and greatest ability to relay traffic. If more than 3000 routers are known, the default scales to <code>knownRouters / 15</code>. [Default is 1000]"
 msgstr "Nombre minimum de pairs à conserver dans le niveau rapide lors de la réorganisation des profils. Une valeur plus élevée garantit plus de pairs disponibles pour la construction de tunnels, au risque d''inclure des pairs plus lents. Si plus de 3000 routeurs sont connus, la valeur par défaut est <code>knownRouters / 15</code>. [Par défaut : 400]"
 
 msgid "Maximum number of peer profiles to retain in memory. Older, inactive profiles are expired first when this limit is reached. Values below 100 are clamped to 100. [Default is 8000, or 800 on slow systems]"
 msgstr "Nombre minimum de pairs à conserver dans le niveau haute capacité. Ce sont les pairs avec le débit mesuré le plus élevé et la plus grande capacité à relayer le trafic. Si plus de 3000 routeurs sont connus, la valeur par défaut est <code>knownRouters / 15</code>. [Par défaut : 500]"
 
-msgid "Maximum age of a RouterInfo (in hours) for a peer to be considered selectable for tunnel building. Peers with RouterInfos older than this threshold are excluded from selection unless they have an active connection. This is particularly relevant for floodfill routers that do not actively explore the NetDB, as their RouterInfos may become stale without periodic refresh. [Default is 3]"
+msgid "Maximum age of a RouterInfo (in hours) for a peer to be considered selectable for tunnel building. Peers with RouterInfos older than this threshold are excluded from selection unless they have an active connection. This is particularly relevant for floodfill routers that do not actively explore the NetDB, as their RouterInfos may become stale without periodic refresh. [Default is 2]"
 msgstr "Âge maximum d'un RouterInfo (en heures) pour qu'un homologue soit considéré comme sélectionnable pour la construction de tunnels. Les homologues dont les informations de routeur sont antérieures à ce seuil sont exclus de la sélection, sauf s'ils disposent d'une connexion active. Ceci est particulièrement pertinent pour les routeurs de nœuds d'inondation qui n'explorent pas activement NetDB, car leurs informations RouterInfo peuvent devenir obsolètes sans actualisation périodique. [La valeur par défaut est 3]"
 
 msgid "This setting determines whether stats about our router are sporadically published to the NetDb. [Default is false]"
@@ -7586,13 +7586,13 @@ msgstr "Ce paramètre détermine si les routeurs classés comme peu intéressant
 msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
 msgstr "Lorsqu''il est réglé sur true, ce paramètre assouplira les conditions requises pour que votre routeur publie des plafonds de congestion, spécifiquement lorsqu''il est déterminé que votre utilisation de la bande passante est élevée. D''autres conditions, telles qu''un délai de tâches élevé ou un routeur classé comme lent, provoqueront toujours la publication des plafonds. [Par défaut est false]"
 
-msgid "The period in milliseconds to check for idle tunnels. Tunnels with no traffic for this period may be dropped. [Default is 60000]"
+msgid "The period in milliseconds to check for idle tunnels. Tunnels with no traffic for this period may be dropped. [Default is 300000 (5 min)]"
 msgstr "Seuil en millisecondes pour la republication proactive de LeaseSet. Si un bail expire dans cette fenêtre, le LeaseSet est republié immédiatement plutôt que d''attendre le prochain cycle périodique. [Par défaut : 180000 (3 minutes)]"
 
-msgid "The minimum number of messages a tunnel must have processed in the detection period to be considered active. Tunnels below this threshold are candidates for removal. [Default is 3]"
+msgid "The minimum number of messages a tunnel must have processed in the detection period to be considered active. Tunnels below this threshold are candidates for removal. [Default is 1]"
 msgstr "La période en millisecondes pour vérifier les tunnels inactifs. Les tunnels sans trafic pendant cette période peuvent être abandonnés. [Par défaut : 60000]"
 
-msgid "The interval in milliseconds between scans for idle transit tunnels. [Default is 180000]"
+msgid "The interval in milliseconds between scans for idle transit tunnels. [Default is 60000 (1 min)]"
 msgstr "Le nombre minimum de messages qu''un tunnel doit avoir traités dans la période de détection pour être considéré comme actif. Les tunnels en dessous de ce seuil sont candidats à la suppression. [Par défaut : 3]"
 
 msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
@@ -7634,7 +7634,7 @@ msgstr "Temps en millisecondes avant l''expiration lorsque les tunnels élagués
 msgid "The minimum number of tunnels to keep in each pool when removing slow tunnels (minimum 2), overriding the configured tunnel quantity. Set to 0 to use the configured quantity per pool. [Default is 0]"
 msgstr "Le seuil de latence en millisecondes pour supprimer les tunnels lents des <a href=/tunnels>pools de tunnels locaux</a>. Les tunnels avec une latence supérieure à ce seuil seront supprimés si le pool dépasse le nombre minimum de tunnels. Mettre à 0 pour utiliser 1 seconde ou la latence la plus basse enregistrée de tous les pools, selon la plus élevée. [Par défaut : 0]"
 
-msgid "The interval in milliseconds between runs of the Remove Slow Tunnels job. Higher values reduce tunnel churn but may keep slow tunnels longer. [Default is 90000 (90s), or 120000 (120s) if under load]"
+msgid "The interval in milliseconds between runs of the Remove Slow Tunnels job. Higher values reduce tunnel churn but may keep slow tunnels longer. [Default is 60000 (60s)]"
 msgstr "Le nombre minimum de tunnels à conserver dans chaque pool lors de la suppression des tunnels lents (minimum 2), remplaçant la quantité de tunnels configurée. Mettre à 0 pour utiliser la quantité configurée par pool. [Par défaut : 0]"
 
 msgid "The time in milliseconds before expiration to mark tunnels for early expiry when the Remove Slow Tunnels job prunes slow or excess tunnels. Higher values allow more time for new tunnels to build. [Default is 30000]"
@@ -7823,7 +7823,7 @@ msgstr "Ce paramètre, lorsqu''il est activé, modifie le délai aléatoire maxi
 msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are sent a RESET (the client may retry) rather than silently dropped, which keeps the client informed of the refusal. [Default is 256 (128 on slow systems)]"
 msgstr "Nombre maximal de connexions en attente (SYN et paquets partiels) dans la file d'attente d'acceptation du serveur. Lorsqu'elle est pleine, les nouveaux SYN reçoivent une réinitialisation RESET (le client peut réessayer) au lieu d'être supprimés silencieusement, ce qui informe le client du refus. [Par défaut : 256 (128 sur les systèmes lents)]"
 
-msgid "The maximum retransmission delay in milliseconds. Retransmit interval will not exceed this value regardless of backoff. Increase to allow longer between retries on congested paths. [Default is 30000 (30s)]"
+msgid "The maximum retransmission delay in milliseconds. Retransmit interval will not exceed this value regardless of backoff. Increase to allow longer between retries on congested paths. [Default is 20000 (20s)]"
 msgstr "Le délai minimum de retransmission en millisecondes. Les paquets ne seront pas renvoyés plus rapidement que cet intervalle. Des valeurs plus basses permettent une récupération plus rapide sur les connexions avec pertes. [Par défaut : 100 ms]"
 
 msgid "Maximum number of packet retransmissions before giving up on a connection. Higher values improve reliability on lossy links but delay failure detection. [Default is 32]"
@@ -7835,10 +7835,10 @@ msgstr "Le délai maximum de retransmission en millisecondes. L''intervalle de r
 msgid "Maximum round-trip time in milliseconds for streaming connections. Caps the computed RTT to prevent pathological timeout values after network disturbances. [Default is 10000 (10 seconds)]"
 msgstr "Temps d'aller-retour maximal en millisecondes pour les connexions de streaming. Plafonne le RTT calculé pour éviter des valeurs de délai d'attente aberrantes après des perturbations du réseau. [Par défaut : 10000 (10 s)]"
 
-msgid "Maximum slow start window size for streaming connections. Caps the congestion window during slow start to prevent overwhelming the network. [Default is 256 (32 on slow systems)]"
+msgid "Maximum slow start window size for streaming connections. Caps the congestion window during slow start to prevent overwhelming the network. [Default is 2048 (1024 on slow systems)]"
 msgstr "Taille maximale de la fenêtre de démarrage lent pour les connexions de streaming. Plafonne la fenêtre de congestion pendant le démarrage lent afin de ne pas submerger le réseau. [Par défaut : 256 (32 sur les systèmes lents)]"
 
-msgid "Maximum congestion window size (in packets) for streaming connections. Caps the maximum throughput of a single stream. [Default is 512 (384 on slow systems)]"
+msgid "Maximum congestion window size (in packets) for streaming connections. Caps the maximum throughput of a single stream. [Default is 2048 (1024 on slow systems)]"
 msgstr "Taille maximale de la fenêtre de congestion (en paquets) pour les connexions de streaming. Limite le débit maximal d'un seul flux. [Par défaut : 512 (384 sur les systèmes lents)]"
 
 msgid "The minimum retransmission delay in milliseconds. Packets will not be resent faster than this interval. Lower values allow faster recovery on lossy connections. [Default is 100ms]"
@@ -7865,7 +7865,7 @@ msgstr "Nombre maximum de connexions en attente (SYN et paquets partiels) dans l
 msgid "Threshold in milliseconds for proactive LeaseSet republish. If a lease is expiring within this window, the LeaseSet is republished immediately rather than waiting for the next periodic cycle. [Default is 180000 (3 minutes)]"
 msgstr "Intervalle en millisecondes entre les republications automatisées de LeaseSet. Des valeurs plus élevées réduisent le trafic netdb mais peuvent causer des informations de bail obsolètes. [Par défaut : 300000 (5 minutes)]"
 
-msgid "The maximum number of simultaneous I2CP client sessions the router will accept. [Default is 1536 (768 on slow systems)]"
+msgid "The maximum number of simultaneous I2CP client sessions the router will accept. [Default is 16384 (4096 on slow systems), used as 2048 at most]"
 msgstr "Le nombre maximal de sessions client I2CP simultanées que le routeur acceptera. [Par défaut : 1536 (768 sur les systèmes lents)]"
 
 msgid "When set to true, disables local-local loopback delivery and forces all traffic through tunnels (outbound tunnel → network → inbound tunnel → local destination). Useful for testing tunnel routing behavior when the source and destination are on the same router. [Disabled by default]"

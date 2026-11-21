@@ -7394,19 +7394,19 @@ msgstr "false پر مقرر کرنے پر، روٹر پرانی ورژن چلا 
 msgid "Allocate number of processor threads for building tunnels. If your processor supports hyperthreading or simultaneous multithreading, you may multiply the number of processor cores by 2 to get the maximum number of threads to allocate, otherwise number of processor cores = maximum number of threads available. Note that you may wish to allocate less than the theoretical maximum to ensure you have headroom for other tasks."
 msgstr "ٹنلز بنانے کے لیے پروسیسر دھاگوں کی تعداد مختص کریں۔ اگر آپ کا پروسیسر ہائپر تھریڈنگ یا ملٹی تھریڈنگ کو سپورٹ کرتا ہے تو آپ زیادہ سے زیادہ مختص کرنے کے قابل دھاگوں کی تعداد حاصل کرنے کے لیے پروسیسر کورز کی تعداد کو 2 سے ضرب کر سکتے ہیں، ورنہ پروسیسر کورز کی تعداد = دستیاب زیادہ سے زیادہ دھاگے۔ نوٹ کریں کہ دوسرے کاموں کے لیے جگہ بچانے کے لیے آپ نظریاتی زیادہ سے زیادہ سے کم تعداد مختص کرنا چاہیں گے۔"
 
-msgid "This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 1000ms. [Restart required]"
+msgid "This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 50ms. [Restart required]"
 msgstr "یہ ترتیب (ملی سیکنڈ میں) طے کرتی ہے کہ کوئی پیکٹ CoDel قطار میں چھوڑ دیے جانے سے پہلے کتنے وقت تک رہ سکتا ہے۔ طے شدہ 1000ms ہے۔ [دوبارہ شروع کرنا ضروری ہے]"
 
-msgid "This setting determines the maximum number of messages in the outbound queue before it is marked as full. [Default is 768]"
+msgid "This setting determines the maximum number of messages in the outbound queue before it is marked as full. [Default is 1024, or 512 on slow systems]"
 msgstr "یہ ترتیب بیرونی قطار میں پیغامات کی وہ زیادہ سے زیادہ تعداد متعین کرتی ہے جو اس کے مکمل قرار دیے جانے سے پہلے ہوتی ہے۔ [طے شدہ 768 ہے]"
 
-msgid "This setting determines the maximum number of messages above the maximum queue value before further messages are dropped. [Default is 128]"
+msgid "This setting determines the maximum number of messages above the maximum queue value before further messages are dropped. [Default is 384, or 256 on slow systems]"
 msgstr "یہ ترتیب زیادہ سے زیادہ قطار قدر سے اوپر پیغامات کی وہ زیادہ سے زیادہ تعداد متعین کرتی ہے جو مزید پیغامات چھوڑ دیے جانے سے پہلے ہوتی ہے۔ [طے شدہ 128 ہے]"
 
-msgid "This setting (in milliseconds) allows you to manually configure the queue delay target value for the CoDel queue management system. Default is 50ms. [Restart required]"
+msgid "This setting (in milliseconds) allows you to manually configure the queue delay target value for the CoDel queue management system. Default is 5ms. [Restart required]"
 msgstr "یہ ترتیب (ملی سیکنڈ میں) آپ کو CoDel قطار انتظامی نظام کے لیے قطار تاخیر کی ہدف قدر دستی طور پر ترتیب دینے کی اجازت دیتی ہے۔ طے شدہ 50ms ہے۔ [دوبارہ شروع کرنا ضروری ہے]"
 
-msgid "This setting, in milliseconds, overrides the default message processing time limit (indicated as <i>Message Delay</i> in the Congestion sidebar section) before the router is determined to be congested and transit tunnel requests are rejected. [Default is 750ms or 1500ms if the router is flagged as slow]"
+msgid "This setting, in milliseconds, overrides the default message processing time limit (indicated as <i>Message Delay</i> in the Congestion sidebar section) before the router is determined to be congested and transit tunnel requests are rejected. [Default is 2000ms, or 3000ms if the router is flagged as slow]"
 msgstr "یہ ترتیب، ملی سیکنڈ میں، طے شدہ پیغام پراسیسنگ وقت کی حد کو نظرانداز کرتی ہے (جسے سائیڈ بار کے رمپ حصے میں <i>پیغام تاخیر</i> کے طور پر دکھایا جاتا ہے) اس سے پہلے کہ روٹر کو رمپ قرار دیا جائے اور ٹرانزٹ ٹنل کی درخواستیں مسترد کر دی جائیں۔ [طے شدہ 750ms ہے یا اگر روٹر کو سست قرار دیا گیا ہو تو 1500ms]"
 
 msgid "Periodically test tunnels to determine the average lag, and display the results in the Congestion sidepanel section. To enable, set this value to false. [Default is false]"
@@ -7421,28 +7421,28 @@ msgstr "false پر مقرر کرنے پر، روٹر دوسرے روٹرز سے 
 msgid "This setting determines which <a href=/profiles#profile_defs>peer capabilities</a> will not be used to build your router's tunnels. e.g. <code>router.excludePeerCaps=LMN</code>"
 msgstr "یہ ترتیب طے کرتی ہے کہ <a href=/profiles#profile_defs>peer صلاحیتیں</a> کون سی آپ کے روٹر کے ٹنلز بنانے کے لیے استعمال نہ ہوں گی۔ مثلاً <code>router.excludePeerCaps=LMN</code>"
 
-msgid "When set to false, unreachable peers may be selected as hops for inbound exploratory tunnels. [Default is true]"
+msgid "When set to false, unreachable peers may be selected as hops for inbound exploratory tunnels. [Default is false]"
 msgstr "false پر مقرر کرنے پر، ناقابل رسائی peer اندرونی ایکسپلوریٹری ٹنلز کے لیے ہاپ کے طور پر منتخب کیے جا سکتے ہیں۔ [طے شدہ true ہے]"
 
-msgid "When set to false, unreachable peers may be selected as hops for outbound exploratory tunnels. [Default is true]"
+msgid "When set to false, unreachable peers may be selected as hops for outbound exploratory tunnels. [Default is false]"
 msgstr "false پر مقرر کرنے پر، ناقابل رسائی peer بیرونی ایکسپلوریٹری ٹنلز کے لیے ہاپ کے طور پر منتخب کیے جا سکتے ہیں۔ [طے شدہ true ہے]"
 
-msgid "When set to false, unreachable peers may be selected as hops for inbound client tunnels. [Default is true]"
+msgid "When set to false, unreachable peers may be selected as hops for inbound client tunnels. [Default is false]"
 msgstr "false پر مقرر کرنے پر، ناقابل رسائی peer اندرونی کلائنٹ ٹنلز کے لیے ہاپ کے طور پر منتخب کیے جا سکتے ہیں۔ [طے شدہ true ہے]"
 
-msgid "When set to false, unreachable peers may be selected as hops for outbound client tunnels. [Default is true]"
+msgid "When set to false, unreachable peers may be selected as hops for outbound client tunnels. [Default is false]"
 msgstr "false پر مقرر کرنے پر، ناقابل رسائی peer بیرونی کلائنٹ ٹنلز کے لیے ہاپ کے طور پر منتخب کیے جا سکتے ہیں۔ [طے شدہ true ہے]"
 
-msgid "When set to false, slow peers (high tunnel test times) may be selected as hops for inbound exploratory tunnels. [Default is true]"
+msgid "When set to false, slow peers (high tunnel test times) may be selected as hops for inbound exploratory tunnels. [Default is false]"
 msgstr "false پر مقرر کرنے پر، سست peer (ٹنل ٹیسٹ کے اوقات زیادہ) اندرونی ایکسپلوریٹری ٹنلز کے لیے ہاپ کے طور پر منتخب کیے جا سکتے ہیں۔ [طے شدہ true ہے]"
 
-msgid "When set to false, slow peers may be selected as hops for outbound exploratory tunnels. [Default is true]"
+msgid "When set to false, slow peers may be selected as hops for outbound exploratory tunnels. [Default is false]"
 msgstr "false پر مقرر کرنے پر، سست peer بیرونی ایکسپلوریٹری ٹنلز کے لیے ہاپ کے طور پر منتخب کیے جا سکتے ہیں۔ [طے شدہ true ہے]"
 
-msgid "When set to false, slow peers may be selected as hops for inbound client tunnels. [Default is true]"
+msgid "When set to false, slow peers may be selected as hops for inbound client tunnels. [Default is false]"
 msgstr "false پر مقرر کرنے پر، سست peer اندرونی کلائنٹ ٹنلز کے لیے ہاپ کے طور پر منتخب کیے جا سکتے ہیں۔ [طے شدہ true ہے]"
 
-msgid "When set to false, slow peers may be selected as hops for outbound client tunnels. [Default is true]"
+msgid "When set to false, slow peers may be selected as hops for outbound client tunnels. [Default is false]"
 msgstr "false پر مقرر کرنے پر، سست peer بیرونی کلائنٹ ٹنلز کے لیے ہاپ کے طور پر منتخب کیے جا سکتے ہیں۔ [طے شدہ true ہے]"
 
 msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"
@@ -7478,25 +7478,25 @@ msgstr "بیک وقت <a href=/jobs>کام رنرز</a> کی کم سے کم تع
 msgid "Enable dynamic scaling of job runners based on queue load. When enabled, the router automatically scales the number of job runner threads up or down based on ready job count and lag. [Default is true]"
 msgstr "قطار کے بوجھ کی بنیاد پر کام رنرز کا متحرک اسکیلنگ فعال کریں۔ فعال ہونے پر، روٹر تیار کاموں کی تعداد اور لیگ کی بنیاد پر کام رنر دھاگوں کی تعداد خودکار طور پر بڑھاتا یا گھٹاتا ہے۔ [طے شدہ true ہے]"
 
-msgid "The job queue lag threshold in milliseconds that triggers scaling up job runners. When max lag exceeds this value, additional runners are started. [Default is 1]"
+msgid "The job queue lag threshold in milliseconds that triggers scaling up job runners. When max lag exceeds this value, additional runners are started. [Default is 10]"
 msgstr "کام قطار کی وہ لیگ حد ملی سیکنڈ میں جو کام رنرز کو بڑھانے کو شروع کرتی ہے۔ جب زیادہ سے زیادہ لیگ اس قدر سے تجاوز کرے تو اضافی رنرز شروع کیے جاتے ہیں۔ [طے شدہ 1 ہے]"
 
-msgid "The job queue lag threshold in milliseconds that allows scaling down job runners. When max lag stays below this value, excess runners are stopped. [Default is 1]"
+msgid "The job queue lag threshold in milliseconds that allows scaling down job runners. When max lag stays below this value, excess runners are stopped. [Default is 5]"
 msgstr "کام قطار کی وہ لیگ حد ملی سیکنڈ میں جو کام رنرز کو گھٹانے کی اجازت دیتی ہے۔ جب زیادہ سے زیادہ لیگ اس قدر سے نیچے رہے تو اضافی رنرز روک دیے جاتے ہیں۔ [طے شدہ 1 ہے]"
 
 msgid "The ratio of ready jobs to active runners that triggers scaling up. If readyJobs > activeRunners * ratio, additional runners are started. [Default is 1.2]"
 msgstr "فعال رنرز کے مقابلے تیار کاموں کا وہ تناسب جو اسکیل اپ کو شروع کرتا ہے۔ اگر readyJobs > activeRunners * ratio ہو تو اضافی رنرز شروع کیے جاتے ہیں۔ [طے شدہ 1.2 ہے]"
 
-msgid "The interval in milliseconds between job runner scaling checks. [Default is 1000]"
+msgid "The interval in milliseconds between job runner scaling checks. [Default is 2000 (2s)]"
 msgstr "کام رنر اسکیلنگ جانچوں کے درمیان وقفہ ملی سیکنڈ میں۔ [طے شدہ 1000 ہے]"
 
-msgid "The cooldown period in milliseconds between scale operations. [Default is 5000]"
+msgid "The cooldown period in milliseconds between scale operations. [Default is 10000 (10s)]"
 msgstr "اسکیل کارروائیوں کے درمیان ٹھہراؤ کی مدت ملی سیکنڈ میں۔ [طے شدہ 5000 ہے]"
 
 msgid "Enable the feedback mechanism that automatically rolls back ineffective scale-up operations. If lag increases after adding runners, they will be removed. [Default is true]"
 msgstr "وہ فیڈ بیک میکانزم فعال کریں جو غیر مؤثر اسکیل اپ کارروائیوں کو خودکار طور پر واپس کر دیتا ہے۔ اگر رنرز شامل کرنے کے بعد لیگ بڑھ جائے تو انہیں ہٹا دیا جائے گا۔ [طے شدہ true ہے]"
 
-msgid "The maximum number of waiting jobs in the queue before aggressive job dropping is triggered. When exceeded, non-critical jobs are dropped to reduce queue pressure. [Default is 48]"
+msgid "The maximum number of waiting jobs in the queue before aggressive job dropping is triggered. When exceeded, non-critical jobs are dropped to reduce queue pressure. [Default is 48, or 24 on slow systems]"
 msgstr "قطار میں انتظار کرنے والے کاموں کی وہ زیادہ سے زیادہ تعداد جو جوشی کام ڈراپ ہونے سے پہلے ہوتی ہے۔ اس سے زیادہ ہونے پر قطار کا دباؤ کم کرنے کے لیے غیر اہم کام چھوڑ دیے جاتے ہیں۔ [طے شدہ 48 ہے]"
 
 msgid "Maximum number of pending tunnel build jobs in the BuildHandler queue. When the queue exceeds this limit, new build requests are rejected to prevent job queue overload. [Default is 256]"
@@ -7544,22 +7544,22 @@ msgstr "وہ روٹر جو Java BigInteger لائبریری کا غیر اصل،
 msgid "This setting determines the number of peer tests to run concurrently, used to determine peer latency. When tunnel build success drops below 50%, concurrency is halved to avoid adding load during a failure cascade. [Default varies: 1 on slow systems, 2 on single/dual-core, 4 otherwise]"
 msgstr "یہ ترتیب طے کرتی ہے کہ peer لیٹنسی جاننے کے لیے کتنے peer ٹیسٹ ایک ساتھ چلائے جائیں۔ جب ٹنل بنانے کی کامیابی 50% سے نیچے گر جائے تو ہمزمانی آدھی کر دی جاتی ہے تاکہ ناکامی کے سلسلے میں اضافی بوجھ نہ پڑے۔ [طے شدہ قدر مختلف ہے: سست نظاموں پر 1، سنگل/ڈیوئل کور پر 2، ورنہ 4]"
 
-msgid "This setting determines the delay between peer test jobs, configured in milliseconds. [Default is 30000 (30s), or 45000 (45s) on slow systems]"
+msgid "This setting determines the delay between peer test jobs, configured in milliseconds. [Default is 300000 (5 min)]"
 msgstr "یہ ترتیب peer ٹیسٹ کاموں کے درمیان تاخیر طے کرتی ہے، جو ملی سیکنڈ میں ترتیب دی جاتی ہے۔ [طے شدہ 30000 (30s)، یا سست نظاموں پر 45000 (45s)]"
 
-msgid "To determine peer latency, this setting allocates the maximum time a peer test should take before being considered a failure, configured in milliseconds. In the event that the timeout is configured lower than the average successful test, the average successful test value will be used. [Default is 5000]"
+msgid "To determine peer latency, this setting allocates the maximum time a peer test should take before being considered a failure, configured in milliseconds. In the event that the timeout is configured lower than the average successful test, the average successful test value will be used. [Default is 10000 (10s)]"
 msgstr "peer لیٹنسی طے کرنے کے لیے، یہ ترتیب ایک peer ٹیسٹ کے لیے اس وقت کی زیادہ سے زیادہ حد مقرر کرتی ہے جو اسے ناکام قرار دیے جانے سے پہلے لگ سکتا ہے، اور یہ ملی سیکنڈ میں ترتیب دی جاتی ہے۔ اگر ٹائم آؤٹ کو کامیاب ٹیسٹ کی اوسط سے کم ترتیب دیا جائے تو کامیاب ٹیسٹ کی اوسط قدر استعمال کی جائے گی۔ [طے شدہ 5000]"
 
-msgid "Minimum number of peers to retain in the fast tier during profile reorganization. A higher value ensures more peers are available for tunnel building, at the cost of potentially including slower peers. If more than 3000 routers are known, the default scales to <code>knownRouters / 15</code>. [Default is 400]"
+msgid "Minimum number of peers to retain in the fast tier during profile reorganization. A higher value ensures more peers are available for tunnel building, at the cost of potentially including slower peers. If more than 3000 routers are known, the default scales to <code>knownRouters / 15</code>. [Default is 1000]"
 msgstr "پروفائل کی دوبارہ تنظیم کے دوران تیز درجے میں برقرار رکھنے کے لیے peer کی کم سے کم تعداد۔ بڑی قدر یہ یقینی بناتی ہے کہ ٹنل بنانے کے لیے زیادہ peer دستیاب ہوں، اگرچہ اس کے عوض سست peer شامل ہونے کا خطرہ رہتا ہے۔ اگر 3000 سے زیادہ روٹرز معلوم ہوں تو طے شدہ قدر <code>knownRouters / 15</code> تک بڑھ جاتی ہے۔ [طے شدہ 400]"
 
-msgid "Minimum number of peers to retain in the high-capacity tier. These are the peers with the highest measured throughput and greatest ability to relay traffic. If more than 3000 routers are known, the default scales to <code>knownRouters / 15</code>. [Default is 500]"
+msgid "Minimum number of peers to retain in the high-capacity tier. These are the peers with the highest measured throughput and greatest ability to relay traffic. If more than 3000 routers are known, the default scales to <code>knownRouters / 15</code>. [Default is 1000]"
 msgstr "زیادہ گنجائش والے درجے میں برقرار رکھنے کے لیے peer کی کم سے کم تعداد۔ یہ وہ peer ہیں جن کی پیمائش شدہ تھروٹ بلند ترین اور ٹریفک ریلے کرنے کی صلاحیت سب سے زیادہ ہے۔ اگر 3000 سے زیادہ روٹرز معلوم ہوں تو طے شدہ قدر <code>knownRouters / 15</code> تک بڑھ جातی ہے۔ [طے شدہ 500]"
 
 msgid "Maximum number of peer profiles to retain in memory. Older, inactive profiles are expired first when this limit is reached. Values below 100 are clamped to 100. [Default is 8000, or 800 on slow systems]"
 msgstr "میموری میں برقرار رکھنے کے لیے peer پروفائل کی زیادہ سے زیادہ تعداد۔ یہ حد پہنچنے پر پرانی، غیر فعال پروفائلز پہلے میعاد ختم کی جاتی ہیں۔ 100 سے کم قدریں 100 پر محدود کر دی جاتی ہیں۔ [طے شدہ 8000، یا سست نظاموں پر 800]"
 
-msgid "Maximum age of a RouterInfo (in hours) for a peer to be considered selectable for tunnel building. Peers with RouterInfos older than this threshold are excluded from selection unless they have an active connection. This is particularly relevant for floodfill routers that do not actively explore the NetDB, as their RouterInfos may become stale without periodic refresh. [Default is 3]"
+msgid "Maximum age of a RouterInfo (in hours) for a peer to be considered selectable for tunnel building. Peers with RouterInfos older than this threshold are excluded from selection unless they have an active connection. This is particularly relevant for floodfill routers that do not actively explore the NetDB, as their RouterInfos may become stale without periodic refresh. [Default is 2]"
 msgstr "RouterInfo کی زیادہ سے زیادہ عمر (گھنٹوں میں) جس کے بعد ایک peer کو ٹنل بنانے کے لیے منتخب کیے جانے کے قابل سمجھا جاتا ہے۔ جن peer کے RouterInfo اس حد سے پرانے ہیں انہیں انتخاب سے خارج کر دیا جاتا ہے، ماسوائے اس صورتحال کے جب ان کا فعال کنکشن موجود ہو۔ یہ خاص طور پر ایسے floodfill روٹرز کے لیے متعلق ہے جو NetDB کی فعال طور پر ایکسپلوریشن نہیں کرتے، کیونکہ ان کے RouterInfo باقاعدہ تازہی کے بغیر پرانے ہو سکتے ہیں۔ [طے شدہ 3]"
 
 msgid "This setting determines whether stats about our router are sporadically published to the NetDb. [Default is false]"
@@ -7595,13 +7595,13 @@ msgstr "یہ ترتیب طے کرتی ہے کہ 1 گھنٹے اپ ٹائم کے 
 msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
 msgstr "true پر مقرر کرنے پر یہ ترتیب آپ کے روٹر کے لیے رمپ کیپس شائع کرنے کے لیے درکار شرائط کو نرم کر دے گی، خاص طور پر جب یہ طے ہو کہ آپ کی بینڈ وائٹ کا استعمال زیادہ ہے۔ دوسری شرائط، جیسے زیادہ کام کی تاخیر یا سست قرار دیا گیا روٹر، اب بھی کیپس کے شائع ہونے کا سبب بنیں گی۔ [طے شدہ false]"
 
-msgid "The period in milliseconds to check for idle tunnels. Tunnels with no traffic for this period may be dropped. [Default is 60000]"
+msgid "The period in milliseconds to check for idle tunnels. Tunnels with no traffic for this period may be dropped. [Default is 300000 (5 min)]"
 msgstr "بیکار ٹنلز کی جانچ کے لیے ملی سیکنڈ میں وقفہ۔ اس وقفے تک ٹریفک سے خالی ٹنلز چھوڑ دیے جا سکتے ہیں۔ [طے شدہ 60000]"
 
-msgid "The minimum number of messages a tunnel must have processed in the detection period to be considered active. Tunnels below this threshold are candidates for removal. [Default is 3]"
+msgid "The minimum number of messages a tunnel must have processed in the detection period to be considered active. Tunnels below this threshold are candidates for removal. [Default is 1]"
 msgstr "تشخیصی مدت میں کسی ٹنل کے پیغامات کی وہ کم سے کم تعداد جسے ہر ضرور بھیجنا پڑے تاکہ وہ فعال سمجھا جائے۔ اس حد سے کم پیغامات والے ٹنلز ہٹانے کے لیے امیدوار ہوتے ہیں۔ [طے شدہ 3]"
 
-msgid "The interval in milliseconds between scans for idle transit tunnels. [Default is 180000]"
+msgid "The interval in milliseconds between scans for idle transit tunnels. [Default is 60000 (1 min)]"
 msgstr "بیکار ٹرانزٹ ٹنلز کی اسکین کے درمیان ملی سیکنڈ میں وقفہ۔ [طے شدہ 180000]"
 
 msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
@@ -7643,7 +7643,7 @@ msgstr "<a href=/tunnels>مقامی ٹنل پولز</a> سے سست ٹنلز ہ�
 msgid "The minimum number of tunnels to keep in each pool when removing slow tunnels (minimum 2), overriding the configured tunnel quantity. Set to 0 to use the configured quantity per pool. [Default is 0]"
 msgstr "سست ٹنلز ہٹاتے وقت ہر پول میں رکھنے کے لیے ٹنلز کی کم سے کم تعداد (کم سے کم 2)، جو ترتیب دی گئی ٹنل تعداد کو نظرانداز کرتی ہے۔ فی پول ترتیب دی گئی تعداد استعمال کرنے کے لیے 0 پر مقرر کریں۔ [طے شدہ 0]"
 
-msgid "The interval in milliseconds between runs of the Remove Slow Tunnels job. Higher values reduce tunnel churn but may keep slow tunnels longer. [Default is 90000 (90s), or 120000 (120s) if under load]"
+msgid "The interval in milliseconds between runs of the Remove Slow Tunnels job. Higher values reduce tunnel churn but may keep slow tunnels longer. [Default is 60000 (60s)]"
 msgstr "Remove Slow Tunnels کام کے چلنے کے درمیان ملی سیکنڈ میں وقفہ۔ بڑی قدریں ٹنلز کی تبدیلی کم کرتی ہیں لیکن سست ٹنلز زیادہ دیر تک رکھے جا سکتے ہیں۔ [طے شدہ 90000 (90s)، یا بوجھ کے تحت 120000 (120s)]"
 
 msgid "The time in milliseconds before expiration to mark tunnels for early expiry when the Remove Slow Tunnels job prunes slow or excess tunnels. Higher values allow more time for new tunnels to build. [Default is 30000]"
@@ -7832,7 +7832,7 @@ msgstr "یہ ترتیب فعال ہونے پر پنگ فعال سرورز کے �
 msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are sent a RESET (the client may retry) rather than silently dropped, which keeps the client informed of the refusal. [Default is 256 (128 on slow systems)]"
 msgstr "سرور کی قبول کرنے کی قطار میں زیر التوا کنکشنز (SYNs اور جزوی پیکٹس) کی زیادہ سے زیادہ تعداد۔ جب قطار بھر جائے تو نئے SYNs کو خاموشی سے چھوڑنے کے بجائے RESET بھیجا جاتا ہے (کلائنٹ دوبارہ کوشش کر سکتا ہے)، جو کلائنٹ کو انکار سے آگاہ رکھتا ہے۔ [طے شدہ 256 (سست نظاموں پر 128)]"
 
-msgid "The maximum retransmission delay in milliseconds. Retransmit interval will not exceed this value regardless of backoff. Increase to allow longer between retries on congested paths. [Default is 30000 (30s)]"
+msgid "The maximum retransmission delay in milliseconds. Retransmit interval will not exceed this value regardless of backoff. Increase to allow longer between retries on congested paths. [Default is 20000 (20s)]"
 msgstr "دوبارہ ترسیل کی زیادہ سے زیادہ تاخیر ملی سیکنڈ میں۔ بیک آف کے باوجود دوبارہ ترسیل کا وقفہ اس قدر سے تجاوز نہیں کرے گا۔ پٹ بند راستوں پر دوبارہ کوششوں کے درمیان زیادہ وقفہ رکھنے کے لیے بڑھائیں۔ [طے شدہ 30000 (30s)]"
 
 msgid "Maximum number of packet retransmissions before giving up on a connection. Higher values improve reliability on lossy links but delay failure detection. [Default is 32]"
@@ -7844,10 +7844,10 @@ msgstr "تیزی سے بڑھتے ہوئے بیک آف (دگنا ہونے) کے �
 msgid "Maximum round-trip time in milliseconds for streaming connections. Caps the computed RTT to prevent pathological timeout values after network disturbances. [Default is 10000 (10 seconds)]"
 msgstr "streaming کنکشنز کے لیے گول ٹرپ ٹائم ملی سیکنڈ میں زیادہ سے زیادہ۔ یہ حساب کی گئی RTT کو محدود کرتا ہے تاکہ نیٹ ورک کی خرابی کے بعد بے قاعدہ ٹائم آؤٹ قدریں پیدا نہ ہوں۔ [طے شدہ 10000 (10 سیکنڈ)]"
 
-msgid "Maximum slow start window size for streaming connections. Caps the congestion window during slow start to prevent overwhelming the network. [Default is 256 (32 on slow systems)]"
+msgid "Maximum slow start window size for streaming connections. Caps the congestion window during slow start to prevent overwhelming the network. [Default is 2048 (1024 on slow systems)]"
 msgstr "streaming کنکشنز کے لیے سست آغاز کی کھڑکی کا زیادہ سے زیادہ حجم۔ نیٹ ورک کو بے قابو نہ کرنے کے لیے سست آغاز کے دوران رمپ کھڑکی کو محدود کرتا ہے۔ [طے شدہ 256 (سست نظاموں پر 32)]"
 
-msgid "Maximum congestion window size (in packets) for streaming connections. Caps the maximum throughput of a single stream. [Default is 512 (384 on slow systems)]"
+msgid "Maximum congestion window size (in packets) for streaming connections. Caps the maximum throughput of a single stream. [Default is 2048 (1024 on slow systems)]"
 msgstr "streaming کنکشنز کے لیے رمپ کھڑکی کا زیادہ سے زیادہ حجم (پیکٹس میں)۔ ایک stream کی زیادہ سے زیادہ تھروٹ پٹ کو محدود کرتا ہے۔ [طے شدہ 512 (سست نظاموں پر 384)]"
 
 msgid "The minimum retransmission delay in milliseconds. Packets will not be resent faster than this interval. Lower values allow faster recovery on lossy connections. [Default is 100ms]"
@@ -7874,7 +7874,7 @@ msgstr "خودکار LeaseSet دوبارہ شائع کرنے کے درمیان �
 msgid "Threshold in milliseconds for proactive LeaseSet republish. If a lease is expiring within this window, the LeaseSet is republished immediately rather than waiting for the next periodic cycle. [Default is 180000 (3 minutes)]"
 msgstr "پیشگی LeaseSet دوبارہ شائع کرنے کی حد ملی سیکنڈ میں۔ اگر کوئی لیس اس کھڑکی کے اندر میعاد ختم ہونے والی ہو تو LeaseSet فوراً دوبارہ شائع کر دیا جاتا ہے بجائے اگلے وقفے کا انتظار کے۔ [طے شدہ 180000 (3 منٹ)]"
 
-msgid "The maximum number of simultaneous I2CP client sessions the router will accept. [Default is 1536 (768 on slow systems)]"
+msgid "The maximum number of simultaneous I2CP client sessions the router will accept. [Default is 16384 (4096 on slow systems), used as 2048 at most]"
 msgstr "روٹر جو زیادہ سے زیادہ I2CP کلائنٹ سشنز قبول کرے گا، ان کی تعداد۔ [طے شدہ 1536 (سست نظاموں پر 768)]"
 
 msgid "When set to true, disables local-local loopback delivery and forces all traffic through tunnels (outbound tunnel → network → inbound tunnel → local destination). Useful for testing tunnel routing behavior when the source and destination are on the same router. [Disabled by default]"
