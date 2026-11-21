@@ -532,8 +532,8 @@ msgid "Data partition"
 msgstr "Partition de données"
 
 #, java-format
-msgid "No valid trackers for {0} - enable opentrackers or DHT?"
-msgstr "Aucun traqueur valide pour {0}. Activer les traqueurs ouverts ou la table de hachage distribuée ?"
+msgid "No valid trackers for {0} - enable opentrackers or DHT"
+msgstr "Aucun traqueur valide pour {0}. Activer les traqueurs ouverts ou la table de hachage distribuée"
 
 msgid "Updating"
 msgstr "Mise à jour"
@@ -666,7 +666,7 @@ msgid "Torrent Options"
 msgstr "Options torrent"
 
 msgid "Half available bandwidth recommended."
-msgstr "La valeur recommandée est la moitié de la bande passante disponible. "
+msgstr "La valeur recommandée est la moitié de la bande passante disponible."
 
 msgid "Bandwidth limit"
 msgstr "Limite de bande passante"

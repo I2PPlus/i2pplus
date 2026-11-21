@@ -533,8 +533,8 @@ msgid "Data partition"
 msgstr "Podatkovna particija"
 
 #, java-format
-msgid "No valid trackers for {0} - enable opentrackers or DHT?"
-msgstr "Za {0} ni veljavnih trackerjev - omogočiti odpri trackerje ali DHT?"
+msgid "No valid trackers for {0} - enable opentrackers or DHT"
+msgstr "Za {0} ni veljavnih trackerjev - omogočiti odpri trackerje ali DHT"
 
 msgid "Updating"
 msgstr "Posodabljanje"
@@ -1243,7 +1243,7 @@ msgstr "Odpiranje razširitve I2PSnark Bridge ni uspelo: {0}"
 
 #, java-format
 msgid " files or folders were excluded from \"{0}\" due to filter rules."
-msgstr "Datoteke ali mape so bile izključene iz \"{0}\" zaradi pravil filtra."
+msgstr " Datoteke ali mape so bile izključene iz \"{0}\" zaradi pravil filtra."
 
 #, java-format
 msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "

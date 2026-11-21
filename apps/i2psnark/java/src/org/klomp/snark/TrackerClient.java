@@ -866,7 +866,7 @@ public class TrackerClient implements Runnable {
                 stop = true;
                 this.snark.addMessage(
                         _util.getString(
-                                "No valid trackers for {0} - enable opentrackers or DHT?",
+                                "No valid trackers for {0} - enable opentrackers or DHT",
                                 this.snark.getBaseName()));
                 _log.error("No valid trackers for " + SnarkLogFormatter.torrent(this.snark));
                 this.snark.stopTorrent();

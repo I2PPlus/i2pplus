@@ -542,8 +542,8 @@ msgid "Data partition"
 msgstr "ډیټا پارتیشن"
 
 #, java-format
-msgid "No valid trackers for {0} - enable opentrackers or DHT?"
-msgstr "د {0} لپاره معتبر ټریکرونه نشته - پوښې ټریکرونه یا DHT فعال کړئ؟"
+msgid "No valid trackers for {0} - enable opentrackers or DHT"
+msgstr "د {0} لپاره معتبر ټریکرونه نشته - پوښې ټریکرونه یا DHT فعال کړئ"
 
 msgid "Updating"
 msgstr "نوې کوی"

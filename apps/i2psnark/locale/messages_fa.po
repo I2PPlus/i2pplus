@@ -420,7 +420,7 @@ msgstr "ذخیره سازی: {0}گیگابایت در حال حاضر برای �
 
 #, java-format
 msgid "Storage: {0}MB currently available for downloads on configured data partition"
-msgstr " ذخیره سازی: {0} مگابایت برای دانلود در بخش داده های تنظیم شده در حال حاضر در دسترس است"
+msgstr "ذخیره سازی: {0} مگابایت برای دانلود در بخش داده های تنظیم شده در حال حاضر در دسترس است"
 
 #, java-format
 msgid "Warning - Only {0}MB available for downloads on configured data partition"
@@ -533,8 +533,8 @@ msgid "Data partition"
 msgstr "پارتیشن داده"
 
 #, java-format
-msgid "No valid trackers for {0} - enable opentrackers or DHT?"
-msgstr "ردیاب معتبری برای {0} وجود ندارد - opentrackers یا DHT فعال شود؟"
+msgid "No valid trackers for {0} - enable opentrackers or DHT"
+msgstr "ردیاب معتبری برای {0} وجود ندارد - opentrackers یا DHT فعال شود"
 
 msgid "Updating"
 msgstr "در حال بروز رسانی"
@@ -1239,11 +1239,11 @@ msgstr "باز کردن افزونه I2PSnark Bridge ناموفق بود: {0}"
 
 #, java-format
 msgid " files or folders were excluded from \"{0}\" due to filter rules."
-msgstr "فایل ها یا پوشه ها به علت قوانین فیلتر از \"{0}\" استثنا شدند."
+msgstr " فایل ها یا پوشه ها به علت قوانین فیلتر از \"{0}\" استثنا شدند."
 
 #, java-format
 msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
-msgstr "فایل ها یا پوشه ها به علت قوانین فیلتر از \"{0}\" استثنا شدند."
+msgstr "فایل ها یا پوشه ها به علت قوانین فیلتر از \"{0}\" استثنا شدند. "
 
 #, java-format
 msgid "Torrent created for \"{0}\""
@@ -1255,7 +1255,7 @@ msgstr "بسیاری از ردیاب‌های I2P از شما می‌خواهن�
 
 #, java-format
 msgid "Error creating a torrent for \"{0}\""
-msgstr "خطا در ایجاد یک تورنت برای \"{0}'"
+msgstr "خطا در ایجاد یک تورنت برای \"{0}\""
 
 msgid "Removed"
 msgstr "حذف شد"
@@ -1624,7 +1624,7 @@ msgid "Your author name for published comments and ratings"
 msgstr "نام نویسنده شما برای نظرات و رتبه‌بندی‌های منتشر شده"
 
 msgid "File downloading priorities updated for torrent "
-msgstr "اولویت‌های دانلود فایل برای تورنت به روز شد"
+msgstr "اولویت‌های دانلود فایل برای تورنت به روز شد "
 
 msgid "Edit Torrent"
 msgstr "ویرایش تورنت"

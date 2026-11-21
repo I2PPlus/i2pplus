@@ -533,8 +533,8 @@ msgid "Data partition"
 msgstr "Datapartitie"
 
 #, java-format
-msgid "No valid trackers for {0} - enable opentrackers or DHT?"
-msgstr "Geen geldige trackers voor {0} - 'open trackers' of DHT aanzetten?"
+msgid "No valid trackers for {0} - enable opentrackers or DHT"
+msgstr "Geen geldige trackers voor {0} - 'open trackers' of DHT aanzetten"
 
 msgid "Updating"
 msgstr "Bezig met updaten"

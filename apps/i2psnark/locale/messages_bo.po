@@ -533,8 +533,8 @@ msgid "Data partition"
 msgstr "གནད་སྡུད་སྡེ་ཚན།"
 
 #, java-format
-msgid "No valid trackers for {0} - enable opentrackers or DHT?"
-msgstr "{0} གི་དོན་ལུ་ནུས་ཅན་གྱི་ཊེ་རེཀར་མིན་འདུག - ཁ་ཕྱེ་བའི་ཊེ་རེཀར་ཡང་ན་ DHT ལྕོགས་ཅན་བཟོ་ནི་ཨིན་ན?"
+msgid "No valid trackers for {0} - enable opentrackers or DHT"
+msgstr "{0} གི་དོན་ལུ་ནུས་ཅན་གྱི་ཊེ་རེཀར་མིན་འདུག - ཁ་ཕྱེ་བའི་ཊེ་རེཀར་ཡང་ན་ DHT ལྕོགས་ཅན་བཟོ་ནི་ཨིན་ན"
 
 msgid "Updating"
 msgstr "དུས་མཐུན་བཟོ་དོ།"

@@ -255,10 +255,10 @@ msgid "Torrent directory reset to data directory."
 msgstr "トレントディレクトリをデータディレクトリにリセットしました。"
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
-msgstr "オープントラッカーリストが変更されました - トレントの再起動が必要です。オープン トラッカー リストが変更されました - 有効にするには torrent を再起動する必要があります。オープン トラッカー リストが変更されました - 有効にするにはトレントの再起動が必要です。オープントラッカーリストが変更されました - このオプションは再起動が必要です。"
+msgstr "オープントラッカーリストが変更されました - 有効にするにはトレントの再起動が必要です。"
 
 msgid "Private tracker list changed - affects newly created torrents only."
-msgstr "プライベートトラッカーリストが変更されました - 新しく作成されたトレントにのみ影響します。プライベート トラッカー リストが変更されました - 新しく作成されたトレントのみに影響します。プライベート トラッカー リストが変更されました - 新しく作成されたトレントのみに影響します。プライベートトラッカーリストが変更されました - 新しく作成されたtorrentのみに影響します."
+msgstr "プライベートトラッカーリストが変更されました - 新しく作成されたトレントのみに影響します。"
 
 #, java-format
 msgid "Unable to save the config to {0}"
@@ -333,7 +333,7 @@ msgstr "警告 - \"{0}\" には I2P トラッカーがなく、DHT とオープ�
 
 #, java-format
 msgid "Open trackers are disabled and we have no DHT peers. Fetch of {0} may not succeed until you start another torrent, enable open trackers, or enable DHT."
-msgstr "オープン トラッカーが無効になっており、DHT ピアがありません。オープントラッカーは無効になっており、DHTピアはありません。 {0}のフェッチは、別のトレントを起動したり、オープントラッカーを有効にしたり、DHTを有効にするまで成功しない場合があります。"
+msgstr "オープントラッカーが無効になっており、DHT ピアがありません。{0} のフェッチは、別のトレントを起動したり、オープントラッカーや DHT を有効にするまで成功しない場合があります。"
 
 #, java-format
 msgid "Adding {0}"
@@ -533,8 +533,8 @@ msgid "Data partition"
 msgstr "データパーティション"
 
 #, java-format
-msgid "No valid trackers for {0} - enable opentrackers or DHT?"
-msgstr "{0} の有効なトラッカーがありません - opentrackers または DHT を有効にしますか?"
+msgid "No valid trackers for {0} - enable opentrackers or DHT"
+msgstr "{0} の有効なトラッカーがありません - opentrackers または DHT を有効にしてください"
 
 msgid "Updating"
 msgstr "更新中"
@@ -1239,7 +1239,7 @@ msgstr "I2PSnark Bridge 拡張機能を開けませんでした: {0}"
 
 #, java-format
 msgid " files or folders were excluded from \"{0}\" due to filter rules."
-msgstr " \"{0}\"から {0} 個のファイルやフォルダーがフィルター規則により除外されました。"
+msgstr " 個のファイルまたはフォルダーがフィルター規則により \"{0}\" から除外されました。"
 
 #, java-format
 msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "

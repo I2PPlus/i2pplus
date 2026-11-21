@@ -531,8 +531,8 @@ msgid "Data partition"
 msgstr "資料分割區"
 
 #, java-format
-msgid "No valid trackers for {0} - enable opentrackers or DHT?"
-msgstr "{0}沒有有效的tracker，要啟用open tracker或DHT嗎？"
+msgid "No valid trackers for {0} - enable opentrackers or DHT"
+msgstr "{0}沒有有效的tracker،請啟用open tracker或DHT"
 
 msgid "Updating"
 msgstr "正在更新"
@@ -1239,7 +1239,7 @@ msgstr " 個檔案或資料夾因篩選規則而從\"{0}\"中排除。"
 
 #, java-format
 msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
-msgstr "下列檔案或資料夾因篩選規則而從\"{0}\"中排除："
+msgstr "下列檔案或資料夾因篩選規則而從\"{0}\"中排除： "
 
 #, java-format
 msgid "Torrent created for \"{0}\""

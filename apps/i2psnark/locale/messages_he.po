@@ -542,8 +542,8 @@ msgid "Data partition"
 msgstr "מחיצת נתונים"
 
 #, java-format
-msgid "No valid trackers for {0} - enable opentrackers or DHT?"
-msgstr "אין מעקבים תקפים עבור {0} - להפעיל מעקבים פתוחים או DHT?"
+msgid "No valid trackers for {0} - enable opentrackers or DHT"
+msgstr "אין מעקבים תקפים עבור {0} - להפעיל מעקבים פתוחים או DHT"
 
 msgid "Updating"
 msgstr "מעדכן"

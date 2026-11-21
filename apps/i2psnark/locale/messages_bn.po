@@ -450,10 +450,10 @@ msgid "Starting torrent: {0}"
 msgstr "টরেন্ট শুরু হচ্ছে: {0}"
 
 msgid "Unable to load torrent create file filter config: "
-msgstr "টরেন্ট ফাইল ফিল্টার কনফিগ লোড করা যাচ্ছে না:"
+msgstr "টরেন্ট ফাইল ফিল্টার কনফিগ লোড করা যাচ্ছে না: "
 
 msgid "Unable to save torrent create file filter config: "
-msgstr "টরেন্ট ফাইল ফিল্টার কনফিগ সংরক্ষণ করা যাচ্ছে না:"
+msgstr "টরেন্ট ফাইল ফিল্টার কনফিগ সংরক্ষণ করা যাচ্ছে না: "
 
 msgid "Torrent not found"
 msgstr "টরেন্ট পাওয়া যায়নি"
@@ -533,8 +533,8 @@ msgid "Data partition"
 msgstr "ডেটা পার্টিশন"
 
 #, java-format
-msgid "No valid trackers for {0} - enable opentrackers or DHT?"
-msgstr "{0}-এর জন্য কোনো বৈধ ট্র্যাকার নেই - ওপেনট্র্যাকার বা DHT সক্রিয় করবেন?"
+msgid "No valid trackers for {0} - enable opentrackers or DHT"
+msgstr "{0}-এর জন্য কোনো বৈধ ট্র্যাকার নেই - ওপেনট্র্যাকার বা DHT সক্রিয় করুন"
 
 msgid "Updating"
 msgstr "আপডেট করা হচ্ছে"
@@ -1243,7 +1243,7 @@ msgstr " ফাইল বা ফোল্ডার ফিল্টার নি�
 
 #, java-format
 msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
-msgstr "ফিল্টার নিয়মের কারণে নিম্নলিখিত ফাইল বা ফোল্ডারগুলি \"{0}\" থেকে বাদ দেওয়া হয়েছে:"
+msgstr "ফিল্টার নিয়মের কারণে নিম্নলিখিত ফাইল বা ফোল্ডারগুলি \"{0}\" থেকে বাদ দেওয়া হয়েছে: "
 
 #, java-format
 msgid "Torrent created for \"{0}\""
@@ -1624,7 +1624,7 @@ msgid "Your author name for published comments and ratings"
 msgstr "প্রকাশিত মন্তব্য এবং রেটিংয়ের জন্য আপনার লেখকের নাম"
 
 msgid "File downloading priorities updated for torrent "
-msgstr "টরেন্টের জন্য ফাইল ডাউনলোড অগ্রাধিকার আপডেট করা হয়েছে"
+msgstr "টরেন্টের জন্য ফাইল ডাউনলোড অগ্রাধিকার আপডেট করা হয়েছে "
 
 msgid "Edit Torrent"
 msgstr "টরেন্ট সম্পাদনা"

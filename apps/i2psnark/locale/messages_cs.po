@@ -533,8 +533,8 @@ msgid "Data partition"
 msgstr "Datový oddíl"
 
 #, java-format
-msgid "No valid trackers for {0} - enable opentrackers or DHT?"
-msgstr "Žádné platné trackery pro {0} – povolit opentrackery nebo DHT?"
+msgid "No valid trackers for {0} - enable opentrackers or DHT"
+msgstr "Žádné platné trackery pro {0} – povolit opentrackery nebo DHT"
 
 msgid "Updating"
 msgstr "Aktualizace"

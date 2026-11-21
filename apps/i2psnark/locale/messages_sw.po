@@ -542,8 +542,8 @@ msgid "Data partition"
 msgstr "Sehemu ya data"
 
 #, java-format
-msgid "No valid trackers for {0} - enable opentrackers or DHT?"
-msgstr "Hakuna tracker halali za {0} - uwashe tracker za wazi au DHT?"
+msgid "No valid trackers for {0} - enable opentrackers or DHT"
+msgstr "Hakuna tracker halali za {0} - uwashe tracker za wazi au DHT"
 
 msgid "Updating"
 msgstr "Inasasisha"

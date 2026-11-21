@@ -533,8 +533,8 @@ msgid "Data partition"
 msgstr "Partisi data"
 
 #, java-format
-msgid "No valid trackers for {0} - enable opentrackers or DHT?"
-msgstr "Tidak ada pelacak yang valid untuk {0} - aktifkan opentracker atau DHT?"
+msgid "No valid trackers for {0} - enable opentrackers or DHT"
+msgstr "Tidak ada pelacak yang valid untuk {0} - aktifkan opentracker atau DHT"
 
 msgid "Updating"
 msgstr "Sedang mengupdate"
@@ -1374,7 +1374,7 @@ msgid "Peer is interested but currently idle"
 msgstr "Rekan tertarik tapi saat ini menganggur"
 
 msgid "Uninterested (We have no pieces the peer needs)"
-msgstr "Uninterested (kita  memiliki potongan-potongan diinginkan peer)"
+msgstr "\"Uninterested (kita memiliki potongan-potongan diinginkan peer)\""
 
 msgid "Choking (We are not allowing the peer to request pieces)"
 msgstr "Choking (kita tidak membiarkan peer meminta potongan)"

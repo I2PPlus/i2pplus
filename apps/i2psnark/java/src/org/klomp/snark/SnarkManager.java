@@ -4470,32 +4470,46 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         }
 
         MetaInfo info = torrent.getMetaInfo();
-        String warnMsg;
         if (!TrackerClient.isValidAnnounce(info.getAnnounce())) {
+            // The messages page names the torrent in full - it can wrap, and the
+            // operator needs to recognise the torrent. Standalone stdout gets the same
+            // text with the name capped, the way every Snark log line caps it, because
+            // a scene release name runs past 60 characters and a terminal line cannot
+            // wrap. Same msgid, so the only difference is the argument.
+            String name = info.getName();
+            String shortName = SnarkLogFormatter.torrent(info);
+            String warnMsg;
+            String printMsg;
             if (info.isPrivate()) {
-                warnMsg = _t("ERROR - No I2P trackers in private torrent \"{0}\"", info.getName());
+                warnMsg = _t("ERROR - No I2P trackers in private torrent \"{0}\"", name);
+                printMsg = _t("ERROR - No I2P trackers in private torrent \"{0}\"", shortName);
             } else if (!_util.getOpenTrackers().isEmpty()) {
                 warnMsg =
-                        _t(
-                                "Warning - No I2P trackers in \"{0}\", will announce to I2P open"
-                                    + " trackers and DHT only.",
-                                info.getName());
+                        _t("Warning - No I2P trackers in \"{0}\", will announce to I2P open" +
+                           " trackers and DHT only.", name);
+                printMsg =
+                        _t("Warning - No I2P trackers in \"{0}\", will announce to I2P open" +
+                           " trackers and DHT only.", shortName);
             } else if (_util.shouldUseDHT()) {
                 warnMsg =
-                        _t(
-                                "Warning - No I2P trackers in \"{0}\", and open trackers are"
-                                    + " disabled, will announce to DHT only.",
-                                info.getName());
+                        _t("Warning - No I2P trackers in \"{0}\", and open trackers are" +
+                           " disabled, will announce to DHT only.", name);
+                printMsg =
+                        _t("Warning - No I2P trackers in \"{0}\", and open trackers are" +
+                           " disabled, will announce to DHT only.", shortName);
             } else {
                 warnMsg =
-                        _t(
-                                "Warning - No I2P trackers in \"{0}\", and DHT and open trackers"
-                                    + " are disabled, you should enable open trackers or DHT before"
-                                    + " starting the torrent.",
-                                info.getName());
+                        _t("Warning - No I2P trackers in \"{0}\", and DHT and open trackers" +
+                           " are disabled, you should enable open trackers or DHT before" +
+                           " starting the torrent.", name);
+                // Nothing to announce to, and the torrent is left stopped, so the
+                // standalone line says that in the same words TrackerClient uses when
+                // it stops a torrent for the same reason.
+                printMsg =
+                        _t("No valid trackers for {0} - enable opentrackers or DHT", shortName);
                 dontAutoStart = true;
             }
-            addMessageAndPrint(warnMsg);
+            addMessageAndPrint(warnMsg, printMsg);
         }
 
         return true;

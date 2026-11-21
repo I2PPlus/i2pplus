@@ -191,7 +191,7 @@ msgstr "Kommentare deaktiviert."
 
 #, java-format
 msgid "Comments name set to {0}."
-msgstr "Kommentarname auf  {0} gesetzt."
+msgstr "\"Kommentarname auf {0} gesetzt.\""
 
 msgid "Collapsible panels enabled."
 msgstr "Einklappbare Panels aktiviert."
@@ -533,8 +533,8 @@ msgid "Data partition"
 msgstr "Datenträgerpartition"
 
 #, java-format
-msgid "No valid trackers for {0} - enable opentrackers or DHT?"
-msgstr "Keine gültigen Tracker für {0}. OpenTrackers oder DHT aktivieren?"
+msgid "No valid trackers for {0} - enable opentrackers or DHT"
+msgstr "Keine gültigen Tracker für {0}. OpenTrackers oder DHT aktivieren"
 
 msgid "Updating"
 msgstr "Aktualisierung"
@@ -1212,7 +1212,7 @@ msgstr "Magnetlink gelöscht: {0}"
 
 #, java-format
 msgid "Torrent file could not be deleted: {0}"
-msgstr "Torrentdatei konnte nicht gelöscht werden:  {0}"
+msgstr "\"Torrentdatei konnte nicht gelöscht werden: {0}\""
 
 #, java-format
 msgid "Data file deleted: {0}"

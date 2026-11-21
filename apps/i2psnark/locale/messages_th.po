@@ -357,7 +357,7 @@ msgid "Failed to copy torrent file to {0}"
 msgstr "คัดลอกไฟล์torrentไปยัง{0}ไม่สำเร็จ"
 
 msgid " - torrent file already exists"
-msgstr "-มีไฟล์torrentอยู่แล้ว"
+msgstr " -มีไฟล์torrentอยู่แล้ว"
 
 #, java-format
 msgid "Too many files in \"{0}\" ({1})!"
@@ -459,10 +459,10 @@ msgid "Starting torrent: {0}"
 msgstr "กำลังเริ่มtorrent:{0}"
 
 msgid "Unable to load torrent create file filter config: "
-msgstr "ไม่สามารถโหลดการกำหนดค่าตัวกรองไฟล์สำหรับสร้างtorrentได้:"
+msgstr "ไม่สามารถโหลดการกำหนดค่าตัวกรองไฟล์สำหรับสร้างtorrentได้: "
 
 msgid "Unable to save torrent create file filter config: "
-msgstr "ไม่สามารถบันทึกการกำหนดค่าตัวกรองไฟล์สำหรับสร้างtorrentได้:"
+msgstr "ไม่สามารถบันทึกการกำหนดค่าตัวกรองไฟล์สำหรับสร้างtorrentได้: "
 
 msgid "Torrent not found"
 msgstr "ไม่พบtorrent"
@@ -542,8 +542,8 @@ msgid "Data partition"
 msgstr "พาร์ติชันข้อมูล"
 
 #, java-format
-msgid "No valid trackers for {0} - enable opentrackers or DHT?"
-msgstr "ไม่มีtrackerที่ถูกต้องสำหรับ{0}-เปิดใช้งานtrackerเปิดหรือDHTหรือไม่"
+msgid "No valid trackers for {0} - enable opentrackers or DHT"
+msgstr "ไม่มีtrackerที่ถูกต้องสำหรับ{0}-เปิดใช้งานtrackerเปิดหรือDHT"
 
 msgid "Updating"
 msgstr "กำลังอัปเดต"
@@ -1248,11 +1248,11 @@ msgstr "เปิดส่วนขยายI2PSnark Bridgeไม่สำเร
 
 #, java-format
 msgid " files or folders were excluded from \"{0}\" due to filter rules."
-msgstr "ไฟล์หรือโฟลเดอร์ถูกตัดออกจาก\"{0}\"ตามกฎตัวกรอง"
+msgstr " ไฟล์หรือโฟลเดอร์ถูกตัดออกจาก\"{0}\"ตามกฎตัวกรอง"
 
 #, java-format
 msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
-msgstr "ไฟล์หรือโฟลเดอร์ต่อไปนี้ถูกตัดออกจาก\"{0}\"ตามกฎตัวกรอง:"
+msgstr "ไฟล์หรือโฟลเดอร์ต่อไปนี้ถูกตัดออกจาก\"{0}\"ตามกฎตัวกรอง: "
 
 #, java-format
 msgid "Torrent created for \"{0}\""
@@ -1633,7 +1633,7 @@ msgid "Your author name for published comments and ratings"
 msgstr "ชื่อผู้เขียนสำหรับความคิดเห็นและคะแนนที่เผยแพร่"
 
 msgid "File downloading priorities updated for torrent "
-msgstr "อัปเดตลำดับความสำคัญการดาวน์โหลดไฟล์สำหรับtorrentแล้ว"
+msgstr "อัปเดตลำดับความสำคัญการดาวน์โหลดไฟล์สำหรับtorrentแล้ว "
 
 msgid "Edit Torrent"
 msgstr "แก้ไขtorrent"

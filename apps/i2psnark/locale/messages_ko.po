@@ -533,8 +533,8 @@ msgid "Data partition"
 msgstr "데이터 파티션"
 
 #, java-format
-msgid "No valid trackers for {0} - enable opentrackers or DHT?"
-msgstr "{0}에 올바른 트래커가 없습니다 - 오픈트래커나 DHT를 활성화 하였습니까?"
+msgid "No valid trackers for {0} - enable opentrackers or DHT"
+msgstr "{0}에 올바른 트래커가 없습니다 - 오픈트래커나 DHT를 활성화하십시오"
 
 msgid "Updating"
 msgstr "업데이트 중"
@@ -787,7 +787,7 @@ msgid "Dest."
 msgstr "목적지"
 
 msgid "Inbound Settings"
-msgstr "수신  세팅"
+msgstr "\"수신 세팅\""
 
 msgid "Outbound Settings"
 msgstr "송신 세팅"
@@ -1061,7 +1061,7 @@ msgid "Start all torrents and the I2P tunnel"
 msgstr "모든 토렌트와 I2P 터널 시작"
 
 msgid "Start all stopped torrents"
-msgstr "모든  멈춰진 토렌트 시작"
+msgstr "\"모든 멈춰진 토렌트 시작\""
 
 msgid "Hide Peers"
 msgstr "피어 감추기"
@@ -1237,7 +1237,7 @@ msgstr "I2PSnark Bridge 확장 열기 실패: {0}"
 
 #, java-format
 msgid " files or folders were excluded from \"{0}\" due to filter rules."
-msgstr "\"{0}\"에서 {0}개의 파일이나 폴더가 필터 규칙으로 제외되었습니다."
+msgstr " 개의 파일이나 폴더가 필터 규칙으로 \"{0}\"에서 제외되었습니다."
 
 #, java-format
 msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "

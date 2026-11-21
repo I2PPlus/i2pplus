@@ -533,8 +533,8 @@ msgid "Data partition"
 msgstr "Partición de datos"
 
 #, java-format
-msgid "No valid trackers for {0} - enable opentrackers or DHT?"
-msgstr "No hay rastreadores válidos para {0}. ¿Quiere activar los rastreadores abiertos o la DHT?"
+msgid "No valid trackers for {0} - enable opentrackers or DHT"
+msgstr "No hay rastreadores válidos para {0}. Active los rastreadores abiertos o la DHT"
 
 msgid "Updating"
 msgstr "Actualizando"

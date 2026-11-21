@@ -533,8 +533,8 @@ msgid "Data partition"
 msgstr "Розділ даних"
 
 #, java-format
-msgid "No valid trackers for {0} - enable opentrackers or DHT?"
-msgstr "Для {0} немає трекерів - включити відкриті трекери або DHT?"
+msgid "No valid trackers for {0} - enable opentrackers or DHT"
+msgstr "Для {0} немає трекерів - включити відкриті трекери або DHT"
 
 msgid "Updating"
 msgstr "Оновлення"
@@ -1630,7 +1630,7 @@ msgid "Your author name for published comments and ratings"
 msgstr "Iм’я вашого автора для опублікованих коментарів і оцінок"
 
 msgid "File downloading priorities updated for torrent "
-msgstr "Пріоритети завантаження файлів оновлено для торренту"
+msgstr "Пріоритети завантаження файлів оновлено для торренту "
 
 msgid "Edit Torrent"
 msgstr "Редагувати Торрент"

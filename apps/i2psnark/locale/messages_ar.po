@@ -533,8 +533,8 @@ msgid "Data partition"
 msgstr "قسم البيانات"
 
 #, java-format
-msgid "No valid trackers for {0} - enable opentrackers or DHT?"
-msgstr "لا يوجد متتبعات صالحة لـ {0} - تمكين opentrackers أو DHT؟"
+msgid "No valid trackers for {0} - enable opentrackers or DHT"
+msgstr "لا يوجد متتبعات صالحة لـ {0} - تمكين opentrackers أو DHT"
 
 msgid "Updating"
 msgstr "ترقية"
@@ -1259,7 +1259,7 @@ msgstr "تم انشاء تورنت لـ {0}"
 
 #, java-format
 msgid "Many I2P trackers require you to register new torrents before seeding - please do so before starting \"{0}\""
-msgstr "يطلب منك العديد من متتبعي I2P تسجيل ملفات تورنت جديدة قبل الزرع - يرجى القيام بذلك قبل البدء \"{0}\"العديد من trackers يطلبون تسجيل التورنت قبل مشاركتها، قم بذلك قبل البداية {0}"
+msgstr "يطلب منك العديد من متتبعي I2P تسجيل ملفات تورنت جديدة قبل الزرع - يرجى القيام بذلك قبل البدء \"{0}\""
 
 #, java-format
 msgid "Error creating a torrent for \"{0}\""

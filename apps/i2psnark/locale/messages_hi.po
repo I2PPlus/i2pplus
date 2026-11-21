@@ -533,8 +533,8 @@ msgid "Data partition"
 msgstr "डेटा पैर्टिशन"
 
 #, java-format
-msgid "No valid trackers for {0} - enable opentrackers or DHT?"
-msgstr "{0} के लिए कोई वैध ट्रैकर नहीं - ओपनट्रैकर्स या DHT को सक्षम करें?"
+msgid "No valid trackers for {0} - enable opentrackers or DHT"
+msgstr "{0} के लिए कोई वैध ट्रैकर नहीं - ओपनट्रैकर्स या DHT को सक्षम करें"
 
 msgid "Updating"
 msgstr "अपडेट कर रहे हैं"
@@ -1003,20 +1003,20 @@ msgid "Deleting {0} and associated metadata only..."
 msgstr "केवल {0} और संबद्ध मेटाडेटा हटा रहे हैं..."
 
 msgid "clear messages"
-msgstr " संदेश हटाएं"
+msgstr "संदेश हटाएं"
 
 msgid "Expand"
-msgstr " विस्तारित करें"
+msgstr "विस्तारित करें"
 
 msgid "Shrink"
-msgstr " संक्षिप्त करें"
+msgstr "संक्षिप्त करें"
 
 #, java-format
 msgid "Warning! Javascript is disabled in your browser. If {0} is enabled, you will lose any input in the add/create torrent sections when a refresh occurs."
 msgstr "सेतना! आपके ब्राउज़र में Javascript अक्षम है। यदि {0} सक्रिय है, तो जब नवीनीकरण होता है, तो आप जोड़/बनाने के टॉरेंट सेक्शंस में किसी भी प्रविष्टि को हारा जाएगा।"
 
 msgid "page refresh"
-msgstr " पेज ताजा करें"
+msgstr "पेज ताजा करें"
 
 msgid "Warning - No I2P"
 msgstr "सचेतना - कोई I2P नहीं"
@@ -1028,10 +1028,10 @@ msgid "No torrents loaded."
 msgstr "कोई टॉरेंट लोड नहीं किया गया।"
 
 msgid "Status"
-msgstr " स्थिति"
+msgstr "स्थिति"
 
 msgid "Torrent"
-msgstr " टॉरेंट"
+msgstr "टॉरेंट"
 
 msgid "ETA"
 msgstr "ETA"
@@ -1064,10 +1064,10 @@ msgid "Start all stopped torrents"
 msgstr "सभी रोके हुए टॉरेंट शुरू करें"
 
 msgid "Hide Peers"
-msgstr " पीयर्स छिपाएं"
+msgstr "पीयर्स छिपाएं"
 
 msgid "Show Peers"
-msgstr " पीयर्स दिखाएं"
+msgstr "पीयर्स दिखाएं"
 
 #, java-format
 msgid "Sort by {0}"
@@ -1131,34 +1131,34 @@ msgid "No DHT Peers"
 msgstr "कोई DHT पीयर नहीं"
 
 msgid "Search"
-msgstr " खोजें"
+msgstr "खोजें"
 
 msgid "Show All"
-msgstr " सभी दिखाएं"
+msgstr "सभी दिखाएं"
 
 msgid "Active"
-msgstr " सक्रिय"
+msgstr "सक्रिय"
 
 msgid "Inactive"
-msgstr " निष्क्रिय"
+msgstr "निष्क्रिय"
 
 msgid "Connected"
-msgstr " जुड़ा हुआ"
+msgstr "जुड़ा हुआ"
 
 msgid "Downloading"
-msgstr " डाउनलोड कर रहा है"
+msgstr "डाउनलोड कर रहा है"
 
 msgid "Seeding"
-msgstr " सीडिंग"
+msgstr "सीडिंग"
 
 msgid "Complete"
-msgstr " पूर्ण"
+msgstr "पूर्ण"
 
 msgid "Incomplete"
 msgstr "अपूर्ण"
 
 msgid "Stopped"
-msgstr " रुका"
+msgstr "रुका"
 
 msgid "First"
 msgstr "पहला"
@@ -1239,11 +1239,11 @@ msgstr "I2PSnark Bridge एक्सटेंशन खोलने में �
 
 #, java-format
 msgid " files or folders were excluded from \"{0}\" due to filter rules."
-msgstr "{0} के कारण फ़िल्टर नियमों के कारण फ़ाइलें या फ़ोल्डरों को छोड़ दिया गया है।"
+msgstr " {0} के कारण फ़िल्टर नियमों के कारण फ़ाइलें या फ़ोल्डरों को छोड़ दिया गया है।"
 
 #, java-format
 msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
-msgstr "{0} के कारण निम्नलिखित फ़ाइलें या फ़ोल्डर फ़िल्टर नियमों के कारण छोड़ दिए गए हैं:"
+msgstr "{0} के कारण निम्नलिखित फ़ाइलें या फ़ोल्डर फ़िल्टर नियमों के कारण छोड़ दिए गए हैं: "
 
 #, java-format
 msgid "Torrent created for \"{0}\""
@@ -1479,7 +1479,7 @@ msgid "Directory"
 msgstr "डायरेक्टरी"
 
 msgid "File type"
-msgstr " फ़ाइल प्रकार"
+msgstr "फ़ाइल प्रकार"
 
 msgid "Size"
 msgstr "कार"

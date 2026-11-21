@@ -533,8 +533,8 @@ msgid "Data partition"
 msgstr "Verilənlər bölməsi"
 
 #, java-format
-msgid "No valid trackers for {0} - enable opentrackers or DHT?"
-msgstr "{0} üçün səhv trackerlər - opentrackerləri və ya DHT-ni aktivləşdirin?"
+msgid "No valid trackers for {0} - enable opentrackers or DHT"
+msgstr "{0} üçün səhv trackerlər - opentrackerləri və ya DHT-ni aktivləşdirin"
 
 msgid "Updating"
 msgstr "Yenilənir"
@@ -1061,7 +1061,7 @@ msgid "Start all torrents and the I2P tunnel"
 msgstr "Bütün torrentləri və I2P tünelini başlat"
 
 msgid "Start all stopped torrents"
-msgstr "Torrent {0}-i başlamaq"
+msgstr "Bütün dayandırılmış torrentleri başlat"
 
 msgid "Hide Peers"
 msgstr "Qarşılıqlıları gizlət"
@@ -1239,7 +1239,7 @@ msgstr "I2PSnark Bridge genişləndirməsi açıla bilmədi: {0}"
 
 #, java-format
 msgid " files or folders were excluded from \"{0}\" due to filter rules."
-msgstr "{0}dan filtrləmə qaydaları səbəbindən fayllar və ya qovluqlar istisna edildi."
+msgstr " {0}dan filtrləmə qaydaları səbəbindən fayllar və ya qovluqlar istisna edildi."
 
 #, java-format
 msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
@@ -1624,7 +1624,7 @@ msgid "Your author name for published comments and ratings"
 msgstr "Yayılan şərhlər və qiymətləndirmələr üçün sizin müəllif adınız"
 
 msgid "File downloading priorities updated for torrent "
-msgstr "Torrent üçün fayl endirmə prioritetləri yeniləndi"
+msgstr "Torrent üçün fayl endirmə prioritetləri yeniləndi "
 
 msgid "Edit Torrent"
 msgstr "Torrenti Redaktə Et"

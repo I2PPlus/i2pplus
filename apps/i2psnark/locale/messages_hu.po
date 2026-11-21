@@ -48,7 +48,7 @@ msgstr "A minimum feltöltők korlátja {0}"
 
 #, java-format
 msgid "Up BW limit changed to {0}KBps"
-msgstr "Felső súlykorlát {0} KB/s-ra módosultFeltöltési sávszélesség korlátja megváltoztatva a következőre: {0} KBps"
+msgstr "Feltöltési sávszélesség korlátja megváltoztatva a következőre: {0} KBps"
 
 #, java-format
 msgid "Minimum up bandwidth limit is {0}KBps"
@@ -298,7 +298,7 @@ msgstr "Érvénytelen torrent a következőben: \"{0}\""
 
 #, java-format
 msgid "ERROR - Out of memory, cannot create torrent from {0}"
-msgstr "HIBA – Elfogyott a memória, nem lehet torrentet létrehozni innen: {0}HIBA - nincs több memória, torrent létrehozása sikertelen a következőből: {0}"
+msgstr "HIBA – Elfogyott a memória, nem lehet torrentet létrehozni innen: {0}"
 
 #, java-format
 msgid "ERROR - cannot create torrent from {0}"
@@ -317,7 +317,7 @@ msgstr "Torrent hozzáadva: {0}"
 
 #, java-format
 msgid "ERROR - No I2P trackers in private torrent \"{0}\""
-msgstr "HIBA – Nincsenek I2P-követők a privát torrentben \"{0}\"HIBA - Nincsenek I2P követők (trackerek) a következő privát torrentben: \"{0}\""
+msgstr "HIBA – Nincsenek I2P-követők a privát torrentben \"{0}\""
 
 #, java-format
 msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
@@ -533,8 +533,8 @@ msgid "Data partition"
 msgstr "Adatpartíció"
 
 #, java-format
-msgid "No valid trackers for {0} - enable opentrackers or DHT?"
-msgstr "Nincsenek érvényes nyomkövetők a(z) {0} számára – engedélyezi az opentrackereket vagy a DHT-t?"
+msgid "No valid trackers for {0} - enable opentrackers or DHT"
+msgstr "Nincsenek érvényes nyomkövetők a(z) {0} számára – engedélyezze az opentrackereket vagy a DHT-t"
 
 msgid "Updating"
 msgstr "Frissítés"
@@ -1251,11 +1251,11 @@ msgstr "Torrent létrehozva a következőnek: \"{0}\""
 
 #, java-format
 msgid "Many I2P trackers require you to register new torrents before seeding - please do so before starting \"{0}\""
-msgstr "Sok I2P követő (tracker) megköveteli az új torrentek regisztrációját táplálás (seed) előtt - kérlek, regisztrálj, mielőtt elindítod a következőt:  \"{0}\""
+msgstr "\"Sok I2P követő (tracker) megköveteli az új torrentek regisztrációját táplálás (seed) előtt - kérlek, regisztrálj, mielőtt elindítod a következőt: \"{0}\"\""
 
 #, java-format
 msgid "Error creating a torrent for \"{0}\""
-msgstr "Hiba történt a torrent létrehozásakor  \"{0}\" számára"
+msgstr "\"Hiba történt a torrent létrehozásakor \"{0}\" számára\""
 
 msgid "Removed"
 msgstr "Eltávolítva"

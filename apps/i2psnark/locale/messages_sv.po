@@ -15,7 +15,7 @@ msgid "Unable to connect to I2P"
 msgstr "Kan inte ansluta till I2P"
 
 msgid "Error connecting to I2P - check your I2CP settings!"
-msgstr "Fel vid anslutning till I2P - kontrollera dina I2CP-inställningar!Problem vid anslutning till I2P - kontrollera dina inställningar för I2CP!"
+msgstr "Fel vid anslutning till I2P - kontrollera dina I2CP-inställningar!"
 
 msgid "Configuring I2PSnark with I2CP options"
 msgstr "Konfigurera Torrenter med I2CP-alternativ"
@@ -163,10 +163,10 @@ msgid "Disabled autostart"
 msgstr "Inaktiverade automatisk start"
 
 msgid "Enabled open trackers - torrent restart required to take effect."
-msgstr "Aktiverade öppna spårare - omstart av torrent krävs för att träda i kraft.Aktiverade öppna spårare - omstart av torrent krävs för att träda i kraft.Aktiverade öppna spårare - omstart av torrent krävs för att träda i kraft.Aktiverade offentliga bevakare - torrenten måste startas om för att inställningen ska träda i kraft."
+msgstr "Aktiverade öppna spårare - omstart av torrent krävs för att träda i kraft."
 
 msgid "Disabled open trackers - torrent restart required to take effect."
-msgstr "Inaktiverade öppna spårare - omstart av torrent krävs för att träda i kraft.Inaktiverade öppna spårare - omstart av torrent krävs för att träda i kraft.Inaktiverade öppna spårare - omstart av torrent krävs för att träda i kraft.Inaktiverade offentliga bevakare - torrenten måste startas om för att inställningen ska träda i kraft."
+msgstr "Inaktiverade öppna spårare - omstart av torrent krävs för att träda i kraft."
 
 msgid "Enabled DHT."
 msgstr "Aktivera DHT."
@@ -321,19 +321,19 @@ msgstr "FEL - Inga I2P bevakare i den privata torrenten \"{0}\""
 
 #, java-format
 msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
-msgstr "Varning - Inga I2P-spårare i \"{0}\", kommer endast att meddela till I2P öppna spårare och DHT.Varning - Inga I2P-spårare i \"{0}\", kommer endast att meddela till I2P öppna spårare och DHT.Varning - Inga I2P-spårare i \"{0}\", kommer endast att meddela till I2P öppna spårare och DHT.Varning - Ingen I2P bevakare i \"{0}\", kommer enbart att annonsera till offentliga I2P bevakare och DHT."
+msgstr "Varning - Inga I2P-spårare i \"{0}\", annonserar endast till öppna I2P-spårare och DHT."
 
 #, java-format
 msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
-msgstr "Varning - Inga I2P-spårare i \"{0}\", och öppna spårare är inaktiverade, kommer endast att meddelas till DHT.Varning - Inga I2P-spårare i \"{0}\", och öppna spårare är inaktiverade, kommer endast att meddelas till DHT.Varning - Inga I2P-spårare i \"{0}\", och öppna spårare är inaktiverade, kommer endast att meddelas till DHT.Varning - Ingen I2P bevakare i \"{0}\" och offentliga bevakare är inaktiverade, kommer enbart att annonsera till DHT."
+msgstr "Varning - Inga I2P-spårare i \"{0}\", och öppna spårare är inaktiverade, annonserar endast till DHT."
 
 #, java-format
 msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
-msgstr "Varning - Inga I2P-spårare i \"{0}\", och DHT och öppna spårare är inaktiverade, du bör aktivera öppna spårare eller DHT innan du startar torrenten.Varning - Inga I2P-spårare i \"{0}\", och DHT och öppna spårare är inaktiverade, du bör aktivera öppna spårare eller DHT innan du startar torrenten.Varning - Inga I2P-spårare i \"{0}\", och DHT och öppna spårare är inaktiverade, du bör aktivera öppna spårare eller DHT innan du startar torrenten.Varning - Ingen I2P bevakare i \"{0}\" och både DHT och offentliga bevakare är inaktiverade, du bör aktivera offentliga bevakare eller DHT innan du startar torrenten."
+msgstr "Varning - Inga I2P-spårare i \"{0}\", och både DHT och öppna spårare är inaktiverade, du bör aktivera öppna spårare eller DHT innan du startar torrenten."
 
 #, java-format
 msgid "Open trackers are disabled and we have no DHT peers. Fetch of {0} may not succeed until you start another torrent, enable open trackers, or enable DHT."
-msgstr "Open trackers är inaktiverade och vi har inga DHT-peers. Open trackers är inaktiverade och vi har inga DHT-peers. Open trackers är inaktiverade och vi har inga DHT-peers. Publika bevakare är inaktiverade och vi har inga DHT-jämlikar. Hämtningen av {0} kan kanske inte genomföras innan du startar en annan torrent eller aktiverar offentliga bevakare eller DHT."
+msgstr "Öppna spårare är inaktiverade och vi har inga DHT-peers. Hämtningen av {0} kanske inte lyckas förrän du startar en annan torrent eller aktiverar öppna spårare eller DHT."
 
 #, java-format
 msgid "Adding {0}"
@@ -533,8 +533,8 @@ msgid "Data partition"
 msgstr "Datapartition"
 
 #, java-format
-msgid "No valid trackers for {0} - enable opentrackers or DHT?"
-msgstr "Ingen giltig bevakare för {0} - aktivera offentliga bevakare eller DHT?"
+msgid "No valid trackers for {0} - enable opentrackers or DHT"
+msgstr "Ingen giltig bevakare för {0} - aktivera offentliga bevakare eller DHT"
 
 msgid "Updating"
 msgstr "Uppdaterar"
@@ -993,7 +993,7 @@ msgstr "Raderar <b>{0}</b> och all tillhörande data..."
 
 #, java-format
 msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
-msgstr "Är du säker på att du vill radera filen  \\''{0}\\' (hämtade data kommer inte att raderas) ?"
+msgstr "Är du säker på att du vill radera filen ''{0}'' (hämtade data kommer inte att raderas)?"
 
 msgid "Note: Downloaded data will not be deleted."
 msgstr "Obs: Nedladdad data kommer inte att raderas."
@@ -1251,7 +1251,7 @@ msgstr "Torrent skapad för \"{0}\""
 
 #, java-format
 msgid "Many I2P trackers require you to register new torrents before seeding - please do so before starting \"{0}\""
-msgstr "Många I2P-spårare kräver att du registrerar nya torrents innan du sådd - vänligen gör det innan du börjar \"{0}\"Många I2P-spårare kräver att du registrerar nya torrents innan du sådd - vänligen gör det innan du börjar \"{0}\"Många I2P-spårare kräver att du registrerar nya torrents innan du sådd - vänligen gör det innan du börjar \"{0}\"Många I2P bevakare kräver att du registrerar nya torrenter innan uppladdningen påbörjas - gör det innan \"{0}\" startas"
+msgstr "Många I2P-spårare kräver att du registrerar nya torrenter innan sådden påbörjas - gör det innan \"{0}\" startas"
 
 #, java-format
 msgid "Error creating a torrent for \"{0}\""
@@ -1421,7 +1421,7 @@ msgstr "Data att ladda upp"
 
 #, java-format
 msgid "File or directory to seed (full path or within the directory {0} )"
-msgstr "Fil eller katalog till frö (fullständig sökväg eller inom katalogen {0})Fil eller katalog att seeda (fullständig sökväg eller inom katalog {0})"
+msgstr "Fil eller katalog att så (fullständig sökväg eller i katalogen {0})"
 
 msgid "Create torrent"
 msgstr "Skapa torrent"

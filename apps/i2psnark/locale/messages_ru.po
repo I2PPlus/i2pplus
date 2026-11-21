@@ -258,7 +258,7 @@ msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "Список открытых трекеров изменён - требуется перезапуск торрента для вступления изменений в силу.Изменен список открытых трекеров. Требуется перезапуск торрентов, чтобы изменения вступили в силу."
 
 msgid "Private tracker list changed - affects newly created torrents only."
-msgstr "Список приватных трекеров изменён - влияет только на вновь созданные торренты.Список частных трекеров изменился - влияет только на заново созданные торренты."
+msgstr "Список приватных трекеров изменён - влияет только на вновь созданные торренты."
 
 #, java-format
 msgid "Unable to save the config to {0}"
@@ -533,8 +533,8 @@ msgid "Data partition"
 msgstr "Раздел данных"
 
 #, java-format
-msgid "No valid trackers for {0} - enable opentrackers or DHT?"
-msgstr "Нет трекеров для {0} — включены ли открытые трекеры или DHT?"
+msgid "No valid trackers for {0} - enable opentrackers or DHT"
+msgstr "Нет трекеров для {0} — включите открытые трекеры или DHT"
 
 msgid "Updating"
 msgstr "Обновление"

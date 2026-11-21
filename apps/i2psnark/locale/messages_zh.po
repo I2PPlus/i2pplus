@@ -321,15 +321,15 @@ msgstr "错误 - 私有种子\"{0}\"中缺少 I2P Tracker"
 
 #, java-format
 msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
-msgstr "警告 - “{0}”中没有 I2P 跟踪器，将仅向 I2P 开放跟踪器和 DHT 通告。警告 - \"{0}\"中缺少 I2P Tracker，程序将仅通过 I2P 中的OpenTracker 和 DHT 下载。"
+msgstr "警告 - \"{0}\" 中没有 I2P Tracker，将仅向 I2P OpenTracker 和 DHT 通告。"
 
 #, java-format
 msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
-msgstr "警告 - “{0}”中没有 I2P 跟踪器，并且开放跟踪器被禁用，将仅向 DHT 通告。警告 - \"{0}\"中缺少 I2P Tracker，已禁用 I2P  Open Tracker，程序将仅通过 DHT 下载。"
+msgstr "警告 - \"{0}\" 中没有 I2P Tracker，并且 OpenTracker 已禁用，将仅向 DHT 通告。"
 
 #, java-format
 msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
-msgstr "警告 - “{0}”中没有 I2P 跟踪器，并且 DHT 和开放式跟踪器被禁用，您应该在启动 torrent 之前启用开放式跟踪器或 DHT。警告 - \"{0}\"中缺少 I2P Tracker，已禁用 I2P  Open Tracker 和 DHT，下载先您需要先启用  OpenTracker 或 DHT 。"
+msgstr "警告 - \"{0}\" 中没有 I2P Tracker，OpenTracker 和 DHT 均已禁用，请在启动 torrent 之前启用 OpenTracker 或 DHT。"
 
 #, java-format
 msgid "Open trackers are disabled and we have no DHT peers. Fetch of {0} may not succeed until you start another torrent, enable open trackers, or enable DHT."
@@ -450,10 +450,10 @@ msgid "Starting torrent: {0}"
 msgstr "正在启动种子{0}"
 
 msgid "Unable to load torrent create file filter config: "
-msgstr "无法加载创建种子文件过滤器配置："
+msgstr "无法加载创建种子文件过滤器配置： "
 
 msgid "Unable to save torrent create file filter config: "
-msgstr "无法保存创建种子文件过滤器配置："
+msgstr "无法保存创建种子文件过滤器配置： "
 
 msgid "Torrent not found"
 msgstr "种子未找到"
@@ -533,8 +533,8 @@ msgid "Data partition"
 msgstr "数据分区"
 
 #, java-format
-msgid "No valid trackers for {0} - enable opentrackers or DHT?"
-msgstr "{0} 中 Tracker 无效 - 要启用 opentrackers 或 DHT 吗？"
+msgid "No valid trackers for {0} - enable opentrackers or DHT"
+msgstr "{0} 中 Tracker 无效 - 请启用 opentrackers 或 DHT"
 
 msgid "Updating"
 msgstr "正在更新"
@@ -1237,11 +1237,11 @@ msgstr "无法打开 I2PSnark Bridge 扩展：{0}"
 
 #, java-format
 msgid " files or folders were excluded from \"{0}\" due to filter rules."
-msgstr " 由于过滤规则，从“{0}”中排除了 {0} 个文件或文件夹。"
+msgstr " 个文件或文件夹由于过滤规则已从 \"{0}\" 中排除。"
 
 #, java-format
 msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
-msgstr "根据过滤规则，以下文件或文件夹被从“{0}”中排除："
+msgstr "根据过滤规则，以下文件或文件夹被从“{0}”中排除： "
 
 #, java-format
 msgid "Torrent created for \"{0}\""
@@ -1249,7 +1249,7 @@ msgstr "种子创建成功\"{0}\""
 
 #, java-format
 msgid "Many I2P trackers require you to register new torrents before seeding - please do so before starting \"{0}\""
-msgstr "许多 I2P 跟踪器要求您在播种前注册新的种子 - 请在开始“{0}”之前注册新的种子多数I2PTracker需要用户在做种前注册新种子 - 请在启动 \"{0}\"前到所使用的Tracker进行注册。"
+msgstr "多数 I2P Tracker 要求在做种前注册新种子 - 请在启动 \"{0}\" 之前完成注册。"
 
 #, java-format
 msgid "Error creating a torrent for \"{0}\""
@@ -1618,7 +1618,7 @@ msgid "Your author name for published comments and ratings"
 msgstr "你发表评论或评分的作者名"
 
 msgid "File downloading priorities updated for torrent "
-msgstr "文件下载优先级已为种子更新"
+msgstr "文件下载优先级已为种子更新 "
 
 msgid "Edit Torrent"
 msgstr "编辑种子"

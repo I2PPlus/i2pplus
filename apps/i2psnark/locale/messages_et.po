@@ -533,8 +533,8 @@ msgid "Data partition"
 msgstr "Andmete partitsioon"
 
 #, java-format
-msgid "No valid trackers for {0} - enable opentrackers or DHT?"
-msgstr "Torrenti {0} jaoks pole kehtivaid trackerite - lubada avalikud trackerid või DHT?"
+msgid "No valid trackers for {0} - enable opentrackers or DHT"
+msgstr "Torrenti {0} jaoks pole kehtivaid trackerite - lubada avalikud trackerid või DHT"
 
 msgid "Updating"
 msgstr "Uuendamine"
@@ -1624,7 +1624,7 @@ msgid "Your author name for published comments and ratings"
 msgstr "Sinu autori nimi avaldatud kommentaaride ja hinnangute jaoks"
 
 msgid "File downloading priorities updated for torrent "
-msgstr "Failide allalaadimise prioriteedid uuendatud torrenti jaoks"
+msgstr "Failide allalaadimise prioriteedid uuendatud torrenti jaoks "
 
 msgid "Edit Torrent"
 msgstr "Muuda torrent"

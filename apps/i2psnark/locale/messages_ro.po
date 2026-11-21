@@ -321,19 +321,19 @@ msgstr "EROARE - Nu sunt trackere I2P in torrent privat \"{0}\""
 
 #, java-format
 msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
-msgstr "Avertisment - Nu există dispozitive de urmărire I2P în \"{0}\", vor anunța numai dispozitivele de urmărire deschise I2P și DHT.Avertisment - Nu sunt trackere I2P în \"{0}\", se va anunța numai la trackerele deschise I2P și DHT."
+msgstr "Avertisment - Nu sunt trackere I2P în \"{0}\", se va anunța numai la trackerele deschise I2P și DHT."
 
 #, java-format
 msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
-msgstr "Avertisment - Nu există dispozitive de urmărire I2P în \"{0}\", iar dispozitivele de urmărire deschise sunt dezactivate, vor anunța numai DHT.Avertisment - Nu există dispozitive de urmărire I2P în \"{0}\", iar dispozitivele de urmărire deschise sunt dezactivate, vor anunța numai DHT.Avertisment - Nu sunt trackere I2P în \"{0}\", și trackerele deschise sunt dezactivate, se va anunța numai prin DHT."
+msgstr "Avertisment - Nu sunt trackere I2P în \"{0}\", și trackerele deschise sunt dezactivate, se va anunța numai prin DHT."
 
 #, java-format
 msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
-msgstr "Avertisment - Nu există dispozitive de urmărire I2P în \"{0}\", iar DHT și trackerele deschise sunt dezactivate, ar trebui să activați trackerele deschise sau DHT înainte de a porni torrentul.Avertisment - Nu există dispozitive de urmărire I2P în \"{0}\", iar DHT și trackerele deschise sunt dezactivate, ar trebui să activați trackerele deschise sau DHT înainte de a porni torrentul.Avertisment - Nu sunt trackere I2P în \"{0}\", și DHT și trackerele deschise sunt dezactivate, ar trebui să permiteți trackere deschise sau DHT înainte de a porni torrentul."
+msgstr "Avertisment - Nu sunt trackere I2P în \"{0}\", și DHT și trackerele deschise sunt dezactivate, ar trebui să activați trackerele deschise sau DHT înainte de a porni torrentul."
 
 #, java-format
 msgid "Open trackers are disabled and we have no DHT peers. Fetch of {0} may not succeed until you start another torrent, enable open trackers, or enable DHT."
-msgstr "Trackerele deschise sunt dezactivate și nu avem peer DHT. Trackerele deschise sunt dezactivate și nu avem participanți DHT. Descărcarea din{0} nu poate reuși până când nu veți porni un alt torrent, permite trackere deschise, sau permite DHT."
+msgstr "Trackerele deschise sunt dezactivate și nu avem peer DHT. Descărcarea din {0} poate să nu reuțească până când nu porniți un alt torrent, nu activați trackerele deschise sau nu activați DHT."
 
 #, java-format
 msgid "Adding {0}"
@@ -533,8 +533,8 @@ msgid "Data partition"
 msgstr "Partiția de date"
 
 #, java-format
-msgid "No valid trackers for {0} - enable opentrackers or DHT?"
-msgstr "Nu sunt trackere valabile pentru {0} - permite opentrackers sau DHT?"
+msgid "No valid trackers for {0} - enable opentrackers or DHT"
+msgstr "Nu sunt trackere valabile pentru {0} - permite opentrackers sau DHT"
 
 msgid "Updating"
 msgstr "Actualizare"
@@ -1253,7 +1253,7 @@ msgstr "Torrent creat pentru \"{0}\""
 
 #, java-format
 msgid "Many I2P trackers require you to register new torrents before seeding - please do so before starting \"{0}\""
-msgstr "Multe instrumente de urmărire I2P vă cer să înregistrați noi torrente înainte de a semăna - vă rugăm să faceți acest lucru înainte de a începe \"{0}\"Multe instrumente de urmărire I2P vă cer să înregistrați noi torrente înainte de a semăna - vă rugăm să faceți acest lucru înainte de a începe \"{0}\"Multe trackere I2P cer să vă înregistrați torrentele noi înainte de seeding - vă rugăm să faceți acest lucru înainte de a începe \"{0}\""
+msgstr "Multe trackere I2P cer să înregistrați torrente noi înainte de a sămăna - vă rugăm să faceți acest lucru înainte de a porni \"{0}\""
 
 #, java-format
 msgid "Error creating a torrent for \"{0}\""

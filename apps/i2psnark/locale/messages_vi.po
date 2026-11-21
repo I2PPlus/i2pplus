@@ -533,8 +533,8 @@ msgid "Data partition"
 msgstr "Phân vùng dữ liệu"
 
 #, java-format
-msgid "No valid trackers for {0} - enable opentrackers or DHT?"
-msgstr "Không có trình theo dõi hợp lệ nào cho {0} - bật trình theo dõi mở hoặc DHT?"
+msgid "No valid trackers for {0} - enable opentrackers or DHT"
+msgstr "Không có trình theo dõi hợp lệ nào cho {0} - bật trình theo dõi mở hoặc DHT"
 
 msgid "Updating"
 msgstr "Đang cập nhật"

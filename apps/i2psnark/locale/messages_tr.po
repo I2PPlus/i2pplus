@@ -163,10 +163,10 @@ msgid "Disabled autostart"
 msgstr "Otomatik başlatma devre dışı"
 
 msgid "Enabled open trackers - torrent restart required to take effect."
-msgstr "Açık izleyiciler etkinleştirildi - etkili olması için torrentin yeniden başlatılması gerekiyor.Açık izleyiciler etkinleştirildi - etkili olması için torrentin yeniden başlatılması gerekiyor.Açık izleyiciler etkinleştirildi - etkili olması için torrentin yeniden başlatılması gerekiyor.Açık izleyiciler etkinleştirildi - değişikliklerin etkili olması için torrenti yeniden başlatmalısınız."
+msgstr "Açık izleyiciler etkinleştirildi - değişikliklerin etkili olması için torrenti yeniden başlatmalısınız."
 
 msgid "Disabled open trackers - torrent restart required to take effect."
-msgstr "Açık izleyiciler devre dışı bırakıldı - etkili olması için torrentin yeniden başlatılması gerekiyor.Açık izleyiciler devre dışı bırakıldı - etkili olması için torrentin yeniden başlatılması gerekiyor.Açık izleyiciler devre dışı bırakıldı - etkili olması için torrentin yeniden başlatılması gerekiyor.Açık izleyiciler devre dışı bırakıldı - değişikliklerin etkili olması için torrenti yeniden başlatmalısınız."
+msgstr "Açık izleyiciler devre dışı bırakıldı - değişikliklerin etkili olması için torrenti yeniden başlatmalısınız."
 
 msgid "Enabled DHT."
 msgstr "DHT etkinleştirildi."
@@ -258,7 +258,7 @@ msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "Açık İzleyici listesi değiştirildi - etkili olması için torrentin yeniden başlatılması gerekiyor."
 
 msgid "Private tracker list changed - affects newly created torrents only."
-msgstr "Özel izleyici listesi değiştirildi - yalnızca yeni oluşturulan torrentleri etkiler.Özel izleyici listesi değiştirildi - yalnızca yeni oluşturulan torrentleri etkiler.Kişisel İzleyici listesi değiştirildi - yalnız yeni oluşturulan torrentler etkilenecek."
+msgstr "Özel izleyici listesi değiştirildi - yalnızca yeni oluşturulan torrentleri etkiler."
 
 #, java-format
 msgid "Unable to save the config to {0}"
@@ -321,19 +321,19 @@ msgstr "HATA - \"{0}\" kişisel torrenti içinde herhangi bir I2P izleyicisi yok
 
 #, java-format
 msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
-msgstr "Uyarı - \"{0}\" içinde I2P izleyici yok, yalnızca I2P açık izleyicilere ve DHT'ye duyurulacak.Uyarı - \"{0}\" içinde I2P izleyici yok, yalnızca I2P açık izleyicilere ve DHT'ye duyurulacak.Uyarı - \"{0}\" içinde I2P izleyici yok, yalnızca I2P açık izleyicilere ve DHT'ye duyurulacak.Uyarı - \"{0}\" içinde herhangi bir I2P izleyici yok. Yalnız I2P açık izleyicileri ve DHT üzerinde duyurulacak."
+msgstr "Uyarı - \"{0}\" içinde hiçbir I2P izleyici yok. Yalnızca I2P açık izleyicileri ve DHT üzerinden duyurulacak."
 
 #, java-format
 msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
-msgstr "Uyarı - \"{0}\" içinde I2P izleyici yok ve açık izleyiciler devre dışı, yalnızca DHT'ye duyurulacak.Uyarı - \"{0}\" içinde I2P izleyici yok ve açık izleyiciler devre dışı, yalnızca DHT'ye duyurulacak.Uyarı - \"{0}\" içinde I2P izleyici yok ve açık izleyiciler devre dışı, yalnızca DHT'ye duyurulacak.Uyarı - \"{0}\" içinde herhangi bir I2P izleyici yok ve I2P açık izleyicileri devre dışı bırakılmış. Yalnız DHT üzerinde duyurulacak."
+msgstr "Uyarı - \"{0}\" içinde hiçbir I2P izleyici yok ve I2P açık izleyicileri devre dışı bırakılmış. Yalnızca DHT üzerinden duyurulacak."
 
 #, java-format
 msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
-msgstr "Uyarı - \"{0}\" içinde I2P izleyici yok ve DHT ile açık izleyiciler devre dışı, torrenti başlatmadan önce açık izleyicileri veya DHT'yi etkinleştirmelisiniz.Uyarı - \"{0}\" içinde I2P izleyici yok ve DHT ile açık izleyiciler devre dışı, torrenti başlatmadan önce açık izleyicileri veya DHT'yi etkinleştirmelisiniz.Uyarı - \"{0}\" içinde I2P izleyici yok ve DHT ile açık izleyiciler devre dışı, torrenti başlatmadan önce açık izleyicileri veya DHT'yi etkinleştirmelisiniz.Uyarı - \"{0}\" içinde herhangi bir I2P izleyici yok. I2P açık izleyicileri ve DHT devre dışı bırakılmış. Torrenti başlatmadan önce açık izleyicileri ya da DHT özelliğini etkinleştirin."
+msgstr "Uyarı - \"{0}\" içinde hiçbir I2P izleyici yok. I2P açık izleyicileri ve DHT devre dışı bırakılmış. Torrenti başlatmadan önce açık izleyicileri ya da DHT özelliğini etkinleştirin."
 
 #, java-format
 msgid "Open trackers are disabled and we have no DHT peers. Fetch of {0} may not succeed until you start another torrent, enable open trackers, or enable DHT."
-msgstr "Açık izleyiciler devre dışı ve DHT eşimiz yok. Açık izleyiciler devre dışı ve DHT eşimiz yok. Açık izleyiciler devre dışı bırakıldı ve DHT eşimiz yok. Açık izleyiciler devre dışı bırakılmış ve herhangi bir DHT eşi yok. Başka bir torrent başlatılana kadar {0} alınamayabilir. Açık izleyicileri ya da DHT özelliğini etkinleştirin."
+msgstr "Açık izleyiciler devre dışı bırakılmış ve hiçbir DHT eşi yok. Başka bir torrent başlatılana kadar {0} alınamayabilir. Açık izleyicileri ya da DHT özelliğini etkinleştirin."
 
 #, java-format
 msgid "Adding {0}"
@@ -517,7 +517,7 @@ msgstr "{0} torrentinin yeniden denetlenmesi tamamlandı, şimdi {1} tamamlandı
 
 #, java-format
 msgid "Finished recheck of torrent {0}, unchanged"
-msgstr "{0} torrentinin yeniden kontrolü tamamlandı, değişmedi{0} torrentinin yeniden denetlenmesi tamamlandı, herhangi bir değişiklik yok"
+msgstr "{0} torrentinin yeniden denetlenmesi tamamlandı, herhangi bir değişiklik yok"
 
 #, java-format
 msgid "Error checking torrent {0}"
@@ -533,8 +533,8 @@ msgid "Data partition"
 msgstr "Veri bölümü"
 
 #, java-format
-msgid "No valid trackers for {0} - enable opentrackers or DHT?"
-msgstr "{0} için geçerli izleyici yok - opentracker'lar veya DHT etkinleştirilsin mi?{0} için geçerli bir izleyici yok. Açık izleyiciler ya da DHT özelliği etkinleştirilsin mi?"
+msgid "No valid trackers for {0} - enable opentrackers or DHT"
+msgstr "{0} için geçerli bir izleyici yok. Açık izleyiciler ya da DHT özelliği etkinleştirilsin"
 
 msgid "Updating"
 msgstr "Yükleniyor"
@@ -993,7 +993,7 @@ msgstr "<b>{0}</b> ve tüm ilişkili veriler siliniyor..."
 
 #, java-format
 msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
-msgstr "\\''{0}\\'' dosyasını silmek istediğinizden emin misiniz (indirilen veriler silinmeyecektir)?\\''{0}\\'' dosyasını silmek istediğinizden emin misiniz (indirilen veriler silinmeyecektir)?\\''{0}\\'' dosyasını silmek istediğinizden emin misiniz (indirilen veriler silinmeyecektir)?\\\"{0}\\\" dosyasını silmek istediğinize emin misiniz (indirilmiş veriler silinmez)?"
+msgstr "{0} dosyasını silmek istediğinize emin misiniz (indirilen veriler silinmeyecek)?"
 
 msgid "Note: Downloaded data will not be deleted."
 msgstr "Not: İndirilen veriler silinmeyecektir."
@@ -1251,7 +1251,7 @@ msgstr "\"{0}\" için torrent oluşturuldu"
 
 #, java-format
 msgid "Many I2P trackers require you to register new torrents before seeding - please do so before starting \"{0}\""
-msgstr "Birçok I2P izleyici, tohumlamadan önce yeni torrentleri kaydetmenizi gerektirir - lütfen bunu \"{0}\" başlamadan önce yapınÇoğu I2P izleyicileri için yeni torrentleri tohumlamadan önce kayıt olmanız gerekir. Lütfen \"{0}\" başlatılmadan önce bu işlemi yapın"
+msgstr "Birçok I2P izleyici, tohumlamadan önce yeni torrentleri kaydetmenizi gerektirir - lütfen bunu \"{0}\" başlamadan önce yapın"
 
 #, java-format
 msgid "Error creating a torrent for \"{0}\""
@@ -1421,7 +1421,7 @@ msgstr "Tohumlanacak veri"
 
 #, java-format
 msgid "File or directory to seed (full path or within the directory {0} )"
-msgstr "Çıkarılacak dosya veya dizin (tam yol veya {0} dizini içinde)Tohumlanacak dosya ya da klasör (tam ya da {0} klasörünün içindeki yol)"
+msgstr "Tohumlanacak dosya ya da klasör (tam yol veya {0} klasörünün içindeki yol)"
 
 msgid "Create torrent"
 msgstr "Torrent oluştur"
