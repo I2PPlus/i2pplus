@@ -635,6 +635,27 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     }
 
     /**
+     * Whether our own LeaseSet still has to travel with a message to this peer.
+     * <p>
+     * Every outbound client message offers our LeaseSet to the peer as a reply, and the
+     * offer is declined whenever we have already delivered a copy at least as new as the
+     * one we hold now. Declining is the ordinary outcome, not an exception, and it is
+     * reached once per message: one 49 MB download through this router declined the offer
+     * 30,315 times in three minutes, which is why the caller reports it at DEBUG through
+     * the throttler rather than at INFO.
+     *
+     * @param delivered the LeaseSet we last delivered to this peer and he acknowledged, or
+     *                  null when no reply has been acknowledged for this pair yet
+     * @param current our own LeaseSet as the client NetDB holds it now, not null
+     * @return true when a copy still has to be sent, because none was acknowledged or ours
+     *         is newer than the acknowledged one
+     * @since 0.9.72+
+     */
+    static boolean replyLeaseSetPending(LeaseSet delivered, LeaseSet current) {
+        return delivered == null || delivered.getDate() < current.getDate();
+    }
+
+    /**
      * Reply lease set, checking the cache first.
      *
      * @param force to force including a reply lease set
@@ -650,16 +671,17 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
 
         if (!force) {
             LeaseSet ls = _cache.leaseSetCache.get(_hashPair);
+            if (!replyLeaseSetPending(ls, newLS)) {
+                // The ordinary outcome of every outbound message, so it stays off INFO and
+                // is collapsed per peer by the throttler.
+                _log.debugThrottled("reply-leaseset-current-" + _toString,
+                                    "Reply LeaseSet skipped -> Already delivered to " + _toString +
+                                    " and still current");
+                return null;
+            }
             if (ls != null) {
-                if (ls.getDate() >= newLS.getDate()) {
-                        if (_log.shouldInfo()) {
-                            _log.info("LeaseSet already ACKed - NOT sending reply LeaseSet to " + _toString);
-                        }
-                        return null;
-                } else {
-                    if (_log.shouldInfo()) {
-                        _log.info("Expired from cache - sending reply LeaseSet to " + _toString);
-                    }
+                if (_log.shouldInfo()) {
+                    _log.info("Expired from cache - sending reply LeaseSet to " + _toString);
                 }
             } else {
                 if (_log.shouldInfo()) {
