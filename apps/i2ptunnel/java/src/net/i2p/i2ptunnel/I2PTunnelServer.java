@@ -274,7 +274,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
         this.l = l;
         init(host, port, tunnel);
         ByteArrayInputStream bais = new ByteArrayInputStream(Base64.decode(privData));
-        sockMgr = createManager(bais);
+        sockMgr = createManager(bais, null);
     }
 
     /**
@@ -300,7 +300,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
         this.l = l;
         init(host, port, tunnel);
         try (InputStream fis = new BufferedInputStream(new FileInputStream(privkey))) {
-            sockMgr = createManager(fis);
+            sockMgr = createManager(fis, privkeyname);
         } catch (IOException ioe) {
             _log.error("Cannot read private key data for " + privkeyname, ioe);
             notifyEvent("openServerResult", "error");
@@ -329,7 +329,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
         _log = tunnel.getContext().logManager().getLog(getClass());
         this.l = l;
         init(host, port, tunnel);
-        sockMgr = createManager(privData);
+        sockMgr = createManager(privData, privkeyname);
     }
 
     /**
@@ -377,12 +377,16 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      * Create the socket manager from the private key data.
      *
      * @param privData the stream to read the destination and private key from
+     * @param keyName the key file as the tunnel config names it, or null if the
+     *                key was supplied inline rather than as a file; used only to
+     *                say which key failed when the data will not load
      * @return the new socket manager
-     * @throws IllegalArgumentException if the I2CP configuration is b0rked so
-     *                                  badly that we cant create a socketManager
+     * @throws IllegalArgumentException if the key data will not load or the I2CP
+     *                                  configuration is so bad that no socket
+     *                                  manager can be built
      * @since 0.9.8
      */
-    private I2PSocketManager createManager(InputStream privData) {
+    private I2PSocketManager createManager(InputStream privData, String keyName) {
         Properties props = new Properties();
         props.putAll(getTunnel().getClientOptions());
         int portNum = I2PClient.DEFAULT_LISTEN_PORT;
@@ -408,7 +412,12 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
             if (alt != null) {addSubsession(rv, alt);}
             return rv;
         } catch (I2PSessionException ise) {
-            throw new IllegalArgumentException("Can't create socket manager", ise);
+            // The key data itself would not load. Say which key and what about it,
+            // or the operator is left with "Can't create socket manager" and no way
+            // to tell a truncated key from an unsupported key type.
+            String finding = keyName != null ? "Cannot read the private key file " + keyName
+                                             : "Cannot read the private key supplied in the tunnel config";
+            throw new IllegalArgumentException(I2PTunnel.keyFileFailure(finding, ise), ise);
         } catch (IllegalArgumentException bad) {
             // The access filter did not load, so the tunnel never opened - say so
             // on the tunnel page as well as in the log.

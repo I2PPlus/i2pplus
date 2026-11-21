@@ -615,8 +615,12 @@ public class TunnelController implements Logging {
         try {
             doStartTunnel();
         } catch (RuntimeException e) {
-            _log.error("Error starting tunnel [" + getName() + "] -> " + e.getMessage());
-            log("✖ Error starting tunnel [" + getName() + "] -> " + e.getMessage());
+            // The producer's message carries the reason (a bad key file names the
+            // file and says what is wrong with it); the cause chain and trace go to
+            // the log so nothing is lost for the few failures that do not.
+            String why = e.getMessage() != null ? e.getMessage() : e.getClass().getSimpleName();
+            _log.error("Error starting tunnel [" + getName() + "]\n* " + why, e);
+            log("✖ Error starting tunnel [" + getName() + "] -> " + why);
             // if we don't acquire() then the release() in stopTunnel() won't work
             acquire();
             stopTunnel();

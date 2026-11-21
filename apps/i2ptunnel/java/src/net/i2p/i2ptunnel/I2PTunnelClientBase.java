@@ -530,7 +530,12 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
                 sockManager = I2PSocketManagerFactory.createDisconnectedManager(null, tunnel.host, portNum, props);
             }
         } catch (I2PSessionException ise) {
-            throw new IllegalArgumentException("Can't create socket manager", ise);
+            // Name the key and the reason the data layer gave. "Can't create socket
+            // manager" leaves a truncated key file indistinguishable from an
+            // unsupported key type.
+            String finding = pkf != null ? "Cannot read the private key file " + pkf
+                                         : "Cannot create a new destination for the client";
+            throw new IllegalArgumentException(I2PTunnel.keyFileFailure(finding, ise), ise);
         } catch (IOException ioe) {
             String failMsg = "Error opening key file for " + nickname + " -> ";
             if (log != null) {log.log("✖ " + failMsg + " -> Please review console logs for more info");}

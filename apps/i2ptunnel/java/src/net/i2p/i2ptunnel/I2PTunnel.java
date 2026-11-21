@@ -622,6 +622,33 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     }
 
     /**
+     * Say what is wrong with a key file that would not load. The session layer
+     * only reports that it could not read the stream; the reason - a short read,
+     * an unsupported key or signature type, a bad offline block - is carried by
+     * the innermost cause, and that is the only part an operator can act on.
+     * Without it the tunnel page and the log both say only that a socket manager
+     * could not be built.
+     *
+     * @param finding what was attempted, in prose, e.g. Cannot read the private
+     *                key file foo.dat
+     * @param failure what the session layer threw, cause chain intact
+     * @return the finding, the arrow, and the innermost reason, for the log and
+     *         for the tunnel page
+     * @since 0.9.72+
+     */
+    static String keyFileFailure(String finding, Throwable failure) {
+        Throwable why = failure;
+        while (why.getCause() != null) {
+            why = why.getCause();
+        }
+        String reason = why.getMessage();
+        if (reason == null || reason.isEmpty()) {
+            reason = why.getClass().getSimpleName();
+        }
+        return finding + " -> " + reason;
+    }
+
+    /**
      * Display help information through the given logger.
      * <p>
      * Does not fire any events to the logger.
