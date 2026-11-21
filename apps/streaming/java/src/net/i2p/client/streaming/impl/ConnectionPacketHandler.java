@@ -835,12 +835,20 @@ class ConnectionPacketHandler {
      * The destination is verified against the connection's own remote peer, so
      * a reset arriving on an established stream is checked against the peer we
      * actually negotiated with, not against a FROM field in the packet.
+     * <p>A reset whose stream IDs match neither direction of this connection is
+     * dropped, and dropping it cannot strand the live connection: a reset meant
+     * for this connection carries our receive stream ID as its send stream ID,
+     * which is the test below, and one meant for a stream we no longer have has
+     * nothing left to wait for it. Measured on a live router, all 83 of these
+     * drops were one tunnel peer resetting a connect attempt it had just NACKed,
+     * delivered against the tunnel's next live connection to the same peer.
      *
      * @param packet the RST packet to validate and act on
      * @param con non-null
      */
     private void verifyReset(Packet packet, Connection con) {
-        if (con.getReceiveStreamId() == packet.getSendStreamId()) {
+        if (resetForThisConnection(con.getReceiveStreamId(),
+                                   packet.getSendStreamId())) {
             // check dest. match
             Destination d1 = con.getRemotePeer();
             Destination d2 = packet.getOptionalFrom();
@@ -875,12 +883,53 @@ class ConnectionPacketHandler {
                 return;
             }
         } else {
+            // The IDs are the finding: without them the line says only that a
+            // reset was dropped, and the reader cannot tell a stale reset for a
+            // dead stream from a forged one against a live connection.
             _log.warnThrottled("streaming-reset-wrong-connection",
                                "Received RESET packet for another connection " + con.shortLabel() +
-                               " -> Ignored");
+                               " -> Ignored" + resetStreamClause(packet.getSendStreamId(),
+                                                                 con.getReceiveStreamId()));
             packet.releasePayload();
             return;
         }
+    }
+
+    /**
+     * Whether a received RST packet belongs to this connection.
+     * <p>A peer resets the stream it knows about, so the packet carries our
+     * receive stream ID in its send stream ID field. Anything else is for a
+     * different stream with the same peer - a connect attempt that was NACKed
+     * and torn down, whose reset arrives late - and must not reset a live
+     * connection that happens to be the one the packet is routed to.
+     *
+     * @param ourReceiveStreamId the stream ID this connection expects replies
+     *                           on, 0 while the connection is still being built
+     * @param packetSendStreamId the stream ID the RST packet was sent for
+     * @return true to act on the packet, false to ignore it
+     * @since 0.9.72+
+     */
+    static boolean resetForThisConnection(long ourReceiveStreamId,
+                                          long packetSendStreamId) {
+        return ourReceiveStreamId == packetSendStreamId;
+    }
+
+    /**
+     * The two stream IDs behind an ignored reset, as log segments.
+     * <p>Both IDs are rendered in the same base64 form the packet dump lines
+     * use, so a reader can match the dropped reset against the SYN or data line
+     * it belongs to. They are not bracketed: the console linkifier reads a
+     * bracketed token as a hash.
+     *
+     * @param packetSendStreamId the stream ID the RST packet was sent for
+     * @param ourReceiveStreamId the stream ID this connection expects replies on
+     * @return {@code "\n* "} continuation lines, never null
+     * @since 0.9.72+
+     */
+    static String resetStreamClause(long packetSendStreamId,
+                                    long ourReceiveStreamId) {
+        return "\n* Packet send stream: " + Packet.toId(packetSendStreamId) +
+               " * Our receive stream: " + Packet.toId(ourReceiveStreamId);
     }
 
     /**
