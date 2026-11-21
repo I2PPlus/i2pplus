@@ -2285,14 +2285,23 @@ public class BuildHandler implements Runnable {
      */
     static final long NEXT_HOP_SUMMARY_INTERVAL_MS = 5 * 60 * 1000;
 
-    /** Counters for each next-hop lookup outcome. */
+    /** Counters for each next-hop lookup outcome, since startup. */
     private static final AtomicLong[] _nextHopOutcomes = new AtomicLong[NEXT_HOP_OUTCOMES];
+    /**
+     * Counts already written by a summary, per outcome. The summary reports
+     * what happened since the previous one, so it subtracts this baseline from
+     * the lifetime counters; without it a line labelled "in 5m" printed the
+     * router's lifetime totals and the percentage was a running average that
+     * could never fall back down.
+     */
+    private static final AtomicLong[] _nextHopReported = new AtomicLong[NEXT_HOP_OUTCOMES];
     /** Time of the next next-hop summary log line. */
     private static final AtomicLong _nextHopSummaryLog = new AtomicLong();
 
     static {
         for (int i = 0; i < NEXT_HOP_OUTCOMES; i++) {
             _nextHopOutcomes[i] = new AtomicLong();
+            _nextHopReported[i] = new AtomicLong();
         }
     }
 
@@ -2324,12 +2333,12 @@ public class BuildHandler implements Runnable {
         long last = _nextHopSummaryLog.get();
         if (now - last < NEXT_HOP_SUMMARY_INTERVAL_MS) {return false;}
         if (!_nextHopSummaryLog.compareAndSet(last, now)) {return false;}
-        log.warn(nextHopSummaryText(snapshotNextHopOutcomes(), now - last));
+        log.warn(nextHopSummaryText(takeNextHopWindow(), now - last));
         return true;
     }
 
     /**
-     * Current next-hop outcome counts.
+     * Current next-hop outcome counts, since startup.
      * @return [replied, timedOut, dropped]
      * @since 0.9.71+
      */
@@ -2342,11 +2351,39 @@ public class BuildHandler implements Runnable {
     }
 
     /**
-     * Reset the counters, for tests.
+     * Next-hop outcome counts since the previous summary, advancing the
+     * baseline so the next call reports only what came after it.
+     * <p>The summary line names a window ("handled in 5m"), so its counts have
+     * to cover that window and nothing else. Lifetime totals under a 5-minute
+     * label read as a rate that cannot move: a router that recovered kept
+     * printing the same percentage, and one that broke kept printing a
+     * percentage diluted by every hour that had worked.
+     * <p>Called only by the one thread that won the compare-and-set on the
+     * summary timestamp in {@link #countNextHopOutcome}, so the baseline cannot
+     * be advanced twice for one window. Events counted between the read and
+     * the write are charged to this window rather than the next one - never to
+     * both.
+     *
+     * @return [replied, timedOut, dropped] since the last summary, never null
+     * @since 0.9.72+
+     */
+    static long[] takeNextHopWindow() {
+        long[] rv = new long[NEXT_HOP_OUTCOMES];
+        for (int i = 0; i < NEXT_HOP_OUTCOMES; i++) {
+            long total = _nextHopOutcomes[i].get();
+            rv[i] = total - _nextHopReported[i].get();
+            _nextHopReported[i].set(total);
+        }
+        return rv;
+    }
+
+    /**
+     * Reset the counters and the summary baseline, for tests.
      * @since 0.9.71+
      */
     static void resetNextHopOutcomes() {
         for (AtomicLong c : _nextHopOutcomes) {c.set(0);}
+        for (AtomicLong c : _nextHopReported) {c.set(0);}
         _nextHopSummaryLog.set(0);
     }
 
@@ -2355,7 +2392,8 @@ public class BuildHandler implements Runnable {
      * are testable without a live router, and so the denominator is explicit:
      * the timeout percentage is of handled requests, not of all outcomes.
      *
-     * @param counts [replied, timedOut, dropped]
+     * @param counts [replied, timedOut, dropped] counted in the window being
+     *               reported, not lifetime totals
      * @param windowMs window the counts cover
      * @return a WARN summary on two lines, plus a third naming the suspect
      *         when the unanswered rate reaches the flag threshold
@@ -2367,10 +2405,10 @@ public class BuildHandler implements Runnable {
         long dropped = counts[2];
         long handled = replied + timedOut;
         int pct = handled > 0 ? (int) Math.round((double) timedOut * 100d / handled) : 0;
-        return "Next-hop contact: " + handled + " handled in " + DataHelper.formatDuration(windowMs) +
+        return "Next-hop contact -> " + handled + " handled in " + DataHelper.formatDuration(windowMs) +
                " * Replied: " + replied + " * Timed out: " + timedOut + " (" + pct + "%)" +
                " * Dropped: " + dropped +
-               (pct >= 20 ? "\n* High unanswered rate -> Suspect unreachable/firewalled peers" : "");
+               (pct >= 20 ? "\n* High unanswered rate, suspect unreachable or firewalled peers" : "");
     }
 
     /**

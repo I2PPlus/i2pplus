@@ -1,11 +1,21 @@
 package net.i2p.router.tunnel.pool;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
+
+import net.i2p.util.Log;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * Tests the next-hop contact outcome summary added to {@link BuildHandler}.
@@ -13,9 +23,28 @@ import static org.junit.Assert.assertTrue;
  * The failure this covers was invisible: 42% of handled inbound builds hit the
  * hop-contact timeout, but the only record was one DEBUG line per event, so an
  * eepsite silently stopped serving and nothing at WARN reflected it.
+ *
+ * The second defect this pins is a mislabelled rate: the summary named a
+ * 5-minute window while printing counters that were never advanced past the
+ * previous summary, so the same line read 517, 1103, 1753, 2352, 3006, 3750
+ * handled across an hour. A lifetime total under a window label is a running
+ * average - a router that recovered could not lower the percentage and one that
+ * had just broken could not raise it.
  */
 public class BuildHandlerNextHopSummaryTest {
 
+    /**
+     * JUnit fixture object; every test here drives static state of
+     * {@link BuildHandler}, so the instance carries no state.
+     */
+    public BuildHandlerNextHopSummaryTest() {
+    }
+
+    /**
+     * Start each test from zeroed counters and an unseeded summary window -
+     * the counters are static, so a test that ran first would otherwise feed
+     * this one's summary line.
+     */
     @Before
     public void setUp() {
         BuildHandler.resetNextHopOutcomes();
@@ -141,5 +170,108 @@ public class BuildHandlerNextHopSummaryTest {
                         BuildHandler.countNextHopOutcome(BuildHandler.NEXT_HOP_TIMEOUT, null, 1000));
         }
         assertEquals(500, BuildHandler.snapshotNextHopOutcomes()[1]);
+    }
+
+    // ---------------- the summary covers its own window ----------------
+
+    /** A clock well past the epoch: a window start of 0 is also the "unseeded" marker. */
+    private static final long T0 = 1_000_000L;
+
+    /** One summary interval, the interval the line claims to cover. */
+    private static final long WINDOW = BuildHandler.NEXT_HOP_SUMMARY_INTERVAL_MS;
+
+    /**
+     * A WARN log that keeps every line written to it.
+     *
+     * @param lines list the captured lines are appended to
+     * @return the mock, already answering shouldWarn() yes
+     */
+    private static Log capturingLog(final List<String> lines) {
+        Log log = mock(Log.class);
+        when(log.shouldWarn()).thenReturn(true);
+        doAnswer(inv -> { lines.add(inv.getArgument(0)); return null; }).when(log).warn(anyString());
+        return log;
+    }
+
+    /**
+     * The counts on a line labelled "in 5m" must be the counts of that 5
+     * minutes, not the router's lifetime totals.
+     *
+     * <p>This was the defect: the counters were never advanced past the
+     * previous summary, so every line repeated everything since startup. In
+     * one hour of logs the same line read 517, 1103, 1753, 2352, 3006, 3750
+     * handled - monotonic, because it was a lifetime counter wearing a
+     * 5-minute label - and the percentage was a running average that a
+     * recovered router could not lower and a broken one could not raise.
+     */
+    @Test
+    public void summaryCountsCoverTheWindowNotLifetime() {
+        List<String> lines = new ArrayList<String>();
+        Log log = capturingLog(lines);
+
+        for (int i = 0; i < 3; i++) {
+            BuildHandler.countNextHopOutcome(BuildHandler.NEXT_HOP_REPLIED, log, T0);
+        }
+        for (int i = 0; i < 2; i++) {
+            BuildHandler.countNextHopOutcome(BuildHandler.NEXT_HOP_TIMEOUT, log, T0);
+        }
+        assertTrue("first outcome must seed the window without logging", lines.isEmpty());
+
+        BuildHandler.countNextHopOutcome(BuildHandler.NEXT_HOP_TIMEOUT, log, T0 + WINDOW);
+        assertEquals("one summary per window: " + lines, 1, lines.size());
+        String first = lines.get(0);
+        assertTrue(first, first.contains("6 handled"));
+        assertTrue(first, first.contains("Replied: 3"));
+        assertTrue(first, first.contains("Timed out: 3 (50%)"));
+
+        // A clean second window: everything answered, nothing unanswered. The
+        // outcome that crosses the interval is the one that writes the line, so
+        // it belongs to the window it reports.
+        for (int i = 0; i < 4; i++) {
+            BuildHandler.countNextHopOutcome(BuildHandler.NEXT_HOP_REPLIED, log, T0 + 2 * WINDOW - 1);
+        }
+        BuildHandler.countNextHopOutcome(BuildHandler.NEXT_HOP_REPLIED, log, T0 + 2 * WINDOW);
+        assertEquals("one summary per window: " + lines, 2, lines.size());
+        String second = lines.get(1);
+        assertTrue(second, second.contains("5 handled"));
+        assertTrue(second, second.contains("Replied: 5"));
+        assertTrue("a recovered window must read 0%: " + second, second.contains("Timed out: 0 (0%)"));
+        assertFalse("must not repeat the handled total: " + second, second.contains("11 handled"));
+        assertFalse("must not repeat the replied total: " + second, second.contains("Replied: 8"));
+    }
+
+    /**
+     * Taking a window advances the baseline, so the same event is never
+     * reported by two summaries.
+     */
+    @Test
+    public void takingAWindowAdvancesTheBaseline() {
+        BuildHandler.countNextHopOutcome(BuildHandler.NEXT_HOP_TIMEOUT, null, T0);
+        BuildHandler.countNextHopOutcome(BuildHandler.NEXT_HOP_DROPPED, null, T0);
+        long[] first = BuildHandler.takeNextHopWindow();
+        assertEquals(1, first[1]);
+        assertEquals(1, first[2]);
+        long[] again = BuildHandler.takeNextHopWindow();
+        assertEquals("nothing new counted: " + Arrays.toString(again), 0,
+                     again[0] + again[1] + again[2]);
+        long[] life = BuildHandler.snapshotNextHopOutcomes();
+        assertEquals("lifetime totals are untouched", 2, life[1] + life[2]);
+    }
+
+    /**
+     * A window longer than the interval - no outcome for a while, then one
+     * that triggers the summary - must label the real elapsed time and cover
+     * exactly the counts in it.
+     */
+    @Test
+    public void longWindowIsLabelledWithItsRealLength() {
+        List<String> lines = new ArrayList<String>();
+        Log log = capturingLog(lines);
+        BuildHandler.countNextHopOutcome(BuildHandler.NEXT_HOP_REPLIED, log, T0);
+        BuildHandler.countNextHopOutcome(BuildHandler.NEXT_HOP_TIMEOUT, log, T0 + 3 * WINDOW);
+        assertEquals(1, lines.size());
+        String s = lines.get(0);
+        assertTrue(s, s.contains("in 15m"));
+        assertTrue(s, s.contains("2 handled"));
     }
 }
