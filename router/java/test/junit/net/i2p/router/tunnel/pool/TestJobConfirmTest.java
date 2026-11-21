@@ -207,14 +207,16 @@ public class TestJobConfirmTest {
         try {src = new java.util.Scanner(f, "UTF-8").useDelimiter("\\A").next();}
         catch (Exception e) {return;}
         for (String ev : TestJob.DIRECTION_EVENTS) {
-            // Two emission styles exist: a literal handed straight to
-            // directionStat(), and a name returned by a helper (farEndVerdict)
-            // and passed through. Both are real emissions, so both count.
+            // Three emission styles exist: a literal handed straight to
+            // directionStat(), a name returned by a helper (farEndVerdict) and
+            // passed through, and a helper that picks between two names by a
+            // ternary (partnerVerdict). All three are real emissions.
             boolean direct = src.contains("directionStat(_cfg.isInbound(), \"" + ev + "\")")
                           || src.contains("directionStat(inbound, \"" + ev + "\")")
                           || src.contains("directionStat(inbound, event)");
             boolean viaHelper = src.contains("return \"" + ev + "\";")
-                             || src.contains("= \"" + ev + "\";");
+                             || src.contains("= \"" + ev + "\";")
+                             || src.contains("? \"" + ev + "\" :");
             assertTrue("declared event " + ev + " is never emitted in TestJob",
                        direct || viaHelper);
         }
@@ -225,7 +227,8 @@ public class TestJobConfirmTest {
     public void theDeclaredEventSetIsWhatWeExpect() {
         assertArrayEquals(new String[] {
             "ConfirmPassed", "ConfirmFailed", "GraceDeferred", "Condemned",
-            "FarEndEstablished", "FarEndUnreachable", "FarEndUnknown"
+            "FarEndEstablished", "FarEndUnreachable", "FarEndUnknown",
+            "PartnerSuspect", "PartnerCharged"
         }, TestJob.DIRECTION_EVENTS);
     }
 

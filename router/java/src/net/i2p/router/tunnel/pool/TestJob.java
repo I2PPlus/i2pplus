@@ -1057,7 +1057,8 @@ public class TestJob extends JobImpl {
      */
     static final String[] DIRECTION_EVENTS = {
         "ConfirmPassed", "ConfirmFailed", "GraceDeferred", "Condemned",
-        "FarEndEstablished", "FarEndUnreachable", "FarEndUnknown"
+        "FarEndEstablished", "FarEndUnreachable", "FarEndUnknown",
+        "PartnerSuspect", "PartnerCharged"
     };
 
     /**
@@ -1109,6 +1110,16 @@ public class TestJob extends JobImpl {
                 "Tunnels marked FAILED by the test cycle (count)", "Tunnels", periods);
         stats.createRequiredRateStat(directionStat(false, "Condemned"),
                 "Tunnels marked FAILED by the test cycle (count)", "Tunnels", periods);
+        stats.createRequiredRateStat(directionStat(true, "PartnerSuspect"),
+                "Rounds deferred: partner leg not usable (count)", "Tunnels", periods);
+        stats.createRequiredRateStat(directionStat(false, "PartnerSuspect"),
+                "Rounds deferred: partner leg not usable (count)", "Tunnels", periods);
+        stats.createRequiredRateStat(directionStat(true, "PartnerCharged"),
+                "Rounds charged to the tunnel: partner suspect, defer budget spent (count)",
+                "Tunnels", periods);
+        stats.createRequiredRateStat(directionStat(false, "PartnerCharged"),
+                "Rounds charged to the tunnel: partner suspect, defer budget spent (count)",
+                "Tunnels", periods);
     }
 
     /**
@@ -4068,6 +4079,82 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
     }
 
     /**
+     * Which stat event a suspect-partner round produced: the round was
+     * {@code PartnerSuspect} deferred, or {@code PartnerCharged} counted
+     * against the tunnel because the defer budget ran out first.
+     * <p>Kept as a pure classification so the pair cannot drift apart and the
+     * boundary is testable without a running pool.
+     *
+     * @param budgetSpent true when the deferral budget was exhausted by this round
+     * @return the event name, never null
+     * @since 0.9.72+
+     */
+    static String partnerVerdict(boolean budgetSpent) {
+        return budgetSpent ? "PartnerCharged" : "PartnerSuspect";
+    }
+
+    /**
+     * How a partner tunnel is named in the deferral logging: its gateway in
+     * brackets, or the word {@code none} when the round had no partner at all.
+     * <p>Split out so the two partner lines cannot disagree about what a
+     * missing partner looks like, and so the bracketing stays a single
+     * greppable form.
+     *
+     * @param partner the tunnel the round was routed through, may be null
+     * @return the tag to print, never null
+     * @since 0.9.72+
+     */
+    static String partnerTag(TunnelInfo partner) {
+        return partner != null ? "[" + partner.getGateway().toShortBase32() + "]" : "none";
+    }
+
+    /**
+     * The WARN line for a round excused because the partner leg was not usable.
+     * <p>Written at WARN, not INFO: the failure it prevents is logged at WARN
+     * ("Kept for the LeaseSet cycle"), so at the default level a pool that
+     * defers every round shows only the consequences and never the reason, and
+     * the two possible diagnoses - dead tunnels, or a dead reply path - look
+     * identical. The deferral count carries its budget so a reader can see how
+     * close the round is to being charged anyway.
+     *
+     * @param partnerTag the partner's gateway tag from {@link #partnerTag}
+     * @param fromExploratory true when the partner was borrowed from the
+     *                        exploratory pool because the paired pool had none
+     * @param deferrals deferrals so far, including this one, always below budget
+     * @param budget the deferral budget from {@link #MAX_PARTNER_DEFERRALS}
+     * @return the log line
+     * @since 0.9.72+
+     */
+    static String partnerSuspectLine(String partnerTag, boolean fromExploratory, int deferrals,
+                                     int budget) {
+        return "Tunnel test failed -> Partner leg not usable, deferring the round" +
+               "\n* Partner gateway: " + partnerTag +
+               (fromExploratory ? " * Partner source: exploratory pool" : "") +
+               " * Deferrals: " + deferrals + " of " + budget;
+    }
+
+    /**
+     * The WARN line for a round that was charged to the tunnel even though its
+     * partner leg was not usable, because the deferral budget ran out.
+     * <p>This is the only line that says a failure was <em>not</em> excused on
+     * partner evidence. Without it, a pool that condemns its own tunnels on
+     * reply-path evidence is indistinguishable in the log from one whose
+     * tunnels are genuinely dead - which is the difference between rebuilding
+     * the paired pool and replacing every tunnel in this one.
+     *
+     * @param partnerTag the partner's gateway tag from {@link #partnerTag}
+     * @param budget the deferral budget that was spent, from
+     *               {@link #MAX_PARTNER_DEFERRALS}
+     * @return the log line
+     * @since 0.9.72+
+     */
+    static String partnerChargedLine(String partnerTag, int budget) {
+        return "Tunnel test failed -> Charging the tunnel after " + budget +
+               " rounds through an unusable partner" +
+               "\n* Partner gateway: " + partnerTag;
+    }
+
+    /**
      * Defer a round because the same reply partner was already blamed for a
      * recent failure, and kick the reply pool so the side that is actually
      * degraded is the side that rebuilds.  Bounded by
@@ -4163,15 +4250,20 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
         TunnelInfo partner = _cfg.isInbound() ? _outTunnel : _replyTunnel;
         if (shouldDeferForPartner(partner, _partnerFallback)) {
             _partnerDeferrals++;
-            if (_partnerDeferrals >= MAX_PARTNER_DEFERRALS) {
+            boolean budgetSpent = _partnerDeferrals >= MAX_PARTNER_DEFERRALS;
+            // Both halves of this decision are counted. The ratio between them
+            // is the answer to whether the pool is losing its own tunnels or
+            // losing the reply path they are tested through.
+            getContext().statManager().addRateData(
+                directionStat(_cfg.isInbound(), partnerVerdict(budgetSpent)), 1);
+            if (budgetSpent) {
                 _partnerDeferrals = 0;
+                _log.warnThrottled("testPartnerSuspectCharged",
+                                   partnerChargedLine(partnerTag(partner), MAX_PARTNER_DEFERRALS));
             } else {
-                if (_log.shouldInfo()) {
-                    String partnerId = partner != null ? "[" + partner.getGateway().toShortBase32() + "]" : "none";
-                    _log.info("Tunnel test failed -> Partner not usable"
-                              + (_partnerFallback ? " * Exploratory fallback" : "")
-                              + "\n* Partner gateway: " + partnerId + " * Deferrals: " + _partnerDeferrals);
-                }
+                _log.warnThrottled("testPartnerSuspect",
+                                   partnerSuspectLine(partnerTag(partner), _partnerFallback,
+                                                      _partnerDeferrals, MAX_PARTNER_DEFERRALS));
                 deferForMissingPartner(_pool.getPairedPool(),
                                        _cfg.isInbound() ? "Outbound" : "Inbound");
                 return;
