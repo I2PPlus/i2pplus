@@ -113,6 +113,9 @@ public class VMCommSystem extends CommSystemFacade {
         VMCommSystem peerSys = _commSystemFacades.get(peer);
 
         long now = _context.clock().now();
+        // Recorded here or the send interval below is now - 0, i.e. 56 years, and
+        // every transport.sendMessageSize sample gets bucketed in the year 2026+.
+        msg.beginSend();
         long sendTime = now - msg.getSendBegin();
 
         boolean sendSuccessful = false;

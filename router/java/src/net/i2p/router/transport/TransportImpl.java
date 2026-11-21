@@ -525,6 +525,10 @@ public abstract class TransportImpl implements Transport {
 
         long lifetime = msg.getLifetime();
         long queueTime = msg.getTransportQueued() > 0 ? now - msg.getTransportQueued() : lifetime;
+        // Resolved once, here, because three log sites and two stats want it. SSU
+        // never calls beginSend() - getNextMessage() is NTCP-only - so for SSU the
+        // send interval is genuinely unknown, and now - 0 is 56 years.
+        long sendTime = sendDuration(msToSend, msg.getSendBegin(), now);
         // The >1500ms block above and the >3000ms block below both fired for the
         // same send, printing the size, type, MsgID and peer twice. The lifetime
         // block wins, so the first one is skipped when it is about to run.
@@ -541,7 +545,7 @@ public abstract class TransportImpl implements Transport {
                 // multi-line dump repeating the size, type and MsgID printed here
                 _log.debug("[" + style + "] Slow send -> " + (sendSuccessful ? "Succeeded" : "Failed")
                            + "\n* Lifetime: " + DataHelper.formatDuration(lifetime)
-                           + " * Time taken: " + DataHelper.formatDuration(msToSend)
+                           + durationClause("Time taken", sendTime)
                            + " * Queued: " + DataHelper.formatDuration(queueTime)
                            + " * " + msg.getMessageSize() + " byte " + msg.getMessageType()
                            + " [MsgID " + msg.getMessageId() + "] from [" + routerHash + "] to [" + peerHash + "]");
@@ -584,20 +588,19 @@ public abstract class TransportImpl implements Transport {
             }
         }
 
-        long sendTime = now - msg.getSendBegin();
         long allTime = now - msg.getCreated();
         if (allTime > 5000 && debug) {
             // new Date(sendTime) was a duration formatted as a calendar date
             _log.debug("[" + style + "] Slow send completed -> " + (sendSuccessful ? "Succeeded" : "Failed")
                        + "\n* From preparation to completion: " + DataHelper.formatDuration(allTime)
-                       + " * Send: " + DataHelper.formatDuration(sendTime)
+                       + durationClause("Send", sendTime)
                        + " * Failed transports: " + msg.getFailedTransports()
                        + (sendSuccessful ? " * Succeeded on: " + style : ""));
         }
         if (allTime > 60000 && sendSuccessful && _log.shouldWarn()) {
             _log.warn("Severe send latency -> " + DataHelper.formatDuration(allTime) + " from creation to completion"
                       + "\n* Type: " + msg.getMessageType() + " * MsgID: " + msg.getMessageId()
-                      + " * Send: " + DataHelper.formatDuration(sendTime)
+                      + durationClause("Send", sendTime)
                       + " * Queued: " + DataHelper.formatDuration(queueTime));
             _context.messageHistory().messageProcessingError(msg.getMessageId(), msg.getMessageType(),
                                                              "Took too long to send [" + allTime + "ms]");
@@ -605,12 +608,54 @@ public abstract class TransportImpl implements Transport {
 
         if (sendSuccessful) {
             _context.statManager().addRateData("transport.sendProcessingTime", lifetime);
-            _context.profileManager().messageSent(msg.getTarget().getIdentity().getHash(), style, sendTime, msg.getMessageSize());
-            _context.statManager().addRateData("transport.sendMessageSize", msg.getMessageSize(), sendTime);
+            // Recorded as 0, the documented "no duration" value, when the transport
+            // never timed the send: a 56-year duration is bucketed far in the future
+            // and drops out of every rate window, so the stat reads empty instead of
+            // wrong only to whoever opens the graph.
+            long knownSendTime = sendTime >= 0 ? sendTime : 0;
+            _context.profileManager().messageSent(msg.getTarget().getIdentity().getHash(), style, knownSendTime, msg.getMessageSize());
+            _context.statManager().addRateData("transport.sendMessageSize", msg.getMessageSize(), knownSendTime);
         } else {
             _context.profileManager().messageFailed(msg.getTarget().getIdentity().getHash(), style);
             _context.statManager().addRateData("transport.sendMessageFailureLifetime", lifetime);
         }
+    }
+
+    /**
+     * How long the transport itself spent handing the message to the peer.
+     *
+     * <p>NTCP passes the interval it measured. SSU passes nothing and never calls
+     * {@link OutNetMessage#beginSend()}, because the only caller of that method,
+     * {@link #getNextMessage()}, is NTCP-only. Subtracting an unset start time from
+     * now is what this closes: the answer is the epoch, which renders as 56 years
+     * in a log line and, handed to a rate stat as the event duration, is bucketed
+     * so far ahead that the sample never appears in any window.
+     *
+     * @param msToSend the duration the transport reported, or 0 if it reported none
+     * @param sendBegin when the transport began the send, or 0 if it never recorded one
+     * @param now the current time from the router clock, in ms
+     * @return the send interval in ms, or -1 when no transport measured one
+     * @since 0.9.72+
+     */
+    static long sendDuration(long msToSend, long sendBegin, long now) {
+        if (msToSend > 0) {
+            return msToSend;
+        }
+        return sendBegin > 0 ? now - sendBegin : -1;
+    }
+
+    /**
+     * A {@code " * label: duration"} log segment, empty when the duration is
+     * unknown, so a measurement that was never taken is left off the line instead
+     * of being printed as an absurd one.
+     *
+     * @param label the segment key, in the house prose form
+     * @param duration the interval in ms, or -1 when unknown
+     * @return the segment to concatenate, never null
+     * @since 0.9.72+
+     */
+    static String durationClause(String label, long duration) {
+        return duration >= 0 ? " * " + label + ": " + DataHelper.formatDuration(duration) : "";
     }
 
     /**
