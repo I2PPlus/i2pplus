@@ -375,6 +375,7 @@ public class StandardSocket extends Socket {
      * Ignored, streaming sockets manage their own tuning.
      */
     @Override
+    @SuppressWarnings("removal")
     public void setPerformancePreferences(int connectionTime, int latency, int bandwidth) { /* no-op */ }
 
     /**
