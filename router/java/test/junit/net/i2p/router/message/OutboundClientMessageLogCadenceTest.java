@@ -25,7 +25,10 @@ import net.i2p.util.LogSuppressor;
  * the router's suppressor under a key naming the destination and the
  * condition, so the condition is reported once a burst per destination with
  * the collapsed count on the line, and the per-message dispatch trace - the
- * line an operator actually needs - is untouched.
+ * line an operator actually needs - is untouched. A fourth condition, a send
+ * that cannot be built at all, is keyed the same way: 239 of those lines came
+ * from 10 destinations in 133 minutes, 103 of them from one destination
+ * inside 11 minutes of application activity.
  *
  * @since 0.9.72+
  */
@@ -135,6 +138,51 @@ public class OutboundClientMessageLogCadenceTest {
         }
         assertEquals("one surviving line at least per destination",
                      destinations, reported.size());
+    }
+
+    /**
+     * A send that cannot be built at all - no encryption type in common, a
+     * meta LeaseSet, a malformed one - is a property of the destination and
+     * the reason, not of the message, so the key names both. Two reasons for
+     * one destination stay two conditions, and one destination's mismatch is
+     * not hidden behind another's counter.
+     */
+    @Test
+    public void testUnbuildableSendKeyNamesReasonAndDestination() {
+        String a = key("[kvi2ymf7]", "unbuildable-105");
+        assertEquals("stable across occurrences", a,
+                     key("[kvi2ymf7]", "unbuildable-105"));
+        assertNotEquals("one key per failure code", a,
+                        key("[kvi2ymf7]", "unbuildable-104"));
+        assertNotEquals("one key per destination", a,
+                        key("[eficnego]", "unbuildable-105"));
+        assertNotEquals("not confused with a state line", a,
+                        key("[kvi2ymf7]", "leaseset-local"));
+    }
+
+    /**
+     * The measured burst: one destination took 103 of these lines in 133
+     * minutes, all of them inside 11 minutes of application activity at it.
+     * One line per 60-second window is what the suppressor gives, and the
+     * destination is still reported in every minute that had a failure.
+     */
+    @Test
+    public void testUnbuildableSendCollapsesTheMeasuredBurst() {
+        LogSuppressor sup = new LogSuppressor();
+        long start = 1_700_000_000_000L;
+        int occurrences = 103;
+        long spanMs = 11 * 60 * 1000L;
+        long spacing = spanMs / occurrences;
+        String key = key("[kvi2ymf7]", "unbuildable-105");
+        int written = 0;
+        long now = start;
+        for (int i = 0; i < occurrences; i++) {
+            now += spacing;
+            if (sup.record(key, now).log) {written++;}
+        }
+        assertTrue("103 lines became " + written, written <= 11);
+        assertTrue("every active minute still reports: " + written,
+                   written >= 11);
     }
 
     /**

@@ -761,12 +761,22 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 // or our own destination is the ElGamal-only one, and those need
                 // opposite fixes.
                 if (_log.shouldWarn()) {
-                    _log.warn("LeaseSet found for " + _toString + " but the send cannot be built -> "
-                              + sendFailureName(rc)
-                              + "\n* Peer encryption: " + (_leaseSet != null ? encryptionTypes(_leaseSet) : "none")
-                              + " * Our encryption: " + encryptionTypes(localSupportedTypes())
-                              + "\n* Our destination: " + localTag()
-                              + " * Status: " + rc);
+                    // Throttled per destination and reason: the mismatch is a
+                    // property of the destination, not of the message, and an
+                    // application that keeps sending at it writes one line per
+                    // message. Measured 239 of these lines over 133 minutes from
+                    // 10 destinations, 103 of them for one destination inside 11
+                    // minutes of app activity - collapsed to one per destination
+                    // per window, with the count on the line.
+                    _log.warnThrottled(debugKey(_toString, "unbuildable-" + rc),
+                                       "LeaseSet found for " + _toString +
+                                       " but the send cannot be built -> " +
+                                       sendFailureName(rc) +
+                                       "\n* Peer encryption: " +
+                                       (_leaseSet != null ? encryptionTypes(_leaseSet) : "none") +
+                                       " * Our encryption: " + encryptionTypes(localSupportedTypes()) +
+                                       "\n* Our destination: " + localTag() +
+                                       " * Status: " + rc);
                 }
                 dieFatal(rc);
             }
