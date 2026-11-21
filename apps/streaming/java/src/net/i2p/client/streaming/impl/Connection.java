@@ -4747,6 +4747,38 @@ class Connection {
                                 : "Not removed from Connection Manager";
     }
 
+    /**
+     * The smallest remaining inactivity window the timer will wait out instead
+     * of performing the inactivity action, in ms. It is the fuzz the timer is
+     * built with, so it is the granularity at which the deadline is actually
+     * maintained.
+     *
+     * @since 0.9.72+
+     */
+    static final long INACTIVITY_RESCHEDULE_FLOOR_MS = 5 * 1000;
+
+    /**
+     * Whether a fired inactivity timer should wait out the time left on the
+     * window instead of performing the inactivity action now.
+     *
+     * <p>{@code resetActivityTimer()} arms the deadline at
+     * {@code inactivityTimeout + _randomWait}, and the event is built with a
+     * 5-second fuzz, so a send shortly before the deadline refreshes the
+     * activity timestamp without moving the timer. The fire then finds a hair
+     * of the window left - 1 to 4,785ms, 2,907 times for one destination in a
+     * live router's 133-minute window - and re-arming for that buys a second
+     * timer fire, two more log lines, and an action that is seconds early
+     * either way. Anything inside the fuzz is treated as elapsed.
+     *
+     * @param leftMs time left on the inactivity window when the timer fired,
+     *               negative once it has passed
+     * @return true to wait out {@code leftMs} rather than act now
+     * @since 0.9.72+
+     */
+    static boolean inactivityWaitOut(long leftMs) {
+        return leftMs > INACTIVITY_RESCHEDULE_FLOOR_MS;
+    }
+
     /** Reset activity timer. */
     private void resetActivityTimer() {
         long howLong = _options.getInactivityTimeout();
@@ -4762,15 +4794,17 @@ class Connection {
          */
         public ActivityTimer() {
             super(_timer);
-            setFuzz(5*1000); // sloppy timer, don't reschedule unless at least 5s later
+            // Sloppy timer, don't reschedule unless at least 5s later. The floor
+            // in inactivityWaitOut() is this same number, and they have to stay
+            // equal: the fuzz is why a fire can find a hair of the window left.
+            setFuzz((int) INACTIVITY_RESCHEDULE_FLOOR_MS);
         }
         /**
          * Perform the configured inactivity action.
          */
         public void timeReached() {
-            if (_log.shouldDebug()) {
-                _log.debug("Invoking inactivity timer on connection to " + getRemotePeerString());
-            }
+            debugPeriodic("inactivity-fire",
+                          shortLabel() + " -> Inactivity timer fired");
             // uh, nothing more to do...
             if (!_connected.get()) {
                 if (_log.shouldDebug()) {
@@ -4781,11 +4815,10 @@ class Connection {
             }
             // we got rescheduled already
             long left = getTimeLeft();
-            if (left > 0) {
-                if (_log.shouldDebug()) {
-                    _log.debug("Inactivity timeout on " + getRemotePeerString() +
-                               " -> Rescheduled, " + left + "ms left");
-                }
+            if (inactivityWaitOut(left)) {
+                debugPeriodic("inactivity-reschedule",
+                              shortLabel() + " -> Rescheduled * Time left: " +
+                              DataHelper.formatDuration(left));
                 schedule(left);
                 return;
             }
@@ -4815,10 +4848,9 @@ class Connection {
                 return;
             }
 
-            if (_log.shouldDebug()) {
-                _log.debug("Inactivity timeout on " + getRemotePeerString() +
-                           " -> " + inactivityActionName(_options.getInactivityAction()));
-            }
+            debugPeriodic("inactivity-action",
+                          shortLabel() + " -> Inactivity window elapsed * Action: " +
+                          inactivityActionName(_options.getInactivityAction()));
 
             // bugger it, might as well do the hard work now
             switch (_options.getInactivityAction()) {
@@ -4830,10 +4862,9 @@ class Connection {
                     break;
                 case ConnectionOptions.INACTIVITY_ACTION_SEND:
                     if (_closeSentOn.get() <= 0 && _closeReceivedOn.get() <= 0) {
-                        if (_log.shouldInfo()) {
-                            _log.info("Sending some data to " + getRemotePeerString() +
-                                      " due to inactivity");
-                        }
+                        // No line of its own: the action line above already names
+                        // what is about to be sent, and this one wrote 5,464 INFO
+                        // lines for a single destination in 133 minutes.
                         _receiver.send(null, 0, 0, true);
                         break;
                     } // else fall through
