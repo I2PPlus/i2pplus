@@ -1487,9 +1487,47 @@ class Connection {
      * @return the fixed inter-SYN retransmit interval (ms) to arm the retransmit timer with
      */
     private int getSynRetransmitInterval() {
-        int rtt = _options.getRTT();
-        if (!_options.receivedAck()) {rtt = -1;}
-        return computeSynRetransmitInterval(rtt, ConnectionOptions.getInitialRTO());
+        int rtt = synPhaseEvidenceRttMs(_options.getRTT(), _options.receivedAck());
+        int interval = computeSynRetransmitInterval(rtt, ConnectionOptions.getInitialRTO());
+        // Only a path with no measurement gets the window-sized interval. With
+        // evidence the interval already tracks the round trip, and shortening
+        // it would fire resends before that round trip can come back.
+        return rtt > 0 ? interval
+                       : fitSynBudgetToWindow(interval, getEffectiveConnectWindow(), maxSynResends);
+    }
+
+    /**
+     * Size the blind SYN retransmit interval so the configured SYN budget fits
+     * the caller's own connect window.
+     * <p>With no RTT evidence for the path,
+     * {@link #computeSynRetransmitInterval(int, int)} returns the configured
+     * initial RTO — 9s by default. Measured on a live router whose proxy asked
+     * for a 58s connect, that made the effective spacing 12s once the retransmit
+     * pass was counted, so about five SYN sends went out before the window
+     * expired and seven of the twelve the operator configured through
+     * {@code i2p.streaming.maxSYNRetransmissions} were never made. The window is
+     * the one deadline the caller actually set, so spend it on attempts rather
+     * than on waiting.
+     * <p>Never below {@link #SYN_RTO_MIN}: round trips inside the network are
+     * seconds, and a SYN re-fired faster than that is a storm against a peer
+     * that is merely slow to answer.
+     * <p>Only ever shortens the interval, so a short window cannot make the
+     * handshake louder than the configured initial RTO already had it.
+     *
+     * @param intervalMs the interval the path evidence produced
+     * @param connectWindowMs the caller's connect window in ms; 0 or less when
+     *                        no connect timeout is configured, in which case
+     *                        there is nothing to size against
+     * @param configuredSends the configured SYN send budget
+     *                        ({@link #maxSynResends})
+     * @return the interval to arm the retransmit timer with
+     * @since 0.9.72+
+     */
+    static int fitSynBudgetToWindow(int intervalMs, long connectWindowMs, int configuredSends) {
+        if (intervalMs <= 0 || connectWindowMs <= 0 || configuredSends <= 0) {return intervalMs;}
+        long fit = (connectWindowMs + configuredSends - 1) / configuredSends;
+        if (fit < SYN_RTO_MIN) {fit = SYN_RTO_MIN;}
+        return (int) Math.min(fit, intervalMs);
     }
 
     /**
