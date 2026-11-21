@@ -29,6 +29,19 @@ more often is kept for 91 days, and a longer period keeps at least 1440 rows.
 Each archive uses the `AVERAGE` consolidation function, XFF 0.9, and one step
 per row.
 
+### Where the archives live
+
+Persistence is on by default (`routerconsole.graphPersistent`). Archives are
+written to `<router dir>/rrd/` as `rrd-<stat name>.<period>.jrb`, one file per
+stat and period. The `.jrb` container is jrobin's own: it is not interchangeable
+with `.rrd` files from RRD4J or other RRD implementations. With
+`routerconsole.graphPersistent=false` the archives use the memory backend
+instead — nothing is written to disk, and the history is gone after a restart.
+
+How much of the archive the console plots is a separate setting,
+`routerconsole.graphPeriods` (default 60 periods, so one hour for a stat
+sampled every minute).
+
 ## Data Consolidation
 
 When moving between resolutions, RRD applies functions:
@@ -54,6 +67,31 @@ from the library.
 - `org.rrd4j.core` - Database engine
 - `org.rrd4j.graph` - Graph rendering
 - `org.rrd4j.data` - Data manipulation and consolidation
+
+## Divergence from upstream I2P's copy
+
+This module is also a fork of the `apps/jrobin` carried by upstream I2P, and it
+has been rewritten rather than patched: 207 files differ, 24,507 lines added and
+8,477 removed.
+
+- **SVG backend.** Upstream's hand-written trio `net.i2p.rrd4j.SimpleSVGMaker`,
+  `SimpleSVGGraphics2D` and `SimpleSVGImageWorker` is gone, replaced by a
+  vendored copy of JFreeSVG (`org.jfree.svg`, 21 files, 6,129 lines) driven
+  through a new `org.rrd4j.graph.SVGImageWorker`.
+- **Graph package.** Added: `MonotoneSpline` (curve smoothing), `RrdGraphMeta`
+  (plot geometry and series as JSON, for the console's hover readout), and
+  `eu.bengreen.data.utility` — a largest-triangle-three-buckets downsampler
+  alongside the existing `DownSampler`. `RrdGraphDef`, `RrdGraphGenerator`,
+  `TimeAxis` and `ValueAxis` are largely rewritten.
+- **Core package.** Also substantially changed: 74 files, 6,092 lines added and
+  4,457 removed, including the `timespec` parser and the `jrrd` file reader.
+- **Tests.** Upstream has none for this module; this copy has 26 test files
+  under `java/test/junit/org/rrd4j/`.
+
+What has not changed is what the console depends on: the archive layout, the
+`.jrb` container, and the retention constants in
+`net.i2p.router.web.GraphListener` match upstream's `SummaryListener` line for
+line, so a graph holds the same span of history in either tree.
 
 ## Building
 
