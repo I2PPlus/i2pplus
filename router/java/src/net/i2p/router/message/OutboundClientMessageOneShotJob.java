@@ -957,6 +957,30 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     }
 
     /**
+     * Names what a send was waiting for, for the line reporting that its reply
+     * timeout fired.
+     * <p>This job's send timeout only exists when a reply was asked for - it is
+     * constructed under {@code wantACK} for the two encryption types, and nowhere
+     * else - so the event is never "the send timed out", it is "the reply did not
+     * come back". Which reply that is follows from the cipher: a ratchet peer
+     * answers with a ratchet reply, and an ElGamal2 peer either answers with proof
+     * that the session tags arrived, when tags were sent, or with a plain receipt.
+     * Naming it is what makes a timeout storm attributable - one peer accounted for
+     * 2,074 of 5,217 reply timeouts in 52 min on a live router, and the old line
+     * said only that something had timed out.
+     *
+     * @param ratchet true when the message was encrypted with ECIES_X25519
+     * @param tagsSent true when ElGamal2 session tags were registered for the send
+     * @return the phrase naming the awaited reply, lower case for mid-sentence use
+     * @since 0.9.72+
+     */
+    static String replyWaitSubject(boolean ratchet, boolean tagsSent) {
+        if (ratchet) {return "ratchet reply";}
+        if (tagsSent) {return "tag delivery";}
+        return "delivery receipt";
+    }
+
+    /**
      * Send a message to a lease.
      * Note: This is generally run inline by {@link #runJob()} above.
      * It is only run on the job queue after a LS lookup.
@@ -2499,8 +2523,12 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             }
             if (old == Result.NONE) {
                 if (_log.shouldInfo()) {
-                    _log.info("Send TIMEOUT to " + _toString + " after " +
-                              DataHelper.formatDuration(getContext().clock().now() - _start));
+                    Payload p = _clientMessage.getPayload();
+                    _log.info("No " + replyWaitSubject(_encryptionKey.getType() == EncType.ECIES_X25519,
+                                                       _tags != null) +
+                              " from " + _toString +
+                              " -> Reporting a best-effort failure" +
+                              " * Sent: " + (p != null ? p.getSize() : 0) + " bytes");
                 }
                 dieFatal(MessageStatusMessage.STATUS_SEND_BEST_EFFORT_FAILURE);
             }
