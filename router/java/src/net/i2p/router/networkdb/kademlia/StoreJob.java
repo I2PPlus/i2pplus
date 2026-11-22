@@ -763,6 +763,43 @@ abstract class StoreJob extends JobImpl {
     }
 
     /**
+     * Why {@link #shouldStoreTo} rejects a router, in the words a log line needs.
+     * The predicate returns a bare boolean, which is enough to skip a peer but
+     * leaves a reader looking at "old router" with no way to tell a peer that has
+     * merely not upgraded from one still on DSA keys - different conditions with
+     * different fixes. Reports every failing condition rather than the first, so
+     * a peer that fails two gates is not misread as failing one.
+     *
+     * @param ri the router info to explain
+     * @return the reasons as <code> * </code>-separated segments, or null when the
+     *         router passes the gate and there is nothing to explain
+     * @since 0.9.72+
+     */
+    static String storeRejectReason(RouterInfo ri) {
+        if (shouldStoreTo(ri)) {return null;}
+        List<String> reasons = new ArrayList<>(3);
+        String v = ri.getVersion();
+        if (VersionComparator.comp(v, MIN_STORE_VERSION) < 0) {
+            reasons.add("Version " + v + " predates " + MIN_STORE_VERSION);
+        }
+        RouterIdentity ident = ri.getIdentity();
+        if (ident.getSigningPublicKey().getType() == SigType.DSA_SHA1) {
+            reasons.add("Signing key " + SigType.DSA_SHA1);
+        }
+        EncType type = ident.getPublicKey().getType();
+        boolean encOk = DatabaseLookupMessage.USE_ECIES_FF
+                            ? LeaseSetKeys.SET_BOTH.contains(type)
+                            : type == EncType.ELGAMAL_2048;
+        if (!encOk) {
+            // A type the router does not know parses to a null EncType, and
+            // "Encryption key null" reads as a bug in this line rather than a
+            // peer running a cipher from before the type registry.
+            reasons.add(type != null ? "Encryption key " + type : "Encryption key type not recognised");
+        }
+        return String.join(" * ", reasons);
+    }
+
+    /**
      * Minimum version for LS2 stores.
      * @since 0.9.38
      */

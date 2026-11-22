@@ -906,9 +906,9 @@ class FloodfillVerifyStoreJob extends JobImpl {
                 getContext().statManager().addRateData("netDb.floodfillVerifyPhase1Timeout", elapsed);
                 if (_log.shouldInfo()) {
                     _log.info("Floodfill store check timed out for [" + _key.toShortBase32() +
-                              "] -> Proceeding to the flood check without blaming"
-                              + "\n* Router: [" +
-                              (_target != null ? _target.toShortBase64() : "?") + "]");
+                              "] -> Proceeding to the flood check without blaming" +
+                              "\n* Router: " +
+                              (_target != null ? "[" + _target.toShortBase64() + "]" : "None selected yet"));
                 }
                 enterFloodCheck();
                 return;
@@ -918,9 +918,9 @@ class FloodfillVerifyStoreJob extends JobImpl {
             if (_log.shouldWarn()) {
                 LeaseSet ls = _facade.lookupLeaseSetLocally(_key);
                 String tunnelName = ls != null ? _facade.getTunnelName(ls.getDestination()) : "";
-                String name = !tunnelName.isEmpty() ? " for \'" + tunnelName + "\'" : " for key";
+                String name = !tunnelName.isEmpty() ? " for \'" + tunnelName + "\'" : "";
                 _log.warn("Floodfill Verify timed out" + name + " [" + _key.toShortBase32() + "] -> " +
-                          "Ignoring [" + _target.toShortBase64() + "] and selecting a new peer...");
+                          "Ignoring [" + _target.toShortBase64() + "] and selecting a different floodfill");
             }
             if (_attempted < MAX_PEERS_TO_TRY) {
                 // Don't resend, simply rerun FVSJ.this inline and chose somebody besides _target for verification

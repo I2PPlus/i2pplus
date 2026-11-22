@@ -692,7 +692,7 @@ public class IterativeSearchJob extends FloodSearchJob {
         }
         if (empty) {
             if (_log.shouldWarn()) {
-                _log.warn("IterativeSearch for " + (_isLease ? "LeaseSet " : "Router") +
+                _log.warn("IterativeSearch for " + (_isLease ? "LeaseSet" : "Router") +
                           " [" + _key.toShortBase64() + "] failed -> No Floodfills in NetDb");
             }
             failed(); // No floodfill peers, fail
@@ -868,7 +868,15 @@ public class IterativeSearchJob extends FloodSearchJob {
                 _skipReasons[SKIP_TOO_OLD]++;
                 failed(peer, false);
                 if (_log.shouldDebug()) {
-                    _log.debug("Not sending query to old Router [" + ri.toBase64().substring(0,6) + "]");
+                    // One of the busiest lines in a live router's log: 100 stale
+                    // peers wrote 80,499 copies in 8.7 min, because every search
+                    // re-picks the same old candidates out of the reply set. The
+                    // reason is a property of the peer, so the peer is the key the
+                    // repeats collapse under.
+                    String why = StoreJob.storeRejectReason(ri);
+                    _log.debugThrottled("too-old-" + peer.toShortBase64(),
+                                        "Not querying [" + peer.toShortBase64() + "] -> " +
+                                        (why != null ? why : "Router too old to answer"));
                 }
                 return;
             }
@@ -912,9 +920,9 @@ public class IterativeSearchJob extends FloodSearchJob {
                 if (replyTunnel == null) {
                     _skipReasons[SKIP_NO_REPLY_TUNNEL]++;
                     if (_log.shouldWarn())
-                        _log.warn("Client search for " + (_isLease ? "LeaseSet " : "RouterInfo ") +
-                                  "[" + keyText() + "] via [" + peer.toShortBase64() +
-                                  "] failed -> No inbound tunnel to receive reply");
+                        _log.warn("Client search for " + (_isLease ? "LeaseSet" : "RouterInfo") +
+                                  " " + keyText() + " via [" + peer.toShortBase64() +
+                                  "] failed -> No inbound tunnel to receive a reply");
                     failed();
                     return;
                 }
@@ -926,8 +934,8 @@ public class IterativeSearchJob extends FloodSearchJob {
                              ri == null ? SKIP_NO_PEER_ROUTERINFO : SKIP_NO_REPLY_SUPPORT;
                 _skipReasons[reason]++;
                 if (_log.shouldInfo()) {
-                    _log.info("Client search for " + (_isLease ? "LeaseSet " : "RouterInfo ") +
-                              "[" + keyText() + "] via [" + peer.toShortBase64() +
+                    _log.info("Client search for " + (_isLease ? "LeaseSet" : "RouterInfo") +
+                              " " + keyText() + " via [" + peer.toShortBase64() +
                               "] skipped -> " + skipReasonText(reason));
                 }
                 failed(peer, false);
@@ -1012,7 +1020,7 @@ public class IterativeSearchJob extends FloodSearchJob {
             int tries;
             synchronized(this) {tries = _unheardFrom.size() + _failedPeers.size();}
             if (_key != null && peer != null) {
-                _log.debug("IterativeSearch for " + (_isLease ? "LeaseSet " : "Router ") +
+                _log.debug("IterativeSearch for " + (_isLease ? "LeaseSet" : "Router") +
                            " [" + _key.toShortBase64() + "] -> Attempt " + tries +
                            "\n* Querying: [" + peer.toShortBase64() + "]" +
                            " * Direct: " + isDirect + " * Reply via client tunnel: " + isClientReplyTunnel);
@@ -1346,8 +1354,8 @@ public class IterativeSearchJob extends FloodSearchJob {
         boolean neverQueried = _queriesSent == 0;
         if (neverQueried ? _log.shouldWarn() : _log.shouldInfo()) {
             long timeRemaining = _expiration - getContext().clock().now();
-            String msg = "IterativeSearch for " + (_isLease ? "LeaseSet " : "Router") +
-                         " [" + keyText() + "] failed -> " +
+            String msg = "IterativeSearch for " + (_isLease ? "LeaseSet" : "Router") +
+                         " " + keyText() + " failed -> " +
                          (neverQueried ? "No peer was ever queried" : "Every peer queried failed") +
                          "\n* Peers queried: " + tries +
                          " * Elapsed: " + DataHelper.formatDuration(time) +
@@ -1507,8 +1515,8 @@ public class IterativeSearchJob extends FloodSearchJob {
         }
         long time = System.currentTimeMillis() - _created;
         if (_log.shouldInfo()) {
-            _log.info("IterativeSearch for " + (_isLease ? "LeaseSet " : "Router") +
-                      " [" + keyText() + "] succeeded -> Peers queried: " + tries +
+            _log.info("IterativeSearch for " + (_isLease ? "LeaseSet" : "Router") +
+                      " " + keyText() + " succeeded -> Peers queried: " + tries +
                       " * Elapsed: " + DataHelper.formatDuration(time));
         }
         getContext().statManager().addRateData("netDb.successTime", time);
