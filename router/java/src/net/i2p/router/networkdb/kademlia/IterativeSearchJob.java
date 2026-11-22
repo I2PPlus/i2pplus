@@ -112,7 +112,13 @@ public class IterativeSearchJob extends FloodSearchJob {
     private int _fingerprintIPCount;
     /** Number of entries used in {@link #_fingerprintPorts}. */
     private int _fingerprintPortCount;
-    /** The peers left out of the search. */
+    /**
+     * The peers left out of the search, at either gate: the soft-signal gate in
+     * {@link #retry()}, and the hard checks inside {@link #sendQuery} that
+     * decided not to ask this candidate at all. Membership here means "no lookup
+     * message ever went to this peer", which is what keeps a passed-over
+     * candidate out of the query budget and off the negative-lookup cache.
+     */
     private final Set<Hash> _skippedPeers;
     /** Floodfill peers we've sent queries to in this search — for active-query tracking. */
     private final Set<Hash> _queriedFloodfills;
@@ -187,10 +193,16 @@ public class IterativeSearchJob extends FloodSearchJob {
      * search ended without ever asking anyone, which is a different finding from
      * a search that asked and was told no - and it is the only case the caller
      * cannot already see from its own elapsed time.
+     * <p>This is also the number the search's own limits are measured against:
+     * the query budget in {@link #retry()}, the beta-confirmation widening gate,
+     * and the negative-lookup cache guard in {@link #failed()}. A candidate
+     * passed over without a query must not advance any of the three, or a search
+     * whose candidates are all unqueryable spends its budget, satisfies beta,
+     * and records a definitive "no such destination" without having asked.
      *
      * @since 0.9.72+
      */
-    private int _queriesSent;
+    private volatile int _queriesSent;
 
     /** Most non-floodfill peers queried. */
     private static final int MAX_NON_FF = 5;
@@ -730,23 +742,32 @@ public class IterativeSearchJob extends FloodSearchJob {
         if (_expiration - 1500 < now)  {_expiration = now + 1500;}
         while (true) {
             Hash peer = null;
-            final int done;
+            final int asked;
             final int pend;
             synchronized (this) {
                 if (_dead) {return;}
                 pend = _unheardFrom.size();
                 if (pend >= _maxConcurrent) {return;}
-                done = _failedPeers.size();
+                asked = _queriesSent;
             }
-            if (done >= _totalSearchLimit) {
-                cancelJob();
+            // Only a lookup that actually left on a tunnel spends the budget.
+            // A candidate rejected inside sendQuery() is recorded in
+            // _skippedPeers, never in _failedPeers, so a search whose closest
+            // candidates are all unqueryable still gets its full allowance of
+            // real questions instead of dying with none asked.
+            if (queryBudgetSpent(asked, _totalSearchLimit)) {
+                // Nothing outstanding to hear back from: the budget is spent and
+                // spent with failures, so stop now rather than wait for the
+                // search timer. With replies still in flight, stop asking and
+                // let them decide.
+                if (pend == 0) {cancelJob();}
                 return;
             }
             // Even if pend and todo are empty, we don't fail, as there may be more peers coming via newPeerToTry()
-            if (done + pend >= _totalSearchLimit) {return;}
             synchronized(this) {
                 if (_alwaysQueryHash != null && !_unheardFrom.contains(_alwaysQueryHash) &&
-                    !_failedPeers.contains(_alwaysQueryHash)) {
+                    !_failedPeers.contains(_alwaysQueryHash) &&
+                    !_skippedPeers.contains(_alwaysQueryHash)) {
                     /*
                      * For testing or local networks... we will pretend that the specified router is floodfill,
                      * and always closest-to-the-key. May be set after startup but can't be changed or unset later.
@@ -785,7 +806,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                 }
                 _unheardFrom.add(peer);
             }
-            sendQuery(peer, done + pend);
+            sendQuery(peer, asked);
         }
     }
 
@@ -799,18 +820,81 @@ public class IterativeSearchJob extends FloodSearchJob {
      * @since 0.9.71+
      */
     private void widenCandidatesLocked() {
-        if (_widened || _dead) {return;}
-        if (_failedPeers.size() + _unheardFrom.size() >= BETA_CONFIRM) {return;}
-        _widened = true;
-        // Cap so a huge netdb does not balloon the sorted set; the closest
-        // 2x the search limit is far more than beta.
-        addClosest(_toTry, _facade.getAllRouters(), _rkey, getContext().routerHash(), _key,
-                   2 * _totalSearchLimit);
-        if (_log.shouldInfo()) {
-            _log.info("IterativeSearch for " + (_isLease ? "LeaseSet" : "Router") +
-                      " [" + _key.toShortBase64() +
-                      "] widening candidates for beta confirmation");
+        if (mayWidenForBeta(_widened, _dead, _queriesSent)) {
+            _widened = true;
+            // Cap so a huge netdb does not balloon the sorted set; the closest
+            // 2x the search limit is far more than beta.
+            addClosest(_toTry, _facade.getAllRouters(), _rkey, getContext().routerHash(), _key,
+                       2 * _totalSearchLimit);
+            if (_log.shouldInfo()) {
+                _log.info("IterativeSearch for " + (_isLease ? "LeaseSet" : "Router") +
+                          " " + keyText() + " widening candidates -> Beta confirmation");
+            }
         }
+    }
+
+    /**
+     * Pure decision: may this search widen its candidate set once to confirm the
+     * failure against beta closest peers?
+     * <p>The gate used to read {@code _failedPeers.size() + _unheardFrom.size()},
+     * and every candidate rejected inside {@link #sendQuery} landed in
+     * {@code _failedPeers}. A search starved of queryable peers therefore
+     * satisfied the "we already asked beta peers" test with peers it had never
+     * asked, and widening - the one response to a starved candidate list - was
+     * switched off by the very condition that called for it. Count queries that
+     * actually left instead.
+     *
+     * @param widened true if this search has already widened once
+     * @param dead true if the search has already finished
+     * @param queriesSent lookups this search actually put on a tunnel
+     * @return true if the candidate set should be widened now
+     * @since 0.9.72+
+     */
+    static boolean mayWidenForBeta(boolean widened, boolean dead, int queriesSent) {
+        return !widened && !dead && queriesSent < BETA_CONFIRM;
+    }
+
+    /**
+     * Pure decision: has this search spent its allowance of queries?
+     * <p>Measured against lookups actually dispatched, not against the peers
+     * recorded as failed. A candidate rejected in {@link #sendQuery} - too old to
+     * answer, no keys to encrypt a reply to, no AEAD support - was recorded as a
+     * failed peer and consumed a slot of the budget, so a search whose closest
+     * candidates were all unqueryable "completed" its budget without a packet
+     * leaving. A live router reported 26.7 LeaseSet lookups per minute failing
+     * having asked nobody, against 7 per minute failing having asked somebody.
+     *
+     * @param queriesSent lookups this search actually put on a tunnel
+     * @param limit the search's total query allowance
+     * @return true if no further query should be sent
+     * @since 0.9.72+
+     */
+    static boolean queryBudgetSpent(int queriesSent, int limit) {
+        return queriesSent >= limit;
+    }
+
+    /**
+     * Pure decision: does this failed search count as a definitive answer that
+     * the key does not exist, so the negative lookup cache should hold that
+     * verdict against it?
+     * <p>The guard's own comment says a failure that contacted nobody is local and
+     * must not poison the key, but it was fed {@code _unheardFrom.size() +
+     * _failedPeers.size()}, and {@code _failedPeers} held every candidate
+     * {@link #sendQuery} passed over without asking. A search that never put a
+     * question on a tunnel therefore cleared the guard and cached "no such
+     * destination" - which is how one rejected destination came to be fetched
+     * 1,639 times: the cache entry expired, the same starved search ran again,
+     * asked nobody, and re-cached the same wrong verdict.
+     *
+     * @param queriesSent lookups this search actually put on a tunnel
+     * @param disconnected true if the router has no connections at all, in which
+     *                     case no lookup could have arrived and a failure says
+     *                     nothing about the key
+     * @return true if the negative lookup cache should record this failure
+     * @since 0.9.72+
+     */
+    static boolean poisonsNegativeCache(int queriesSent, boolean disconnected) {
+        return !disconnected && NegativeLookupCache.countsAsDefinitiveFail(queriesSent);
     }
 
     /**
@@ -847,10 +931,17 @@ public class IterativeSearchJob extends FloodSearchJob {
     }
 
     /**
-     * Send a DLM to the peer.
+     * Ask one candidate for the key. Any of the checks along the way can decide
+     * the peer could not answer - it is too old to hold this key type, there is
+     * no key to encrypt a reply to, no AEAD support, a zero-hop path that would
+     * expose the target - and then no lookup is sent and the peer is recorded
+     * with {@link #passedOver(Hash)} rather than as a failed query.
      *
      * @param peer who to send to
-     * @param previouslyTried how many did we send to before this one?
+     * @param previouslyTried how many lookups this search has already put on a
+     *                        tunnel; zero means this is the first, and the
+     *                        first query picks the tunnel whose far end is
+     *                        closest to the peer, later ones pick at random
      * @since 0.9.53 added previouslyTried param
      */
     private void sendQuery(Hash peer, int previouslyTried) {
@@ -866,7 +957,7 @@ public class IterativeSearchJob extends FloodSearchJob {
              */
             if (!StoreJob.shouldStoreTo(ri)) {
                 _skipReasons[SKIP_TOO_OLD]++;
-                failed(peer, false);
+                passedOver(peer);
                 if (_log.shouldDebug()) {
                     // One of the busiest lines in a live router's log: 100 stale
                     // peers wrote 80,499 copies in 8.7 min, because every search
@@ -938,7 +1029,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                               " " + keyText() + " via [" + peer.toShortBase64() +
                               "] skipped -> " + skipReasonText(reason));
                 }
-                failed(peer, false);
+                passedOver(peer);
                 return;
             }
             isDirect = false;
@@ -988,7 +1079,7 @@ public class IterativeSearchJob extends FloodSearchJob {
          */
         if (outTunnel != null && outTunnel.getLength() <= 1) {
             if (peer != null && peer.equals(_key)) {
-                failed(peer, false);
+                passedOver(peer);
                 if (_log.shouldDebug()) {
                     _log.debug("Not sending zero-hop self-lookup of [" +
                                peer.toShortBase64() + "]");
@@ -996,7 +1087,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                 return;
             }
             if (peer != null && _facade.lookupLocallyWithoutValidation(peer) == null) {
-                failed(peer, false);
+                passedOver(peer);
                 if (_log.shouldDebug()) {
                     _log.debug("Not sending zero-hop lookup of [" +
                                peer.toShortBase64() + "] to UNKNOWN");
@@ -1017,11 +1108,12 @@ public class IterativeSearchJob extends FloodSearchJob {
         dlm.setSearchType(_isLease ? DatabaseLookupMessage.Type.LS : DatabaseLookupMessage.Type.RI);
 
         if (_log.shouldDebug()) {
-            int tries;
-            synchronized(this) {tries = _unheardFrom.size() + _failedPeers.size();}
+            // This query's ordinal: the counter is taken once the lookup is
+            // dispatched, below, so this one is the next number.
+            int attempt = _queriesSent + 1;
             if (_key != null && peer != null) {
                 _log.debug("IterativeSearch for " + (_isLease ? "LeaseSet" : "Router") +
-                           " [" + _key.toShortBase64() + "] -> Attempt " + tries +
+                           " " + keyText() + " -> Attempt " + attempt +
                            "\n* Querying: [" + peer.toShortBase64() + "]" +
                            " * Direct: " + isDirect + " * Reply via client tunnel: " + isClientReplyTunnel);
             }
@@ -1041,7 +1133,7 @@ public class IterativeSearchJob extends FloodSearchJob {
             if (ri != null) {
                 // Request encrypted reply - now covered by version check above, which is more recent
                 if (!(type == EncType.ELGAMAL_2048 || (type == EncType.ECIES_X25519 && DatabaseLookupMessage.USE_ECIES_FF))) {
-                    if (peer != null) {failed(peer, false);}
+                    if (peer != null) {passedOver(peer);}
                     if (_log.shouldWarn()) {
                         _log.warn("Can't do encrypted lookup to [" + peer.toShortBase64() + "] with EncType " + type);
                     }
@@ -1057,7 +1149,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                     boolean ratchet2 = DatabaseLookupMessage.supportsRatchetReplies(ri);
                     if (ratchet1 && !ratchet2) {
                         _skipReasons[SKIP_NO_AEAD]++;
-                        if (peer != null) {failed(peer, false);}
+                        if (peer != null) {passedOver(peer);}
                         if (_log.shouldWarn()) {
                             _log.warn("Can't do encrypted lookup to [" + peer.toShortBase64() +
                                       "] -> Router does not support AEAD replies");
@@ -1201,6 +1293,37 @@ public class IterativeSearchJob extends FloodSearchJob {
     }
 
     /**
+     * A candidate this search decided not to ask: every check between picking the
+     * peer and dispatching the lookup that found a reason the query could not be
+     * answered - too old to hold the key type, no keys to encrypt a reply to, no
+     * AEAD support, a zero-hop path that would leak the target.
+     * <p>Record it as passed over, not as a failed query. {@link #failed(Hash,
+     * boolean)} puts the peer in {@code _failedPeers}, and that set is what the
+     * query budget, the beta-confirmation widening gate and the negative-lookup
+     * cache guard all read, so a peer we never asked spent a slot of the budget,
+     * counted toward "we asked beta peers", and let the search record a
+     * definitive "no such destination" for a key it had never put a question to.
+     * A passed-over peer is also not blamed in the profile manager: it never had
+     * the chance to answer.
+     *
+     * @param peer the candidate we decided not to query, null for none
+     * @since 0.9.72+
+     */
+    private void passedOver(Hash peer) {
+        if (_dead || peer == null || getContext().banlist().isBanlisted(peer)) {return;}
+        synchronized (this) {
+            _unheardFrom.remove(peer);
+            // The floodfill query counter is taken only once a lookup is
+            // dispatched, so there is nothing to release here - but a peer that
+            // was claimed and then rejected must not stay in the set, or
+            // releaseFloodfillQueries() would decrement a count never taken.
+            _queriedFloodfills.remove(peer);
+            _skippedPeers.add(peer);
+        }
+        retry();
+    }
+
+    /**
      * A new (floodfill) peer was discovered that may have the answer.
      * @param peer may not actually be new
      */
@@ -1331,13 +1454,16 @@ public class IterativeSearchJob extends FloodSearchJob {
         int tries;
         final List<Hash> unheard;
         final boolean sawReply;
+        final boolean disconnected;
         synchronized(this) {
-            tries = _unheardFrom.size() + _failedPeers.size();
+            // What we actually asked, not what we recorded as failed: a candidate
+            // passed over without a query is neither.
+            tries = _queriesSent;
             unheard = new ArrayList<>(_unheardFrom);
             sawReply = _sawReply;
         }
-        if (getContext().commSystem().getStatus() != Status.DISCONNECTED
-                && NegativeLookupCache.countsAsDefinitiveFail(tries)) {
+        disconnected = getContext().commSystem().getStatus() == Status.DISCONNECTED;
+        if (poisonsNegativeCache(tries, disconnected)) {
             // Zero-try failures are local (no peer contacted) and must not poison the
             // key. Pure timeouts use a higher threshold so a brief tunnel outage
             // doesn't lock out a live destination.
@@ -1478,7 +1604,7 @@ public class IterativeSearchJob extends FloodSearchJob {
             if (_dead) {return;}
             _dead = true;
             _success = true;
-            tries = _unheardFrom.size() + _failedPeers.size();
+            tries = _queriesSent;
             if (_unheardFrom.size() == 1) {
                 peer = _unheardFrom.iterator().next();
                 _unheardFrom.clear();
