@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.client.SendMessageOptions;
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.SessionKeyManager;
@@ -350,12 +351,38 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
      * stored finds nothing anywhere, and no search on earth can answer a key we
      * hold. Dying there costs the peer a streaming retransmit cycle (2-3.25 s)
      * and the client a failure status, for a gap the republish job closes by
-     * itself. Rare on a live router - zero of these in 3 h 48 min for the three
-     * destinations this router hosts - which is why the budget is small.
+     * itself.
+     * <p>The count is deliberately above what a single wait can spend: {@link
+     * #mintGapRetryPending} stops the loop as soon as a further wait would land
+     * past the send's expiry, so the expiry, not this number, is the outer bound.
+     * A budget of 3 (6 s) gave up before the peer's own SYN retransmit ladder ran
+     * its course - 157 of these retries in 51 min on a live router, and the
+     * destination's LeaseSet typically stayed absent for 20-60 s after a client
+     * resumed - so a longer wait buys the peer's next attempt a send that works.
+     * Closing a gap that long is {@link #MINT_GAP_NUDGE_MS}'s job, not this one's.
      *
      * @since 0.9.72+
      */
-    static final int MINT_GAP_RETRIES = 3;
+    static final int MINT_GAP_RETRIES = 8;
+
+    /**
+     * How often one send asks our own client to re-sign a missing LeaseSet, per
+     * destination. The republish job asks on its own cycle; this nudge is for the
+     * case where that cycle has not run yet, and it only has to be sent once per
+     * gap to do its job.
+     *
+     * @since 0.9.72+
+     */
+    static final long MINT_GAP_NUDGE_MS = 10L * 1000;
+
+    /**
+     * When each destination was last asked to re-sign a LeaseSet a send found
+     * missing, so a burst of sends to one destination asks once per gap. Keyed
+     * only by destinations this router hosts, of which there are a handful.
+     *
+     * @since 0.9.72+
+     */
+    private static final ConcurrentHashMap<Hash, Long> _mintGapNudges = new ConcurrentHashMap<>();
 
     /**
      * How long each of those waits lasts, in ms. Two seconds is one streaming
@@ -909,6 +936,27 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     }
 
     /**
+     * Whether this send should also ask our own client to re-sign the LeaseSet it
+     * is waiting for.
+     * <p>The republish job nudges on its own cycle, but a destination that has
+     * just been resumed has no reason to run that cycle early, and its pool holds
+     * tunnels that nothing has asked it to sign. Measured on a live router: the
+     * proxy's destination came back at 12:23:07, its LeaseSet was still absent
+     * 8 s later, the SYN it had sent was rotated and given up on at 12:23:15, and
+     * the client got "could not establish a connection". One request per gap,
+     * rate-limited, turns that into a send that finds a LeaseSet.
+     *
+     * @param lastNudge when this destination was last asked, null if never
+     * @param now the current time from the router clock, in ms since the epoch
+     * @param intervalMs the minimum time between asks for one destination
+     * @return true to send the request
+     * @since 0.9.72+
+     */
+    static boolean mintGapNudgeDue(Long lastNudge, long now, long intervalMs) {
+        return lastNudge == null || now - lastNudge.longValue() >= intervalMs;
+    }
+
+    /**
      * Send a message to a lease.
      * Note: This is generally run inline by {@link #runJob()} above.
      * It is only run on the job queue after a LS lookup.
@@ -1263,14 +1311,26 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 getContext().statManager().addRateData("client.leaseSetFailedRemoteTime", lookupTime);
             }
 
+            long failNow = getContext().clock().now();
             if (mintGapRetryPending(_leaseSetFastFail, _mintGapRetries,
-                                    getContext().clock().now(), _overallExpiration)) {
+                                    failNow, _overallExpiration)) {
                 _mintGapRetries++;
+                Hash localKey = _to.calculateHash();
+                boolean nudged = mintGapNudgeDue(_mintGapNudges.get(localKey), failNow,
+                                                 MINT_GAP_NUDGE_MS);
+                if (nudged) {
+                    _mintGapNudges.put(localKey, failNow);
+                    // The republish cycle may not run for another interval and the
+                    // pool has no reason to sign anything until asked, so the send
+                    // that found the gap is the one that closes it.
+                    getContext().clientManager().requestLeaseSet(localKey, null);
+                }
                 if (_log.shouldInfo()) {
                     _log.info("LeaseSet lookup failed for " + _toString +
                               " -> Retrying, our own LeaseSet is not published yet" +
                               "\n* Attempt: " + _mintGapRetries + " of " + MINT_GAP_RETRIES +
-                              " * Wait: " + DataHelper.formatDuration(MINT_GAP_RETRY_MS));
+                              " * Wait: " + DataHelper.formatDuration(MINT_GAP_RETRY_MS) +
+                              (nudged ? " * Re-sign: requested" : ""));
                 }
                 // The send itself, re-queued behind the wait, not this job. Only
                 // the lookup has run so far, so the retry cannot duplicate a

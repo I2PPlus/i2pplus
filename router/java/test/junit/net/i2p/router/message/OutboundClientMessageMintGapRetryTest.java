@@ -17,7 +17,9 @@ import org.junit.Test;
  * nothing in either NetDb, and no search can answer a key this router holds.
  * The lookup fast-fails with that fact, and the send used to report NO_LEASESET
  * to the client there - costing the peer a streaming retransmit cycle for a gap
- * the republish job closes by itself.
+ * the republish job closes by itself. The send now waits, and asks our own client
+ * to re-sign once per gap, because a resumed destination has no reason to run its
+ * republish cycle early and its pool signs nothing until asked.
  *
  * @since 0.9.72+
  */
@@ -124,5 +126,51 @@ public class OutboundClientMessageMintGapRetryTest {
                      NOW + OutboundClientMessageOneShotJob.MINT_GAP_RETRIES *
                      (long) OutboundClientMessageOneShotJob.MINT_GAP_RETRY_MS,
                      now);
+    }
+
+    /**
+     * A send with little life left is not extended past it: the budget is the
+     * ceiling only while the message still has a future to be sent into, so a
+     * short-lived send stops waiting at its own expiry instead.
+     *
+     * @since 0.9.72+
+     */
+    @Test
+    public void theLoopEndsAtTheExpiryForAShortLivedSend() {
+        int gap = KademliaNetworkDatabaseFacade.LOOKUP_FAILED_LOCAL_NOT_STORED;
+        int wait = OutboundClientMessageOneShotJob.MINT_GAP_RETRY_MS;
+        int retries = 0;
+        long now = NOW;
+        long expiry = NOW + 3 * wait;
+        while (OutboundClientMessageOneShotJob.mintGapRetryPending(
+                   gap, retries, now, expiry)) {
+            retries++;
+            now += wait;
+        }
+        assertEquals("a send with 3 waits of life left takes 2", 2, retries);
+    }
+
+    /**
+     * One re-sign request per gap: never asked before gets asked, a request that
+     * lands exactly on the interval is due, and anything inside it is not - so a
+     * destination whose LeaseSet is missing under a burst of sends is asked once,
+     * not once per message.
+     *
+     * @since 0.9.72+
+     */
+    @Test
+    public void oneReSignRequestPerGap() {
+        long interval = OutboundClientMessageOneShotJob.MINT_GAP_NUDGE_MS;
+        assertTrue(OutboundClientMessageOneShotJob.mintGapNudgeDue(
+                       null, NOW, interval));
+        assertFalse(OutboundClientMessageOneShotJob.mintGapNudgeDue(
+                        NOW, NOW, interval));
+        assertFalse(OutboundClientMessageOneShotJob.mintGapNudgeDue(
+                        NOW, NOW + interval - 1, interval));
+        assertTrue(OutboundClientMessageOneShotJob.mintGapNudgeDue(
+                       NOW, NOW + interval, interval));
+        // a clock that moves backwards does not buy an extra request
+        assertFalse(OutboundClientMessageOneShotJob.mintGapNudgeDue(
+                        NOW, NOW - 1000L, interval));
     }
 }
