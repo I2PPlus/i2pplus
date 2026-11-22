@@ -119,6 +119,79 @@ public class IterativeSearchJob extends FloodSearchJob {
     /** Set once the candidate set has been widened for beta confirmation. Guarded by this. @since 0.9.71+. */
     private boolean _widened;
 
+    /**
+     * Index into {@link #_skipReasons}: the candidate is too old to store a
+     * reply to, so it cannot answer a LeaseSet lookup at all.
+     *
+     * @since 0.9.72+
+     */
+    static final int SKIP_TOO_OLD = 0;
+    /**
+     * Index into {@link #_skipReasons}: the client whose tunnels the search uses
+     * has no keys in the key manager, so there is nothing to encrypt the reply to.
+     *
+     * @since 0.9.72+
+     */
+    static final int SKIP_NO_CLIENT_KEYS = 1;
+    /**
+     * Index into {@link #_skipReasons}: no RouterInfo for the candidate, so its
+     * reply capabilities cannot be checked.
+     *
+     * @since 0.9.72+
+     */
+    static final int SKIP_NO_PEER_ROUTERINFO = 2;
+    /**
+     * Index into {@link #_skipReasons}: neither the client nor the candidate
+     * supports a reply this router can decrypt - typically a post-quantum client
+     * and a floodfill that predates ratchet replies.
+     *
+     * @since 0.9.72+
+     */
+    static final int SKIP_NO_REPLY_SUPPORT = 3;
+    /**
+     * Index into {@link #_skipReasons}: no inbound tunnel to receive the reply on.
+     *
+     * @since 0.9.72+
+     */
+    static final int SKIP_NO_REPLY_TUNNEL = 4;
+    /**
+     * Index into {@link #_skipReasons}: no outbound or inbound tunnel at all, the
+     * path that used to end the search without writing a single line.
+     *
+     * @since 0.9.72+
+     */
+    static final int SKIP_NO_TUNNEL = 5;
+    /**
+     * Index into {@link #_skipReasons}: the peer cannot do an AEAD reply and this
+     * search cannot fall back to an unencrypted one, so the query was built and
+     * then dropped.
+     *
+     * @since 0.9.72+
+     */
+    static final int SKIP_NO_AEAD = 6;
+    /** How many skip reasons are tallied. */
+    static final int SKIP_REASON_COUNT = 7;
+
+    /**
+     * How many candidates were passed over for each reason, indexed by the
+     * {@code SKIP_*} constants. A diagnostic tally: the searches that set it and
+     * the one that reads it are the same search, and a lost increment only makes
+     * the line understate, so it is not synchronised.
+     *
+     * @since 0.9.72+
+     */
+    private final int[] _skipReasons = new int[SKIP_REASON_COUNT];
+
+    /**
+     * Lookup messages actually put on a tunnel by this search. Zero means the
+     * search ended without ever asking anyone, which is a different finding from
+     * a search that asked and was told no - and it is the only case the caller
+     * cannot already see from its own elapsed time.
+     *
+     * @since 0.9.72+
+     */
+    private int _queriesSent;
+
     /** Most non-floodfill peers queried. */
     private static final int MAX_NON_FF = 5;
     /** Max number of peers to query. */
@@ -792,6 +865,7 @@ public class IterativeSearchJob extends FloodSearchJob {
              * so we won't request unencrypted replies anymore either.
              */
             if (!StoreJob.shouldStoreTo(ri)) {
+                _skipReasons[SKIP_TOO_OLD]++;
                 failed(peer, false);
                 if (_log.shouldDebug()) {
                     _log.debug("Not sending query to old Router [" + ri.toBase64().substring(0,6) + "]");
@@ -836,9 +910,10 @@ public class IterativeSearchJob extends FloodSearchJob {
                     isClientReplyTunnel = true;
                 }
                 if (replyTunnel == null) {
+                    _skipReasons[SKIP_NO_REPLY_TUNNEL]++;
                     if (_log.shouldWarn())
                         _log.warn("Client search for " + (_isLease ? "LeaseSet " : "RouterInfo ") +
-                                  "[" + _key.toShortBase64() + "] via [" + peer.toShortBase64() +
+                                  "[" + keyText() + "] via [" + peer.toShortBase64() +
                                   "] failed -> No inbound tunnel to receive reply");
                     failed();
                     return;
@@ -847,12 +922,13 @@ public class IterativeSearchJob extends FloodSearchJob {
                 // We don't have a way to request/get a ECIES-tagged reply,
                 // sending reply down expl. tunnel gets the LS stored in the
                 // main netdb where the client can't find it
+                int reason = lsk == null ? SKIP_NO_CLIENT_KEYS :
+                             ri == null ? SKIP_NO_PEER_ROUTERINFO : SKIP_NO_REPLY_SUPPORT;
+                _skipReasons[reason]++;
                 if (_log.shouldInfo()) {
-                    String why = lsk == null ? "No client keys" :
-                                 ri == null ? "No peer RouterInfo" : "No ratchet or ElGamal reply support";
                     _log.info("Client search for " + (_isLease ? "LeaseSet " : "RouterInfo ") +
-                              "[" + _key.toShortBase64() + "] via [" + peer.toShortBase64() +
-                              "] skipped -> " + why);
+                              "[" + keyText() + "] via [" + peer.toShortBase64() +
+                              "] skipped -> " + skipReasonText(reason));
                 }
                 failed(peer, false);
                 return;
@@ -887,6 +963,10 @@ public class IterativeSearchJob extends FloodSearchJob {
             ctx.statManager().addRateData("netDb.RILookupDirect", 0);
         }
         if ((!isDirect) && (replyTunnel == null || outTunnel == null)) {
+            // This used to end the whole search without writing a line, so a
+            // lookup that died in milliseconds left only the caller's duration
+            // behind. The tally below is what names it.
+            _skipReasons[SKIP_NO_TUNNEL]++;
             failed();
             return;
         }
@@ -968,6 +1048,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                     boolean ratchet1 = ourType.equals(EncType.ECIES_X25519);
                     boolean ratchet2 = DatabaseLookupMessage.supportsRatchetReplies(ri);
                     if (ratchet1 && !ratchet2) {
+                        _skipReasons[SKIP_NO_AEAD]++;
                         if (peer != null) {failed(peer, false);}
                         if (_log.shouldWarn()) {
                             _log.warn("Can't do encrypted lookup to [" + peer.toShortBase64() +
@@ -1020,6 +1101,9 @@ public class IterativeSearchJob extends FloodSearchJob {
                                                 OutNetMessage.PRIORITY_MY_NETDB_LOOKUP, ri);
             ctx.commSystem().processMessage(m);
         } else {ctx.tunnelDispatcher().dispatchOutbound(outMsg, outTunnel.getSendTunnelId(0), peer);}
+        // The search has now actually asked somebody. Everything above this point
+        // is a candidate passed over without a query.
+        _queriesSent++;
 
         // Mark as recently queried so other concurrent searches avoid this peer
         _facade.markQueried(peer);
@@ -1256,25 +1340,114 @@ public class IterativeSearchJob extends FloodSearchJob {
         // Blame the unheard-from (others already blamed in failed() above)
         for (Hash h : unheard) {getContext().profileManager().dbLookupFailed(h);}
         long time = System.currentTimeMillis() - _created;
-        if (_log.shouldInfo()) {
+        // The search either asked somebody and was told no, or it never got as far
+        // as asking. Only the second is invisible to the caller, whose own line
+        // already carries the duration.
+        boolean neverQueried = _queriesSent == 0;
+        if (neverQueried ? _log.shouldWarn() : _log.shouldInfo()) {
             long timeRemaining = _expiration - getContext().clock().now();
-            _log.info("IterativeSearch for "  + (_isLease ? "LeaseSet " : "Router") + " [" + _key.toShortBase64() + "] failed" +
-                      "\n* Peers queried: " + tries + "; Time taken: " + time + "ms (" + timeRemaining + "ms remaining)");
+            String msg = "IterativeSearch for " + (_isLease ? "LeaseSet " : "Router") +
+                         " [" + keyText() + "] failed -> " +
+                         (neverQueried ? "No peer was ever queried" : "Every peer queried failed") +
+                         "\n* Peers queried: " + tries +
+                         " * Elapsed: " + DataHelper.formatDuration(time) +
+                         " * Window left: " + DataHelper.formatDuration(Math.max(0, timeRemaining)) +
+                         skipTally();
+            if (neverQueried) {_log.warn(msg);} else {_log.info(msg);}
         }
         if (tries > 0) {
             // Don't bias the stats with immediate fails
             getContext().statManager().addRateData("netDb.failedTime", time);
             getContext().statManager().addRateData("netDb.failedRetries", (long) tries - 1);
+        }
+        // The counter the console names "zero peers queried" used to key on the peers
+        // recorded as failed, and a candidate passed over without a query is recorded
+        // as a failed peer. A live router therefore reported no zero-try failures at
+        // all beside 28 lookups that died in under 5 ms. What decides is whether a
+        // query ever left on a tunnel.
+        if (_queriesSent > 0) {
             getContext().statManager().addRateData(
                 _isLease ? "netDb.lookupsFailedLeaseSet" : "netDb.lookupsFailedRouterInfo", 1);
         } else {
-            // Zero-try: banlist/negcache skip, no floodfill peers, or job drop. Keep
-            // these out of the iterative-fail counters.
+            // Nothing was asked: no usable candidate, no tunnel, or the job was
+            // dropped. Keep these out of the iterative-fail counters.
             getContext().statManager().addRateData(
                 _isLease ? "netDb.lookupsFailedLeaseSetZeroTry" : "netDb.lookupsFailedRouterInfoZeroTry", 1);
         }
         for (Job j : _onFailed) {getContext().jobQueue().addJob(j);}
         _onFailed.clear();
+    }
+
+    /**
+     * The key being searched for, in the bracketed short form the rest of the
+     * NetDb logging uses. Null-safe: a dropped search may have no key at all.
+     *
+     * @return the key as a bracketed short base64 string, or <code>[unknown]</code>
+     * @since 0.9.72+
+     */
+    String keyText() {
+        return '[' + (_key != null ? _key.toShortBase64() : "unknown") + ']';
+    }
+
+    /**
+     * The words for one {@code SKIP_*} reason, for the lines that report a
+     * candidate passed over without a query.
+     *
+     * @param reason one of the {@code SKIP_*} constants
+     * @return a prose reason, capitalized, never null
+     * @since 0.9.72+
+     */
+    static String skipReasonText(int reason) {
+        switch (reason) {
+            case SKIP_TOO_OLD:             return "Router too old to answer";
+            case SKIP_NO_CLIENT_KEYS:      return "No client keys to encrypt a reply to";
+            case SKIP_NO_PEER_ROUTERINFO:  return "No RouterInfo for the peer";
+            case SKIP_NO_REPLY_SUPPORT:    return "No ratchet or ElGamal reply support";
+            case SKIP_NO_REPLY_TUNNEL:     return "No inbound tunnel to receive a reply";
+            case SKIP_NO_TUNNEL:           return "No tunnel to send the query on";
+            case SKIP_NO_AEAD:             return "Router cannot do an AEAD reply";
+            default:                       return "Reason unknown";
+        }
+    }
+
+    /**
+     * How many candidates this search passed over without querying, in the log
+     * form of {@link #skipTally(int[])}.
+     *
+     * @return the tally segments with their leading separators, or an empty string
+     * @since 0.9.72+
+     */
+    String skipTally() {
+        return skipTally(_skipReasons);
+    }
+
+    /**
+     * Formats a per-reason skip tally as a flat <code> * Skipped: N</code> total
+     * followed by one <code> * Reason: N</code> segment per non-zero reason, in
+     * {@code SKIP_*} index order. Empty when nothing was skipped, so a search that
+     * queried everybody it considered keeps its line unchanged.
+     * <p>
+     * The total is kept flat and the reasons sit beside it rather than nested under
+     * the {@code Skipped} label, so every segment of the emitted line is a
+     * <code>key: value</code> pair at the same level.
+     *
+     * @param reasons counts indexed by the {@code SKIP_*} constants, at least
+     *                {@link #SKIP_REASON_COUNT} long, never null
+     * @return the tally segments with their leading separators, or an empty string
+     * @since 0.9.72+
+     */
+    static String skipTally(int[] reasons) {
+        int total = 0;
+        for (int i = 0; i < SKIP_REASON_COUNT; i++) {total += reasons[i];}
+        if (total == 0) {return "";}
+        StringBuilder buf = new StringBuilder(64 + 40 * SKIP_REASON_COUNT);
+        buf.append(" * Skipped: ").append(total);
+        for (int i = 0; i < SKIP_REASON_COUNT; i++) {
+            if (reasons[i] > 0) {
+                buf.append(" * ").append(skipReasonText(i)).append(": ").append(reasons[i]);
+            }
+        }
+        return buf.toString();
     }
 
     /**
@@ -1335,8 +1508,8 @@ public class IterativeSearchJob extends FloodSearchJob {
         long time = System.currentTimeMillis() - _created;
         if (_log.shouldInfo()) {
             _log.info("IterativeSearch for " + (_isLease ? "LeaseSet " : "Router") +
-                      " [" + _key.toShortBase64() + "] succeeded" +
-                      "\n* Peers queried: " + tries + "; Time taken: " + time + "ms");
+                      " [" + keyText() + "] succeeded -> Peers queried: " + tries +
+                      " * Elapsed: " + DataHelper.formatDuration(time));
         }
         getContext().statManager().addRateData("netDb.successTime", time);
         getContext().statManager().addRateData("netDb.successRetries", (long) tries - 1);
