@@ -3179,7 +3179,7 @@ class Connection {
         if (_log.shouldDebug()) {
             _log.debugThrottled(periodicDebugKey(shortLabel(), "ack-sent"),
                                 shortLabel() + " -> Sending a new ACK * Sequence: " +
-                                packet.getSequenceNum() + packet.formatAsString(false));
+                                packet.getSequenceNum() + packet.formatInline());
         }
     }
 
@@ -4918,18 +4918,16 @@ class Connection {
                 case ConnectionOptions.INACTIVITY_ACTION_DISCONNECT:
                     // fall through
                 default:
+                    // One record for the event, not two: a class at DEBUG passes the
+                    // INFO record too, so the separate counters record was a second
+                    // line for the same timeout, and it divided the timeout by 1000
+                    // by hand, which printed "0s" for any sub-second setting.
                     if (_log.shouldInfo()) {
-                        int timeout = _options.getInactivityTimeout() / 1000;
-                        _log.info("Closing connection -> Inactivity timeout of " + timeout +
-                                  "s reached on " + getRemotePeerString());
-                    }
-                    if (_log.shouldDebug()) {
-                        StringBuilder buf = new StringBuilder(128);
                         long now = _context.clock().now();
-                        buf.append("Last sent: ").append(now - _lastSendTime).append("ms ago");
-                        buf.append(" * Last received: ").append(now - _lastReceivedOn).append("ms ago");
-                        buf.append(" * Inactivity timeout: ").append(_options.getInactivityTimeout()).append("ms");
-                        _log.debug(buf.toString());
+                        _log.info(shortLabel() + " -> Closing the connection on the inactivity timeout" +
+                                  "\n* Timeout: " + DataHelper.formatDuration(_options.getInactivityTimeout()) +
+                                  " * Last sent: " + DataHelper.formatDuration(now - _lastSendTime) +
+                                  " * Last received: " + DataHelper.formatDuration(now - _lastReceivedOn));
                     }
 
                     IOException ioe = new IOException("Inactivity timeout");

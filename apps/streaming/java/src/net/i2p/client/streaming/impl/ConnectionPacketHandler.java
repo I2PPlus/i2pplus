@@ -277,7 +277,8 @@ class ConnectionPacketHandler {
                                    "More data received after local close on " + con.shortLabel() +
                                    " -> Sending reset");
                 if (_log.shouldDebug())
-                    _log.debug("Dropped a packet after local close -> " + packet);
+                    _log.debug("Dropped a packet after local close -> " +
+                               packet.streamTag() + packet.formatInline());
                 con.disconnect(false);
             } else {
                 _log.warnThrottled("streaming-inbound-buffer-exceeded",
@@ -333,12 +334,18 @@ class ConnectionPacketHandler {
         }
 
         if (_log.shouldDebug()) {
-            String type;
-            if (!allowAck) {type = "Non-SYN before SYN";}
-            else if (isNew) {type = "New";}
-            else if (packet.getPayloadSize() <= 0) {type = "ACK-only";}
-            else {type = "DUP";}
-            _log.debug(type + " Inbound packet: " + packet + " on " + con);
+            // The hottest line in the streaming log: a live router wrote 47,506
+            // two-line records of this shape in 8.7 min. Appending the packet and
+            // the connection opened a continuation line for each, so a fact of
+            // under 90 characters took three. The connection names the stream pair,
+            // so the stream IDs go too.
+            String what;
+            if (!allowAck) {what = "Non-SYN packet before the SYN";}
+            else if (isNew) {what = "New inbound packet";}
+            else if (packet.getPayloadSize() <= 0) {what = "ACK-only inbound packet";}
+            else {what = "Duplicate inbound packet";}
+            _log.debug(con.shortLabel() + " -> " + what +
+                       " * Sequence: " + packet.getSequenceNum() + packet.formatInline());
         }
 
         boolean ackOnly = false;
@@ -349,7 +356,8 @@ class ConnectionPacketHandler {
 
             if (delayReq && packet.getOptionalDelay() <= 0) {
                 if (_log.shouldDebug())
-                    _log.debug("Scheduling immediate ACK for " + packet);
+                    _log.debug("Scheduling immediate ACK -> " +
+                               packet.streamTag() + packet.formatInline());
                 // honor request "almost" immediately
                 // Note: the delay below _may_ be a big limiter in how fast local "loopback" connections
                 // can go, however if it goes too fast then we start choking which causes
@@ -363,7 +371,8 @@ class ConnectionPacketHandler {
                     delay = con.getOptions().getSendAckDelay();
                 con.setNextSendTime(delay + _context.clock().now());
                 if (_log.shouldDebug())
-                    _log.debug("Scheduling ACK in " + delay + "ms for received packet " + packet);
+                    _log.debug("Scheduling ACK in " + delay + "ms -> " +
+                               packet.streamTag() + packet.formatInline());
             }
         } else {
             if ((seqNum > 0) || (packet.getPayloadSize() > 0) || isSYN) {
@@ -414,7 +423,8 @@ class ConnectionPacketHandler {
             } else {
                 ackOnly = true;
                 if (_log.shouldDebug()) {
-                    _log.debug("Received ACK-only packet: " + packet);
+                    _log.debug("Received ACK-only packet -> " +
+                               packet.streamTag() + packet.formatInline());
                 }
             }
         }

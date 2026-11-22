@@ -1215,6 +1215,26 @@ class Packet {
     }
 
     /**
+     * The packet's own identity, on the caller's line: the stream-ID pair and the
+     * sequence number as a labelled segment, with no line break. The sequence
+     * number is labelled rather than printed as the bare {@code [N]} the
+     * {@link #formatAsString(boolean)} header uses, because a bare number beside a
+     * stream ID reads as a second ID - and a caller that drops the multi-line
+     * header to keep its message on one line would otherwise drop the sequence
+     * number with it. Pair it with {@link #formatInline()} for the flags.
+     *
+     * @return the identity tag, non-null, never containing a line break
+     * @since 0.9.72+
+     */
+    protected String streamTag() {
+        StringBuilder buf = new StringBuilder(32);
+        buf.append("[Stream ").append(toId(_receiveStreamId))
+           .append('/').append(toId(_sendStreamId)).append(']')
+           .append(" * Sequence: ").append(_sequenceNum);
+        return buf.toString();
+    }
+
+    /**
      * Format as a string builder for logging, on the caller's own line: the flags,
      * the options and the payload size, joined to whatever precedes them with
      * {@code " * "} instead of opening a continuation line, and without the stream

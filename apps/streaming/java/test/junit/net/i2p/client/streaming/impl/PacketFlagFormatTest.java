@@ -13,6 +13,13 @@ import net.i2p.client.I2PSession;
 public class PacketFlagFormatTest extends TestCase {
 
     /**
+     * Declares the no-arg constructor the class would otherwise inherit, so
+     * the test class itself is documented.
+     */
+    public PacketFlagFormatTest() {
+    }
+
+    /**
      * Builds a packet carrying one flag and the given ACK-through value.
      *
      * @param flag the flag to set, 0 for none
@@ -63,5 +70,49 @@ public class PacketFlagFormatTest extends TestCase {
         assertTrue("[" + desc + "]", desc.startsWith("\n*"));
         assertTrue("[" + desc + "]", desc.contains("CLOSE"));
         assertTrue("[" + desc + "]", desc.contains("ACK 7"));
+    }
+
+    /**
+     * Builds a packet with a stream pair, a sequence number and an ACK.
+     *
+     * @param flag the flag to set, 0 for none
+     * @param ackThrough the ACK-through value
+     * @param sequence the sequence number to carry
+     * @return the packet, non-null
+     */
+    private static PacketLocal addressed(int flag, long ackThrough, long sequence) {
+        PacketLocal pkt = packet(flag, ackThrough);
+        pkt.setReceiveStreamId(0x12345678L);
+        pkt.setSendStreamId(0x9ABCDEF0L);
+        pkt.setSequenceNum(sequence);
+        return pkt;
+    }
+
+    /**
+     * The one-line identity tag names both stream IDs and labels the sequence
+     * number: the multi-line header prints it as a bare <code>[7]</code>, which
+     * beside a stream pair reads as a second ID, and a caller that drops the
+     * header to stay on one line would otherwise drop the number with it.
+     */
+    public void testStreamTagLabelsTheSequence() {
+        String tag = addressed(0, 0, 7).streamTag();
+        assertTrue("[" + tag + "]", tag.startsWith("[Stream "));
+        assertTrue("[" + tag + "]", tag.contains(" * Sequence: 7"));
+        assertFalse("[" + tag + "]", tag.contains("\n"));
+    }
+
+    /**
+     * Identity tag plus inline flags stay on one line even for a packet with
+     * flags and an acknowledgement - the whole point of the pair, since these
+     * lines are emitted per packet and a wrapped copy doubles the log's line
+     * count.
+     */
+    public void testTagAndFlagsStayOnOneLine() {
+        PacketLocal pkt = addressed(Packet.FLAG_CLOSE, 2, 5);
+        String line = pkt.streamTag() + pkt.formatInline();
+        assertFalse("[" + line + "]", line.contains("\n"));
+        assertTrue("[" + line + "]", line.contains(" * Sequence: 5"));
+        assertTrue("[" + line + "]", line.contains("CLOSE"));
+        assertTrue("[" + line + "]", line.contains("ACK 2"));
     }
 }
