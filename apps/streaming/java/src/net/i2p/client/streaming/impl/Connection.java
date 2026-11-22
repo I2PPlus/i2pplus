@@ -2609,6 +2609,32 @@ class Connection {
     }
 
     /**
+     * Pure decision: does this retransmit pass cut the congestion window and the
+     * slow-start threshold at all?
+     * <p>A cut is a congestion response, and a connection that has never had a
+     * packet acknowledged has no congestion measured: it has not completed a
+     * round trip, its window is still the configured initial value, and its
+     * bandwidth estimate is empty. Cutting it because a SYN went unacked throws
+     * away a ramp that has not started, and the strike it records makes the
+     * first real data loss cut one tier harder than the loss profile intends —
+     * a connect that retried once opens in the 3/4 tier instead of the 7/8 one.
+     * An unacked SYN is a path or peer problem, bounded by
+     * {@link #getMaxSynSends()} and answered by rotating to a fresh outbound
+     * tunnel, not by shrinking a window nothing is using yet.
+     *
+     * @param hasForwardProgress true once any packet has been acknowledged on the
+     *                           connection (Connection._highestAckedThrough &gt;= 0)
+     * @param sendsSoFar how many times the oldest unacknowledged packet has been
+     *                   sent; a tail loss probe re-sends the head of line without
+     *                   there being a real loss, so only the first two sends count
+     * @return true if the window and the slow-start threshold should be cut
+     * @since 0.9.72+
+     */
+    static boolean cutsWindowOnLoss(boolean hasForwardProgress, int sendsSoFar) {
+        return hasForwardProgress && sendsSoFar <= 2;
+    }
+
+    /**
      * Graduated congestion response: the window is cut by an amount that
      * scales with the number of CONSECUTIVE loss events since the last
      * recovery, so a single failed packet does not collapse the connection
@@ -5452,8 +5478,10 @@ class Connection {
                 PacketLocal oldest = e.getValue();
                 // numSends may be 2 if a Tail Loss Probe was sent for this packet
                 // (TLP re-enqueues the same PacketLocal, incrementing numSends).
-                // Cut the window on the first real loss (numSends <= 2).
-                if (oldest.getNumSends() <= 2) {
+                // Cut the window on the first real loss, and only once the
+                // connection has proved it can carry anything at all.
+                final boolean forwardProgress = _highestAckedThrough.get() >= 0;
+                if (cutsWindowOnLoss(forwardProgress, oldest.getNumSends())) {
                     debugPeriodic("window-cut", shortLabel() + " -> Cutting SlowStartThreshold and Window");
                     int wsize = _options.getWindowSize();
                     long now = _context.clock().now();
@@ -5479,7 +5507,8 @@ class Connection {
                     _options.setWindowSize(Math.min(ceiling, Math.min(maxSS, graduatedLossWindow(strikes, wsize))));
                     updatePacingRate();
                 } else {
-                    debugPeriodic("window-no-cut", shortLabel() + " -> Not cutting SlowStartThreshold and Window");
+                    debugPeriodic("window-no-cut", shortLabel() + " -> Not cutting SlowStartThreshold and Window"
+                                  + (forwardProgress ? " -> Tail loss probe resend" : " -> Connect phase"));
                 }
 
                 // The window map is a TreeMap, so values() already returns
