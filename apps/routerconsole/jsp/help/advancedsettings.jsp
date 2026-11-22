@@ -523,8 +523,14 @@
 <tr class=config><th>i2p.streaming.defaultStreamDelayMax={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("Default maximum stream delay in milliseconds when no explicit connect timeout is set. [Default is 10000 (10 seconds)]")%></td></tr>
 
+<tr class=config><th>i2p.streaming.destinationCooldownMaxMs={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Ceiling for the escalating cooldown of a destination that keeps failing. Each repeated connection attempt doubles the wait, starting from <code>i2p.streaming.destinationCooldownMs</code> and stopping at this value. It is also the age past which a destination's failure record is pruned, so a record cannot be dropped while the window it arms is still running. [Default is 300000 (5 minutes)]")%>&nbsp;<%=intl._t("Router-wide: set it in your <code>router.config</code> file, or on the <a href=/configadvanced>Advanced Configuration page</a>. It is not a tunnel option.")%></td></tr>
+
 <tr class=config><th>i2p.streaming.destinationCooldownMs={n} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("Cooldown period in milliseconds between connection attempts to the same unreachable destination. Prevents hammering unreachable peers. [Default is 5000 (5 seconds)]")%></td></tr>
+<tr><td><%=intl._t("Cooldown period in milliseconds between connection attempts to the same unreachable destination. Prevents hammering unreachable peers. [Default is 5000 (5 seconds)]")%>&nbsp;<%=intl._t("Router-wide: set it in your <code>router.config</code> file, or on the <a href=/configadvanced>Advanced Configuration page</a>. It is not a tunnel option.")%></td></tr>
+
+<tr class=config><th>i2p.streaming.destinationCooldownRefuseMs={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("How long a connection attempt will wait out a destination's cooldown before refusing instead. If the time left on the cooldown is above this, the connection fails at once, with no SYN sent and no outbound tunnel used; below it the caller waits for the cooldown to expire. A non-positive value always waits, restoring the behaviour of waiting out even a multi-minute cooldown. [Default is 30000 (30 seconds)]")%>&nbsp;<%=intl._t("Router-wide: set it in your <code>router.config</code> file, or on the <a href=/configadvanced>Advanced Configuration page</a>. It is not a tunnel option.")%></td></tr>
 
 <tr class=config><th>i2p.streaming.disconnectTimeout={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("The TIME-WAIT duration in milliseconds after a streaming connection disconnects, during which late packets are still acknowledged. Increase for high-latency paths where final ACKs may be delayed. [Default is 120000 (2 minutes)]")%></td></tr>
