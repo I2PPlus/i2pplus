@@ -293,6 +293,24 @@ class ConnectionHandler {
     }
 
     /**
+     * The accept pool a listening period opens with.
+     * <p>A period that started with no worker at all stayed invisible until it
+     * was over: nothing reported the pool at activation, so the only evidence
+     * that a hosted destination had none was 887 handshakes dying on its accept
+     * queue. Naming the pool as the period opens makes that state visible in the
+     * second it begins, and it puts the queue cap beside the number that has to
+     * be read with it.
+     *
+     * @param workers accept workers started for this listening period
+     * @param max the configured accept-queue cap, 0 or less when uncapped
+     * @return the INFO line to log, never null
+     * @since 0.9.72+
+     */
+    static String listeningText(int workers, int max) {
+        return "Listening -> Accept workers: " + workers + " * " + synQueueLimitText(max);
+    }
+
+    /**
      * The one line a reaper sweep writes when SYNs waited out their accept window:
      * how many, the window they waited out, and how deep the queue is now against
      * the bound it stops at.
@@ -685,6 +703,9 @@ class ConnectionHandler {
             // rule added after the damage.
             _active = true;
             startAcceptWorkers();
+            if (_log.shouldInfo()) {
+                _log.info(listeningText(_activeWorkerCount.get(), getMaxQueueSize()));
+            }
         } else {
             _active = active;
         }

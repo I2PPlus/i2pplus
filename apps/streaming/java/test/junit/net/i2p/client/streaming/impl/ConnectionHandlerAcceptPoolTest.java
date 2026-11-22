@@ -40,6 +40,13 @@ import org.mockito.stubbing.Answer;
  */
 public class ConnectionHandlerAcceptPoolTest {
 
+    /** Where the handler's own source sits in the tree, for the wiring assertions. */
+    private static final String HANDLER_PATH =
+        "apps/streaming/java/src/net/i2p/client/streaming/impl/ConnectionHandler.java";
+    /** The same file as seen from a test run rooted inside the module. */
+    private static final String HANDLER_PATH_SHORT =
+        "src/net/i2p/client/streaming/impl/ConnectionHandler.java";
+
     /** Context supplying the log and the clock. */
     private I2PAppContext _ctx;
     /** Manager the handler hands SYNs to. */
@@ -189,6 +196,49 @@ public class ConnectionHandlerAcceptPoolTest {
         }
         assertTrue("every worker ends once the hand-off returns",
                    waitForCount(handler, 0, 5000));
+    }
+
+    /**
+     * The line that opens a listening period names the pool it opened and the
+     * cap the queue will stop at.
+     */
+    @Test
+    public void theActivationNamesThePoolItStarted() {
+        String line = ConnectionHandler.listeningText(0, 4096);
+        assertTrue("the pool size is the fact being reported",
+                   line.contains("Listening -> Accept workers: 0"));
+        assertTrue("and the cap belongs beside it", line.contains("Limit: 4096 SYNs"));
+        assertTrue("an uncapped queue must not read as a zero-sized one",
+                   ConnectionHandler.listeningText(4, 0).contains("Uncapped"));
+        assertTrue("one line, inside the log column", line.length() <= 90);
+    }
+
+    /**
+     * The report is actually made when the period opens, not just available.
+     */
+    @Test
+    public void theListeningPeriodReportsItsPool() {
+        String body = readHandlerSource();
+        org.junit.Assume.assumeTrue("source not available", body != null);
+        assertTrue("the activation reports the pool it started",
+                   body.contains("_log.info(listeningText(_activeWorkerCount.get(),"));
+    }
+
+    /**
+     * Reads the handler's own source, for the assertions that pin wiring rather
+     * than behaviour.
+     *
+     * @return the source text, or null if it is not where this test run can see it
+     */
+    private static String readHandlerSource() {
+        java.io.File src = new java.io.File(HANDLER_PATH);
+        if (!src.isFile()) {src = new java.io.File(HANDLER_PATH_SHORT);}
+        if (!src.isFile()) {return null;}
+        try {
+            return new String(java.nio.file.Files.readAllBytes(src.toPath()), "UTF-8");
+        } catch (java.io.IOException e) {
+            return null;
+        }
     }
 
     /**
