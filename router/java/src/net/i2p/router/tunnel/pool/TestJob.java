@@ -228,10 +228,12 @@ public class TestJob extends JobImpl {
      * The first is a data-path fault. The second is a fault in the test's own
      * pass criterion, and the remedy is opposite.  One counter cannot tell
      * them apart, so this splits the population.
-     * <p>Observational only: it never gates selection, never alters the
-     * charge, and never changes timing, so it cannot itself change behaviour.
-     * It runs only on rounds that have already failed and are already being
-     * charged.
+     * <p>It never gates selection and never changes test timing. It does carry
+     * one decision: a tunnel that has recently delivered real traffic is not
+     * dropped on an uncorroborated test failure, and an unreachable far
+     * endpoint is one of the two things that corroborate it - see
+     * {@link #independentFailureSignal}. It still runs only on rounds that have
+     * already failed, so the counters describe the failure population only.
      * <p>Two signals are read rather than one, because
      * {@link CommSystemFacade#isEstablished} and
      * {@link CommSystemFacade#wasUnreachable} both default to {@code false}
@@ -245,18 +247,21 @@ public class TestJob extends JobImpl {
      * probed, so the counters describe the failure population only.
      *
      * @param cfg the tunnel whose round failed
+     * @param cfg the tunnel whose round failed
+     * @return the verdict event written, e.g. {@code FarEndUnreachable}, or
+     *         {@code null} if there was no far endpoint to probe
      * @since 0.9.71+
      */
-    private void probeFarEndpoint(TunnelInfo cfg) {
-        if (cfg == null) {return;}
+    private String probeFarEndpoint(TunnelInfo cfg) {
+        if (cfg == null) {return null;}
         Hash farEnd;
         try {
             farEnd = cfg.getFarEnd();
         } catch (RuntimeException e) {
             // A peer array not yet sized would throw here; nothing to report.
-            return;
+            return null;
         }
-        if (farEnd == null) {return;}
+        if (farEnd == null) {return null;}
         boolean inbound = cfg.isInbound();
         StatManager sm = getContext().statManager();
         String event;
@@ -267,6 +272,7 @@ public class TestJob extends JobImpl {
             event = "FarEndUnknown";
         }
         sm.addRateData(directionStat(inbound, event), 1);
+        return event;
     }
 
     /**
@@ -1073,7 +1079,7 @@ public class TestJob extends JobImpl {
     static final String[] DIRECTION_EVENTS = {
         "ConfirmPassed", "ConfirmFailed", "GraceDeferred", "Condemned",
         "FarEndEstablished", "FarEndUnreachable", "FarEndUnknown",
-        "PartnerSuspect", "PartnerPairedShort", "PartnerCharged"
+        "PartnerSuspect", "PartnerPairedShort", "PartnerCharged", "DataDropHeld"
     };
 
     /**
@@ -1140,6 +1146,12 @@ public class TestJob extends JobImpl {
                 "Tunnels", periods);
         stats.createRequiredRateStat(directionStat(false, "PartnerCharged"),
                 "Rounds charged to the tunnel: partner suspect, defer budget spent (count)",
+                "Tunnels", periods);
+        stats.createRequiredRateStat(directionStat(true, "DataDropHeld"),
+                "Data-carrying tunnels kept past the removal bar: no independent evidence (count)",
+                "Tunnels", periods);
+        stats.createRequiredRateStat(directionStat(false, "DataDropHeld"),
+                "Data-carrying tunnels kept past the removal bar: no independent evidence (count)",
                 "Tunnels", periods);
     }
 
@@ -3988,6 +4000,85 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
     }
 
     /**
+     * Extra failed rounds a data-carrying tunnel is allowed before it is
+     * dropped, when nothing but the test round itself says the tunnel is bad.
+     * <p>A test round is a composite of the tunnel under test and the reply leg
+     * it was answered through, and one reply partner cannot tell those apart.
+     * A tunnel that has delivered real traffic <em>lately</em> has proven its
+     * own leg in production, so dropping it at the ordinary bar condemns it on
+     * evidence that is about the reply path as likely as about it.
+     * <p>Two rounds, not unlimited: the failure count still climbs, so a
+     * genuinely dead tunnel is dropped a little later rather than never.
+     * @since 0.9.72+
+     */
+    static final int UNCORROBORATED_DROP_GRACE = 2;
+
+    /**
+     * The consecutive-failure count past which a verified-traffic tunnel is
+     * dropped. A drop held for the grace gets
+     * {@link #UNCORROBORATED_DROP_GRACE} more rounds, because the evidence
+     * against the tunnel is indistinguishable from a broken reply path.
+     *
+     * @param threshold the pool bar from {@link #removalThreshold}
+     * @param held true when the uncorroborated grace applies
+     * @return the failure count that must be exceeded to drop the tunnel
+     * @since 0.9.72+
+     */
+    static int dataCarryingDropAt(int threshold, boolean held) {
+        return held ? threshold + UNCORROBORATED_DROP_GRACE : threshold;
+    }
+
+    /**
+     * Whether a verified-traffic tunnel's drop is held for the extra rounds.
+     * <p>The grace is for the one case where the tunnel's own leg is known
+     * good right now: it carried production traffic inside the trust window,
+     * and nothing independent says the tunnel is bad. A second partner that
+     * also failed rules out one bad reply path; a far endpoint known
+     * unreachable is a data-path fault the tunnel owns outright.
+     * <p>Stale proof does not earn the grace. In the hour before a stalled
+     * download, every one of the 18 tunnels dropped from this branch had last
+     * carried traffic 9 to 12 minutes ago, against a 30-second trust window -
+     * they were dropped <em>because</em> their proof had gone stale, and a
+     * 12-minute-old delivery is not a working tunnel to protect.
+     *
+     * @param confirmedByOtherPartner true when a round through another partner
+     *                                also failed
+     * @param farEndUnreachable true when the tunnel's far endpoint is known
+     *                          unreachable
+     * @param recentTrafficProof true when the tunnel carried production
+     *                           traffic inside the trust window
+     * @return true to hold the drop for {@link #UNCORROBORATED_DROP_GRACE}
+     * @since 0.9.72+
+     */
+    static boolean holdDataCarryingDrop(boolean confirmedByOtherPartner,
+                                        boolean farEndUnreachable,
+                                        boolean recentTrafficProof) {
+        return recentTrafficProof && !confirmedByOtherPartner && !farEndUnreachable;
+    }
+
+    /**
+     * The WARN line for a verified-traffic tunnel that passed the pool's
+     * removal bar but is held back by the uncorroborated-failure grace.
+     * <p>Without this line the hold is invisible: the tunnel stays in the pool,
+     * the failures keep climbing, and the only thing in the log is the eventual
+     * drop - which reads as though the pool kept a dead tunnel for no reason.
+     * Both bars are printed because the difference between them is the whole
+     * message: the pool bar was passed, the evidence was not enough.
+     *
+     * @param tunnel the tunnel being kept, as its short description
+     * @param failures consecutive test failures it now has
+     * @param threshold the pool's own removal bar, already passed
+     * @param dropAt the higher bar the uncorroborated failures are held to
+     * @return the log line
+     * @since 0.9.72+
+     */
+    static String dataTrustHeldLine(String tunnel, int failures, int threshold, int dropAt) {
+        return "Tunnel test failed -> Keeping a verified-traffic tunnel, no independent evidence" +
+               "\n* " + tunnel + " * Failures: " + failures + " * Pool bar: " + threshold +
+               " * Drop at: " + dropAt;
+    }
+
+    /**
      * Whether an ASAP retest should be deferred because the pool is thin
      * and the tunnel already has failures.  Scheduling ASAP retries for a
      * failing tunnel while the pool has ≤ 2 remaining tunnels competes
@@ -4325,7 +4416,11 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
         // an unreachable hop for tunnels that are working.
         noteLocalHopAttribution();
         updateTestDuration(timeToFail);
-        probeFarEndpoint(_cfg);
+        // The verdict is kept, not just counted: a far endpoint known
+        // unreachable is a fault the tunnel owns, and it is what lets a tunnel
+        // that is carrying traffic be dropped on a test failure alone.
+        String farEndEvent = probeFarEndpoint(_cfg);
+        boolean farEndUnreachable = "FarEndUnreachable".equals(farEndEvent);
 
         // Reply-path protection: the partner tunnel is the one the round was
         // actually routed through, not the tunnel under test.  A round that
@@ -4393,12 +4488,16 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
         // penalised for it.  Bounded by a single confirmation per charge, and
         // skipped entirely when no different partner can be obtained, so this
         // can neither livelock nor mask a genuinely dead tunnel.
+        boolean confirmedByOtherPartner = false;
         if (!_confirmPending) {
             if (beginConfirmationRound(partner)) {
                 return;
             }
         } else {
-            // The confirming round failed too: the tunnel itself is at fault.
+            // The confirming round failed too, and through a different partner:
+            // the tunnel itself is at fault, and that is the independent
+            // evidence the data-carrying trust below needs before dropping it.
+            confirmedByOtherPartner = true;
             getContext().statManager().addRateData(directionStat(_cfg.isInbound(), "ConfirmFailed"), 1);
         }
         _confirmPending = false;
@@ -4460,7 +4559,9 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
             long lastTransfer = _cfg.getLastTransferred();
             long nowMs = System.currentTimeMillis();
             long staleMs = nowMs - lastTransfer;
-            if (isRecentDataTransfer(lastTransfer, nowMs)) {
+            boolean recentProof = isRecentDataTransfer(lastTransfer, nowMs);
+            String proofAge = DataHelper.formatDuration(staleMs);
+            if (recentProof) {
                 // Recently carried data — likely a reply-path false negative.
                 // Allow 1 exemption per refill; once spent it counts as a
                 // normal failure until the tunnel carries real traffic again,
@@ -4484,10 +4585,11 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
                 }
                 // Exceeded recent-traffic exemption limit — count as failure
                 if (_log.shouldWarn()) {
-                    _log.warn("Tunnel test failed -> Recent traffic exemption exhausted" +
+                    _log.warn("Tunnel test failed -> Recent traffic exemption exhausted," +
+                              " counting the failure" +
                               "\n* " + _cfg.toShortString() +
-                              " -> Verified: " + _cfg.getVerifiedBytesTransferred() +
-                              " bytes, last transfer " + staleMs + "ms ago — counting failure");
+                              " * Verified: " + _cfg.getVerifiedBytesTransferred() +
+                              " bytes * Last transfer: " + proofAge + " ago");
                 }
             }
             // Stale data or exhausted exemptions — count failure toward the
@@ -4496,13 +4598,20 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
             _cfg.setTestFailed();
             int currentFailures = _cfg.getTunnelFailures();
             int maxFailures = removalThreshold(baseRemovalThreshold(isDegraded()), _pool.size());
-            if (currentFailures > maxFailures) {
+            // A tunnel whose own leg is proven by traffic it carried just now is
+            // dropped only on evidence that is not another copy of this round: a
+            // second partner that also failed, or a far endpoint known
+            // unreachable. Stale proof earns nothing - see holdDataCarryingDrop.
+            boolean held = holdDataCarryingDrop(confirmedByOtherPartner, farEndUnreachable,
+                                                recentProof);
+            int dropAt = dataCarryingDropAt(maxFailures, held);
+            if (currentFailures > dropAt) {
                 if (_log.shouldWarn()) {
-                    _log.warn("Tunnel test failed -> Marking data-carrying tunnel failed after " +
+                    _log.warn("Tunnel test failed -> Marking tunnel failed after " +
                               currentFailures + " consecutive failures" +
                               "\n* " + _cfg.toShortString() +
-                              " -> Verified: " + _cfg.getVerifiedBytesTransferred() +
-                              " bytes, last transfer " + staleMs + "ms ago");
+                              " * Verified: " + _cfg.getVerifiedBytesTransferred() +
+                              " bytes * Last transfer: " + proofAge + " ago");
                 }
                 getContext().statManager().addRateData(
                     isExploratory ? "tunnel.testExploratoryFailedCompletelyTime" : "tunnel.testFailedCompletelyTime",
@@ -4512,6 +4621,14 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
                 cleanupTunnelTracking();
                 decrementIfCounted();
                 return;
+            }
+            if (currentFailures > maxFailures) {
+                getContext().statManager().addRateData(
+                    directionStat(_cfg.isInbound(), "DataDropHeld"), 1);
+                if (_log.shouldWarn()) {
+                    _log.warn(dataTrustHeldLine(_cfg.toShortString(), currentFailures,
+                                                maxFailures, dropAt));
+                }
             }
             if (_log.shouldInfo()) {
                 _log.info(keepDataCarryingLine(_cfg.toShortString(), _cfg.getVerifiedBytesTransferred(),
@@ -5110,11 +5227,11 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
      */
     static String keepDataCarryingLine(String tunnel, long verified, int failures,
                                        int maxFailures, long staleMs) {
-        return "Tunnel test failed -> Keeping a data-carrying tunnel" +
+        return "Tunnel test failed -> Keeping a verified-traffic tunnel" +
                "\n* Tunnel: " + tunnel +
                "\n* Verified: " + verified + " bytes" +
                " * Failures: " + failures + '/' + maxFailures +
-               " * Last transfer: " + staleMs + "ms ago";
+               " * Last transfer: " + DataHelper.formatDuration(staleMs) + " ago";
     }
 
     /**

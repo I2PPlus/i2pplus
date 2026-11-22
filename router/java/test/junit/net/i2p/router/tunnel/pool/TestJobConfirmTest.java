@@ -246,7 +246,7 @@ public class TestJobConfirmTest {
         assertArrayEquals(new String[] {
             "ConfirmPassed", "ConfirmFailed", "GraceDeferred", "Condemned",
             "FarEndEstablished", "FarEndUnreachable", "FarEndUnknown",
-            "PartnerSuspect", "PartnerPairedShort", "PartnerCharged"
+            "PartnerSuspect", "PartnerPairedShort", "PartnerCharged", "DataDropHeld"
         }, TestJob.DIRECTION_EVENTS);
     }
 

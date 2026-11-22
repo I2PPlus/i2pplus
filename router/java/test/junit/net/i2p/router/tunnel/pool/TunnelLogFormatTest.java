@@ -17,6 +17,13 @@ import static org.junit.Assert.assertTrue;
 public class TunnelLogFormatTest {
 
     /**
+     * JUnit fixture object; every test here drives a static log-line builder,
+     * so the instance carries no state.
+     */
+    public TunnelLogFormatTest() {
+    }
+
+    /**
      * A failed test on a busy tunnel keeps it, and the entry has to say why
      * without running onto one 165-character line.
      */
@@ -24,10 +31,10 @@ public class TunnelLogFormatTest {
     public void keepDataCarryingLineIsHouseStyle() {
         String entry = TestJob.keepDataCarryingLine("Outbound Client tunnel [skank.i2p / qiii4iqr]",
                                                     12345L, 1, 3, 45000L);
-        assertEquals("Tunnel test failed -> Keeping a data-carrying tunnel" +
+        assertEquals("Tunnel test failed -> Keeping a verified-traffic tunnel" +
                      "\n* Tunnel: Outbound Client tunnel [skank.i2p / qiii4iqr]" +
                      "\n* Verified: 12345 bytes" +
-                     " * Failures: 1/3 * Last transfer: 45000ms ago", entry);
+                     " * Failures: 1/3 * Last transfer: 45s ago", entry);
         assertFalse("no key=value pairs: " + entry, entry.matches("(?s).*\\w+=\\w.*"));
     }
 
@@ -78,6 +85,8 @@ public class TunnelLogFormatTest {
         long now = 1759480000000L;
         assertWithinLimit(TestJob.keepDataCarryingLine("Outbound Client tunnel [skank.i2p / qiii4iqr]",
                                                        1234567890L, 11, 33, 450000L));
+        assertWithinLimit(TestJob.dataTrustHeldLine(
+            "Outbound Client tunnel [skank.i2p / qiii4iqr]", 5, 3, 5));
         assertWithinLimit(TestJob.thinPoolRetestLine(2, 1));
         assertWithinLimit(ExpireJob.expirationLine(4989139629878557547L, now + 600000L, now + 1200000L, now));
         assertWithinLimit(TunnelPoolManager.noPoolLine(true, hash(2)));
