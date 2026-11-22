@@ -1,5 +1,6 @@
 package net.i2p.router.networkdb.kademlia;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -7,6 +8,7 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -547,6 +549,90 @@ public class RepublishLeaseSetJobTest {
         assertFalse(RepublishLeaseSetJob.fallbackCopyOutlivesStored(-1L, 0L));
         // both already gone: signing it cannot shorten a copy that has no life left
         assertTrue(RepublishLeaseSetJob.fallbackCopyOutlivesStored(0L, 0L));
+    }
+
+    /**
+     * A local destination whose LeaseSet is missing, on a pool that already holds
+     * leases it could sign, must be nudged even while builds are in flight. The
+     * hold-off assumed the pool's build-complete hook would land the LeaseSet; on
+     * a live router that state lasted minutes - the HTTP Proxy pool failed six
+     * inbound builds in a row while 38 sends to its own destination timed out and
+     * 44 LeaseSet copies went unacknowledged.
+     */
+    @Test
+    public void testMissingLeaseSetNudgesABusyPoolThatHasLeasesToSign() {
+        Hash hash = newHash(12);
+        when(_cm.shouldPublishLeaseSet(hash)).thenReturn(true);
+        when(_cm.isLocal(hash)).thenReturn(true);
+        when(_facade.lookupLeaseSetLocally(hash)).thenReturn(null);
+
+        TunnelPool pool = mock(TunnelPool.class);
+        when(pool.getInProgressCount()).thenReturn(2);
+        when(pool.getTestingTunnelCount()).thenReturn(1);
+        LeaseSet signable = freshPoolLeaseSet(NOW + 300L * 1000, 3);
+        when(pool.getInboundTunnelsAsLeaseSet()).thenReturn(signable);
+        TunnelPoolSettings targetSettings = settings(3);
+        TunnelManagerFacade tm = mock(TunnelManagerFacade.class);
+        when(tm.getInboundPool(hash)).thenReturn(pool);
+        when(tm.getInboundSettings(any(Hash.class))).thenReturn(targetSettings);
+        when(_ctx.tunnelManager()).thenReturn(tm);
+
+        RepublishLeaseSetJob job = new RepublishLeaseSetJob(_ctx, _facade, hash);
+        assertTrue(job.registerSelf());
+        job.runJob();
+
+        verify(_cm).requestLeaseSet(eq(hash), isNull());
+        verify(_jobQueue).addJob(any(Job.class));
+    }
+
+    /**
+     * The hold-off still applies to a pool with nothing signable yet: it re-signs
+     * on the build that gives it something, and a request now is dropped.
+     */
+    @Test
+    public void testMissingLeaseSetHoldsOffForABuildingPoolWithNothingToSign() {
+        Hash hash = newHash(13);
+        when(_cm.shouldPublishLeaseSet(hash)).thenReturn(true);
+        when(_cm.isLocal(hash)).thenReturn(true);
+        when(_facade.lookupLeaseSetLocally(hash)).thenReturn(null);
+
+        TunnelPool pool = mock(TunnelPool.class);
+        when(pool.getInProgressCount()).thenReturn(2);
+        when(pool.getTestingTunnelCount()).thenReturn(1);
+        // leases inside the pool's own eligibility floor: nothing to sign
+        LeaseSet unsignable = freshPoolLeaseSet(NOW + 60L * 1000, 3);
+        when(pool.getInboundTunnelsAsLeaseSet()).thenReturn(unsignable);
+        TunnelPoolSettings targetSettings = settings(3);
+        TunnelManagerFacade tm = mock(TunnelManagerFacade.class);
+        when(tm.getInboundPool(hash)).thenReturn(pool);
+        when(tm.getInboundSettings(any(Hash.class))).thenReturn(targetSettings);
+        when(_ctx.tunnelManager()).thenReturn(tm);
+
+        RepublishLeaseSetJob job = new RepublishLeaseSetJob(_ctx, _facade, hash);
+        assertTrue(job.registerSelf());
+        job.runJob();
+
+        verify(_cm, never()).requestLeaseSet(eq(hash), any());
+        verify(_jobQueue).addJob(any(Job.class));
+    }
+
+    /**
+     * The two pure decisions behind that path: a pool with leases to sign is
+     * always nudged, a busy pool without them is not, and a quiet pool always is;
+     * and the same pool state picks the retry interval, so a destination waiting
+     * only on a re-sign is asked again in a third of the time.
+     */
+    @Test
+    public void testMissingLeaseSetDecisions() {
+        assertTrue(RepublishLeaseSetJob.missingLeaseSetNeedsNudge(2, 1, 1));
+        assertTrue(RepublishLeaseSetJob.missingLeaseSetNeedsNudge(9, 9, 4));
+        assertFalse(RepublishLeaseSetJob.missingLeaseSetNeedsNudge(2, 1, 0));
+        // no pool at all, or a quiet one: nothing in flight, so the nudge is the only hope
+        assertTrue(RepublishLeaseSetJob.missingLeaseSetNeedsNudge(0, 0, 0));
+
+        assertEquals(30_000L, RepublishLeaseSetJob.missingLeaseSetRetryMs(0));
+        assertEquals(10_000L, RepublishLeaseSetJob.missingLeaseSetRetryMs(1));
+        assertEquals(10_000L, RepublishLeaseSetJob.missingLeaseSetRetryMs(8));
     }
 
     /**

@@ -149,6 +149,14 @@ public class RepublishLeaseSetJob extends JobImpl {
      */
     private static final long MISSING_LEASESET_RETRY = 30L * 1000;
     /**
+     * Retry interval after a missing local LeaseSet when the pool already holds
+     * leases it could sign — that case needs a re-sign, not a build, so waiting
+     * for one buys nothing while the destination stays unreachable.
+     *
+     * @since 0.9.72+
+     */
+    private static final long MISSING_LEASESET_RETRY_SIGNABLE = 10L * 1000;
+    /**
      * A lease is viable for a re-mint while it has at least this much time
      * remaining: the re-sign request, floodfill propagation, and connection
      * establishment all need the lease alive, and a tunnel closer to expiry
@@ -362,27 +370,70 @@ public class RepublishLeaseSetJob extends JobImpl {
     private void handleMissingLeaseSet() {
         long now = getContext().clock().now();
         Long lastLog = _lastMissingLogTime.get(_dest);
+        TunnelPool pool = getContext().tunnelManager().getInboundPool(_dest);
+        int building = pool != null ? pool.getInProgressCount() : 0;
+        int testing = pool != null ? pool.getTestingTunnelCount() : 0;
+        int viable = countFreshLeases(pool != null ? pool.getInboundTunnelsAsLeaseSet() : null, now);
         if (_log.shouldInfo() && (lastLog == null || now - lastLog > 10L * 1000)) {
             _log.info("Client [" + shortHash() +
-                      "] is LOCAL, but no valid LeaseSet found -> Requesting rebuild");
+                      "] is LOCAL, but no valid LeaseSet found -> Requesting rebuild" +
+                      "\n* Viable leases: " + viable +
+                      " * Building: " + building + " * Testing: " + testing);
             _lastMissingLogTime.put(_dest, now);
         }
         clearRetryInProgress();
         // A LOCAL client with no stored LeaseSet is usually a pool still
-        // building its first tunnels or a store race.  The pool requests a
-        // re-sign itself on every completed build, so while it is actively
-        // building or testing our request would be redundant — skip it and
-        // let the pool's own hook land the LeaseSet.  Only a quiet pool
-        // (no builds in flight) needs the nudge to re-sign its tunnels.
-        TunnelPool pool = getContext().tunnelManager().getInboundPool(_dest);
-        if (pool == null || (pool.getInProgressCount() == 0 && pool.getTestingTunnelCount() == 0)) {
+        // building its first tunnels or a store race.  While that is the case the
+        // pool requests a re-sign itself on every completed build, so our request
+        // would be redundant and a quiet pool is the only one that needs the
+        // nudge.  It is not the only state that can leave the LeaseSet missing,
+        // though: a pool holding leases it has simply never signed has nothing to
+        // wait for, and on a live router that state lasted minutes - the HTTP
+        // Proxy pool failed six inbound builds in a row while 38 sends to its own
+        // destination timed out and 44 LeaseSet copies went unacknowledged.  So
+        // the hold-off only applies while there is a build in flight that could
+        // produce something to sign.
+        if (missingLeaseSetNeedsNudge(building, testing, viable)) {
             getContext().clientManager().requestLeaseSet(_dest, null);
         } else if (_log.shouldDebug()) {
             _log.debug("Skipping LeaseSet request for busy pool [" + shortHash() + "] (" +
-                       pool.getInProgressCount() + " building, " + pool.getTestingTunnelCount() +
-                       " testing)");
+                       building + " building, " + testing + " testing)");
         }
-        scheduleRepublish(MISSING_LEASESET_RETRY);
+        scheduleRepublish(missingLeaseSetRetryMs(viable));
+    }
+
+    /**
+     * Pure decision: whether a local destination whose LeaseSet is missing gets
+     * this job's re-sign request, or waits for the pool's own build-complete hook.
+     * <p>A pool with nothing signable yet must not be nudged - it re-signs on the
+     * build that gives it something, and a request now is dropped. A pool that
+     * already holds viable leases is a different case: no build in flight owes it
+     * anything, and holding off leaves the destination unreachable for as long as
+     * the builds take.
+     *
+     * @param building tunnels being built, 0 when there is no pool
+     * @param testing tunnels being tested, 0 when there is no pool
+     * @param viable leases the pool could sign right now
+     * @return true when the re-sign request should be sent
+     * @since 0.9.72+
+     */
+    static boolean missingLeaseSetNeedsNudge(int building, int testing, int viable) {
+        return viable > 0 || (building == 0 && testing == 0);
+    }
+
+    /**
+     * Pure decision: how long to wait before the next pass after a missing local
+     * LeaseSet.
+     * <p>The 30 s interval is sized for a pool that has to build and test a
+     * replacement tunnel before it can answer. A pool that already holds viable
+     * leases needs a re-sign, not a build, so it is asked again much sooner.
+     *
+     * @param viable leases the pool could sign right now
+     * @return the retry interval in ms
+     * @since 0.9.72+
+     */
+    static long missingLeaseSetRetryMs(int viable) {
+        return viable > 0 ? MISSING_LEASESET_RETRY_SIGNABLE : MISSING_LEASESET_RETRY;
     }
 
     /**
