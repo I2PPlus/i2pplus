@@ -7807,8 +7807,8 @@ msgstr "對對等點傳送ping時，等待pong回覆的最長時間（毫秒）�
 msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
 msgstr "啟用此設定後，若<code>i2p.streaming.enablePongDelay</code>也已啟用，則會調整已啟用ping的伺服器所加入的額外隨機pong延遲上限。未明確設定時將使用預設值50ms。"
 
-msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are sent a RESET (the client may retry) rather than silently dropped, which keeps the client informed of the refusal. [Default is 256 (128 on slow systems)]"
-msgstr "伺服器接受佇列中待處理連線（SYN與不完整封包）的最大數量。佇列滿載時，新送來的SYN會收到RESET（客戶端可以重試），而不是被默默丟棄，讓客戶端得知拒絕的結果。[預設為256（慢速系統為128）]"
+msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are sent a RESET (the client may retry) rather than silently dropped, which keeps the client informed of the refusal. Set to 0 for no limit of this kind: the queue is then bounded only by a backstop of 16384 pending SYNs, and accept workers are added once it passes a quarter of that rather than a quarter of this number. Takes effect immediately, no restart required. [Default is 4096 (256 on slow systems)]"
+msgstr "伺服器接受佇列中待處理連線（SYN與不完整封包）的最大數量。佇列滿載時，新送來的SYN會收到RESET（客戶端可以重試），而不是被默默丟棄，讓客戶端得知拒絕的結果。[預設為4096（慢速系統為256）]"
 
 msgid "The maximum retransmission delay in milliseconds. Retransmit interval will not exceed this value regardless of backoff. Increase to allow longer between retries on congested paths. [Default is 20000 (20s)]"
 msgstr "最大重傳延遲（毫秒）。無論退避計算結果為何，重傳間隔都不會超過此值。若要讓壅塞路徑上的重試間隔拉長，請提高此值。[預設為30000（30秒）]"

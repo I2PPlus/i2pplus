@@ -7809,8 +7809,8 @@ msgstr "피어 핑 시 pong 응답을 기다리는 최대 시간(밀리초). [�
 msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
 msgstr "이 설정은 활성화되었을 때, <code>i2p.streaming.enablePongDelay</code>가 활성화된 경우 ping 가능한 서버에 추가되는 최대 무작위 pong 지연을 수정합니다. 명시적으로 설정하지 않은 경우 50ms의 기본값을 사용합니다."
 
-msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are sent a RESET (the client may retry) rather than silently dropped, which keeps the client informed of the refusal. [Default is 256 (128 on slow systems)]"
-msgstr "서버 승인 대기열에서 보류 중인 연결(SYN 및 부분 패킷)의 최대 개수. 대기열이 가득 차면 새 SYN은 조용히 버려지는 대신 RESET을 보내므로(클라이언트는 재시도할 수 있음) 클라이언트가 거절 사실을 알 수 있습니다. [기본값 256(느린 시스템 128)]"
+msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are sent a RESET (the client may retry) rather than silently dropped, which keeps the client informed of the refusal. Set to 0 for no limit of this kind: the queue is then bounded only by a backstop of 16384 pending SYNs, and accept workers are added once it passes a quarter of that rather than a quarter of this number. Takes effect immediately, no restart required. [Default is 4096 (256 on slow systems)]"
+msgstr "서버 승인 대기열에서 보류 중인 연결(SYN 및 부분 패킷)의 최대 개수. 대기열이 가득 차면 새 SYN은 조용히 버려지는 대신 RESET을 보내므로(클라이언트는 재시도할 수 있음) 클라이언트가 거절 사실을 알 수 있습니다. [기본값 4096(느린 시스템 256)]"
 
 msgid "The maximum retransmission delay in milliseconds. Retransmit interval will not exceed this value regardless of backoff. Increase to allow longer between retries on congested paths. [Default is 20000 (20s)]"
 msgstr "최대 재전송 지연(밀리초). 백오프와 관계없이 재전송 간격이 이 값을 초과하지 않습니다. 혼잡 경로에서 재시도 간 더 긴 시간을 허용하려면 증가시킵니다. [기본값 30000(30초)]"
