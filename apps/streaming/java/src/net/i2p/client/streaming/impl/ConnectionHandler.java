@@ -51,6 +51,21 @@ class ConnectionHandler {
     private final AtomicInteger _workerId;
     /** Timer running the reaper tasks. */
     private final SimpleTimer2 _timer;
+    /**
+     * The one SYN-queue sweeper this handler owns, armed on activation and
+     * cancelled on the way out.
+     * <p>Held as a field rather than built per activation, because the sweep
+     * re-arms itself while the handler is active: an activation that lands
+     * before the previous period's sweeper next runs leaves that sweeper alive,
+     * and it keeps re-arming for as long as the handler stays active. Measured
+     * on a live router, three sweeper instances swept one accept queue in the
+     * same window, each expiring and resetting the same SYNs and each making its
+     * own scale-up decision off a queue another had already drained.
+     * <p>{@code SimpleTimer2.addEvent()} is idempotent while an event is
+     * scheduled, so re-arming this instance cannot double-book the timer.
+     * @since 0.9.72+
+     */
+    private final SynReaper _synReaper = new SynReaper();
     /** True while the handler accepts work. */
     private volatile boolean _active;
     /** Explicit per-manager override, or -1 to use the live configured {@link #getAcceptTimeout}.
@@ -649,6 +664,10 @@ class ConnectionHandler {
         boolean wasActive = _active;
         _active = active;
         if (wasActive && !active) {
+            // Stop sweeping before the queue is drained: the sweeper resets and
+            // NACKs what it finds, and the drain below does the same for
+            // whatever is left, so one of them has to stand down first.
+            _synReaper.cancel();
             // stopping, drain queues and wake all workers.
             // The SYNs are reset before the queue is dropped: an accept worker
             // that is still running may take one and answer it, but a SYN that
@@ -770,9 +789,10 @@ class ConnectionHandler {
         for (int i = 0; i < count; i++) {
             startAcceptWorker();
         }
-        // One self-rescheduling sweeper per activation; it stops re-arming
-        // when the handler deactivates. Replaces two per-SYN timer events.
-        _timer.addEvent(new SynReaper(), SYN_SWEEP_INTERVAL);
+        // One sweeper for the handler's whole life, re-armed here and cancelled
+        // by setActive(false). Replaces two per-SYN timer events, and a per
+        // activation instance, which outlived its own period.
+        _timer.addEvent(_synReaper, SYN_SWEEP_INTERVAL);
     }
 
     /**
@@ -1277,6 +1297,8 @@ class ConnectionHandler {
      * <p>The two-argument removal on the concurrent map is atomic against the
      * worker's refresh, so a packet that was re-quoted after this sweep read its
      * entry is left alone for the next sweep.
+     * <p>One instance per handler, held in {@link #_synReaper}: armed by
+     * {@code startAcceptWorkers()} and cancelled by {@code setActive(false)}.
      */
     private class SynReaper extends SimpleTimer2.TimedEvent {
         /** Builds the half open connection reaper. */
