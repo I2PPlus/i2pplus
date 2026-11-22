@@ -639,12 +639,25 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             if (!isLocalDest) {
                 _cache.lsLookupInFlight.put(toHash, now + getLeaseSetLookupTimeout());
             }
-            if (recentlyValid) {
+            if (leaseSetReprobeWanted(recentlyValid, isLocalDest)) {
                 // Sweep any transient negative-cache abort so this probe actually
                 // searches the network instead of failing in ~2ms, then log loudly.
                 kndf.clearNegativeCache(toHash);
                 if (_log.shouldInfo()) {
                     _log.info("LeaseSet for " + _toString + " missing but recently valid -> Re-probing with negative cache cleared");
+                }
+            } else if (recentlyValid) {
+                // A destination we host is resolved out of our own store: publish()
+                // mirrors the LeaseSet into the main NetDb, and a network search
+                // cannot fetch a copy of our own key. So there is nothing to clear
+                // and no probe to start - the lookup below queues its own failure in
+                // the same millisecond it is called. Measured: 18 of these in one
+                // window, every one for a destination this router hosts, each one
+                // claiming a re-probe that never ran while the send died.
+                if (_log.shouldInfo()) {
+                    _log.infoThrottled(debugKey(_toString, "leaseset-local-mint-gap"),
+                                       "LeaseSet for " + _toString +
+                                       " missing from our own store -> Failing without a remote search");
                 }
             }
             _leaseSetLookupBegin = getContext().clock().now();
@@ -1958,6 +1971,26 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     static boolean shouldBlameOutboundTunnel(int status, boolean locallyHosted) {
         if (locallyHosted) {return false;}
         return isTunnelRelatedFailure(status) || isSoftSendFailure(status);
+    }
+
+    /**
+     * Whether a LeaseSet missing from the local store earns a network re-probe.
+     * <p>A destination this router hosts is resolved out of the router's own
+     * store: {@code publish()} mirrors its LeaseSet into the main NetDb, and a
+     * remote search would query floodfills for a key the router already holds.
+     * The facade fails that lookup synchronously, so clearing the negative cache
+     * and announcing a re-probe was false on every occurrence - 18 in one
+     * window, all of them for locally hosted destinations, each one followed in
+     * the same millisecond by a failed send that had never searched.
+     *
+     * @param recentlyValid true if the LeaseSet was valid until recently, which
+     *                      is what makes a remote miss look like a transient gap
+     * @param isLocalDest true if this router hosts the destination
+     * @return true to clear the negative cache and search the network
+     * @since 0.9.72+
+     */
+    static boolean leaseSetReprobeWanted(boolean recentlyValid, boolean isLocalDest) {
+        return recentlyValid && !isLocalDest;
     }
 
     /**
