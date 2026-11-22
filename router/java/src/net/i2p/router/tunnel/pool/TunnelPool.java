@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.EnumMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -3705,7 +3706,7 @@ public class TunnelPool {
             // LeaseSet to the configured target instead of leaving it short.
             List<TunnelInfo> provenUntested = collectTrafficProvenUntested(tunnels, expireAfter);
             // These can already be in goodTunnels: when the pool has no GOOD tunnel at all,
-            // isEligibleForLease() admits UNTESTED ones, so collectLeaseTunnels() has already
+            // leaseRejection() admits UNTESTED ones, so collectLeaseTunnels() has already
             // picked up every tunnel this method is about to return. Adding them again inflated
             // the offered list, which the lease set then collapsed back by identity - so the
             // top-up filled nothing and the shortfall it exists to close stayed open. Dropping
@@ -3757,9 +3758,14 @@ public class TunnelPool {
         // re-floods the LS — it slowly fades from the network.
         if (rotateForPropagation) {
             rotateOldestLeaseForPropagation(leases, tunnels, rotatedOut);
+            if (!rotatedOut.isEmpty()) {
+                // Rotation is a reason the set came out short like any other, and
+                // it is the one reason the pool chose for itself.
+                selection.rejected.merge(LeaseRejection.ROTATED, rotatedOut.size(), Integer::sum);
+            }
         }
 
-        return finalizeLeaseSet(leases, wanted, now);
+        return finalizeLeaseSet(leases, wanted, now, selection.rejected, tunnels.size());
     }
 
     /**
@@ -3790,14 +3796,69 @@ public class TunnelPool {
         /** A zero-hop tunnel, used only if the good list is short. */
         final TunnelInfo zeroHop;
         /**
+         * How many tunnels each reason turned away, so a short LeaseSet can
+         * say why it is short rather than only that it is.
+         */
+        final Map<LeaseRejection, Integer> rejected;
+        /**
          * Holds the tunnels picked for a lease set.
          *
          * @param good the chosen tunnels
          * @param zeroHop the fallback zero-hop tunnel
+         * @param rejected how many tunnels each reason turned away, keyed by
+         *                 reason and never null
          */
-        LeaseTunnels(List<TunnelInfo> good, TunnelInfo zeroHop) {
+        LeaseTunnels(List<TunnelInfo> good, TunnelInfo zeroHop, Map<LeaseRejection, Integer> rejected) {
             this.good = good;
             this.zeroHop = zeroHop;
+            this.rejected = rejected;
+        }
+    }
+
+    /**
+     * Why a tunnel sitting in the pool was not offered as a LeaseSet lease.
+     * <p>The shortfall warning used to report only how few leases the set
+     * carried, so a pool holding eight sound tunnels and publishing three
+     * read exactly like a pool holding three tunnels. Naming the reason is
+     * what separates a supply problem — the pool cannot build enough tunnels —
+     * from an eligibility problem — it has tunnels it cannot advertise. Those
+     * two need opposite fixes, and the old line could not tell them apart.
+     * @since 0.9.72+
+     */
+    enum LeaseRejection {
+        /** Marked failed, so it is published only as the emergency fallback lease. */
+        FAILED("Failed"),
+        /** Test status is not GOOD, and a GOOD tunnel is available to publish instead. */
+        NOT_GOOD("Not GOOD"),
+        /** Expires inside the propagation deadline, so its lease would lapse first. */
+        NEAR_EXPIRY("Expiring"),
+        /** Has no inbound gateway or receive tunnel id to advertise. */
+        NO_GATEWAY("No gateway"),
+        /** Zero-hop, and the pool is not configured to expose the router directly. */
+        ZERO_HOP("Zero-hop"),
+        /** Swapped out of the set so floodfill peers see a new earliest lease date. */
+        ROTATED("Rotated");
+
+        /** The prose label the shortfall tally prints for this reason. */
+        private final String _label;
+
+        /**
+         * Binds this reason to the words the shortfall tally prints for it.
+         *
+         * @param label the prose label to print for this reason
+         */
+        LeaseRejection(String label) {
+            _label = label;
+        }
+
+        /**
+         * The prose label for this reason, as the shortfall tally prints it —
+         * words a reader at 3am can parse, not the enum name.
+         *
+         * @return the label to print
+         */
+        String label() {
+            return _label;
         }
     }
 
@@ -3818,37 +3879,58 @@ public class TunnelPool {
     private LeaseTunnels collectLeaseTunnels(List<TunnelInfo> tunnels, long expireAfter, boolean hasGoodTunnel) {
         TunnelInfo zeroHopTunnel = null;
         List<TunnelInfo> goodTunnels = new ArrayList<>();
+        Map<LeaseRejection, Integer> rejected = new EnumMap<>(LeaseRejection.class);
         for (TunnelInfo tunnel : tunnels) {
-            if (!isEligibleForLease(tunnel, hasGoodTunnel, expireAfter)) {continue;}
+            LeaseRejection why = leaseRejection(tunnel, hasGoodTunnel, expireAfter);
+            if (why != null) {
+                rejected.merge(why, 1, Integer::sum);
+                continue;
+            }
             if (tunnel.getLength() <= 1) {
-                if (!_settings.getAllowZeroHop()) {continue;}
+                if (!_settings.getAllowZeroHop()) {
+                    rejected.merge(LeaseRejection.ZERO_HOP, 1, Integer::sum);
+                    continue;
+                }
+                // Being superseded by a later-expiring zero-hop tunnel is not a
+                // rejection - the pool still advertises one of the pair.
                 if (!replaceZeroHopCandidate(zeroHopTunnel, tunnel)) {continue;}
                 zeroHopTunnel = tunnel;
                 continue;
             }
-            if (!hasInboundGateway(tunnel)) {continue;}
+            if (!hasInboundGateway(tunnel)) {
+                rejected.merge(LeaseRejection.NO_GATEWAY, 1, Integer::sum);
+                continue;
+            }
             goodTunnels.add(tunnel);
         }
-        return new LeaseTunnels(goodTunnels, zeroHopTunnel);
+        return new LeaseTunnels(goodTunnels, zeroHopTunnel, rejected);
     }
 
     /**
-     * Whether the tunnel may be included in the LeaseSet: not failed, GOOD
-     * (or UNTESTED when no GOOD exists), and expiring after the propagation
-     * deadline.
+     * Why the tunnel may not be a LeaseSet lease, or null when it may: not
+     * failed, GOOD (or UNTESTED when no GOOD exists), and expiring after the
+     * propagation deadline.
+     * <p>Split out of the boolean the collection path used to call so the
+     * shortfall warning can count the reasons rather than only the result.
+     * The checks run in the same order that boolean short-circuited in, so
+     * the reason reported for a tunnel that fails several is the first one
+     * that would have turned it away.
      *
      * @param tunnel the tunnel to test
      * @param hasGoodTunnel whether the pool holds a GOOD tunnel, which decides
      *                      whether an UNTESTED tunnel qualifies
      * @param expireAfter the earliest expiration the tunnel may have to qualify
-     * @return true if the tunnel may be included in the LeaseSet
+     * @return the reason to withhold the tunnel, null to advertise it
+     * @since 0.9.72+
      */
-    private boolean isEligibleForLease(TunnelInfo tunnel, boolean hasGoodTunnel, long expireAfter) {
-        if (tunnel.getTunnelFailed()) return false;
+    static LeaseRejection leaseRejection(TunnelInfo tunnel, boolean hasGoodTunnel, long expireAfter) {
+        if (tunnel.getTunnelFailed()) {return LeaseRejection.FAILED;}
         if (tunnel.getTestStatus() != TunnelTestStatus.GOOD &&
-            (hasGoodTunnel || tunnel.getTestStatus() != TunnelTestStatus.UNTESTED)) return false;
-        if (tunnel.getExpiration() <= expireAfter) {return false;}
-        return true;
+            (hasGoodTunnel || tunnel.getTestStatus() != TunnelTestStatus.UNTESTED)) {
+            return LeaseRejection.NOT_GOOD;
+        }
+        if (tunnel.getExpiration() <= expireAfter) {return LeaseRejection.NEAR_EXPIRY;}
+        return null;
     }
 
     /**
@@ -4119,6 +4201,39 @@ public class TunnelPool {
     }
 
     /**
+     * Why the pool came out short, as one continuation line: what it was
+     * choosing from, and what it turned away for each reason.
+     * <p>"Have 3 of 8" cannot be acted on by itself. It is the same string
+     * whether the pool holds three tunnels or eight tunnels it cannot
+     * advertise, and those two need opposite fixes - build more tunnels, or
+     * stop disqualifying the ones that exist. The tally says which, and it
+     * names each reason in prose rather than as an enum constant a reader
+     * would have to look up.
+     *
+     * @param rejected tunnels turned away, by reason; empty when unknown
+     * @param poolTunnels how many tunnels the pool was choosing from, negative
+     *                    when unknown
+     * @return the continuation line, empty when there is nothing to say
+     * @since 0.9.72+
+     */
+    static String shortfallDetail(Map<LeaseRejection, Integer> rejected, int poolTunnels) {
+        StringBuilder buf = new StringBuilder("\n* ");
+        boolean any = false;
+        for (LeaseRejection why : LeaseRejection.values()) {
+            Integer count = rejected.get(why);
+            if (count == null || count == 0) {continue;}
+            buf.append(any ? " * " : "Not offered -> ")
+               .append(why.label()).append(": ").append(count);
+            any = true;
+        }
+        if (poolTunnels >= 0) {
+            buf.append(any ? " * " : "").append("Pool tunnels: ").append(poolTunnels);
+            any = true;
+        }
+        return any ? buf.toString() : "";
+    }
+
+    /**
      * Builds the lease set from the chosen leases.
      * The returned LeaseSet is incomplete by contract: leases only, no
      * destination or signature, so callers must not ask it for its wire size.
@@ -4126,9 +4241,15 @@ public class TunnelPool {
      * @param leases the leases to publish
      * @param wanted the number of leases wanted
      * @param now the current time
+     * @param rejected how many tunnels each {@link LeaseRejection} reason turned
+     *                 away while assembling the set, empty when unknown
+     * @param poolTunnels how many tunnels the pool was choosing from, negative
+     *                    when unknown
      * @return the lease set, or null if it could not be built
+     * @since 0.9.72+ the two extra arguments carry the shortfall tally
      */
-    LeaseSet finalizeLeaseSet(TreeSet<Lease> leases, int wanted, long now) {
+    LeaseSet finalizeLeaseSet(TreeSet<Lease> leases, int wanted, long now,
+                              Map<LeaseRejection, Integer> rejected, int poolTunnels) {
         if (leases.size() < wanted) {
             // The incomplete-set handling below runs for any shortfall, which is correct:
             // even 7 of 8 is incomplete. Only the log is filtered, because it used to fire on
@@ -4141,7 +4262,8 @@ public class TunnelPool {
                 if (_log.shouldWarn()) {
                     _log.warn(toString() + " -> Not enough leases for a full LeaseSet"
                               + " * Have " + leases.size() + " of " + wanted + ", need "
-                              + usableLeaseMinimum(wanted));
+                              + usableLeaseMinimum(wanted)
+                              + shortfallDetail(rejected, poolTunnels));
                 }
             }
             _hasIncompleteLeaseSet = true;

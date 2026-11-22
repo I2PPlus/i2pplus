@@ -1,13 +1,17 @@
 package net.i2p.router.tunnel.pool;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeSet;
 
 import org.junit.Assume;
@@ -39,15 +43,34 @@ import net.i2p.util.Log;
  */
 public class TunnelPoolLeaseAssemblyTest {
 
+    /**
+     * JUnit fixture object; the tests drive static helpers of {@link TunnelPool}
+     * and one pool built per call, so the instance carries no state.
+     */
+    public TunnelPoolLeaseAssemblyTest() {
+    }
+
+    /** Shared router context for the pools and tunnels this test builds. */
     private static RouterContext _ctx;
+    /** LeaseSet target used throughout, matching the pool size in the regression. */
     private static final int TUNNELS = 8;
+    /** One minute in milliseconds, for the lifetimes and deadlines below. */
     private static final long MINUTE = 60 * 1000L;
 
+    /**
+     * Builds the router context every test in this class reads.
+     */
     @BeforeClass
     public static void setUp() {
         _ctx = RouterTestHelper.newContext();
     }
 
+    /**
+     * A pool configured for the given LeaseSet target.
+     *
+     * @param quantity inbound tunnel count the pool wants, its LeaseSet target
+     * @return a pool over the shared context, never null
+     */
     private static TunnelPool pool(int quantity) {
         Assume.assumeTrue("No RouterContext available", _ctx != null);
         return new TunnelPool(_ctx, mock(TunnelPoolManager.class), settings(quantity),
@@ -278,11 +301,158 @@ public class TunnelPoolLeaseAssemblyTest {
         int saved = log.getMinimumPriority();
         try {
             log.setMinimumPriority(Log.INFO);
-            LeaseSet ls = pool.finalizeLeaseSet(leases, TUNNELS, _ctx.clock().now());
+            LeaseSet ls = pool.finalizeLeaseSet(leases, TUNNELS, _ctx.clock().now(),
+                                                Collections.emptyMap(), TUNNELS);
             assertEquals("all leases made it into the set", TUNNELS, ls.getLeaseCount());
         } finally {
             log.setMinimumPriority(saved);
         }
+    }
+
+    // ---- why a short LeaseSet is short ----
+
+    /**
+     * A tunnel marked failed by hard failures is withheld, and the reason says so.
+     *
+     * @return the config, for the caller to read back
+     */
+    private static PooledTunnelCreatorConfig failedTunnel() {
+        PooledTunnelCreatorConfig cfg = (PooledTunnelCreatorConfig) tunnel(0);
+        for (int i = 0; i < 4; i++) {
+            cfg.incrementTestFailures();
+        }
+        cfg.setTestFailed();
+        return cfg;
+    }
+
+    /**
+     * A tunnel that failed one test is degraded, not dead.
+     *
+     * @return the config, in {@code FAILING} status
+     */
+    private static PooledTunnelCreatorConfig failingTunnel() {
+        PooledTunnelCreatorConfig cfg = (PooledTunnelCreatorConfig) tunnel(0);
+        cfg.incrementTestFailures();
+        cfg.setTestFailed();
+        return cfg;
+    }
+
+    /**
+     * A tunnel that passed its test, expiring at the given offset from now.
+     *
+     * @param expiresAfter how far past the current time the tunnel expires, ms
+     * @return the config, in {@code GOOD} status
+     */
+    private static PooledTunnelCreatorConfig goodTunnel(long expiresAfter) {
+        PooledTunnelCreatorConfig cfg = (PooledTunnelCreatorConfig) tunnel(0);
+        cfg.clearTestFailures();
+        cfg.setExpiration(_ctx.clock().now() + expiresAfter);
+        return cfg;
+    }
+
+    /**
+     * A pool holding eight sound tunnels must not report the same shortfall as
+     * a pool holding three. The old line said only "Have 3 of 8", and the two
+     * cases need opposite fixes - build more tunnels, or stop disqualifying the
+     * ones that exist - so the reason has to be in the line.
+     */
+    @Test
+    public void eachReasonAShortSetCameFromIsNamed() {
+        long now = _ctx.clock().now();
+        long deadline = now + 3 * MINUTE;
+        assertEquals(TunnelPool.LeaseRejection.FAILED,
+                     TunnelPool.leaseRejection(failedTunnel(), true, deadline));
+        assertEquals(TunnelPool.LeaseRejection.NOT_GOOD,
+                     TunnelPool.leaseRejection(failingTunnel(), true, deadline));
+        assertNull("a GOOD tunnel well clear of the deadline is advertised",
+                   TunnelPool.leaseRejection(goodTunnel(10 * MINUTE), true, deadline));
+        assertEquals(TunnelPool.LeaseRejection.NEAR_EXPIRY,
+                     TunnelPool.leaseRejection(goodTunnel(2 * MINUTE), true, deadline));
+    }
+
+    /**
+     * An UNTESTED tunnel is only a fallback: it is advertised while the pool has
+     * nothing better and turned away once a GOOD tunnel exists.
+     */
+    @Test
+    public void untestedTunnelsQualifyOnlyWhileNothingBetterExists() {
+        long deadline = _ctx.clock().now() + 3 * MINUTE;
+        assertNull("no GOOD tunnel, so the untested one is advertised",
+                   TunnelPool.leaseRejection(tunnel(0), false, deadline));
+        assertEquals(TunnelPool.LeaseRejection.NOT_GOOD,
+                     TunnelPool.leaseRejection(tunnel(0), true, deadline));
+    }
+
+    /**
+     * The tally line has to be readable by someone with no source open: prose
+     * labels, not enum constants, and the house shape - an arrow after the
+     * subject, {@code key: value} segments, no emitted line over 100 characters.
+     */
+    @Test
+    public void tallyLineNamesTheReasonsInProse() {
+        Map<TunnelPool.LeaseRejection, Integer> rejected =
+            new EnumMap<>(TunnelPool.LeaseRejection.class);
+        rejected.put(TunnelPool.LeaseRejection.NEAR_EXPIRY, 3);
+        rejected.put(TunnelPool.LeaseRejection.FAILED, 1);
+        String line = TunnelPool.shortfallDetail(rejected, 9);
+        assertTrue(line, line.contains("Not offered -> "));
+        assertTrue(line, line.contains("Expiring: 3"));
+        assertTrue(line, line.contains("Failed: 1"));
+        assertTrue(line, line.contains("Pool tunnels: 9"));
+        assertFalse("a reason with no tunnels must not appear: " + line,
+                    line.contains("Zero-hop"));
+        for (String part : line.split("\n")) {
+            assertTrue("emitted line over 100 chars: " + part.length() + ' ' + part,
+                       part.length() <= 100);
+            assertFalse("trailing whitespace: [" + part + ']', part.endsWith(" "));
+        }
+    }
+
+    /** A set that lost nothing has nothing to explain. */
+    @Test
+    public void tallyLineIsSilentWhenNothingWasRejected() {
+        assertEquals("", TunnelPool.shortfallDetail(new EnumMap<>(TunnelPool.LeaseRejection.class), -1));
+        Map<TunnelPool.LeaseRejection, Integer> zero = new EnumMap<>(TunnelPool.LeaseRejection.class);
+        zero.put(TunnelPool.LeaseRejection.ZERO_HOP, 0);
+        assertEquals("", TunnelPool.shortfallDetail(zero, -1));
+    }
+
+    /**
+     * The denominator is what makes the tally actionable - three tunnels turned
+     * away out of four is a supply problem, out of nine an eligibility one - so
+     * it is printed when known and left out when not.
+     */
+    @Test
+    public void poolSizeIsPrintedOnlyWhenKnown() {
+        Map<TunnelPool.LeaseRejection, Integer> none =
+            new EnumMap<>(TunnelPool.LeaseRejection.class);
+        assertEquals("\n* Pool tunnels: 9", TunnelPool.shortfallDetail(none, 9));
+        assertEquals("", TunnelPool.shortfallDetail(none, -1));
+    }
+
+    /**
+     * The helper has to reach the line the router actually emits. A tally
+     * nobody appends reads green in unit tests and changes nothing in the log,
+     * and the reason counts have to come from the same pass that chose the
+     * tunnels, not from a second walk that could disagree with it.
+     *
+     * @throws Exception if the TunnelPool source cannot be read back from disk
+     */
+    @Test
+    public void theShortfallLineCarriesTheTally() throws Exception {
+        java.io.File src =
+            new java.io.File("router/java/src/net/i2p/router/tunnel/pool/TunnelPool.java");
+        if (!src.isFile()) {
+            src = new java.io.File("src/net/i2p/router/tunnel/pool/TunnelPool.java");
+        }
+        Assume.assumeTrue("source not available", src.isFile());
+        String body = new String(java.nio.file.Files.readAllBytes(src.toPath()), "UTF-8");
+        assertTrue("the warning must append the tally",
+                   body.contains("shortfallDetail(rejected, poolTunnels)"));
+        assertTrue("the tally must come from the collection pass",
+                   body.contains("return new LeaseTunnels(goodTunnels, zeroHopTunnel, rejected)"));
+        assertTrue("rotation must count as a reason",
+                   body.contains("LeaseRejection.ROTATED, rotatedOut.size()"));
     }
 
     private static Lease lease(long end, long tunnelId, int gateway) {
