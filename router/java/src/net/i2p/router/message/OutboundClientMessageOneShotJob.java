@@ -35,6 +35,7 @@ import net.i2p.router.ClientMessage;
 import net.i2p.router.JobImpl;
 import net.i2p.router.LeaseSetKeys;
 import net.i2p.router.MessageSelector;
+import net.i2p.router.NetworkDatabaseFacade;
 import net.i2p.router.ReplyJob;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
@@ -619,7 +620,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             // "recently valid" re-probe below, which clears the negative cache and
             // would otherwise start a fresh search every probe interval - 1,639 of
             // them for one destination in 133 minutes.
-            if (!isLocalDest && kndf.storeRejectedRecently(toHash)) {
+            if (!isLocalDest && storeRejectedOnAnyNetDb(kndf, getContext().netDb(), toHash)) {
                 getContext().statManager().addRateData("client.leaseSetSkipStoreReject", 1);
                 _log.infoThrottled(debugKey(_toString, "leaseset-store-rejected"),
                                    "Skipping send to " + _toString +
@@ -1991,6 +1992,32 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
      */
     static boolean leaseSetReprobeWanted(boolean recentlyValid, boolean isLocalDest) {
         return recentlyValid && !isLocalDest;
+    }
+
+    /**
+     * Whether any NetDb on this router still holds this key rejected from a
+     * LeaseSet that failed store validation.
+     * <p>The rejection is a fact about the key, but the window is recorded on
+     * whichever facade ran the store: a LeaseSet that arrives from a search lands
+     * in the main NetDb, while a floodfill store aimed at a client destination
+     * lands in that client's sub-NetDb. Checking only the sender's own sub-NetDb
+     * let 102 rejected LeaseSets be re-fetched after being refused - one
+     * destination re-probed 14 seconds after its own rejection, another 1.7
+     * seconds after a rejection recorded on the other facade, both well inside
+     * the 30 minute window.
+     *
+     * @param subDb the sender's client sub-NetDb, may be null
+     * @param mainDb the router's main NetDb, may be null
+     * @param key the destination hash, may be null
+     * @return true while either facade holds the key rejected
+     * @since 0.9.72+
+     */
+    static boolean storeRejectedOnAnyNetDb(KademliaNetworkDatabaseFacade subDb,
+                                           NetworkDatabaseFacade mainDb, Hash key) {
+        if (key == null) {return false;}
+        if (subDb != null && subDb.storeRejectedRecently(key)) {return true;}
+        return mainDb instanceof KademliaNetworkDatabaseFacade &&
+               ((KademliaNetworkDatabaseFacade) mainDb).storeRejectedRecently(key);
     }
 
     /**
