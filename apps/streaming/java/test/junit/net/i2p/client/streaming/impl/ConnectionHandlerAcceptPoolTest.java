@@ -29,6 +29,13 @@ import org.mockito.stubbing.Answer;
  * 887 handshakes from 54 peers were reset over 3m 11s, and the expiries stopped
  * in the second the added worker started.
  *
+ * <p>The other half is who owns the count of live workers. It decides whether the
+ * queue-pressure rules add another worker, how many poison packets a shutdown
+ * offers, and the number a pressure report prints. A worker decrements it as its
+ * own run() ends, because a worker in the middle of a SYN outlives the period it
+ * was started in; a shutdown that reset the count too subtracted such a worker
+ * twice.
+ *
  * @since 0.9.72+
  */
 public class ConnectionHandlerAcceptPoolTest {
@@ -123,6 +130,65 @@ public class ConnectionHandlerAcceptPoolTest {
             handler.setActive(false);
             ConnectionOptions.setAcceptWorkerThreads(saved);
         }
+    }
+
+    /**
+     * A worker still holding a SYN from the previous listening period is still a
+     * live worker, and the next period has to count it.
+     *
+     * <p>The shutdown interrupts it and drops it from the thread list, but it
+     * only reaches its own decrement when the hand-off returns. A shutdown that
+     * reset the count as well subtracted it twice, so the new period reported a
+     * pool smaller than the one running - and the queue-pressure rules read that
+     * number when deciding whether to add another worker.
+     *
+     * @throws Exception if the stalled hand-off does not resolve
+     */
+    @Test
+    public void aWorkerStillHoldingASynIsStillCounted() throws Exception {
+        final CountDownLatch inHandoff = new CountDownLatch(1);
+        final CountDownLatch release = new CountDownLatch(1);
+        when(_mgr.receiveConnection(any(Packet.class))).thenAnswer(new Answer<Connection>() {
+            @Override
+            public Connection answer(InvocationOnMock invocation) {
+                inHandoff.countDown();
+                // Hold the SYN the way a worker mid-handshake does: the
+                // shutdown's interrupt does not end a crypto operation, so the
+                // worker only reaches its own decrement once this returns.
+                long until = System.currentTimeMillis() + 2000;
+                while (System.currentTimeMillis() < until && release.getCount() > 0) {
+                    try {
+                        Thread.sleep(20);
+                    } catch (InterruptedException e) {
+                        // keep holding the SYN until the hand-off completes
+                    }
+                }
+                return null;
+            }
+        });
+        int saved = ConnectionOptions.getAcceptWorkerThreads();
+        ConnectionOptions.setAcceptWorkerThreads(1);
+        ConnectionHandler handler = new ConnectionHandler(_ctx, _mgr, _timer);
+        try {
+            handler.setActive(true);
+            handler.receiveNewSyn(mock(Packet.class));
+            assertTrue("the worker never picked the SYN up",
+                       inHandoff.await(5, TimeUnit.SECONDS));
+            assertEquals("one worker, the one holding the SYN", 1,
+                         handler.getActiveWorkerCount());
+            // The period ends while the worker is inside receiveConnection(), and
+            // a new one starts before that worker reaches the loop top.
+            handler.setActive(false);
+            handler.setActive(true);
+            assertEquals("the worker holding the SYN and the new one are both live",
+                         2, handler.getActiveWorkerCount());
+        } finally {
+            release.countDown();
+            handler.setActive(false);
+            ConnectionOptions.setAcceptWorkerThreads(saved);
+        }
+        assertTrue("every worker ends once the hand-off returns",
+                   waitForCount(handler, 0, 5000));
     }
 
     /**

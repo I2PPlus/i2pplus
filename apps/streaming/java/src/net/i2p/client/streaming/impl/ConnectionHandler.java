@@ -45,7 +45,19 @@ class ConnectionHandler {
     private final LinkedBlockingQueue<Connection> _resultQueue;
     /** The threads accepting connections. */
     private final List<Thread> _acceptWorkers;
-    /** Workers currently handling a connection. */
+    /**
+     * Accept workers that are alive: incremented when one is started, and
+     * decremented by the worker itself as its run() ends.
+     * <p>The worker owns its own decrement, because a worker in the middle of a
+     * SYN outlives the listening period it was started in - the shutdown
+     * interrupts it and drops it from the thread list, but its finally runs
+     * whenever it gets back to the loop top. A shutdown that also reset this
+     * count therefore subtracted live workers from it, and the pool read smaller
+     * than it was: a pressure report on a live router named
+     * <code>Workers: 1</code> at the moment it added a worker, while two
+     * accept-worker threads were logging in the same minutes. Both the scale-up
+     * gate and the number of poison packets offered on the way out read this.
+     */
     private final AtomicInteger _activeWorkerCount;
     /** Sequence number of the worker threads. */
     private final AtomicInteger _workerId;
@@ -823,13 +835,15 @@ class ConnectionHandler {
 
     /**
      * Stop all accept worker threads. Called when setActive(false).
+     * <p>The live-worker count is left to the workers themselves: each one
+     * subtracts itself as its run() ends, and a worker holding a SYN does not
+     * stop just because the period it came from has been shut down.
      */
     private synchronized void shutdownAcceptWorkers() {
         for (Thread t : _acceptWorkers) {
             t.interrupt();
         }
         _acceptWorkers.clear();
-        _activeWorkerCount.set(0);
     }
 
     /**
