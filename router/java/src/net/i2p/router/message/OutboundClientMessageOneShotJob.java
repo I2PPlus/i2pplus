@@ -152,6 +152,12 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
      * back after the failure callback would blame the cache for every timeout.
      */
     private int _leaseSetFastFail = KademliaNetworkDatabaseFacade.LOOKUP_SEARCH_STARTED;
+    /**
+     * How many times this send has waited for a locally hosted destination's own
+     * LeaseSet to be republished. Bounded by {@link #MINT_GAP_RETRIES} and by the
+     * message's own expiry.
+     */
+    private int _mintGapRetries;
     /** The outbound tunnel the message was sent on. */
     private TunnelInfo _outTunnel;
     /** The inbound tunnel the reply arrived on. */
@@ -335,6 +341,30 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
      * @since 0.9.72+
      */
     static final int REPLY_LEASESET_RESEND_MS = 60*1000;
+
+    /**
+     * How many times a send to a destination this router hosts waits for its own
+     * LeaseSet to appear in the NetDb before the send is failed.
+     * <p>publish() mirrors a locally hosted LeaseSet into the main NetDb, so a
+     * send that lands between the old copy expiring and the republished one being
+     * stored finds nothing anywhere, and no search on earth can answer a key we
+     * hold. Dying there costs the peer a streaming retransmit cycle (2-3.25 s)
+     * and the client a failure status, for a gap the republish job closes by
+     * itself. Rare on a live router - zero of these in 3 h 48 min for the three
+     * destinations this router hosts - which is why the budget is small.
+     *
+     * @since 0.9.72+
+     */
+    static final int MINT_GAP_RETRIES = 3;
+
+    /**
+     * How long each of those waits lasts, in ms. Two seconds is one streaming
+     * retransmit, so a retry that finds the LeaseSet published delivers the
+     * message no later than the retransmit the failure would have caused.
+     *
+     * @since 0.9.72+
+     */
+    static final int MINT_GAP_RETRY_MS = 2000;
 
     /**
      * Minimum time in ms to keep using the same outbound tunnel for a given
@@ -667,7 +697,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 if (_log.shouldInfo()) {
                     _log.infoThrottled(debugKey(_toString, "leaseset-local-mint-gap"),
                                        "LeaseSet for " + _toString +
-                                       " missing from our own store -> Failing without a remote search");
+                                       " missing from our own store -> No remote search possible");
                 }
             }
             // Asked before the lookup runs, because these are the very gates the
@@ -855,6 +885,27 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
      */
     static boolean ackedCopyCarriesReply(LeaseSet acked, long now) {
         return acked == null || acked.getEarliestLeaseDate() > now;
+    }
+
+    /**
+     * Whether a failed LeaseSet lookup should be waited out instead of failed:
+     * the key is a destination this router hosts, its LeaseSet is in neither
+     * NetDb yet, retries remain, and the message still has a future to be sent
+     * into - a retry that lands after the expiry is only a delay.
+     *
+     * @param fastFail the {@code LOOKUP_*} code captured when the lookup started
+     * @param retries how many waits this send has already made
+     * @param now the current time from the router clock, in ms since the epoch
+     * @param expiration when this message expires, in ms since the epoch
+     * @return true to wait and retry instead of reporting a failure
+     * @since 0.9.72+
+     */
+    static boolean mintGapRetryPending(int fastFail, int retries, long now,
+                                       long expiration) {
+        return fastFail ==
+               KademliaNetworkDatabaseFacade.LOOKUP_FAILED_LOCAL_NOT_STORED &&
+               retries < MINT_GAP_RETRIES &&
+               now + MINT_GAP_RETRY_MS < expiration;
     }
 
     /**
@@ -1210,6 +1261,23 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                               getContext().clock().now() - _leaseSetLookupBegin : 0;
             if (lookupTime > 0) {
                 getContext().statManager().addRateData("client.leaseSetFailedRemoteTime", lookupTime);
+            }
+
+            if (mintGapRetryPending(_leaseSetFastFail, _mintGapRetries,
+                                    getContext().clock().now(), _overallExpiration)) {
+                _mintGapRetries++;
+                if (_log.shouldInfo()) {
+                    _log.info("LeaseSet lookup failed for " + _toString +
+                              " -> Retrying, our own LeaseSet is not published yet" +
+                              "\n* Attempt: " + _mintGapRetries + " of " + MINT_GAP_RETRIES +
+                              " * Wait: " + DataHelper.formatDuration(MINT_GAP_RETRY_MS));
+                }
+                // The send itself, re-queued behind the wait, not this job. Only
+                // the lookup has run so far, so the retry cannot duplicate a
+                // payload, and the expiry check at the top of runJob() ends the
+                // loop if the republish does not land.
+                OutboundClientMessageOneShotJob.this.requeue(MINT_GAP_RETRY_MS);
+                return;
             }
 
             int cause;
