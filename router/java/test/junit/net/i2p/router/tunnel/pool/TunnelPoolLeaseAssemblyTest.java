@@ -455,6 +455,113 @@ public class TunnelPoolLeaseAssemblyTest {
                    body.contains("LeaseRejection.ROTATED, rotatedOut.size()"));
     }
 
+    // ---- what a propagation rotation may cost ----
+
+    /**
+     * A rotation drops a working lease and then removes that tunnel from the
+     * pool, so it is only allowed when the set still clears the usable minimum
+     * afterwards.
+     *
+     * <p>The live numbers this pins: over 37 minutes a router logged 43 rotations
+     * and 56 "not enough leases" warnings, 41 of which would not have fired at
+     * all without the rotation - a target-3 pool publishing "Have 1 of 3" whose
+     * only reason was one rotation, and target-8 pools holding seven or eight
+     * tunnels advertising three because the fourth lease was rotated out.
+     */
+    @Test
+    public void rotationIsOnlyPaidForByASetThatCanAffordIt() {
+        // target 8: the usable minimum is 4, so the set must hold 5 to spend one
+        assertFalse(TunnelPool.canAffordRotation(4, 8));
+        assertTrue(TunnelPool.canAffordRotation(5, 8));
+        // target 3: minimum 2, so 3 leases are needed to spend one
+        assertFalse(TunnelPool.canAffordRotation(2, 3));
+        assertTrue(TunnelPool.canAffordRotation(3, 3));
+        // target 4: minimum 2
+        assertFalse(TunnelPool.canAffordRotation(2, 4));
+        assertTrue(TunnelPool.canAffordRotation(3, 4));
+        // a one-lease set has nothing to rotate
+        assertFalse(TunnelPool.canAffordRotation(1, 1));
+        assertFalse(TunnelPool.canAffordRotation(0, 8));
+    }
+
+    /**
+     * The two shapes measured on the live router: a target-3 pool down to two
+     * leases, and a target-8 pool at exactly its minimum. Both were thinned by a
+     * rotation into a warning, and both must now be left alone.
+     */
+    @Test
+    public void theMeasuredSelfInflictedShortfallsAreBlocked() {
+        assertFalse("harry.i2p: Rotated: 1 * Pool tunnels: 2 against a target of 3",
+                    TunnelPool.canAffordRotation(2, 3));
+        assertFalse("skank.i2p: Have 3 of 8 with the fourth lease rotated out",
+                    TunnelPool.canAffordRotation(4, 8));
+    }
+
+    /**
+     * The gate has to sit in the pass that rotates, not beside it: a helper no
+     * caller consults reads green in unit tests and changes nothing in the log.
+     *
+     * @throws Exception if the TunnelPool source cannot be read back from disk
+     */
+    @Test
+    public void theRotationGateIsWiredIntoTheAssemblyPass() throws Exception {
+        java.io.File src =
+            new java.io.File("router/java/src/net/i2p/router/tunnel/pool/TunnelPool.java");
+        if (!src.isFile()) {
+            src = new java.io.File("src/net/i2p/router/tunnel/pool/TunnelPool.java");
+        }
+        Assume.assumeTrue("source not available", src.isFile());
+        String body = new String(java.nio.file.Files.readAllBytes(src.toPath()), "UTF-8");
+        assertTrue("the rotation must consult the gate",
+                   body.contains("if (!canAffordRotation(leases.size(), wanted)) {"));
+        assertTrue("the assembly pass must hand the target to the rotation",
+                   body.contains("rotateOldestLeaseForPropagation(leases, tunnels, " +
+                                 "rotatedOut, wanted)"));
+    }
+
+    // ---- the tally must not double-count ----
+
+    /**
+     * A tunnel the set publishes after all is not also a tunnel it turned away.
+     *
+     * <p>The traffic-proven UNTESTED top-up and the emergency degraded fallback
+     * both publish a tunnel the collection pass had already counted under its
+     * reason, so the shortfall line would print the same tunnel in "Have N" and
+     * in "Not offered", and the arithmetic a reader uses to check the tally
+     * ({@code Have + reasons = pool tunnels}) would stop adding up.
+     */
+    @Test
+    public void aPublishedTunnelIsNotAlsoCountedAsRejected() {
+        long deadline = _ctx.clock().now() + 3 * MINUTE;
+        Map<TunnelPool.LeaseRejection, Integer> rejected =
+            new EnumMap<>(TunnelPool.LeaseRejection.class);
+        rejected.put(TunnelPool.LeaseRejection.NOT_GOOD, 2);
+        TunnelPool.unrejectTunnel(rejected, tunnel(0), true, deadline);
+        assertEquals(Integer.valueOf(1), rejected.get(TunnelPool.LeaseRejection.NOT_GOOD));
+        TunnelPool.unrejectTunnel(rejected, tunnel(1), true, deadline);
+        assertFalse("an emptied reason must leave the tally",
+                    rejected.containsKey(TunnelPool.LeaseRejection.NOT_GOOD));
+    }
+
+    /**
+     * Taking a tunnel back out of a reason that never counted it must not invent
+     * a negative count, and a tunnel the pass never turned away changes nothing.
+     */
+    @Test
+    public void unrejectingWhatWasNeverCountedChangesNothing() {
+        long deadline = _ctx.clock().now() + 3 * MINUTE;
+        Map<TunnelPool.LeaseRejection, Integer> rejected =
+            new EnumMap<>(TunnelPool.LeaseRejection.class);
+        rejected.put(TunnelPool.LeaseRejection.NEAR_EXPIRY, 1);
+        TunnelPool.unrejectTunnel(rejected, goodTunnel(10 * MINUTE), true, deadline);
+        assertEquals("a GOOD tunnel was never a rejection",
+                     Integer.valueOf(1), rejected.get(TunnelPool.LeaseRejection.NEAR_EXPIRY));
+        TunnelPool.unrejectTunnel(rejected, failingTunnel(), true, deadline);
+        assertEquals("a reason with no tunnels counted stays absent",
+                     Integer.valueOf(1), rejected.get(TunnelPool.LeaseRejection.NEAR_EXPIRY));
+        assertFalse(rejected.containsKey(TunnelPool.LeaseRejection.NOT_GOOD));
+    }
+
     private static Lease lease(long end, long tunnelId, int gateway) {
         Lease lease = new Lease();
         lease.setEndDate(end);

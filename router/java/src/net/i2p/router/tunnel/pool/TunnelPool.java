@@ -3723,6 +3723,13 @@ public class TunnelPool {
             }
             goodTunnels = new ArrayList<>(goodTunnels);
             goodTunnels.addAll(provenUntested);
+            // The collection pass counted every one of these as a rejection, so
+            // publishing them without taking them back out would report the same
+            // tunnel twice on the shortfall line - once in "Have N" and once
+            // under the reason that turned it away.
+            for (TunnelInfo tunnel : provenUntested) {
+                unrejectTunnel(selection.rejected, tunnel, hasGood, expireAfter);
+            }
         }
 
         TreeSet<Lease> leases = buildLeases(goodTunnels, selection.zeroHop);
@@ -3748,7 +3755,12 @@ public class TunnelPool {
                 }
                 return null;
             }
-            addDegradedFallbackLease(leases, tunnels, isServerPool);
+            TunnelInfo fallback = addDegradedFallbackLease(leases, tunnels, isServerPool);
+            if (fallback != null) {
+                // Same correction as the top-up: the fallback tunnel is one the
+                // collection pass turned away and counted under its reason.
+                unrejectTunnel(selection.rejected, fallback, hasGood, expireAfter);
+            }
         }
         // Rotate out the oldest lease if it matches the previous publish's
         // earliest end time.  This gives each republished LeaseSet a different
@@ -3757,7 +3769,7 @@ public class TunnelPool {
         // the same earliest end time every build, and the floodfill never
         // re-floods the LS — it slowly fades from the network.
         if (rotateForPropagation) {
-            rotateOldestLeaseForPropagation(leases, tunnels, rotatedOut);
+            rotateOldestLeaseForPropagation(leases, tunnels, rotatedOut, wanted);
             if (!rotatedOut.isEmpty()) {
                 // Rotation is a reason the set came out short like any other, and
                 // it is the one reason the pool chose for itself.
@@ -3934,6 +3946,33 @@ public class TunnelPool {
     }
 
     /**
+     * Take a tunnel out of the rejection tally because the assembled LeaseSet
+     * publishes it after all.
+     * <p>The tally counts tunnels the pool turned away, and two paths publish a
+     * tunnel the collection pass had already counted: the traffic-proven UNTESTED
+     * top-up, and the emergency degraded fallback. Without this the shortfall line
+     * reports the same tunnel twice - once inside "Have N" and once under the
+     * reason that withheld it - and the arithmetic that lets a reader check the
+     * tally stops adding up.
+     *
+     * @param rejected the tally to correct, keyed by reason
+     * @param tunnel the tunnel the set published anyway
+     * @param hasGoodTunnel whether the pool holds a GOOD tunnel, as the
+     *                      collection pass saw it
+     * @param expireAfter the propagation deadline, as the collection pass saw it
+     * @since 0.9.72+
+     */
+    static void unrejectTunnel(Map<LeaseRejection, Integer> rejected, TunnelInfo tunnel,
+                               boolean hasGoodTunnel, long expireAfter) {
+        LeaseRejection why = leaseRejection(tunnel, hasGoodTunnel, expireAfter);
+        if (why == null) {return;}
+        Integer left = rejected.get(why);
+        if (left == null) {return;}
+        if (left > 1) {rejected.put(why, left - 1);}
+        else {rejected.remove(why);}
+    }
+
+    /**
      * UNTESTED tunnels that have verified delivering real inbound data
      * recently.  Inbound delivery through InboundEndpointProcessor is
      * end-to-end proof the tunnel works, so these are safe to publish as
@@ -4065,8 +4104,10 @@ public class TunnelPool {
      * @param tunnels the pool's current tunnels, searched for a degraded one
      * @param isServerPool true for a server pool, which may still advertise a
      *                     tunnel that has failed or failed its test
+     * @return the tunnel published as the fallback lease, null if none qualified
      */
-    private void addDegradedFallbackLease(TreeSet<Lease> leases, List<TunnelInfo> tunnels, boolean isServerPool) {
+    private TunnelInfo addDegradedFallbackLease(TreeSet<Lease> leases, List<TunnelInfo> tunnels,
+                                                boolean isServerPool) {
         TunnelInfo fallback = findBestDegradedTunnel(tunnels, isServerPool);
         if (fallback != null) {
             TunnelId inId = fallback.getReceiveTunnelId(0);
@@ -4079,8 +4120,10 @@ public class TunnelPool {
                                        toString() + " -> Publishing a degraded tunnel as the emergency fallback, " +
                                        fallback.getConsecutiveFailures() + " failures");
                 }
+                return fallback;
             }
         }
+        return null;
     }
 
     /**
@@ -4096,11 +4139,29 @@ public class TunnelPool {
      *                tunnel
      * @param rotatedOut collects the tunnel that was rotated out, or null to skip
      *                   the bookkeeping
+     * @param wanted the LeaseSet target this pool was assembling for, used to
+     *               decide whether the set can pay for the rotation
      */
-    private void rotateOldestLeaseForPropagation(TreeSet<Lease> leases, List<TunnelInfo> tunnels, List<TunnelInfo> rotatedOut) {
+    private void rotateOldestLeaseForPropagation(TreeSet<Lease> leases, List<TunnelInfo> tunnels,
+                                                 List<TunnelInfo> rotatedOut, int wanted) {
         if (leases.size() < 2) {return;}
         long earliest = leases.first().getEndTime();
         if (!shouldRotateLease(earliest)) {return;}
+        // Rotation spends a lease that works, and the tunnel behind it is then
+        // dropped from the pool, so a set already at the usable minimum ends the
+        // pass thinner than it started. Measured over 37 minutes: 43 rotations
+        // manufactured 41 of the 56 "not enough leases" warnings - a target-3
+        // pool published "Have 1 of 3" with the whole reason being one rotation,
+        // and target-8 pools with 7 or 8 tunnels advertised 3 because the fourth
+        // was rotated out. Propagating a LeaseSet nobody can reach with one lease
+        // is not worth the lease.
+        if (!canAffordRotation(leases.size(), wanted)) {
+            if (_log.shouldDebug()) {
+                _log.debug(toString() + " -> Withheld lease rotation to keep the set usable" +
+                           " * Leases: " + leases.size() + " * Minimum: " + usableLeaseMinimum(wanted));
+            }
+            return;
+        }
         Lease rotated = leases.pollFirst();
         if (_log.shouldInfo()) {
             long delta = earliest - _context.clock().now();
@@ -4184,6 +4245,25 @@ public class TunnelPool {
      */
     static int usableLeaseMinimum(int wanted) {
         return (wanted + 1) / 2;
+    }
+
+    /**
+     * Whether a LeaseSet can pay for a propagation rotation, which drops one
+     * lease from the set and then removes that tunnel from the pool.
+     * <p>The bar is the same usable minimum the shortfall warning uses
+     * ({@link #usableLeaseMinimum(int)}), applied to the set as it would be
+     * after the swap: a set that is only usable because of the lease about to be
+     * rotated out is not a set worth rotating. Rotation exists to keep the
+     * LeaseSet propagating through the floodfills, and a set thinned below the
+     * minimum stops being reachable faster than it stops being flooded.
+     *
+     * @param leases leases in the assembled set
+     * @param wanted the LeaseSet target the pool was assembling for
+     * @return true if dropping the oldest lease still leaves a usable set
+     * @since 0.9.72+
+     */
+    static boolean canAffordRotation(int leases, int wanted) {
+        return leases >= 2 && !isMateriallyShort(leases - 1, wanted);
     }
 
     /**
