@@ -37,8 +37,17 @@ import org.junit.Test;
  */
 public class TestJobConfirmTest {
 
+    /**
+     * JUnit fixture object; every test here drives a static helper of
+     * {@link TestJob}, so the instance carries no state.
+     */
+    public TestJobConfirmTest() {
+    }
+
+    /** Mock context the partner and tunnel fixtures are built against. */
     private RouterContext _ctx;
 
+    /** Fresh context and clock for each test, so no history leaks between them. */
     @Before
     public void setUp() {
         _ctx = mock(RouterContext.class);
@@ -64,6 +73,10 @@ public class TestJobConfirmTest {
 
     // ---- the confirming round must not reuse the partner that just failed ---
 
+    /**
+     * A partner other than the one the failed round used is what a confirming
+     * round needs - re-running through the same suspect proves nothing.
+     */
     @Test
     public void aDifferentPartnerIsUsableForTheConfirmingRound() {
         TunnelInfo failed = livePartner();
@@ -85,6 +98,7 @@ public class TestJobConfirmTest {
                     TestJob.usablePartner(failed, failed));
     }
 
+    /** A null candidate cannot carry a round, whatever it is being compared to. */
     @Test
     public void aNullCandidateIsNeverUsable() {
         assertFalse("a missing partner cannot carry the round",
@@ -101,12 +115,14 @@ public class TestJobConfirmTest {
 
     // ---- a known-good partner still charges after its budget is spent ----
 
+    /** A healthy partner means the failed round is evidence about the tunnel. */
     @Test
     public void goodPartnerIsNotDeferred() {
         assertFalse("a healthy partner means the round is evidence about the tunnel",
                     TestJob.shouldDeferForPartner(livePartner(), false));
     }
 
+    /** A partner borrowed from the exploratory pool still defers the round. */
     @Test
     public void exploratoryFallbackStillDefers() {
         assertTrue("a borrowed exploratory partner is not evidence about this tunnel",
@@ -176,6 +192,7 @@ public class TestJobConfirmTest {
         assertEquals("tunnel.testOutboundFailed", TestJob.directionStat(false, false));
     }
 
+    /** A new event name must not read as the existing pass or fail counter. */
     @Test
     public void newEventsDoNotCollideWithTheExistingPair() {
         for (String ev : new String[] {"ConfirmPassed", "ConfirmFailed", "Condemned"}) {
@@ -184,6 +201,7 @@ public class TestJobConfirmTest {
         }
     }
 
+    /** The build-side stat names are spelled by BuildExecutor, not by TestJob. */
     @Test
     public void buildDirectionStatNamesAreDistinct() {
         assertEquals("tunnel.buildInboundSucceeded",
@@ -228,7 +246,7 @@ public class TestJobConfirmTest {
         assertArrayEquals(new String[] {
             "ConfirmPassed", "ConfirmFailed", "GraceDeferred", "Condemned",
             "FarEndEstablished", "FarEndUnreachable", "FarEndUnknown",
-            "PartnerSuspect", "PartnerCharged"
+            "PartnerSuspect", "PartnerPairedShort", "PartnerCharged"
         }, TestJob.DIRECTION_EVENTS);
     }
 
@@ -245,6 +263,7 @@ public class TestJobConfirmTest {
         assertEquals("FarEndUnreachable", TestJob.farEndVerdict(true, false));
     }
 
+    /** A peer the lookup reached is reported as established, not unknown. */
     @Test
     public void aLiveFarEndIsReportedEstablished() {
         assertEquals("FarEndEstablished", TestJob.farEndVerdict(false, true));
@@ -259,6 +278,7 @@ public class TestJobConfirmTest {
         assertEquals("FarEndUnknown", TestJob.farEndVerdict(false, false));
     }
 
+    /** Every far-end verdict must have a registered counter to land in. */
     @Test
     public void everyVerdictIsADeclaredDirectionEvent() {
         for (String v : new String[] {"FarEndUnreachable", "FarEndEstablished", "FarEndUnknown"}) {

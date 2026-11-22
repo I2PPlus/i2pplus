@@ -140,6 +140,21 @@ public class TestJob extends JobImpl {
      * @since 0.9.71+
      */
     static final int MAX_PARTNER_DEFERRALS = 3;
+    /**
+     * Fewest tunnels the paired pool must be able to carry traffic with before
+     * a suspect-partner round may be charged to the tunnel under test.
+     * <p>The deferral budget exists so a genuinely failing tunnel cannot hide
+     * behind a bad partner forever. It assumes the paired pool is fit to supply
+     * a good partner and the round still failed - which is not true when that
+     * pool is itself down to one or two tunnels, the state a client pool sits
+     * in while it is rebuilding. Charging there condemns tunnels on reply-path
+     * evidence, and each condemnation makes the pool that has to recover
+     * smaller: the feedback loop that keeps a pool crippled for an hour.
+     * <p>Two, not one: a single tunnel is not a reply path, it is the one
+     * tunnel the pool is trying to replace.
+     * @since 0.9.72+
+     */
+    static final int MIN_PAIRED_POOL_TUNNELS = 2;
     /** Times the paired pool kicked this test. */
     private int _pairedPoolKicks = 0;
     /**
@@ -1058,7 +1073,7 @@ public class TestJob extends JobImpl {
     static final String[] DIRECTION_EVENTS = {
         "ConfirmPassed", "ConfirmFailed", "GraceDeferred", "Condemned",
         "FarEndEstablished", "FarEndUnreachable", "FarEndUnknown",
-        "PartnerSuspect", "PartnerCharged"
+        "PartnerSuspect", "PartnerPairedShort", "PartnerCharged"
     };
 
     /**
@@ -1114,6 +1129,12 @@ public class TestJob extends JobImpl {
                 "Rounds deferred: partner leg not usable (count)", "Tunnels", periods);
         stats.createRequiredRateStat(directionStat(false, "PartnerSuspect"),
                 "Rounds deferred: partner leg not usable (count)", "Tunnels", periods);
+        stats.createRequiredRateStat(directionStat(true, "PartnerPairedShort"),
+                "Rounds deferred past budget: paired pool too short to test through (count)",
+                "Tunnels", periods);
+        stats.createRequiredRateStat(directionStat(false, "PartnerPairedShort"),
+                "Rounds deferred past budget: paired pool too short to test through (count)",
+                "Tunnels", periods);
         stats.createRequiredRateStat(directionStat(true, "PartnerCharged"),
                 "Rounds charged to the tunnel: partner suspect, defer budget spent (count)",
                 "Tunnels", periods);
@@ -4079,18 +4100,62 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
     }
 
     /**
-     * Which stat event a suspect-partner round produced: the round was
-     * {@code PartnerSuspect} deferred, or {@code PartnerCharged} counted
-     * against the tunnel because the defer budget ran out first.
-     * <p>Kept as a pure classification so the pair cannot drift apart and the
-     * boundary is testable without a running pool.
+     * How many tunnels the paired pool could still carry traffic with, 0 when
+     * there is no paired pool at all.
+     * <p>A missing paired pool reads as short: with nothing to route a test
+     * through, a failed round says nothing about the tunnel under test, and
+     * {@link #deferForMissingPartner(TunnelPool, String)} still bounds the
+     * deferral, so this cannot park a dead tunnel forever.
+     *
+     * @return usable tunnels in the paired pool, never negative
+     * @since 0.9.72+
+     */
+    private int pairedPoolTunnels() {
+        TunnelPool paired = _pool.getPairedPool();
+        return paired != null ? paired.countUsableTunnels() : 0;
+    }
+
+    /**
+     * Whether a suspect-partner round is charged to the tunnel under test.
+     * <p>Two conditions, because the budget alone is not enough. The budget
+     * answers "has this tunnel hidden behind a bad partner long enough" - it
+     * presumes the paired pool is fit to supply a good partner and the round
+     * failed anyway. When that pool is itself short of tunnels, the round had
+     * no fair partner to begin with, and charging shrinks the pool that has to
+     * recover. Withholding the charge is still bounded: the deferral runs
+     * through {@link #deferForMissingPartner(TunnelPool, String)}, whose
+     * paired-pool kick and post-kick budgets fail the tunnel if the paired
+     * pool never comes back.
      *
      * @param budgetSpent true when the deferral budget was exhausted by this round
+     * @param pairedPoolShort true when the paired pool cannot supply a partner
+     * @return true to charge the tunnel with this round
+     * @since 0.9.72+
+     */
+    static boolean chargePartnerRound(boolean budgetSpent, boolean pairedPoolShort) {
+        return budgetSpent && !pairedPoolShort;
+    }
+
+    /**
+     * Which stat event a suspect-partner round produced: {@code PartnerCharged}
+     * counted against the tunnel, {@code PartnerSuspect} deferred while the
+     * defer budget lasts, or {@code PartnerPairedShort} deferred past the
+     * budget because the paired pool was too short to have supplied a fair
+     * partner.
+     * <p>Kept as a pure classification so the three cannot drift apart and the
+     * boundaries are testable without a running pool. The last pair is the
+     * measurement that matters: {@code PartnerPairedShort} against
+     * {@code PartnerCharged} says whether a pool is losing tunnels to its own
+     * broken reply path or to tunnels that are genuinely dead.
+     *
+     * @param charge true when {@link #chargePartnerRound} charged this round
+     * @param pairedPoolShort true when the paired pool cannot supply a partner
      * @return the event name, never null
      * @since 0.9.72+
      */
-    static String partnerVerdict(boolean budgetSpent) {
-        return budgetSpent ? "PartnerCharged" : "PartnerSuspect";
+    static String partnerVerdict(boolean charge, boolean pairedPoolShort) {
+        return charge ? "PartnerCharged" :
+               (pairedPoolShort ? "PartnerPairedShort" : "PartnerSuspect");
     }
 
     /**
@@ -4152,6 +4217,30 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
         return "Tunnel test failed -> Charging the tunnel after " + budget +
                " rounds through an unusable partner" +
                "\n* Partner gateway: " + partnerTag;
+    }
+
+    /**
+     * The WARN line for a round whose charge was withheld because the paired
+     * pool was too short to have supplied a fair partner, even though the
+     * defer budget was already spent.
+     * <p>This is the line that names the feedback loop: the pool under test is
+     * losing tunnels to failures routed through a paired pool that is itself
+     * down to one or two tunnels. Without it a withheld charge is invisible,
+     * and the pool looks like it is failing tests for no reason at all.
+     *
+     * @param partnerTag the partner's gateway tag from {@link #partnerTag}
+     * @param usable tunnels the paired pool could carry traffic with
+     * @param minimum the usable count from {@link #MIN_PAIRED_POOL_TUNNELS} the
+     *                paired pool has to reach before a charge is fair
+     * @param deferrals deferrals so far, including this one, past the budget
+     * @return the log line
+     * @since 0.9.72+
+     */
+    static String partnerShortLine(String partnerTag, int usable, int minimum, int deferrals) {
+        return "Tunnel test failed -> Paired pool too short to test through, withholding the charge" +
+               "\n* Partner gateway: " + partnerTag +
+               " * Paired pool tunnels: " + usable + " * Minimum: " + minimum +
+               " * Rounds deferred: " + deferrals;
     }
 
     /**
@@ -4249,21 +4338,31 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
         // tunnel once that budget is spent.
         TunnelInfo partner = _cfg.isInbound() ? _outTunnel : _replyTunnel;
         if (shouldDeferForPartner(partner, _partnerFallback)) {
+            int pairedTunnels = pairedPoolTunnels();
+            boolean shortPaired = pairedTunnels < MIN_PAIRED_POOL_TUNNELS;
             _partnerDeferrals++;
-            boolean budgetSpent = _partnerDeferrals >= MAX_PARTNER_DEFERRALS;
-            // Both halves of this decision are counted. The ratio between them
-            // is the answer to whether the pool is losing its own tunnels or
-            // losing the reply path they are tested through.
+            // Charging needs both the spent budget and a paired pool that was
+            // fit to supply a fair partner. The ratio of these counters is the
+            // answer to whether the pool is losing its own tunnels or losing
+            // the reply path they are tested through.
+            boolean charge = chargePartnerRound(_partnerDeferrals >= MAX_PARTNER_DEFERRALS,
+                                                shortPaired);
             getContext().statManager().addRateData(
-                directionStat(_cfg.isInbound(), partnerVerdict(budgetSpent)), 1);
-            if (budgetSpent) {
+                directionStat(_cfg.isInbound(), partnerVerdict(charge, shortPaired)), 1);
+            if (charge) {
                 _partnerDeferrals = 0;
                 _log.warnThrottled("testPartnerSuspectCharged",
                                    partnerChargedLine(partnerTag(partner), MAX_PARTNER_DEFERRALS));
             } else {
-                _log.warnThrottled("testPartnerSuspect",
-                                   partnerSuspectLine(partnerTag(partner), _partnerFallback,
-                                                      _partnerDeferrals, MAX_PARTNER_DEFERRALS));
+                if (shortPaired) {
+                    _log.warnThrottled("testPartnerPairedShort",
+                                       partnerShortLine(partnerTag(partner), pairedTunnels,
+                                                        MIN_PAIRED_POOL_TUNNELS, _partnerDeferrals));
+                } else {
+                    _log.warnThrottled("testPartnerSuspect",
+                                       partnerSuspectLine(partnerTag(partner), _partnerFallback,
+                                                          _partnerDeferrals, MAX_PARTNER_DEFERRALS));
+                }
                 deferForMissingPartner(_pool.getPairedPool(),
                                        _cfg.isInbound() ? "Outbound" : "Inbound");
                 return;

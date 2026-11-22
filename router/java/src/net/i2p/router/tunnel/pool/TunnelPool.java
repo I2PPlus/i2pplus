@@ -3335,10 +3335,15 @@ public class TunnelPool {
     /**
      * Count tunnels that are neither FAILED nor FAILING
      * (dead/dying must not block replacements).
+     * <p>Package-visible so {@link TestJob} can ask the paired pool the same
+     * question: a test round routed through a pool that has almost nothing to
+     * route through is evidence about that pool, not about the tunnel under
+     * test. Cheap enough for that - it walks one pool's tunnel set, at most
+     * once per failed test round.
      *
      * @return how many pool tunnels could still carry traffic
      */
-    private int countUsableTunnels() {
+    int countUsableTunnels() {
         int usable = 0;
         for (TunnelInfo t : _tunnels) {
             TunnelTestStatus ts = t.getTestStatus();
