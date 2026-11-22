@@ -7424,16 +7424,16 @@ msgstr "Όταν είναι false, μη προσβάσιμοι συνομήλι�
 msgid "When set to false, unreachable peers may be selected as hops for outbound client tunnels. [Default is false]"
 msgstr "Όταν είναι false, μη προσβάσιμοι συνομήλικοι μπορούν να επιλεγούν ως άλματα για εξερχόμενες σήραγγες πελάτη. [Προεπιλογή true]"
 
-msgid "When set to false, slow peers (high tunnel test times) may be selected as hops for inbound exploratory tunnels. [Default is false]"
+msgid "When set to false, slow peers (high tunnel test times) may be selected as hops for inbound exploratory tunnels. [Default is true]"
 msgstr "Όταν είναι false, αργοί συνομήλικοι (υψηλοί χρόνοι δοκιμής σήραγγας) μπορούν να επιλεγούν ως άλματα για εισερχόμενες διερευνητικές σήραγγες. [Προεπιλογή true]"
 
-msgid "When set to false, slow peers may be selected as hops for outbound exploratory tunnels. [Default is false]"
+msgid "When set to false, slow peers may be selected as hops for outbound exploratory tunnels. [Default is true]"
 msgstr "Όταν είναι false, αργοί συνομήλικοι μπορούν να επιλεγούν ως άλματα για εξερχόμενες διερευνητικές σήραγγες. [Προεπιλογή true]"
 
-msgid "When set to false, slow peers may be selected as hops for inbound client tunnels. [Default is false]"
+msgid "When set to false, slow peers may be selected as hops for inbound client tunnels. [Default is true]"
 msgstr "Όταν είναι false, αργοί συνομήλικοι μπορούν να επιλεγούν ως άλματα για εισερχόμενες σήραγγες πελάτη. [Προεπιλογή true]"
 
-msgid "When set to false, slow peers may be selected as hops for outbound client tunnels. [Default is false]"
+msgid "When set to false, slow peers may be selected as hops for outbound client tunnels. [Default is true]"
 msgstr "Όταν είναι false, αργοί συνομήλικοι μπορούν να επιλεγούν ως άλματα για εξερχόμενες σήραγγες πελάτη. [Προεπιλογή true]"
 
 msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"

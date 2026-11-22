@@ -7411,16 +7411,16 @@ msgstr "設為false時，不可達的對等點可能會被選為傳入客戶端�
 msgid "When set to false, unreachable peers may be selected as hops for outbound client tunnels. [Default is false]"
 msgstr "設為false時，不可達的對等點可能會被選為傳出客戶端隧道的跳躍。[Default為true]"
 
-msgid "When set to false, slow peers (high tunnel test times) may be selected as hops for inbound exploratory tunnels. [Default is false]"
+msgid "When set to false, slow peers (high tunnel test times) may be selected as hops for inbound exploratory tunnels. [Default is true]"
 msgstr "設為false時，緩慢的對等點（隧道測試時間較長）可能會被選為傳入探索隧道的跳躍。[Default為true]"
 
-msgid "When set to false, slow peers may be selected as hops for outbound exploratory tunnels. [Default is false]"
+msgid "When set to false, slow peers may be selected as hops for outbound exploratory tunnels. [Default is true]"
 msgstr "設為false時，緩慢的對等點（隧道測試時間較長）可能會被選為傳出探索隧道的跳躍。[Default為true]"
 
-msgid "When set to false, slow peers may be selected as hops for inbound client tunnels. [Default is false]"
+msgid "When set to false, slow peers may be selected as hops for inbound client tunnels. [Default is true]"
 msgstr "設為false時，緩慢的對等點（隧道測試時間較長）可能會被選為傳入客戶端隧道的跳躍。[Default為true]"
 
-msgid "When set to false, slow peers may be selected as hops for outbound client tunnels. [Default is false]"
+msgid "When set to false, slow peers may be selected as hops for outbound client tunnels. [Default is true]"
 msgstr "設為false時，緩慢的對等點（隧道測試時間較長）可能會被選為傳出客戶端隧道的跳躍。[Default為true]"
 
 msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"

@@ -7424,16 +7424,16 @@ msgstr "Lorsque défini sur faux, les pairs injoignables peuvent être sélectio
 msgid "When set to false, unreachable peers may be selected as hops for outbound client tunnels. [Default is false]"
 msgstr "Lorsque défini sur faux, les pairs injoignables peuvent être sélectionnés comme sauts pour les tunnels clients sortants. [Par défaut : vrai]"
 
-msgid "When set to false, slow peers (high tunnel test times) may be selected as hops for inbound exploratory tunnels. [Default is false]"
+msgid "When set to false, slow peers (high tunnel test times) may be selected as hops for inbound exploratory tunnels. [Default is true]"
 msgstr "Lorsque défini sur faux, les pairs lents (temps de test de tunnel élevés) peuvent être sélectionnés comme sauts pour les tunnels exploratoires entrants. [Par défaut : vrai]"
 
-msgid "When set to false, slow peers may be selected as hops for outbound exploratory tunnels. [Default is false]"
+msgid "When set to false, slow peers may be selected as hops for outbound exploratory tunnels. [Default is true]"
 msgstr "Lorsque défini sur faux, les pairs lents peuvent être sélectionnés comme sauts pour les tunnels exploratoires sortants. [Par défaut : vrai]"
 
-msgid "When set to false, slow peers may be selected as hops for inbound client tunnels. [Default is false]"
+msgid "When set to false, slow peers may be selected as hops for inbound client tunnels. [Default is true]"
 msgstr "Lorsque défini sur faux, les pairs lents peuvent être sélectionnés comme sauts pour les tunnels clients entrants. [Par défaut : vrai]"
 
-msgid "When set to false, slow peers may be selected as hops for outbound client tunnels. [Default is false]"
+msgid "When set to false, slow peers may be selected as hops for outbound client tunnels. [Default is true]"
 msgstr "Lorsque défini sur faux, les pairs lents peuvent être sélectionnés comme sauts pour les tunnels clients sortants. [Par défaut : vrai]"
 
 msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"

@@ -7413,16 +7413,16 @@ msgstr "false로 설정하면 도달 불가능한 피어가 인바운드 클라�
 msgid "When set to false, unreachable peers may be selected as hops for outbound client tunnels. [Default is false]"
 msgstr "false로 설정하면 도달 불가능한 피어가 아웃바운드 클라이언트 터널의 홉으로 선택될 수 있습니다. [기본값 true]"
 
-msgid "When set to false, slow peers (high tunnel test times) may be selected as hops for inbound exploratory tunnels. [Default is false]"
+msgid "When set to false, slow peers (high tunnel test times) may be selected as hops for inbound exploratory tunnels. [Default is true]"
 msgstr "false로 설정하면 느린 피어(터널 테스트 시간이 긴)가 인바운드 탐색 터널의 홉으로 선택될 수 있습니다. [기본값 true]"
 
-msgid "When set to false, slow peers may be selected as hops for outbound exploratory tunnels. [Default is false]"
+msgid "When set to false, slow peers may be selected as hops for outbound exploratory tunnels. [Default is true]"
 msgstr "false로 설정하면 느린 피어가 아웃바운드 탐색 터널의 홉으로 선택될 수 있습니다. [기본값 true]"
 
-msgid "When set to false, slow peers may be selected as hops for inbound client tunnels. [Default is false]"
+msgid "When set to false, slow peers may be selected as hops for inbound client tunnels. [Default is true]"
 msgstr "false로 설정하면 느린 피어가 인바운드 클라이언트 터널의 홉으로 선택될 수 있습니다. [기본값 true]"
 
-msgid "When set to false, slow peers may be selected as hops for outbound client tunnels. [Default is false]"
+msgid "When set to false, slow peers may be selected as hops for outbound client tunnels. [Default is true]"
 msgstr "false로 설정하면 느린 피어가 아웃바운드 클라이언트 터널의 홉으로 선택될 수 있습니다. [기본값 true]"
 
 msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"

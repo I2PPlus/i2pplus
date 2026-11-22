@@ -7424,16 +7424,16 @@ msgstr "Yanlış olaraq təyin edildikdə, əlçatmaz həmyaşıdlar daxili mü�
 msgid "When set to false, unreachable peers may be selected as hops for outbound client tunnels. [Default is false]"
 msgstr "Yanlış olaraq təyin edildikdə, əlçatmaz həmyaşıdlar xarici müştəri tunelləri üçün hop olaraq seçilə bilər. [Standart doğrudur]"
 
-msgid "When set to false, slow peers (high tunnel test times) may be selected as hops for inbound exploratory tunnels. [Default is false]"
+msgid "When set to false, slow peers (high tunnel test times) may be selected as hops for inbound exploratory tunnels. [Default is true]"
 msgstr "Yanlış olaraq təyin edildikdə, yavaş həmyaşıdlar (yüksək tunnel test vaxtları) daxili kəşfiyyat tunelləri üçün hop olaraq seçilə bilər. [Standart doğrudur]"
 
-msgid "When set to false, slow peers may be selected as hops for outbound exploratory tunnels. [Default is false]"
+msgid "When set to false, slow peers may be selected as hops for outbound exploratory tunnels. [Default is true]"
 msgstr "Yanlış olaraq təyin edildikdə, yavaş həmyaşıdlar xarici kəşfiyyat tunelləri üçün hop olaraq seçilə bilər. [Standart doğrudur]"
 
-msgid "When set to false, slow peers may be selected as hops for inbound client tunnels. [Default is false]"
+msgid "When set to false, slow peers may be selected as hops for inbound client tunnels. [Default is true]"
 msgstr "Yanlış olaraq təyin edildikdə, yavaş həmyaşıdlar daxili müştəri tunelləri üçün hop olaraq seçilə bilər. [Standart doğrudur]"
 
-msgid "When set to false, slow peers may be selected as hops for outbound client tunnels. [Default is false]"
+msgid "When set to false, slow peers may be selected as hops for outbound client tunnels. [Default is true]"
 msgstr "Yanlış olaraq təyin edildikdə, yavaş həmyaşıdlar xarici müştəri tunelləri üçün hop olaraq seçilə bilər. [Standart doğrudur]"
 
 msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"

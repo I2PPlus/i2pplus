@@ -7424,16 +7424,16 @@ msgstr "Quan és fals, es poden seleccionar peers inassequibles com a salts dels
 msgid "When set to false, unreachable peers may be selected as hops for outbound client tunnels. [Default is false]"
 msgstr "Quan és fals, es poden seleccionar peers inassequibles com a salts dels túnels de client de sortida. [Per defecte és cert]"
 
-msgid "When set to false, slow peers (high tunnel test times) may be selected as hops for inbound exploratory tunnels. [Default is false]"
+msgid "When set to false, slow peers (high tunnel test times) may be selected as hops for inbound exploratory tunnels. [Default is true]"
 msgstr "Quan és fals, es poden seleccionar peers lents (amb temps de prova de túnel elevats) com a salts dels túnels exploratoris d’entrada. [Per defecte és cert]"
 
-msgid "When set to false, slow peers may be selected as hops for outbound exploratory tunnels. [Default is false]"
+msgid "When set to false, slow peers may be selected as hops for outbound exploratory tunnels. [Default is true]"
 msgstr "Quan és fals, es poden seleccionar peers lents com a salts dels túnels exploratoris de sortida. [Per defecte és cert]"
 
-msgid "When set to false, slow peers may be selected as hops for inbound client tunnels. [Default is false]"
+msgid "When set to false, slow peers may be selected as hops for inbound client tunnels. [Default is true]"
 msgstr "Quan és fals, es poden seleccionar peers lents com a salts dels túnels de client d’entrada. [Per defecte és cert]"
 
-msgid "When set to false, slow peers may be selected as hops for outbound client tunnels. [Default is false]"
+msgid "When set to false, slow peers may be selected as hops for outbound client tunnels. [Default is true]"
 msgstr "Quan és fals, es poden seleccionar peers lents com a salts dels túnels de client de sortida. [Per defecte és cert]"
 
 msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"

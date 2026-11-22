@@ -7424,16 +7424,16 @@ msgstr "false पर सेट होने पर, अप्राप्य प
 msgid "When set to false, unreachable peers may be selected as hops for outbound client tunnels. [Default is false]"
 msgstr "false पर सेट होने पर, अप्राप्य पीयर को आउटबाउंड क्लाइंट सुरंगों के हॉप के रूप में चुना जा सकता है। [डिफ़ॉल्ट true]"
 
-msgid "When set to false, slow peers (high tunnel test times) may be selected as hops for inbound exploratory tunnels. [Default is false]"
+msgid "When set to false, slow peers (high tunnel test times) may be selected as hops for inbound exploratory tunnels. [Default is true]"
 msgstr "false पर सेट होने पर, धीमे पीयर (उच्च सुरंग परीक्षण समय) को इनबाउंड खोजी सुरंगों के हॉप के रूप में चुना जा सकता है। [डिफ़ॉल्ट true]"
 
-msgid "When set to false, slow peers may be selected as hops for outbound exploratory tunnels. [Default is false]"
+msgid "When set to false, slow peers may be selected as hops for outbound exploratory tunnels. [Default is true]"
 msgstr "false पर सेट होने पर, धीमे पीयर को आउटबाउंड खोजी सुरंगों के हॉप के रूप में चुना जा सकता है। [डिफ़ॉल्ट true]"
 
-msgid "When set to false, slow peers may be selected as hops for inbound client tunnels. [Default is false]"
+msgid "When set to false, slow peers may be selected as hops for inbound client tunnels. [Default is true]"
 msgstr "false पर सेट होने पर, धीमे पीयर को इनबाउंड क्लाइंट सुरंगों के हॉप के रूप में चुना जा सकता है। [डिफ़ॉल्ट true]"
 
-msgid "When set to false, slow peers may be selected as hops for outbound client tunnels. [Default is false]"
+msgid "When set to false, slow peers may be selected as hops for outbound client tunnels. [Default is true]"
 msgstr "false पर सेट होने पर, धीमे पीयर को आउटबाउंड क्लाइंट सुरंगों के हॉप के रूप में चुना जा सकता है। [डिफ़ॉल्ट true]"
 
 msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"

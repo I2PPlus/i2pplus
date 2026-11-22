@@ -7435,16 +7435,16 @@ msgstr "Коли встановлено false, недоступні вузли �
 msgid "When set to false, unreachable peers may be selected as hops for outbound client tunnels. [Default is false]"
 msgstr "Коли встановлено false, недоступні вузли можуть вибиратися як переходи для вихідних клієнтських тунелів. [Стандартно true]"
 
-msgid "When set to false, slow peers (high tunnel test times) may be selected as hops for inbound exploratory tunnels. [Default is false]"
+msgid "When set to false, slow peers (high tunnel test times) may be selected as hops for inbound exploratory tunnels. [Default is true]"
 msgstr "Коли встановлено false, повільні вузли (високий час тесту тунелю) можуть вибиратися як переходи для вхідних дослідницьких тунелів. [Стандартно true]"
 
-msgid "When set to false, slow peers may be selected as hops for outbound exploratory tunnels. [Default is false]"
+msgid "When set to false, slow peers may be selected as hops for outbound exploratory tunnels. [Default is true]"
 msgstr "Коли встановлено false, повільні вузли можуть вибиратися як переходи для вихідних дослідницьких тунелів. [Стандартно true]"
 
-msgid "When set to false, slow peers may be selected as hops for inbound client tunnels. [Default is false]"
+msgid "When set to false, slow peers may be selected as hops for inbound client tunnels. [Default is true]"
 msgstr "Коли встановлено false, повільні вузли можуть вибиратися як переходи для вхідних клієнтських тунелів. [Стандартно true]"
 
-msgid "When set to false, slow peers may be selected as hops for outbound client tunnels. [Default is false]"
+msgid "When set to false, slow peers may be selected as hops for outbound client tunnels. [Default is true]"
 msgstr "Коли встановлено false, повільні вузли можуть вибиратися як переходи для вихідних клієнтських тунелів. [Стандартно true]"
 
 msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"

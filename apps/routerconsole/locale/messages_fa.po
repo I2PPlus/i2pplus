@@ -7424,16 +7424,16 @@ msgstr "وقتی به false تنظیم شود، همتایان غیرقابل د
 msgid "When set to false, unreachable peers may be selected as hops for outbound client tunnels. [Default is false]"
 msgstr "وقتی به false تنظیم شود، همتایان غیرقابل دسترس می‌توانند به عنوان پرش برای تونل‌های کلینت خروجی انتخاب شوند. [پیش‌فرض true]"
 
-msgid "When set to false, slow peers (high tunnel test times) may be selected as hops for inbound exploratory tunnels. [Default is false]"
+msgid "When set to false, slow peers (high tunnel test times) may be selected as hops for inbound exploratory tunnels. [Default is true]"
 msgstr "وقتی به false تنظیم شود، همتایان کند (زمان‌های آزمایش تونل بالا) می‌توانند به عنوان پرش برای تونل‌های اکتشافی ورودی انتخاب شوند. [پیش‌فرض true]"
 
-msgid "When set to false, slow peers may be selected as hops for outbound exploratory tunnels. [Default is false]"
+msgid "When set to false, slow peers may be selected as hops for outbound exploratory tunnels. [Default is true]"
 msgstr "وقتی به false تنظیم شود، همتایان کند می‌توانند به عنوان پرش برای تونل‌های اکتشافی خروجی انتخاب شوند. [پیش‌فرض true]"
 
-msgid "When set to false, slow peers may be selected as hops for inbound client tunnels. [Default is false]"
+msgid "When set to false, slow peers may be selected as hops for inbound client tunnels. [Default is true]"
 msgstr "وقتی به false تنظیم شود، همتایان کند می‌توانند به عنوان پرش برای تونل‌های کلینت ورودی انتخاب شوند. [پیش‌فرض true]"
 
-msgid "When set to false, slow peers may be selected as hops for outbound client tunnels. [Default is false]"
+msgid "When set to false, slow peers may be selected as hops for outbound client tunnels. [Default is true]"
 msgstr "وقتی به false تنظیم شود، همتایان کند می‌توانند به عنوان پرش برای تونل‌های کلینت خروجی انتخاب شوند. [پیش‌فرض true]"
 
 msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"

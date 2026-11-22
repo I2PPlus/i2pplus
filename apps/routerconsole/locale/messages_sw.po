@@ -7433,16 +7433,16 @@ msgstr "Ukisawazishwa kuwa false, peer hazipatikani zinaweza kuchaguliwa kama ho
 msgid "When set to false, unreachable peers may be selected as hops for outbound client tunnels. [Default is false]"
 msgstr "Ukisawazishwa kuwa false, peer hazipatikani zinaweza kuchaguliwa kama hop za tuneli za mteja za kutoka. [Default ni true]"
 
-msgid "When set to false, slow peers (high tunnel test times) may be selected as hops for inbound exploratory tunnels. [Default is false]"
+msgid "When set to false, slow peers (high tunnel test times) may be selected as hops for inbound exploratory tunnels. [Default is true]"
 msgstr "Ukisawazishwa kuwa false, peer polepole (muda wa jaribio la tuneli mkubwa) zinaweza kuchaguliwa kama hop za tuneli za uchunguzi za kuingia. [Default ni true]"
 
-msgid "When set to false, slow peers may be selected as hops for outbound exploratory tunnels. [Default is false]"
+msgid "When set to false, slow peers may be selected as hops for outbound exploratory tunnels. [Default is true]"
 msgstr "Ukisawazishwa kuwa false, peer polepole zinaweza kuchaguliwa kama hop za tuneli za uchunguzi za kutoka. [Default ni true]"
 
-msgid "When set to false, slow peers may be selected as hops for inbound client tunnels. [Default is false]"
+msgid "When set to false, slow peers may be selected as hops for inbound client tunnels. [Default is true]"
 msgstr "Ukisawazishwa kuwa false, peer polepole zinaweza kuchaguliwa kama hop za tuneli za mteja za kuingia. [Default ni true]"
 
-msgid "When set to false, slow peers may be selected as hops for outbound client tunnels. [Default is false]"
+msgid "When set to false, slow peers may be selected as hops for outbound client tunnels. [Default is true]"
 msgstr "Ukisawazishwa kuwa false, peer polepole zinaweza kuchaguliwa kama hop za tuneli za mteja za kutoka. [Default ni true]"
 
 msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"

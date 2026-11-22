@@ -7424,16 +7424,16 @@ msgstr "Wanneer ingesteld op false, kunnen onbereikbare peers worden geselecteer
 msgid "When set to false, unreachable peers may be selected as hops for outbound client tunnels. [Default is false]"
 msgstr "Wanneer ingesteld op false, kunnen onbereikbare peers worden geselecteerd als hops voor uitgaande clienttunnels. [Standaard true]"
 
-msgid "When set to false, slow peers (high tunnel test times) may be selected as hops for inbound exploratory tunnels. [Default is false]"
+msgid "When set to false, slow peers (high tunnel test times) may be selected as hops for inbound exploratory tunnels. [Default is true]"
 msgstr "Wanneer ingesteld op false, kunnen trage peers (hoge tunneltesttijden) worden geselecteerd als hops voor inkomende verkennende tunnels. [Standaard true]"
 
-msgid "When set to false, slow peers may be selected as hops for outbound exploratory tunnels. [Default is false]"
+msgid "When set to false, slow peers may be selected as hops for outbound exploratory tunnels. [Default is true]"
 msgstr "Wanneer ingesteld op false, kunnen trage peers worden geselecteerd als hops voor uitgaande verkennende tunnels. [Standaard true]"
 
-msgid "When set to false, slow peers may be selected as hops for inbound client tunnels. [Default is false]"
+msgid "When set to false, slow peers may be selected as hops for inbound client tunnels. [Default is true]"
 msgstr "Wanneer ingesteld op false, kunnen trage peers worden geselecteerd als hops voor inkomende clienttunnels. [Standaard true]"
 
-msgid "When set to false, slow peers may be selected as hops for outbound client tunnels. [Default is false]"
+msgid "When set to false, slow peers may be selected as hops for outbound client tunnels. [Default is true]"
 msgstr "Wanneer ingesteld op false, kunnen trage peers worden geselecteerd als hops voor uitgaande clienttunnels. [Standaard true]"
 
 msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"

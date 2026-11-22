@@ -7424,16 +7424,16 @@ msgstr "false-তে সেট করা হলে, অপ্রাপ্য প
 msgid "When set to false, unreachable peers may be selected as hops for outbound client tunnels. [Default is false]"
 msgstr "false-তে সেট করা হলে, অপ্রাপ্য পিয়ারগুলি আউটবাউন্ড ক্লায়েন্ট টানেল বিল্ডের জন্য হপ হিসাবে নির্বাচিত হতে পারে। [ডিফল্ট true]"
 
-msgid "When set to false, slow peers (high tunnel test times) may be selected as hops for inbound exploratory tunnels. [Default is false]"
+msgid "When set to false, slow peers (high tunnel test times) may be selected as hops for inbound exploratory tunnels. [Default is true]"
 msgstr "false-তে সেট করা হলে, ধীর পিয়ার (উচ্চ টানেল পরীক্ষার সময়) ইনবাউন্ড এক্সপ্লোরেটরি টানেল বিল্ডের জন্য হপ হিসাবে নির্বাচিত হতে পারে। [ডিফল্ট true]"
 
-msgid "When set to false, slow peers may be selected as hops for outbound exploratory tunnels. [Default is false]"
+msgid "When set to false, slow peers may be selected as hops for outbound exploratory tunnels. [Default is true]"
 msgstr "false-তে সেট করা হলে, ধীর পিয়ারগুলি আউটবাউন্ড এক্সপ্লোরেটরি টানেল বিল্ডের জন্য হপ হিসাবে নির্বাচিত হতে পারে। [ডিফল্ট true]"
 
-msgid "When set to false, slow peers may be selected as hops for inbound client tunnels. [Default is false]"
+msgid "When set to false, slow peers may be selected as hops for inbound client tunnels. [Default is true]"
 msgstr "false-তে সেট করা হলে, ধীর পিয়ারগুলি ইনবাউন্ড ক্লায়েন্ট টানেল বিল্ডের জন্য হপ হিসাবে নির্বাচিত হতে পারে। [ডিফল্ট true]"
 
-msgid "When set to false, slow peers may be selected as hops for outbound client tunnels. [Default is false]"
+msgid "When set to false, slow peers may be selected as hops for outbound client tunnels. [Default is true]"
 msgstr "false-তে সেট করা হলে, ধীর পিয়ারগুলি আউটবাউন্ড ক্লায়েন্ট টানেল বিল্ডের জন্য হপ হিসাবে নির্বাচিত হতে পারে। [ডিফল্ট true]"
 
 msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"

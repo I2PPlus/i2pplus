@@ -7499,16 +7499,16 @@ msgstr "Når satt til false, kan utilgjengelige jevnaldrende velges som hopp for
 msgid "When set to false, unreachable peers may be selected as hops for outbound client tunnels. [Default is false]"
 msgstr "Når satt til false, kan utilgjengelige jevnaldrende velges som hopp for utgående klienttunneler. [Standard true"
 
-msgid "When set to false, slow peers (high tunnel test times) may be selected as hops for inbound exploratory tunnels. [Default is false]"
+msgid "When set to false, slow peers (high tunnel test times) may be selected as hops for inbound exploratory tunnels. [Default is true]"
 msgstr "Når satt til false, kan trege jevnaldrende (høy tunneltesttid) velges som hopp for innkommende utforskende tunneler. [Standard true"
 
-msgid "When set to false, slow peers may be selected as hops for outbound exploratory tunnels. [Default is false]"
+msgid "When set to false, slow peers may be selected as hops for outbound exploratory tunnels. [Default is true]"
 msgstr "Når satt til false, kan trege jevnaldrende velges som hopp for utgående utforskende tunneler. [Standard true"
 
-msgid "When set to false, slow peers may be selected as hops for inbound client tunnels. [Default is false]"
+msgid "When set to false, slow peers may be selected as hops for inbound client tunnels. [Default is true]"
 msgstr "Når satt til false, kan trege jevnaldrende velges som hopp for innkommende klienttunneler. [Standard true"
 
-msgid "When set to false, slow peers may be selected as hops for outbound client tunnels. [Default is false]"
+msgid "When set to false, slow peers may be selected as hops for outbound client tunnels. [Default is true]"
 msgstr "Når satt til false, kan trege jevnaldrende velges som hopp for utgående klienttunneler. [Standard true"
 
 msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"
