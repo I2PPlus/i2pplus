@@ -2729,6 +2729,34 @@ class Connection {
     }
 
     /**
+     * Slow-start threshold to leave behind after a loss cut: a high-water mark,
+     * not a second cut.
+     * <p>The window has already conceded capacity through
+     * {@link #graduatedLossWindow(int, int)}. Setting the threshold equal to
+     * that cut — which is what {@link #graduatedLossSsthresh(int, int, int)}
+     * alone gives whenever the bandwidth anchor is low — leaves the connection
+     * in congestion avoidance from its own floor, climbing one packet per RTT,
+     * and the bandwidth anchor cannot rescue it because that estimate is
+     * measured from ACK arrivals, which fall precisely because the window is
+     * small: the self-reinforcing low-window lock the anchor's own javadoc
+     * describes. Flooring the threshold at the window held before the cut lets
+     * the connection slow-start back to the size it had and no further. The
+     * floor is not fixed — the pre-cut window is itself already reduced by
+     * every earlier cut — so sustained loss still walks the threshold down.
+     *
+     * @param strikes consecutive loss events (&gt;= 1) since the last recovery
+     * @param wsize the window size before this cut
+     * @param bwBasedSsthresh the bandwidth-estimate-derived anchor (&gt;= 1);
+     *                        kept when it is the larger of the two
+     * @return the threshold, never below the pre-cut window and never below the
+     *         graduated window or the anchor
+     * @since 0.9.72+
+     */
+    static int lossRecoverySsthresh(int strikes, int wsize, int bwBasedSsthresh) {
+        return Math.max(wsize, graduatedLossSsthresh(strikes, wsize, bwBasedSsthresh));
+    }
+
+    /**
      * The bandwidth-derived slow-start threshold anchor: the packets the pipe
      * can hold, estimated as measured bandwidth times the effective RTT times
      * the growth factor, floored at the given minimum.
@@ -5548,10 +5576,11 @@ class Connection {
                                               graduatedLossWindow(strikes, wsize));
                     // Graduated cut: a single failed packet shrinks the window only
                     // mildly (7/8), escalated strikes back off harder (3/4, then 1/2).
-                    // ssthresh is kept at least the new window so slow-start can
-                    // regrow quickly after recovery instead of crawling at ~4.
+                    // The threshold is left at the window the connection held before
+                    // the cut, not at the cut itself, so it slow-starts back to that
+                    // size instead of entering congestion avoidance at its own floor.
                     int maxSS = ConnectionPacketHandler.getMaxSlowStartWindow(_context);
-                    _ssthresh = Math.min(maxSS, graduatedLossSsthresh(strikes, wsize, bwSsthresh));
+                    _ssthresh = Math.min(maxSS, lossRecoverySsthresh(strikes, wsize, bwSsthresh));
                     // Floor at 4 so repeated RTO events don't collapse the window
                     // below a usable minimum — prevents degenerative behavior
                     // where each retransmit halves the window to 1, making every
