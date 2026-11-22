@@ -741,9 +741,18 @@ public class TestJob extends JobImpl {
      * How recently data must have flowed through a tunnel for us to trust
      * it over the test result.  If data was seen within this window, the
      * test failure is treated as a false negative (reply-path issue).
+     * <p>The window is one tunnel lifetime: proof older than that describes a
+     * tunnel that is gone, and what bounds how often the trust is granted is the
+     * exemption budget refilled in {@code TunnelCreatorConfig.recordRealTraffic()},
+     * not the age. The 30s this used to be could not be met at all: a GOOD tunnel
+     * that carried traffic inside {@link #TRAFFIC_DEFER_MS} has its retest
+     * deferred by {@link #shouldDeferActiveGoodTunnel}, so by the time a failure
+     * is recorded the freshest proof on a working tunnel is already minutes old.
+     * Measured over 42 minutes: 25 drop lines, proof ages 7-12 minutes, none
+     * under 30s, and the hold it guards fired 0 times.
      * @since 0.9.69+
      */
-    private static final long RECENT_TRAFFIC_MS = 30 * 1000L;
+    static final long RECENT_TRAFFIC_MS = 10 * 60 * 1000L;
 
     /**
      * How recently a tunnel must have carried real (non-test) traffic for

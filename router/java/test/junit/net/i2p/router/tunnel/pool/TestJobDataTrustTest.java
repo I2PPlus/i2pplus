@@ -151,6 +151,40 @@ public class TestJobDataTrustTest {
                     TestJob.isRecentDataTransfer(now - 10_000_000L, now));
     }
 
+    /**
+     * The window has to be wider than the traffic defer, or it can never be met:
+     * {@code shouldDeferActiveGoodTunnel} holds the retest of a GOOD tunnel that
+     * carried traffic inside {@code TRAFFIC_DEFER_MS}, so by the time a failure
+     * is recorded the freshest proof on a working tunnel is already older than
+     * that. The 30s this used to be sat below the defer, and the hold it guards
+     * fired 0 times in 42 minutes.
+     */
+    @Test
+    public void theWindowIsWiderThanTheTrafficDefer() {
+        assertTrue("a trust window at or below the retest defer is unreachable",
+                   TestJob.RECENT_TRAFFIC_MS > TestJob.TRAFFIC_DEFER_MS);
+    }
+
+    /**
+     * The measured population the old window excluded: 25 drop lines whose
+     * traffic proof was 7-12 minutes old, on tunnels whose own traffic had
+     * deferred the retest.
+     */
+    @Test
+    public void proofFromTheTunnelsOwnLifetimeQualifies() {
+        long now = 1_000_000_000L;
+        assertTrue(TestJob.isRecentDataTransfer(now - 7 * 60 * 1000L, now));
+        assertTrue(TestJob.isRecentDataTransfer(now - 9 * 60 * 1000L, now));
+        assertTrue(TestJob.isRecentDataTransfer(now - TestJob.RECENT_TRAFFIC_MS + 1, now));
+    }
+
+    /** Proof older than one tunnel lifetime describes a tunnel that is gone. */
+    @Test
+    public void proofOlderThanTheTunnelLifetimeDoesNotQualify() {
+        long now = 1_000_000_000L;
+        assertFalse(TestJob.isRecentDataTransfer(now - TestJob.RECENT_TRAFFIC_MS, now));
+    }
+
     @Test
     public void futureTimestampIsTreatedAsStale() {
         // A backwards clock step must not produce a negative age and read as
