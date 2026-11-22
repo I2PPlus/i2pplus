@@ -602,7 +602,7 @@ public abstract class TransportImpl implements Transport {
                       + "\n* Type: " + msg.getMessageType() + " * MsgID: " + msg.getMessageId()
                       + durationClause("Send", sendTime)
                       + " * Queued: " + DataHelper.formatDuration(queueTime)
-                      + outboundQueueClause());
+                      + outboundQueueClause(msg));
             _context.messageHistory().messageProcessingError(msg.getMessageId(), msg.getMessageType(),
                                                              "Took too long to send [" + allTime + "ms]");
         }
@@ -664,15 +664,21 @@ public abstract class TransportImpl implements Transport {
      * holds packets before the wire.
      * <p>The base transport has no such queue: an {@link OutNetMessage} waits in
      * the router's send pool, and that wait is already on the line as
-     * {@code Queued}. SSU adds a second wait below it - the per-endpoint packet
-     * queue - and a backlog there delays everyone's transit traffic, so the
-     * severe-latency line has to say which of the two waits it found.
+     * {@code Queued}. SSU adds two waits below it - the per-peer message queue,
+     * and the per-endpoint packet queue - and a backlog in either delays transit
+     * traffic, so the severe-latency line has to say which of them it found.
+     * <p>The message is passed because the two queues are not global: the one that
+     * holds this message belongs to the peer it is going to. Sampling only the
+     * endpoint-wide queue after the send has already completed reports an empty
+     * queue for a message that waited a minute elsewhere - measured on a live
+     * router, 79 severe-latency lines and not one of them carried the clause.
      *
-     * @return {@code " * key: value"} segments, or an empty string when this
-     *         transport queues nothing of its own
+     * @param msg the message whose send is being reported
+     * @return {@code " * key: value"} segments, or an empty string when nothing
+     *         of this transport's own is queued for that message
      * @since 0.9.72+
      */
-    protected String outboundQueueClause() {
+    protected String outboundQueueClause(OutNetMessage msg) {
         return "";
     }
 
@@ -693,6 +699,41 @@ public abstract class TransportImpl implements Transport {
         if (packets <= 0) {return "";}
         return " * Sender queue: " + packets + " packets * Queue delay: " +
                DataHelper.formatDuration(delayMs);
+    }
+
+    /**
+     * Renders one peer's outbound message queue for the log.
+     * <p>Like the sender queue, an empty queue contributes nothing. The wait is
+     * the age of the oldest message already being sent to that peer, which is the
+     * figure the peer's own backoff and retransmit decisions are keyed on; it is
+     * left off when it is not known, because the transport caches it from its
+     * last build pass and a message still waiting to start has no age there.
+     *
+     * @param messages messages queued for that peer now
+     * @param oldestMs how long the oldest message in flight has waited, in ms,
+     *                 0 when the transport has no sample
+     * @return the segments to concatenate, never null
+     * @since 0.9.72+
+     */
+    protected static String peerQueueClause(int messages, long oldestMs) {
+        if (messages <= 0) {return "";}
+        return " * Peer queue: " + messages + " messages" +
+               (oldestMs > 0 ? " * Peer wait: " + DataHelper.formatDuration(oldestMs) : "");
+    }
+
+    /**
+     * Puts a transport's queue segments on their own log line.
+     * <p>The severe-latency line already carries the message type, the message id
+     * and the wait in the router's send pool; the queue report is a second set of
+     * measurements, and four more segments on the first line would put it past the
+     * log column. Nothing is queued, nothing is added.
+     *
+     * @param clauses the {@code " * key: value"} segments from the queue builders
+     * @return a {@code \n* } continuation line, or an empty string
+     * @since 0.9.72+
+     */
+    protected static String queueReport(String clauses) {
+        return clauses.isEmpty() ? "" : "\n* " + clauses.substring(3);
     }
 
     /**

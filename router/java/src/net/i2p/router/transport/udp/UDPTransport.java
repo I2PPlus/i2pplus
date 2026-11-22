@@ -850,19 +850,27 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     * The outbound packet queue across every SSU sender, for the severe-latency
-     * line written by {@link TransportImpl}.
-     * <p>Each endpoint has its own sender and its own CoDel queue, so a backlog
-     * on one address delays that address's transit traffic while the others look
-     * healthy. The depth is summed because the router's send pool feeds all of
-     * them; the delay is the worst of them, because that is the queue a message
-     * that waited a minute actually met.
+     * The outbound queues SSU holds a message behind, for the severe-latency line
+     * written by {@link TransportImpl}.
+     * <p>Two waits sit under the router's send pool. Each endpoint has its own
+     * sender and its own CoDel queue, so a backlog on one address delays that
+     * address's transit traffic while the others look healthy; the depth is summed
+     * because the send pool feeds all of them, and the delay is the worst of them.
+     * <p>Behind that sits the per-peer message queue, and it is usually the one
+     * holding a slow send: a peer whose window is closed, whose packets are
+     * waiting for ACKs, or that is still being established keeps its messages
+     * there while every sender queue is empty. Measured on a live router: 79
+     * severe-latency lines, none of them carrying the sender clause, with the
+     * messages queued between 60s and 5m. So the peer the message is going to is
+     * named by the message, and its queue is reported beside the sender's.
      *
-     * @return {@code " * key: value"} segments, empty when nothing is queued
+     * @param msg the message whose slow send is being reported
+     * @return a {@code \n* } continuation line with the queue segments, empty
+     *         when nothing of this transport's own is queued for that message
      * @since 0.9.72+
      */
     @Override
-    protected String outboundQueueClause() {
+    protected String outboundQueueClause(OutNetMessage msg) {
         int packets = 0;
         long delay = 0;
         for (UDPEndpoint endpoint : _endpoints) {
@@ -872,7 +880,16 @@ public class UDPTransport extends TransportImpl {
             long senderDelay = sender.getQueueDelay();
             if (senderDelay > delay) {delay = senderDelay;}
         }
-        return queueClause(packets, delay);
+        String rv = queueClause(packets, delay);
+        RouterInfo tori = msg.getTarget();
+        if (tori != null && tori.getIdentity() != null) {
+            PeerState peer = getPeerState(tori.getIdentity().calculateHash());
+            if (peer != null) {
+                rv += peerQueueClause(peer.getOutboundMessageCount(),
+                                      peer.getOldestOutboundLifetime());
+            }
+        }
+        return queueReport(rv);
     }
 
     /**

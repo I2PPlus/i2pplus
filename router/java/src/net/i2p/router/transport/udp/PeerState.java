@@ -2329,6 +2329,22 @@ public class PeerState {
     }
 
     /**
+     * How long the oldest message already being sent to this peer has been
+     * waiting, as cached by the most recent build pass.
+     * <p>Not a live scan: the value is refreshed by {@code finishAndAllocate()},
+     * and it covers messages that have started, not ones still waiting in the
+     * queue for their turn. Read for the severe-latency report, where a peer
+     * backed up for a minute is the finding even from a sample one build pass
+     * old, and a full scan of both outbound maps on every slow send is not.
+     *
+     * @return the oldest wait in ms, 0 when nothing has started or nothing is queued
+     * @since 0.9.72+
+     */
+    long getOldestOutboundLifetime() {
+        return _dead ? 0 : _cachedOldestLifetime;
+    }
+
+    /**
      * May disconnect to true.
      * @since 0.9.24
      */
