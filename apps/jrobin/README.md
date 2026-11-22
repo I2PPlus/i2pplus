@@ -76,8 +76,16 @@ has been rewritten rather than patched: 207 files differ, 24,507 lines added and
 
 - **SVG backend.** Upstream's hand-written trio `net.i2p.rrd4j.SimpleSVGMaker`,
   `SimpleSVGGraphics2D` and `SimpleSVGImageWorker` is gone, replaced by a
-  vendored copy of JFreeSVG (`org.jfree.svg`, 21 files, 6,129 lines) driven
-  through a new `org.rrd4j.graph.SVGImageWorker`.
+  vendored copy of JFreeSVG 4.1 (`org.jfree.svg`, 21 files, 6,129 lines) driven
+  through a new `org.rrd4j.graph.SVGImageWorker`. The copy is modified by
+  addition: console-theme detection plus that theme's gradient and CSS defs
+  (`detectTheme`, `appendThemeDefs`, `appendThemeCSSDefs`, `setThemeName`),
+  collapsing runs of same-class `<line>` elements (`consolidateSvgGroups`,
+  `groupLineRun`, `wrapLineSubrun`), axis tagging, glow/smoothing toggles, and
+  `RyuDouble` for number formatting, which 4.1 itself does not ship. Only one
+  upstream method was dropped: `rgbaColorStr`, replaced by the `SvgColor` class.
+  Nine of the nineteen Java files are otherwise unchanged from upstream once the
+  comments are set aside.
 - **Graph package.** Added: `MonotoneSpline` (curve smoothing), `RrdGraphMeta`
   (plot geometry and series as JSON, for the console's hover readout), and
   `eu.bengreen.data.utility` — a largest-triangle-three-buckets downsampler
