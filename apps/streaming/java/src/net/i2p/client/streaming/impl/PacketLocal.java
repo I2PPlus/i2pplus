@@ -322,8 +322,9 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
      * Count a NACK for this packet, and on the
      * {@link Connection#FAST_RETRANSMIT_THRESHOLD}th one ask for a fast
      * retransmit, provided the retransmit timer has demonstrably not already
-     * fired: the packet must have been sent at least max(4s, RTT) ago, and
-     * only the first such NACK storm triggers it.
+     * fired: the packet must have been in flight long enough for the NACK to be
+     * about that send ({@link Connection#nackTrustFlightMs(long)}), and only the
+     * first such NACK storm triggers it.
      * The retransmit is a no-op unless this is the lowest unacked packet
      * (see Connection.ResendPacketEvent).
      */
@@ -333,24 +334,22 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
         // and the guard below has to cover the newResendPacketEvent() call as
         // well as the RTT read, not just the read.
         final Connection con = _connection;
+        final long flight = _lastSend > 0 ? _context.clock().now() - _lastSend : -1;
+        final long rtt = con != null ? con.getOptions().getRTT() : 0;
         if (cnt >= Connection.FAST_RETRANSMIT_THRESHOLD && (!_retransmitted) && con != null &&
-            _lastSend > 0 && _lastSend < _context.clock().now() -
-                Math.max(4000, con.getOptions().getRTT())) {
+            Connection.nackIsLossEvidence(flight, rtt)) {
             _retransmitted = true;
-            Connection.ResendPacketEvent evt = con.newResendPacketEvent(this);
-            evt.fastRetransmit();
+            con.newResendPacketEvent(this).fastRetransmit();
 
             if (_log.shouldDebug()) {
-                final String log = String.format("%s NACKS and retransmits. %n* Criteria: nacks=%d, retransmitted=%b,"+
-                    " numSends=%d, lastSend=%d, now=%d",
-                    toString(), cnt, _retransmitted, _numSends.get(), _lastSend, _context.clock().now());
-                    _log.debug(log);
+                _log.debug("Resending on the NACK storm -> " + streamTag() +
+                           "\n* NACKs: " + cnt + " * Since send: " + flight +
+                           "ms * NACK floor: " + Connection.nackTrustFlightMs(rtt) + "ms");
             }
         } else if (_log.shouldDebug()) {
-            final String log = String.format("%s NACK but no retransmit. %n* Criteria: nacks=%d, retransmitted=%b,"+
-                    " numSends=%d, lastSend=%d, now=%d",
-                    toString(), cnt, _retransmitted, _numSends.get(), _lastSend, _context.clock().now());
-                    _log.debug(log);
+            _log.debug("Not resending on the NACK storm -> " + streamTag() +
+                       "\n* NACKs: " + cnt + " * Since send: " + flight +
+                       "ms * NACK floor: " + Connection.nackTrustFlightMs(rtt) + "ms");
         }
     }
 

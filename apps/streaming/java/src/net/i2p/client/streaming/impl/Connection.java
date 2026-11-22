@@ -2635,6 +2635,60 @@ class Connection {
     }
 
     /**
+     * Floor for {@link #nackTrustFlightMs(long)}, in ms: a NACK about a packet
+     * sent less than this ago cannot have been provoked by that send on any path
+     * this network routes.
+     * @since 0.9.72+
+     */
+    static final long NACK_TRUST_FLIGHT_MIN_MS = 500;
+
+    /**
+     * The least time a packet must have been in flight before a NACK naming it
+     * counts as loss evidence and earns a fast retransmit.
+     * <p>A NACK is only evidence about a packet that has had time to reach the
+     * peer and come back as a complaint, so the honest floor is one way: half
+     * the smoothed RTT. Anything larger is a guess about a stale NACK describing
+     * an earlier send, and a guess large enough to be safe is large enough to
+     * switch fast recovery off outright — the floor here until now was
+     * {@code max(4000, RTT)}, while a peer NACKs a hole about one RTT after the
+     * send. On I2P's 1-2 s paths the NACK therefore always arrived too early to
+     * count: fast retransmit never once fired on a live stream, the duplicate-ACK
+     * congestion stat recorded no events in a running router's whole lifetime,
+     * and every head-of-line loss escalated to a retransmit-timeout pass that
+     * cut the window.
+     * <p>The floor keeps an unmeasured connection (initial RTT 2 s) honest and
+     * stops a sub-second path from resending on a NACK that was already in the
+     * fabric when the packet went out.
+     *
+     * @param rttMs the connection's smoothed RTT in ms; &lt;= 0 means unmeasured
+     * @return the least flight time in ms before a NACK triggers a fast resend
+     * @since 0.9.72+
+     */
+    static long nackTrustFlightMs(long rttMs) {
+        if (rttMs <= 0) {
+            return NACK_TRUST_FLIGHT_MIN_MS;
+        }
+        return Math.max(rttMs / 2, NACK_TRUST_FLIGHT_MIN_MS);
+    }
+
+    /**
+     * Pure decision: is a NACK naming this packet trusted as loss evidence, so
+     * that it should earn a fast retransmit?
+     * <p>See {@link #nackTrustFlightMs(long)} for why the trust test is one way
+     * and not a fixed delay. A packet that has never been sent has no flight
+     * time and is never trusted.
+     *
+     * @param flightMs how long the packet has been in flight since its last
+     *                 send, or a negative value if it was never sent
+     * @param rttMs the connection's smoothed RTT in ms; &lt;= 0 means unmeasured
+     * @return true if the NACK describes a send the peer has had time to see
+     * @since 0.9.72+
+     */
+    static boolean nackIsLossEvidence(long flightMs, long rttMs) {
+        return flightMs >= 0 && flightMs >= nackTrustFlightMs(rttMs);
+    }
+
+    /**
      * Graduated congestion response: the window is cut by an amount that
      * scales with the number of CONSECUTIVE loss events since the last
      * recovery, so a single failed packet does not collapse the connection
