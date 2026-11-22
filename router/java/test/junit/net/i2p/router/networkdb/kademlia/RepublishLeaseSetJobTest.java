@@ -1,5 +1,6 @@
 package net.i2p.router.networkdb.kademlia;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -444,6 +445,108 @@ public class RepublishLeaseSetJobTest {
         verify(_facade).stopPublishing(hash);
         verify(_facade).fail(hash);
         verify(_facade, never()).sendStore(any(Hash.class), any(LeaseSet.class), any(Job.class), any(Job.class), anyLong(), any());
+    }
+
+    /**
+     * The deferral-bounded fallback may not sign a copy that dies before the one
+     * it replaces. A pool of aging tunnels can hold every lease the target asks
+     * for and still offer a shorter-lived set than what is published, and
+     * swapping the longer copy for the shorter one is how a live router lost one
+     * destination's LeaseSet for two minutes: a fallback reporting 8 of 8 viable
+     * leases replaced a copy with roughly 4 minutes left with one that died in
+     * roughly 2, after which 117 sends failed against a key with nothing stored
+     * while the expiry path stayed silent.
+     */
+    @Test
+    public void testFallbackRefusesACopyShorterThanThePublishedOne() {
+        Hash hash = newHash(10);
+        when(_cm.shouldPublishLeaseSet(hash)).thenReturn(true);
+        when(_cm.isLocal(hash)).thenReturn(true);
+
+        // published copy has 200s left: inside the 4-minute expiry window so the
+        // cycle re-mints, outside the 2-minute emergency window so a copy that
+        // cannot extend the expiry defers instead of re-minting
+        LeaseSet ls = localLeaseSet(hash, NOW + 200L * 1000);
+        when(ls.getLeaseCount()).thenReturn(3);
+        when(_facade.lookupLeaseSetLocally(hash)).thenReturn(ls);
+
+        // pool is at target (3 of 3 viable leases, the mocked context's viability
+        // window being the 2-minute floor) but every lease is aging: the set it
+        // can sign dies 10s sooner than the one already published
+        LeaseSet freshPoolLs = freshPoolLeaseSet(NOW + 190L * 1000, 3);
+        TunnelPool pool = mock(TunnelPool.class);
+        when(pool.getInboundTunnelsAsLeaseSet()).thenReturn(freshPoolLs);
+        TunnelPoolSettings targetSettings = settings(3);
+        TunnelManagerFacade tm = mock(TunnelManagerFacade.class);
+        when(tm.getInboundPool(hash)).thenReturn(pool);
+        when(tm.getInboundSettings(any(Hash.class))).thenReturn(targetSettings);
+        when(_ctx.tunnelManager()).thenReturn(tm);
+
+        // three deferred cycles, then the fallback - which must decline to shorten
+        for (int i = 0; i < 4; i++) {
+            RepublishLeaseSetJob job = new RepublishLeaseSetJob(_ctx, _facade, hash);
+            assertTrue(job.registerSelf());
+            job.runJob();
+        }
+        verify(_cm, never()).requestLeaseSet(eq(hash), any());
+        // and it keeps asking the pool for tunnels it can actually sign
+        verify(pool, times(4)).requestFreshTunnelBuild();
+    }
+
+    /**
+     * A fallback copy that lives exactly as long as the published one is still
+     * worth signing: rotating the leases is what makes the floodfill re-flood the
+     * set, and an equal horizon cannot shorten anything.
+     */
+    @Test
+    public void testFallbackPublishesACopyThatOutlivesThePublishedOne() {
+        Hash hash = newHash(11);
+        when(_cm.shouldPublishLeaseSet(hash)).thenReturn(true);
+        when(_cm.isLocal(hash)).thenReturn(true);
+
+        LeaseSet ls = localLeaseSet(hash, NOW + 200L * 1000);
+        when(ls.getLeaseCount()).thenReturn(3);
+        when(_facade.lookupLeaseSetLocally(hash)).thenReturn(ls);
+
+        // same horizon, different tunnels: rotating the leases is what makes the
+        // floodfill re-flood the set, and an equal horizon cannot shorten anything
+        LeaseSet freshPoolLs = freshPoolLeaseSet(NOW + 200L * 1000, 3);
+        TunnelPool pool = mock(TunnelPool.class);
+        when(pool.getInboundTunnelsAsLeaseSet()).thenReturn(freshPoolLs);
+        TunnelPoolSettings targetSettings = settings(3);
+        TunnelManagerFacade tm = mock(TunnelManagerFacade.class);
+        when(tm.getInboundPool(hash)).thenReturn(pool);
+        when(tm.getInboundSettings(any(Hash.class))).thenReturn(targetSettings);
+        when(_ctx.tunnelManager()).thenReturn(tm);
+
+        for (int i = 0; i < 3; i++) {
+            RepublishLeaseSetJob job = new RepublishLeaseSetJob(_ctx, _facade, hash);
+            assertTrue(job.registerSelf());
+            job.runJob();
+        }
+        verify(_cm, never()).requestLeaseSet(eq(hash), any());
+
+        RepublishLeaseSetJob job = new RepublishLeaseSetJob(_ctx, _facade, hash);
+        assertTrue(job.registerSelf());
+        job.runJob();
+        verify(_cm).requestLeaseSet(eq(hash), eq(freshPoolLs));
+    }
+
+    /**
+     * The pure horizon test behind that decision: equal or longer is publishable,
+     * anything shorter is not, and the comparison is on remaining life, not on
+     * absolute lease dates, so a clock that moves between the two reads cannot
+     * change the verdict.
+     */
+    @Test
+    public void testFallbackHorizonDecision() {
+        assertTrue(RepublishLeaseSetJob.fallbackCopyOutlivesStored(400L, 400L));
+        assertTrue(RepublishLeaseSetJob.fallbackCopyOutlivesStored(401L, 400L));
+        assertFalse(RepublishLeaseSetJob.fallbackCopyOutlivesStored(399L, 400L));
+        // a candidate already past its earliest lease never replaces anything
+        assertFalse(RepublishLeaseSetJob.fallbackCopyOutlivesStored(-1L, 0L));
+        // both already gone: signing it cannot shorten a copy that has no life left
+        assertTrue(RepublishLeaseSetJob.fallbackCopyOutlivesStored(0L, 0L));
     }
 
     /**

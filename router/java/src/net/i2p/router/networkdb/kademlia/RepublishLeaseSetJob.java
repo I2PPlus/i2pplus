@@ -652,6 +652,34 @@ public class RepublishLeaseSetJob extends JobImpl {
     }
 
     /**
+     * Whether the deferral-bounded fallback may replace the LeaseSet already
+     * published.
+     * <p>The fallback exists so a pool below its target cannot let the published
+     * copy lapse, and it assumed any viable copy is worth signing. That holds
+     * only if the candidate lives at least as long as what is stored: a pool of
+     * aging tunnels can hold every lease the target asks for and still offer a
+     * set whose earliest lease dies before the stored copy's, so signing it
+     * shortens the life of the published LeaseSet. One live router lost a
+     * destination for two minutes that way - a fallback reporting 8 of 8 viable
+     * leases replaced a copy with roughly 4 minutes left with one that died in
+     * roughly 2, after which 117 sends failed against a key with nothing stored
+     * while the expiry path stayed silent, the copy having been replaced rather
+     * than expired.
+     * <p>Refusing cannot itself cause a lapse. Every deferred cycle is
+     * rescheduled from the stored copy's own expiry, so the cycle reaches the
+     * emergency window, where {@link #shouldRemint} publishes any viable copy
+     * whether or not it extends the expiry.
+     *
+     * @param freshTimeUntilExpiry milliseconds of life left on the pool's candidate copy
+     * @param storedTimeUntilExpiry milliseconds of life left on the copy already published
+     * @return true when signing the candidate cannot shorten the published LeaseSet
+     * @since 0.9.72+
+     */
+    static boolean fallbackCopyOutlivesStored(long freshTimeUntilExpiry, long storedTimeUntilExpiry) {
+        return freshTimeUntilExpiry >= storedTimeUntilExpiry;
+    }
+
+    /**
      * How long to hold off a further re-mint after one that changed nothing.
      * <p>A re-mint inside the emergency window is permitted even when it does not
      * extend the stored copy, because a thin copy the pool can still serve beats
@@ -885,18 +913,44 @@ public class RepublishLeaseSetJob extends JobImpl {
             // capacity.  Rotation guarantees each re-minted set differs from
             // the stored copy, so the floodfill accepts and re-floods it even
             // when the latest lease date barely moves.
+            //
+            // What the fallback may not do is sign a copy that dies before the
+            // one it replaces. A pool of aging tunnels can hold every lease the
+            // target asks for and still offer a shorter-lived set than the one
+            // already published, and swapping the longer copy for the shorter
+            // one is how a live router lost one destination's LeaseSet for two
+            // minutes: 117 sends failed against a key with nothing stored, and
+            // the expiry path never reported the loss because the copy had been
+            // replaced, not expired. Refusing keeps the longer copy in force
+            // until the emergency window makes a thin re-mint the better option
+            // anyway — a window the deferral always reaches, because each
+            // deferred cycle is rescheduled from the stored copy's own expiry.
             AtomicInteger defers = _remintDefers.computeIfAbsent(_dest, k -> new AtomicInteger(0));
             if (freshCount > 0 && defers.getAndIncrement() >= MAX_REMINT_DEFERS) {
-                if (_log.shouldWarn()) {
-                    _log.warn("Re-mint" + name + " [" + shortHash() +
-                              "] falling back after " + defers.get() +
-                              " deferred tries (" + freshCount + "/" + target + " viable leases)");
+                if (fallbackCopyOutlivesStored(freshTimeUntilExpiry, timeUntilExpiry)) {
+                    if (_log.shouldWarn()) {
+                        _log.warn("Re-mint" + name + " [" + shortHash() + "] deferred " + MAX_REMINT_DEFERS +
+                                  " times -> Publishing the pool's copy" +
+                                  "\n* Viable leases: " + freshCount + " of " + target +
+                                  " * Copy lives: " + DataHelper.formatDuration(freshTimeUntilExpiry));
+                    }
+                    getContext().clientManager().requestLeaseSet(_dest, fresh);
+                    // Reset so the next cycle requests fresh builds again instead
+                    // of re-minting thin copies forever
+                    _remintDefers.remove(_dest);
+                    requested = true;
+                } else {
+                    // Deliberately not reset: the next cycle publishes as soon as
+                    // the pool holds a copy worth signing.
+                    if (_log.shouldInfo()) {
+                        _log.info("Re-mint" + name + " [" + shortHash() + "] deferred " + MAX_REMINT_DEFERS +
+                                  " times -> Keeping the published copy" +
+                                  "\n* The pool's copy dies " +
+                                  DataHelper.formatDuration(timeUntilExpiry - freshTimeUntilExpiry) +
+                                  " sooner * Viable leases: " + freshCount + " of " + target);
+                    }
+                    pool.requestFreshTunnelBuild();
                 }
-                getContext().clientManager().requestLeaseSet(_dest, fresh);
-                // Reset so the next cycle requests fresh builds again instead
-                // of re-minting thin copies forever
-                _remintDefers.remove(_dest);
-                requested = true;
             } else {
                 if (_log.shouldInfo()) {
                     _log.info("Deferring re-mint" + name + " [" + shortHash() +
