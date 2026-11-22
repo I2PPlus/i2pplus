@@ -111,10 +111,13 @@ public class ConnectCooldownDecisionTest {
 
     // ---- recordFailure ----
 
+    /** Spacing disabled: every failure counts as its own event. */
+    private static final long ANY_SPACING = 0;
+
     /** The first failure against a destination is one strike. */
     @Test
     public void testFirstFailureIsOneStrike() {
-        long[] rec = ConnectionManager.recordFailure(null, 1000L, false);
+        long[] rec = ConnectionManager.recordFailure(null, 1000L, false, ANY_SPACING);
         assertEquals(1000L, rec[0]);
         assertEquals(1, rec[1]);
         assertEquals(0, rec[2]);
@@ -123,11 +126,11 @@ public class ConnectCooldownDecisionTest {
     /** A second failure keeps the new timestamp and grows the strike count. */
     @Test
     public void testStrikesGrow() {
-        long[] first = ConnectionManager.recordFailure(null, 1000L, false);
-        long[] second = ConnectionManager.recordFailure(first, 2500L, false);
+        long[] first = ConnectionManager.recordFailure(null, 1000L, false, ANY_SPACING);
+        long[] second = ConnectionManager.recordFailure(first, 2500L, false, ANY_SPACING);
         assertEquals(2500L, second[0]);
         assertEquals(2, second[1]);
-        long[] third = ConnectionManager.recordFailure(second, 3000L, false);
+        long[] third = ConnectionManager.recordFailure(second, 3000L, false, ANY_SPACING);
         assertEquals(3, third[1]);
     }
 
@@ -137,8 +140,8 @@ public class ConnectCooldownDecisionTest {
      */
     @Test
     public void testPriorRecordNotMutated() {
-        long[] first = ConnectionManager.recordFailure(null, 1000L, false);
-        ConnectionManager.recordFailure(first, 2500L, true);
+        long[] first = ConnectionManager.recordFailure(null, 1000L, false, ANY_SPACING);
+        ConnectionManager.recordFailure(first, 2500L, true, ANY_SPACING);
         assertEquals(1000L, first[0]);
         assertEquals(1, first[1]);
         assertEquals(0, first[2]);
@@ -147,23 +150,94 @@ public class ConnectCooldownDecisionTest {
     /** A corrupt or hand-seeded record with no strikes still escalates from one. */
     @Test
     public void testNonPositivePriorStrikesCountsAsOne() {
-        assertEquals(2, ConnectionManager.recordFailure(new long[] {1000L, 0, 0}, 2000L, false)[1]);
-        assertEquals(2, ConnectionManager.recordFailure(new long[] {1000L, -4, 1}, 2000L, true)[1]);
+        assertEquals(2, ConnectionManager.recordFailure(new long[] {1000L, 0, 0}, 2000L, false,
+                                                        ANY_SPACING)[1]);
+        assertEquals(2, ConnectionManager.recordFailure(new long[] {1000L, -4, 1}, 2000L, true,
+                                                        ANY_SPACING)[1]);
     }
 
     /** A path death is marked as one, so a later connect success cannot erase it. */
     @Test
     public void testPathDeathIsMarked() {
-        assertEquals(1, ConnectionManager.recordFailure(null, 1000L, true)[2]);
-        long[] prior = ConnectionManager.recordFailure(null, 1000L, true);
-        assertEquals(1, ConnectionManager.recordFailure(prior, 2000L, true)[2]);
+        assertEquals(1, ConnectionManager.recordFailure(null, 1000L, true, ANY_SPACING)[2]);
+        long[] prior = ConnectionManager.recordFailure(null, 1000L, true, ANY_SPACING);
+        assertEquals(1, ConnectionManager.recordFailure(prior, 2000L, true, ANY_SPACING)[2]);
+    }
+
+    // ---- one burst is one failure ----
+
+    /**
+     * Failures closer together than the spacing are one event, not several
+     * strikes, so the doubling escalation cannot be driven by a single local
+     * stall.
+     *
+     * <p>The live shape this pins: eight asset connects a browser had opened to
+     * one locally hosted destination all died inside the same millisecond when
+     * the router's own send path stalled, and each was counted as a strike -
+     * seven strikes, a 300s cooldown, and 616 refused connects to a destination
+     * that was demonstrably alive within the next minute.
+     */
+    @Test
+    public void testABurstIsOneStrikeNotSeveral() {
+        long[] rec = ConnectionManager.recordFailure(null, 1000L, false, BASE);
+        // the seven siblings of the measured burst, all within 1 ms
+        for (int i = 0; i < 7; i++) {
+            rec = ConnectionManager.recordFailure(rec, 1001L + i, false, BASE);
+        }
+        assertEquals(1, rec[1]);
+        // one strike is a 5s window, below the 30s refuse threshold, so the
+        // caller waits it out instead of being refused outright
+        long window = ConnectionManager.destCooldownMs((int) rec[1], BASE, MAX);
+        assertEquals(BASE, window);
+        assertFalse(ConnectionManager.refuseCooldown(window, REFUSE_AFTER));
+    }
+
+    /**
+     * The timestamp still follows every failure, coalesced or not, so the
+     * cooldown window is always measured from the most recent one and a
+     * destination that keeps failing cannot be released early.
+     */
+    @Test
+    public void testCoalescedFailureStillMovesTheWindow() {
+        long[] rec = ConnectionManager.recordFailure(null, 1000L, false, BASE);
+        rec = ConnectionManager.recordFailure(rec, 1200L, false, BASE);
+        assertEquals(1200L, rec[0]);
+        assertEquals(1, rec[1]);
+    }
+
+    /**
+     * Once the spacing passes, the next failure is a separate event and
+     * escalates as before, so a destination that genuinely fails over and over
+     * is still pushed back further each time.
+     */
+    @Test
+    public void testSpacedFailuresStillEscalate() {
+        long[] rec = ConnectionManager.recordFailure(null, 0L, false, BASE);
+        for (int i = 1; i <= 6; i++) {
+            rec = ConnectionManager.recordFailure(rec, i * (BASE + 1), false, BASE);
+        }
+        assertEquals(7, rec[1]);
+        assertEquals(MAX, ConnectionManager.destCooldownMs((int) rec[1], BASE, MAX));
+    }
+
+    /**
+     * A failure exactly at the spacing boundary is a separate event; one
+     * millisecond short of it is part of the same burst; and a disabled spacing
+     * counts every failure on its own.
+     */
+    @Test
+    public void testSpacingBoundaryCountsSeparately() {
+        long[] rec = ConnectionManager.recordFailure(null, 0L, false, BASE);
+        assertEquals(2, ConnectionManager.recordFailure(rec, BASE, false, BASE)[1]);
+        assertEquals(1, ConnectionManager.recordFailure(rec, BASE - 1, false, BASE)[1]);
+        assertEquals(2, ConnectionManager.recordFailure(rec, 1L, false, ANY_SPACING)[1]);
     }
 
     /** The mark follows the newest failure, not the oldest. */
     @Test
     public void testMarkFollowsNewestFailure() {
-        long[] path = ConnectionManager.recordFailure(null, 1000L, true);
-        assertEquals(0, ConnectionManager.recordFailure(path, 2000L, false)[2]);
+        long[] path = ConnectionManager.recordFailure(null, 1000L, true, ANY_SPACING);
+        assertEquals(0, ConnectionManager.recordFailure(path, 2000L, false, ANY_SPACING)[2]);
     }
 
     // ---- forgetsOnConnectSuccess ----
@@ -202,7 +276,7 @@ public class ConnectCooldownDecisionTest {
         long[] rec = null;
         long[] windows = new long[6];
         for (int i = 0; i < 6; i++) {
-            rec = ConnectionManager.recordFailure(rec, now, true);
+            rec = ConnectionManager.recordFailure(rec, now, true, BASE);
             assertFalse(ConnectionManager.forgetsOnConnectSuccess(rec));
             windows[i] = ConnectionManager.destCooldownMs((int) rec[1], BASE, MAX);
             now += 106 * 1000L;

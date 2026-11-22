@@ -198,18 +198,35 @@ class ConnectionManager {
 
     /**
      * Pure decision: the record to store for a failure against a destination.
-     * The strike count only ever grows, so a record read concurrently with a
-     * second failure cannot lose the escalation.
+     * The strike count only grows on failures spaced far enough apart to be
+     * separate events, so a record read concurrently with a second failure
+     * cannot lose the escalation.
+     * <p>Spacing matters because a connect failure is usually not one event.
+     * Measured on a live router: eight browser asset connects to one locally
+     * hosted destination were in flight together, all eight died in the same
+     * millisecond when the local send path stalled, and each one was counted as
+     * a strike - seven strikes, a 300s cooldown, and every later click on a
+     * destination that was demonstrably alive refused instantly for five
+     * minutes, 616 refusals in the first minute alone. One stall is one failure.
      *
      * @param prior the destination's existing record, or null if none
      * @param now the clock time of this failure, in ms since the epoch
      * @param fromPath true if a stream died after it established, false for a
      *                 connect that never got there
-     * @return {now, consecutive failures, 1 if fromPath else 0}
+     * @param spacingMs how far apart two failures must be to count separately;
+     *                  0 or less counts every failure as its own event
+     * @return {time of this failure, consecutive strikes, 1 if fromPath else 0}
      * @since 0.9.72+
      */
-    static long[] recordFailure(long[] prior, long now, boolean fromPath) {
-        int strikes = prior == null ? 1 : (int) Math.max(1, prior[1]) + 1;
+    static long[] recordFailure(long[] prior, long now, boolean fromPath, long spacingMs) {
+        if (prior == null)
+            return new long[] {now, 1, fromPath ? 1 : 0};
+        int strikes = (int) Math.max(1, prior[1]);
+        // The timestamp still moves on a coalesced failure, so the window is
+        // always measured from the most recent failure; only the escalation is
+        // held back, which is what a burst must not be allowed to buy.
+        if (spacingMs <= 0 || now - prior[0] >= spacingMs)
+            strikes++;
         return new long[] {now, strikes, fromPath ? 1 : 0};
     }
 
@@ -2609,7 +2626,9 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
               _context.statManager().addRateData("stream.connectBackoffRefused", 1);
            } else if (err != null) {
               _context.statManager().addRateData("stream.connectFailed", connectElapsed, connectElapsed);
-              _destFailures.compute(destHash, (k, prior) -> recordFailure(prior, _context.clock().now(), false));
+              _destFailures.compute(destHash,
+                                    (k, prior) -> recordFailure(prior, _context.clock().now(), false,
+                                                                getDestCooldownMs()));
               // Opportunistic trim: prevent unbounded growth from abandoned destinations
               trimDestFailures();
           } else {
@@ -2647,7 +2666,9 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
     void recordPathFailure(Hash dest) {
         if (dest == null)
             return;
-        _destFailures.compute(dest, (k, prior) -> recordFailure(prior, _context.clock().now(), true));
+        _destFailures.compute(dest,
+                              (k, prior) -> recordFailure(prior, _context.clock().now(), true,
+                                                          getDestCooldownMs()));
         trimDestFailures();
     }
 
