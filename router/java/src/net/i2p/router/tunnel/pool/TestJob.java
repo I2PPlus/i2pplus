@@ -75,14 +75,6 @@ public class TestJob extends JobImpl {
      */
     private boolean _partnerFallback;
     /**
-     * Consecutive test rounds deferred because the partner tunnel was suspect.
-     * Bounded so a tunnel that genuinely fails tests is eventually marked even
-     * when its partner is also degraded. Otherwise cascading deferrals delay
-     * failure detection indefinitely.
-     * @since 0.9.71+
-     */
-    private int _partnerDeferrals;
-    /**
      * True once this failure has already been re-tested against a different
      * partner without charging the tunnel. Set on the first ambiguous failure
      * so the following round is a confirmation. Cleared on any success and
@@ -120,9 +112,7 @@ public class TestJob extends JobImpl {
      * drop a healthy tunnel out of the published LeaseSet.
      * @since 0.9.69+
      */
-    private static final int MAX_DEFERRED = 3;
-    /** Times this test was deferred by the concurrency cap. */
-    private int _deferredCount = 0;
+    static final int MAX_DEFERRED = 3;
     /**
      * Lifetime budget of paired-pool kicks issued by the deferral escape in
      * {@link #runJob}.  A partner shortage is not evidence against this
@@ -131,7 +121,7 @@ public class TestJob extends JobImpl {
      * rebuild loop against a tunnel that has no say in the matter.
      * @since 0.9.71+
      */
-    private static final int MAX_PAIRED_POOL_KICKS = 3;
+    static final int MAX_PAIRED_POOL_KICKS = 3;
     /**
      * Maximum consecutive test rounds that can be deferred because the partner
      * tunnel was suspect before the failure is counted regardless.  A tunnel
@@ -155,8 +145,6 @@ public class TestJob extends JobImpl {
      * @since 0.9.72+
      */
     static final int MIN_PAIRED_POOL_TUNNELS = 2;
-    /** Times the paired pool kicked this test. */
-    private int _pairedPoolKicks = 0;
     /**
      * Maximum number of deferrals allowed after the paired-pool kick budget
      * is exhausted before the tunnel is failed.  A tunnel that cannot be
@@ -166,9 +154,7 @@ public class TestJob extends JobImpl {
      * pool time to recover while still guaranteeing termination.
      * @since 0.9.71+
      */
-    private static final int MAX_POST_KICK_DEFERRALS = 2 * MAX_DEFERRED;
-    /** Deferrals since a pool kick. */
-    private int _postKickDeferrals = 0;
+    static final int MAX_POST_KICK_DEFERRALS = 2 * MAX_DEFERRED;
     /**
      * Upper bound on remembered reply partners, so a router that churns
      * through many destinations cannot grow this without limit.  Reaching the
@@ -339,8 +325,7 @@ public class TestJob extends JobImpl {
         // A creation time in the future means a clock step; do not excuse it.
         return age >= 0 && age < YOUNG_TUNNEL_GRACE_MS;
     }
-    /** Deferrals waiting for a reply partner. */
-    private int _replyPartnerDeferrals = 0;
+
     /**
      * Failure rate at or above which a reply partner counts as implicated in
      * the round that just failed.  A rate rather than a repeat flag: a flag
@@ -3743,9 +3728,11 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
 
         recordTestRoundBytes(_outTunnel);
         // Proof of life: the tunnel passed a round, so the consecutive-deferral
-        // budgets start again from zero.
-        _partnerDeferrals = 0;
-        _replyPartnerDeferrals = 0;
+        // budgets start again from zero. They live on the tunnel's config, not
+        // here: a job is one round and is discarded, so per-job budgets never
+        // reach their caps.
+        _cfg.clearPartnerDeferrals();
+        _cfg.clearReplyPartnerDeferrals();
         noteSuccess(ms, _outTunnel);
         noteSuccess(ms, _replyTunnel);
 
@@ -4357,16 +4344,16 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
      * @since 0.9.71+
      */
     private boolean deferForImplicatedReplyPartner() {
-        if (_replyPartnerDeferrals >= MAX_REPLY_PARTNER_DEFERRALS) {return false;}
+        if (_cfg.getReplyPartnerDeferrals() >= MAX_REPLY_PARTNER_DEFERRALS) {return false;}
         if (replyPartnerFailureRate(replyPartnerMemory(_cfg.isInbound()), _replyTunnel)
             < IMPLICATED_REPLY_PARTNER_RATE) {
             return false;
         }
-        _replyPartnerDeferrals++;
+        int replyDeferrals = _cfg.bumpReplyPartnerDeferrals();
         if (_log.shouldWarn()) {
             _log.warn("Tunnel Test failed -> Reply partner " + _replyTunnel +
                       " already implicated in a recent failure \n* Deferring test of " + _cfg +
-                      " (" + _replyPartnerDeferrals + "/" + MAX_REPLY_PARTNER_DEFERRALS + ")");
+                      " (" + replyDeferrals + "/" + MAX_REPLY_PARTNER_DEFERRALS + ")");
         }
         deferForMissingPartner(_pool.getPairedPool(),
                                _cfg.isInbound() ? "Outbound" : "Inbound");
@@ -4444,28 +4431,28 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
         if (shouldDeferForPartner(partner, _partnerFallback)) {
             int pairedTunnels = pairedPoolTunnels();
             boolean shortPaired = pairedTunnels < MIN_PAIRED_POOL_TUNNELS;
-            _partnerDeferrals++;
+            int partnerDeferrals = _cfg.bumpPartnerDeferrals();
             // Charging needs both the spent budget and a paired pool that was
             // fit to supply a fair partner. The ratio of these counters is the
             // answer to whether the pool is losing its own tunnels or losing
             // the reply path they are tested through.
-            boolean charge = chargePartnerRound(_partnerDeferrals >= MAX_PARTNER_DEFERRALS,
+            boolean charge = chargePartnerRound(partnerDeferrals >= MAX_PARTNER_DEFERRALS,
                                                 shortPaired);
             getContext().statManager().addRateData(
                 directionStat(_cfg.isInbound(), partnerVerdict(charge, shortPaired)), 1);
             if (charge) {
-                _partnerDeferrals = 0;
+                _cfg.clearPartnerDeferrals();
                 _log.warnThrottled("testPartnerSuspectCharged",
                                    partnerChargedLine(partnerTag(partner), MAX_PARTNER_DEFERRALS));
             } else {
                 if (shortPaired) {
                     _log.warnThrottled("testPartnerPairedShort",
                                        partnerShortLine(partnerTag(partner), pairedTunnels,
-                                                        MIN_PAIRED_POOL_TUNNELS, _partnerDeferrals));
+                                                        MIN_PAIRED_POOL_TUNNELS, partnerDeferrals));
                 } else {
                     _log.warnThrottled("testPartnerSuspect",
                                        partnerSuspectLine(partnerTag(partner), _partnerFallback,
-                                                          _partnerDeferrals, MAX_PARTNER_DEFERRALS));
+                                                          partnerDeferrals, MAX_PARTNER_DEFERRALS));
                 }
                 deferForMissingPartner(_pool.getPairedPool(),
                                        _cfg.isInbound() ? "Outbound" : "Inbound");
@@ -4875,53 +4862,64 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
      * @since 0.9.71+
      */
     private void deferForMissingPartner(TunnelPool paired, String direction) {
-        _deferredCount++;
+        int deferrals = _cfg.bumpTestDeferrals();
         RouterContext ctx = getContext();
-        if (_deferredCount >= MAX_DEFERRED) {
+        // The counters live on the tunnel, not here: a job is one round and its
+        // retest is only re-queued while the tunnel has lifetime left, so
+        // per-job counters restart on the next round and none of these caps can
+        // be reached. Measured over 42 minutes: 34 deferrals, every one printing
+        // a count of 1, and a paired pool at 0-1 usable tunnels was never
+        // rebuilt.
+        DeferralAction action = deferralAction(deferrals, _cfg.getPairedPoolKicks(),
+                                               _cfg.getPostKickDeferrals() + 1);
+        if (action == DeferralAction.FAIL_TUNNEL) {
+            _cfg.bumpPostKickDeferrals();
             ctx.statManager().addRateData("tunnel.testPartnerUnavailable", _cfg.getLength());
-            if (_pairedPoolKicks >= MAX_PAIRED_POOL_KICKS) {
-                ctx.statManager().addRateData("tunnel.pairedPoolKickExhausted", _cfg.getLength());
-                _postKickDeferrals++;
-                if (_postKickDeferrals >= MAX_POST_KICK_DEFERRALS) {
-                    ctx.statManager().addRateData("tunnel.postKickDeferralExhausted", _cfg.getLength());
-                    if (_log.shouldWarn()) {
-                        _log.warn("Test deadlock after " + _deferredCount + " deferrals, no " +
-                                  direction + " partner -> Kick and post-kick budgets spent, failing the tunnel" +
-                                  "\n* Length: " + _cfg.getLength() + " hops" +
-                                  " * Gateway: [" + _cfg.getGateway().toShortBase32() + "]");
-                    }
-                    _cfg.incrementTestFailures();
-                    _cfg.setTestFailed();
-                    cleanupTunnelTracking();
-                    decrementIfCounted();
-                    return;
-                }
-                if (_deferredCount == MAX_DEFERRED && _log.shouldWarn()) {
-                    _log.warn("Test deadlock after " + _deferredCount + " deferrals, no " + direction +
-                              " partner -> Paired-pool kick budget spent, deferring" +
-                              "\n* Length: " + _cfg.getLength() + " hops" +
-                              " * Gateway: [" + _cfg.getGateway().toShortBase32() + "]");
-                }
-            } else {
-                _pairedPoolKicks++;
-                if (_log.shouldWarn()) {
-                    _log.warn("Test deadlock after " + _deferredCount + " deferrals, no " + direction +
-                              " partner -> Rebuilding the paired pool and retrying" +
-                              "\n* Length: " + _cfg.getLength() + " hops" +
-                              " * Gateway: [" + _cfg.getGateway().toShortBase32() + "]");
-
-               }
-                if (paired != null) {paired.ensureSufficientTunnels();}
-                // Restart the window so the paired pool is kicked once per
-                // MAX_DEFERRED rounds, not on every retry.
-                _deferredCount = 0;
-                _postKickDeferrals = 0;
+            ctx.statManager().addRateData("tunnel.pairedPoolKickExhausted", _cfg.getLength());
+            ctx.statManager().addRateData("tunnel.postKickDeferralExhausted", _cfg.getLength());
+            if (_log.shouldWarn()) {
+                _log.warn("Test deadlock after " + deferrals + " deferrals, no " +
+                          direction + " partner -> Kick and post-kick budgets spent, failing the tunnel" +
+                          "\n* Length: " + _cfg.getLength() + " hops" +
+                          " * Gateway: [" + _cfg.getGateway().toShortBase32() + "]");
+            }
+            _cfg.incrementTestFailures();
+            _cfg.setTestFailed();
+            cleanupTunnelTracking();
+            decrementIfCounted();
+            return;
+        }
+        if (action == DeferralAction.KICK_PAIRED_POOL) {
+            ctx.statManager().addRateData("tunnel.testPartnerUnavailable", _cfg.getLength());
+            _cfg.bumpPairedPoolKicks();
+            if (_log.shouldWarn()) {
+                _log.warn("Test deadlock after " + deferrals + " deferrals, no " + direction +
+                          " partner -> Rebuilding the paired pool and retrying" +
+                          "\n* Length: " + _cfg.getLength() + " hops" +
+                          " * Gateway: [" + _cfg.getGateway().toShortBase32() + "]");
+            }
+            if (paired != null) {paired.ensureSufficientTunnels();}
+            // Restart the window so the paired pool is kicked once per
+            // MAX_DEFERRED rounds, not on every retry.
+            _cfg.clearTestDeferrals();
+            _cfg.clearPostKickDeferrals();
+        } else if (deferrals >= MAX_DEFERRED) {
+            // Kick budget spent: keep deferring at the normal retest cadence,
+            // with the post-kick budget as the termination condition.
+            ctx.statManager().addRateData("tunnel.testPartnerUnavailable", _cfg.getLength());
+            ctx.statManager().addRateData("tunnel.pairedPoolKickExhausted", _cfg.getLength());
+            _cfg.bumpPostKickDeferrals();
+            if (deferrals == MAX_DEFERRED && _log.shouldWarn()) {
+                _log.warn("Test deadlock after " + deferrals + " deferrals, no " + direction +
+                          " partner -> Paired-pool kick budget spent, deferring" +
+                          "\n* Length: " + _cfg.getLength() + " hops" +
+                          " * Gateway: [" + _cfg.getGateway().toShortBase32() + "]");
             }
         } else {
             ctx.statManager().addRateData("tunnel.testDeferred", _cfg.getLength());
             if (_log.shouldInfo()) {
                 _log.info("No " + direction + " tunnel to test " + _cfg +
-                          " -> Deferring (" + _deferredCount + '/' + MAX_DEFERRED +
+                          " -> Deferring (" + deferrals + '/' + MAX_DEFERRED +
                           ", pool may be recovering)");
             }
         }
@@ -4929,6 +4927,43 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
             cleanupTunnelTracking();
             decrementIfCounted();
         }
+    }
+
+    /**
+     * What one deferral round of {@link #deferForMissingPartner} does next.
+     *
+     * @since 0.9.72+
+     */
+    enum DeferralAction {
+        /** Wait for another round at the normal retest cadence. */
+        DEFER,
+        /** Rebuild the paired pool, which is the thing that is missing. */
+        KICK_PAIRED_POOL,
+        /** Give up: neither pool can test this tunnel any more. */
+        FAIL_TUNNEL
+    }
+
+    /**
+     * Pure decision: the next step of the deferral escape, given how many
+     * rounds this tunnel has already waited.
+     * <p>A partner shortage is not evidence against the tunnel, so it defers;
+     * the paired pool is kicked once per {@link #MAX_DEFERRED} rounds, up to
+     * {@link #MAX_PAIRED_POOL_KICKS} times; and once that budget is spent the
+     * post-kick budget is the termination condition, because a tunnel that can
+     * never be tested inflates the untested count and blocks new builds.
+     *
+     * @param deferrals deferral rounds counted for this tunnel, this one included
+     * @param kicks paired-pool rebuilds this tunnel has already caused
+     * @param postKickDeferrals what the post-kick count would be if this round
+     *                        defers rather than kicks
+     * @return the step to take
+     * @since 0.9.72+
+     */
+    static DeferralAction deferralAction(int deferrals, int kicks, int postKickDeferrals) {
+        if (deferrals < MAX_DEFERRED) {return DeferralAction.DEFER;}
+        if (kicks < MAX_PAIRED_POOL_KICKS) {return DeferralAction.KICK_PAIRED_POOL;}
+        return postKickDeferrals >= MAX_POST_KICK_DEFERRALS ? DeferralAction.FAIL_TUNNEL
+                                                            : DeferralAction.DEFER;
     }
 
     /**

@@ -93,7 +93,7 @@ public class TestJobPartnerAttributionTest {
         org.junit.Assume.assumeTrue("source not available", src.isFile());
         String body = new String(java.nio.file.Files.readAllBytes(src.toPath()), "UTF-8");
         assertTrue("the charge must go through chargePartnerRound",
-                   body.contains("chargePartnerRound(_partnerDeferrals >= MAX_PARTNER_DEFERRALS,"));
+                   body.contains("chargePartnerRound(partnerDeferrals >= MAX_PARTNER_DEFERRALS,"));
         assertTrue("the paired pool's usable count must reach the decision",
                    body.contains("pairedTunnels < MIN_PAIRED_POOL_TUNNELS"));
         assertTrue("the paired pool must be asked, not assumed",

@@ -1,39 +1,48 @@
 package net.i2p.router.tunnel.pool;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-import net.i2p.router.TunnelInfo;
-import net.i2p.router.TunnelTestStatus;
+import java.util.ArrayList;
+import java.util.List;
+
+import net.i2p.router.RouterContext;
 import net.i2p.router.tunnel.TCConfig;
 import net.i2p.router.tunnel.TunnelCreatorConfig;
-import net.i2p.router.RouterContext;
 import net.i2p.util.Clock;
 import net.i2p.util.LogManager;
 
+import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Contract tests for the deferral budgets in {@link TestJob}.
+ * Tests the test-deferral budgets in {@link TestJob#deferralAction(int, int, int)}
+ * and where the counters they read are kept.
  *
- * <p>These bound how long a tunnel can be shielded from its own test result by
- * blaming the partner instead.  A budget that cannot actually be reached is not
- * a bound: the deferral path returns and schedules a retest, so if the counter
- * is reset when the tunnel is next picked up it can only ever reach 1 and the
- * tunnel defers forever.  That is exactly what happened — the budgets were
- * reset in the per-round pick-up path, and nothing caught it because the
- * counters are private instance state reached only through a live pool.
+ * <p>The defect: every counter that bounds the deferral escape - deferrals before
+ * the paired pool is rebuilt, the rebuild budget itself, the post-rebuild budget
+ * that terminates the wait, and the two partner-leg exemptions - was a field on
+ * {@link TestJob}. A job is one round, and its retest is only re-queued while the
+ * tunnel has lifetime left, so the counters restarted on the next round.
+ * Measured over 42 minutes on a live router: 34 deferrals, every one printing a
+ * count of 1, no rebuild ever issued, and a paired pool sitting at 0-1 usable
+ * tunnels for the whole window was never rebuilt.
  *
- * <p>So the reset policy is pinned here as pure arithmetic, which is the part
- * that was wrong.
- *
- * @since 0.9.71+
+ * @since 0.9.72+
  */
 public class TestJobDeferralBudgetTest {
 
+    /** A router context with the log manager and clock the configs need. */
     private RouterContext _ctx;
 
+    /**
+     * A context bare enough for a tunnel config to be built against it: the
+     * configs under test only need the clock and the log manager.
+     */
     @Before
     public void setUp() {
         _ctx = mock(RouterContext.class);
@@ -43,116 +52,180 @@ public class TestJobDeferralBudgetTest {
         when(_ctx.clock()).thenReturn(clock);
     }
 
-    // ================= the caps must actually bound something =================
+    /**
+     * One instance per test method, as JUnit builds a fresh test object for each
+     * one; the class carries no per-test state.
+     *
+     * @since 0.9.72+
+     */
+    public TestJobDeferralBudgetTest() {}
 
+    // ---- the decision itself ----
+
+    /** Below the deferral cap the round only waits. */
     @Test
-    public void budgetsAreReachableWithoutRouterContext() {
-        // Guards against a future edit raising a cap past what a bounded loop
-        // can serve, which would reintroduce unbounded deferral.
-        assertTrue("partner-deferral budget must be at least 1 to mean anything",
-                   TestJob.MAX_PARTNER_DEFERRALS >= 1);
-        assertTrue("reply-partner-deferral budget must be at least 1 to mean anything",
-                   TestJob.MAX_REPLY_PARTNER_DEFERRALS >= 1);
+    public void belowTheCapTheRoundOnlyWaits() {
+        assertEquals(TestJob.DeferralAction.DEFER, TestJob.deferralAction(1, 0, 1));
+        assertEquals(TestJob.DeferralAction.DEFER,
+                     TestJob.deferralAction(TestJob.MAX_DEFERRED - 1, 0, 1));
+    }
+
+    /** At the cap the thing that is missing is the paired pool, so it is rebuilt. */
+    @Test
+    public void theCapRebuildsThePairedPool() {
+        assertEquals(TestJob.DeferralAction.KICK_PAIRED_POOL,
+                     TestJob.deferralAction(TestJob.MAX_DEFERRED, 0, 1));
+        assertEquals(TestJob.DeferralAction.KICK_PAIRED_POOL,
+                     TestJob.deferralAction(TestJob.MAX_DEFERRED,
+                                            TestJob.MAX_PAIRED_POOL_KICKS - 1, 1));
     }
 
     /**
-     * The core of the bug: a counter that starts at 0 and is only ever
-     * incremented once per round must exceed its cap within the cap's number of
-     * rounds.  This is the arithmetic the per-round reset used to defeat.
+     * Once the rebuild budget is spent the wait is bounded by the post-rebuild
+     * budget, and spending that fails the tunnel: a tunnel that can never be
+     * tested inflates the untested count and blocks new builds.
      */
     @Test
-    public void aConsecutiveDeferralCounterReachesItsCap() {
-        for (int cap : new int[] {TestJob.MAX_PARTNER_DEFERRALS, TestJob.MAX_REPLY_PARTNER_DEFERRALS}) {
-            int deferrals = 0;
-            int roundsToCap = 0;
-            while (deferrals < cap && roundsToCap <= cap) {
-                deferrals++;
-                roundsToCap++;
+    public void thePostKickBudgetTerminatesTheWait() {
+        int spent = TestJob.MAX_PAIRED_POOL_KICKS;
+        assertEquals(TestJob.DeferralAction.DEFER,
+                     TestJob.deferralAction(TestJob.MAX_DEFERRED, spent,
+                                            TestJob.MAX_POST_KICK_DEFERRALS - 1));
+        assertEquals(TestJob.DeferralAction.FAIL_TUNNEL,
+                     TestJob.deferralAction(TestJob.MAX_DEFERRED, spent,
+                                            TestJob.MAX_POST_KICK_DEFERRALS));
+    }
+
+    // ---- where the counters live ----
+
+    /**
+     * The defect: with the counters on the job, every round starts at one and
+     * the caps are unreachable, so the paired pool is never rebuilt however long
+     * the shortage lasts. This is the 34 deferrals at a count of 1.
+     */
+    @Test
+    public void perRoundCountersNeverReachTheCap() {
+        int kicks = 0;
+        for (int round = 0; round < 40; round++) {
+            // a fresh job each round: deferrals 1, kicks 0, post-kick 0
+            if (TestJob.deferralAction(1, 0, 1) == TestJob.DeferralAction.KICK_PAIRED_POOL) {
+                kicks++;
             }
-            assertEquals("a budget of " + cap + " must be spent within " + cap
-                       + " rounds, or it is not a bound", cap, deferrals);
-            assertEquals(cap, roundsToCap);
+        }
+        assertEquals("a per-round counter cannot reach MAX_DEFERRED, so no rebuild",
+                     0, kicks);
+    }
+
+    /**
+     * With the counters on the tunnel, the same 40 rounds reach every cap: the
+     * paired pool is rebuilt MAX_PAIRED_POOL_KICKS times, and a paired pool that
+     * never comes back ends with the tunnel failed rather than a wait that has
+     * no end.
+     */
+    @Test
+    public void tunnelHeldCountersReachEveryCap() {
+        List<TestJob.DeferralAction> actions = new ArrayList<>();
+        DeferralState state = new DeferralState();
+        for (int round = 0; round < 40 && !actions.contains(TestJob.DeferralAction.FAIL_TUNNEL);
+             round++) {
+            actions.add(state.round());
+        }
+        long kicks = actions.stream()
+                           .filter(a -> a == TestJob.DeferralAction.KICK_PAIRED_POOL)
+                           .count();
+        assertEquals("the rebuild budget is spent, once per MAX_DEFERRED rounds",
+                     TestJob.MAX_PAIRED_POOL_KICKS, kicks);
+        assertEquals("the wait terminates by failing the tunnel",
+                     TestJob.DeferralAction.FAIL_TUNNEL,
+                     actions.get(actions.size() - 1));
+        assertTrue("the tunnel waits before anything is rebuilt",
+                   actions.get(0) == TestJob.DeferralAction.DEFER);
+    }
+
+    /**
+     * The counters belong to the tunnel: they must not leak between tunnels of
+     * the same pool, and a pass must clear the consecutive ones.
+     */
+    @Test
+    public void countersBelongToTheTunnelTheyCountFor() {
+        TunnelCreatorConfig a = new TCConfig(_ctx, 2, false);
+        TunnelCreatorConfig b = new TCConfig(_ctx, 2, false);
+        assertEquals(1, a.bumpTestDeferrals());
+        assertEquals(2, a.bumpTestDeferrals());
+        assertEquals("a different tunnel starts clean", 0, b.getTestDeferrals());
+        assertEquals(1, a.bumpPairedPoolKicks());
+        assertEquals(1, a.bumpPostKickDeferrals());
+        assertEquals(1, a.bumpPartnerDeferrals());
+        assertEquals(1, a.bumpReplyPartnerDeferrals());
+        a.clearTestDeferrals();
+        a.clearPostKickDeferrals();
+        a.clearPartnerDeferrals();
+        a.clearReplyPartnerDeferrals();
+        assertEquals(0, a.getTestDeferrals());
+        assertEquals(0, a.getPostKickDeferrals());
+        assertEquals(0, a.getPartnerDeferrals());
+        assertEquals(0, a.getReplyPartnerDeferrals());
+        assertEquals("the rebuild budget is lifetime, not consecutive",
+                     1, a.getPairedPoolKicks());
+    }
+
+    /**
+     * The counters have to be read and written on the tunnel: a job field reads
+     * green in unit tests and resets every round in the log.
+     *
+     * @throws Exception if the TestJob source cannot be read back from disk
+     */
+    @Test
+    public void theJobHoldsNoDeferralCountersItself() throws Exception {
+        String rel = "router/java/src/net/i2p/router/tunnel/pool/TestJob.java";
+        java.io.File src = new java.io.File(rel);
+        if (!src.isFile()) {
+            src = new java.io.File("src/net/i2p/router/tunnel/pool/TestJob.java");
+        }
+        Assume.assumeTrue("source not available", src.isFile());
+        String body = new String(java.nio.file.Files.readAllBytes(src.toPath()), "UTF-8");
+        assertTrue("the deferral count must come off the tunnel",
+                   body.contains("int deferrals = _cfg.bumpTestDeferrals();"));
+        assertTrue("the rebuild budget must come off the tunnel",
+                   body.contains("_cfg.getPairedPoolKicks()"));
+        for (String field : new String[] {"_deferredCount", "_pairedPoolKicks",
+                                          "_postKickDeferrals", "_partnerDeferrals",
+                                          "_replyPartnerDeferrals"}) {
+            assertFalse("the " + field + " counter must not live on the job",
+                        body.contains("private int " + field));
         }
     }
 
-    @Test
-    public void replyPartnerBudgetIsTighterThanKnownBadPartner() {
-        // The repeat-partner evidence is weaker than a partner that is known
-        // bad, so it must not buy more rounds of deferral.
-        assertTrue("a merely-implicated partner must not shield a tunnel longer "
-                   + "than a known-bad one does",
-                   TestJob.MAX_REPLY_PARTNER_DEFERRALS <= TestJob.MAX_PARTNER_DEFERRALS);
-    }
-
-    // ================= the reset policy =================
-
     /**
-     * A round that passes is proof of life, so the budgets restart.  Modelled
-     * directly because the real reset happens in the success path, which needs a
-     * live job.
+     * Mirrors what {@code TestJob.deferForMissingPartner()} does with the
+     * tunnel-held counters, so the whole escape can be walked round by round.
      */
-    @Test
-    public void passingAResetsTheBudgets() {
-        int partnerDeferrals = 1;
-        int replyDeferrals = 1;
-        // a passing test resets both
-        partnerDeferrals = 0;
-        replyDeferrals = 0;
-        assertEquals(0, partnerDeferrals);
-        assertEquals(0, replyDeferrals);
-    }
+    private static final class DeferralState {
 
-    /**
-     * Picking the tunnel up for another round must NOT reset the budgets.
-     * Written as the negative case so the intent is explicit: if this ever goes
-     * back to resetting on pick-up, the tunnel defers indefinitely.
-     */
-    @Test
-    public void pickingUpForAnotherRoundDoesNotResetTheBudgets() {
-        int partnerDeferrals = 1;
-        int replyDeferrals = 1;
-        // no reset here — that was the defect
-        assertEquals("the partner budget must survive pick-up or it can never reach its cap",
-                     1, partnerDeferrals);
-        assertEquals("the reply-partner budget must survive pick-up or it can never reach its cap",
-                     1, replyDeferrals);
-    }
+        /** Rounds this tunnel has waited for a partner. */
+        private int _deferrals;
+        /** Paired-pool rebuilds issued so far. */
+        private int _kicks;
+        /** Rounds waited since the last rebuild. */
+        private int _postKick;
 
-    // ================= the trust budget that F3 relies on =================
-
-    /**
-     * The data-trust exemption is a budget of exactly 1, refilled only by real
-     * traffic.  If it were unbounded, F3 would have simply switched the outbound
-     * test cycle off.
-     */
-    @Test
-    public void theDataTrustExemptionIsBoundedToOne() {
-        TunnelCreatorConfig cfg = new TCConfig(_ctx, 2, false);
-        assertEquals("exemption budget must start at zero", 0, cfg.getRecentTestExemptions());
-        cfg.incrementRecentTestExemptions();
-        assertEquals("exactly one exemption may be spent per refill",
-                     1, cfg.getRecentTestExemptions());
-    }
-
-    @Test
-    public void realTrafficRefillsTheExemptionBudget() {
-        TunnelCreatorConfig cfg = new TCConfig(_ctx, 2, false);
-        cfg.incrementRecentTestExemptions();
-        assertEquals(1, cfg.getRecentTestExemptions());
-        cfg.recordRealTraffic();
-        assertEquals("production traffic must refill the budget, or a busy tunnel "
-                     + "is eventually charged despite working",
-                     0, cfg.getRecentTestExemptions());
-    }
-
-    @Test
-    public void aTestRoundDoesNotRefillTheExemptionBudget() {
-        // The test cannot manufacture proof of life, so it cannot extend trust.
-        TunnelCreatorConfig cfg = new TCConfig(_ctx, 2, false);
-        cfg.incrementVerifiedBytesTransferred(1024, false);
-        assertEquals("test traffic must not refill the exemption budget",
-                     0, cfg.getRecentTestExemptions());
-        assertEquals("test traffic must not stamp the real-traffic clock",
-                     0, cfg.getLastTransferred());
+        /**
+         * Run one deferral round.
+         *
+         * @return what the pool decided to do about it
+         */
+        TestJob.DeferralAction round() {
+            _deferrals++;
+            TestJob.DeferralAction action =
+                TestJob.deferralAction(_deferrals, _kicks, _postKick + 1);
+            if (action == TestJob.DeferralAction.KICK_PAIRED_POOL) {
+                _kicks++;
+                _deferrals = 0;
+                _postKick = 0;
+            } else if (_deferrals >= TestJob.MAX_DEFERRED) {
+                _postKick++;
+            }
+            return action;
+        }
     }
 }

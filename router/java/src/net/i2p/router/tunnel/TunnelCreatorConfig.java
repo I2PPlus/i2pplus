@@ -259,6 +259,45 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      * @since 0.9.69+
      */
     private volatile int _recentTestExemptions;
+    /**
+     * Consecutive test rounds this tunnel was deferred because no usable partner
+     * tunnel could be found, or the one it had was suspect.
+     * <p>Held on the tunnel, not on the test job: a job is one round and is
+     * discarded, and its retest is only re-queued while the tunnel has lifetime
+     * left, so per-job counters restart on the next round. Measured over 42
+     * minutes: 34 deferrals, every one printing a count of 1, so none of the
+     * documented caps could ever be reached and a paired pool sitting at 0-1
+     * usable tunnels was never rebuilt.
+     * @since 0.9.72+
+     */
+    private volatile int _testDeferrals;
+    /**
+     * Paired-pool rebuilds this tunnel has caused. Lifetime, not consecutive:
+     * the budget bounds how many rebuilds one tunnel may ask for, and a tunnel
+     * that keeps failing gets no fresh allowance for having waited.
+     * @since 0.9.72+
+     */
+    private volatile int _pairedPoolKicks;
+    /**
+     * Test rounds deferred since the last paired-pool rebuild. This is the
+     * termination condition for a tunnel whose paired pool never comes back.
+     * @since 0.9.72+
+     */
+    private volatile int _postKickDeferrals;
+    /**
+     * Consecutive rounds excused because the partner leg, not this tunnel, was
+     * the suspect half of the round. Cleared when the round is finally charged
+     * or the tunnel passes a test.
+     * @since 0.9.72+
+     */
+    private volatile int _partnerDeferrals;
+    /**
+     * Consecutive rounds deferred because the reply partner had already been
+     * blamed for a failed round. Weaker evidence than
+     * {@code _partnerDeferrals}, so a smaller budget.
+     * @since 0.9.72+
+     */
+    private volatile int _replyPartnerDeferrals;
     /** Optional pool nickname for log display. */
     private String _destinationNickname;
 
@@ -1010,6 +1049,116 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      * @since 0.9.69+
      */
     public void incrementRecentTestExemptions() {_recentTestExemptions++;}
+
+    /**
+     * Count one more test round deferred for this tunnel.
+     *
+     * @return the deferrals counted so far, including this one
+     * @since 0.9.72+
+     */
+    public int bumpTestDeferrals() {return ++_testDeferrals;}
+
+    /**
+     * The test rounds deferred for this tunnel so far.
+     *
+     * @return the deferral count
+     * @since 0.9.72+
+     */
+    public int getTestDeferrals() {return _testDeferrals;}
+
+    /**
+     * Stop counting this tunnel's test deferrals, because the paired pool was
+     * rebuilt and the next round is a fresh chance rather than another wait.
+     *
+     * @since 0.9.72+
+     */
+    public void clearTestDeferrals() {_testDeferrals = 0;}
+
+    /**
+     * Count one paired-pool rebuild caused by this tunnel.
+     *
+     * @return the rebuilds counted so far, including this one
+     * @since 0.9.72+
+     */
+    public int bumpPairedPoolKicks() {return ++_pairedPoolKicks;}
+
+    /**
+     * The paired-pool rebuilds this tunnel has caused.
+     *
+     * @return the rebuild count
+     * @since 0.9.72+
+     */
+    public int getPairedPoolKicks() {return _pairedPoolKicks;}
+
+    /**
+     * Count one test round deferred since the last paired-pool rebuild.
+     *
+     * @return the post-kick deferrals counted so far, including this one
+     * @since 0.9.72+
+     */
+    public int bumpPostKickDeferrals() {return ++_postKickDeferrals;}
+
+    /**
+     * The test rounds deferred since the last paired-pool rebuild.
+     *
+     * @return the post-kick deferral count
+     * @since 0.9.72+
+     */
+    public int getPostKickDeferrals() {return _postKickDeferrals;}
+
+    /**
+     * Stop counting post-kick deferrals, because the paired pool was rebuilt.
+     *
+     * @since 0.9.72+
+     */
+    public void clearPostKickDeferrals() {_postKickDeferrals = 0;}
+
+    /**
+     * Count one round excused because the partner leg was the suspect half.
+     *
+     * @return the partner deferrals counted so far, including this one
+     * @since 0.9.72+
+     */
+    public int bumpPartnerDeferrals() {return ++_partnerDeferrals;}
+
+    /**
+     * The rounds excused for a suspect partner leg.
+     *
+     * @return the partner deferral count
+     * @since 0.9.72+
+     */
+    public int getPartnerDeferrals() {return _partnerDeferrals;}
+
+    /**
+     * Stop counting rounds excused for a suspect partner leg, because the
+     * failure was charged or the tunnel passed.
+     *
+     * @since 0.9.72+
+     */
+    public void clearPartnerDeferrals() {_partnerDeferrals = 0;}
+
+    /**
+     * Count one round deferred because the reply partner was already implicated.
+     *
+     * @return the reply-partner deferrals counted so far, including this one
+     * @since 0.9.72+
+     */
+    public int bumpReplyPartnerDeferrals() {return ++_replyPartnerDeferrals;}
+
+    /**
+     * The rounds excused for an implicated reply partner.
+     *
+     * @return the reply-partner deferral count
+     * @since 0.9.72+
+     */
+    public int getReplyPartnerDeferrals() {return _replyPartnerDeferrals;}
+
+    /**
+     * Stop counting rounds excused for an implicated reply partner.
+     *
+     * @since 0.9.72+
+     */
+    public void clearReplyPartnerDeferrals() {_replyPartnerDeferrals = 0;}
 
     /**
      * Mark the tunnel as GOOD, recording the latency of the successful test.
