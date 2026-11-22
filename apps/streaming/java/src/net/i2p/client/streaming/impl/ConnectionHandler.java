@@ -647,22 +647,35 @@ class ConnectionHandler {
      * Setting it to false offers a poison packet to each accept worker so they
      * leave their SYN-queue waits; a caller blocked in {@link #accept} is woken
      * by that method's own bounded poll, within {@link #ACCEPT_POLL_INTERVAL}.
+     * <p>Setting it to true marks the handler active before the worker pool is
+     * started, not after: a worker tests this flag as the first thing it does, so
+     * a worker started while the handler still reads inactive ends itself before
+     * it can take a SYN off the queue.
      *
      * @param active true to accept connections, false to stop
      */
     public synchronized void setActive(boolean active) {
+        boolean wasActive = _active;
         // if starting, clear any old poison
-        if (active && !_active) {
+        if (active && !wasActive) {
             _listenState = new ListenState();
             _synQueue.clear();
             _synEnqueueTimes.clear();
             _resultQueue.clear();
             _synQueueProcessed.reset();
             _synQueueExpired.reset();
+            // A listening period that starts its pool first gets no pool: every
+            // worker it launched saw !_active at the loop top and exited. Measured
+            // on a live router, one hosted destination's period ran with no accept
+            // worker alive at all - its queue climbed from 47 to 1,039 under a
+            // 4,096 cap and 887 handshakes from 54 peers were reset over 3m 11s,
+            // and the only worker that ever served it was the one the pressure
+            // rule added after the damage.
+            _active = true;
             startAcceptWorkers();
+        } else {
+            _active = active;
         }
-        boolean wasActive = _active;
-        _active = active;
         if (wasActive && !active) {
             // Stop sweeping before the queue is drained: the sweeper resets and
             // NACKs what it finds, and the drain below does the same for
@@ -833,6 +846,17 @@ class ConnectionHandler {
      */
     int getQueueCapacity() {
         return getMaxQueueSize();
+    }
+
+    /**
+     * How many accept workers are alive, including one still finishing a SYN
+     * from an earlier listening period.
+     *
+     * @return the live accept-worker count
+     * @since 0.9.72+
+     */
+    int getActiveWorkerCount() {
+        return _activeWorkerCount.get();
     }
 
     /**
