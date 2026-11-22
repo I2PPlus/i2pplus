@@ -2266,15 +2266,25 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *
      * @param key the expected key (destination hash) for this LeaseSet
      * @param leaseSet the LeaseSet instance to validate
-     * @return a descriptive reason why the key does not match, or null
+     * @return a descriptive reason why the key does not match, or why the entry
+     *         has no destination to match it against, or null
      * @since 0.9.72+ (package-visible and static so the reason is testable)
      */
     static String validateKeyMatch(Hash key, LeaseSet leaseSet) {
-        if (key.equals(leaseSet.getHash())) {return null;}
+        // Read the entry's hash once. The reason has to describe the value that
+        // was compared, and getHash() is a live computation over the entry's
+        // published identity, not a stored field.
+        Hash lsHash = leaseSet.getHash();
+        if (lsHash == null) {
+            // No published identity to compare against - a different fact from a
+            // mismatch, and there is no hash to put in brackets beside it.
+            return "The LeaseSet publishes no destination to compare the key against";
+        }
+        if (key.equals(lsHash)) {return null;}
         // What the caller cannot supply on its own: the destination this
         // LeaseSet really belongs to, beside the key it was stored under.
         return "Key does not match the LeaseSet destination ["
-               + leaseSet.getHash().toShortBase32() + "]";
+               + lsHash.toShortBase32() + "]";
     }
 
     /**
@@ -4057,8 +4067,9 @@ return false;
      *
      * @param key the key the LeaseSet was stored under
      * @param lsHash the hash the LeaseSet itself carries, may be null
-     * @return {@code "\n* "} continuation lines, or an empty string when the
-     *         short forms already tell the story
+     * @return {@code "\n* "} continuation lines, including the byte-level verdict
+     *         from {@link #hashDiffClause(Hash, Hash)}, or an empty string when
+     *         the short forms already tell the story
      * @since 0.9.72+
      */
     static String fullHashClause(Hash key, Hash lsHash) {
@@ -4066,7 +4077,35 @@ return false;
         String a = key.toShortBase32();
         String b = lsHash.toShortBase32();
         if (a == null || b == null || !a.equals(b)) {return "";}
-        return "\n* Key: " + key.toBase32() + "\n* LeaseSet: " + lsHash.toBase32();
+        return "\n* Key: " + key.toBase32() + "\n* LeaseSet: " + lsHash.toBase32() +
+               hashDiffClause(key, lsHash);
+    }
+
+    /**
+     * Say, in bytes, whether the two hashes the store failure names really differ.
+     * <p>On a live router, all 906 key-mismatch rejections that printed both full
+     * forms printed the same 52 characters twice - the entry's hash and the key
+     * it was refused under are the same 32 bytes, while the check that compares
+     * them still said they differ. A base32 form cannot show that contradiction
+     * to a reader, and without it the next window cannot tell a wrong reason from
+     * a wrong rendering. Naming the first differing byte does the same for the
+     * case where the two really do part company.
+     *
+     * @param key the key the LeaseSet was stored under
+     * @param lsHash the hash the LeaseSet itself carries
+     * @return a {@code \n* } continuation line, never empty
+     * @since 0.9.72+
+     */
+    static String hashDiffClause(Hash key, Hash lsHash) {
+        byte[] a = key.toByteArray();
+        byte[] b = lsHash.toByteArray();
+        int len = Math.min(a.length, b.length);
+        int i = 0;
+        while (i < len && a[i] == b[i]) {i++;}
+        if (i >= a.length && i >= b.length) {
+            return "\n* The two hashes are byte-identical -> The key check disagrees with the entry";
+        }
+        return "\n* First difference at byte " + i + " of " + a.length;
     }
 
     /**

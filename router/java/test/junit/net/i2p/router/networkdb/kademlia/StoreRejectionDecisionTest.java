@@ -112,8 +112,53 @@ public class StoreRejectionDecisionTest {
                    clause.contains("\n* Key: " + key.toBase32()));
         assertTrue("LeaseSet on its own line: " + clause,
                    clause.contains("\n* LeaseSet: " + ls.toBase32()));
-        assertTrue("two continuation lines: " + clause,
-                   clause.split("\n").length == 3);
+        assertTrue("where they part company: " + clause,
+                   clause.contains("First difference at byte 31 of 32"));
+        assertTrue("three continuation lines: " + clause,
+                   clause.split("\n").length == 4);
+    }
+
+    /**
+     * The measured case: on a live router, all 906 key-mismatch rejections that
+     * printed both full forms printed the same 52 characters twice - the two
+     * hashes are the same 32 bytes, so the reason and the bytes disagree, and
+     * the line has to say that rather than leave a reader to compare 52
+     * characters by eye.
+     *
+     * @since 0.9.72+
+     */
+    @Test
+    public void testByteIdenticalHashesFlagTheContradiction() {
+        Hash key = hash(0x01);
+        Hash same = hash(0x01);
+        String clause = KademliaNetworkDatabaseFacade.fullHashClause(key,
+                                                                     same);
+        assertTrue("the verdict is there: " + clause,
+                   clause.contains("The two hashes are byte-identical"));
+        assertTrue("and it points at what disagrees: " + clause,
+                   clause.contains("-> The key check disagrees"));
+        assertFalse("no byte offset when there is none: " + clause,
+                    clause.contains("First difference"));
+    }
+
+    /**
+     * The verdict is about bytes, not the rendered forms: hashes that part
+     * company at byte 7 say byte 7, which tells a reader a real difference
+     * from a truncated rendering.
+     *     *
+     * @since 0.9.72+
+     */
+    @Test
+    public void testTheVerdictNamesTheDifferingByte() {
+        byte[] a = new byte[32];
+        byte[] b = new byte[32];
+        a[0] = 0x11;
+        b[0] = 0x11;
+        a[7] = (byte) 0x80;
+        Hash key = new Hash(a);
+        Hash ls = new Hash(b);
+        assertEquals("\n* First difference at byte 7 of 32",
+                     KademliaNetworkDatabaseFacade.hashDiffClause(key, ls));
     }
 
     /**

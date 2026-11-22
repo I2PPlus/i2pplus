@@ -93,6 +93,23 @@ public class LeaseSetStoreReasonTest {
                    !err.contains("NetDbStore"));
     }
 
+    /**
+     * A LeaseSet with no published identity has no hash to compare the key
+     * against, which is a different fact from a mismatch - and the old code
+     * reached straight for {@code getHash().toShortBase32()} on it, so the store
+     * path threw instead of reporting why it refused.
+     */
+    @Test
+    public void noPublishedDestinationSaysSo() {
+        LeaseSet ls = new LeaseSet();
+        String err = KademliaNetworkDatabaseFacade.validateKeyMatch(dest().calculateHash(), ls);
+        assertNotNull("no reason for an entry with no destination", err);
+        assertTrue("the reason claims a mismatch instead: " + err,
+                   err.contains("publishes no destination"));
+        assertTrue("the reason puts a hash in the bracketed form the console links: " + err,
+                   !err.contains("["));
+    }
+
     /** A LeaseSet whose dates are near now is not refused for its dates. */
     @Test
     public void nearDatesAreNotRefused() {
