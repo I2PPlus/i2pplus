@@ -324,7 +324,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
 
     /**
      * Minimum interval, in ms, between two bundles of our own LeaseSet to the
-     * same destination while it has not acknowledged one.
+     * same destination, while the copy it already holds can still carry a reply.
      * <p>The ACK path is what normally records that a destination holds our
      * LeaseSet, so a destination that never ACKs looks like it holds nothing and
      * gets a fresh copy with every message: 7,606 of them across 1,115
@@ -752,9 +752,10 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         LeaseSet newLS = getContext().clientNetDb(_from.calculateHash()).lookupLeaseSetLocally(_from.calculateHash());
         if (newLS == null) {return null;} // punt
 
-        // If the last leaseSet we sent him is still good, don't bother sending again
-        // The ACK path records that in SendSuccessJob; here we only record that we
-        // sent one, so an unacknowledged destination is not re-sent at every message.
+        // Don't re-bundle a copy he can still reply on. The ACK path records what
+        // he acknowledged in SendSuccessJob; this class records only that a copy
+        // went out, so neither a destination that has acknowledged nothing nor
+        // one holding an acknowledged copy of ours is re-sent at every message.
 
         if (!force) {
             LeaseSet ls = _cache.leaseSetCache.get(_hashPair);
@@ -768,17 +769,16 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             }
             Long sentOn = _cache.replyLeaseSetSentOn.get(_hashPair);
             long now = getContext().clock().now();
-            if (ls == null && replyLeaseSetRecentlySent(sentOn, now,
-                                                        REPLY_LEASESET_RESEND_MS)) {
+            if (replyLeaseSetHoldOff(ls, sentOn, now, REPLY_LEASESET_RESEND_MS)) {
                 _log.debugThrottled(debugKey(_toString, "leaseset-sent-recently"),
-                                    "Reply LeaseSet skipped -> Sent to " + _toString +
-                                    " without an ACK " +
-                                    DataHelper.formatDuration(now - sentOn.longValue()) + " ago");
+                                    "Reply LeaseSet skipped -> Bundled a copy to " + _toString +
+                                    " " + DataHelper.formatDuration(now - sentOn.longValue()) + " ago");
                 return null;
             }
             if (ls != null) {
                 if (_log.shouldInfo()) {
-                    _log.info("Reply LeaseSet cache expired -> Sending a new copy to " + _toString);
+                    _log.info("Reply LeaseSet newer than the copy acknowledged -> " +
+                              "Sending ours to " + _toString);
                 }
             } else {
                 if (_log.shouldInfo()) {
@@ -791,24 +791,70 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     }
 
     /**
+     * Whether this message may go without a bundle of our own LeaseSet, because
+     * one went out recently and the destination can still reply on what it holds.
+     * <p>Both halves are needed. The interval alone would hold off a destination
+     * whose acknowledged copy has just lost its last live lease; the lease test
+     * alone would re-send on every message to a destination that is slow to
+     * acknowledge.
+     *
+     * @param acked the LeaseSet this destination acknowledged, or null when it
+     *              has acknowledged nothing
+     * @param sentOn when the last copy went out, in ms since the epoch, or null
+     *               when nothing has been sent to this pair yet
+     * @param now the current time from the router clock, in ms since the epoch
+     * @param intervalMs how long one copy is held to be enough
+     * @return true to skip this copy, false to bundle one
+     * @since 0.9.72+
+     */
+    static boolean replyLeaseSetHoldOff(LeaseSet acked, Long sentOn, long now,
+                                        long intervalMs) {
+        return replyLeaseSetRecentlySent(sentOn, now, intervalMs) &&
+               ackedCopyCarriesReply(acked, now);
+    }
+
+    /**
      * Whether we bundled our own LeaseSet to this destination recently enough to
      * hold off a second copy.
-     * <p>Only reached for a destination with nothing in the ACKed cache, which is
-     * either a first contact or one that never answers. A first contact must get
-     * the LeaseSet, so the entry is written when the first copy goes out, not
-     * when it is acknowledged, and the next {@code intervalMs} of messages ride
-     * without it.
+     * <p>A first contact must get the LeaseSet, so the entry is written when the
+     * first copy goes out, not when it is acknowledged, and the next
+     * {@code intervalMs} of messages ride without it. The caller pairs this with
+     * {@link #ackedCopyCarriesReply(LeaseSet, long)}, because holding off is only
+     * safe while the destination still has a copy it can reply with.
      *
-     * @param sentOn when the last unacknowledged copy went out, in ms since the
-     *               epoch, or null when nothing has been sent to this pair yet
+     * @param sentOn when the last copy went out, in ms since the epoch, or null
+     *               when nothing has been sent to this pair yet
      * @param now the current time from the router clock, in ms since the epoch
-     * @param intervalMs how long one unacknowledged copy is held to be enough
+     * @param intervalMs how long one copy is held to be enough
      * @return true to skip this copy, false to send one
      * @since 0.9.72+
      */
     static boolean replyLeaseSetRecentlySent(Long sentOn, long now,
                                              long intervalMs) {
         return sentOn != null && now - sentOn.longValue() < intervalMs;
+    }
+
+    /**
+     * Whether the destination can still answer us on a LeaseSet we have already
+     * given it, so a second copy may wait for the resend interval.
+     * <p>The hold-off used to be gated on the acknowledged cache being empty, so
+     * a destination that had acknowledged an older copy of ours - every pair,
+     * once our LeaseSet was republished - was bundled a fresh copy with every
+     * outbound message: 4,443 of those sends in one live router's log, each
+     * labelled "cache expired" on the branch where the cache entry was present.
+     * An acknowledged copy is usable while its earliest lease is still in the
+     * future, the same test the cache cleaner uses to drop it.
+     *
+     * @param acked the LeaseSet this destination acknowledged, or null when it
+     *              has acknowledged nothing, in which case the copy already on
+     *              the wire is the only one it has and holding off is the whole
+     *              point of the resend interval
+     * @param now the current time from the router clock, in ms since the epoch
+     * @return true when a second copy can wait
+     * @since 0.9.72+
+     */
+    static boolean ackedCopyCarriesReply(LeaseSet acked, long now) {
+        return acked == null || acked.getEarliestLeaseDate() > now;
     }
 
     /**
