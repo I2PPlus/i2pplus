@@ -1497,6 +1497,49 @@ class Connection {
     }
 
     /**
+     * Delay to arm this connection's retransmit timer with for its next probe.
+     * <p>A handshake that has not seen its first ACK is paced at the fixed
+     * SYN-phase interval; an established path is paced at the connection's RTO.
+     * Every arming site must go through here, because the SYN-phase wall-clock
+     * budget ({@link #getSynPhaseBudgetMs()}) and the send-count budget
+     * ({@link #getMaxSynSends()}) are both sized from that same interval.
+     * Arming the first pass with the RTO while the budgets assume the SYN
+     * interval spends the whole handshake before its first retransmit can
+     * fire: measured on a live router, a proxy connect with a 15s window fitted
+     * twelve probes into 1250ms each and kept the 8s budget floor, then armed
+     * the first pass at the 9s initial RTO, so the handshake died at 9.0s
+     * having put one SYN on the fabric - while handshakes to the same
+     * destination that got past the first tunnel opened in 0.8-3s.
+     * <p>Never lengthens the gap: the SYN interval only ever caps the RTO, so a
+     * path whose RTO is already shorter keeps its faster cadence.
+     *
+     * @param rtoMs the RTO the established path would arm with
+     * @return the arm delay in ms
+     * @since 0.9.72+
+     */
+    private int retransmitArmDelayMs(int rtoMs) {
+        return computeRetransmitArmDelay(_highestAckedThrough.get() < 0,
+                                         getSynRetransmitInterval(), rtoMs);
+    }
+
+    /**
+     * Pure decision behind {@link #retransmitArmDelayMs(int)}: the handshake is
+     * paced at the SYN interval capped by the RTO, and an established path at
+     * the RTO.
+     *
+     * @param awaitingFirstAck true while no ACK has advanced this connection
+     *                         past its initial SYN
+     * @param synIntervalMs the SYN-phase interval from
+     *                      {@link #getSynRetransmitInterval()}
+     * @param rtoMs the RTO the established path would arm with
+     * @return the arm delay in ms
+     * @since 0.9.72+
+     */
+    static int computeRetransmitArmDelay(boolean awaitingFirstAck, int synIntervalMs, int rtoMs) {
+        return awaitingFirstAck ? Math.min(synIntervalMs, rtoMs) : rtoMs;
+    }
+
+    /**
      * Size the blind SYN retransmit interval so the configured SYN budget fits
      * the caller's own connect window.
      * <p>With no RTT evidence for the path,
@@ -3363,7 +3406,11 @@ class Connection {
             // Schedule retransmit timer outside _outboundPacketsLock
             // to prevent deadlock with RetransmitEvent.timeReached()
             // TLP scheduled at ~2*RTT to detect loss before RTO.
-            if (_retransmitEvent.scheduleIfNotRunning(timeout)) {
+            // The packet keeps the RTO as its own timeout (that is the TTL the
+            // router holds the message for), while the timer is armed at the
+            // SYN-phase interval during a handshake, so the first probe gap is
+            // the gap the SYN budgets were sized from.
+            if (_retransmitEvent.scheduleIfNotRunning(retransmitArmDelayMs(timeout))) {
                _tlpEvent.scheduleProbe(getPTO());
             }
         }
@@ -5352,7 +5399,7 @@ class Connection {
                 Map.Entry<Long, PacketLocal> e = ob == null ? null : ob.firstEntry();
                 if (e == null) {
                     if (freshDuringPass) {
-                        reArmAfterPass(_options.getRTO());
+                        reArmAfterPass(retransmitArmDelayMs(_options.getRTO()));
                     } else if (_log.shouldWarn()) {
                         _log.warn(shortLabel() + " -> Retransmission timer hit but nothing transmitted");
                     }
@@ -5376,9 +5423,12 @@ class Connection {
             } else {
                 // SYN phase: fixed interval, no backoff. Evidence-gated + RTT-aware so the
                 // interval tracks the measured path (packing more attempts into the connect
-                // window on a healthy but slower-than-default fabric) instead of always the
-                // 5000ms default; a path with no RTT evidence keeps the default unchanged.
-                _retransmitEvent.reArmAfterPass(getSynRetransmitInterval());
+                // window on a healthy but slower-than-default fabric); with no evidence at
+                // all it is shortened to fit the configured probe count inside the connect
+                // window, never below SYN_RTO_MIN. Same helper as the arm that put the SYN
+                // on the fabric, so the first gap and every later one match and the
+                // SYN-phase budgets size against the cadence that actually runs.
+                _retransmitEvent.reArmAfterPass(retransmitArmDelayMs(_options.getRTO()));
             }
 
             // 3. cut ssthresh to bandwidth estimate, window to 1
@@ -6150,7 +6200,7 @@ synchronized boolean checkRetransmitStall() {
                 _packet.setTimeout(timeout);
 
                 if (_outboundQueue.enqueue(_packet)) {
-                    if (_retransmitEvent.scheduleIfNotRunning(timeout) && _log.shouldDebug()) {
+                    if (_retransmitEvent.scheduleIfNotRunning(retransmitArmDelayMs(timeout)) && _log.shouldDebug()) {
                         _log.debug(shortLabel() + " -> Fast resend enqueued, timer scheduled");
                     }
 
