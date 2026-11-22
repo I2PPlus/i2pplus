@@ -210,42 +210,57 @@ class ConnectionHandler {
     }
 
     /**
-     * Whether the accept queue is deep enough to be worth another worker. One
-     * worker draining a deep queue leaves every SYN behind it waiting the full
-     * accept timeout, so the pool grows once the queue passes a quarter of the
-     * depth it will stop at - the configured cap, or the backstop when the cap says
-     * uncapped.
-     *
-     * <p>Keyed on the configured cap and gated on it being positive, a router
-     * running uncapped never added a worker at all: the one setting with no ceiling
-     * on the queue was the one the scale-up refused to serve.
+     * Whether the accept queue needs another worker.
+     * <p>Two independent triggers:
+     * <ol>
+     * <li>Depth. One worker draining a deep queue leaves every SYN behind it
+     * waiting the full accept timeout, so the pool grows once the queue passes a
+     * quarter of the depth it will stop at - the configured cap, or the backstop
+     * when the cap says uncapped. Keyed on the configured cap and gated on it
+     * being positive, a router running uncapped never added a worker at all: the
+     * one setting with no ceiling on the queue was the one the scale-up refused
+     * to serve.</li>
+     * <li>Expiry. A SYN that waited out its window was never accepted, whatever
+     * the depth said about it. Measured on a live router: one hosted destination
+     * ran with no accept worker at all, its queue climbed from 47 to 1,039 under
+     * a 4,096 cap, and the depth rule stayed shut until the very last step -
+     * 887 handshakes were reset to 54 peers over 3m 11s before one worker was
+     * added, and the expiries stopped in the second it started. Depth is a
+     * forecast; an expiry is the event.</li>
+     * </ol>
      *
      * @param queued SYNs waiting now
      * @param max the configured soft cap, 0 or less when uncapped
      * @param workers accept workers running now
+     * @param expired SYNs that just waited out their accept window, 0 if none
      * @return true to start one more accept worker
      * @since 0.9.72+
      */
-    static boolean acceptQueueNeedsWorker(int queued, int max, int workers) {
-        return queued > effectiveQueueLimit(max) / 4 && workers < MAX_ACCEPT_WORKERS;
+    static boolean acceptWorkerNeeded(int queued, int max, int workers, int expired) {
+        return workers < MAX_ACCEPT_WORKERS &&
+               (queued > effectiveQueueLimit(max) / 4 || expired > 0);
     }
 
     /**
-     * The line the reaper writes when the accept queue is deep enough to need
-     * another worker: the action it took, then the depth and the bound that depth
-     * is measured against.
+     * The line the reaper writes when a sweep adds an accept worker: the action
+     * it took, then the depth and the bound that depth is measured against.
      * <p>Extracted from the reaper so the rendering is testable, and so the depth
      * and the bound are joined rather than added - see
      * {@link #synExpiryTally(int, int, int, int)} for what the arithmetic cost.
+     * <p>The lead names which of the two triggers fired, because the two read
+     * differently: a deep queue is pressure that has not hurt anyone yet, an
+     * expired handshake is a client that was already reset.
      *
      * @param queued SYNs waiting now
      * @param max the configured soft cap, 0 or less when uncapped
      * @param workers accept workers running now, the one just started included
+     * @param expired SYNs that just waited out their accept window, 0 if none
      * @return the line to log
      * @since 0.9.72+
      */
-    static String synQueuePressureText(int queued, int max, int workers) {
-        return "SYN queue busy -> Added an accept worker" +
+    static String synQueuePressureText(int queued, int max, int workers, int expired) {
+        String reason = expired > 0 ? "SYN handshakes expired" : "SYN queue busy";
+        return reason + " -> Added an accept worker" +
                " * Queued: " + queued + " SYNs * " + synQueueLimitText(max) +
                " * Workers: " + workers;
     }
@@ -1268,13 +1283,7 @@ class ConnectionHandler {
         SynReaper() {super();}
 
         public void timeReached() {
-            // Scale up under pressure before draining: a deep queue drained
-            // by one worker still leaves every SYN waiting the full timeout.
             int max = getMaxQueueSize();
-            if (_active && acceptQueueNeedsWorker(_synQueue.size(), max, _activeWorkerCount.get())) {
-                startAcceptWorker();
-                _log.info(synQueuePressureText(_synQueue.size(), max, _activeWorkerCount.get()));
-            }
             long now = _context.clock().now();
             int expired = 0;
             int timeoutMs = 0;
@@ -1308,6 +1317,20 @@ class ConnectionHandler {
             // that matters, which is how many and how deep.
             if (expired > 0 && _log.shouldDebug()) {
                 _log.debug(synExpiryTally(expired, timeoutMs, _synQueue.size(), max));
+            }
+            // Scale up on what the drain just saw, not only on the depth. A
+            // deep queue drained by one worker leaves every SYN behind it
+            // waiting the full timeout, but a listener with no worker at all
+            // resets handshakes long before the depth rule opens.
+            if (_active) {
+                int queued = _synQueue.size();
+                int workers = _activeWorkerCount.get();
+                if (acceptWorkerNeeded(queued, max, workers, expired)) {
+                    startAcceptWorker();
+                    if (_log.shouldInfo()) {
+                        _log.info(synQueuePressureText(queued, max, _activeWorkerCount.get(), expired));
+                    }
+                }
             }
             if (_active)
                 _timer.addEvent(this, SYN_SWEEP_INTERVAL);

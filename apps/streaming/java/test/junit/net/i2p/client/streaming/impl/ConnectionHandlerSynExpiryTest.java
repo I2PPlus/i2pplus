@@ -190,13 +190,27 @@ public class ConnectionHandlerSynExpiryTest {
      */
     @Test
     public void testPressureTextCarriesDepthAndWorkers() {
-        String msg = ConnectionHandler.synQueuePressureText(1028, 4096, 3);
+        String msg = ConnectionHandler.synQueuePressureText(1028, 4096, 3, 0);
         assertTrue("depth: " + msg, msg.contains("Queued: 1028 SYNs"));
         assertTrue("bound: " + msg, msg.contains("Limit: 4096 SYNs"));
         assertTrue("pool after the change: " + msg,
                    msg.contains("Workers: 3"));
         assertFalse("not the sum of depth and bound: " + msg,
                     msg.contains("5171"));
+    }
+
+    /**
+     * The expiry-triggered form leads with a longer phrase and still fits one
+     * log line.
+     */
+    @Test
+    public void testExpiryPressureTextFitsOneLogLine() {
+        String msg =
+            ConnectionHandler.synQueuePressureText(1039, 4096, 1, 887);
+        assertTrue("emitted line is " + msg.length() + " chars: " + msg,
+                   msg.length() <= 100);
+        assertTrue("reason: " + msg,
+                   msg.startsWith("SYN handshakes expired -> "));
     }
 
     /**

@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import org.junit.Assume;
 import org.junit.Test;
 
 /**
@@ -92,9 +93,9 @@ public class ConnectionHandlerSynAdmissionTest {
      */
     @Test
     public void testACappedQueueGrowsWorkersPastAQuarterOfTheCap() {
-        assertTrue(ConnectionHandler.acceptQueueNeedsWorker(65, 256, 4));
-        assertFalse(ConnectionHandler.acceptQueueNeedsWorker(64, 256, 4));
-        assertFalse(ConnectionHandler.acceptQueueNeedsWorker(20, 256, 4));
+        assertTrue(ConnectionHandler.acceptWorkerNeeded(65, 256, 4, 0));
+        assertFalse(ConnectionHandler.acceptWorkerNeeded(64, 256, 4, 0));
+        assertFalse(ConnectionHandler.acceptWorkerNeeded(20, 256, 4, 0));
     }
 
     /**
@@ -105,20 +106,43 @@ public class ConnectionHandlerSynAdmissionTest {
     @Test
     public void testAnUncappedQueueStillGrowsWorkers() {
         int backstop = ConnectionHandler.SYN_QUEUE_BACKSTOP;
-        assertTrue(ConnectionHandler.acceptQueueNeedsWorker(backstop / 4 + 1, 0, 4));
-        assertTrue(ConnectionHandler.acceptQueueNeedsWorker(backstop / 4 + 1, -1, 4));
-        assertFalse(ConnectionHandler.acceptQueueNeedsWorker(backstop / 4, 0, 4));
+        assertTrue(ConnectionHandler.acceptWorkerNeeded(backstop / 4 + 1, 0, 4, 0));
+        assertTrue(ConnectionHandler.acceptWorkerNeeded(backstop / 4 + 1, -1, 4, 0));
+        assertFalse(ConnectionHandler.acceptWorkerNeeded(backstop / 4, 0, 4, 0));
     }
 
     /**
-     * The pool stops growing at the module's ceiling, capped or uncapped.
+     * The defect: a listener with no accept worker at all resets handshakes long
+     * before the depth rule opens, because the depth rule waits for a quarter of
+     * the cap.
+     *
+     * <p>Measured on a live router: one hosted destination ran with no worker,
+     * its queue climbed from 47 to 1,039 under a 4,096 cap, and 887 handshakes
+     * from 54 peers were reset over 3m 11s before the depth rule fired at 1,039
+     * and one worker started - the expiries stopped in that same second. An
+     * expiry is the event; the depth is only a forecast of it.
+     */
+    @Test
+    public void testExpiringHandshakesGrowWorkersWithoutTheDepth() {
+        // the measured climb: 47 queued, nothing accepted, cap 4096
+        assertTrue(ConnectionHandler.acceptWorkerNeeded(47, 4096, 0, 1));
+        assertTrue(ConnectionHandler.acceptWorkerNeeded(151, 4096, 0, 887));
+        // and with no expiry the same depths are left alone
+        assertFalse(ConnectionHandler.acceptWorkerNeeded(47, 4096, 0, 0));
+        assertFalse(ConnectionHandler.acceptWorkerNeeded(1024, 4096, 0, 0));
+    }
+
+    /**
+     * The pool stops growing at the module's ceiling, capped or uncapped, and
+     * an expiry cannot buy a worker past it.
      */
     @Test
     public void testThePoolStopsAtTheCeiling() {
         int ceiling = ConnectionHandler.MAX_ACCEPT_WORKERS;
-        assertFalse(ConnectionHandler.acceptQueueNeedsWorker(ConnectionHandler.SYN_QUEUE_BACKSTOP,
-                                                             0, ceiling));
-        assertFalse(ConnectionHandler.acceptQueueNeedsWorker(100000, 256, ceiling));
+        assertFalse(ConnectionHandler.acceptWorkerNeeded(ConnectionHandler.SYN_QUEUE_BACKSTOP,
+                                                         0, ceiling, 0));
+        assertFalse(ConnectionHandler.acceptWorkerNeeded(100000, 256, ceiling, 0));
+        assertFalse(ConnectionHandler.acceptWorkerNeeded(0, 4096, ceiling, 500));
     }
 
     /**
@@ -153,6 +177,54 @@ public class ConnectionHandlerSynAdmissionTest {
         assertFalse(uncapped, uncapped.contains("Limit: 0"));
         // a negative cap is the same sentinel, and says the same thing
         assertEquals(ConnectionHandler.synQueueLimitText(-1), uncapped);
+    }
+
+    /**
+     * The scale-up report says which trigger opened, so a reader can tell
+     * pressure that has not hurt anyone yet from a queue that is already resetting
+     * clients - and both forms keep the depth and the bound as separate values,
+     * never their sum.
+     */
+    @Test
+    public void testTheScaleUpReportNamesWhatTriggeredIt() {
+        String depth = ConnectionHandler.synQueuePressureText(1100, 4096, 5, 0);
+        assertTrue(depth, depth.startsWith("SYN queue busy -> Added an accept worker"));
+        String expiry = ConnectionHandler.synQueuePressureText(47, 4096, 1, 887);
+        assertTrue(expiry, expiry.startsWith("SYN handshakes expired -> Added an accept worker"));
+        for (String s : new String[] {depth, expiry}) {
+            assertTrue(s, s.contains(" * Queued: "));
+            assertTrue(s, s.contains("Limit: 4096 SYNs"));
+            assertTrue(s, s.contains(" * Workers: "));
+            // the arithmetic defect this rendering exists to prevent: 1100 + '/'
+            // as a char added the two together
+            assertFalse(s, s.contains("5196"));
+        }
+    }
+
+    /**
+     * The gate has to sit where the sweep can see what it just reaped: a
+     * predicate no caller consults with the expiry count reads green in unit
+     * tests and changes nothing in the log.
+     *
+     * @throws Exception if the ConnectionHandler source cannot be read back from disk
+     */
+    @Test
+    public void testTheReaperHandsTheExpiryCountToTheGate() throws Exception {
+        String rel = "apps/streaming/java/src/net/i2p/client/streaming/" +
+                     "impl/ConnectionHandler.java";
+        java.io.File src = new java.io.File(rel);
+        if (!src.isFile()) {
+            src = new java.io.File("src/net/i2p/client/streaming/impl/ConnectionHandler.java");
+        }
+        Assume.assumeTrue("source not available", src.isFile());
+        String body = new String(java.nio.file.Files.readAllBytes(src.toPath()), "UTF-8");
+        String gate = "acceptWorkerNeeded(queued, max, workers, expired)";
+        assertTrue("the sweep must decide with the count it just reaped", body.contains(gate));
+        String report = "synQueuePressureText(queued, max, _activeWorkerCount.get(), expired)";
+        assertTrue("the report must say which trigger fired", body.contains(report));
+        int tally = body.indexOf("synExpiryTally(expired, timeoutMs");
+        assertTrue("the decision must follow the drain, not precede it",
+                   tally > 0 && body.indexOf(gate) > tally);
     }
 
     /**
