@@ -62,6 +62,70 @@ public abstract class NetworkDatabaseFacade implements Service {
     public abstract DatabaseEntry lookupLocallyWithoutValidation(Hash key);
 
     /**
+     * Return value of the Kademlia facade's leaseSetLookupFastFail() when the
+     * lookup reaches the network: the failure, if any, came from the search
+     * itself and took the whole timeout to say so.
+     *
+     * @since 0.9.72+
+     */
+    public static final int LOOKUP_SEARCH_STARTED = 0;
+
+    /**
+     * Return value when the NetDb was not ready, so the failure callback ran at
+     * once and no entry was ever consulted.
+     *
+     * @since 0.9.72+
+     */
+    public static final int LOOKUP_FAILED_NOT_INITIALIZED = 1;
+
+    /**
+     * Return value when a client sub-NetDb missed a destination this router
+     * hosts. Only the main NetDb holds our own LeaseSet, so a remote search
+     * could not answer it and was not started.
+     *
+     * @since 0.9.72+
+     */
+    public static final int LOOKUP_FAILED_LOCAL_NOT_STORED = 2;
+
+    /**
+     * Return value when the key is held in the NetDb negative cache, so the
+     * lookup was abandoned without asking any peer.
+     *
+     * @since 0.9.72+
+     */
+    public static final int LOOKUP_FAILED_NEGATIVE_CACHE = 3;
+
+    /**
+     * Return value when the last LeaseSet fetched under this key failed store
+     * validation, so fetching it again would only be refused again. Set by the
+     * sender, not by the facade: the rejection is recorded when the entry is
+     * stored, and the lookup is skipped before it is asked.
+     *
+     * @since 0.9.72+
+     */
+    public static final int LOOKUP_FAILED_STORE_REJECTED = 4;
+
+    /**
+     * Plain words for one of the {@code LOOKUP_*} codes, for the log line that
+     * reports a failed LeaseSet lookup. A reader skimming the log has no source
+     * open, so the code is never printed on its own.
+     *
+     * @param code one of the {@code LOOKUP_*} constants
+     * @return a phrase naming why the lookup ended, capitalized to follow an
+     *         {@code -> } arrow, never null
+     * @since 0.9.72+
+     */
+    public static String lookupFastFailText(int code) {
+        switch (code) {
+            case LOOKUP_FAILED_NOT_INITIALIZED: return "NetDb not started";
+            case LOOKUP_FAILED_LOCAL_NOT_STORED: return "Locally hosted LeaseSet not in this NetDb";
+            case LOOKUP_FAILED_NEGATIVE_CACHE: return "Held in the negative cache";
+            case LOOKUP_FAILED_STORE_REJECTED: return "Rejected by store validation";
+            default: return "Search failed";
+        }
+    }
+
+    /**
      * Lookup a LeaseSet in the network database.
      *
      * @param key the destination hash whose LeaseSet is sought

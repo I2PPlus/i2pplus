@@ -145,6 +145,13 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     private Result _finished = Result.NONE;
     /** When the lease set lookup started. */
     private long _leaseSetLookupBegin;
+    /**
+     * Which gate ended the LeaseSet lookup, one of the {@code LOOKUP_*} codes,
+     * captured before the lookup is started: the negative cache that explains a
+     * fast failure is itself filled by a search that fails, so reading the gates
+     * back after the failure callback would blame the cache for every timeout.
+     */
+    private int _leaseSetFastFail = KademliaNetworkDatabaseFacade.LOOKUP_SEARCH_STARTED;
     /** The outbound tunnel the message was sent on. */
     private TunnelInfo _outTunnel;
     /** The inbound tunnel the reply arrived on. */
@@ -610,6 +617,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 // Fail job sees _leaseSetLookupBegin == 0 and will not record
                 // leaseSetFailedRemoteTime; permanent negatives still map to
                 // UNSUPPORTED_ENCRYPTION inside the fail job.
+                _leaseSetFastFail = KademliaNetworkDatabaseFacade.LOOKUP_FAILED_NEGATIVE_CACHE;
                 LookupLeaseSetFailedJob failed = new LookupLeaseSetFailedJob(getContext());
                 getContext().jobQueue().addJob(failed);
                 return;
@@ -625,6 +633,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 _log.infoThrottled(debugKey(_toString, "leaseset-store-rejected"),
                                    "Skipping send to " + _toString +
                                    " -> LeaseSet rejected by store validation");
+                _leaseSetFastFail = KademliaNetworkDatabaseFacade.LOOKUP_FAILED_STORE_REJECTED;
                 LookupLeaseSetFailedJob failed = new LookupLeaseSetFailedJob(getContext());
                 getContext().jobQueue().addJob(failed);
                 return;
@@ -661,6 +670,10 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                                        " missing from our own store -> Failing without a remote search");
                 }
             }
+            // Asked before the lookup runs, because these are the very gates the
+            // facade is about to test, and a search that fails fills the negative
+            // cache the failure line would otherwise blame for its own timeout.
+            _leaseSetFastFail = kndf.leaseSetLookupFastFail(toHash);
             _leaseSetLookupBegin = getContext().clock().now();
             if (_log.shouldDebug()) {
                 _log.debug("Send Outbound client message - initiating LeaseSet Lookup job " +
@@ -1164,11 +1177,13 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             } else {
                 if (_log.shouldInfo()) {
                     if (_leaseSetLookupBegin > 0) {
-                        _log.info("LeaseSet lookup failed for " + _toString + " after " +
-                                  DataHelper.formatDuration(lookupTime));
+                        _log.info("LeaseSet lookup failed for " + _toString +
+                                  " -> " + fastFailText() +
+                                  " * Elapsed: " + DataHelper.formatDuration(lookupTime));
                     } else {
-                        // Pure neg-cache abort - no search ran, duration would be nonsense
-                        _log.info("LeaseSet lookup skipped for " + _toString + " -> Negatively cached");
+                        // No search ran at all, so a duration would be nonsense.
+                        _log.info("LeaseSet lookup skipped for " + _toString +
+                                  " -> " + fastFailText());
                     }
                 }
                 cause = MessageStatusMessage.STATUS_SEND_FAILURE_NO_LEASESET;
@@ -1191,6 +1206,18 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 _cache.lsFailCooldown.put(toHash, getContext().clock().now() + cooldown);
             }
             dieFatal(cause);
+        }
+
+        /**
+         * Words for the gate that ended this send's LeaseSet lookup, captured
+         * when the lookup was started. A reader skimming the log has no source
+         * open, so the numeric code is never printed on its own.
+         *
+         * @return a phrase naming the gate, never null
+         * @since 0.9.72+
+         */
+        private String fastFailText() {
+            return KademliaNetworkDatabaseFacade.lookupFastFailText(_leaseSetFastFail);
         }
     }
 

@@ -954,26 +954,82 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         LeaseSet ls = lookupLeaseSetLocally(key);
         if (ls != null) {
             if (onFindJob != null) {_context.jobQueue().addJob(onFindJob);}
-        } else if (shouldFailLocalWithoutRemoteSearch(isClientDb(), isLocalDestination(key))) {
-            // A client sub-NetDb miss for a destination we host cannot be
-            // repaired from the network: publish() mirrors the LS into the
-            // main NetDb only, and a remote search would query floodfills
-            // for a key we already hold (or are about to re-mint).
-            if (_log.shouldInfo()) {
-                _log.info("Local destination [" + key.toShortBase32() +
-                          "] not in local store -> Failing without remote search");
-            }
-            if (onFailedLookupJob != null) {_context.jobQueue().addJob(onFailedLookupJob);}
-        } else if (isNegativeCached(key)) {
-            if (_log.shouldInfo()) {
-                _log.info("LeaseSet [" + key.toShortBase32() +
-                          "] is negatively cached -> Queueing search...");
-            }
-            if (onFailedLookupJob != null) {_context.jobQueue().addJob(onFailedLookupJob);}
-        } else {
+            return;
+        }
+        boolean isClientDb = isClientDb();
+        boolean isLocalDest = isLocalDestination(key);
+        // The negative cache is only consulted when no earlier gate applies, so
+        // the netDb.negativeCache abort stat counts what it always counted.
+        boolean negativeCached = !shouldFailLocalWithoutRemoteSearch(isClientDb, isLocalDest) &&
+                                 isNegativeCached(key);
+        int fastFail = lookupFastFail(isClientDb, isLocalDest, negativeCached);
+        if (fastFail == LOOKUP_SEARCH_STARTED) {
             key = blindCache().getHash(key);
             search(key, onFindJob, onFailedLookupJob, timeoutMs, true, fromLocalDest);
+        } else {
+            if (_log.shouldInfo()) {
+                // No search is started on any of these paths, whatever the older
+                // wording said: the failure callback runs in this same millisecond.
+                _log.info("LeaseSet [" + key.toShortBase32() +
+                          "] not in local store -> " + lookupFastFailText(fastFail));
+            }
+            if (onFailedLookupJob != null) {_context.jobQueue().addJob(onFailedLookupJob);}
         }
+    }
+
+    /**
+     * Why a LeaseSet lookup for this key would end without searching the
+     * network, as one of the {@code LOOKUP_*} codes in
+     * {@link net.i2p.router.NetworkDatabaseFacade}, or
+     * {@code LOOKUP_SEARCH_STARTED} when a search would run.
+     *
+     * <p>A caller that reports the failure afterwards cannot tell the fast paths
+     * from a real search by timing alone: a negative-cache abort returns in
+     * milliseconds and a search that runs to its deadline returns in seconds,
+     * but both arrive through the same failure callback. This asks the same
+     * gates {@link #lookupLeaseSet(Hash, Job, Job, long, Hash)} is about to ask,
+     * before it runs, so the reason is recorded while it is still true - the
+     * negative cache is populated by a failed search, so reading it afterwards
+     * would blame the cache for every timeout.
+     *
+     * <p>Records no abort stat, unlike the lookup itself. A LeaseSet found in
+     * the local store never fails, so a code naming a fast path is only read by
+     * a caller that did fail.
+     *
+     * @param key the LeaseSet key, null returns {@code LOOKUP_SEARCH_STARTED}
+     * @return the code for the gate that stops the lookup, or
+     *         {@code LOOKUP_SEARCH_STARTED}
+     * @since 0.9.72+
+     */
+    public int leaseSetLookupFastFail(Hash key) {
+        if (!isInitialized()) {return LOOKUP_FAILED_NOT_INITIALIZED;}
+        boolean isClientDb = isClientDb();
+        boolean isLocalDest = isLocalDestination(key);
+        if (shouldFailLocalWithoutRemoteSearch(isClientDb, isLocalDest)) {
+            return LOOKUP_FAILED_LOCAL_NOT_STORED;
+        }
+        if (peekNegativeCached(key)) {return LOOKUP_FAILED_NEGATIVE_CACHE;}
+        return LOOKUP_SEARCH_STARTED;
+    }
+
+    /**
+     * The fast-fail decision, with the gates already read, so
+     * {@link #lookupLeaseSet(Hash, Job, Job, long, Hash)} and
+     * {@link #leaseSetLookupFastFail(Hash)} cannot drift apart.
+     *
+     * @param isClientDb true when this facade is a client sub-NetDb
+     * @param isLocalDest true when the key is a destination hosted on this router
+     * @param negativeCached true when the key is in the NetDb negative cache
+     * @return the code for the first gate that stops the lookup, or
+     *         {@code LOOKUP_SEARCH_STARTED}
+     * @since 0.9.72+
+     */
+    static int lookupFastFail(boolean isClientDb, boolean isLocalDest, boolean negativeCached) {
+        if (shouldFailLocalWithoutRemoteSearch(isClientDb, isLocalDest)) {
+            return LOOKUP_FAILED_LOCAL_NOT_STORED;
+        }
+        if (negativeCached) {return LOOKUP_FAILED_NEGATIVE_CACHE;}
+        return LOOKUP_SEARCH_STARTED;
     }
 
     /**
