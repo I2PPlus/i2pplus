@@ -33,6 +33,7 @@ import net.i2p.router.TunnelInfo;
 import net.i2p.router.TunnelManagerFacade;
 import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.router.util.MaskedIPSet;
+import net.i2p.router.util.PeerLogFormatter;
 import net.i2p.router.util.RandomIterator;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateConstants;
@@ -203,6 +204,16 @@ public class IterativeSearchJob extends FloodSearchJob {
      * @since 0.9.72+
      */
     private volatile int _queriesSent;
+
+    /**
+     * Candidates named in the search's opening line. The set is counted, not
+     * listed in full: a live router wrote 15,332 of those lines at 600 to 1,370
+     * characters each, because every candidate went out as a full 43-character
+     * base64 hash - and an unbracketed string that long is dead text in the log
+     * viewer, while a bracketed one of that length is linkified as a lease set
+     * rather than the router it is.
+     */
+    private static final int MAX_LOGGED_PEERS = 16;
 
     /** Most non-floodfill peers queried. */
     private static final int MAX_NON_FF = 5;
@@ -718,11 +729,11 @@ public class IterativeSearchJob extends FloodSearchJob {
         _out = getContext().messageRegistry().registerPending(replySelector, onReply, onTimeout);
         if (_log.shouldInfo())
             _log.info("New IterativeSearch for " + (_isLease ? "LeaseSet" : "Router") +
-                      " [" + _key.toShortBase64() + "] -> Querying: " +
-                      DataHelper.toString(_toTry) +
-                      "\n* Routing key: [" + _rkey.toShortBase64() + "]" +
+                      " " + keyText() + " -> Routing key: [" + _rkey.toShortBase64() + "]" +
                       " * Timeout: " + DataHelper.formatDuration(_timeoutMs) +
-                      " * DbId: " + _facade);
+                      "\n* DbId: " + _facade +
+                      PeerLogFormatter.peerList(_toTry, "Querying", _toTry.size(),
+                                                MAX_LOGGED_PEERS));
         retry();
     }
 
