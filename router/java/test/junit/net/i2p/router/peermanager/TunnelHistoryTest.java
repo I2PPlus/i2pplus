@@ -2,6 +2,10 @@ package net.i2p.router.peermanager;
 
 import static org.junit.Assert.*;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.util.Properties;
+
 import net.i2p.router.RouterContext;
 
 import org.junit.Assume;
@@ -9,7 +13,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- *  Tests for TunnelHistory.
+ * The per-peer tunnel record: what each build, rejection, failure and test
+ * round leaves behind, how those counters decay, and what survives a restart
+ * through the profile file.
  */
 public class TunnelHistoryTest {
 
@@ -125,5 +131,97 @@ public class TunnelHistoryTest {
         assertEquals(20, TunnelHistory.TUNNEL_REJECT_TRANSIENT_OVERLOAD);
         assertEquals(30, TunnelHistory.TUNNEL_REJECT_BANDWIDTH);
         assertEquals(50, TunnelHistory.TUNNEL_REJECT_CRIT);
+    }
+
+    /**
+     * A round that came back is counted, not just timestamped. The success
+     * count is what any ratio against the failure count needs.
+     */
+    @Test
+    public void testIncrementTestSucceeded() {
+        Assume.assumeTrue(_ctx != null);
+        TunnelHistory th = new TunnelHistory(_ctx, "test.group");
+        th.incrementTestSucceeded();
+        assertEquals(1, th.getLifetimeTestSucceeded());
+        assertTrue(th.getLastTestedSuccessfully() > 0);
+    }
+
+    /**
+     * A round that did not come back is charged too. Before this the test
+     * cycle wrote nothing to a profile on a failed round, so a peer's test
+     * record was only the rounds that answered.
+     */
+    @Test
+    public void testIncrementTestFailed() {
+        Assume.assumeTrue(_ctx != null);
+        TunnelHistory th = new TunnelHistory(_ctx, "test.group");
+        th.incrementTestFailed();
+        assertEquals(1, th.getLifetimeTestFailed());
+        assertTrue(th.getLastTestFailed() > 0);
+    }
+
+    /**
+     * Passing and failing a round are separate records: a success does not
+     * erase the failure it sits beside, or the ratio between them is lost.
+     */
+    @Test
+    public void testTestCountersDoNotShadowEachOther() {
+        Assume.assumeTrue(_ctx != null);
+        TunnelHistory th = new TunnelHistory(_ctx, "test.group");
+        for (int i = 0; i < 4; i++) {
+            th.incrementTestFailed();
+        }
+        for (int i = 0; i < 3; i++) {
+            th.incrementTestSucceeded();
+        }
+        assertEquals(4, th.getLifetimeTestFailed());
+        assertEquals(3, th.getLifetimeTestSucceeded());
+    }
+
+    /**
+     * The test counters decay with the other lifetime counters, so a peer is
+     * not held to its whole history and a bad patch is outlived.
+     */
+    @Test
+    public void testTestCountersDecay() {
+        Assume.assumeTrue(_ctx != null);
+        TunnelHistory th = new TunnelHistory(_ctx, "test.group");
+        for (int i = 0; i < 8; i++) {
+            th.incrementTestFailed();
+            th.incrementTestSucceeded();
+        }
+        th.decayLifetimeCounters(System.currentTimeMillis() +
+                                 TunnelHistory.DECAY_INTERVAL_MS + 1000L);
+        assertEquals(6, th.getLifetimeTestFailed());
+        assertEquals(6, th.getLifetimeTestSucceeded());
+    }
+
+    /**
+     * The test counters and their timestamps survive a restart, the way the
+     * build counters do, so a peer's record is not rebuilt from nothing every
+     * boot.
+     */
+    @Test
+    public void testTestCountersSurviveStoreAndLoad() throws Exception {
+        Assume.assumeTrue(_ctx != null);
+        TunnelHistory th = new TunnelHistory(_ctx, "test.group");
+        for (int i = 0; i < 5; i++) {
+            th.incrementTestFailed();
+        }
+        for (int i = 0; i < 2; i++) {
+            th.incrementTestSucceeded();
+        }
+        ByteArrayOutputStream buf = new ByteArrayOutputStream();
+        th.store(buf, false);
+        Properties props = new Properties();
+        props.load(new ByteArrayInputStream(buf.toByteArray()));
+
+        TunnelHistory restored = new TunnelHistory(_ctx, "test.group");
+        restored.load(props);
+        assertEquals(5, restored.getLifetimeTestFailed());
+        assertEquals(2, restored.getLifetimeTestSucceeded());
+        assertEquals(th.getLastTestFailed(), restored.getLastTestFailed());
+        assertEquals(th.getLastTestedSuccessfully(),
+                     restored.getLastTestedSuccessfully());
     }
 }

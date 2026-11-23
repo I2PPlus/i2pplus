@@ -4401,6 +4401,31 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
     }
 
     /**
+     * Charge the hop we sent the test round through with the round that failed.
+     * <p>The test cycle has always credited the hops of a round that came back
+     * and charged nobody for one that did not, so a peer's test record is only
+     * the rounds that answered: a peer that silently eats our rounds accrues
+     * nothing against it while the peers that answer keep lowering their test
+     * RTT, and the selection gate reading that RTT cannot see the difference.
+     * <p>This is the charge, not the penalty. It counts, and nothing acts on
+     * the count yet — the hop we sent through is the only hop a failed round
+     * can name, and any deeper hop of the onion may have dropped it instead, so
+     * the count is an upper bound on the peer's share. A demotion rule built on
+     * it needs the count measured first.
+     * <p>Attributed the way a build timeout is, to {@link
+     * BuildRequestor#getBuildRequestPeer} — the hop we hand the message to,
+     * {@code getPeer(0)} inbound and {@code getPeer(1)} outbound. Using a fixed
+     * index would charge a peer we never contacted.
+     *
+     * @since 0.9.72+
+     */
+    private void noteHopTestFailure() {
+        Hash hop = BuildRequestor.getBuildRequestPeer(_cfg);
+        if (hop == null) {return;}
+        getContext().profileManager().tunnelTestFailed(hop);
+    }
+
+    /**
      * Handles a test that timed out or failed.
      *
      * @param timeToFail ms spent before the failure was noticed
@@ -4508,6 +4533,12 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
         // Record the failed round so getSuccessRate() reflects reality and
         // getDelay() retests a failing tunnel sooner rather than slower.
         updateSuccessHistory(false);
+
+        // Charge the hop the round was sent through, at the point the round is
+        // ours: the partner and reply-leg deferrals above have already returned
+        // for rounds we decided belong to another pool, and charging a hop for
+        // those is how an innocent peer gets a record it did not earn.
+        noteHopTestFailure();
 
         boolean isExploratory = _pool.getSettings().isExploratory();
         getContext().statManager().addRateData(

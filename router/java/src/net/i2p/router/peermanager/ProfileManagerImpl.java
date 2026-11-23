@@ -171,6 +171,20 @@ public class ProfileManagerImpl implements ProfileManager {
     }
 
     /**
+     * Note that a tunnel test through this peer failed.
+     * <p>
+     * Non-blocking. Will not update the profile if we can't get the lock.
+     * Records the failure only: no demotion, no penalty, because the hop we
+     * sent the round through is not necessarily the hop that dropped it.
+     */
+    @Override
+    public void tunnelTestFailed(Hash peer) {
+        PeerProfile data = getProfileNonblocking(peer);
+        if (data == null) return;
+        data.getTunnelHistory().incrementTestFailed();
+    }
+
+    /**
      * Non-blocking. Will not update the profile if we can't get the lock.
      */
     @Override

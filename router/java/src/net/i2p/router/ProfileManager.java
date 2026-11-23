@@ -86,6 +86,17 @@ public interface ProfileManager {
     void tunnelTestSucceeded(Hash peer, long responseTimeMs);
 
     /**
+     * Note that a tunnel test through the router failed.
+     * <p>Charged to the hop the round was sent through, the only hop a failed
+     * round can name. Without it a peer's test record is only the rounds that
+     * came back, and a peer that silently drops them accrues nothing.
+     *
+     * @param peer hash of the hop the test round was sent through
+     * @since 0.9.72+
+     */
+    void tunnelTestFailed(Hash peer);
+
+    /**
      * Note that we were able to push some data through a tunnel that the peer
      * is participating in (detected after rtt).
      *

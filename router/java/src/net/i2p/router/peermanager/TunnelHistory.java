@@ -43,6 +43,12 @@ public class TunnelHistory {
     private volatile long _lastFailed;
     /** When a tunnel last passed a test. */
     private volatile long _lastTestedSuccessfully;
+    /** Tunnel tests through this peer that passed, lifetime. */
+    private final AtomicLong _lifetimeTestSucceeded = new AtomicLong();
+    /** Tunnel tests through this peer that failed, lifetime. */
+    private final AtomicLong _lifetimeTestFailed = new AtomicLong();
+    /** When a tunnel test last failed. */
+    private volatile long _lastTestFailed;
     /** Rate stat for the rejections. */
     private final RateStat _rejectRate;
     /** Rate stat for the failures. */
@@ -186,11 +192,61 @@ public class TunnelHistory {
     public long getLastTestedSuccessfully() {return _lastTestedSuccessfully;}
 
     /**
+     * When the peer last failed a tunnel test.
+     *
+     * @return milliseconds since the epoch, or 0 if no test through the peer
+     *         has ever failed
+     * @since 0.9.72+
+     */
+    public long getLastTestFailed() {return _lastTestFailed;}
+
+    /**
+     * Tunnel tests through this peer that passed, decayed with the other
+     * lifetime counters.
+     *
+     * @return the count, 0 if the peer has never been tested through
+     * @since 0.9.72+
+     */
+    public long getLifetimeTestSucceeded() {return _lifetimeTestSucceeded.get();}
+
+    /**
+     * Tunnel tests through this peer that failed, decayed with the other
+     * lifetime counters.
+     *
+     * @return the count, 0 if no test through the peer has ever failed
+     * @since 0.9.72+
+     */
+    public long getLifetimeTestFailed() {return _lifetimeTestFailed.get();}
+
+    /**
      * Record that a tunnel test through this peer succeeded.
      * This indicates the peer is actively participating in working tunnels.
      */
     public void incrementTestSucceeded() {
+        _lifetimeTestSucceeded.incrementAndGet();
         _lastTestedSuccessfully = _context.clock().now();
+    }
+
+    /**
+     * Record that a tunnel test through this peer failed.
+     * <p>Until now the test cycle wrote nothing to a profile on a failed round,
+     * so the only test evidence a peer ever carried was the rounds that came
+     * back. That is a survivor-biased record: a peer that silently eats our
+     * test rounds accrues nothing against it while the peers that answer keep
+     * lowering their test RTT, and a selection gate reading that RTT is
+     * structurally blind to every round that never returned.
+     * <p>Charged to the one hop a failed round can name — the peer we sent it
+     * through — the same attribution a build timeout uses. A tunnel test is an
+     * onion and any hop may drop it silently, so this is an upper bound on the
+     * peer's share, not a verdict, which is why nothing here penalises the peer
+     * yet. The counter has to exist and be measured before any demotion rule
+     * built on it can be shown to help.
+     *
+     * @since 0.9.72+
+     */
+    public void incrementTestFailed() {
+        _lifetimeTestFailed.incrementAndGet();
+        _lastTestFailed = _context.clock().now();
     }
 
     /**
@@ -322,13 +378,16 @@ public class TunnelHistory {
         decayCounter(_lifetimeRejected, "lifetimeRejected");
         decayCounter(_lifetimeTimedOut, "lifetimeTimedOut");
         decayCounter(_lifetimeFailed, "lifetimeFailed");
+        decayCounter(_lifetimeTestSucceeded, "lifetimeTestSucceeded");
+        decayCounter(_lifetimeTestFailed, "lifetimeTestFailed");
     }
 
     /**
      * Coalesce the rate statistics and periodically decay lifetime counters.
-     * <p>Lifetime counters ({@link #_lifetimeAgreedTo}, {@link #_lifetimeRejected},
-     * {@link #_lifetimeTimedOut}, {@link #_lifetimeFailed}) are decayed at 75%
-     * per 8 hours (matching {@link DBHistory}).  This prevents unbounded
+     * <p>Lifetime counters {@link #_lifetimeAgreedTo}, {@link #_lifetimeRejected},
+     * {@link #_lifetimeTimedOut}, {@link #_lifetimeFailed},
+     * {@link #_lifetimeTestSucceeded} and {@link #_lifetimeTestFailed} are decayed
+     * at 75% per 8 hours (matching {@link DBHistory}).  This prevents unbounded
      * growth across restarts and ensures stale history does not permanently
      * block peers from tiers.  Recency is handled by the RateStats
      * (10-minute and 1-hour windows) and by selection gates.
@@ -396,10 +455,14 @@ public class TunnelHistory {
         if (_lastRejectedTransient != 0) {addDate(buf, addComments, "lastRejectedTransient", _lastRejectedTransient, "Last time peer refused tunnel participation (Transient):");}
         if (_lastRejectedProbabalistic != 0) {addDate(buf, addComments, "lastRejectedProbabalistic", _lastRejectedProbabalistic, "Last time peer refused tunnel participation (Probabalistic):");}
         if (_lastFailed != 0) {addDate(buf, addComments, "lastFailed", _lastFailed, "Last time of participating tunnel failure for peer:");}
+        if (_lastTestedSuccessfully != 0) {addDate(buf, addComments, "lastTestedSuccessfully", _lastTestedSuccessfully, "Last time a tunnel test through the peer passed:");}
+        if (_lastTestFailed != 0) {addDate(buf, addComments, "lastTestFailed", _lastTestFailed, "Last time a tunnel test through the peer failed:");}
         if (_lifetimeAgreedTo.get() > 0) {add(buf, addComments, "lifetimeAgreedTo", _lifetimeAgreedTo.get(), "Total tunnels peer agreed to participate in: " + _lifetimeAgreedTo.get());}
         if (_lifetimeRejected.get() > 0) {add(buf, addComments, "lifetimeRejected", _lifetimeRejected.get(), "Total tunnels peer refused to participate in: " + _lifetimeRejected.get());}
         if (_lifetimeTimedOut.get() > 0) {add(buf, addComments, "lifetimeTimedOut", _lifetimeTimedOut.get(), "Total tunnel builds that timed out waiting for response: " + _lifetimeTimedOut.get());}
         if (_lifetimeFailed.get() > 0) {add(buf, addComments, "lifetimeFailed", _lifetimeFailed.get(), "Total failed tunnels peer agreed to participate in: " + _lifetimeFailed.get());}
+        if (_lifetimeTestSucceeded.get() > 0) {add(buf, addComments, "lifetimeTestSucceeded", _lifetimeTestSucceeded.get(), "Total tunnel tests the peer passed: " + _lifetimeTestSucceeded.get());}
+        if (_lifetimeTestFailed.get() > 0) {add(buf, addComments, "lifetimeTestFailed", _lifetimeTestFailed.get(), "Total tunnel tests the peer failed: " + _lifetimeTestFailed.get());}
         out.write(buf.toString().getBytes(StandardCharsets.UTF_8));
         _rejectRate.store(out, "tunnelHistory.rejectRate", addComments);
         _failRate.store(out, "tunnelHistory.failRate", addComments);
@@ -444,6 +507,8 @@ public class TunnelHistory {
     public void load(Properties props) {
         _lastAgreedTo = getLong(props, "tunnels.lastAgreedTo");
         _lastFailed = getLong(props, "tunnels.lastFailed");
+        _lastTestedSuccessfully = getLong(props, "tunnels.lastTestedSuccessfully");
+        _lastTestFailed = getLong(props, "tunnels.lastTestFailed");
         _lastRejectedCritical = getLong(props, "tunnels.lastRejectedCritical");
         _lastRejectedBandwidth = getLong(props, "tunnels.lastRejectedBandwidth");
         _lastRejectedTransient = getLong(props, "tunnels.lastRejectedTransient");
@@ -452,6 +517,8 @@ public class TunnelHistory {
         _lifetimeFailed.set(getLong(props, "tunnels.lifetimeFailed"));
         _lifetimeRejected.set(getLong(props, "tunnels.lifetimeRejected"));
         _lifetimeTimedOut.set(getLong(props, "tunnels.lifetimeTimedOut"));
+        _lifetimeTestSucceeded.set(getLong(props, "tunnels.lifetimeTestSucceeded"));
+        _lifetimeTestFailed.set(getLong(props, "tunnels.lifetimeTestFailed"));
         try {
             _rejectRate.load(props, "tunnelHistory.rejectRate", true);
         } catch (IllegalArgumentException iae) {
