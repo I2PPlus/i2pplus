@@ -532,6 +532,11 @@ public class RepublishLeaseSetJob extends JobImpl {
                           + "\n* LeaseSet: [" + shortHash() + "]"
                           + " * Expires in " + DataHelper.formatDuration(timeUntilExpiry));
             }
+            // Count the cycle. republishLeaseSetCount is only reached by a real
+            // store, so a destination parked in this branch stops showing up in
+            // the stats at the moment it stops publishing: here 3.6 publishes a
+            // minute against 5 re-mints a minute that recorded nothing at all.
+            getContext().statManager().addRateData("netDb.republishLeaseSetRemint", 1);
             refloatLeaseSet(ls, name, now, timeUntilExpiry);
             return;
         }

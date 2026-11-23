@@ -44,13 +44,31 @@ import net.i2p.util.LogManager;
  * never failed as if they had stopped.
  */
 public class RepublishLeaseSetJobTest {
+
+    /**
+     * The republish dispatch cases. Each case builds its own job against the
+     * mocks assembled in {@link #setUp()}, so the instance holds no state.
+     */
+    public RepublishLeaseSetJobTest() {
+    }
+
+    /** A clock value every case shares, past the startup grace window. */
     private static final long NOW = 1_000_000_000L;
 
+    /** The mocked context every job under test is built against. */
     private RouterContext _ctx;
+    /** The client manager, asked whether this destination publishes at all. */
     private ClientManagerFacade _cm;
+    /** The facade the job stores through and claims its publishing slot from. */
     private KademliaNetworkDatabaseFacade _facade;
+    /** The queue the job hands its successor to. */
     private JobQueue _jobQueue;
 
+    /**
+     * Assembles the mocks: a router past the startup grace window, a clock
+     * parked at {@link #NOW}, inbound pool settings with a target of 2, and a
+     * facade that accepts the publishing job.
+     */
     @Before
     public void setUp() {
         _ctx = mock(RouterContext.class);
@@ -164,6 +182,8 @@ public class RepublishLeaseSetJobTest {
 
         verify(_facade).sendStore(eq(hash), eq(ls), any(Job.class), any(Job.class), anyLong(), any());
         verify(_ctx.statManager()).addRateData(eq("netDb.republishLeaseSetCount"), anyLong());
+        verify(_ctx.statManager(), never()).addRateData(eq("netDb.republishLeaseSetRemint"),
+                                                        anyLong());
         verify(_jobQueue).addJob(any(Job.class));
     }
 
@@ -201,6 +221,12 @@ public class RepublishLeaseSetJobTest {
         // re-mint requested with the pool's healthy current LS, not the stored copy
         verify(_cm).requestLeaseSet(eq(hash), eq(freshPoolLs));
         verify(_jobQueue).addJob(any(Job.class));
+        // and the cycle is still visible in the stats: it re-minted, and it did
+        // not publish, which is exactly when republishLeaseSetCount goes silent
+        verify(_ctx.statManager()).addRateData(eq("netDb.republishLeaseSetRemint"),
+                                               anyLong());
+        verify(_ctx.statManager(), never()).addRateData(eq("netDb.republishLeaseSetCount"),
+                                                        anyLong());
     }
 
 /**
