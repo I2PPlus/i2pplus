@@ -85,7 +85,8 @@ public class PacketInlineDescriptionTest {
     public void inlineFormOmitsTheHandshakeOptions() throws Exception {
         String inline = synWithOptions(1812).formatInline().toString();
         assertTrue("flags still belong: " + inline, inline.contains("SYN"));
-        assertTrue("NACK still belongs: " + inline, inline.contains("NACK"));
+        assertTrue("NO-ACK still belongs: " + inline,
+                   inline.contains("NO-ACK"));
         assertFalse("sender identity size repeated per packet: " + inline,
                     inline.contains("Sender identity"));
         assertFalse("max packet size repeated per packet: " + inline,
@@ -154,5 +155,23 @@ public class PacketInlineDescriptionTest {
                     zero.contains("Delay"));
         p.setOptionalDelay(25);
         assertTrue(p.formatInline().toString().contains("Delay: 25ms"));
+    }
+
+    /**
+     * The NO_ACK flag names what it does - no acknowledgement is requested for
+     * this packet - and is not printed as "NACK". A client SYN sets that flag
+     * and carries no NACK list, and "SYN NACK" read as the receiver negatively
+     * acknowledging the SYN, the reverse of the handshake it describes; the
+     * NACK list, the packet's real negative acknowledgements, is printed
+     * separately.
+     *
+     * @throws Exception if the identity's ElGamal keys cannot be generated
+     */
+    @Test
+    public void noAckFlagIsNotPrintedAsANack() throws Exception {
+        String inline = synWithOptions(1812).formatInline().toString();
+        assertTrue("the flag is named: " + inline, inline.contains("NO-ACK"));
+        assertFalse("no bare NACK token to read as the NACK list: " + inline,
+                    inline.matches("(?s).*\\sNACK(\\s|$).*"));
     }
 }

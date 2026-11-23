@@ -52,7 +52,9 @@ import net.i2p.util.Log;
  * <li>{@link #FLAG_MAX_PACKET_SIZE_INCLUDED}: 2 byte integer</li>
  * <li>{@link #FLAG_PROFILE_INTERACTIVE}: no option data</li>
  * <li>{@link #FLAG_ECHO}: no option data</li>
- * <li>{@link #FLAG_NO_ACK}: no option data - this appears to be unused, we always ack, even for the first packet</li>
+ * <li>{@link #FLAG_NO_ACK}: no option data - set on the SYN and on every
+ * retransmit of it, because there is nothing to acknowledge yet
+ * ({@link #setAckThrough(long)} with a negative value sets it)</li>
  * </ol>
  * <p>If the signature is included, it uses the Destination's DSA key
  * to sign the entire header and payload with the space in the options
@@ -213,7 +215,10 @@ class Packet {
     public static final int FLAG_ECHO = (1 << 9);
 
     /**
-     * If set, this packet doesn't really want to ack anything.
+     * If set, the sender does not want this packet acknowledged, and
+     * {@link #getAckThrough()} reports -1 instead of 0. A SYN and its retransmits
+     * set it, because at that point the sender has nothing of the peer's to
+     * acknowledge.
      */
     public static final int FLAG_NO_ACK = (1 << 10);
 
@@ -1300,7 +1305,12 @@ class Packet {
         if (isFlagSet(FLAG_CLOSE)) {buf.append(" CLOSE");}
         if (isFlagSet(FLAG_RESET)) {buf.append(" RESET");}
         if (isFlagSet(FLAG_ECHO)) {buf.append(" ECHO");}
-        if (isFlagSet(FLAG_NO_ACK)) {buf.append(" NACK");}
+        // NO-ACK, not NACK: this flag says the packet asks for no acknowledgement,
+        // and the NACK list a few lines below is the packet's negative
+        // acknowledgements. Printed as "NACK" the two collide - a client SYN, which
+        // carries this flag and no NACK list, rendered as "SYN NACK" and read as the
+        // receiver negatively acknowledging a SYN, the opposite of what it means.
+        if (isFlagSet(FLAG_NO_ACK)) {buf.append(" NO-ACK");}
         else if (getAckThrough() > 0) {
             // An ACK of 0 acknowledges nothing, so printing it states an absence as
             // if it were a value - every RESET against a closed session carried
