@@ -317,6 +317,7 @@ public class FloodfillPeerSelector extends PeerSelector {
         Collections.sort(sorted, new XORComparator<>(key));
 
         int found = 0;
+        int unqueryable = 0;
         long now = _context.clock().now();
         long uptime = _context.router().getUptime();
         boolean enforceHeard = uptime > STARTUP_GRACE_PERIOD;
@@ -353,6 +354,16 @@ public class FloodfillPeerSelector extends PeerSelector {
                 continue;
             }
             RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(entry);
+            // A floodfill on an old version, or with a key type this router
+            // cannot encrypt to, cannot hold the entry or answer a lookup for it.
+            // The lookup path rejects it in sendQuery() - after the search has
+            // already spent one of its candidate slots on it - so reject it here,
+            // where the next-closest peer takes the slot instead of the search
+            // dying one candidate short.
+            if (!canAnswerLookup(info)) {
+                unqueryable++;
+                continue;
+            }
             // put anybody in the same /16, port, or family at the end
             boolean sameIP = info != null && !addSameIPFingerprint(maskedIPs, ports, families, _context, entry, info, SAME_IP_MASK);
             PeerClass cls = classifyFloodfillPeer(entry, info, sameIP, now, enforceHeard, maxFailRate);
@@ -362,7 +373,7 @@ public class FloodfillPeerSelector extends PeerSelector {
                 case BAD:   badff.add(entry); break;
             }
         }
-        logSelectionResults(rv, okff, badff);
+        logSelectionResults(rv, okff, badff, unqueryable);
         // Shuffle within each tier so concurrent searches don't all pick
         // the same XOR-closest peers, distributing load across floodfills
         Collections.shuffle(rv, _context.random());
@@ -391,6 +402,28 @@ public class FloodfillPeerSelector extends PeerSelector {
         }
 
         return rv;
+    }
+
+    /**
+     * Pure decision: is this floodfill one this router can put a question to at
+     * all, as opposed to one that is merely healthy and nearby?
+     * <p>The same predicate the lookup path applies in
+     * {@code IterativeSearchJob.sendQuery} - a peer below the minimum store
+     * version, a DSA-signed identity, or an encryption key this router cannot
+     * wrap a reply to can neither hold the entry nor answer for it. Ranking
+     * those peers and handing them out is what starved a live router's LeaseSet
+     * searches: 3,362 of them in four log files ended having asked nobody,
+     * because the closest floodfills were all stale and each one consumed a slot
+     * of the search's candidate allowance.
+     *
+     * @param info the candidate's RouterInfo, null when none is known locally;
+     *             an unknown RouterInfo is kept, exactly as the lookup path keeps it
+     * @return false only when the RouterInfo is known and shows a peer this
+     *         router cannot ask
+     * @since 0.9.72+
+     */
+    static boolean canAnswerLookup(RouterInfo info) {
+        return info == null || StoreJob.shouldStoreTo(info);
     }
 
     /**
@@ -737,13 +770,20 @@ public class FloodfillPeerSelector extends PeerSelector {
      * @param good hashes classified GOOD, listed first
      * @param ok hashes classified OK
      * @param bad hashes classified BAD, listed last
+     * @param unqueryable candidates dropped for being peers this router cannot
+     *                    ask at all - an old version or a key type it cannot
+     *                    wrap a reply to
      */
-    private void logSelectionResults(List<Hash> good, List<Hash> ok, List<Hash> bad) {
+    private void logSelectionResults(List<Hash> good, List<Hash> ok, List<Hash> bad,
+                                     int unqueryable) {
         if (_log.shouldDebug()) {
             StringBuilder buf = new StringBuilder("Floodfill sort results:");
             if (!good.isEmpty()) {buf.append(PeerLogFormatter.peerList(good, "Good", good.size(), MAX_LOGGED_PEERS));}
             if (!ok.isEmpty()) {buf.append(PeerLogFormatter.peerList(ok, "OK", ok.size(), MAX_LOGGED_PEERS));}
             if (!bad.isEmpty()) {buf.append(PeerLogFormatter.peerList(bad, "Bad", bad.size(), MAX_LOGGED_PEERS));}
+            if (unqueryable > 0) {
+                buf.append("\n* Peers that cannot answer: ").append(unqueryable);
+            }
             _log.debug(buf.toString());
         }
     }
