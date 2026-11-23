@@ -176,7 +176,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      *
      * @since 0.9.71+
      */
-    private static final int MAX_CONNS_PER_DEST = 32;
+    static final int MAX_CONNS_PER_DEST = 32;
 
     /**
      * Active outbound I2P socket count per destination hash.
@@ -212,7 +212,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      *         its connection limit
      * @since 0.9.71+
      */
-    private static boolean tryAcquireConnPermit(Hash dest) {
+    static boolean tryAcquireConnPermit(Hash dest) {
         if (dest == null) {return true;}
         AtomicBoolean acquired = new AtomicBoolean(false);
         _activeConns.compute(dest, (key, existing) -> {
@@ -236,7 +236,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      * @param dest the destination to release one permit for, null does nothing
      * @since 0.9.71+
      */
-    private static void releaseConnPermit(Hash dest) {
+    static void releaseConnPermit(Hash dest) {
         if (dest == null) {return;}
         _activeConns.computeIfPresent(dest, (key, count) -> {
             if (count.decrementAndGet() <= 0) {
@@ -245,6 +245,23 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             }
             return count;
         });
+    }
+
+    /**
+     * How many concurrent-connection permits this destination currently holds.
+     * A diagnostic read for the tests and for anyone tracing a permit that never
+     * came back: a destination pinned at {@link #MAX_CONNS_PER_DEST} refuses
+     * every further connection, and only a permit that was dropped without being
+     * released gets it there.
+     *
+     * @param dest the destination to read, null reads zero
+     * @return the permits held against this destination, never negative
+     * @since 0.9.72+
+     */
+    static int activeConnPermits(Hash dest) {
+        if (dest == null) {return 0;}
+        AtomicInteger count = _activeConns.get(dest);
+        return count != null ? Math.max(0, count.get()) : 0;
     }
 
     /**
@@ -1830,6 +1847,19 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             }
 
             if (needNewSocket) {
+
+                // An I2P-keepalive socket carries its permit across the request
+                // loop, and the loop boundary hands it back only when the socket is
+                // dropped outright. Reaching here means the socket is being
+                // replaced instead - another destination, another port, or a failed
+                // health check - so hand the old permit back before taking another.
+                // Overwriting the holder instead leaves the previous destination
+                // counted for the life of the browser connection, and a destination
+                // that flaps walks one slot per replacement to the cap.
+                if (heldPermitDest != null) {
+                    releaseConnPermit(heldPermitDest);
+                    heldPermitDest = null;
+                }
 
                 // Per-destination concurrent connection limit: prevent SYN storms
                 // when the browser fires many parallel requests to the same I2P
