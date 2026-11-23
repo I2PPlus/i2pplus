@@ -5979,8 +5979,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         MaxInboundBufferParam() {
             super("i2p.streaming.maxInboundBuffer", "Max inbound buffer (bytes)",
                     SUB_STREAMING,
-                    // 64 MB is the ceiling setMaxInboundBufferStatic accepts; offering
-                    // more only produced a target that was rewritten back.
+                    // 64 MB is the highest ceiling setMaxInboundBufferStatic can
+                    // accept; on a small-heap router a share of the heap binds it
+                    // first, and offering more only produced a target that was
+                    // rewritten back.
                     8388608, 64 * 1024 * 1024, 8388608,
                     // The stat the decision below acts on: how many streams began
                     // choking, and how deep their outbound queues were. It was

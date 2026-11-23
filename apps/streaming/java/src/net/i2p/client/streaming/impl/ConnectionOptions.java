@@ -1926,11 +1926,71 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      */
     public static int getMaxInboundBufferStatic() { return maxInboundBuffer; }
     /**
-     * Maximum inbound buffer cap, clamped to [512KB, 64MB].
+     * Maximum inbound buffer cap, clamped to [512KB, a share of the heap].
      * @param val the inbound buffer cap in bytes
      * @since 0.9.70+
      */
-    public static void setMaxInboundBufferStatic(int val) { maxInboundBuffer = Math.max(512 * 1024, Math.min(64 * 1024 * 1024, val)); }
+    public static void setMaxInboundBufferStatic(int val) {
+        maxInboundBuffer = inboundBufferCap(val, SystemVersion.getMaxMemory());
+    }
+
+    /**
+     * Smallest inbound buffer cap any router may be given, in bytes. Below this
+     * a stream cannot hold a window's worth of the smallest messages, so a
+     * reader that pauses briefly stalls the sender.
+     *
+     * @since 0.9.72+
+     */
+    static final int MIN_INBOUND_BUFFER = 512 * 1024;
+
+    /**
+     * Largest inbound buffer cap any router may be given, in bytes, whatever the
+     * heap. This is the bound the parameter has always had; the heap share below
+     * can only bring it lower, never raise it.
+     *
+     * @since 0.9.72+
+     */
+    static final int MAX_INBOUND_BUFFER = 64 * 1024 * 1024;
+
+    /**
+     * How many inbound streams' full buffers may together equal the heap. The
+     * buffer is per stream, so this is the concurrency the heap is sized for: a
+     * 4 GiB heap allows 64 MiB a stream, a 128 MiB heap allows 8 MiB.
+     *
+     * @since 0.9.72+
+     */
+    static final int INBOUND_BUFFER_HEAP_SHARES = 64;
+
+    /**
+     * The bound to apply to a requested inbound buffer cap. Pure decision - no
+     * context or runtime access, safe for unit tests.
+     * <p>The ceiling used to be a constant: 64 MiB per inbound stream on every
+     * router, while the formula that sizes the buffer,
+     * {@code maxMessageSize x (6 x maxWindowSize / 2 + 2)}, evaluates to about
+     * 3.2 GB at the shipped defaults, so the constant was always the binding
+     * term. A 128 MiB router therefore let a single inbound stream buffer half
+     * its heap, and a handful of them asked for more than the heap holds. The
+     * heap is what actually bounds this, so the ceiling is now a share of it,
+     * with the old constant kept as the absolute upper bound.
+     *
+     * @param requested the cap the Tuner or configuration asks for
+     * @param maxMemoryBytes the JVM's maximum heap, as {@link SystemVersion}
+     *                       reports it; 0 or less leaves the absolute bound in
+     *                       force, for a runtime that cannot report one
+     * @return the cap to use, never below {@link #MIN_INBOUND_BUFFER} and never
+     *         above {@link #MAX_INBOUND_BUFFER}
+     * @since 0.9.72+
+     */
+    static int inboundBufferCap(int requested, long maxMemoryBytes) {
+        long ceiling = MAX_INBOUND_BUFFER;
+        if (maxMemoryBytes > 0) {
+            ceiling = Math.min(ceiling, maxMemoryBytes / INBOUND_BUFFER_HEAP_SHARES);
+        }
+        if (ceiling < MIN_INBOUND_BUFFER) {
+            ceiling = MIN_INBOUND_BUFFER;
+        }
+        return Math.max(MIN_INBOUND_BUFFER, (int) Math.min(ceiling, Math.max(0, requested)));
+    }
 
     /** Initialize inbound buffer size and packet count cap. */
     private void initializeInboundBufferSize() {
