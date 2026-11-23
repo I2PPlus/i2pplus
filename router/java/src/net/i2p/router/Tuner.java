@@ -11478,7 +11478,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double sendWindow = getAdditionalStat(_context, "udp.avgSendWindow");
             boolean cwinCollapsed = !Double.isNaN(sendWindow) && sendWindow < 20000;
             double congCWIN = getAdditionalStat(_context, "udp.congestionOccurred");
-            boolean congestionActive = !Double.isNaN(congCWIN) && congCWIN > 0;
+            boolean congestionActive = transportCongested(congCWIN);
             double buildTime = getAdditionalStat(_context, "tunnel.buildRequestTime");
             boolean buildsSlow = !Double.isNaN(buildTime) && buildTime > 15000;
             double handlerQueue = getAdditionalStat(_context, "tunnel.buildHandler.queueSize");
@@ -12644,7 +12644,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double sendWindow = getAdditionalStat(_context, "udp.avgSendWindow");
             boolean cwinCollapsed = !Double.isNaN(sendWindow) && sendWindow < 20000;
             double congCWIN = getAdditionalStat(_context, "udp.congestionOccurred");
-            boolean congestionActive = !Double.isNaN(congCWIN) && congCWIN > 0;
+            boolean congestionActive = transportCongested(congCWIN);
             double congestedRTO = getAdditionalStat(_context, "udp.congestedRTO");
             boolean rtoInflated = !Double.isNaN(congestedRTO) && congestedRTO > current * 2;
             // Emergency: rtxRatio > 1000 = stream death spiral
@@ -12727,7 +12727,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double sendWindow = getAdditionalStat(_context, "udp.avgSendWindow");
             boolean cwinCollapsed = !Double.isNaN(sendWindow) && sendWindow < 20000;
             double congCWIN = getAdditionalStat(_context, "udp.congestionOccurred");
-            boolean congestionActive = !Double.isNaN(congCWIN) && congCWIN > 0;
+            boolean congestionActive = transportCongested(congCWIN);
             double congestedRTO = getAdditionalStat(_context, "udp.congestedRTO");
             boolean rtoInflated = !Double.isNaN(congestedRTO) && congestedRTO > current * 1.5;
             double rtxRatio = getAdditionalStat(_context, "stream.rtxRatio");
@@ -12822,6 +12822,42 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     }
 
     /**
+     * Congestion-window size, in bytes, at or below which a congestion event
+     * means the peer's window has actually shut down rather than merely lost a
+     * packet. It is the RFC 5681 initial window ({@code 3 * MTU}) that
+     * {@code PeerState} gives a fresh peer, at the default MTU.
+     * <p>Package-visible so the threshold can be derived from it in tests rather
+     * than re-declared as a second literal that could drift.
+     *
+     * @since 0.9.72+
+     */
+    static final int CONGESTED_CWIN_BYTES = 3 * PeerState.DEFAULT_MTU;
+
+    /**
+     * Is the UDP transport congested, as opposed to simply retransmitting on a
+     * healthy path?
+     * <p>{@code udp.congestionOccurred} records the peer's send window in bytes
+     * at the moment of the event ({@code PeerState.messageRetransmitted}), so its
+     * average is a size and is never zero while any event fires. Every call site
+     * tested {@code > 0} and was therefore true on any router that retransmits at
+     * all: this one reports 141 events/min at an average window of 11,574 bytes
+     * while the average window across all peers is a healthy 39,534, and the
+     * always-true flag held {@code tunnel.build.maxConcurrent} on its
+     * hard-decrease branch every pass. Read the magnitude the stat carries
+     * instead - a congestion event at a window of a few packets is a collapsed
+     * path, one at a full window is ordinary loss.
+     *
+     * @param cwinAtCongestion the {@code udp.congestionOccurred} average in
+     *                         bytes, NaN while no event has fired
+     * @return true when congestion arrived with the window at its initial size
+     * @since 0.9.72+
+     */
+    static boolean transportCongested(double cwinAtCongestion) {
+        return !Double.isNaN(cwinAtCongestion) && cwinAtCongestion > 0 &&
+               cwinAtCongestion <= CONGESTED_CWIN_BYTES;
+    }
+
+    /**
      * Pure CWIN growth/shrink decision for the max send window, extracted from
      * {@code MaxSendWindowParam#computeTarget} so the branches are unit-testable
      * without a Tuner context.
@@ -12845,7 +12881,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * @param jobLag     {@code jobQueue.jobLag} (NaN = unknown)
      * @param memPressure heap pressure ratio 0.0-1.0
      * @param retransmits     {@code udp.retransmitEvents} recent count
-     * @param congCWIN        {@code udp.congestionOccurred} recent count
+     * @param congCWIN        {@code udp.congestionOccurred} average send window in
+     *                        bytes at the moment of a congestion event
      * @param sendWindow      {@code udp.avgSendWindow} for collapse detection
      * @param rtxRatio        {@code stream.rtxRatio} hourly ratio
      * @param failsafeCloses  {@code ntcp.failsafeCloses} recent count
@@ -12861,7 +12898,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean memOk = memPressure < 0.75;
             boolean highUsage = !Double.isNaN(observed) && observed > current * 0.7;
             boolean congested = !Double.isNaN(retransmits) && retransmits > 0;
-            boolean congestionActive = !Double.isNaN(congCWIN) && congCWIN > 0;
+            boolean congestionActive = transportCongested(congCWIN);
             boolean cwinCollapsed = !Double.isNaN(sendWindow) && sendWindow < 20000;
             boolean deathSpiral = !Double.isNaN(rtxRatio) && rtxRatio > 1000;
             boolean failsafeActive = !Double.isNaN(failsafeCloses) && failsafeCloses > 0;
@@ -13027,7 +13064,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double congCWIN = getAdditionalStat(_context, "udp.congestionOccurred");
-            boolean congestionActive = !Double.isNaN(congCWIN) && congCWIN > 0;
+            boolean congestionActive = transportCongested(congCWIN);
             double retransmits = getAdditionalEventCount(_context, "udp.retransmitEvents");
             boolean hasRetransmits = !Double.isNaN(retransmits) && retransmits > 0;
             double expired = getAdditionalEventCount(_context, "udp.sendExpired");
