@@ -1294,9 +1294,19 @@ public class IterativeSearchJob extends FloodSearchJob {
                     else {_log.info("IterativeSearch for Router [unknown] timed out");}
                 }
             } else {
-                if (_log.shouldInfo()) {
-                    if (peer != null) {_log.info("IterativeSearch for " + (isKnown ? "known " : "") + "Router [" + peer.toShortBase64() + "] failed");}
-                    else {_log.info("IterativeSearch for Router [unknown] failed");}
+                // The peer answered and simply did not have the key - the
+                // ordinary outcome of one hop of an iterative lookup, and it was
+                // written once per peer per search at INFO: 205,711 lines in two
+                // log files, some 360 MB a day, beside the search's own summary
+                // line that already reports how many peers were asked.
+                if (_log.shouldDebug()) {
+                    if (peer != null) {
+                        _log.debug("Search reply from [" + peer.toShortBase64() +
+                                   "] held no match for " + keyText() +
+                                   (isKnown ? "" : " -> Router not known locally"));
+                    } else {
+                        _log.debug("Search reply from an unknown router held no match for " + keyText());
+                    }
                 }
             }
         }
