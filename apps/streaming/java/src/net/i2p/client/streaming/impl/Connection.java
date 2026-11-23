@@ -1510,8 +1510,16 @@ class Connection {
      * the first pass at the 9s initial RTO, so the handshake died at 9.0s
      * having put one SYN on the fabric - while handshakes to the same
      * destination that got past the first tunnel opened in 0.8-3s.
-     * <p>Never lengthens the gap: the SYN interval only ever caps the RTO, so a
-     * path whose RTO is already shorter keeps its faster cadence.
+     * <p>Never lengthens the gap on a measured path: the SYN interval only ever
+     * caps the RTO, so a path whose measured RTO is already shorter keeps its
+     * faster cadence. A seed RTO - one taken from the initial RTT estimate before
+     * any sample - does not get to shorten it. The handshake's wall-clock and
+     * send-count budgets are both sized from the SYN interval, so arming a
+     * shorter gap than the one they were sized from ends the handshake before the
+     * probes they promised: with a 171,950ms Snark window the interval is 9s and
+     * the budget buys twelve probes, and a 2s seed would have spent that budget
+     * in the first 24 seconds of a handshake the caller said could take three
+     * minutes.
      *
      * @param rtoMs the RTO the established path would arm with
      * @return the arm delay in ms
@@ -1519,24 +1527,29 @@ class Connection {
      */
     private int retransmitArmDelayMs(int rtoMs) {
         return computeRetransmitArmDelay(_highestAckedThrough.get() < 0,
-                                         getSynRetransmitInterval(), rtoMs);
+                                         getSynRetransmitInterval(), rtoMs,
+                                         _options.isRTTEstablished());
     }
 
     /**
      * Pure decision behind {@link #retransmitArmDelayMs(int)}: the handshake is
-     * paced at the SYN interval capped by the RTO, and an established path at
-     * the RTO.
+     * paced at the SYN interval, or at the RTO when the RTO is a measurement of
+     * this path; an established path is paced at the RTO.
      *
      * @param awaitingFirstAck true while no ACK has advanced this connection
      *                         past its initial SYN
      * @param synIntervalMs the SYN-phase interval from
      *                      {@link #getSynRetransmitInterval()}
      * @param rtoMs the RTO the established path would arm with
+     * @param rtoIsMeasured whether {@code rtoMs} came from a round-trip sample on
+     *                      this path rather than from the pre-measurement seed
      * @return the arm delay in ms
      * @since 0.9.72+
      */
-    static int computeRetransmitArmDelay(boolean awaitingFirstAck, int synIntervalMs, int rtoMs) {
-        return awaitingFirstAck ? Math.min(synIntervalMs, rtoMs) : rtoMs;
+    static int computeRetransmitArmDelay(boolean awaitingFirstAck, int synIntervalMs,
+                                         int rtoMs, boolean rtoIsMeasured) {
+        if (!awaitingFirstAck) {return rtoMs;}
+        return rtoIsMeasured ? Math.min(synIntervalMs, rtoMs) : synIntervalMs;
     }
 
     /**

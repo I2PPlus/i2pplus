@@ -46,8 +46,12 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     private volatile int _minRtt = Integer.MAX_VALUE;
     /** Rtt deviation. */
     private volatile int _rttDeviation;
-    /** Retransmit timeout. */
-    private volatile int _retransmitTimeout = defaultInitialRTO;
+    /**
+     * Retransmit timeout. Seeded from the path estimate through
+     * {@link #initialRtoMs(int)}, not from the standalone initial-RTO constant -
+     * see that method for why the two disagree.
+     */
+    private volatile int _retransmitTimeout = initialRtoMs(DEFAULT_INITIAL_RTT);
     /** Retransmit delay. */
     private int _retransmitDelay;
     /** Ack delay. */
@@ -160,9 +164,13 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      */
     static final long MIN_RTO_DOUBLE_GAP_MS = 1000;
 
-    /** Prop initial rto. */
-    private static final String PROP_INITIAL_RTO = "i2p.streaming.initialRTO";
-    /** Prop max rto. */
+    /**
+     * Per-socket override for the initial RTO. I2PSnark and the IRC client use it
+     * to ask for a longer first timeout than the router-wide value, and a value
+     * here wins outright over the seed {@link #initialRtoMs(int)} derives.
+     */
+    static final String PROP_INITIAL_RTO = "i2p.streaming.initialRTO";
+    /** Per-socket override for the RTO backoff ceiling. */
     static final String PROP_MAX_RTO = "i2p.streaming.maxRTO";
 
     /**
@@ -180,9 +188,14 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     static final String PROP_STALL_GIVEUP_MS = "i2p.streaming.stallGiveupMs";
 
     /**
-     * Default initial RTO (ms) before any RTT measurement. Set to 9000 — accommodates
-     * typical I2P RTT up to ~6s without premature SYN retransmit, matching i2pd's
-     * INITIAL_RTO. The Tuner adjusts this adaptively based on network conditions.
+     * Default initial RTO (ms) before any RTT measurement, and the ceiling on the
+     * seed a connection starts with - see {@link #initialRtoMs(int)}, which caps
+     * this by what the initial RTT estimate justifies and puts the result through
+     * the resend-delay bounds. 9000 accommodates typical I2P RTT up to ~6s without
+     * premature SYN retransmit, matching i2pd's INITIAL_RTO, and it is the blind
+     * SYN-phase interval {@code Connection#getSynRetransmitInterval()} sizes the
+     * handshake from. The Tuner adjusts this adaptively based on network conditions.
+     *
      * @since 0.9.70+ mutable for adaptive tuning
      */
     private static volatile int defaultInitialRTO = 9000;
@@ -986,7 +999,9 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
         applyInt(opts, PROP_TAGS_TO_SEND, DEFAULT_TAGS_TO_SEND, onlyIfSet, v -> _tagsToSend = v);
         applyInt(opts, PROP_TAG_THRESHOLD, DEFAULT_TAG_THRESHOLD, onlyIfSet, v -> _tagThreshold = v);
 
-        applyInt(opts, PROP_INITIAL_RTO, defaultInitialRTO, onlyIfSet, v -> _retransmitTimeout = v);
+        // Absent property means "the seed this connection's own path estimate
+        // implies", not the standalone constant - see initialRtoMs.
+        applyInt(opts, PROP_INITIAL_RTO, initialRtoMs(_smoothedRtt), onlyIfSet, v -> _retransmitTimeout = v);
     }
 
     /**
@@ -1228,6 +1243,34 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
         int lo = Math.min(minRD, maxRD);
         int hi = Math.max(minRD, maxRD);
         return Math.max(lo, Math.min(rto, hi));
+    }
+
+    /**
+     * The retransmit timeout a connection starts with, before it has measured
+     * anything about its path.
+     * <p>The seed used to be the initial-RTO constant on its own, and that value
+     * was never put through the bounds {@link #computeRTO()} applies to every
+     * computed RTO. Live on a router whose Tuner had pulled Max Resend Delay down
+     * to 2,005 ms from its 20,000 default, the seed still read 9,000 ms - the
+     * same quantity bounded two different ways, and the looser one won exactly
+     * where it mattered: on a fresh connection, whose first loss then sat on the
+     * head of the stream for nine seconds while the Tuner was saying two. The
+     * seed is now the same 1.5x derivation {@link #computeRTO()} uses for a
+     * connection's first sample, applied to the initial RTT estimate, capped by
+     * the configured initial RTO so the Tuner keeps the knob in both directions,
+     * and put through the same {@link #clampRto} bounds.
+     * <p>The configured initial RTO still governs the SYN-phase cadence
+     * ({@code Connection#getSynRetransmitInterval()} reads it directly), where
+     * the wait is for a peer to answer, not for a round trip to come back.
+     *
+     * @param initialRttMs the connection's RTT estimate before any sample,
+     *                     normally {@link #DEFAULT_INITIAL_RTT}
+     * @return the timeout to start with, in ms, within the resend-delay bounds
+     * @since 0.9.72+
+     */
+    static int initialRtoMs(int initialRttMs) {
+        int fromRtt = initialRttMs + initialRttMs / 2;
+        return clampRto(Math.min(fromRtt, defaultInitialRTO), minResendDelay, maxResendDelay);
     }
 
     /** Recalculate RTO from current smoothed RTT and deviation per RFC 6298. */

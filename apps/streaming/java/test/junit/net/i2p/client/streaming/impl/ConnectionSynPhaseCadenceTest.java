@@ -55,7 +55,7 @@ public class ConnectionSynPhaseCadenceTest {
     public void firstProbeFiresInsideTheBudgetItSized() {
         int interval = Connection.fitSynBudgetToWindow(INITIAL_RTO, PROXY_WINDOW_MS, CONFIGURED_SENDS);
         long budget = Connection.computeSynPhaseBudgetMs(PROXY_WINDOW_MS, -1, interval);
-        int gap = Connection.computeRetransmitArmDelay(true, interval, INITIAL_RTO);
+        int gap = Connection.computeRetransmitArmDelay(true, interval, INITIAL_RTO, false);
         assertEquals(1250, interval);
         assertEquals(8000, budget);
         assertEquals("the armed gap is the interval the budget was sized from", interval, gap);
@@ -77,16 +77,40 @@ public class ConnectionSynPhaseCadenceTest {
     }
 
     /**
-     * A handshake is paced at the SYN interval, capped by the RTO, so the fix
-     * can only shorten the first gap, never lengthen a path that is already
-     * probing faster than the SYN interval asks.
+     * A handshake on a path with a measured RTO is paced at the SYN interval
+     * capped by that measurement, so the cadence can only shorten, never lengthen
+     * a path that is already probing faster than the SYN interval asks.
      */
     @Test
-    public void handshakeGapIsTheSynIntervalCappedByTheRto() {
-        assertEquals(1250, Connection.computeRetransmitArmDelay(true, 1250, INITIAL_RTO));
-        assertEquals(1500, Connection.computeRetransmitArmDelay(true, 9000, 1500));
+    public void handshakeGapIsTheSynIntervalCappedByAMeasuredRto() {
+        assertEquals(1250, Connection.computeRetransmitArmDelay(true, 1250, INITIAL_RTO, true));
+        assertEquals(1500, Connection.computeRetransmitArmDelay(true, 9000, 1500, true));
         assertEquals(Connection.SYN_RTO_MIN,
-                     Connection.computeRetransmitArmDelay(true, Connection.SYN_RTO_MIN, INITIAL_RTO));
+                     Connection.computeRetransmitArmDelay(true, Connection.SYN_RTO_MIN,
+                                                          INITIAL_RTO, true));
+    }
+
+    /**
+     * A seed RTO is not a measurement, and the handshake's budgets are sized from
+     * the SYN interval, so a seed shorter than that interval must not shorten the
+     * gap. This is the case the faster pre-measurement seed creates: a Snark
+     * connect window of 171,950ms fits twelve probes at 9s each, and a 2s seed
+     * would have spent that budget in 24s of a handshake the caller said could run
+     * for three minutes.
+     */
+    @Test
+    public void seedRtoDoesNotShortenTheHandshakeGap() {
+        int window = 171950;
+        int interval = Connection.fitSynBudgetToWindow(INITIAL_RTO, window, CONFIGURED_SENDS);
+        assertEquals(9000, interval);
+        assertEquals("the seed is not evidence, so the interval holds", interval,
+                     Connection.computeRetransmitArmDelay(true, interval, 2005, false));
+        assertEquals("a measured 2005ms round trip does win", 2005,
+                     Connection.computeRetransmitArmDelay(true, interval, 2005, true));
+        long budget = Connection.computeSynPhaseBudgetMs(window, -1, interval);
+        assertTrue("budget " + budget + "ms must stay inside the window", budget <= window);
+        assertTrue("the armed gap must buy the probe floor",
+                   budget / interval >= Connection.SYN_PHASE_BUDGET_MIN_PROBES);
     }
 
     /**
@@ -95,8 +119,9 @@ public class ConnectionSynPhaseCadenceTest {
      */
     @Test
     public void establishedPathKeepsItsRto() {
-        assertEquals(INITIAL_RTO, Connection.computeRetransmitArmDelay(false, 1250, INITIAL_RTO));
-        assertEquals(18000, Connection.computeRetransmitArmDelay(false, 1250, 18000));
+        assertEquals(INITIAL_RTO,
+                     Connection.computeRetransmitArmDelay(false, 1250, INITIAL_RTO, true));
+        assertEquals(18000, Connection.computeRetransmitArmDelay(false, 1250, 18000, false));
     }
 
     /**
@@ -111,7 +136,7 @@ public class ConnectionSynPhaseCadenceTest {
         for (long window : windows) {
             int interval = Connection.fitSynBudgetToWindow(INITIAL_RTO, window, CONFIGURED_SENDS);
             long budget = Connection.computeSynPhaseBudgetMs(window, -1, interval);
-            int gap = Connection.computeRetransmitArmDelay(true, interval, INITIAL_RTO);
+            int gap = Connection.computeRetransmitArmDelay(true, interval, INITIAL_RTO, false);
             long probes = budget / gap;
             assertTrue("window " + window + "ms buys " + probes + " probes at " + gap +
                        "ms, below the floor of " + Connection.SYN_PHASE_BUDGET_MIN_PROBES,
@@ -130,7 +155,7 @@ public class ConnectionSynPhaseCadenceTest {
         // 1.5s round trip, 150% headroom
         int interval = Connection.computeSynRetransmitInterval(1000, INITIAL_RTO);
         long budget = Connection.computeSynPhaseBudgetMs(PROXY_WINDOW_MS, 1000, interval);
-        int gap = Connection.computeRetransmitArmDelay(true, interval, 1250);
+        int gap = Connection.computeRetransmitArmDelay(true, interval, 1250, true);
         assertEquals(1500, interval);
         assertEquals("the RTO is shorter than the SYN interval here, and wins", 1250, gap);
         assertTrue(budget / gap >= Connection.SYN_PHASE_BUDGET_MIN_PROBES);
