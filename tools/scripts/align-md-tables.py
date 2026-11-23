@@ -3,9 +3,11 @@
 align-md-tables.py — Align markdown tables and trim trailing whitespace.
 
 Reads one or more markdown files, finds all pipe-delimited tables,
-and rewrites them with vertically aligned column separators. Also trims
-trailing whitespace, preserving intentional markdown line breaks (exactly
-2 trailing spaces). Accounts for CJK double-width characters.
+and rewrites them with vertically aligned column separators. A column's
+alignment marker (``:---``, ``---:``, ``:---:``) is read from the separator row
+and written back into it, so reformatting never changes how the table renders.
+Also trims trailing whitespace, preserving intentional markdown line breaks
+(exactly 2 trailing spaces). Accounts for CJK double-width characters.
 
 Usage:
     align-md-tables.py FILE [FILE ...]
@@ -84,6 +86,49 @@ def parse_row(line):
     return [cell.strip() for cell in CELL_SPLIT.split(stripped)]
 
 
+def separator_index(table_lines):
+    """Which line of a table is its separator row, or None.
+
+    A GFM table's separator is the second line, right under the header. That is
+    where to look first: a body cell that is only dashes (a divider someone drew
+    by hand) reads as a separator too, and the wrong one decides the alignment of
+    every column.
+    """
+    if len(table_lines) > 1 and is_separator_row(table_lines[1]):
+        return 1
+    for i, line in enumerate(table_lines):
+        if is_separator_row(line):
+            return i
+    return None
+
+
+def column_alignments(sep_row):
+    """Per-column alignment read off the separator row.
+
+    ``:---`` left, ``---:`` right, ``:---:`` centre, ``---`` leave it to the
+    renderer. The colons are not decoration: they are what the renderer aligns
+    the column by, so rewriting the row as plain dashes changes how the table
+    displays, not only how the source looks.
+    """
+    out = []
+    for cell in sep_row:
+        left, right = cell.startswith(':'), cell.endswith(':')
+        out.append('center' if left and right else
+                   'left' if left else 'right' if right else '')
+    return out
+
+
+def separator_cell(align, width):
+    """A separator cell ``width`` wide, keeping its alignment marker.
+
+    The colons count towards the width, so the pipes still line up with the rows
+    above and below; a column never gets narrower than the marker it needs.
+    """
+    left = ':' if align in ('left', 'center') else ''
+    right = ':' if align in ('right', 'center') else ''
+    return left + '-' * max(width - len(left) - len(right), 1) + right
+
+
 def align_table(table_lines):
     """Align a list of table row strings. Returns reformatted lines."""
     if len(table_lines) < 2:
@@ -104,15 +149,25 @@ def align_table(table_lines):
         for i, cell in enumerate(row):
             widths[i] = max(widths[i], rendered_width(cell))
 
+    # Read the alignment before the row that carries it is rewritten, and make
+    # room for it: a right-aligned column of one-character cells still needs the
+    # colon that says so.
+    sep_at = separator_index(table_lines)
+    aligns = column_alignments(parsed[sep_at]) if sep_at is not None else []
+    for i, align in enumerate(aligns):
+        if align:
+            widths[i] = max(widths[i], 3 if align == 'center' else 2)
+
     # Rebuild lines
     result = []
-    for row in parsed:
-        if is_separator_row(table_lines[len(result)]):
-            # Separator row: dashes matching column widths
-            cells = ['-' * widths[i] for i in range(ncols)]
+    for i, row in enumerate(parsed):
+        if i == sep_at:
+            # Separator row: dashes matching column widths, marker kept
+            cells = [separator_cell(aligns[j] if j < len(aligns) else '', widths[j])
+                     for j in range(ncols)]
         else:
             # Data/header row: pad cells
-            cells = [pad_to(row[i], widths[i]) for i in range(ncols)]
+            cells = [pad_to(row[j], widths[j]) for j in range(ncols)]
         result.append('| ' + ' | '.join(cells) + ' |')
 
     return result
