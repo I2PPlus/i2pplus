@@ -14130,14 +14130,107 @@ protected int computeTarget(double observed) {
     }
 
     /**
+     * Next ceiling for the tunnel test failure window
+     * ({@code i2p.tunnel.testJob.maxTestPeriod}).
+     * <p>Pure, so the survivor-bias rule is testable without a router. The
+     * observed successful-test RTT only contains rounds that finished
+     * <em>inside</em> the window this parameter bounds, so while most rounds
+     * fail it cannot be used to shrink that window: shrinking it excludes more
+     * rounds, which lowers the measured mean further, which shrinks it again.
+     * Measured live, that loop ran the ceiling from 15s to 3.8s and the floor
+     * from 3s to 1s while 84 outbound rounds a minute failed against 29 that
+     * passed. While the cycle is failing, the window is the thing being missed,
+     * so it grows.
+     * <p>The growth condition this replaces, {@code testFailedTime > 2x
+     * current}, was dead code: a failed round is timed out at the deadline, so
+     * its recorded duration sits at the window and never above twice it. The
+     * ceiling could therefore only ever fall.
+     *
+     * @param current the window ceiling in effect, ms
+     * @param min the lowest this tuner may set the ceiling, ms
+     * @param max the highest this tuner may set the ceiling, ms
+     * @param step the largest change per tuning pass, ms
+     * @param successTimeAvgMs average successful-test RTT, NaN if unmeasured
+     * @param failureRatio share of recent rounds that failed, NaN if too few rounds
+     * @param floor the minTestPeriod floor in effect, the target's lower bound, ms
+     * @return the next ceiling in ms, inside [min, max]
+     * @since 0.9.72+
+     */
+    static int testWindowCeilingTarget(int current, int min, int max, int step,
+                                       double successTimeAvgMs, double failureRatio,
+                                       int floor) {
+        // No measurements yet — hold the current window rather than guessing.
+        if (Double.isNaN(successTimeAvgMs) || successTimeAvgMs <= 0)
+            return current;
+        // Most rounds failing: widen, one step at a time, up to the ceiling.
+        if (!Double.isNaN(failureRatio) && failureRatio > TEST_FAIL_RATIO)
+            return Math.min(max, current + step);
+        int target = (int) Math.round(2 * successTimeAvgMs);
+        // Never let the window drift below the configured floor.
+        if (target < floor)
+            target = floor;
+        // Hysteresis: leave alone when already close to target.
+        if (current >= target - step && current <= target + step)
+            return current;
+        if (target > current)
+            return Math.min(max, current + step);
+        return Math.max(min, current - step);
+    }
+
+    /**
+     * Next value for the tunnel test failure window floor
+     * ({@code i2p.tunnel.testJob.minTestPeriod}).
+     * <p>Pure. The floor is anchored at 1x the measured successful-test RTT so
+     * the 2x window cannot collapse below the typical success time on a very
+     * fast network, and it is never pushed above the max window. It is never
+     * pulled below {@link #TEST_WINDOW_FLOOR_MIN} either — see that constant.
+     *
+     * @param current the floor in effect, ms
+     * @param min the lowest this tuner may set the floor, ms
+     * @param max the highest this tuner may set the floor, ms
+     * @param step the largest change per tuning pass, ms
+     * @param successTimeAvgMs average successful-test RTT, NaN if unmeasured
+     * @param maxWindow the maxTestPeriod in effect, the floor's upper bound, ms
+     * @return the next floor in ms, inside [min, max]
+     * @since 0.9.72+
+     */
+    static int testWindowFloorTarget(int current, int min, int max, int step,
+                                     double successTimeAvgMs, int maxWindow) {
+        if (Double.isNaN(successTimeAvgMs) || successTimeAvgMs <= 0)
+            return current;
+        int target = (int) Math.round(successTimeAvgMs);
+        // Never push the floor above the max window.
+        if (target > maxWindow)
+            target = maxWindow;
+        // Hysteresis: leave alone when already close to target.
+        if (current >= target - step && current <= target + step)
+            return current;
+        if (target > current)
+            return Math.min(max, current + step);
+        return Math.max(min, current - step);
+    }
+
+    /**
+     * Lowest the auto-tuner may push the tunnel test failure window floor
+     * ({@code i2p.tunnel.testJob.minTestPeriod}).
+     * <p>Equal to the shipped default of {@code minTestPeriod}, because this
+     * parameter's job is to raise the floor when the network is slow, not to
+     * undercut the default when the network looks fast. The old bound of 1000ms
+     * let the tuner take the floor below the time a 6-hop round trip needs on
+     * a loaded router, which is what put the window in use at 1.4s and
+     * false-failed three quarters of the outbound test rounds.
+     * @since 0.9.72+
+     */
+    static final int TEST_WINDOW_FLOOR_MIN = 3000;
+
+    /**
      * Tunes the maximum tunnel test failure window ({@code i2p.tunnel.testJob.maxTestPeriod}).
      * The window is how long a tunnel test may take before the tunnel is declared
      * failed. Target is 2x the measured successful-test RTT ({@code tunnel.testSuccessTime}):
      * a test answered in ~2.3s is almost certainly dead if it needs more than ~4.6s.
-     * Shrinking the window lets pools fail and rebuild fast instead of waiting tens
-     * of seconds on tunnels that will never answer — the dominant cause of the
-     * network-wide build timeout rate. Grows when failing tests run far past the
-     * window, which is the signature of a genuinely degraded network.
+     * While most rounds fail the window grows instead — the successful-test RTT
+     * only samples the rounds that already finished inside it, so it cannot
+     * describe the rounds that did not. See {@link #testWindowCeilingTarget}.
      * Cross-refs: {@code tunnel.testFailedTime} (failing tests), {@code tunnel.testPeriod} (the
      * window actually applied by TestJob).
      */
@@ -14168,30 +14261,12 @@ protected int computeTarget(double observed) {
         }
 
         protected int computeTarget(double observed) {
-            int current = getRuntimeValue();
             // observed = tunnel.testSuccessTime (ms): measured RTT of successful tests.
-            double failTime = getAdditionalStat(_context, "tunnel.testFailedTime");
-            double minPeriod = _context.getProperty("i2p.tunnel.testJob.minTestPeriod", 3000);
-
-            // No measurements yet — hold the current window rather than guessing.
-            if (Double.isNaN(observed) || observed <= 0)
-                return current;
-
-            int target = (int) Math.round(2 * observed);
-            // Never let the window drift below the configured floor.
-            if (target < minPeriod)
-                target = (int) minPeriod;
-
-            // Failing tests taking far longer than the window means the network
-            // degraded — give it room before shrinking back.
-            if (!Double.isNaN(failTime) && failTime > current * 2 && current < _max)
-                return Math.min(_max, current + _step);
-
-            // Hysteresis: leave alone when already close to target.
-            if (current >= target - _step && current <= target + _step)
-                return current;
-
-            return clamp(current, target, _step);
+            double successes = getAdditionalEventCount(_context, "tunnel.testSuccessTime");
+            double failures = getAdditionalEventCount(_context, "tunnel.testFailedTime");
+            double ratio = outcomeRatio(successes, failures, MIN_TEST_SAMPLES);
+            return testWindowCeilingTarget(getRuntimeValue(), _min, _max, _step, observed, ratio,
+                                           TestJob.getMinTestPeriod(_context));
         }
     }
 
@@ -14200,7 +14275,8 @@ protected int computeTarget(double observed) {
      * ({@code i2p.tunnel.testJob.minTestPeriod}). Anchored at 1x the measured
      * successful-test RTT so the 2x window in TestJobMaxPeriodParam can't
      * collapse below the typical success time on very fast networks, which
-     * would invite flapping. Never pushed above the configured max window.
+     * would invite flapping. Never pushed above the configured max window, and
+     * never pulled below {@link #TEST_WINDOW_FLOOR_MIN}.
      * Cross-refs: {@code tunnel.testSuccessTime} (primary), {@code tunnel.testPeriod}.
      */
     private class TestJobMinPeriodParam extends BaseParam {
@@ -14210,7 +14286,7 @@ protected int computeTarget(double observed) {
             super("i2p.tunnel.testJob.minTestPeriod", "Tunnel test failure window floor (ms)",
                   SUB_TUNNEL,
 
-                  1000, 10000, 1000, "tunnel.testSuccessTime", _context);
+                  TEST_WINDOW_FLOOR_MIN, 10000, 1000, "tunnel.testSuccessTime", _context);
         }
 
         protected void applyValue(int value) {
@@ -14230,21 +14306,9 @@ protected int computeTarget(double observed) {
         }
 
         protected int computeTarget(double observed) {
-            int current = getRuntimeValue();
             // observed = tunnel.testSuccessTime (ms)
-            if (Double.isNaN(observed) || observed <= 0)
-                return current;
-
-            int target = (int) Math.round(observed);
-            // Never push the floor above the max window.
-            int maxPeriod = _context.getProperty("i2p.tunnel.testJob.maxTestPeriod", 15000);
-            target = Math.min(target, maxPeriod);
-
-            // Hysteresis: leave alone when already close to target.
-            if (current >= target - _step && current <= target + _step)
-                return current;
-
-            return clamp(current, target, _step);
+            return testWindowFloorTarget(getRuntimeValue(), _min, _max, _step, observed,
+                                         TestJob.getMaxTestPeriod(_context));
         }
     }
 

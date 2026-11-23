@@ -3520,7 +3520,11 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
 
         // Compute the test period once for this round and reuse it when judging
         // the reply — recomputing from live stats could shift the window.
-        _testPeriod = (int) getAdaptiveTimeout(getTestPeriod());
+        // Re-clamp after the pool's multiplier: the range the configuration
+        // states has to hold of the window actually in use, not just of the
+        // unadapted base.
+        _testPeriod = clampTestPeriod(getAdaptiveTimeout(getTestPeriod()),
+                                      getMinTestPeriod(), getMaxTestPeriod());
         ctx.statManager().addRateData("tunnel.testPeriod", _testPeriod);
         long testExpiration = now + _testPeriod;
 
@@ -4732,14 +4736,43 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
     }
 
     /**
+     * Share of rounds that must have failed, over the last minute, before the
+     * rounds that passed stop being a usable sample to size the window from.
+     * The same bar the Tuner uses to call the test cycle failing.
+     * @since 0.9.72+
+     */
+    static final double UNREPRESENTATIVE_FAILURE_RATIO = 0.25d;
+
+    /**
+     * Rounds needed in the last minute before the pass/fail ratio means
+     * anything. Below this a single failure out of two rounds is read as a
+     * 50% failure rate and widens the window on noise.
+     * @since 0.9.72+
+     */
+    static final int MIN_RATIO_SAMPLES = 20;
+
+    /**
      * Compute the tunnel test failure window: how long a test may take before
      * the tunnel is declared failed.
      * <p>
-     * When a recent successful-test measurement exists, the window is 2x that
-     * average. A test answered in ~2.3s is almost certainly dead if it needs
-     * more than ~4.6s.  Before any measurements exist, fall back to mainline's
-     * formula (3x transport send processing + 2.5s per hop), which assumes a
-     * slow network so early tests don't false-fail.
+     * When a recent successful-test measurement exists and most rounds are
+     * passing, the window is 2x that average. A test answered in ~2.3s is
+     * almost certainly dead if it needs more than ~4.6s.  Before any
+     * measurements exist, fall back to mainline's formula
+     * (3x transport send processing + 2.5s per hop), which assumes a slow
+     * network so early tests don't false-fail.
+     * <p>
+     * The success average is a survivor-biased sample: it only holds rounds
+     * that finished <em>inside</em> the window this function sets, so it can
+     * never grow the window that excluded everything else. Once most rounds
+     * fail it describes the fast tail only, and sizing from it converges on the
+     * smallest window consistent with the rounds that already fit — measured
+     * live at 84 outbound failures per minute against 29 passes, with the
+     * window pinned at 1.4s and every failure recorded at the deadline. When
+     * the ratio passes {@link #UNREPRESENTATIVE_FAILURE_RATIO}, size from the
+     * rounds that missed the window instead: a failed round is timed out at the
+     * deadline, so its recorded duration is the deadline it missed, and 2x that
+     * is the room the failing population needs.
      * <p>
      * Always clamped to [minPeriod, maxPeriod], with min &lt;= max enforced by
      * construction so a crossed config can't widen the window unintentionally.
@@ -4748,29 +4781,106 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
      *
      * @param successTimeAvgMs average {@code tunnel.testSuccessTime} over the last minute,
      *                         NaN if never measured
+     * @param failedTimeAvgMs average {@code tunnel.testFailedTime} over the last minute,
+     *                        NaN if never measured
+     * @param failureRatio share of last-minute rounds that failed, NaN if too few
+     *                     rounds to judge, see {@link #testFailureRatio}
      * @param sendProcessingMs average {@code transport.sendProcessingTime}, NaN if unknown
      * @param outLen outbound tunnel length, &lt;= 0 if no outbound tunnel
      * @param replyLen reply tunnel length, &lt;= 0 if no reply tunnel
      * @param minPeriod the configured minTestPeriod, the lower clamp in ms
      * @param maxPeriod the configured maxTestPeriod, the upper clamp in ms
      * @return the failure window in ms
-     * @since 0.9.70+
+     * @since 0.9.72+
      */
-    static int computeTestPeriod(double successTimeAvgMs, double sendProcessingMs,
+    static int computeTestPeriod(double successTimeAvgMs, double failedTimeAvgMs,
+                                 double failureRatio, double sendProcessingMs,
                                  int outLen, int replyLen, int minPeriod, int maxPeriod) {
         int period;
         if (outLen <= 0 || replyLen <= 0) {
             period = 15*1000;
-        } else if (!Double.isNaN(successTimeAvgMs) && successTimeAvgMs > 0) {
+        } else if (representativeSample(successTimeAvgMs, failureRatio)) {
             period = (int) Math.round(2 * successTimeAvgMs);
+        } else if (worseLatency(successTimeAvgMs, failedTimeAvgMs) > 0) {
+            // Most rounds are failing (or the success sample is unusable but the
+            // failure sample is not): fit the window to the population that
+            // missed it, not to the tail that fitted inside it.
+            period = (int) Math.round(2 * worseLatency(successTimeAvgMs, failedTimeAvgMs));
         } else {
             int base = (!Double.isNaN(sendProcessingMs) && sendProcessingMs > 0) ?
                        (int) (3 * sendProcessingMs) : 15*1000;
             period = base + (2500 * (outLen + replyLen));
         }
+        return clampTestPeriod(period, minPeriod, maxPeriod);
+    }
+
+    /**
+     * Whether the passing rounds describe the whole test population.
+     * <p>Pure, so the survivor-bias rule is testable on its own. A sample with
+     * no measurements is not "unrepresentative", it is simply absent, and the
+     * caller falls back to the hop-based formula for that case.
+     *
+     * @param successTimeAvgMs average successful-test duration, NaN if never measured
+     * @param failureRatio share of rounds that failed, NaN if too few rounds
+     * @return true when a measured success average may be trusted to size the window
+     * @since 0.9.72+
+     */
+    static boolean representativeSample(double successTimeAvgMs, double failureRatio) {
+        if (Double.isNaN(successTimeAvgMs) || successTimeAvgMs <= 0) return false;
+        return Double.isNaN(failureRatio) || failureRatio <= UNREPRESENTATIVE_FAILURE_RATIO;
+    }
+
+    /**
+     * The slower of the two measured round-trip averages, 0 if neither is usable.
+     * <p>Pure. Taking the worse of the two is what keeps a healthy router fast:
+     * while rounds are mostly passing the success average is the larger of the
+     * pair anyway, so the window stays at 2x the measured RTT and only widens
+     * once the failing population is the one that needs the room.
+     *
+     * @param successTimeAvgMs average successful-test duration, NaN if never measured
+     * @param failedTimeAvgMs average failed-test duration, NaN if never measured
+     * @return the larger usable average in ms, 0 when neither is usable
+     * @since 0.9.72+
+     */
+    static double worseLatency(double successTimeAvgMs, double failedTimeAvgMs) {
+        double s = (!Double.isNaN(successTimeAvgMs) && successTimeAvgMs > 0) ? successTimeAvgMs : 0;
+        double f = (!Double.isNaN(failedTimeAvgMs) && failedTimeAvgMs > 0) ? failedTimeAvgMs : 0;
+        return Math.max(s, f);
+    }
+
+    /**
+     * Share of test rounds that failed over the sampled period.
+     *
+     * @param successes rounds that passed
+     * @param failures rounds that failed
+     * @return failures as a share of all rounds, NaN when fewer than
+     *         {@link #MIN_RATIO_SAMPLES} rounds were run
+     * @since 0.9.72+
+     */
+    static double testFailureRatio(double successes, double failures) {
+        double total = successes + failures;
+        if (total < MIN_RATIO_SAMPLES) return Double.NaN;
+        return failures / total;
+    }
+
+    /**
+     * Hold a test window inside the configured range.
+     * <p>The pool's adaptive multiplier is applied <em>after</em>
+     * {@link #computeTestPeriod} clamps its own result, so without this second
+     * clamp the window leaves the range the configuration states — at the 2.0
+     * multiplier ceiling, twice the maxTestPeriod. min &lt;= max is enforced by
+     * construction, as in {@link #computeTestPeriod}.
+     *
+     * @param adapted the adapted window in ms
+     * @param minPeriod the configured minTestPeriod, the lower clamp in ms
+     * @param maxPeriod the configured maxTestPeriod, the upper clamp in ms
+     * @return the window in ms, inside [minPeriod, maxPeriod]
+     * @since 0.9.72+
+     */
+    static int clampTestPeriod(long adapted, int minPeriod, int maxPeriod) {
         int lo = Math.min(minPeriod, maxPeriod);
         int hi = Math.max(minPeriod, maxPeriod);
-        return Math.max(lo, Math.min(hi, period));
+        return (int) Math.max(lo, Math.min(hi, adapted));
     }
 
     /**
@@ -4781,18 +4891,33 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
     private int getTestPeriod() {
         final RouterContext ctx = getContext();
         double successTime = Double.NaN;
+        double failedTime = Double.NaN;
+        double failureRatio = Double.NaN;
         double sendProcessing = Double.NaN;
         int outLen = 0;
         int replyLen = 0;
         if (_outTunnel != null && _replyTunnel != null) {
             outLen = _outTunnel.getLength();
             replyLen = _replyTunnel.getLength();
+            double successRounds = 0;
+            double failedRounds = 0;
             RateStat st = ctx.statManager().getRate("tunnel.testSuccessTime");
             if (st != null) {
                 Rate r = st.getRate(60*1000L);
-                if (r != null && r.getLastEventCount() > 0)
+                if (r != null && r.getLastEventCount() > 0) {
                     successTime = r.getAverageValue();
+                    successRounds = r.getLastEventCount();
+                }
             }
+            RateStat ft = ctx.statManager().getRate("tunnel.testFailedTime");
+            if (ft != null) {
+                Rate r = ft.getRate(60*1000L);
+                if (r != null && r.getLastEventCount() > 0) {
+                    failedTime = r.getAverageValue();
+                    failedRounds = r.getLastEventCount();
+                }
+            }
+            failureRatio = testFailureRatio(successRounds, failedRounds);
             RateStat tspt = ctx.statManager().getRate("transport.sendProcessingTime");
             if (tspt != null) {
                 Rate r = tspt.getRate(60*1000L);
@@ -4800,8 +4925,8 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
                     sendProcessing = r.getAverageValue();
             }
         }
-        return computeTestPeriod(successTime, sendProcessing, outLen, replyLen,
-                                 getMinTestPeriod(), getMaxTestPeriod());
+        return computeTestPeriod(successTime, failedTime, failureRatio, sendProcessing,
+                                 outLen, replyLen, getMinTestPeriod(), getMaxTestPeriod());
     }
 
     /**
