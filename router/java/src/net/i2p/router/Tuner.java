@@ -230,6 +230,27 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     }
 
     /**
+     * Hold a value restored from autotune.config inside the range the parameter
+     * has now.
+     * <p>The persisted value is applied on the first pass, before any
+     * measurement is read, and the range is code-level. Raising a parameter's
+     * bound — as {@link #TEST_WINDOW_FLOOR_MIN} raises the tunnel test window
+     * floor from 1000ms to 3000ms — leaves the previous session's value outside
+     * it, and applying that value verbatim puts the collapsed limit back in
+     * force for the whole session, in front of every measurement that would
+     * have rejected it.
+     *
+     * @param value the value the previous session left in autotune.config
+     * @param min the parameter's current lower bound
+     * @param max the parameter's current upper bound
+     * @return the value, inside [min, max]
+     * @since 0.9.72+
+     */
+    static int clampRestoredValue(int value, int min, int max) {
+        return Math.max(min, Math.min(max, value));
+    }
+
+    /**
      * Scale an observed round-trip time into a tuning floor for a timeout that
      * must stay above it.
      * <p>Pure helper so the no-data handling is unit-testable. A missing stat
@@ -3539,11 +3560,25 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                     }
                 } else if (_initialValue != current) {
                     if (restorePersistedValue()) {
-                        if (_log.shouldInfo())
-                            _log.info("Restoring persisted value " + _initialValue + " for " + _name +
-                                      " (current: " + current + ")");
-                        applyValue(_initialValue);
-                        persistValue(_ctx, _initialValue);
+                        // The range is code-level and the persisted value is not:
+                        // a bound raised in code makes last session's value out of
+                        // range, and restoring it verbatim would put the collapsed
+                        // limit in force ahead of every measurement this session
+                        // has not taken yet.
+                        int restored = clampRestoredValue(_initialValue, _min, _max);
+                        if (restored != _initialValue && _log.shouldInfo()) {
+                            _log.info("Restored value outside the range for " + _name +
+                                      " -> Clamped to the parameter's bounds" +
+                                      "\n* Persisted: " + _initialValue + " * Applied: " + restored +
+                                      " * Bounds: " + _min + " to " + _max);
+                        }
+                        if (restored != current) {
+                            if (_log.shouldInfo())
+                                _log.info("Restoring persisted value " + restored + " for " + _name +
+                                          " (current: " + current + ")");
+                            applyValue(restored);
+                            persistValue(_ctx, restored);
+                        }
                     } else if (_log.shouldInfo()) {
                         _log.info("Not restoring " + _name + " from autotune.config" +
                                   " -> Remote peers drive it\n* Persisted: " + _initialValue +

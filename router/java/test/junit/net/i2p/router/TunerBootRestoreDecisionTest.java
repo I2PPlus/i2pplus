@@ -189,6 +189,29 @@ public class TunerBootRestoreDecisionTest {
     }
 
     /**
+     * A code-level bound raised above the value the previous session left in
+     * autotune.config. The restore runs before any measurement is read, so a
+     * value applied verbatim here is in force for the whole session, ahead of
+     * every measurement that would have rejected it.
+     */
+    @Test
+    public void aPersistedValueOutsideTheRangeIsClamped() {
+        int raised = PERSISTED + 13;
+        ProbeParam param = new ProbeParam(_param, true, _ctx, _autotune, raised);
+        param.update();
+        assertEquals(raised, param.getRuntimeValue());
+        assertEquals(String.valueOf(raised), _autotune.getProperty(_param + ".value"));
+    }
+
+    /** The clamp itself, including a value already inside the range. */
+    @Test
+    public void restoredValueClampsToTheBounds() {
+        assertEquals(950, Tuner.clampRestoredValue(937, 950, 1000));
+        assertEquals(1000, Tuner.clampRestoredValue(1200, 950, 1000));
+        assertEquals(937, Tuner.clampRestoredValue(937, 900, 1000));
+    }
+
+    /**
      * A param that only exists to be tuned: the observed stat is a constant, so
      * the pass reaches {@code computeTarget} instead of stopping at a missing
      * stat, and the target is a fixed move from wherever the value stands.
@@ -203,7 +226,16 @@ public class TunerBootRestoreDecisionTest {
         private boolean _tune;
 
         ProbeParam(String name, boolean restore, RouterContext ctx, Tuner.AutotuneConfig autotune) {
-            super(name, "Boot restore probe", "test", 10, 1000, 10, name + ".stat", ctx, autotune,
+            this(name, restore, ctx, autotune, 10);
+        }
+
+        /**
+         * The same param with a lower bound of its own, to stand in for a
+         * code-level bound raised above what a previous session persisted.
+         */
+        ProbeParam(String name, boolean restore, RouterContext ctx, Tuner.AutotuneConfig autotune,
+                   int min) {
+            super(name, "Boot restore probe", "test", min, 1000, 10, name + ".stat", ctx, autotune,
                   CONFIGURED);
             _restore = restore;
         }
