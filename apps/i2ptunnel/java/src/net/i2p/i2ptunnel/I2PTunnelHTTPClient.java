@@ -136,6 +136,20 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      */
     static final long EMPTY_RECONNECT_DEADLINE_MS = 60 * 1000;
     /**
+     * How long a body resume waits for an emptied client tunnel pool to start
+     * rebuilding, before the download is given up on (ms).
+     * <p>An empty pool is not a dead one: the pool replaces its own tunnels on a
+     * scheduled pass, so between the pass that let the last tunnel expire and the
+     * pass that builds its replacement it reports no valid tunnels and no builds
+     * in progress - the state {@link #poolState()} calls dead. A first connect
+     * should not wait for that pass, but a resume that has already carried part
+     * of the entity has bytes the browser is holding and a server that already
+     * served them, so the wait is the cheaper side.
+     *
+     * @since 0.9.72+
+     */
+    static final long POOL_REBUILD_WAIT_MS = 5 * 1000;
+    /**
      * In-session b32/b33 naming lookup budget, clamped to the shared
      * request connect deadline so naming cannot outlive the request.
      * @since 0.9.71+
@@ -2079,9 +2093,10 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                             // keeps the configured budget unchanged.
                             I2PTunnelRunner.BodyProgress bp = resumeRunner.getBodyProgress();
                             long expectedLength = bp != null ? bp.contentLength : -1;
+                            long delivered = bp != null ? bp.bodyReceived : 0;
                             return openEmptyReconnect(reconnectDest, reconnectPort,
                                     scaledEmptyReconnectBudget(emptyBudget, expectedLength),
-                                    requestId, false);
+                                    requestId, false, delivered);
                         }
 
                         @Override
@@ -2626,9 +2641,33 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      */
     private I2PSocket openEmptyReconnect(Destination dest, int port, int emptyBudget,
                                          long requestId, boolean quiet) {
+        return openEmptyReconnect(dest, port, emptyBudget, requestId, quiet, 0);
+    }
+
+    /**
+     * Open a fresh I2P socket for a reconnect, with the bytes already delivered
+     * to the browser taken into account.
+     * <p>Only the body-resume caller passes a non-zero {@code bodyReceived}. For
+     * it an emptied client pool is waited out rather than treated as terminal -
+     * see {@link #reconnectRetryDelayMs(int, long, long, long)} - because the
+     * alternative is handing the browser a truncated entity.
+     *
+     * @param dest the destination to open the fresh socket to
+     * @param port remote port (0 = default)
+     * @param emptyBudget max connect attempts for this request
+     * @param requestId logging prefix id
+     * @param quiet when true, suppress per-attempt Info logs
+     * @param bodyReceived entity bytes already handed to the browser, 0 for a
+     *                     first connect or an empty-response retry
+     * @return a connected socket, or null if the budget / deadline / dead pool stopped us
+     * @since 0.9.72+
+     */
+    private I2PSocket openEmptyReconnect(Destination dest, int port, int emptyBudget,
+                                         long requestId, boolean quiet, long bodyReceived) {
         final long deadlineMs = System.currentTimeMillis() + EMPTY_RECONNECT_DEADLINE_MS;
         for (int attempt = 1; attempt <= emptyBudget; attempt++) {
-            if (isDeadlineExpired(deadlineMs, System.currentTimeMillis())) {
+            long now = System.currentTimeMillis();
+            if (isDeadlineExpired(deadlineMs, now)) {
                 if (!quiet && _log.shouldInfo()) {
                     _log.info(getPrefix(requestId) + "Empty-reconnect deadline reached -> Giving up"
                               + "\n* Attempt: " + attempt + " of " + emptyBudget
@@ -2656,12 +2695,28 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 // Fail fast once the client outbound pool is provably dead:
                 // no further attempt can succeed, so return null to surface a
                 // swift empty-response error instead of stalling the browser
-                // across the whole backoff budget.
-                if (shouldStopEmptyReconnect(poolState())) {return null;}
-                if (!sleepQuietly(getConnectRetryDelayMs(attempt))) {return null;}
+                // across the whole backoff budget. A resume that has already
+                // delivered body bytes waits for the pool's own rebuild pass
+                // instead, while its deadline can cover one (see
+                // reconnectRetryDelayMs).
+                long delayMs = reconnectRetryDelayMs(poolState(), bodyReceived,
+                                                     deadlineMs - System.currentTimeMillis(),
+                                                     getConnectRetryDelayMs(attempt));
+                if (delayMs < 0) {
+                    if (!quiet && _log.shouldWarn()) {
+                        _log.warn(getPrefix(requestId) + "Empty-reconnect stopped -> Client tunnel pool has no tunnels"
+                                  + "\n* Attempt: " + attempt + " of " + emptyBudget
+                                  + " * Body delivered: " + bodyReceived + " bytes");
+                    }
+                    return null;
+                }
+                if (!sleepQuietly(delayMs)) {return null;}
             } catch (I2PException ie) {
-                if (shouldStopEmptyReconnect(poolState())) {return null;}
-                if (!sleepQuietly(getConnectRetryDelayMs(attempt))) {return null;}
+                long delayMs = reconnectRetryDelayMs(poolState(), bodyReceived,
+                                                     deadlineMs - System.currentTimeMillis(),
+                                                     getConnectRetryDelayMs(attempt));
+                if (delayMs < 0) {return null;}
+                if (!sleepQuietly(delayMs)) {return null;}
             }
         }
         return null;
@@ -2797,6 +2852,38 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      */
     static boolean shouldStopEmptyReconnect(int poolState) {
         return poolState == -1;
+    }
+
+    /**
+     * How long to wait before the next reconnect attempt, or whether to stop
+     * trying at all. Pure decision - no context access, safe for unit tests.
+     * <p>What the fail-fast gate did not know is how much of the response the
+     * browser is already holding. A first connect has nothing to lose, so an
+     * empty pool ends the loop. A resume that has delivered part of a
+     * Content-Length body does: the measured case abandoned 300,348 of
+     * 49,684,099 bytes because the client pool read empty once, fifteen seconds
+     * into a sixty second budget, and the pool rebuilds its own tunnels on a
+     * scheduled pass, so "no valid tunnels and none in progress" is a state the
+     * pool walks through whenever a tunnel expires before its replacement's
+     * build pass starts. Waiting for that pass costs seconds; the alternative is
+     * a truncated file.
+     * <p>The wait is only taken while the loop's own deadline can still cover a
+     * rebuild plus an attempt - once it cannot, stopping is the honest answer.
+     *
+     * @param poolState the {@link #poolState()} read after the failed attempt
+     * @param bodyReceived entity bytes already handed to the browser, 0 for a
+     *                     first connect or an empty-response retry
+     * @param remainingMs milliseconds left before the reconnect loop's deadline
+     * @param attemptDelayMs the backoff delay the attempt count already asks for
+     * @return the delay to wait before retrying, or -1 to stop retrying
+     * @since 0.9.72+
+     */
+    static long reconnectRetryDelayMs(int poolState, long bodyReceived, long remainingMs,
+                                      long attemptDelayMs) {
+        if (!shouldStopEmptyReconnect(poolState)) {return attemptDelayMs;}
+        if (bodyReceived <= 0) {return -1;}
+        if (remainingMs <= POOL_REBUILD_WAIT_MS) {return -1;}
+        return Math.max(attemptDelayMs, POOL_REBUILD_WAIT_MS);
     }
 
     /**
