@@ -1819,14 +1819,14 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     * Build success rate from hourly stats (0.0-1.0).
+     * Build success rate from hourly stats, as a fraction 0.0-1.0.
      * <p>{@code tunnel.buildSuccessRate} is emitted as a percentage -
      * {@code BuildExecutor} records {@code (successes * 100) / count} - and this
-     * divides it out. A param that reads the same stat straight through
-     * {@code getObservedStat()} stays on the raw 0-100 scale and has to compare
-     * against percentages, as the pool backoff and pool failure threshold
-     * params do. Reading one scale with the other's thresholds pins a param on
-     * a single branch forever, so a new param has to say which scale it is on.
+     * averages the success, failure and timeout markers and divides out the
+     * percentage through {@link #buildSuccessFraction}. Every threshold in this
+     * file is a fraction, so a param that reads the stat through
+     * {@code getObservedStat()} converts it there too; reading one scale with the
+     * other's thresholds pins a param on a single branch forever.
      *
      * @return success rate or NaN if insufficient data
      */
@@ -1836,23 +1836,165 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         double timeout = getHourlyAvgStat("tunnel.buildTimeoutRate");
         double total = success + failure + timeout;
         if (Double.isNaN(total) || total <= 0) return Double.NaN;
-        return success / 100.0;
+        return buildSuccessFraction(success);
     }
 
     /**
-     * Build success, as a fraction, above which the network is healthy enough
-     * for a param to grow. Named once because nine params asked the same
-     * question with the same number, while the file also carries 0.6, 0.8,
-     * 0.85 and 0.95 for adjacent decisions and the raw-scale 85 and 90.
+     * Build success, as a fraction 0.0-1.0, below which builds are failing badly
+     * enough to shrink a peer tier or a pool.
+     *
+     * @since 0.9.72+
      */
-    static final double HEALTHY_BUILD_SUCCESS = 0.7d;
+    static final double BUILD_SUCCESS_POOR = 0.4d;
+
+    /**
+     * Build success at which enough tunnels still get built for a param to leave
+     * its build-path timings alone. Deliberately below
+     * {@link #BUILD_SUCCESS_HEALTHY}: this is the bar for "not broken", the one a
+     * first-hop cooldown or a stale-build threshold asks, not the one that
+     * justifies growing anything.
+     * <p>Those four params gated their walk on 80 % until 0.9.71, and a router
+     * running 70-77 % success saw "not healthy" permanently - each walked to one
+     * of its bounds and stayed there, the first-hop cooldown pinned at its 600 s
+     * ceiling while the concurrency throttle sat at its maximum. 80 % is a
+     * healthy-I2P target, not this network's operating point; 50 % still
+     * separates the broken case (single digits) from the working one without
+     * demanding a target the network cannot reach.
+     *
+     * @since 0.9.72+
+     */
+    static final double BUILD_SUCCESS_USABLE = 0.5d;
+
+    /**
+     * Build success above which the network is healthy enough for a param to
+     * grow a pool, a peer tier or a concurrency limit.
+     *
+     * @since 0.9.72+
+     */
+    static final double BUILD_SUCCESS_HEALTHY = 0.7d;
+
+    /**
+     * Build success above which builds are going cleanly, the bar for shortening
+     * a cooldown, a rebuild backoff or a pool spare buffer.
+     *
+     * @since 0.9.72+
+     */
+    static final double BUILD_SUCCESS_STRONG = 0.9d;
+
+    /**
+     * Puts {@code tunnel.buildSuccessRate} on the fraction scale every threshold
+     * in this file uses.
+     * <p>The stat is emitted as a percentage - {@code BuildExecutor} records
+     * {@code (successes * 100) / count} - and a param that reads it through
+     * {@code getObservedStat()} used to get it raw, so eight params compared
+     * against 50, 60, 70, 80, 85 and 90 while the rest of the file compared
+     * against 0.4 to 0.95. Reading one scale with the other's thresholds pins a
+     * param on a single branch forever, so every param that observes this stat
+     * converts here and every threshold is a fraction.
+     *
+     * @param percent the stat's average value on the 0-100 scale, NaN for no data
+     * @return the same rate as a fraction 0.0-1.0, NaN for no data
+     * @since 0.9.72+
+     */
+    static double buildSuccessFraction(double percent) {
+        return Double.isNaN(percent) ? Double.NaN : percent / 100.0;
+    }
+
+    /**
+     * Are builds failing badly enough to shrink a peer tier or a pool?
+     *
+     * @param buildSuccess build success as a fraction 0.0-1.0, NaN for no data
+     * @return true below {@link #BUILD_SUCCESS_POOR}; false when there is no data
+     * @since 0.9.72+
+     */
+    static boolean buildsPoor(double buildSuccess) {
+        return buildSuccess < BUILD_SUCCESS_POOR;
+    }
+
+    /**
+     * Are enough tunnels getting built for the build-path timings to be left
+     * alone?
+     *
+     * @param buildSuccess build success as a fraction 0.0-1.0, NaN for no data
+     * @return true at or above {@link #BUILD_SUCCESS_USABLE}; false when there is
+     *         no data
+     * @since 0.9.72+
+     */
+    static boolean buildsUsable(double buildSuccess) {
+        return buildSuccess >= BUILD_SUCCESS_USABLE;
+    }
+
+    /**
+     * Are builds failing badly enough that a build-path timing should move? The
+     * opposite of {@link #buildsUsable}, named so a caller does not have to
+     * negate it and read no data as a finding.
+     *
+     * @param buildSuccess build success as a fraction 0.0-1.0, NaN for no data
+     * @return true below {@link #BUILD_SUCCESS_USABLE}; false when there is no
+     *         data
+     * @since 0.9.72+
+     */
+    static boolean buildsUnusable(double buildSuccess) {
+        return buildSuccess < BUILD_SUCCESS_USABLE;
+    }
+
+    /**
+     * Is build success below the bar for growing anything?
+     *
+     * @param buildSuccess build success as a fraction 0.0-1.0, NaN for no data
+     * @return true below {@link #BUILD_SUCCESS_HEALTHY}; false when there is no
+     *         data
+     * @since 0.9.72+
+     */
+    static boolean buildsWeak(double buildSuccess) {
+        return buildSuccess < BUILD_SUCCESS_HEALTHY;
+    }
+
+    /**
+     * Is build success above the bar for growing a pool, a peer tier or a
+     * concurrency limit?
+     *
+     * @param buildSuccess build success as a fraction 0.0-1.0, NaN for no data
+     * @return true above {@link #BUILD_SUCCESS_HEALTHY}; false when there is no
+     *         data
+     * @since 0.9.72+
+     */
+    static boolean buildsHealthy(double buildSuccess) {
+        return buildSuccess > BUILD_SUCCESS_HEALTHY;
+    }
+
+    /**
+     * Is build success below the bar for shortening a cooldown or a backoff?
+     *
+     * @param buildSuccess build success as a fraction 0.0-1.0, NaN for no data
+     * @return true below {@link #BUILD_SUCCESS_STRONG}; false when there is no
+     *         data
+     * @since 0.9.72+
+     */
+    static boolean buildsBelowStrong(double buildSuccess) {
+        return buildSuccess < BUILD_SUCCESS_STRONG;
+    }
+
+    /**
+     * Are builds going cleanly enough to shorten a cooldown, a rebuild backoff or
+     * a pool spare buffer?
+     *
+     * @param buildSuccess build success as a fraction 0.0-1.0, NaN for no data
+     * @return true above {@link #BUILD_SUCCESS_STRONG}; false when there is no
+     *         data
+     * @since 0.9.72+
+     */
+    static boolean buildsStrong(double buildSuccess) {
+        return buildSuccess > BUILD_SUCCESS_STRONG;
+    }
 
     /**
      * Is the tunnel build success rate good enough for a param to act on it?
      * <p>No data counts as healthy rather than failing: a param that stopped
      * growing whenever the stats were empty would sit wherever startup left it,
      * and empty stats are the ordinary state of a router that has not built
-     * tunnels in the window.
+     * tunnels in the window. Every other predicate in this block is false for no
+     * data, because there a false answer leaves the value alone.
      *
      * @param buildSuccess build success as a fraction 0.0-1.0, or NaN for no
      *                     data in the window
@@ -1860,7 +2002,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * @since 0.9.72+
      */
     static boolean networkHealthy(double buildSuccess) {
-        return Double.isNaN(buildSuccess) || buildSuccess > HEALTHY_BUILD_SUCCESS;
+        return Double.isNaN(buildSuccess) || buildsHealthy(buildSuccess);
     }
 
     /**
@@ -3158,7 +3300,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double timeout = getAdditionalStatHourly(ctx, "tunnel.buildTimeoutRate");
             double total = success + failure + timeout;
             if (Double.isNaN(total) || total <= 0) return Double.NaN;
-            return success / 100.0;
+            return buildSuccessFraction(success);
         }
 
         /**
@@ -8484,8 +8626,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (rs == null) return Double.NaN;
             Rate rate = rs.getRate(STAT_PERIOD);
             if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
-            // Stat emitted as 0-100; normalize to 0-1 for threshold comparisons
-            return rate.getAverageValue() / 100.0;
+            return buildSuccessFraction(rate.getAverageValue());
         }
 
         protected int computeTarget(double observed) {
@@ -8495,23 +8636,23 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // Hourly trend: confirm build success trend isn't just a short-term dip
             double concurrentBuilds = getAdditionalStat(_context, "tunnel.concurrentBuilds");
             double transitBps = getAdditionalStat(_context, "tunnel.participating InBps");
-            double hourlySuccess = getAdditionalStatHourly(_context, _statName) / 100.0;
+            double hourlySuccess = buildSuccessFraction(getAdditionalStatHourly(_context, _statName));
 
             boolean buildStorm = !Double.isNaN(concurrentBuilds) && concurrentBuilds > 15;
             boolean heavyLoad = !Double.isNaN(transitBps) && transitBps > 80000;
             // Confirm sustained low success rate
-            boolean sustainedLowSuccess = !Double.isNaN(hourlySuccess) && hourlySuccess < 0.6;
+            boolean sustainedLowSuccess = buildsWeak(hourlySuccess);
 
             // Build storm = hold steady (don't change rejection curve mid-storm)
             if (buildStorm) return current;
 
             // High success + low load = increase exponent (sharper cutoff, can be aggressive)
-            if (observed > 0.9 && !heavyLoad)
+            if (buildsStrong(observed) && !heavyLoad)
                 return Math.min(_max, current + _step);
 
             // Low success = decrease exponent (gentler rejection curve, less abrupt)
             // Require sustained trend to avoid over-reacting to brief dips
-            if (observed < 0.5 && sustainedLowSuccess)
+            if (buildsUnusable(observed) && sustainedLowSuccess)
                 return Math.max(_min, current - _step);
 
             return current;
@@ -8888,8 +9029,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (rs == null) return Double.NaN;
             Rate rate = rs.getRate(STAT_PERIOD);
             if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
-            // Stat emitted as 0-100; normalize to 0-1 for threshold comparisons
-            return rate.getAverageValue() / 100.0;
+            return buildSuccessFraction(rate.getAverageValue());
         }
 
         protected int computeTarget(double observed) {
@@ -8906,18 +9046,18 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean perTunnelHigh = !Double.isNaN(msgsPerTunnel) && msgsPerTunnel > 200;
 
             // Build storm + low success = increase throttle (back off, let congestion clear)
-            if (buildStorm && observed < 0.7)
+            if (buildStorm && buildsWeak(observed))
                 return Math.min(_max, current + _step);
 
             // Build storm but good success = hold (throttle is working)
             if (buildStorm) return current;
 
             // Low success + light load = increase throttle (conservative, avoid transport burn)
-            if (observed < 0.7 && !heavyLoad && !perTunnelHigh)
+            if (buildsWeak(observed) && !heavyLoad && !perTunnelHigh)
                 return Math.min(_max, current + _step);
 
             // High success + low load = decrease throttle (builds are cheap, replenish quickly)
-            if (observed > 0.95 && !heavyLoad && !perTunnelHigh)
+            if (buildsStrong(observed) && !heavyLoad && !perTunnelHigh)
                 return Math.max(_min, current - _step);
 
             return current;
@@ -11283,8 +11423,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
             // Peer quality: low latency + good acceptance = more fast peers are useful
             boolean lowLatency = !Double.isNaN(confirmTime) && confirmTime < 200;
-            boolean goodAcceptance = !Double.isNaN(buildSuccess) && buildSuccess > 0.7;
-            boolean poorQuality = (!Double.isNaN(buildSuccess) && buildSuccess < 0.4) ||
+            boolean goodAcceptance = buildsHealthy(buildSuccess);
+            boolean poorQuality = buildsPoor(buildSuccess) ||
                                   (!Double.isNaN(confirmTime) && confirmTime > 500);
 
             // Many fast peers + large pool + quality peers = raise minimum
@@ -11452,7 +11592,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double hourlyQuality = getAdditionalStatHourly(_context, _statName);
 
             boolean manyFastPeers = !Double.isNaN(fastPeers) && fastPeers > 300;
-            boolean goodBuild = !Double.isNaN(buildSuccess) && buildSuccess > 0.6;
+            boolean goodBuild = buildsHealthy(buildSuccess);
             boolean sustainedHighQuality = !Double.isNaN(hourlyQuality) && hourlyQuality > current;
 
             // Ensure min always stays below max - 100
@@ -11467,7 +11607,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 return Math.min(ceiling, Math.min(_max, current + _step));
 
             // Poor build success or small pool = decrease minimum
-            if ((!Double.isNaN(buildSuccess) && buildSuccess < 0.4) || observed < current * 0.5)
+            if (buildsPoor(buildSuccess) || observed < current * 0.5)
                 return Math.max(_min, Math.max(current - _step, _min));
 
             // Few quality peers = decrease minimum
@@ -11633,7 +11773,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // When builds are expiring during a storm, fall through to the normal
             // increase logic below so the timeout grows until expirations stop.
             if (buildStorm) {
-                if (observed < 10 && buildSuccess > 0.7)
+                if (observed < 10 && buildsHealthy(buildSuccess))
                     return Math.max(_min, current - _step * 2);
                 if (observed < 10)
                     return current;
@@ -11645,7 +11785,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
             // Moderate timeout rate (15-30%) + low success or builds backed up: increase
             if (observed > 15 && (buildsBackedUp ||
-                (!Double.isNaN(buildSuccess) && buildSuccess < 0.6)))
+                buildsWeak(buildSuccess)))
                 return Math.min(_max, current + _step);
 
             // Tunnel tests slow + timeout rate elevated: network latency is high
@@ -11658,7 +11798,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 return Math.max(_min, current - _step * 2);
 
             // Low timeout rate + high success + no backlog = decrease (room to go faster)
-            if (observed < 10 && !Double.isNaN(buildSuccess) && buildSuccess > 0.85 &&
+            if (observed < 10 && buildsStrong(buildSuccess) &&
                 !buildsBackedUp)
                 return Math.max(_min, current - _step);
 
@@ -11788,8 +11928,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (rs == null) return Double.NaN;
             Rate rate = rs.getRate(STAT_PERIOD);
             if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
-            // Stat emitted as 0-100; normalize to 0-1 for threshold comparisons
-            return rate.getAverageValue() / 100.0;
+            return buildSuccessFraction(rate.getAverageValue());
         }
 
         protected int computeTarget(double observed) {
@@ -11821,9 +11960,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double buildTimeoutRate = getAdditionalStatHourly(_context, "tunnel.buildTimeoutRate");
             boolean timeoutsHigh = !Double.isNaN(buildTimeoutRate) && buildTimeoutRate > 20;
 
-            boolean successHigh = !Double.isNaN(observed) && observed > 0.85;
-            boolean successLow = !Double.isNaN(observed) && observed < 0.65;
-            boolean successSteady = !Double.isNaN(observed) && observed > 0.7 && observed < 0.85;
+            boolean successHigh = buildsStrong(observed);
+            boolean successLow = buildsWeak(observed);
+            boolean successSteady = buildsHealthy(observed) && buildsBelowStrong(observed);
             boolean buildsExpiring = !Double.isNaN(buildExpires) && buildExpires > 10;
             boolean buildsBackedUp = !Double.isNaN(backlog) && backlog > 20;
             boolean buildsSlowLegacy = !Double.isNaN(testTime) && testTime > 10000;
@@ -11854,11 +11993,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 return Math.min(_max, current + _step);
 
             // Startup / high demand: builds backed up + success ok = increase
-            if (buildsBackedUp && (successHigh || observed > 0.7) && !cpuPressure && !cwinCollapsed && !congestionActive)
+            if (buildsBackedUp && (successHigh || buildsHealthy(observed)) && !cpuPressure && !cwinCollapsed && !congestionActive)
                 return Math.min(_max, current + _step * 2);
 
             // Builds expiring + success ok = increase (peers can handle more)
-            if (buildsExpiring && (successHigh || observed > 0.7) && !cpuPressure && !cwinCollapsed && !congestionActive)
+            if (buildsExpiring && (successHigh || buildsHealthy(observed)) && !cpuPressure && !cwinCollapsed && !congestionActive)
                 return Math.min(_max, current + _step);
 
             // Using most capacity + no issues = increase cautiously
@@ -12018,8 +12157,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (rs == null) {return Double.NaN;}
             Rate rate = rs.getRate(STAT_PERIOD);
             if (rate == null || rate.getLastEventCount() == 0) {return Double.NaN;}
-            // Stat emitted as 0-100; normalize to 0-1 for threshold comparisons
-            return rate.getAverageValue() / 100.0;
+            return buildSuccessFraction(rate.getAverageValue());
         }
 
         /**
@@ -16601,14 +16739,14 @@ protected int computeTarget(double observed) {
             if (rs == null) return Double.NaN;
             Rate rate = rs.getRate(STAT_PERIOD);
             if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
-            return rate.getAverageValue();
+            return buildSuccessFraction(rate.getAverageValue());
         }
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
             boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
-            boolean healthy = !Double.isNaN(observed) && observed > 90 && !cpuPressure;
-            boolean failing = !Double.isNaN(observed) && observed < 70;
+            boolean healthy = buildsStrong(observed) && !cpuPressure;
+            boolean failing = buildsWeak(observed);
             if (healthy) return Math.min(_max, current + 1);
             if (failing) return Math.max(_min, current - 1);
             return current;
@@ -16632,7 +16770,7 @@ protected int computeTarget(double observed) {
             if (rs == null) return Double.NaN;
             Rate rate = rs.getRate(STAT_PERIOD);
             if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
-            return rate.getAverageValue();
+            return buildSuccessFraction(rate.getAverageValue());
         }
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
@@ -16640,8 +16778,8 @@ protected int computeTarget(double observed) {
             double memPressure = getMemoryPressure();
             double buildTimeoutRate = getAdditionalStatHourly(_context, "tunnel.buildTimeoutRate");
             boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
-            boolean healthy = !Double.isNaN(observed) && observed > 90 && !cpuPressure;
-            boolean failing = (!Double.isNaN(observed) && observed < 85)
+            boolean healthy = buildsStrong(observed) && !cpuPressure;
+            boolean failing = buildsBelowStrong(observed)
                               || (!Double.isNaN(buildTimeoutRate) && buildTimeoutRate > 20);
             // Under memory pressure, recover faster (shorter cooldown) so pools
             // stop holding rebuild resources they can't afford
@@ -16676,15 +16814,15 @@ protected int computeTarget(double observed) {
             if (rs == null) return Double.NaN;
             Rate rate = rs.getRate(STAT_PERIOD);
             if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
-            return rate.getAverageValue();
+            return buildSuccessFraction(rate.getAverageValue());
         }
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
             double memPressure = getMemoryPressure();
             boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
-            boolean healthy = !Double.isNaN(observed) && observed > 80 && !cpuPressure;
-            boolean failing = !Double.isNaN(observed) && observed < 60;
+            boolean healthy = buildsStrong(observed) && !cpuPressure;
+            boolean failing = buildsWeak(observed);
             // Spare tunnels cost memory; don't build a buffer when the heap is tight
             boolean memOk = memPressure < 0.75;
 
@@ -16748,15 +16886,15 @@ protected int computeTarget(double observed) {
             if (rs == null) return Double.NaN;
             Rate rate = rs.getRate(STAT_PERIOD);
             if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
-            return rate.getAverageValue();
+            return buildSuccessFraction(rate.getAverageValue());
         }
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double memPressure = getMemoryPressure();
             double testFailed = getAdditionalStat(_context, "tunnel.testFailedTime");
             boolean testsFailing = !Double.isNaN(testFailed) && testFailed > 0;
-            boolean healthy = !Double.isNaN(observed) && observed > 80 && !testsFailing;
-            boolean failing = (!Double.isNaN(observed) && observed < 60) || testsFailing;
+            boolean healthy = buildsStrong(observed) && !testsFailing;
+            boolean failing = buildsWeak(observed) || testsFailing;
             boolean memOk = memPressure < 0.75;
 
             // Check pool deficits
@@ -16794,28 +16932,6 @@ protected int computeTarget(double observed) {
      * Longer cooldown keeps flaky peers out longer; shorter cooldown is more
      * forgiving of transient issues.
      */
-    /**
-     * Whether a build success rate counts as healthy for a tuning walk.
-     * <p>Four params gate their walk on {@code observed > 80}: the first-hop
-     * cooldown, first-hop threshold, stale-build threshold and concurrency
-     * throttle. This router runs 70-77% success, so all four saw "not healthy"
-     * permanently while their paired timeoutsHigh condition was also permanently
-     * true, and each walked to one of its bounds and stayed there -- the cooldown
-     * pinned at its 600s ceiling while the concurrency throttle sat at its 50%
-     * maximum.
-     * <p>80% is a healthy-I2P target, not this network's operating point, so using
-     * it as a walk gate means the gate never opens. 50% still separates the broken
-     * case (single digits) from the working one without demanding a target this
-     * network cannot reach.
-     *
-     * @param observed build success rate as a fraction, or NaN when unavailable
-     * @return true when the rate is at or above the walk's healthy bound
-     * @since 0.9.71+
-     */
-    static boolean isHealthyBuildRate(double observed) {
-        return !Double.isNaN(observed) && observed >= 50;
-    }
-
     /** Tunes the cooldown applied after repeated first-hop build failures. */
     private class FirstHopFailureCooldownParam extends BaseParam {
         /** Creates the parameter that tunes the first-hop failure cooldown. */
@@ -16843,13 +16959,13 @@ protected int computeTarget(double observed) {
             if (rs == null) return Double.NaN;
             Rate rate = rs.getRate(STAT_PERIOD);
             if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
-            return rate.getAverageValue();
+            return buildSuccessFraction(rate.getAverageValue());
         }
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double timeoutRate = getAdditionalStatHourly(_context, "tunnel.buildTimeoutRate");
             boolean timeoutsHigh = !Double.isNaN(timeoutRate) && timeoutRate > 25;
-            boolean healthy = isHealthyBuildRate(observed);
+            boolean healthy = buildsUsable(observed);
             // Hysteresis: the walk must settle, not reverse every pass. Without this,
             // success hovering near the healthy bound makes the cooldown climb and fall
             // by one step alternately -- a limit cycle, not a convergence. Stay put
@@ -16888,16 +17004,16 @@ protected int computeTarget(double observed) {
             if (rs == null) return Double.NaN;
             Rate rate = rs.getRate(STAT_PERIOD);
             if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
-            return rate.getAverageValue();
+            return buildSuccessFraction(rate.getAverageValue());
         }
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double pacedOut = getAdditionalEventCount(_context, "tunnel.buildPacedOut");
             boolean manyPacedOut = !Double.isNaN(pacedOut) && pacedOut > 30;
-            boolean healthy = isHealthyBuildRate(observed);
+            boolean healthy = buildsUsable(observed);
             if (manyPacedOut && !healthy)
                 return Math.min(_max, current + 1);
-            if (!Double.isNaN(observed) && observed < 50)
+            if (buildsUnusable(observed))
                 return Math.max(_min, current - 1);
             return current;
         }
@@ -16928,13 +17044,13 @@ protected int computeTarget(double observed) {
             if (rs == null) return Double.NaN;
             Rate rate = rs.getRate(STAT_PERIOD);
             if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
-            return rate.getAverageValue();
+            return buildSuccessFraction(rate.getAverageValue());
         }
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double stalePruned = getAdditionalEventCount(_context, "tunnel.buildStalePruned");
             boolean manyPruned = !Double.isNaN(stalePruned) && stalePruned > 20;
-            boolean healthy = isHealthyBuildRate(observed);
+            boolean healthy = buildsUsable(observed);
             if (manyPruned && !healthy)
                 return Math.min(_max, current + 5);
             if (healthy)
@@ -16967,13 +17083,13 @@ protected int computeTarget(double observed) {
             if (rs == null) return Double.NaN;
             Rate rate = rs.getRate(STAT_PERIOD);
             if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
-            return rate.getAverageValue();
+            return buildSuccessFraction(rate.getAverageValue());
         }
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double timeoutRate = getAdditionalStatHourly(_context, "tunnel.buildTimeoutRate");
             boolean timeoutsHigh = !Double.isNaN(timeoutRate) && timeoutRate > 35;
-            boolean healthy = isHealthyBuildRate(observed);
+            boolean healthy = buildsUsable(observed);
             if (timeoutsHigh && !healthy)
                 return Math.max(_min, current - 5);
             if (healthy)
