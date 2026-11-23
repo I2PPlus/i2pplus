@@ -1792,6 +1792,16 @@ class ConnectionManager {
         _context.statManager().createRequiredRateStat("stream.connectionCreated", "Number of outbound stream connections created", "Stream", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRequiredRateStat("stream.connectFailed", "Elapsed time (ms) of a failed outbound connect attempt", "Stream", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRequiredRateStat("stream.connectBackoffRefused", "Outbound connects refused by the destination's connect cooldown (no SYN sent)", "Stream", RATES);
+        // A SYN-phase rotation asks the pool for a fresh outbound tunnel. Room is
+        // how much of the connect's own SYN budget was left when it was spent -
+        // enough for a spare tunnel, or not nearly enough for a build; opened is
+        // the gap between spending it and the SYN-ACK arriving, so the two together
+        // say whether the rotation is what opened the connect. 1,342 rotations ran
+        // through one log set with neither number recorded anywhere.
+        _context.statManager().createRequiredRateStat("stream.synRotationRoomMs",
+                "Milliseconds of SYN-phase budget left when the outbound tunnel was rotated", "Stream", RATES);
+        _context.statManager().createRequiredRateStat("stream.synRotationOpened",
+                "Milliseconds from an outbound tunnel rotation to the SYN-ACK that opened the connect", "Stream", RATES);
         _context.statManager().createRequiredRateStat("stream.connectCooldownMs",
                 "Milliseconds parked in a destination's connect cooldown", "Stream", RATES);
         _context.statManager().createRequiredRateStat("stream.connectSlotWaitMs",

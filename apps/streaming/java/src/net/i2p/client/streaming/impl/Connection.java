@@ -295,6 +295,15 @@ class Connection {
     private final AtomicBoolean _synRotated = new AtomicBoolean();
 
     /**
+     * When this connect spent its one outbound-tunnel rotation, or 0 while it has
+     * not. Volatile: written on the retransmit timer thread, read on the ACK path
+     * and at disconnect.
+     *
+     * @since 0.9.72+
+     */
+    private volatile long _synRotatedAt;
+
+    /**
      * Count of consecutive retransmit timer firings without ACK progress
      * (highestAckedThrough unchanged).  Used to detect stalled downloads
      * on slow/lossy paths where soft-failure rotation does not trigger.
@@ -1458,7 +1467,58 @@ class Connection {
      *         subsequent one
      * @since 0.9.72+
      */
-    boolean claimSynRotation() { return _synRotated.compareAndSet(false, true); }
+    boolean claimSynRotation() {
+        if (!_synRotated.compareAndSet(false, true))
+            return false;
+        long now = _context.clock().now();
+        _synRotatedAt = now;
+        return true;
+    }
+
+    /**
+     * How much of the SYN-phase budget is left for a rotated tunnel to build, be
+     * selected and shake hands in.
+     * <p>A rotation asks the pool for a fresh outbound tunnel. If the pool has a
+     * spare, that is instant; if it does not, the rotation starts a build that
+     * this connect may not live to see - and on a degraded pool the build is
+     * taken out of the same capacity the running tunnels need. 1,342 rotations
+     * were logged across one log set, one per failed connect, and nothing
+     * recorded how much handshake time any of them had left. Live, one connect
+     * rotated at 2.5s into an 8.8s SYN phase and died 6.25s later: enough room
+     * for a spare tunnel, not nearly enough for a build. This is the number that
+     * decides whether the rotation should wait for headroom.
+     *
+     * @param budgetMs the connect's SYN-phase wall-clock budget, 0 if none is set
+     * @param ageMs how much of that phase has already run; a negative value, from
+     *              a clock that stepped backwards, counts as no time run
+     * @return the ms left, never negative; 0 when no budget is configured
+     * @since 0.9.72+
+     */
+    static long synRotationRoomMs(long budgetMs, long ageMs) {
+        if (budgetMs <= 0)
+            return 0;
+        return Math.max(0, budgetMs - Math.max(0, ageMs));
+    }
+
+    /**
+     * Count the one outbound-tunnel rotation this connect spent as what it was
+     * spent for, once the SYN-ACK arrives, and clear the tracker so a connection
+     * reports at most once.
+     * <p>The value is the gap between spending the rotation and the handshake
+     * completing - the only direct measure of what a rotation buys. Read beside
+     * {@code stream.synRotationRoomMs}, which records how much SYN-phase budget
+     * was left when it was spent, it says whether a rotated tunnel could be used
+     * at all: a rotation with 6s left either rides a spare tunnel that already
+     * exists or starts a build this connect will not live to see.
+     */
+    private void noteSynRotationOpened() {
+        long at = _synRotatedAt;
+        if (at <= 0)
+            return;
+        _synRotatedAt = 0;
+        long elapsed = Math.max(0, _context.clock().now() - at);
+        _context.statManager().addRateData("stream.synRotationOpened", elapsed);
+    }
     /**
      * Returns true if the next send should use a fresh connection
      * (tunnel rotation). Cleared on read so only the first send
@@ -3728,6 +3788,11 @@ class Connection {
         // so the stall counter in timeReached() can reset.
         if (_highestAckedThrough.get() > oldHighest) {
             _ackProgress = true;
+            // The first ACK on an outbound connect is the SYN-ACK, and it settles
+            // the one question the rotation cost is measured against: whether the
+            // fresh tunnel it asked the pool for is what opened the handshake.
+            if (oldHighest < 0 && !_isInbound)
+                noteSynRotationOpened();
         }
 
         _ackedList.clear();
@@ -5955,11 +6020,20 @@ class Connection {
                                                   SYN_RESEND_ROTATION_SENDS)
                         && claimSynRotation()) {
                         setNextSendFreshConnection();
-                        // 20,234 of these in one 80-minute window, 2.3% of the whole log,
-                        // nearly all of them one client tunnel dialing peers that never answer.
-                        debugPeriodic("syn-rotate", shortLabel() + " -> SYN unacked after " +
-                                      packet.getNumSends() + " sends, rotating to a " +
-                                      "fresh outbound tunnel");
+                        long room = synRotationRoomMs(getSynPhaseBudgetMs(),
+                                                      synPhaseAgeMs(_context.clock().now(),
+                                                                    packet.getCreatedOn()));
+                        _context.statManager().addRateData("stream.synRotationRoomMs", room);
+                        // 20,234 of these in one 80-minute window at DEBUG, 2.3% of the
+                        // whole log, nearly all of them one client tunnel dialing peers
+                        // that never answer - so throttled rather than per-send, and at a
+                        // level the standard config can see, because the budget left is
+                        // the number that says whether a rotated tunnel could ever pay.
+                        _log.infoThrottled("streaming-syn-rotate",
+                                           shortLabel() + " -> SYN unacked after " +
+                                           packet.getNumSends() + " sends, rotating to a " +
+                                           "fresh outbound tunnel * Budget left: " +
+                                           DataHelper.formatDuration(room));
                     }
 
                     packet.setResendDelay(_options.getResendDelay() / 1000);
