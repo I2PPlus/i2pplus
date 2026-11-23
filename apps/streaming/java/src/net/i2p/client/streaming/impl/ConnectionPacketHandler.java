@@ -182,13 +182,12 @@ class ConnectionPacketHandler {
             if ((seqNum > 0) || (packet.getPayloadSize() > 0) ||
                  (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE | Packet.FLAG_CLOSE))) {
                 if (_log.shouldDebug())
-                    _log.debug("Received a data packet after hard disconnect on " + con +
-                              " -> Sending RESET");
+                    _log.debug(con.shortLabel() + " -> Data packet after hard disconnect, sending RESET");
                 // the following will send a RESET
                 con.disconnect(false);
             } else {
                 if (_log.shouldDebug())
-                    _log.debug("Ignoring packet received after hard disconnect on " + con);
+                    _log.debug(con.shortLabel() + " -> Packet after hard disconnect, ignoring");
             }
             packet.releasePayload();
             return;
@@ -548,9 +547,9 @@ class ConnectionPacketHandler {
             // the RTT update and the window adjustment act on, and the per-packet
             // lines were the loudest output on a busy connection.
             if (_log.shouldDebug()) {
-                _log.debug("ACKed " + acked.size() + " packets -> Resends: " + numResends +
-                           (highestRTT > 0 ? " * RTT: " + lowestRTT + "ms - " + highestRTT + "ms" : "") +
-                           "\n* " + con);
+                _log.debug(con.shortLabel() + " -> ACKed " + acked.size() + " packets" +
+                           " * Resends: " + numResends +
+                           (highestRTT > 0 ? " * RTT: " + lowestRTT + "ms - " + highestRTT + "ms" : ""));
             }
             if (highestRTT > 0) {
                 int oldrtt = con.getOptions().getRTT();
@@ -563,10 +562,10 @@ class ConnectionPacketHandler {
                 // Worth a line only when the sample actually moved a timer, since
                 // this path runs for every ACK on every connection.
                 if (_log.shouldDebug() && (newrtt != oldrtt || newrto != oldrto || newdev != olddev)) {
-                    _log.debug("RTT updated -> Highest: " + highestRTT + "ms" +
-                               "\n* RTT: " + oldrtt + "ms to " + newrtt + "ms * RTO: " + oldrto + "ms to " + newrto + "ms" +
-                               " * Deviation: " + olddev + "ms to " + newdev + "ms" +
-                               "\n* " + con);
+                    _log.debug(con.shortLabel() + " -> RTT updated: " + highestRTT + "ms" +
+                               "\n* RTT: " + oldrtt + "ms to " + newrtt + "ms" +
+                               " * RTO: " + oldrto + "ms to " + newrto + "ms" +
+                               " * Deviation: " + olddev + "ms to " + newdev + "ms");
                 }
                 if (firstAck) {
                     if (con.isInbound())

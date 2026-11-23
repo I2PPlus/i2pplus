@@ -3232,9 +3232,8 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
         returnToPool(con);
 
         if (_log.shouldDebug())
-            _log.debug("Removing a connection -> Removed: " + removed
-                       + " * Remaining connections: " + _connectionByInboundId.size()
-                       + "\n* " + con);
+            _log.debug("Removing a connection " + con.shortLabel() + " -> Removed: " + removed
+                       + " * Remaining connections: " + _connectionByInboundId.size());
         if (!removed && _log.shouldDebug()) {
             // Not the map itself. On a busy host the dispatch table runs into the
             // low thousands, and values() is a multi-line dump of every one of
