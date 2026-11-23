@@ -1240,7 +1240,10 @@ class Packet {
      * {@code " * "} instead of opening a continuation line, and without the stream
      * context the caller already names. Use this for a message that has to stay on
      * one line; {@link #formatAsString(boolean)} opens its own continuation line
-     * and is for a message that can afford one.
+     * and is for a message that can afford one. The SYN-negotiated framing options
+     * - the sender identity's size and the peer's maximum packet size - are left to
+     * the full form: they belong to the handshake, and the inline form runs once
+     * per packet, so repeating them repeats the handshake on every retransmit.
      *
      * @return a buffer holding the human readable form of this packet, ready to
      *         be appended to a log message, non-null
@@ -1304,8 +1307,22 @@ class Packet {
             // "ACK 0" for exactly that reason.
             buf.append(" ACK ").append(getAckThrough());
         }
-        if (isFlagSet(FLAG_FROM_INCLUDED) && _optionFrom != null && _optionFrom.size() > 0)
-            buf.append(" * Sender identity: ").append(_optionFrom.size()).append(" bytes");
+        // The sender identity's size and the peer's maximum packet size frame the
+        // stream, and they are negotiated once at the SYN. In a live router's log
+        // all 103,762 packets carrying them were SYNs, and the two values were
+        // 391 and 1812 bytes on 99% of them - reprinted on every retransmit of a
+        // SYN that never opened, one destination re-describing the same SYN 3,342
+        // times. They stay in the full description (openLine), which is what a
+        // reader asks for when they want the packet's shape; the inline form is
+        // what the per-packet DEBUG sites print, and it is where the repeat was.
+        if (openLine) {
+            if (isFlagSet(FLAG_FROM_INCLUDED) && _optionFrom != null && _optionFrom.size() > 0) {
+                buf.append(" * Sender identity: ").append(_optionFrom.size()).append(" bytes");
+            }
+            if (isFlagSet(FLAG_MAX_PACKET_SIZE_INCLUDED)) {
+                buf.append(" * Max size: ").append(_optionMaxSize).append(" bytes");
+            }
+        }
         if (_nacks != null && debug) {
             buf.append(" * NACK");
             for (int i = 0; i < _nacks.length; i++) {buf.append(' ').append(_nacks[i]);}
@@ -1315,7 +1332,6 @@ class Packet {
         // "Delay: 0ms" for exactly that reason.
         if (isFlagSet(FLAG_DELAY_REQUESTED) && _optionDelay > 0)
             buf.append(" * Delay: ").append(DataHelper.formatDuration(_optionDelay));
-        if (isFlagSet(FLAG_MAX_PACKET_SIZE_INCLUDED)) buf.append(" * Max size: ").append(_optionMaxSize).append(" bytes");
         if (isFlagSet(FLAG_PROFILE_INTERACTIVE)) buf.append(" * Interactive profile");
         if (isFlagSet(FLAG_SIGNATURE_REQUESTED)) buf.append(" * Signature requested");
         if (isFlagSet(FLAG_SIGNATURE_OFFLINE) && debug) {
