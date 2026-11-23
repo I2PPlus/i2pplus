@@ -9882,9 +9882,13 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     /**
      * Inactivity timeout for streaming connections.
      * Higher values keep slow transfers alive; lower values free resources faster.
-     * Primary signal: {@code udp.sendConfirmTime} (transport RTT).
-     * Cross-refs: {@code stream.con.lifetimeRTT} (completed stream RTT),
-     * {@code stream.con.sendDuplicateSize} (retransmit pressure).
+     * Primary signal: {@code stream.con.lifetimeRTT} (completed stream RTT).
+     * Cross-ref: {@code stream.con.sendDuplicateSize} (retransmit pressure).
+     * <p>The timeout governs how long we wait to hear anything at all on a stream,
+     * so it is tuned on the stream's own round trip. It was tuned on
+     * {@code udp.sendConfirmTime} — 80-107ms live against a completed-stream RTT of
+     * 1,407ms — so its tighten branch was true on every cycle and the value sat
+     * pinned at the 120s floor whatever the streams were doing.
      */
     private class InactivityTimeoutParam extends BaseParam {
 
@@ -9893,7 +9897,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("i2p.streaming.inactivityTimeout", "Streaming inactivity timeout (ms)",
                   SUB_STREAMING,
 
-                  120000, 600000, 30000, "udp.sendConfirmTime", _context);
+                  120000, 600000, 30000, "stream.con.lifetimeRTT", _context);
         }
 
         protected void applyValue(int value) {
@@ -9905,32 +9909,76 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return v > 0 ? v : 300000;
         }
 
+        /**
+         * The completed-stream RTT, with no transport fallback.
+         * {@link BaseParam#getObservedRTT} falls back to
+         * {@code udp.sendConfirmTime} when no stream has completed, and that
+         * fallback is the defect: a transport send-confirm time says nothing about
+         * how long a stream may stay silent, and reading it here is what pinned the
+         * timeout to its floor. No completed stream means no signal, so the cycle
+         * holds the value rather than inventing one.
+         *
+         * @param ctx the router context
+         * @return the completed-stream RTT in ms, or NaN when none has completed
+         */
         protected double getObservedStat(RouterContext ctx) {
-            return getObservedRTT(_context, _statName);
+            return getAdditionalStat(ctx, _statName);
         }
 
         protected int computeTarget(double observed) {
-            int current = getRuntimeValue();
-            // observed = udp.sendConfirmTime (ms, actual network RTT)
-            // Cross-refs: stream.con.lifetimeRTT (slow pipe indicator),
-            //             stream.con.sendDuplicateSize (retransmit pressure)
-            double lifetimeRTT = getAdditionalStat(_context, "stream.con.lifetimeRTT");
-            double lossRate = getStreamingLossRate(_context);
-
-            boolean highRTT = !Double.isNaN(observed) && observed > 7000;
-            boolean streamsSlow = !Double.isNaN(lifetimeRTT) && lifetimeRTT > 8000;
-            boolean dropping = isStreamLossy(lossRate);
-
-            // High RTT or slow streams = raise timeout (avoid killing slow transfers)
-            if (highRTT || (streamsSlow && !dropping))
-                return Math.min(_max, current + _step);
-
-            // Low RTT + no loss = tighten timeout (faster resource reclamation)
-            if (observed < 5000 && !dropping)
-                return Math.max(_min, current - _step);
-
-            return current;
+            return nextInactivityTimeoutMs(getRuntimeValue(), observed,
+                                           isStreamLossy(getStreamingLossRate(_context)),
+                                           _min, _max, _step);
         }
+    }
+
+    /**
+     * Round trips of silence the streaming inactivity timeout must cover before
+     * silence looks like a dead stream rather than a slow one. The shipped
+     * bracket implies the multiple: the 120s floor is 100 round trips at 1.2s, the
+     * 300s default at 3s, and the 600s ceiling at 6s — the range of stream RTTs
+     * this router reports.
+     *
+     * @since 0.9.72+
+     */
+    static final int INACTIVITY_RTT_ROUNDS = 100;
+
+    /**
+     * Next streaming inactivity timeout for one tuning cycle: one step toward the
+     * target the completed-stream RTT implies.
+     * <p>The old policy was a pair of thresholds on the transport RTT, and because
+     * the transport RTT is always far below them it only ever had one direction —
+     * tighten to the floor. This targets the quantity the timeout is about: how
+     * many round trips of a stream's own RTT we are prepared to hear nothing for.
+     * A cycle within one step of the target holds, so the value settles instead of
+     * walking past it, and a cycle with no completed stream to measure holds too.
+     * The dead zone is strictly under one step: a target exactly one step away is
+     * landed on, so the bracket's own floor and ceiling stay reachable.
+     * A cycle while streams are retransmitting also holds: the RTT sample is
+     * inflated by the retransmit waits themselves, so it cannot say which way the
+     * timeout should move.
+     *
+     * @param current the timeout in effect, in ms
+     * @param streamRttMs completed-stream RTT in ms, or NaN when none has completed
+     * @param dropping whether streams are currently retransmitting
+     * @param min floor in ms, the value the streaming setter itself enforces
+     * @param max ceiling in ms
+     * @param step maximum movement per cycle, in ms
+     * @return the timeout to apply, in [min, max]
+     * @since 0.9.72+
+     */
+    static int nextInactivityTimeoutMs(int current, double streamRttMs, boolean dropping,
+                                       int min, int max, int step) {
+        if (Double.isNaN(streamRttMs) || streamRttMs <= 0 || dropping)
+            return current;
+        double want = streamRttMs * INACTIVITY_RTT_ROUNDS;
+        int target = (int) Math.min(max, Math.max(min, want));
+        // less than one step from the target already: moving would risk a limit
+        // cycle, and exactly one step moves so the floor and ceiling stay reachable
+        if (Math.abs((long) current - target) < step)
+            return current;
+        return current < target ? Math.min(max, current + step)
+                                : Math.max(min, current - step);
     }
 
     /**
