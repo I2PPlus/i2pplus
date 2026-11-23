@@ -341,8 +341,8 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
             _retransmitted = true;
             con.newResendPacketEvent(this).fastRetransmit();
             // Counted as well as logged: the decision is the single most
-            // consequential one in loss recovery, and its log line is debug on a
-            // logger the standard config does not enable.
+            // consequential one in loss recovery, and both outcomes have to be
+            // readable in the standard log setup, not only the one that fired.
             _context.statManager().addRateData("stream.fastRetransmit", 1);
             _log.infoThrottled("streaming-fast-retransmit",
                                streamTag() + " -> Fast retransmit on the NACK storm" +
@@ -350,13 +350,16 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
                                DataHelper.formatDuration(flight) +
                                " * NACK floor: " + Connection.nackTrustFlightMs(rtt) + "ms");
         } else {
+            // Its own throttle key: a run of untrusted storms must not be able to
+            // silence the accepts, and the decline is the half of the decision the
+            // stats alone cannot explain - they say how many were refused, this
+            // says against what floor.
             _context.statManager().addRateData("stream.fastRetransmitDeclined", 1);
-            if (_log.shouldDebug()) {
-                _log.debug(streamTag() + " -> NACK storm not trusted as loss evidence" +
-                           "\n* NACKs: " + cnt + " * Since send: " +
-                           DataHelper.formatDuration(flight) +
-                           " * NACK floor: " + Connection.nackTrustFlightMs(rtt) + "ms");
-            }
+            _log.infoThrottled("streaming-fast-retransmit-declined",
+                               streamTag() + " -> NACK storm not trusted as loss evidence" +
+                               "\n* NACKs: " + cnt + " * Since send: " +
+                               DataHelper.formatDuration(flight) +
+                               " * NACK floor: " + Connection.nackTrustFlightMs(rtt) + "ms");
         }
     }
 
