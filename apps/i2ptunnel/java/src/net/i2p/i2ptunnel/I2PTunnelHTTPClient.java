@@ -2101,6 +2101,15 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
 
                         @Override
                         public I2PSocket[] reconnectPair(Exception cause) {
+                            // The early race asks for a pair directly: it races
+                            // fresh sockets against a live-but-silent primary, a
+                            // different bet from the empty-response retry, so it
+                            // always gets the pair.
+                            return reconnectPair(true, cause);
+                        }
+
+                        @Override
+                        public I2PSocket[] reconnectPair(boolean mayRace, Exception cause) {
                             // Same as the single reconnect: a browser that has hung
                             // up is not waiting for a retry, let alone two.
                             if (isBrowserPeerClosed(s, reader, reconnectMethod)) {
@@ -2112,11 +2121,15 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                             }
                             Hash destHash = reconnectDest.calculateHash();
                             long now = System.currentTimeMillis();
+                            if (!mayRace && _log.shouldInfo()) {
+                                _log.info(getPrefix(requestId) +
+                                          "Empty-response retry opening one socket -> This attempt already spent its race");
+                            }
                             long[] budget = _raceBudget.computeIfAbsent(destHash,
                                     k -> new long[]{I2PTunnelRunner.RACE_TOKENS_MAX * 1000L, now});
                             boolean wantRace;
                             synchronized (budget) {
-                                wantRace = I2PTunnelRunner.tryConsumeRaceBudget(budget, now,
+                                wantRace = mayRace && I2PTunnelRunner.tryConsumeRaceBudget(budget, now,
                                         I2PTunnelRunner.RACE_COST_TOKENS);
                             }
                             if (!wantRace) {

@@ -249,6 +249,20 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
      */
     static final long EMPTY_RACE_TIMEOUT_MS = 30 * 1000;
     /**
+     * How many empty-response cycles may pay for a dual race.
+     * <p>One. The race is a bet on the path — one of two fresh tunnels is
+     * healthy, the other black-holes — and one bet per attempt is enough to
+     * test that. A cycle that follows a raced cycle has already watched two
+     * independent tunnels answer the same request with nothing, which moves the
+     * blame from the path to the destination, and a second pair of streams
+     * doubles what the request costs a destination that is already failing.
+     * Halves what one dead path costs the fabric: 8 streams out of the retry
+     * loop, 10 counting the early race, down to 5 and 6.
+     *
+     * @since 0.9.72+
+     */
+    static final int EMPTY_RACE_MAX_CYCLE = 1;
+    /**
      * Upstream silence (ms) after a request write before the runner races
      * fresh sockets against the still-open primary connection.
      * <p>The full {@link #INITIAL_RESPONSE_TIMEOUT_MS} (120s) is the right
@@ -446,6 +460,25 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
         if (state[0] < cost) {return false;}
         state[0] -= cost;
         return true;
+    }
+
+    /**
+     * Whether an empty-response cycle may ask the callback for a dual race.
+     * <p>Pure decision; {@link #EMPTY_RACE_MAX_CYCLE} is why the answer is no
+     * past the first cycle. The early race is a dual race too, so when it has
+     * already fired for this attempt the attempt has spent its one race and the
+     * empty-response loop that follows must not spend a second one on the same
+     * bet.
+     *
+     * @param earlyRaceFired true if the early race already opened sockets for
+     *                       this attempt
+     * @param cycle the 1-based empty-response cycle about to run; a cycle below
+     *              1 is refused
+     * @return true to ask for two sockets, false to ask for one
+     * @since 0.9.72+
+     */
+    static boolean emptyRaceAllowed(boolean earlyRaceFired, int cycle) {
+        return !earlyRaceFired && cycle >= 1 && cycle <= EMPTY_RACE_MAX_CYCLE;
     }
 
     /**
@@ -846,6 +879,29 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
          * @since 0.9.71+
          */
         public default I2PSocket[] reconnectPair(Exception cause) {
+            I2PSocket s = reconnect(cause);
+            return s == null ? null : new I2PSocket[]{s};
+        }
+
+        /**
+         * Open one or two sockets for an empty-response retry, with the
+         * runner's verdict on whether a second socket is worth paying for.
+         * <p>The runner has already decided the race is spent for this attempt
+         * ({@link I2PTunnelRunner#emptyRaceAllowed(boolean, int)}), and a
+         * callback that races on its own budget alone will keep opening pairs
+         * to a destination that has answered empty on every pair so far.
+         * Implementations that hold a dual-race path should honour
+         * {@code mayRace} and open one socket when it is false; the default
+         * ignores it, because a callback that never races has nothing to
+         * decline.
+         *
+         * @param mayRace true if a second socket is worth opening for this cycle
+         * @param cause the cause of the empty completion, or null
+         * @return 1-2 freshly connected sockets (index 0 is primary), or null to give up
+         * @since 0.9.72+
+         */
+        public default I2PSocket[] reconnectPair(boolean mayRace, Exception cause) {
+            if (mayRace) {return reconnectPair(cause);}
             I2PSocket s = reconnect(cause);
             return s == null ? null : new I2PSocket[]{s};
         }
@@ -2426,6 +2482,12 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
                 // the outer loop would spin forever.  4 cycles × callback's 9-attempt
                 // budget gives generous headroom for transient failures while bounding
                 // the total to ~40 attempts / ~30s worst-case.
+                //
+                // Only the first of those cycles is offered a dual race
+                // (emptyRaceAllowed): after two independent tunnels have answered the
+                // same request with nothing the destination, not the path, is the
+                // common factor, and a second pair of streams only doubles the load on
+                // a destination that is already failing.
                 int emptyReconnectCycles = 0;
                 while (shouldReconnectEmptyResponse(totalReceived, _reconnectCallback != null, isRetryableRequest(initialI2PData))) {
                     if (emptyReconnectCycles++ >= MAX_EMPTY_RECONNECT_CYCLES) {
@@ -2463,7 +2525,8 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
                     }
                     Exception e = fromI2P.getFailure();
                     if (e == null && toI2P != null) {e = toI2P.getFailure();}
-                    I2PSocket[] pair = _reconnectCallback.reconnectPair(e);
+                    boolean mayRace = emptyRaceAllowed(_earlyRaceFired, emptyReconnectCycles);
+                    I2PSocket[] pair = _reconnectCallback.reconnectPair(mayRace, e);
                     if (pair == null || pair.length == 0) {break;}
                     // The dead connection is done; retire it from the shared socket list
                     // and swap in the fresh one the callback obtained.

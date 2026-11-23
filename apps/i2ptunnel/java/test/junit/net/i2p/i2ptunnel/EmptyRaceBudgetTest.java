@@ -4,9 +4,12 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import net.i2p.client.streaming.I2PSocket;
+
 /**
  * Pure decision helpers for the paced dual-race empty-response retry:
- * inter-cycle delay, per-dest race token refill, and budget consumption.
+ * inter-cycle delay, per-dest race token refill, budget consumption, and
+ * whether a cycle may race at all.
  *
  * <p>Guards against the two bugs the race budget exists to prevent:
  * zero-delay empty-retry spinning (remote SYN-burst gate) and unbounded
@@ -171,9 +174,62 @@ public class EmptyRaceBudgetTest {
         assertEquals(0L, st[0]);
     }
 
+    /* emptyRaceAllowed */
+
+    /** One cycle may race; every cycle after it opens a single socket. */
+    @Test
+    public void testRaceAllowedOnlyOnTheFirstCycle() {
+        assertTrue(I2PTunnelRunner.emptyRaceAllowed(false, 1));
+        assertFalse(I2PTunnelRunner.emptyRaceAllowed(false, 2));
+        assertFalse(I2PTunnelRunner.emptyRaceAllowed(false, I2PTunnelRunner.MAX_EMPTY_RECONNECT_CYCLES));
+    }
+
+    /**
+     * The early race is a dual race too: it has already opened a pair against
+     * the silent primary, so the empty-response loop that follows must not open
+     * a second pair on the same bet.
+     */
+    @Test
+    public void testEarlyRaceSpendsTheAttemptsOneRace() {
+        assertFalse(I2PTunnelRunner.emptyRaceAllowed(true, 1));
+        assertFalse(I2PTunnelRunner.emptyRaceAllowed(true, 2));
+    }
+
+    /** A cycle the loop never numbers is not a cycle that may race. */
+    @Test
+    public void testRaceRefusedForAnUnnumberedCycle() {
+        assertFalse(I2PTunnelRunner.emptyRaceAllowed(false, 0));
+        assertFalse(I2PTunnelRunner.emptyRaceAllowed(false, -1));
+    }
+
+    /**
+     * The two-argument callback default: a declined race falls back to the
+     * single reconnect, an allowed one to the callback's own pair.
+     */
+    @Test
+    public void testCallbackDefaultHonoursTheRaceVerdict() {
+        final I2PSocket[] pair = new I2PSocket[2];
+        I2PTunnelRunner.ReconnectCallback cb = new I2PTunnelRunner.ReconnectCallback() {
+            @Override
+            public I2PSocket reconnect(Exception cause) {
+                return null;
+            }
+
+            @Override
+            public I2PSocket[] reconnectPair(Exception cause) {
+                return pair;
+            }
+        };
+        assertSame(pair, cb.reconnectPair(true, null));
+        // reconnect() returns null here, so a declined race gives up rather than
+        // opening a pair the runner said was not worth paying for.
+        assertNull(cb.reconnectPair(false, null));
+    }
+
     @Test
     public void testConstantsMatchApprovedDesign() {
         assertEquals(6, I2PTunnelRunner.RACE_TOKENS_MAX);
+        assertEquals(1, I2PTunnelRunner.EMPTY_RACE_MAX_CYCLE);
         assertEquals(6, I2PTunnelRunner.RACE_REFILL_PER_SEC);
         assertEquals(2, I2PTunnelRunner.RACE_COST_TOKENS);
         assertEquals(1, I2PTunnelRunner.SINGLE_COST_TOKENS);
