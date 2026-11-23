@@ -9,14 +9,28 @@ import net.i2p.client.streaming.I2PSocketOptions;
 import static org.junit.Assert.*;
 
 /**
- * Unit tests for the shared request connect deadline (budget, expiry,
- * clamping, per-leg connect timeouts, and the pool-building grace), plus
- * the single pool-snapshot outer-retry decision it gates.
+ * Unit tests for the shared request connect deadline - the budget, its expiry,
+ * clamping each step to the remaining budget, the per-leg connect timeouts, and
+ * the pool-building grace - plus the single pool-snapshot outer-retry decision
+ * it gates.
  */
 public class ConnectDeadlineTest {
 
+    /**
+     * One instance per test method, as JUnit builds a fresh test object for each
+     * one. The class holds no per-test state; every case calls a static decision
+     * with its own clock readings.
+     *
+     * @since 0.9.72+
+     */
+    public ConnectDeadlineTest() {}
+
     // ---------- budget and expiry ----------
 
+    /**
+     * The request budget is the documented 120s, and a deadline derived from a
+     * start time is that budget added to it.
+     */
     @Test
     public void testDeadlineBudget() {
         assertEquals(120 * 1000, I2PTunnelClientBase.REQUEST_CONNECT_DEADLINE_MS);
@@ -24,6 +38,10 @@ public class ConnectDeadlineTest {
                      I2PTunnelClientBase.connectDeadlineFrom(1_000));
     }
 
+    /**
+     * A deadline is spent at the moment it reads equal to the clock, not one
+     * millisecond later, so the boundary is inclusive.
+     */
     @Test
     public void testExpiredAtExactBoundary() {
         long deadline = 10_000;
@@ -32,6 +50,11 @@ public class ConnectDeadlineTest {
         assertTrue(I2PTunnelClientBase.isDeadlineExpired(deadline, 10_001));
     }
 
+    /**
+     * The sentinel for "no shared budget" never expires, whatever the clock
+     * reads, so a caller that has not adopted the budget keeps the old
+     * unbounded behaviour.
+     */
     @Test
     public void testNoDeadlineNeverExpires() {
         assertFalse(I2PTunnelClientBase.isDeadlineExpired(I2PTunnelClientBase.NO_DEADLINE,
@@ -42,28 +65,51 @@ public class ConnectDeadlineTest {
 
     // ---------- clamping ----------
 
+    /**
+     * Well inside the budget, a step is given the timeout it asked for - the
+     * clamp must not shrink a step that fits.
+     */
     @Test
     public void testClampWithinBudgetReturnsRequested() {
         assertEquals(5_000, I2PTunnelClientBase.clampToDeadlineMs(5_000, 10_000, 2_000));
     }
 
+    /**
+     * Near the end of the budget, the step takes only what is left, so a step
+     * cannot outlive the request that started it.
+     */
     @Test
     public void testClampShortensToRemainingBudget() {
         assertEquals(3_000, I2PTunnelClientBase.clampToDeadlineMs(5_000, 10_000, 7_000));
     }
 
+    /**
+     * At or past the deadline the clamp returns zero, the value callers read as
+     * "skip this step" rather than a timeout of their own.
+     */
     @Test
     public void testClampAtOrPastBoundaryIsZero() {
         assertEquals(0, I2PTunnelClientBase.clampToDeadlineMs(5_000, 10_000, 10_000));
         assertEquals(0, I2PTunnelClientBase.clampToDeadlineMs(5_000, 10_000, 12_000));
     }
 
+    /**
+     * With no shared deadline the requested timeout passes through untouched,
+     * which is the legacy behaviour for a caller outside the budget.
+     */
     @Test
     public void testClampNoDeadlineReturnsRequested() {
         assertEquals(30_000, I2PTunnelClientBase.clampToDeadlineMs(30_000,
                      I2PTunnelClientBase.NO_DEADLINE, System.currentTimeMillis()));
     }
 
+    /**
+     * Every step a request can spend - naming, the retry sleep, and a leg's
+     * connect timeout - is clamped to what the request has left, and both naming
+     * budgets are small enough to fit inside the request budget at its start.
+     * This is the invariant that stops naming from consuming the whole connect
+     * budget before a SYN is sent.
+     */
     @Test
     public void testNamingAndSleepClampToRemainingBudget() {
         long now = 1_000;
@@ -90,6 +136,11 @@ public class ConnectDeadlineTest {
 
     // ---------- per-leg connect timeout ----------
 
+    /**
+     * With no shared deadline the leg keeps the timeout it was given, and a
+     * caller that asked for none keeps zero, meaning unlimited - the legacy
+     * pairing of "no budget" and "no timeout".
+     */
     @Test
     public void testLegTimeoutNoDeadlinePassesThrough() {
         long now = System.currentTimeMillis();
@@ -100,10 +151,13 @@ public class ConnectDeadlineTest {
                 0, I2PTunnelClientBase.NO_DEADLINE, now));
     }
 
+    /**
+     * A leg options object can carry a zero connect timeout when streaming has
+     * not established an effective window yet. Against a real deadline that must
+     * not read as "wait forever", so the default window is substituted.
+     */
     @Test
     public void testLegTimeoutSubstitutesDefaultWhenNoneRequested() {
-        // streaming can carry a 0 (not-yet-established) connect timeout;
-        // against a real deadline that must not mean "wait forever"
         long now = 1_000;
         long deadline = now + 120_000;
         assertEquals(I2PTunnelClientBase.DEFAULT_CONNECT_TIMEOUT,
@@ -112,6 +166,11 @@ public class ConnectDeadlineTest {
                      I2PTunnelClientBase.legConnectTimeoutMs(-1, deadline, now));
     }
 
+    /**
+     * A leg takes the remaining budget when that is shorter than it asked for,
+     * keeps its own value when the budget is larger, and still runs when what is
+     * left is exactly the 10s floor streaming enforces.
+     */
     @Test
     public void testLegTimeoutClampedToRemainingBudget() {
         // 40s remaining shrinks a 60s request
@@ -122,9 +181,13 @@ public class ConnectDeadlineTest {
         assertEquals(10_000, I2PTunnelClientBase.legConnectTimeoutMs(30_000, 20_000, 10_000));
     }
 
+    /**
+     * Below the 10s floor the leg is doomed - streaming would cut it short
+     * anyway - so the decision returns -1 and the walk skips the leg instead of
+     * starting an attempt that cannot finish.
+     */
     @Test
     public void testLegTimeoutSkipsBelowFloor() {
-        // under streaming's 10s connect floor the leg is doomed — skip it
         assertEquals(-1, I2PTunnelClientBase.legConnectTimeoutMs(30_000, 19_999, 10_000));
         assertEquals(-1, I2PTunnelClientBase.legConnectTimeoutMs(30_000, 10_000, 10_000));
         assertEquals(-1, I2PTunnelClientBase.legConnectTimeoutMs(0, 10_000, 12_000));
@@ -168,6 +231,24 @@ public class ConnectDeadlineTest {
     }
 
     /**
+     * The empty-reconnect loop runs under its own wall-clock deadline, and every
+     * attempt inside it gets the same walk the first connect gets. Passing the
+     * loop deadline through unmetered left streaming sizing each leg from its own
+     * 30s default, so one request asked the same destination for 15,000ms and
+     * then 30,000ms, and the longer leg bought half as many retries.
+     */
+    @Test
+    public void testReconnectAttemptsShareTheFirstConnectWindow() {
+        long start = 1_000_000;
+        long loop = start + I2PTunnelHTTPClient.EMPTY_RECONNECT_DEADLINE_MS;
+        long attempt = I2PTunnelClientBase.attemptDeadlineMs(loop, start);
+        assertEquals(start + I2PTunnelClientBase.MAX_CONNECT_ATTEMPT_MS, attempt);
+        assertEquals(I2PTunnelClientBase.MAX_CONNECT_ATTEMPT_MS, attempt - start);
+        // The loop still outlives the attempt, so room is left for the retries.
+        assertTrue(loop - attempt >= I2PTunnelClientBase.MAX_CONNECT_ATTEMPT_MS);
+    }
+
+    /**
      * The attempt budget has to leave a startable leg: streaming floors a
      * connect window at 10s and the walk skips a leg with less than that left.
      */
@@ -181,6 +262,11 @@ public class ConnectDeadlineTest {
 
     // ---------- pool-building grace ----------
 
+    /**
+     * A deadline that has just expired while the client pool has builds in
+     * flight is extended by the grace window, because those builds may still
+     * land and deliver the connection the request is waiting for.
+     */
     @Test
     public void testGraceExtendsExpiredDeadlineWhileBuilding() {
         assertEquals(10_000 + I2PTunnelClientBase.POOL_BUILD_DEADLINE_GRACE_MS,
@@ -189,11 +275,20 @@ public class ConnectDeadlineTest {
                      I2PTunnelClientBase.extendDeadlineForBuildingPool(10_000, 12_000, 0, false));
     }
 
+    /**
+     * While the deadline is still alive there is nothing to extend - the grace
+     * answers an expiry, not a slow start.
+     */
     @Test
     public void testGraceNotGrantedWhileDeadlineAlive() {
         assertEquals(10_000, I2PTunnelClientBase.extendDeadlineForBuildingPool(10_000, 9_999, 0, false));
     }
 
+    /**
+     * The grace is for a pool that is rebuilding. A pool holding tunnels, one
+     * that is dead, and one whose state cannot be read all keep the original
+     * deadline, so the extension cannot become a general timeout extension.
+     */
     @Test
     public void testGraceNotGrantedForHealthyOrUnknownPool() {
         assertEquals(10_000, I2PTunnelClientBase.extendDeadlineForBuildingPool(10_000, 10_000, 1, false));
@@ -201,27 +296,37 @@ public class ConnectDeadlineTest {
         assertEquals(10_000, I2PTunnelClientBase.extendDeadlineForBuildingPool(10_000, 10_000, -2, false));
     }
 
+    /**
+     * The grace is granted once per request. A second expiry with the pool still
+     * building does not re-extend, which keeps the worst case at budget plus one
+     * grace instead of an unbounded sequence of extensions.
+     */
     @Test
     public void testGraceOnlyOncePerRequest() {
-        // a second expiry with the pool still building must not re-extend,
-        // keeping the worst case at budget + grace
         assertEquals(10_000, I2PTunnelClientBase.extendDeadlineForBuildingPool(10_000, 10_000, 0, true));
     }
 
     // ---------- outer retry ----------
 
+    /**
+     * An expired deadline ends the request at once, even with timeout budget
+     * left and the pool building - the budget is what bounds the browser's wait,
+     * and the grace above is the only exception to it.
+     */
     @Test
     public void testDeadlineExpiredStopsRetry() {
-        // Even with a fresh timeout budget and a building pool, an expired
-        // deadline ends the request immediately.
         assertFalse(I2PTunnelClientBase.shouldOuterRetryConnect(1, 1, true, 0, true));
         assertFalse(I2PTunnelClientBase.shouldOuterRetryConnect(1, 0, false, 1, true));
     }
 
+    /**
+     * One {@code poolState()} reading must decide exactly what the older pair of
+     * queries decided, so collapsing the two calls into one snapshot cannot
+     * change behaviour. Exhaustive over every pool state, attempt count,
+     * timeout count and timeout flag the caller can present.
+     */
     @Test
     public void testSingleSnapshotDerivesBothPoolFlags() {
-        // One poolState() reading must decide exactly what the legacy pair of
-        // queries (poolState + poolIsDefinitivelyDown) decided.
         for (int state = -2; state <= 1; state++) {
             for (int attempts = 1; attempts <= 8; attempts++) {
                 for (int timeouts = 0; timeouts <= 4; timeouts++) {
@@ -239,12 +344,23 @@ public class ConnectDeadlineTest {
         }
     }
 
+    /**
+     * A pool that is dead, or whose state cannot be read, stops the outer retry
+     * from the snapshot alone - no further attempt can reach the destination.
+     */
     @Test
     public void testDownPoolStopsRetryFromSnapshot() {
         assertFalse(I2PTunnelClientBase.shouldOuterRetryConnect(1, 0, false, -1, false));
         assertFalse(I2PTunnelClientBase.shouldOuterRetryConnect(1, 1, true, -2, false));
     }
 
+    /**
+     * How the timeout budget is spent depends on the pool. A healthy pool that
+     * just timed out once is not re-entered, because every leg already failed
+     * fast as a timeout; a rebuilding pool is given one more attempt, since its
+     * in-flight builds may still land, and stops at the second timeout; a
+     * non-timeout failure on a healthy pool keeps retrying inside its budget.
+     */
     @Test
     public void testTimeoutBudgetFromSnapshot() {
         // Healthy pool: the first timeout already ends the retry loop — the
@@ -258,6 +374,11 @@ public class ConnectDeadlineTest {
         assertTrue(I2PTunnelClientBase.shouldOuterRetryConnect(2, 0, false, 1, false));
     }
 
+    /**
+     * The attempt cap is absolute: reaching it ends the retry loop even with
+     * deadline left and a healthy pool, so a destination that keeps refusing
+     * cannot consume the whole request budget.
+     */
     @Test
     public void testMaxRetriesStopsEvenWithDeadlineRemaining() {
         assertFalse(I2PTunnelClientBase.shouldOuterRetryConnect(

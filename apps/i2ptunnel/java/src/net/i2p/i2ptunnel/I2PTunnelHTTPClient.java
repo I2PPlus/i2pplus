@@ -2678,7 +2678,15 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             try {
                 I2PSocketOptions opts = getDefaultOptions();
                 if (port > 0) {opts.setPort(port);}
-                I2PSocket fresh = createI2PSocket(dest, opts);
+                // Give this attempt the same walk budget the first connect gets.
+                // The loop's own deadline is not a per-attempt one: passed through
+                // as-is, streaming sized each leg from its own 30s default, so the
+                // same destination was asked to connect in 15,000ms on the first
+                // attempt and 30,000ms on every reconnect - 62 log lines at one
+                // timeout and 48 at the other in a single request - and the longer
+                // leg left room for half as many retries.
+                I2PSocket fresh = createI2PSocket(dest, opts,
+                                                  attemptDeadlineMs(deadlineMs, System.currentTimeMillis()));
                 if (!quiet && _log.shouldInfo()) {
                     // Shared callback serves both empty-response retry and
                     // mid-body Range resume; the runner already logged which
