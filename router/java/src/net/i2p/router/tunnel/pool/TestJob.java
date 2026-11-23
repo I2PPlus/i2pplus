@@ -4895,6 +4895,47 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
     }
 
     /**
+     * Fold the two test-failure statistics into the one population the success
+     * count is compared against.
+     * <p>A passing round is recorded under a single statistic whatever pool ran
+     * it, while a failing round is filed under one of two:
+     * {@code tunnel.testFailedTime} for client pools and
+     * {@code tunnel.testExploratoryFailedTime} for exploratory ones. Reading
+     * only the first compares every pool's passes against one pool's failures,
+     * which understates the share that failed by exactly the exploratory rounds
+     * — and the window sizing depends on that share crossing
+     * {@link #UNREPRESENTATIVE_FAILURE_RATIO}. Measured on this router the
+     * exploratory side is small (1.3 failures a minute against 21), so this is
+     * a correctness fix rather than a retune here; on a router whose rounds are
+     * mostly exploratory it is the difference between a representative sample
+     * and one the sizing refuses to trust.
+     * <p>The mean is folded by event count, not by averaging the two means: 90
+     * rounds at 6s beside 2 rounds at 1s is a 5.9s population, not a 3.5s one.
+     *
+     * @param clientRounds rounds failed by client pools in the sampled period
+     * @param clientAvgMs their mean duration in ms, NaN when there were none
+     * @param exploratoryRounds rounds failed by exploratory pools
+     * @param exploratoryAvgMs their mean duration in ms, NaN when there were none
+     * @return the mean duration over both populations in ms, NaN when neither failed
+     * @since 0.9.72+
+     */
+    static double combineTestFailureAverage(double clientRounds, double clientAvgMs,
+                                            double exploratoryRounds, double exploratoryAvgMs) {
+        double total = 0;
+        double counted = 0;
+        if (clientRounds > 0 && !Double.isNaN(clientAvgMs)) {
+            total += clientAvgMs * clientRounds;
+            counted += clientRounds;
+        }
+        if (exploratoryRounds > 0 && !Double.isNaN(exploratoryAvgMs)) {
+            total += exploratoryAvgMs * exploratoryRounds;
+            counted += exploratoryRounds;
+        }
+        if (counted <= 0) return Double.NaN;
+        return total / counted;
+    }
+
+    /**
      * Hold a test window inside the configured range.
      * <p>The pool's adaptive multiplier is applied <em>after</em>
      * {@link #computeTestPeriod} clamps its own result, so without this second
@@ -4941,13 +4982,31 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
                 }
             }
             RateStat ft = ctx.statManager().getRate("tunnel.testFailedTime");
+            double clientRounds = 0;
+            double clientAvgMs = Double.NaN;
             if (ft != null) {
                 Rate r = ft.getRate(60*1000L);
                 if (r != null && r.getLastEventCount() > 0) {
-                    failedTime = r.getAverageValue();
-                    failedRounds = r.getLastEventCount();
+                    clientAvgMs = r.getAverageValue();
+                    clientRounds = r.getLastEventCount();
                 }
             }
+            // Exploratory rounds are recorded under their own statistic while the
+            // success count above carries every pool's, so both sides of the ratio
+            // need both populations.
+            RateStat eft = ctx.statManager().getRate("tunnel.testExploratoryFailedTime");
+            double exploratoryRounds = 0;
+            double exploratoryAvgMs = Double.NaN;
+            if (eft != null) {
+                Rate r = eft.getRate(60*1000L);
+                if (r != null && r.getLastEventCount() > 0) {
+                    exploratoryAvgMs = r.getAverageValue();
+                    exploratoryRounds = r.getLastEventCount();
+                }
+            }
+            failedRounds = clientRounds + exploratoryRounds;
+            failedTime = combineTestFailureAverage(clientRounds, clientAvgMs,
+                                                   exploratoryRounds, exploratoryAvgMs);
             failureRatio = testFailureRatio(successRounds, failedRounds);
             RateStat tspt = ctx.statManager().getRate("transport.sendProcessingTime");
             if (tspt != null) {

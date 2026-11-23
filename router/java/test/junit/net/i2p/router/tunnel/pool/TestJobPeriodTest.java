@@ -22,6 +22,12 @@ import org.junit.Test;
  * share passes {@link TestJob#UNREPRESENTATIVE_FAILURE_RATIO} the window is
  * sized from the rounds that missed it instead.
  *
+ * <p>The rounds that missed it are recorded under two statistics - one for
+ * client pools, one for exploratory - while the passes are recorded under one
+ * for every pool, so the failure side has to fold both populations back
+ * together before it is comparable with the success side. The fold is by event
+ * count, and the last group of cases pins that.
+ *
  * @since 0.9.70+
  */
 public class TestJobPeriodTest {
@@ -264,5 +270,64 @@ public class TestJobPeriodTest {
         assertEquals(20000, TestJob.clampTestPeriod(30000, 20000, 5000));
         assertEquals(9000, TestJob.clampTestPeriod(9000, 20000, 5000));
         assertEquals(7000, TestJob.clampTestPeriod(1000, 10000, 7000));
+    }
+
+    // =====================================================================
+    // Folding the two test-failure populations into one
+    // =====================================================================
+
+    /**
+     * With no exploratory rounds the client mean is used as measured, so the
+     * common case does not move.
+     */
+    @Test
+    public void testFailureAverageUnchangedWithoutExploratoryRounds() {
+        assertEquals(17897d,
+                     TestJob.combineTestFailureAverage(21, 17897d, 0, Double.NaN), 0.0001d);
+    }
+
+    /**
+     * The fold is by event count, not an average of the two means: 90 rounds at
+     * 6s beside 2 rounds at 1s is a population of 92 rounds at 5.9s, and
+     * averaging the means would report 3.5s - a window half the size the
+     * measured rounds need.
+     */
+    @Test
+    public void testFailureAverageFoldsBothPopulationsByCount() {
+        assertEquals(5891.3d, TestJob.combineTestFailureAverage(90, 6000d, 2, 1000d), 0.1d);
+    }
+
+    /** A side with rounds but no usable mean contributes nothing, and vice versa. */
+    @Test
+    public void testFailureAverageIgnoresAnUnmeasuredSide() {
+        assertEquals(20000d,
+                     TestJob.combineTestFailureAverage(0, Double.NaN, 5, 20000d), 0.0001d);
+        assertEquals(6000d,
+                     TestJob.combineTestFailureAverage(7, 6000d, 3, Double.NaN), 0.0001d);
+    }
+
+    /** No failed rounds is not a measurement, and must not read as a zero mean. */
+    @Test
+    public void testNoFailedRoundsIsNotAMeasurement() {
+        double none = TestJob.combineTestFailureAverage(0, Double.NaN, 0, Double.NaN);
+        assertTrue(Double.isNaN(none));
+        assertTrue(Double.isNaN(TestJob.combineTestFailureAverage(-1, 5000d, 0, 5000d)));
+    }
+
+    /**
+     * The defect the fold closes: passes are counted for every pool while
+     * failures are filed under two statistics, so comparing all the passes
+     * against only the client failures can keep the ratio under the threshold
+     * that makes the sample worth sizing from, with the exploratory rounds
+     * failing unseen.
+     */
+    @Test
+    public void testExploratoryRoundsMoveTheRatioAcrossTheThreshold() {
+        double clientOnly = TestJob.testFailureRatio(40, 12);
+        double bothPools = TestJob.testFailureRatio(40, 12 + 12);
+        assertTrue("client-only ratio " + clientOnly + " should sit under the threshold",
+                   clientOnly < TestJob.UNREPRESENTATIVE_FAILURE_RATIO);
+        assertTrue("folded ratio " + bothPools + " should sit above it",
+                   bothPools > TestJob.UNREPRESENTATIVE_FAILURE_RATIO);
     }
 }
