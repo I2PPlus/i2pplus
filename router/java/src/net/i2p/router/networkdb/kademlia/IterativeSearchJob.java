@@ -125,6 +125,15 @@ public class IterativeSearchJob extends FloodSearchJob {
     private final Set<Hash> _queriedFloodfills;
     /** Set once the candidate set has been widened for beta confirmation. Guarded by this. @since 0.9.71+. */
     private boolean _widened;
+    /**
+     * Why the search stopped of its own accord - expired window, spent query
+     * allowance - or null when it ended by timeout or drop. Read only by
+     * {@link #failed()} to put the reason in the failure log line, and written
+     * immediately before that call, so it needs no lock.
+     *
+     * @since 0.9.72+
+     */
+    private volatile String _giveUpReason;
 
     /**
      * Index into {@link #_skipReasons}: the candidate is too old to store a
@@ -234,6 +243,30 @@ public class IterativeSearchJob extends FloodSearchJob {
      * @since 0.9.71+
      */
     private static final int BETA_CONFIRM = 3;
+
+    /**
+     * Failure-log reason: the search's window ran out before its next pass.
+     * Package-visible so the test can pin the strings the log actually emits.
+     *
+     * @since 0.9.72+
+     */
+    static final String GIVE_UP_WINDOW = "Search window expired";
+
+    /**
+     * Failure-log reason: under a second of the window is left, too little for
+     * another query to be worth sending.
+     *
+     * @since 0.9.72+
+     */
+    static final String GIVE_UP_NO_TIME = "Too little time left to ask another peer";
+
+    /**
+     * Failure-log reason: the search spent its whole query allowance with nothing
+     * outstanding - the common ending for a destination nobody has.
+     *
+     * @since 0.9.72+
+     */
+    static final String GIVE_UP_BUDGET = "Query budget exhausted";
 
     /** Config key for the total search time cap. */
     public static final String PROP_MAX_SEARCH_TIME = "netdb.maxSearchTime";
@@ -743,11 +776,11 @@ public class IterativeSearchJob extends FloodSearchJob {
     private void retry() {
         long now = getContext().clock().now();
         if (_expiration < now) {
-            cancelJob();
+            giveUp(GIVE_UP_WINDOW);
             return;
         }
         if (_expiration - MIN_SINGLE_SEARCH_TIME < now) { // not enough time left to bother
-            cancelJob();
+            giveUp(GIVE_UP_NO_TIME);
             return;
         }
         if (_expiration - 1500 < now)  {_expiration = now + 1500;}
@@ -767,11 +800,11 @@ public class IterativeSearchJob extends FloodSearchJob {
             // candidates are all unqueryable still gets its full allowance of
             // real questions instead of dying with none asked.
             if (queryBudgetSpent(asked, _totalSearchLimit)) {
-                // Nothing outstanding to hear back from: the budget is spent and
-                // spent with failures, so stop now rather than wait for the
-                // search timer. With replies still in flight, stop asking and
-                // let them decide.
-                if (pend == 0) {cancelJob();}
+                // Nothing outstanding to hear back from: the allowance is spent
+                // and every question came back empty, so stop now rather than
+                // wait for the search timer. With replies still in flight, stop
+                // asking and let them decide.
+                if (pend == 0) {giveUp(GIVE_UP_BUDGET);}
                 return;
             }
             // Even if pend and todo are empty, we don't fail, as there may be more peers coming via newPeerToTry()
@@ -1420,9 +1453,12 @@ public class IterativeSearchJob extends FloodSearchJob {
     }
 
     /**
-     * Cancels the search and delivers failure to all registered waiters.
-     * Cancellation is terminal for callers - negative-cache skip, banlist
-     * skip, exhausted search window - so this fires the onFailed jobs.
+     * Cancels the search and delivers failure to all registered waiters, with no
+     * stat, no negative cache and no blame - the key is already known, so the
+     * search learned nothing and nothing failed. That is the only reason left to
+     * cancel: a search that ran out of window or of query allowance ends through
+     * {@link #giveUp(String)} instead, because that is a failed lookup and has to
+     * be counted as one.
      * @since 0.9.65+
      */
     void cancelJob() {
@@ -1434,6 +1470,41 @@ public class IterativeSearchJob extends FloodSearchJob {
         releaseFloodfillQueries();
         for (Job j : _onFailed) {getContext().jobQueue().addJob(j);}
         _onFailed.clear();
+    }
+
+    /**
+     * Ends the search as a failure and records what made it stop.
+     * <p>These endings went through {@link #cancelJob()}, which fires the
+     * onFailed jobs and nothing else: no {@code netDb.lookupsFailed*} sample, no
+     * negative-lookup cache entry, no {@code dbLookupFailed} blame for the peers
+     * that never answered, and no log line. A search that spent its whole query
+     * allowance and heard nothing back was invisible in every counter that
+     * measures failing lookups, and its key stayed un-cached, so the caller asked
+     * for the same destination again on its next pass.
+     *
+     * @param reason what made the search stop, for the failure log line
+     * @since 0.9.72+
+     */
+    private void giveUp(String reason) {
+        _giveUpReason = reason;
+        failed();
+    }
+
+    /**
+     * Pure decision: the reason half of a search's failure log line.
+     * <p>A search that stopped by its own decision says why; one that timed out
+     * or was dropped says only whether it ever got as far as asking somebody,
+     * because that is the difference the caller can act on.
+     *
+     * @param giveUpReason the reason recorded by {@link #giveUp}, null otherwise
+     * @param neverQueried true when no lookup message ever left on a tunnel
+     * @return the reason text, always capitalized and never empty
+     * @since 0.9.72+
+     */
+    static String failureReason(String giveUpReason, boolean neverQueried) {
+        if (giveUpReason != null)
+            return giveUpReason;
+        return neverQueried ? "No peer was ever queried" : "Every peer queried failed";
     }
 
     /**
@@ -1495,15 +1566,15 @@ public class IterativeSearchJob extends FloodSearchJob {
         // Blame the unheard-from (others already blamed in failed() above)
         for (Hash h : unheard) {getContext().profileManager().dbLookupFailed(h);}
         long time = System.currentTimeMillis() - _created;
-        // The search either asked somebody and was told no, or it never got as far
-        // as asking. Only the second is invisible to the caller, whose own line
-        // already carries the duration.
+        // A search that stopped by its own decision names why; one that timed out
+        // says only whether it got as far as asking somebody, and only that second
+        // case is invisible to the caller, whose own line carries the duration.
         boolean neverQueried = _queriesSent == 0;
         if (neverQueried ? _log.shouldWarn() : _log.shouldInfo()) {
             long timeRemaining = _expiration - getContext().clock().now();
             String msg = "IterativeSearch for " + (_isLease ? "LeaseSet" : "Router") +
                          " " + keyText() + " failed -> " +
-                         (neverQueried ? "No peer was ever queried" : "Every peer queried failed") +
+                         failureReason(_giveUpReason, neverQueried) +
                          "\n* Peers queried: " + tries +
                          " * Elapsed: " + DataHelper.formatDuration(time) +
                          " * Window left: " + DataHelper.formatDuration(Math.max(0, timeRemaining)) +
