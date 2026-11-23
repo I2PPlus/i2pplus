@@ -706,19 +706,24 @@ class ConnectionPacketHandler {
 
                 // One line per adjustment instead of a growth-mode line plus a
                 // result line. Growth names the rule that ran; when none did,
-                // Congested says why on its own line.
+                // Congested says why on its own line. The window is a count of
+                // messages in flight, not a byte size, and the full connection
+                // snapshot goes: this line ran 36,095 times in two log files at
+                // ~380 characters each, three quarters of that the snapshot.
                 if (_log.shouldDebug()) {
-                    _log.debug("Window adjusted -> Window: " + newWindowSize + "B * Previous: " + oldWindow + "B" +
+                    _log.debug(con.shortLabel() + " -> Window adjusted: " + newWindowSize + " messages" +
+                               " * Previous: " + oldWindow + " messages" +
                                "\n* Growth: " + (growth != null ? growth : "none") +
                                " * ACKed: " + acked + " packets * Resends: " + numResends +
-                               (growth != null ? "" : "\n* Congested: " + congested) +
-                               "\n* " + con);
+                               (growth != null ? "" : "\n* Congested: " + congested));
                 }
             } else {
                 if (_log.shouldDebug()) {
-                    _log.debug("No window adjustment -> Window: " + con.getOptions().getWindowSize() + "B" +
-                               " * ACKed: " + acked + " * UnACKed sent: " + con.getUnackedPacketsSent() +
-                               "\n* Highest ACKed through: " + lowest +
+                    _log.debug(con.shortLabel() + " -> No window adjustment" +
+                               " * Window: " + con.getOptions().getWindowSize() + " messages" +
+                               " * ACKed: " + acked + " packets" +
+                               "\n* UnACKed sent: " + con.getUnackedPacketsSent() +
+                               " * Highest ACKed through: " + lowest +
                                " * Congestion window end: " + con.getCongestionWindowEnd());
                 }
             }
