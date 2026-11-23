@@ -186,7 +186,10 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      * or replaced.  With I2P keepalive the socket (and its permit) persist
      * across the request loop, so a long-lived connection is counted against
      * the cap for exactly as long as it occupies one.  A dual-race secondary
-     * socket holds an extra permit only until the race settles.
+     * socket holds an extra permit only until the race settles.  At the cap a
+     * request queues for a slot for up to {@link #PERMIT_WAIT_MAX_MS} before it
+     * is refused, so the cap sheds a burst instead of refusing a request that
+     * would have found a slot moments later.
      *
      * @since 0.9.71+
      */
@@ -238,6 +241,55 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             return count;
         });
         return acquired.get();
+    }
+
+    /**
+     * Longest a request will queue for a free per-destination permit (ms).
+     * <p>The cap is a burst gate, not a capacity limit: 32 live sockets to one
+     * destination is well past what a browser keeps open, so a request turned
+     * away at the cap is almost always one that would have found a slot a
+     * moment later. Refusing it costs a 504 in under 2ms with no SYN sent and
+     * no streaming connection, and the browser's own retry lands behind the
+     * same wall — which is how one busy destination stays bricked for minutes.
+     * Three seconds is a third of one connect attempt, short enough that a
+     * genuinely saturated destination still fails inside the request's own
+     * budget.
+     *
+     * @since 0.9.72+
+     */
+    static final long PERMIT_WAIT_MAX_MS = 3 * 1000;
+    /** Spacing between permit re-checks while a request queues for a slot (ms). */
+    static final long PERMIT_WAIT_POLL_MS = 150;
+
+    /**
+     * Queue for a free per-destination permit rather than refusing at once.
+     * Clamped to the request's shared connect deadline with
+     * {@link I2PTunnelClientBase#clampToDeadlineMs(long, long, long)}, so the
+     * wait can never spend budget the connect itself still needs.
+     *
+     * @param dest the destination to take a permit for, null always acquires
+     * @param deadlineMs the request's connect deadline, or
+     *                   {@link I2PTunnelClientBase#NO_DEADLINE} for none
+     * @return the milliseconds waited when the permit was taken, 0 if it was
+     *         free at once, -1 if the budget ran out first
+     * @since 0.9.72+
+     */
+    static long waitForConnPermit(Hash dest, long deadlineMs) {
+        if (tryAcquireConnPermit(dest)) {return 0;}
+        long start = System.currentTimeMillis();
+        long budget = clampToDeadlineMs(PERMIT_WAIT_MAX_MS, deadlineMs, start);
+        long waited = 0;
+        while (waited < budget) {
+            try {
+                Thread.sleep(Math.min(PERMIT_WAIT_POLL_MS, budget - waited));
+            } catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+                break;
+            }
+            waited = System.currentTimeMillis() - start;
+            if (tryAcquireConnPermit(dest)) {return waited;}
+        }
+        return -1;
     }
 
     /**
@@ -1879,14 +1931,20 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 // when the browser fires many parallel requests to the same I2P
                 // destination (20+ simultaneous SYNs observed without this gate).
                 Hash destHash = clientDest.calculateHash();
-                if (!tryAcquireConnPermit(destHash)) {
+                long queuedMs = waitForConnPermit(destHash, connectDeadline);
+                if (queuedMs < 0) {
                     if (_log.shouldWarn()) {
                         _log.warn(getPrefix(requestId) + "Connection limit reached for [" +
                                   destHash.toShortBase32() +
-                                  "] (" + MAX_CONNS_PER_DEST + " concurrent)");
+                                  "] -> Refusing the request (" + MAX_CONNS_PER_DEST + " concurrent)");
                     }
                     throw new IOException("Too many concurrent connections to [" +
                                           destHash.toShortBase32() + "]");
+                }
+                if (queuedMs > 0 && _log.shouldInfo()) {
+                    _log.info(getPrefix(requestId) + "Connection limit reached for [" +
+                              destHash.toShortBase32() + "] -> Queued " +
+                              DataHelper.formatDuration(queuedMs) + " for a free slot");
                 }
                 heldPermitDest = destHash;
 

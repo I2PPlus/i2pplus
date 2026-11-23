@@ -22,6 +22,12 @@ import org.junit.Test;
  * the cap, where every further request is refused with "too many concurrent
  * connections".
  *
+ * <p>The second half covers the queue at the cap. A request refused there was
+ * refused in under 2ms, with no SYN sent and no streaming connection, and the
+ * browser's retry landed behind the same wall - which is how one busy
+ * destination stays bricked for minutes. The queue is bounded by the request's
+ * own connect deadline, and those cases pin that bound as well as the hand-off.
+ *
  * <p>The permit map is static and the helpers are stateless, so the cases run
  * without a running proxy. Each uses its own destination to stay independent of
  * the others.
@@ -170,5 +176,117 @@ public class ConnPermitReplacementTest {
         assertEquals(0, I2PTunnelHTTPClient.activeConnPermits(null));
         I2PTunnelHTTPClient.releaseConnPermit(null);
         assertEquals(0, I2PTunnelHTTPClient.activeConnPermits(null));
+    }
+
+    /* waitForConnPermit */
+
+    /**
+     * Fills one destination to its cap and leaves it there.
+     *
+     * @param d the destination to fill, non-null
+     */
+    private static void fillToCap(Hash d) {
+        for (int i = 0; i < I2PTunnelHTTPClient.MAX_CONNS_PER_DEST; i++) {
+            assertTrue(I2PTunnelHTTPClient.tryAcquireConnPermit(d));
+        }
+    }
+
+    /** A free slot is taken without waiting at all. */
+    @Test
+    public void testQueueTakesAFreeSlotWithoutWaiting() {
+        Hash d = dest(9);
+        long start = System.currentTimeMillis();
+        long noDeadline = I2PTunnelClientBase.NO_DEADLINE;
+        assertEquals(0, I2PTunnelHTTPClient.waitForConnPermit(d, noDeadline));
+        long elapsed = System.currentTimeMillis() - start;
+        assertTrue("a free slot must not sleep",
+                   elapsed < I2PTunnelHTTPClient.PERMIT_WAIT_POLL_MS);
+        assertEquals(1, I2PTunnelHTTPClient.activeConnPermits(d));
+        I2PTunnelHTTPClient.releaseConnPermit(d);
+    }
+
+    /**
+     * A request whose connect budget is already spent does not queue: the wait
+     * must not extend a request past its own deadline, and a deadline in the
+     * past leaves nothing to queue with.
+     */
+    @Test
+    public void testQueueSkippedWhenTheDeadlineHasPassed() {
+        Hash d = dest(10);
+        fillToCap(d);
+        long start = System.currentTimeMillis();
+        assertEquals(-1, I2PTunnelHTTPClient.waitForConnPermit(d, start - 1000));
+        long elapsed = System.currentTimeMillis() - start;
+        assertTrue("a spent deadline must not sleep",
+                   elapsed < I2PTunnelHTTPClient.PERMIT_WAIT_POLL_MS);
+        assertEquals("a refused queue must not take a slot",
+                     I2PTunnelHTTPClient.MAX_CONNS_PER_DEST,
+                     I2PTunnelHTTPClient.activeConnPermits(d));
+        for (int i = 0; i < I2PTunnelHTTPClient.MAX_CONNS_PER_DEST; i++) {
+            I2PTunnelHTTPClient.releaseConnPermit(d);
+        }
+    }
+
+    /**
+     * The defect this closes: at the cap a request was refused in under 2ms,
+     * with no SYN sent, and the browser's retry landed behind the same wall.
+     * A slot that frees while the request waits must be found.
+     */
+    @Test
+    public void testQueueTakesASlotThatFreesWhileWaiting() {
+        final Hash d = dest(11);
+        fillToCap(d);
+        Thread releaser = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(250);
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                }
+                I2PTunnelHTTPClient.releaseConnPermit(d);
+            }
+        }, "permit-release-test");
+        releaser.start();
+        long waited = I2PTunnelHTTPClient.waitForConnPermit(d,
+                System.currentTimeMillis() + 10 * 1000);
+        assertTrue("expected a slot after the release, waited " + waited,
+                   waited > 0);
+        assertTrue("the queue must land inside its own budget, waited " + waited,
+                   waited <= I2PTunnelHTTPClient.PERMIT_WAIT_MAX_MS);
+        assertEquals(I2PTunnelHTTPClient.MAX_CONNS_PER_DEST,
+                     I2PTunnelHTTPClient.activeConnPermits(d));
+        for (int i = 0; i < I2PTunnelHTTPClient.MAX_CONNS_PER_DEST; i++) {
+            I2PTunnelHTTPClient.releaseConnPermit(d);
+        }
+    }
+
+    /**
+     * The wait is clamped to the smaller of the cap and what the request has
+     * left, so a request with 200ms of budget left does not spend 3s queueing.
+     */
+    @Test
+    public void testQueueIsClampedToTheRequestDeadline() {
+        Hash d = dest(12);
+        fillToCap(d);
+        long start = System.currentTimeMillis();
+        assertEquals(-1, I2PTunnelHTTPClient.waitForConnPermit(d, start + 200));
+        long elapsed = System.currentTimeMillis() - start;
+        long poll = I2PTunnelHTTPClient.PERMIT_WAIT_POLL_MS;
+        long cap = I2PTunnelHTTPClient.PERMIT_WAIT_MAX_MS;
+        assertTrue("waited " + elapsed + "ms, must poll at least once first",
+                   elapsed >= poll);
+        assertTrue("waited " + elapsed + "ms, must not exceed the 200ms left",
+                   elapsed < cap + poll);
+        for (int i = 0; i < I2PTunnelHTTPClient.MAX_CONNS_PER_DEST; i++) {
+            I2PTunnelHTTPClient.releaseConnPermit(d);
+        }
+    }
+
+    /** A destination that cannot be hashed is never queued: fail-open. */
+    @Test
+    public void testNullDestinationIsNeverQueued() {
+        long past = System.currentTimeMillis() - 1000;
+        assertEquals(0, I2PTunnelHTTPClient.waitForConnPermit(null, past));
     }
 }
