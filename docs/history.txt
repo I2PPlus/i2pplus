@@ -1,3 +1,86 @@
+2026-11-23 dr|z3d
+  * Router, Tuner: Size the tunnel test failure window from the rounds that
+    missed it, not the ones that fitted - window, floor and ceiling all came
+    from the mean of the rounds that already fitted, so the ceiling fell 15s
+    to 3.8s and the floor 3s to 1s while 84 outbound tests a minute failed
+    against 29, every one timed out at the 1.4s deadline; hold a value
+    restored from autotune.config inside the bounds it now has, or the boot
+    puts the collapsed 1s floor back
+  * NetDb, Router: Rank floodfills on whether they can answer at all, take the
+    search fallback to the main NetDb, and credit a lookup answered with a
+    redirect - 3,362 searches ended having asked nobody; 58 lookups a minute
+    read the fallback off an always-empty sub-DB
+  * Tuner, Streaming: Read the stats as the quantities they hold, register the
+    missing ceiling, divide the handler budget across the tunnels sharing it,
+    put build success on one scale and four tiers, size the inbound buffer from
+    real choke pressure and from the heap, and tune the inactivity timeout on
+    the stream's own round trip - the congestion stat is a window in bytes and
+    never zero; 64 MiB pinned per stream; 12 params read one stat as 0-100 and
+    0.0-1.0 at once; the transport RTT pinned the timeout at its 120s floor
+  * NetDb, Streaming: Cut the logs back to a summary and count what they hid -
+    205,711 no-match lines, half of 126 MB repeats, retransmit calls all DEBUG
+  * Streaming: Count and bound the connect cooldown, seed the first retransmit
+    timeout from the path estimate, keep the growth credit a cut discards, hold
+    the pacing floor inside the congestion window, log both halves of the
+    fast-retransmit decision, count the SYNs a connect burned before it gave
+    up, and measure what a SYN-phase rotation has to work with - 71 refusals
+    ran with the stat reading "No lifetime events"; a 192 KB/s floor outran a
+    111 KB/s window; 18,727 give-ups never said how many SYNs died
+  * I2PTunnel: Keep a download alive when its client pool empties, hand back
+    the permit a replaced I2P socket held, and stop the unreachable-site page
+    re-firing a dead connect every 15s - one empty read abandoned 300,348 of
+    49,684,099 bytes; the retry beat the 22-30s attempt
+
+2026-11-22 dr|z3d
+  * Streaming:
+    - Stop a connect-phase SYN loss cutting a congestion window the handshake
+      has not filled yet, and floor the post-loss threshold at the window we
+      had, so one lost packet costs one window, not a full ramp
+    - Trust a peer's NACK as loss evidence once the packet has been in flight
+      one way round, instead of waiting out a 4s retransmit timer a stalled
+      tunnel never reaches
+  * NetDb: Count only the peers a lookup actually asked against its budget - a
+    candidate rejected as too old was filed as a failed query, and 3,362
+    LeaseSet searches ended having asked nobody
+  * Router: Keep the tunnel-test budgets on the tunnel, not the one-round job,
+    and drop a verified-traffic tunnel only on independent failure evidence
+  * Router: Check both NetDbs for a LeaseSet a store rejected on a key
+    mismatch, and stop claiming a network re-probe for a destination we host
+  * Router: Name the reply a send's timeout was waiting for, not the send
+  * Console: Document the destination connect-cooldown keys as router-wide
+  * Build: Record what the vendored JFreeSVG copy adds over upstream
+
+2026-11-21 dr|z3d
+  * Router:
+    - Blame a soft build timeout on the peer that never answered, not the whole
+      tunnel - the supply spiral behind a stalled 49 MB proxy download
+    - Wait out a locally hosted LeaseSet re-mint gap instead of failing the
+      send, ask our client to re-sign, and stop the fallback signing a copy
+      that dies before its replacement - one destination fetched 1,639 times
+    - Stop a propagation rotation thinning the LeaseSet it keeps alive, and
+      hold off re-sending a reply LeaseSet per destination rather than per
+      message - 41 of 56 "not enough leases" warnings, 9.5% of the log
+    - Name the gate that ended a LeaseSet lookup, and report a send's duration
+      only when a transport measured one - 100 stale peers wrote 80,499 lines,
+      and 461 printed `Send: 56y`
+  * Streaming:
+    - Start the accept pool after the handler is marked listening, and add a
+      worker the moment a queued handshake dies - one eepsite ran with none
+    - Size the first SYN retransmit from the client's own connect window, not
+      the 9s RTO - 274 give-ups in 30 min, 7 of 24 proxy connects opened
+    - Refuse a connect past a destination's own 30s cooldown rather than
+      parking the caller, and count one failure per burst - 616 instant refusals
+    - Collapse the per-packet connection reports onto one line per condition
+      per burst - 304,699 lines of one log rotation, 47,506 more wrapped
+  * Core: Stop warning that an encrypted LeaseSet cannot be decrypted - a
+    router storing or relaying one normally has no key for it
+  * Console: Sort the advanced-settings help keys with their rows, correct 27
+    printed defaults, and re-sync the ids across 41 translations
+  * I2PTunnel: Bound one connect attempt so the retry loop gets the rest of the
+    connect window, and say which tunnel key file failed to load
+  * SusiDNS: Optimize jdenticon rendering, and load the addressbook select-all
+    checkbox only on the view that has the cell for it
+
 2026-11-20 dr|z3d
   * Router: Hold the streaming defaults the module ships, not the tuning floor;
     keep an operator's pinned Tuner value across a restart; judge our own
