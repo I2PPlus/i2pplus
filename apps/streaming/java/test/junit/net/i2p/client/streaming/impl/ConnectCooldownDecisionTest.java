@@ -437,6 +437,155 @@ public class ConnectCooldownDecisionTest {
         assertFalse(ConnectionManager.isBackoffRefusal(Connection.ERR_CONNECTION_TIMED_OUT));
     }
 
+    // ---- cooldownGate ----
+
+    /**
+     * Consults the gate with the class's configured base, ceiling and refuse
+     * threshold, so each case below reads as the record and the moment the
+     * attempt arrives, not as five arguments.
+     *
+     * @param record the destination's failure record, or null when it has never failed
+     * @param now the clock reading the attempt arrives at, in ms since the epoch
+     * @return the outcome to assert on, never null
+     */
+    private static ConnectionManager.CooldownGate gate(long[] record, long now) {
+        return ConnectionManager.cooldownGate(record, now, BASE, MAX, REFUSE_AFTER);
+    }
+
+    /**
+     * A destination with no failure record, and a cooldown switched off, runs the
+     * connect at once: nothing refused, nothing held, nothing left to report.
+     */
+    @Test
+    public void testGateRunsWhenNothingIsArmed() {
+        long now = 1_700_000_000_000L;
+        ConnectionManager.CooldownGate none = gate(null, now);
+        assertFalse(none.refused);
+        assertEquals(0, none.waitMs);
+        assertEquals(0, none.strikes);
+        assertEquals(0, none.remainingMs);
+
+        // A base of 0 switches the cooldown off even against an escalated record.
+        long[] escalated = new long[] {now - 1000, 6, 1};
+        ConnectionManager.CooldownGate off =
+            ConnectionManager.cooldownGate(escalated, now, 0, MAX, REFUSE_AFTER);
+        assertFalse(off.refused);
+        assertEquals(0, off.waitMs);
+    }
+
+    /**
+     * The first failure holds the caller for the rest of the base window and does
+     * not refuse it - one lost connect is a retry, not a dead destination.
+     */
+    @Test
+    public void testGateHoldsTheFirstFailure() {
+        long now = 1_700_000_000_000L;
+        ConnectionManager.CooldownGate g = gate(new long[] {now - 1000, 1, 0}, now);
+        assertFalse(g.refused);
+        assertEquals(BASE - 1000, g.waitMs);
+        assertEquals(1, g.strikes);
+        assertEquals(BASE - 1000, g.remainingMs);
+    }
+
+    /**
+     * The refusals a live router actually wrote, reproduced from the record that
+     * armed them: "Cooldown left: 39s * Consecutive failures: 4" and
+     * "Cooldown left: 148s * Consecutive failures: 6". Both must come back as a
+     * refusal carrying the same window and the same strike count, because those
+     * two values are all the log line has to report.
+     */
+    @Test
+    public void testGateRefusesTheMeasuredWindows() {
+        long now = 1_700_000_000_000L;
+        // 4 strikes arm 40s; the attempt arrived 1s in, so 39s were left.
+        ConnectionManager.CooldownGate four = gate(new long[] {now - 1000, 4, 1}, now);
+        assertTrue(four.refused);
+        assertEquals(39 * 1000L, four.remainingMs);
+        assertEquals(4, four.strikes);
+        assertEquals(0, four.waitMs);
+
+        // 6 strikes arm 160s; the attempt arrived 12s in, so 148s were left.
+        ConnectionManager.CooldownGate six = gate(new long[] {now - 12 * 1000, 6, 1}, now);
+        assertTrue(six.refused);
+        assertEquals(148 * 1000L, six.remainingMs);
+        assertEquals(6, six.strikes);
+    }
+
+    /**
+     * Once the window has run out the connect goes through and the record is
+     * retired - the gate must not hold a destination past the window its failures
+     * bought, and it must not refuse an attempt that is already allowed to run.
+     */
+    @Test
+    public void testGateRunsOnceTheWindowHasRun() {
+        long now = 1_700_000_000_000L;
+        // 4 strikes arm 40s; this attempt is 60s after the failure that armed it.
+        ConnectionManager.CooldownGate g = gate(new long[] {now - 60 * 1000, 4, 1}, now);
+        assertFalse(g.refused);
+        assertEquals(0, g.waitMs);
+        assertEquals(0, g.remainingMs);
+        assertEquals(4, g.strikes);
+    }
+
+    /**
+     * A clock that stepped backwards leaves a negative elapsed: the record counts
+     * as spent, so the connect runs instead of sitting out a window the clock
+     * invented.
+     */
+    @Test
+    public void testGateRunsOnAClockStepBackwards() {
+        long now = 1_700_000_000_000L;
+        ConnectionManager.CooldownGate g = gate(new long[] {now + 30 * 1000, 6, 1}, now);
+        assertFalse(g.refused);
+        assertEquals(0, g.waitMs);
+        assertEquals(0, g.remainingMs);
+    }
+
+    /**
+     * Switching the refuse threshold off restores the old behaviour in full: even
+     * a window escalated to the ceiling is waited out rather than refused.
+     */
+    @Test
+    public void testGateWaitsWhenRefusalIsDisabled() {
+        long now = 1_700_000_000_000L;
+        long[] record = new long[] {now - 1000, 20, 1};
+        ConnectionManager.CooldownGate g =
+            ConnectionManager.cooldownGate(record, now, BASE, MAX, 0);
+        assertFalse(g.refused);
+        assertEquals(MAX - 1000, g.waitMs);
+        assertEquals(MAX - 1000, g.remainingMs);
+    }
+
+    /**
+     * The whole cycle end to end: failures arriving a few seconds apart, each one
+     * recorded through recordFailure() and each later attempt consulted through
+     * the gate, escalate until an attempt is refused instead of held. This is the
+     * sequence the counting defect hid - the refusals were happening and the stat
+     * that reports them stayed empty.
+     */
+    @Test
+    public void testSustainedFailuresEscalateToARefusal() {
+        long t = 1_700_000_000_000L;
+        long[] record = null;
+        // One failure: the next attempt is held for what is left of the base window.
+        record = ConnectionManager.recordFailure(record, t, false, BASE);
+        assertEquals(1, record[1]);
+        assertEquals(BASE - 1000, gate(record, t + 1000).waitMs);
+
+        // Failures spaced past the base window are separate events, so each one
+        // buys the next doubling: 10s, then 20s, then 40s.
+        record = ConnectionManager.recordFailure(record, t + 8 * 1000, false, BASE);
+        record = ConnectionManager.recordFailure(record, t + 20 * 1000, false, BASE);
+        assertEquals(3, record[1]);
+        assertFalse(gate(record, t + 21 * 1000).refused);
+
+        record = ConnectionManager.recordFailure(record, t + 42 * 1000, false, BASE);
+        assertEquals(4, record[1]);
+        ConnectionManager.CooldownGate g = gate(record, t + 43 * 1000);
+        assertTrue(g.refused);
+        assertEquals(39 * 1000L, g.remainingMs);
+    }
+
     /**
      * The refusal line names the destination, how much of its window is left,
      * and how many failures put it there - and the duration comes from the house

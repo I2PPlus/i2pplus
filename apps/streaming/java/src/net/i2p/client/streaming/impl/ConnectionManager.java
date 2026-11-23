@@ -317,6 +317,74 @@ class ConnectionManager {
     }
 
     /**
+     * What to do with a connect aimed at a destination that has failed before:
+     * refuse it outright, hold it for the rest of its window, or let it through
+     * and retire the record.
+     *
+     * @see #cooldownGate(long[], long, long, long, long)
+     * @since 0.9.72+
+     */
+    static final class CooldownGate {
+        /** True to fail the connect now, with no SYN sent and no tunnel used. */
+        final boolean refused;
+        /** How long to park the caller before attempting, in ms; 0 to go now. */
+        final long waitMs;
+        /** Consecutive failures recorded against the destination, at least 1. */
+        final int strikes;
+        /** Cooldown left on the destination, in ms; 0 once the window has run. */
+        final long remainingMs;
+
+        /**
+         * Build one gate outcome.
+         *
+         * @param refused true to fail the connect without reaching the peer
+         * @param waitMs how long to hold the caller before attempting, in ms
+         * @param strikes the strike count the window was computed from
+         * @param remainingMs the cooldown left, in ms
+         */
+        CooldownGate(boolean refused, long waitMs, int strikes, long remainingMs) {
+            this.refused = refused;
+            this.waitMs = waitMs;
+            this.strikes = strikes;
+            this.remainingMs = remainingMs;
+        }
+    }
+
+    /**
+     * Pure decision: consult one destination's cooldown for a connect about to run.
+     * <p>The three outcomes live in one function because they were measured apart.
+     * A live router refused 71 connects in 55 minutes, the window escalated to
+     * 39s, 40s, 64s and 148s by 4, 5 and 6 consecutive failures, and
+     * {@code stream.connectBackoffRefused} still read "No lifetime events" - the
+     * refusal returned from {@link #finalizeConnection} before the block that
+     * counts it, so the stat that justifies the feature stayed empty while the
+     * feature ran. One decision, one exit, is what keeps the counting and the
+     * branching from drifting apart again.
+     *
+     * @param record the destination's failure record {@code {failedOn, strikes,
+     *               fromPath}}, or null when it has never failed
+     * @param now the current clock reading, in ms since the epoch
+     * @param baseMs the window a first failure arms, 0 or less disables the cooldown
+     * @param maxMs the ceiling the window escalates to
+     * @param refuseAfterMs the cooldown left past which a connect is refused
+     *                      rather than held, non-positive to always hold
+     * @return the outcome to act on, never null
+     * @since 0.9.72+
+     */
+    static CooldownGate cooldownGate(long[] record, long now, long baseMs, long maxMs,
+                                     long refuseAfterMs) {
+        if (record == null || baseMs <= 0) {return new CooldownGate(false, 0, 0, 0);}
+        int strikes = (int) Math.max(1, record[1]);
+        long cooldown = destCooldownMs(strikes, baseMs, maxMs);
+        long elapsed = now - record[0];
+        if (!cooldownRunning(elapsed, cooldown)) {return new CooldownGate(false, 0, strikes, 0);}
+        long remaining = cooldown - elapsed;
+        return refuseCooldown(remaining, refuseAfterMs)
+            ? new CooldownGate(true, 0, strikes, remaining)
+            : new CooldownGate(false, remaining, strikes, remaining);
+    }
+
+    /**
      * Is this connection error our own refusal to connect, rather than a
      * failure the peer caused? A refusal must not be recorded as a strike: the
      * attempt never ran, so counting refusals would escalate the window on
@@ -2560,61 +2628,61 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
           // ok we're in...
           Hash destHash = peer.calculateHash();
           // Skip cooldown for pooled connections — the connection is already established
+          boolean refused = false;
           if (!fromPool) {
               long[] failure = _destFailures.get(destHash);
-              if (failure != null) {
-                  int strikes = (int) Math.max(1, failure[1]);
-                  long cooldown = destCooldownMs(strikes, getDestCooldownMs(), getDestCooldownMaxMs());
-                  long elapsed = _context.clock().now() - failure[0];
-                  if (cooldownRunning(elapsed, cooldown)) {
-                      long delay = cooldown - elapsed;
-                      long now = _context.clock().now();
-                      if (refuseCooldown(delay, getDestCooldownRefuseMs())) {
-                          // Refused before eventOccurred(), so no SYN is queued and
-                          // no outbound tunnel is used. The caller closes the
-                          // connection, as it does for any connect that comes back
-                          // with an error.
-                          con.setConnectionError(ERR_CONNECT_BACKOFF);
-                          _log.warnThrottled("connect-backoff-" + destHash.toShortBase64(),
-                                             backoffRefusal(destHash, delay, strikes));
-                          return con;
-                      }
-                      Long lw = _cooldownWarned.get(destHash);
-                      long lastWarn = lw == null ? 0 : lw.longValue();
-                      if (shouldLogCooldownWarn(lastWarn, now, cooldown)) {
-                          _cooldownWarned.put(destHash, Long.valueOf(now));
-                          if (_log.shouldDebug())
-                              _log.debug("Delaying connect to [" + destHash.toShortBase64() +
-                                         "] -> Cooling down for " +
-                                         DataHelper.formatDuration(delay) +
-                                         " * Consecutive failures: " + strikes);
-                      }
-                      awaitCooldown(_cooldownLock, delay, _context.clock());
-                  } else {
-                      _destFailures.remove(destHash, failure);
+              CooldownGate gate = cooldownGate(failure, _context.clock().now(), getDestCooldownMs(),
+                                              getDestCooldownMaxMs(), getDestCooldownRefuseMs());
+              if (gate.refused) {
+                  // Refused before eventOccurred(), so no SYN is queued and no
+                  // outbound tunnel is used. The caller closes the connection, as
+                  // it does for any connect that comes back with an error, and the
+                  // shared outcome block below is what counts the refusal.
+                  con.setConnectionError(ERR_CONNECT_BACKOFF);
+                  refused = true;
+                  _log.warnThrottled("connect-backoff-" + destHash.toShortBase64(),
+                                     backoffRefusal(destHash, gate.remainingMs, gate.strikes));
+              } else if (gate.waitMs > 0) {
+                  Long lw = _cooldownWarned.get(destHash);
+                  long lastWarn = lw == null ? 0 : lw.longValue();
+                  if (shouldLogCooldownWarn(lastWarn, _context.clock().now(), gate.waitMs)) {
+                      _cooldownWarned.put(destHash, Long.valueOf(_context.clock().now()));
+                      if (_log.shouldDebug())
+                          _log.debug("Delaying connect to [" + destHash.toShortBase64() +
+                                     "] -> Cooling down for " +
+                                     DataHelper.formatDuration(gate.waitMs) +
+                                     " * Consecutive failures: " + gate.strikes);
                   }
+                  awaitCooldown(_cooldownLock, gate.waitMs, _context.clock());
+              } else if (failure != null) {
+                  _destFailures.remove(destHash, failure);
               }
           }
-          con.eventOccurred();
+          if (!refused) {
+              con.eventOccurred();
 
-           if (_log.shouldDebug())
-               _log.debug("Connecting with SYN send delayed -> Delay: " + opts.getConnectDelay() + "ms");
-           if (opts.getConnectDelay() <= 0) {
-               con.waitForConnect();
-            } else {
-                // The SYN send is delayed by connectDelay ms (SchedulerPreconnect).
-                // Wait for the connection to establish with enough margin for the
-                // SYN delay plus the configured connect timeout (which governs
-                // RTO doubling and retry budget). The connectTimeout from opts
-                // (_connectTimeout, default 30s) is the authoritative limit.
-                // Sets _connectionError on timeout.
-               long boundedTimeout = (long) opts.getConnectDelay() + opts.getConnectTimeout();
-               // long math so a huge/saturated connect timeout can't overflow the
-               // int sum; clamp into waitForConnect's int range.
-               con.waitForConnect((int) Math.min(boundedTimeout, Integer.MAX_VALUE));
+              if (_log.shouldDebug())
+                  _log.debug("Connecting with SYN send delayed -> Delay: " + opts.getConnectDelay() + "ms");
+              if (opts.getConnectDelay() <= 0) {
+                  con.waitForConnect();
+              } else {
+                  // The SYN send is delayed by connectDelay ms (SchedulerPreconnect).
+                  // Wait for the connection to establish with enough margin for the
+                  // SYN delay plus the configured connect timeout (which governs
+                  // RTO doubling and retry budget). The connectTimeout from opts
+                  // (_connectTimeout, default 30s) is the authoritative limit.
+                  // Sets _connectionError on timeout.
+                  long boundedTimeout = (long) opts.getConnectDelay() + opts.getConnectTimeout();
+                  // long math so a huge/saturated connect timeout can't overflow the
+                  // int sum; clamp into waitForConnect's int range.
+                  con.waitForConnect((int) Math.min(boundedTimeout, Integer.MAX_VALUE));
+              }
           }
           long connectElapsed = _context.clock().now() - connectStart;
-          if (_log.shouldInfo()) {
+          // The refusal is already reported, at WARN, by backoffRefusal(); a second
+          // line here would say the same connect twice, and "failed in 0ms" would
+          // read as a measurement when nothing was attempted.
+          if (_log.shouldInfo() && !refused) {
               String err = con.getConnectionError();
               if (err != null) {
                   _log.info("ConnectionManager.connect() to [" + destHash.toShortBase64() +
