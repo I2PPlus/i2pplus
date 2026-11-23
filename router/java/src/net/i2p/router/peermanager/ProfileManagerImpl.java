@@ -263,6 +263,10 @@ public class ProfileManagerImpl implements ProfileManager {
      * routers that were unusable, and a count of duplicates we had explicitly
      * asked them not to send but they did anyway
      * <p>
+     * This will force creation of DB stats - a peer that only ever answers a
+     * lookup this way, the usual case for a floodfill that does not hold the
+     * key, still has to end up with a response time and a failure rate.
+     * <p>
      * Non-blocking. Will not update the profile if we can't get the lock.
      */
     @Override
@@ -271,11 +275,14 @@ public class ProfileManagerImpl implements ProfileManager {
         if (data == null) return;
         data.setLastHeardFrom(_context.clock().now());
         if (!data.getIsExpandedDB())
-            return;
+            data.expandDBProfile();
         data.getDbResponseTime().addData(responseTimeMs, responseTimeMs);
         data.getDbIntroduction().addData(newPeers, responseTimeMs);
         DBHistory hist = data.getDBHistory();
         hist.lookupReply(newPeers, oldPeers, invalid, duplicate);
+        // a redirect is a request answered, so it counts toward the failure
+        // rate even though it did not carry the value we asked for
+        hist.lookupAnswered();
         updateFloodfillReliability(data);
     }
 

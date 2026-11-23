@@ -160,6 +160,26 @@ public class DBHistory {
     }
 
     /**
+     * Note that the peer answered a NetDb lookup usefully without holding the
+     * data itself - a search reply pointing us at routers that might. That is a
+     * request answered, so it feeds the combined failure rate with a success (0)
+     * and stamps the last-answered time exactly as {@link #lookupSuccessful()}
+     * does; it does not raise {@link #getSuccessfulLookups()}, which counts only
+     * the routers that actually returned the value.
+     * <p>Without it a floodfill that answers every lookup with a redirect - the
+     * ordinary case, since only a handful of them hold any one key - never
+     * becomes eligible for the {@code GOOD} tier in FloodfillPeerSelector, which
+     * requires a non-null failure rate as well as a response time.
+     *
+     * @since 0.9.72+
+     */
+    public void lookupAnswered() {
+        _failedLookupRate.addData(0);
+        _context.statManager().addRateData("peer.failedLookupRate", 0);
+        _lastLookupSuccessful = _context.clock().now();
+    }
+
+    /**
      * Note that the peer failed to respond to the db lookup in any way
      * <p>Also feeds the combined failure rate with a failure (1).
      */
