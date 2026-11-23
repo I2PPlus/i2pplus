@@ -6,8 +6,8 @@ import org.junit.Test;
 
 /**
  * Tests the deterministic congestion-avoidance growth ratchet in
- * {@link ConnectionPacketHandler}: ACK credit is accumulated in 20.20
- * fixed-point ({@link ConnectionPacketHandler#caGrowthCredit(long, int, int, int)})
+ * {@link ConnectionPacketHandler}: ACK credit is accumulated in
+ * 20-bit fixed-point ({@link ConnectionPacketHandler#caGrowthCredit(long, int, int, int)})
  * and harvested as whole window increments
  * ({@link ConnectionPacketHandler#caWindowIncrements(long)},
  * {@link ConnectionPacketHandler#caWindowRemainder(long)}), replacing the old
@@ -21,11 +21,23 @@ import org.junit.Test;
  * remainder provides finer granularity at low window sizes so trickle ACKs
  * still produce whole-packet increments.
  *
+ * <p>A window cut carries that credit rather than discarding it
+ * ({@link ConnectionPacketHandler#caCreditAfterCut(long)}), capped at one
+ * increment, so a lossy path regrows from where it stood instead of from zero.
+ *
  * @since 0.9.71+
  */
 public class ConnectionCAWindowGrowthTest {
 
-    /** Single-ACK credit is the exact 20.20 fraction of one RTT increment. */
+    /**
+     * One instance per test method, as JUnit builds a fresh test object for each
+     * one. The class holds no per-test state; the helpers it exercises are static.
+     *
+     * @since 0.9.72+
+     */
+    public ConnectionCAWindowGrowthTest() {}
+
+    /** Single-ACK credit is the exact 20-bit fraction of one RTT increment. */
     @Test
     public void testCreditEqualsExpectedRate() {
         // acked / (factor * window) = 100 / 2200 = 1/22 of one increment
@@ -105,5 +117,66 @@ public class ConnectionCAWindowGrowthTest {
         assertEquals(10L << 20, acc);
         assertEquals(10, ConnectionPacketHandler.caWindowIncrements(acc));
         assertEquals(0L, ConnectionPacketHandler.caWindowRemainder(acc));
+    }
+
+    /** A cut carries the sub-increment credit already earned, and 0 stays 0. */
+    @Test
+    public void testCutCarriesPartialCredit() {
+        assertEquals(0L, ConnectionPacketHandler.caCreditAfterCut(0L));
+        assertEquals(1L, ConnectionPacketHandler.caCreditAfterCut(1L));
+        // the largest remainder the growth path can leave behind survives whole
+        assertEquals(1048575L, ConnectionPacketHandler.caCreditAfterCut(1048575L));
+    }
+
+    /** The carry is capped at one increment, so a cut never buys a jump. */
+    @Test
+    public void testCutCarriesAtMostOneIncrement() {
+        assertEquals(1048576L, ConnectionPacketHandler.caCreditAfterCut(1048576L));
+        assertEquals(1048576L, ConnectionPacketHandler.caCreditAfterCut(5L << 20));
+        assertEquals(1048576L, ConnectionPacketHandler.caCreditAfterCut(Long.MAX_VALUE));
+        // and carrying twice changes nothing
+        long once = ConnectionPacketHandler.caCreditAfterCut(3L << 20);
+        assertEquals(once, ConnectionPacketHandler.caCreditAfterCut(once));
+    }
+
+    /**
+     * The carried credit is spent, not parked: after a cut to a smaller window,
+     * the next increment arrives exactly the carried credit sooner than it would
+     * from a zeroed accumulator.
+     */
+    @Test
+    public void testCarriedCreditShortensTheNextIncrement() {
+        long credit = 0;
+        // 100 trickle ACKs at a 128-message window, growth factor 1 - not yet one
+        // increment, so the growth path holds all of it as remainder
+        for (int i = 0; i < 100; i++)
+            credit = ConnectionPacketHandler.caGrowthCredit(credit, 1, 1, 128);
+        assertEquals(0, ConnectionPacketHandler.caWindowIncrements(credit));
+        assertEquals(credit, ConnectionPacketHandler.caCreditAfterCut(credit));
+        // the graduated cut lands on 7/8 of 128
+        int cutTo = 112;
+        long carried = ConnectionPacketHandler.caCreditAfterCut(credit);
+        int fromCarry = acksToIncrement(carried, cutTo);
+        int fromZero = acksToIncrement(0L, cutTo);
+        assertTrue("carried " + fromCarry + " ACKs, zeroed " + fromZero + " ACKs to regrow",
+                   fromCarry < fromZero);
+    }
+
+    /**
+     * ACK events needed to harvest the first whole window increment from a
+     * starting accumulator, at the given window and growth factor 1.
+     *
+     * @param start fixed-point credit already carried
+     * @param windowSize congestion window to grow
+     * @return ACK events until the first increment, at most one window's worth
+     */
+    private static int acksToIncrement(long start, int windowSize) {
+        long acc = start;
+        int acks = 0;
+        while (ConnectionPacketHandler.caWindowIncrements(acc) == 0 && acks <= windowSize) {
+            acc = ConnectionPacketHandler.caGrowthCredit(acc, 1, 1, windowSize);
+            acks++;
+        }
+        return acks;
     }
 }

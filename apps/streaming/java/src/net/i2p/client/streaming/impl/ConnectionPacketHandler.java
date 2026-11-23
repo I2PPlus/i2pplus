@@ -678,7 +678,7 @@ class ConnectionPacketHandler {
                             // per-ACK random draw: accumulate credit proportional to
                             // effAcked / (caFactor * window) and harvest only the whole
                             // increments. Same expected growth rate as the probabilistic
-                            // gate, but reproducible and free of RNG noise. Uses a 20.16
+                            // gate, but reproducible and free of RNG noise. Uses a 20-bit
                             // fixed-point accumulator for finer granularity at low window
                             // sizes, so trickle ACKs still produce whole-packet increments.
                             // At max window the accumulator holds its remainder while the
@@ -734,13 +734,13 @@ class ConnectionPacketHandler {
 
     /**
      * Credit increment for the deterministic congestion-avoidance ratchet.
-     * Accumulated in 20.16 fixed-point; each whole unit corresponds to one
+     * Accumulated in 20-bit fixed-point; each whole unit corresponds to one
      * packet-in-flight increment on the congestion window.
      * <p>The expected value equals {@code effAcked / (caFactor * windowSize)},
      * which is the probability that the old random gate would have
      * incremented.
      *
-     * @param accum the 20.16 fixed-point accumulator so far
+     * @param accum the 20-bit fixed-point accumulator so far
      * @param effAcked effective number of packets ACKed this round
      * @param caFactor congestion-avoidance growth divisor
      * @param windowSize current congestion window
@@ -773,6 +773,26 @@ class ConnectionPacketHandler {
      */
     static long caWindowRemainder(long accum) {
         return accum & 0xFFFFFL;
+    }
+
+    /**
+     * Growth credit carried across a congestion-window cut.
+     * <p>A cut takes the window, not the credit already earned by ACKs of data the
+     * peer has already acknowledged. Zeroing it threw that progress away, so a path
+     * that loses every few seconds restarted its linear growth from nothing on every
+     * loss and never regained the size it had just held. The growth path harvests
+     * whole increments on every ACK event, so what reaches a cut is normally a
+     * sub-increment remainder; the cap is the bound on what a cut may carry, so a
+     * cut is answered with the start of one increment of regrowth and never with a
+     * jump from credit harvested at the ceiling edge, where the window clamp
+     * discards whole increments.
+     *
+     * @param accum the fixed-point credit accumulated before the cut
+     * @return the credit to carry into recovery, in [0, 1048576]
+     * @since 0.9.72+
+     */
+    static long caCreditAfterCut(long accum) {
+        return Math.min(accum, 1L << 20);
     }
 
     /**

@@ -218,7 +218,9 @@ class Connection {
      * giving the same expected growth rate as the probabilistic gate without
      * RNG noise. Holds the 20-bit fractional remainder of the accumulator.
      * Must only be read/written while holding {@link #_outboundPacketsLock};
-     * zeroed in retransmit() when the window is cut.
+     * carried across a window cut by
+     * {@link ConnectionPacketHandler#caCreditAfterCut(long)}, which caps what a
+     * cut may carry rather than discarding it.
      * @since 0.9.71+
      */
     long _caWindowAccumulator;
@@ -5586,7 +5588,7 @@ class Connection {
                     _lossStrikes++;
                     _lastLossStrikeTime = now;
                     int strikes = _lossStrikes;
-                    _caWindowAccumulator = 0;
+                    _caWindowAccumulator = ConnectionPacketHandler.caCreditAfterCut(_caWindowAccumulator);
                     int bwSsthresh = Math.max(bandwidthSsthreshAnchor(_bwEstimator.getBandwidthEstimate(), _options.getMinRTT(), 1, 2),
                                               graduatedLossWindow(strikes, wsize));
                     // Graduated cut: a single failed packet shrinks the window only
@@ -6235,7 +6237,7 @@ synchronized boolean checkRetransmitStall() {
                 if (_isChoked) {
                     congestionOccurred();
                     _options.setWindowSize(1);
-                    _caWindowAccumulator = 0;
+                    _caWindowAccumulator = ConnectionPacketHandler.caCreditAfterCut(_caWindowAccumulator);
                 } else if (_ackSinceCongestion.get() && _packet.getSequenceNum() > _lastCongestionHighestUnacked) {
                     // only shrink the window once per window
                     congestionOccurred();
@@ -6251,7 +6253,7 @@ synchronized boolean checkRetransmitStall() {
                     _lossStrikes = decayLossStrikes(_lossStrikes, _lastLossStrikeTime, _context.clock().now(), _options.getRTT());
                     _lossStrikes++;
                     _lastLossStrikeTime = _context.clock().now();
-                    _caWindowAccumulator = 0;
+                    _caWindowAccumulator = ConnectionPacketHandler.caCreditAfterCut(_caWindowAccumulator);
                     if (_packet.getNumSends() == 1) {
                         int strikes = _lossStrikes;
                         int bwSsthresh = bandwidthSsthreshAnchor(_bwEstimator.getBandwidthEstimate(), _options.getMinRTT(),
