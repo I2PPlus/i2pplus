@@ -2359,15 +2359,51 @@ class Connection {
      * Time after which we send a probe if no ACK has been received for the
      * oldest unacked packet. Fires at ~2*RTT to detect loss before RTO.
      *
-     * @return probe timeout in ms — [200, 2000] once the RTT is known,
-     *         otherwise bounded by half the current RTO (up to 3000)
+     * @return probe timeout in ms, from {@link #computeProbeTimeoutMs} with this
+     *         connection's own RTT estimate and retransmit timer
      */
     private int getPTO() {
-        int rtt = _options.getRTT();
-        if (rtt <= 0) {
-            return Math.min(3000, _options.getRTO() / 2);
-        }
-        return Math.max(200, Math.min(2000, rtt * 2));
+        return computeProbeTimeoutMs(_options.getRTT(), _options.getRTO());
+    }
+
+    /** Floor for the tail loss probe: no probe fires under this, however fast the path. */
+    static final int PROBE_MIN_MS = 200;
+    /**
+     * Floor for the probe ceiling. It is also the ceiling the formula had before
+     * the ceiling was derived from the path, so a path under ~1s RTT is unaffected.
+     */
+    static final int PROBE_CEILING_MIN_MS = 2000;
+    /** Ceiling when no RTT is known: half the retransmit timer, never past this. */
+    static final int PROBE_NO_RTT_MAX_MS = 3000;
+
+    /**
+     * Pure decision: when to send the tail loss probe for a path.
+     * <p>The target is two round trips, the point at which a tail packet has been
+     * unacknowledged long enough to be presumed lost rather than delayed. The
+     * ceiling used to be a flat 2000 ms, and that is what broke it here: this
+     * tree's retransmit timer is {@code SRTT + 4*RTTVAR}, about 1.5 round trips on
+     * a steady path, so on any path slower than ~1s the probe fired inside one
+     * round trip, before the acknowledgement it was waiting for could physically
+     * arrive. A 3s path probed at 2s, 0.67 RTT, so every stall bought a guaranteed
+     * wasted probe - and the probes are excluded from the SYN and retransmit
+     * evidence counts precisely because they are not evidence of anything.
+     * <p>Derive the ceiling from the connection's own retransmit timer instead:
+     * three quarters of it, so the probe still pre-empts the timer it exists to
+     * pre-empt, floored at {@link #PROBE_CEILING_MIN_MS} so a fast path keeps the
+     * cadence it has always had.
+     *
+     * @param rttMs the smoothed round trip, 0 or less when nothing is measured yet
+     * @param rtoMs the connection's current retransmit timeout
+     * @return the probe timeout in ms, never below {@link #PROBE_MIN_MS}; with no
+     *         RTT known, half the retransmit timer up to {@link #PROBE_NO_RTT_MAX_MS}
+     * @since 0.9.72+
+     */
+    static int computeProbeTimeoutMs(int rttMs, int rtoMs) {
+        long rto = Math.max(0, rtoMs);
+        if (rttMs <= 0)
+            return (int) Math.min(PROBE_NO_RTT_MAX_MS, rto / 2);
+        long ceiling = Math.max(PROBE_CEILING_MIN_MS, rto * 3 / 4);
+        return (int) Math.max(PROBE_MIN_MS, Math.min((long) rttMs * 2, ceiling));
     }
 
     /**
