@@ -447,6 +447,25 @@ class ConnectionManager {
     }
 
     /**
+     * The log line for a connect attempt that ran to its end, opened or not.
+     * <p>It used to lead with the method name and concatenate the elapsed time
+     * as raw milliseconds, so a 45s attempt read as "45000ms" beside every other
+     * line's formatted duration, and the reason the attempt failed sat after a
+     * colon where the house form puts the outcome after an arrow.
+     *
+     * @param dest the destination connected to, as the bracketed hash truncation
+     * @param error the connection's error, null if the connect opened
+     * @param elapsedMs how long the attempt ran, in ms
+     * @return the line, never null
+     * @since 0.9.72+
+     */
+    static String connectResultLine(String dest, String error, long elapsedMs) {
+        return (error != null ? "Connect to [" + dest + "] failed -> " + error
+                              : "Connect to [" + dest + "] opened") +
+               " * Elapsed: " + DataHelper.formatDuration(elapsedMs);
+    }
+
+    /**
      * Stream connection pool — reuses established streams to the same destination.
      * Key: destination Hash, Value: deque of pooled connections.
      * @since 0.9.71+
@@ -1802,6 +1821,12 @@ class ConnectionManager {
                 "Milliseconds of SYN-phase budget left when the outbound tunnel was rotated", "Stream", RATES);
         _context.statManager().createRequiredRateStat("stream.synRotationOpened",
                 "Milliseconds from an outbound tunnel rotation to the SYN-ACK that opened the connect", "Stream", RATES);
+        // A connect that gives up on an unanswered SYN says nothing about how many
+        // SYNs it burned doing so - 18,727 give-ups in one 80-minute log set, none
+        // of them counted anywhere. The value is the hard SYN sends only, excluding
+        // soft-failure resends and tail-loss probes - see Connection.synHardSends().
+        _context.statManager().createRequiredRateStat("stream.synUnackedSends",
+                "SYN sends that went unanswered when the connect gave up", "Stream", RATES);
         _context.statManager().createRequiredRateStat("stream.connectCooldownMs",
                 "Milliseconds parked in a destination's connect cooldown", "Stream", RATES);
         _context.statManager().createRequiredRateStat("stream.connectSlotWaitMs",
@@ -2757,14 +2782,8 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
           // line here would say the same connect twice, and "failed in 0ms" would
           // read as a measurement when nothing was attempted.
           if (_log.shouldInfo() && !refused) {
-              String err = con.getConnectionError();
-              if (err != null) {
-                  _log.info("ConnectionManager.connect() to [" + destHash.toShortBase64() +
-                            "] failed in " + connectElapsed + "ms: " + err);
-              } else {
-                  _log.info("ConnectionManager.connect() to [" + destHash.toShortBase64() +
-                            "] succeeded in " + connectElapsed + "ms");
-              }
+              _log.info(connectResultLine(destHash.toShortBase64(), con.getConnectionError(),
+                                          connectElapsed));
           }
            // Record failure for cooldown; a success forgets the record only if the
            // failure was a connect that never established - see forgetsOnConnectSuccess()

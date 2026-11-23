@@ -5087,8 +5087,9 @@ class Connection {
      * @since 0.9.72+
      */
     static String connectWaitLine(String peer, long timeoutMs) {
-        return "Waiting for the connection to open " + peer +
-               " -> Timeout: " + timeoutMs + "ms";
+        return "Waiting for the connection to open " + peer + " -> " +
+               (timeoutMs > 0 ? "Timeout: " + DataHelper.formatDuration(timeoutMs)
+                              : "No timeout");
     }
 
     /**
@@ -5103,9 +5104,31 @@ class Connection {
      */
     static String connectDoneLine(String peer, long elapsedMs, boolean timedOut) {
         return timedOut ? "Connection still not open " + peer +
-                          " -> Gave up after: " + elapsedMs + "ms"
+                          " -> Gave up after: " + DataHelper.formatDuration(elapsedMs)
                         : "Connection opened while waiting " + peer +
-                          " -> Took: " + elapsedMs + "ms";
+                          " -> Took: " + DataHelper.formatDuration(elapsedMs);
+    }
+
+    /**
+     * The entry for a connect that stops resending its SYN because the peer has
+     * never acknowledged it.
+     * <p>The send count is the point of the line: it says whether the give-up
+     * fired on the send budget or on the wall clock, and 18,727 of these entries
+     * in one 80-minute log set carried neither number. Only the hard sends are
+     * evidence of an unanswered SYN - see {@link #synHardSends}.
+     *
+     * @param label the connection's {@link #shortLabel()} prefix
+     * @param synSends hard SYN sends that went unanswered
+     * @param softResends resends triggered by a soft failure, which never reached
+     *                    the tunnel fabric and are not evidence of a dead path
+     * @param ageMs how long the SYN has been unacknowledged
+     * @return the log entry, never null
+     * @since 0.9.72+
+     */
+    static String synGiveUpLine(String label, int synSends, int softResends, long ageMs) {
+        return label + " -> SYN not acknowledged, closing" +
+               "\n* SYN sends: " + synSends + " * Soft resends: " + softResends +
+               " * Age: " + DataHelper.formatDuration(ageMs);
     }
 
     /**
@@ -5977,7 +6000,17 @@ class Connection {
                     // acknowledged" instead of the generic "Connection failed".
                     // 18,727 of these in one 80-minute window, 2.1% of the whole log, and
                     // they repeat per connect attempt against the same unreachable peer.
-                    debugPeriodic("syn-give-up", shortLabel() + " -> SYN not acknowledged, closing");
+                    // None of them said how many SYNs died - the count is what says
+                    // whether the give-up fired on its send budget or on the wall clock.
+                    int synSends = synHardSends(packet.getNumSends(),
+                                                packet.getNumSoftResends(),
+                                                packet.getNumTlpProbes());
+                    _context.statManager().addRateData("stream.synUnackedSends", synSends);
+                    debugPeriodic("syn-give-up",
+                                  synGiveUpLine(shortLabel(), synSends,
+                                                packet.getNumSoftResends(),
+                                                synPhaseAgeMs(_context.clock().now(),
+                                                              packet.getCreatedOn())));
                     packet.cancelled();
                     if (_connectionError == null) {setConnectionError(ERR_SYN_NOT_ACKNOWLEDGED);}
                     disconnect(false);

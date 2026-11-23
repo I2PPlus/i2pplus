@@ -11,11 +11,23 @@ import static org.junit.Assert.assertEquals;
  */
 public class ConnectionLogFormatTest {
 
+    /** Runs the cases; it holds no state of its own. */
+    public ConnectionLogFormatTest() {
+        super();
+    }
+
     /** The wait entry states the budget, in prose, with a truncated peer. */
     @Test
     public void waitEntryStatesTheBudgetInProse() {
-        assertEquals("Waiting for the connection to open [abcdefgh] -> Timeout: 10000ms",
+        assertEquals("Waiting for the connection to open [abcdefgh] -> Timeout: 10s",
                      Connection.connectWaitLine("[abcdefgh]", 10000L));
+    }
+
+    /** A 0 budget means the wait is unbounded, and the line has to say so. */
+    @Test
+    public void waitEntryNamesAnUnboundedWait() {
+        assertEquals("Waiting for the connection to open [abcdefgh] -> No timeout",
+                     Connection.connectWaitLine("[abcdefgh]", 0L));
     }
 
     /** How the wait ended is the part worth reading, so it goes after "-&gt; ". */
@@ -23,8 +35,33 @@ public class ConnectionLogFormatTest {
     public void doneEntrySeparatesConnectedFromGaveUp() {
         assertEquals("Connection opened while waiting [abcdefgh] -> Took: 1234ms",
                      Connection.connectDoneLine("[abcdefgh]", 1234L, false));
-        assertEquals("Connection still not open [abcdefgh] -> Gave up after: 10000ms",
+        assertEquals("Connection still not open [abcdefgh] -> Gave up after: 10s",
                      Connection.connectDoneLine("[abcdefgh]", 10000L, true));
+    }
+
+    /**
+     * The give-up entry carries the SYN send count - the number that says
+     * whether the connect ran out of sends or out of wall-clock budget.
+     */
+    @Test
+    public void synGiveUpEntryCountsTheUnansweredSends() {
+        assertEquals("[abcdefgh] -> SYN not acknowledged, closing" +
+                     "\n* SYN sends: 12 * Soft resends: 3 * Age: 9s",
+                     Connection.synGiveUpLine("[abcdefgh]", 12, 3, 9000L));
+    }
+
+    /**
+     * The manager's result line names the outcome, then the reason, then how
+     * long the attempt ran - never the method that wrote it.
+     */
+    @Test
+    public void managerResultLineSeparatesOpenedFromFailed() {
+        assertEquals("Connect to [abcdefgh] opened * Elapsed: 1234ms",
+                     ConnectionManager.connectResultLine("abcdefgh", null, 1234L));
+        assertEquals("Connect to [abcdefgh] failed -> Connection timed out: SYN not acknowledged" +
+                     " * Elapsed: 45s",
+                     ConnectionManager.connectResultLine("abcdefgh",
+                         "Connection timed out: SYN not acknowledged", 45000L));
     }
 
     /**
