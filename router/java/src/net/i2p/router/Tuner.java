@@ -1795,6 +1795,14 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * Build success rate from hourly stats (0.0-1.0).
+     * <p>{@code tunnel.buildSuccessRate} is emitted as a percentage -
+     * {@code BuildExecutor} records {@code (successes * 100) / count} - and this
+     * divides it out. A param that reads the same stat straight through
+     * {@code getObservedStat()} stays on the raw 0-100 scale and has to compare
+     * against percentages, as the pool backoff and pool failure threshold
+     * params do. Reading one scale with the other's thresholds pins a param on
+     * a single branch forever, so a new param has to say which scale it is on.
+     *
      * @return success rate or NaN if insufficient data
      */
     private double getBuildSuccessRate() {
@@ -1804,6 +1812,77 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         double total = success + failure + timeout;
         if (Double.isNaN(total) || total <= 0) return Double.NaN;
         return success / 100.0;
+    }
+
+    /**
+     * Build success, as a fraction, above which the network is healthy enough
+     * for a param to grow. Named once because nine params asked the same
+     * question with the same number, while the file also carries 0.6, 0.8,
+     * 0.85 and 0.95 for adjacent decisions and the raw-scale 85 and 90.
+     */
+    static final double HEALTHY_BUILD_SUCCESS = 0.7d;
+
+    /**
+     * Is the tunnel build success rate good enough for a param to act on it?
+     * <p>No data counts as healthy rather than failing: a param that stopped
+     * growing whenever the stats were empty would sit wherever startup left it,
+     * and empty stats are the ordinary state of a router that has not built
+     * tunnels in the window.
+     *
+     * @param buildSuccess build success as a fraction 0.0-1.0, or NaN for no
+     *                     data in the window
+     * @return true when builds are succeeding well enough to raise a value
+     * @since 0.9.72+
+     */
+    static boolean networkHealthy(double buildSuccess) {
+        return Double.isNaN(buildSuccess) || buildSuccess > HEALTHY_BUILD_SUCCESS;
+    }
+
+    /**
+     * How many cycles in a row a move opposite to the last one has to be asked
+     * for before it is applied.
+     *
+     * <p>Two, because one cycle of a stat is noise: the Tuner runs every five
+     * seconds, and a param sitting on a branch boundary of its own
+     * {@code computeTarget()} alternates direction on consecutive passes. Live
+     * over one log rotation, {@code netdb.maxSearchTime} moved 44 times, 10 of
+     * them straight back to where the previous pass had just put it, and
+     * {@code i2p.streaming.minPacingRate} 50 times with 4 such reversals - 374
+     * param writes and 374 INFO lines in 17 minutes, each reversal also
+     * rewriting autotune.config.
+     */
+    static final int REVERSAL_CONFIRM_CYCLES = 2;
+
+    /**
+     * Decide whether this cycle's target may be applied, or whether the param
+     * is held where it is because the move reverses the last one and has not
+     * been asked for often enough to be believed.
+     * <p>A move in the direction the param already moved, and a rollback toward
+     * the factory default while the stat has turned against that divergence,
+     * are never held: a trend still moves every cycle and the recovery path
+     * stays as fast as it was. Only a fresh reversal is made to wait for
+     * confirmation.
+     *
+     * @param current the value the param holds now
+     * @param target the value this cycle's {@code computeTarget()} asked for,
+     *               already clamped to the param's range
+     * @param lastDir direction of the last applied move: 1 up, -1 down, 0 when
+     *                the param has not moved
+     * @param heldCycles cycles in a row this param has already been held
+     *                   instead of making this opposite move, 0 or more
+     * @param recovery true when the move rolls back a divergence the stat has
+     *                 turned against, which is never held
+     * @return the value to apply, or {@code current} to leave the param where
+     *         it is
+     * @since 0.9.72+
+     */
+    static int confirmReversal(int current, int target, int lastDir, int heldCycles,
+                               boolean recovery) {
+        if (target == current) {return current;}
+        if (recovery || lastDir == 0) {return target;}
+        int dir = target > current ? 1 : -1;
+        if (dir == lastDir) {return target;}
+        return heldCycles + 1 >= REVERSAL_CONFIRM_CYCLES ? target : current;
     }
 
     /**
@@ -2308,6 +2387,26 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * @since 0.9.71+
          */
         private boolean _noEffectReported;
+
+        /**
+         * Direction of the last move this param applied: 1 up, -1 down, 0 when it
+         * has not moved, or moved back to the value it started the cycle on.
+         * Together with {@link #_reversalCycles} it is what makes a reversal have
+         * to be asked for more than once.
+         *
+         * @since 0.9.72+
+         */
+        private int _lastMoveDir;
+
+        /**
+         * How many cycles in a row this param has been asked to move the opposite
+         * way from its last move, and has been held at instead. Reset on a
+         * converged cycle, on an applied move, and whenever the ask matches the
+         * direction it last moved.
+         *
+         * @since 0.9.72+
+         */
+        private int _reversalCycles;
 
         /** Whether this param's value is being driven by CPU load rather than its own stat. */
         protected boolean _cpuDriven;
@@ -3528,13 +3627,16 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 // move later is reported again.
                 _lastAppliedTarget = 0;
                 _noEffectReported = false;
+                _lastMoveDir = 0;
+                _reversalCycles = 0;
                 return;
             }
             boolean divergedUp = current > _defaultValue;
             boolean divergedDown = current < _defaultValue;
             boolean statMovedAgainst = (divergedUp && target < current) ||
                                        (divergedDown && target > current);
-            if (statMovedAgainst && Math.abs(target - current) > _step) {
+            boolean recovery = statMovedAgainst && Math.abs(target - current) > _step;
+            if (recovery) {
                 // accelerate rollback: 2x step in the revert direction
                 int fastStep = _step * 2;
                 if (target < current)
@@ -3542,6 +3644,20 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 else
                     target = Math.min(target, current + fastStep);
             }
+            target = confirmReversal(current, target, _lastMoveDir, _reversalCycles, recovery);
+            if (target == current) {
+                // Held. Count the cycle so a reversal that persists still lands, and
+                // say nothing: a move that was not made has no reason line to report.
+                _reversalCycles++;
+                if (_log.shouldDebug()) {
+                    _log.debug("Held the reversal for " + _name + " -> Asked for " + target +
+                               " again, confirming on pass " + (_reversalCycles + 1) + " of " +
+                               REVERSAL_CONFIRM_CYCLES);
+                }
+                return;
+            }
+            _lastMoveDir = target > current ? 1 : -1;
+            _reversalCycles = 0;
             // Retrying a target that already failed to take effect is not tuning:
             // it emits the same log line every cycle while the value never moves.
             boolean repeatingNoEffect = target == _lastAppliedTarget;
@@ -5521,7 +5637,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double resets = getAdditionalEventCount(_context, "stream.resetReceived");
 
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
-            boolean networkHealthy = Double.isNaN(buildSuccess) || buildSuccess > 0.7;
+            boolean networkHealthy = networkHealthy(buildSuccess);
             // A sustained retransmission rate means genuine path loss regardless
             // of how big the resent messages are.
             boolean dropping = isStreamLossy(lossRate);
@@ -5649,7 +5765,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean retransmitting = !Double.isNaN(rtxRatio) && rtxRatio > 200;
 
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
-            boolean networkHealthy = Double.isNaN(buildSuccess) || buildSuccess > 0.7;
+            boolean networkHealthy = networkHealthy(buildSuccess);
             boolean spuriousRetransmits = isStreamLossy(lossRate);
             boolean highRTT = (!Double.isNaN(observed) && observed > 7000) ||
                               (!Double.isNaN(confirmTime) && confirmTime > 7000);
@@ -8211,7 +8327,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double hourlyBps = getAdditionalStatHourly(_context, _statName);
             double msgsPerTunnel = getAdditionalStat(_context, "tunnel.participatingMessageCountAvgPerTunnel");
 
-            boolean networkHealthy = Double.isNaN(buildSuccess) || buildSuccess > 0.7;
+            boolean networkHealthy = networkHealthy(buildSuccess);
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
             // Confirm high usage is a sustained trend, not just a spike
             boolean sustainedHighUsage = !Double.isNaN(hourlyBps) && hourlyBps / maxBps > 0.6;
@@ -8422,7 +8538,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
             double concurrentBuilds = getAdditionalStat(_context, "tunnel.concurrentBuilds");
 
-            boolean networkHealthy = Double.isNaN(buildSuccess) || buildSuccess > 0.7;
+            boolean networkHealthy = networkHealthy(buildSuccess);
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
             boolean systemBusy = !Double.isNaN(jobLag) && jobLag > 100;
             boolean buildStorm = !Double.isNaN(concurrentBuilds) && concurrentBuilds > 15;
@@ -8490,7 +8606,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
 
-            boolean networkHealthy = Double.isNaN(buildSuccess) || buildSuccess > 0.7;
+            boolean networkHealthy = networkHealthy(buildSuccess);
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
             boolean systemBusy = !Double.isNaN(jobLag) && jobLag > 100;
 
@@ -8641,7 +8757,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
 
-            boolean networkHealthy = Double.isNaN(buildSuccess) || buildSuccess > 0.7;
+            boolean networkHealthy = networkHealthy(buildSuccess);
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
             boolean systemBusy = !Double.isNaN(jobLag) && jobLag > 100;
 
@@ -8691,7 +8807,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean highLoad = sysLoad > 80;
             double memPressure = getMemoryPressure();
 
-            boolean networkHealthy = Double.isNaN(buildSuccess) || buildSuccess > 0.7;
+            boolean networkHealthy = networkHealthy(buildSuccess);
             boolean buildStorm = !Double.isNaN(concurrentBuilds) && concurrentBuilds > 15;
             boolean sustainedHighLag = !Double.isNaN(hourlyLag) && hourlyLag > 500;
 
@@ -9253,7 +9369,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                                 (!Double.isNaN(rtxRatio5) && rtxRatio5 < 40);
 
         boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
-        boolean networkHealthy = Double.isNaN(buildSuccess) || buildSuccess > 0.7;
+        boolean networkHealthy = networkHealthy(buildSuccess);
         boolean dropping = isStreamLossy(lossRate);
         // Lower threshold to 3000ms so connections on modest-latency paths
         // (e.g. 3.5s RTT) are treated as slow and eligible for faster growth.
@@ -9419,7 +9535,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         boolean retransmitLow = (!Double.isNaN(rtxRatio) && rtxRatio < 50) ||
                                 (!Double.isNaN(rtxRatio5) && rtxRatio5 < 40);
 
-        boolean networkHealthy = Double.isNaN(buildSuccess) || buildSuccess > 0.7;
+        boolean networkHealthy = networkHealthy(buildSuccess);
         boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
         boolean dropping = isStreamLossy(lossRate);
         // Use observed (initialRTT.out) as primary RTT for "streams slow"
