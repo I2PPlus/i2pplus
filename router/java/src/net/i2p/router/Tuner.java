@@ -136,6 +136,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * {@code computeRTO()} clamps to {@code [minResendDelay, maxResendDelay]},
      * and an inverted pair clamps every RTO to a value below the path RTT, so
      * every packet retransmits before its ACK can return.
+     * <p>The peer-tier pairs are here for the same reason: each tier's floor
+     * and ceiling only keep their own distance to the other in mind
+     * ({@code min + 100} / {@code max - 100}), and the ranges allow the
+     * crossing - a floor may climb to 2000 while its ceiling sinks toward 200.
      * <p>Checked once per slow cycle; a violated pair resets both members to
      * their factory defaults.
      *
@@ -147,6 +151,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         {"i2p.streaming.initialResendDelay", "i2p.streaming.maxResendDelay"},
         {"udp.peer.minRTO", "udp.peer.initRTO"},
         {"udp.peer.initRTO", "udp.peer.maxRTO"},
+        {"profileOrganizer.minFastPeers", "profileOrganizer.maxFastPeers"},
+        {"profileOrganizer.minHighCapacityPeers",
+         "profileOrganizer.maxHighCapacityPeers"},
     };
 
     /**
@@ -1413,6 +1420,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         _params.add(new MinFastPeersParam());
         _params.add(new LossyThresholdParam());
         _params.add(new MinHighCapPeersParam());
+        _params.add(new MaxHighCapPeersParam());
 
         // Index the params by name for the cross-parameter invariant checks
         for (TunableParam param : _params)
@@ -11141,7 +11149,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     * Minimum high-capacity peers.
+     * Floor on the high-capacity peer tier, in peers - the size
+     * {@code ProfileOrganizer} refills that tier toward.
      */
     private class MinHighCapPeersParam extends BaseParam {
 
@@ -11206,7 +11215,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     * Maximum high-capacity peers.
+     * Ceiling on the high-capacity peer tier, in peers.
+     * {@code ProfileOrganizer} never grows the tier past it, however large the
+     * NetDb gets, and {@link MinHighCapPeersParam} holds the floor it may not
+     * fall below.
      */
     private class MaxHighCapPeersParam extends BaseParam {
 
