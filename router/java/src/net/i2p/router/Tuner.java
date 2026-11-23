@@ -6193,6 +6193,64 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     }
 
     /**
+     * Fraction of the streaming RTT clamp at or above which a measurement counts
+     * as pinned to it. The smoother is an EWMA, so a stream whose samples are all
+     * clamped settles below the clamp rather than exactly on it, and a reading
+     * this close to the clamp is the clamp being too low.
+     * <p>Package-visible so the threshold can be derived from it in tests rather
+     * than re-declared as a second literal that could drift.
+     *
+     * @since 0.9.72+
+     */
+    static final double RTT_CLAMP_PRESSURE = 0.85d;
+
+    /**
+     * The streaming default for {@code i2p.streaming.maxRtt}, used when the
+     * reflector cannot read the live value.
+     *
+     * @since 0.9.72+
+     */
+    private static final int DEFAULT_RTT_CLAMP_MS = 10000;
+
+    /**
+     * Is the measured streaming RTT pinned against the clamp its samples pass
+     * through?
+     * <p>{@code ConnectionOptions.clampRttSample()} reins every sample to
+     * {@code i2p.streaming.maxRtt} before it enters the smoother, and
+     * {@code stream.rtt} reports that smoothed value, so the measurement can
+     * never exceed the clamp. A fixed threshold above the clamp is therefore
+     * unsatisfiable: the clamp's own floor is 5000 ms while the parameters that
+     * act on this signal tested for more than 7000 ms, so once the tighten branch
+     * had pulled the clamp to its floor no RTT measurement could ever raise it
+     * again, and a genuinely slow path stayed measured at the ceiling for the
+     * life of the router. Compare against the live clamp instead, so a pinned
+     * sample is the signal at any clamp value.
+     *
+     * @param observed the observed RTT in ms, NaN when nothing was measured
+     * @param clampMs the live {@code i2p.streaming.maxRtt} in ms; zero or
+     *                negative means the clamp is off and nothing is ever pinned
+     * @return true when the measurement sits at or near the clamp
+     * @since 0.9.72+
+     */
+    static boolean rttPinnedToClamp(double observed, int clampMs) {
+        return clampMs > 0 && !Double.isNaN(observed) &&
+               observed >= clampMs * RTT_CLAMP_PRESSURE;
+    }
+
+    /**
+     * The live {@code i2p.streaming.maxRtt} that the streaming RTT smoother
+     * clamps its samples to.
+     *
+     * @return the clamp in ms, {@link #DEFAULT_RTT_CLAMP_MS} when the reflector
+     *         cannot read a live value
+     * @since 0.9.72+
+     */
+    static int rttClampMs() {
+        int v = StreamingReflector.invokeGetInt("getMaxRttStatic");
+        return v > 0 ? v : DEFAULT_RTT_CLAMP_MS;
+    }
+
+    /**
      * Is the streaming path losing enough to justify the aggressive shrink?
      *
      * @param lossRate rate from {@link #streamingLossRate}, possibly NaN
@@ -8744,7 +8802,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double lossRate = getStreamingLossRate(_context);
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
-            boolean highRTT = !Double.isNaN(observed) && observed > 7000;
+            // stream.rtt is clamped by i2p.streaming.maxRtt, a different parameter
+            // from this one, so a fixed 7000 ms threshold was unsatisfiable
+            // whenever that clamp sat at or below it - which its own floor of
+            // 5000 ms lets the tuner arrange. Test against the live clamp.
+            boolean highRTT = rttPinnedToClamp(observed, rttClampMs());
             boolean highDups = isStreamLossy(lossRate);
 
             // High retransmit pressure + high RTT = raise RTO ceiling (allow more headroom)
@@ -9444,8 +9506,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         protected int getRuntimeValue() {
-            int v = StreamingReflector.invokeGetInt("getMaxRttStatic");
-            return v > 0 ? v : 10000;
+            return rttClampMs();
         }
 
         protected double getObservedStat(RouterContext ctx) {
@@ -9461,9 +9522,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
 
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
-            // Threshold must stay below the RTT cap (default 10000): observed RTT
-            // is clamped to the cap, so a threshold >= cap would never trigger.
-            boolean highRTT = !Double.isNaN(observed) && observed > 7000;
+            // This parameter is the clamp the observed stat passes through, so the
+            // sample is pinned when it reaches this parameter's own value. The old
+            // fixed 7000 ms threshold sat above the 5000 ms floor: once the tighten
+            // branch below had pulled the cap there, the raise branch could never
+            // fire again and the cap stayed on its floor whatever the path did.
+            boolean highRTT = rttPinnedToClamp(observed, current);
             boolean highDups = isStreamLossy(lossRate);
 
             // Spurious retransmits + congestion = raise cap (RTT spikes are real)
