@@ -351,18 +351,11 @@ class ConnectionManager {
     }
 
     /**
-     * Pure decision: consult one destination's cooldown for a connect about to run.
-     * <p>The three outcomes live in one function because they were measured apart.
-     * A live router refused 71 connects in 55 minutes, the window escalated to
-     * 39s, 40s, 64s and 148s by 4, 5 and 6 consecutive failures, and
-     * {@code stream.connectBackoffRefused} still read "No lifetime events" - the
-     * refusal returned from {@link #finalizeConnection} before the block that
-     * counts it, so the stat that justifies the feature stayed empty while the
-     * feature ran. One decision, one exit, is what keeps the counting and the
-     * branching from drifting apart again.
+     * Pure decision: consult one destination's cooldown for a connect about to
+     * run, with no caller window to respect.
      *
-     * @param record the destination's failure record {@code {failedOn, strikes,
-     *               fromPath}}, or null when it has never failed
+     * @see #cooldownGate(long[], long, long, long, long, long)
+     * @param record the destination's failure record, or null when it has never failed
      * @param now the current clock reading, in ms since the epoch
      * @param baseMs the window a first failure arms, 0 or less disables the cooldown
      * @param maxMs the ceiling the window escalates to
@@ -373,13 +366,51 @@ class ConnectionManager {
      */
     static CooldownGate cooldownGate(long[] record, long now, long baseMs, long maxMs,
                                      long refuseAfterMs) {
+        return cooldownGate(record, now, baseMs, maxMs, refuseAfterMs, -1);
+    }
+
+    /**
+     * Pure decision: consult one destination's cooldown for a connect about to
+     * run, with the caller's own connect window taken into account.
+     * <p>The three outcomes live in one function because they were measured apart.
+     * A live router refused 71 connects in 55 minutes, the window escalated to
+     * 39s, 40s, 64s and 148s by 4, 5 and 6 consecutive failures, and
+     * {@code stream.connectBackoffRefused} still read "No lifetime events" - the
+     * refusal returned from {@link #finalizeConnection} before the block that
+     * counts it, so the stat that justifies the feature stayed empty while the
+     * feature ran. One decision, one exit, is what keeps the counting and the
+     * branching from drifting apart again.
+     * <p>A cooldown wait is invisible to the caller: it is not part of the
+     * connect timeout the caller asked for, and nothing measured it. A live
+     * router reported failed outbound connects averaging 49,894ms against a
+     * 30,000ms connect timeout - the wait stacked on top of the handshake
+     * window, so a caller that budgeted 30s for one attempt parked for 20s of
+     * it and then paid for the handshake as well. Sitting out a cooldown longer
+     * than the time the caller has left cannot help that caller: the attempt
+     * runs out of window either way, so refuse now and let it fail over.
+     *
+     * @param record the destination's failure record {@code {failedOn, strikes,
+     *               fromPath}}, or null when it has never failed
+     * @param now the current clock reading, in ms since the epoch
+     * @param baseMs the window a first failure arms, 0 or less disables the cooldown
+     * @param maxMs the ceiling the window escalates to
+     * @param refuseAfterMs the cooldown left past which a connect is refused
+     *                      rather than held, non-positive to always hold
+     * @param callerBudgetMs milliseconds left in the caller's own connect
+     *                       window, negative when the caller set no window
+     * @return the outcome to act on, never null
+     * @since 0.9.72+
+     */
+    static CooldownGate cooldownGate(long[] record, long now, long baseMs, long maxMs,
+                                     long refuseAfterMs, long callerBudgetMs) {
         if (record == null || baseMs <= 0) {return new CooldownGate(false, 0, 0, 0);}
         int strikes = (int) Math.max(1, record[1]);
         long cooldown = destCooldownMs(strikes, baseMs, maxMs);
         long elapsed = now - record[0];
         if (!cooldownRunning(elapsed, cooldown)) {return new CooldownGate(false, 0, strikes, 0);}
         long remaining = cooldown - elapsed;
-        return refuseCooldown(remaining, refuseAfterMs)
+        boolean outlivesCaller = callerBudgetMs >= 0 && remaining > callerBudgetMs;
+        return refuseCooldown(remaining, refuseAfterMs) || outlivesCaller
             ? new CooldownGate(true, 0, strikes, remaining)
             : new CooldownGate(false, remaining, strikes, remaining);
     }
@@ -1761,6 +1792,10 @@ class ConnectionManager {
         _context.statManager().createRequiredRateStat("stream.connectionCreated", "Number of outbound stream connections created", "Stream", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRequiredRateStat("stream.connectFailed", "Elapsed time (ms) of a failed outbound connect attempt", "Stream", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRequiredRateStat("stream.connectBackoffRefused", "Outbound connects refused by the destination's connect cooldown (no SYN sent)", "Stream", RATES);
+        _context.statManager().createRequiredRateStat("stream.connectCooldownMs",
+                "Milliseconds parked in a destination's connect cooldown", "Stream", RATES);
+        _context.statManager().createRequiredRateStat("stream.connectSlotWaitMs",
+                "Milliseconds waiting for a free stream slot before connecting", "Stream", RATES);
         _context.statManager().createRequiredRateStat("stream.connectTime", "Elapsed time (ms) of a successful outbound connect", "Stream", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
           _context.statManager().createRequiredRateStat("stream.chokeSizeBegin", "Number of outstanding messages when we started to choke", "Stream", RATES);
           _context.statManager().createRequiredRateStat("stream.chokeSizeEnd", "Number of outstanding messages when we stopped being choked", "Stream", RATES);
@@ -2530,6 +2565,10 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
           long tmout = opts.getConnectTimeout();
           if (tmout <= 0) {expiration += getDefaultStreamDelayMax();}
           else {expiration += tmout;}
+          // Time parked waiting for a stream slot. It is charged against the
+          // caller's connect window and it is part of what a slow connect feels
+          // like, so it has to be measurable apart from the handshake.
+          long slotWaitMs = 0;
           _numWaiting.incrementAndGet();
           try {
               while (true) {
@@ -2581,6 +2620,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
                   }
 
                   // no remaining streams, let's wait a bit
+                  long napStart = _context.clock().now();
                   try { Thread.sleep(remaining/4); }
                   catch (InterruptedException ie) {
                       // Honoring the interrupt: restore the flag and abandon
@@ -2589,6 +2629,11 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
                       Thread.currentThread().interrupt();
                       return null;
                   }
+                  slotWaitMs += _context.clock().now() - napStart;
+              }
+
+              if (slotWaitMs > 0) {
+                  _context.statManager().addRateData("stream.connectSlotWaitMs", slotWaitMs);
               }
 
               // Delegate to shared finalizeConnection for cooldown, waitForConnect, and stats.
@@ -2631,8 +2676,15 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
           boolean refused = false;
           if (!fromPool) {
               long[] failure = _destFailures.get(destHash);
+              // What the caller itself budgeted for this connect, less whatever
+              // the wait for a stream slot has already taken. The cooldown must
+              // not be allowed to spend time the caller never offered it.
+              long legMs = opts.getConnectTimeout() > 0 ? opts.getConnectTimeout()
+                                                       : getDefaultStreamDelayMax();
+              long callerLeftMs = legMs - (_context.clock().now() - connectStart);
               CooldownGate gate = cooldownGate(failure, _context.clock().now(), getDestCooldownMs(),
-                                              getDestCooldownMaxMs(), getDestCooldownRefuseMs());
+                                              getDestCooldownMaxMs(), getDestCooldownRefuseMs(),
+                                              callerLeftMs);
               if (gate.refused) {
                   // Refused before eventOccurred(), so no SYN is queued and no
                   // outbound tunnel is used. The caller closes the connection, as
@@ -2653,7 +2705,13 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
                                      DataHelper.formatDuration(gate.waitMs) +
                                      " * Consecutive failures: " + gate.strikes);
                   }
-                  awaitCooldown(_cooldownLock, gate.waitMs, _context.clock());
+                  long waited = awaitCooldown(_cooldownLock, gate.waitMs, _context.clock());
+                  if (waited > 0) {
+                      // Counted apart from the handshake: connectFailed blends
+                      // the two, which is how a 30s connect timeout came to
+                      // report a 49,894ms average.
+                      _context.statManager().addRateData("stream.connectCooldownMs", waited);
+                  }
               } else if (failure != null) {
                   _destFailures.remove(destHash, failure);
               }

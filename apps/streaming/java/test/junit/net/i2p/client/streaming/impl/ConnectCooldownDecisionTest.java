@@ -556,6 +556,90 @@ public class ConnectCooldownDecisionTest {
         assertEquals(MAX - 1000, g.remainingMs);
     }
 
+    // ---- cooldownGate, caller budget ----
+
+    /**
+     * Consults the gate with a caller window, so the budget cases read as the
+     * record, the moment and the time the caller has left.
+     *
+     * @param record the destination's failure record, or null when it has never failed
+     * @param now the clock reading the attempt arrives at, in ms since the epoch
+     * @param callerBudgetMs milliseconds left in the caller's own connect window
+     * @return the outcome to assert on, never null
+     */
+    private static ConnectionManager.CooldownGate gate(long[] record, long now,
+                                                       long callerBudgetMs) {
+        return ConnectionManager.cooldownGate(record, now, BASE, MAX, REFUSE_AFTER,
+                                              callerBudgetMs);
+    }
+
+    /**
+     * A cooldown longer than the time the caller has left is refused, not waited
+     * out. The wait is not part of the connect timeout the caller asked for, so
+     * parking there spends time that was never offered: a live router reported
+     * failed connects averaging 49,894ms against a 30,000ms connect timeout,
+     * because the wait stacked on top of the handshake window.
+     */
+    @Test
+    public void testGateRefusesWhenTheCooldownOutlivesTheCaller() {
+        long now = 1_700_000_000_000L;
+        // 3 strikes arm 20s with 19s left - under the 30s refuse threshold, so on
+        // its own that is a wait. With 8s left of the caller's window it cannot be.
+        long[] record = new long[] {now - 1000, 3, 1};
+        assertFalse(gate(record, now).refused);
+        ConnectionManager.CooldownGate g = gate(record, now, 8 * 1000);
+        assertTrue(g.refused);
+        assertEquals(19 * 1000L, g.remainingMs);
+        assertEquals(0, g.waitMs);
+    }
+
+    /**
+     * A caller with no time left is refused outright: there is no window in which
+     * the handshake could run, so the attempt would park and then fail anyway.
+     */
+    @Test
+    public void testGateRefusesAnOutOfTimeCaller() {
+        long now = 1_700_000_000_000L;
+        long[] record = new long[] {now - 1000, 1, 0};
+        assertTrue(gate(record, now, 0).refused);
+        // One millisecond of window left cannot cover a 4s cooldown either.
+        assertTrue(gate(record, now, 1).refused);
+    }
+
+    /**
+     * A caller with more time than the cooldown left keeps the old behaviour: it
+     * waits the window out and connects, because for it the wait is affordable.
+     * A negative budget means the caller set no window and stays unbounded.
+     */
+    @Test
+    public void testGateWaitsWhenTheCallerCanAffordIt() {
+        long now = 1_700_000_000_000L;
+        long[] record = new long[] {now - 1000, 3, 1};
+        ConnectionManager.CooldownGate wide = gate(record, now, 60 * 1000);
+        assertFalse(wide.refused);
+        assertEquals(19 * 1000L, wide.waitMs);
+
+        ConnectionManager.CooldownGate unbounded = gate(record, now, -1);
+        assertFalse(unbounded.refused);
+        assertEquals(19 * 1000L, unbounded.waitMs);
+    }
+
+    /**
+     * The measured live case: a 30s caller facing a destination whose escalated
+     * window still had 40s left. Before, it parked 40s and then paid for a
+     * handshake it had no budget for; now the refusal comes back with no SYN
+     * sent and the caller fails over to another tunnel leg.
+     */
+    @Test
+    public void testMeasuredCallerIsRefusedALongerWindow() {
+        long now = 1_700_000_000_000L;
+        long[] record = new long[] {now - 1000, 4, 1};
+        ConnectionManager.CooldownGate g = gate(record, now, 30 * 1000);
+        assertTrue(g.refused);
+        assertEquals(39 * 1000L, g.remainingMs);
+        assertEquals(4, g.strikes);
+    }
+
     /**
      * The whole cycle end to end: failures arriving a few seconds apart, each one
      * recorded through recordFailure() and each later attempt consulted through
