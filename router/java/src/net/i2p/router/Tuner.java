@@ -5833,7 +5833,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                     // 64 MB is the ceiling setMaxInboundBufferStatic accepts; offering
                     // more only produced a target that was rewritten back.
                     8388608, 64 * 1024 * 1024, 8388608,
-                    "stream.con.lifetimeBytesReceived", _context, null, 8388608);
+                    // The stat the decision below acts on: how many streams began
+                    // choking, and how deep their outbound queues were. It was
+                    // stream.con.lifetimeBytesReceived, whose event count is simply
+                    // how many streams closed - 1,230/min here, so the "choking"
+                    // flag was never false and the cap sat on its ceiling.
+                    "stream.chokeSizeBegin", _context, null, 8388608);
         }
 
         /** Apply the cap via I2PSocketManagerFull. */
@@ -5854,38 +5859,86 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /** Compute target based on choke pressure, retransmissions, and memory pressure. */
         protected int computeTarget(double observed) {
-            int current = getRuntimeValue();
-            // primary stat = stream.chokeSizeBegin (choke events per 60s)
+            // observed = stream.chokeSizeBegin events per 60s (streams that began
+            //            choking); its average value is the queue depth at the time
             // Cross-refs: retransmission rate, memory pressure
+            double chokeDepth = getAdditionalStat(_context, _statName);
             double lossRate = getStreamingLossRate(_context);
-            double memPressure = Tuner.getMemoryPressure();
-
-            boolean choking = !Double.isNaN(observed) && observed > 0;
-            boolean retransmitting = isStreamLossy(lossRate);
-            boolean memoryTight = memPressure > 0.75;
-
-            // Choking or sustained retransmission = increase buffer. The cap spans
-            // 8 MB to 128 MB and the step is a full 8 MB, so a linear climb would
-            // need fifteen 15s cycles to reach a cap the receiver can actually use
-            // under a sustained choke rate; climbing half the current value each
-            // cycle gets there in four, while the memory-pressure shrink below
-            // still only ever moves one step.
-            if (choking || retransmitting) {
-                return Math.min(_max, current + Math.max(_step, current / 2));
-            }
-
-            // Memory pressure = decrease buffer
-            if (memoryTight && current > _defaultValue) {
-                return Math.max(_defaultValue, current - _step);
-            }
-
-            // No pressure = ease back toward default
-            if (current > _defaultValue) {
-                return Math.max(_defaultValue, current - _step);
-            }
-
-            return current;
+            return maxInboundBufferTarget(getRuntimeValue(), _min, _max, _step,
+                                          _defaultValue, observed, chokeDepth,
+                                          lossRate, Tuner.getMemoryPressure());
         }
+    }
+
+    /**
+     * Outstanding messages at or above which a choke counts as real pressure on
+     * the inbound buffer.
+     * <p>{@code stream.chokeSizeBegin} records the outbound queue depth at the
+     * moment a stream began choking. Live here its average is 1 message while its
+     * peak-period average is 96, so a choke that starts with a single message
+     * queued is a momentary pause, not a backed-up pipe, and must not be read as
+     * pressure worth doubling the cap.
+     * <p>Package-visible so the threshold can be derived from it in tests rather
+     * than re-declared as a second literal that could drift.
+     *
+     * @since 0.9.72+
+     */
+    static final int CHOKE_PRESSURE_MESSAGES = 32;
+
+    /**
+     * Heap pressure above which the inbound buffer must stop growing.
+     *
+     * @since 0.9.72+
+     */
+    private static final double MEMORY_TIGHT_RATIO = 0.75d;
+
+    /**
+     * Pure inbound-buffer cap decision, extracted from
+     * {@code MaxInboundBufferParam.computeTarget}.
+     * <p>Grows when streams are choking with a deep queue, or when the streaming
+     * path is losing enough that more in-flight capacity is wanted - but not while
+     * the heap is tight, which is the case the growth used to win anyway: the cap
+     * is per connection and the ceiling is 64 MB, so growth under memory pressure
+     * is what put this router at 67,108,864 bytes per stream against a 4 GiB heap
+     * with 1,024 stream slots. Shrinks one step toward the factory default under
+     * memory pressure or when the pressure has gone away.
+     *
+     * @param current the cap being re-evaluated, in bytes
+     * @param min hard lower clamp in bytes
+     * @param max hard upper clamp in bytes
+     * @param step per-cycle adjustment in bytes
+     * @param defaultValue the factory default in bytes, the floor to ease back to
+     * @param chokeEvents {@code stream.chokeSizeBegin} events per 60s, NaN if none
+     * @param chokeDepth  {@code stream.chokeSizeBegin} average queue depth, NaN if
+     *                    no stream choked
+     * @param lossRate rate from {@link #streamingLossRate}, possibly NaN
+     * @param memPressure heap pressure ratio 0.0-1.0
+     * @return the new cap, already clamped to {@code [min, max]}
+     * @since 0.9.72+
+     */
+    static int maxInboundBufferTarget(int current, int min, int max, int step,
+                                      int defaultValue, double chokeEvents,
+                                      double chokeDepth, double lossRate,
+                                      double memPressure) {
+        boolean choking = !Double.isNaN(chokeEvents) && chokeEvents > 0 &&
+                          !Double.isNaN(chokeDepth) &&
+                          chokeDepth >= CHOKE_PRESSURE_MESSAGES;
+        boolean retransmitting = isStreamLossy(lossRate);
+        boolean memoryTight = memPressure > MEMORY_TIGHT_RATIO;
+
+        // Choking with a deep queue, or sustained retransmission, wants more
+        // in-flight capacity - but never while the heap is tight.
+        if ((choking || retransmitting) && !memoryTight) {
+            return Math.min(max, current + Math.max(step, current / 2));
+        }
+
+        // Memory pressure, or the pressure simply going away: ease back one step
+        // toward the factory default rather than staying on the ceiling.
+        if (current > defaultValue) {
+            return Math.max(defaultValue, current - step);
+        }
+
+        return current;
     }
 
     /**
