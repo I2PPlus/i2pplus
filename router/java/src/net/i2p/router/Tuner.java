@@ -9630,7 +9630,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * Pacing smooths packet transmission to avoid burst loss.
      * Higher = allows pacing on slower connections (more smoothing),
      * lower = only pace on fast connections.
-     * Observed via bandwidth stat, targets based on network conditions.
+     * Observed: {@code bw.sendBps} (KB/s). Cross-refs:
+     * {@code transport.sendMessageFailureLifetime} (congestion),
+     * {@code stream.con.sendDuplicateSize} (retransmit pressure).
      * @since 0.9.70+
      */
     private class MinPacingRateParam extends BaseParam {
@@ -9649,7 +9651,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         protected int getRuntimeValue() {
             int v = StreamingReflector.invokeGetInt("getMinPacingRateKBps");
-            return v >= 0 ? v : 16;
+            return v >= 0 ? v : DEFAULT_MIN_PACING_KBPS;
         }
 
         protected double getObservedStat(RouterContext ctx) {
@@ -9664,29 +9666,100 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         protected int computeTarget(double observed) {
-            int current = getRuntimeValue();
             // observed = bw.sendBps (average send bandwidth in KB/s)
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
-            double lossRate = getStreamingLossRate(_context);
-
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
-            boolean dropping = isStreamLossy(lossRate);
-            boolean highBandwidth = !Double.isNaN(observed) && observed > 100;
-
-            // Congestion or drops on fast link = raise pacing floor (smoother transmission)
-            if ((congested || dropping) && highBandwidth)
-                return Math.min(_max, current + _step);
-
-            // Congestion on slow link = lower pacing floor (let slow links pace less)
-            if ((congested || dropping) && !highBandwidth)
-                return Math.max(_min, current - _step);
-
-            // Healthy network + high bandwidth = lower pacing floor (can afford to burst)
-            if (!congested && !dropping && highBandwidth)
-                return Math.max(_min, current - _step);
-
-            return current;
+            return nextMinPacingRateKBps(getRuntimeValue(), observed, congested,
+                                         isStreamLossy(getStreamingLossRate(_context)),
+                                         _min, _max, DEFAULT_MIN_PACING_KBPS, _step);
         }
+    }
+
+    /**
+     * Shipped streaming floor for the pacing rate, in KB/s. The Tuner converges
+     * back to this rather than to its own 1 KB/s bracket floor: below it the
+     * parameter stops rescuing the streams it exists for, and nothing observed
+     * argues for going further.
+     * <p>Kept in step with {@code ConnectionOptions.minPacingRate}'s shipped
+     * default — the router cannot see the streaming module except through the
+     * reflector, so this is a comment-level coupling, as with
+     * {@code MaxSynResendsParam.DEFAULT_MAX_SYN_SENDS}.
+     *
+     * @since 0.9.72+
+     */
+    static final int DEFAULT_MIN_PACING_KBPS = 16;
+
+    /**
+     * Send bandwidth, in KB/s, at which the router is moving enough data that the
+     * congestion window, not the floor, sets the pace of every stream.
+     *
+     * @since 0.9.72+
+     */
+    static final double PACING_HIGH_BANDWIDTH_KBPS = 100;
+
+    /**
+     * Send bandwidth, in KB/s, below which streams are running at paces where the
+     * floor is the only thing keeping them moving.
+     *
+     * @since 0.9.72+
+     */
+    static final double PACING_LOW_BANDWIDTH_KBPS = 25;
+
+    /**
+     * Highest the Tuner will take the pacing floor, whatever its bracket and the
+     * setter allow.
+     * <p>{@code Connection.effectivePacingRate} lets the floor outrun the
+     * congestion window only when the window's own pace would space packets more
+     * than 100ms apart - a derived pace near 14 KB/s. A floor far above that
+     * turns each rescued window into a back-to-back burst, which is the thing
+     * pacing exists to prevent.
+     *
+     * @since 0.9.72+
+     */
+    static final int PACING_RATE_TUNER_MAX_KBPS = 64;
+
+    /**
+     * Next streaming pacing floor for one tuning cycle.
+     * <p>The old policy raised the floor whenever the router was both busy and
+     * lossy, which is exactly the state a bulk download creates: live it reached
+     * 192 KB/s against a 16 KB/s default, and because the pacing rate was
+     * {@code max(window-derived pace, floor)}, the floor replaced the congestion
+     * window's pace - 192 KB/s against a derived 111 KB/s - so the pacer released
+     * the window faster than the path could acknowledge it, and the burst loss
+     * that caused was what made the Tuner raise the floor again.
+     * <p>A congested or lossy cycle now lowers the floor, and a healthy busy
+     * router lowers it too: in both cases the window is setting the pace and the
+     * floor is dead weight. It only climbs on a healthy router whose streams are
+     * moving too little, and only as far as {@link #PACING_RATE_TUNER_MAX_KBPS} -
+     * a value an operator set above that is left where they put it, never pulled
+     * down to the cap.
+     *
+     * @param current the floor in effect, in KB/s
+     * @param sendKBps average send bandwidth in KB/s, or NaN when no send events
+     * @param congested whether the transports are reporting send backpressure
+     * @param dropping whether streams are currently retransmitting
+     * @param min bracket floor in KB/s, the value the setter itself enforces
+     * @param max bracket ceiling in KB/s
+     * @param defaultValue the shipped streaming default the policy converges to
+     * @param step maximum movement per cycle, in KB/s
+     * @return the floor to apply, in KB/s
+     * @since 0.9.72+
+     */
+    static int nextMinPacingRateKBps(int current, double sendKBps, boolean congested,
+                                     boolean dropping, int min, int max, int defaultValue,
+                                     int step) {
+        if (Double.isNaN(sendKBps))
+            return current;
+        if (congested || dropping || sendKBps >= PACING_HIGH_BANDWIDTH_KBPS)
+            return Math.max(Math.max(min, defaultValue), current - step);
+        if (sendKBps < PACING_LOW_BANDWIDTH_KBPS) {
+            int ceiling = Math.min(max, PACING_RATE_TUNER_MAX_KBPS);
+            // an operator above the cap stays above it
+            if (current >= ceiling)
+                return current;
+            return Math.min(ceiling, current + step);
+        }
+        return current;
     }
 
     /**

@@ -1774,25 +1774,58 @@ class Connection {
     /**
      * Calculate pacing rate based on current congestion window and RTT.
      * Rate = (cwnd * mss) / rtt to smooth transmission.
-     * @return the pacing rate in bytes per second, never below
-     * {@link ConnectionOptions#getMinPacingRate}, or {@link Long#MAX_VALUE}
-     * when the RTT, window or MSS is still unset (pacing disabled)
+     * @return the pacing rate in bytes per second, rescued by
+     * {@link ConnectionOptions#getMinPacingRate} only when the window's own pace
+     * would stall the stream, or {@link Long#MAX_VALUE} when the RTT, window or
+     * MSS is still unset (pacing disabled)
      */
     private long calculatePacingRate() {
-        int cwnd = _options.getWindowSize();
-        int mss = _options.getMaxMessageSize();
-        int rtt = _options.getRTT();
+        return effectivePacingRate(_options.getWindowSize(), _options.getMaxMessageSize(),
+                                   _options.getRTT(), ConnectionOptions.getMinPacingRate());
+    }
 
-        if (rtt <= 0 || cwnd <= 0 || mss <= 0) {
-            return Long.MAX_VALUE; // No pacing if parameters invalid
-        }
+    /**
+     * Inter-packet spacing, in ms, at which the configured pacing floor is allowed
+     * to outrun the congestion window.
+     * <p>At the house MSS of 1400 bytes, 100ms of spacing is a derived pace of
+     * 14 KB/s - the same region the 16 KB/s shipped floor names. Below that the
+     * floor is a rescue for a stream the window would otherwise stall; above it
+     * the window is already moving and the floor is just a second, unrelated
+     * speed limit on top of it.
+     *
+     * @since 0.9.72+
+     */
+    static final long PACING_FLOOR_STALL_MS = 100;
 
-        // Calculate rate in bytes per second
-        long rateBytesPerSec = (long) cwnd * mss * 1000 / rtt;
-
-        // Ensure minimum rate to prevent excessive delays
-        long minRate = ConnectionOptions.getMinPacingRate();
-        return Math.max(rateBytesPerSec, minRate);
+    /**
+     * Pacing rate for one connection: the rate the congestion window itself
+     * supports, with the configured floor applied only when that rate would space
+     * packets further apart than {@link #PACING_FLOOR_STALL_MS}.
+     * <p>The floor used to be a plain {@code max(derived, floor)}, so whenever the
+     * Tuner held it above the derived pace it replaced congestion control: live,
+     * a 128-message window at a 1,578ms RTT derives 111 KB/s while the Tuner held
+     * the floor at 192 KB/s, and the pacer released that window 1.7x faster than
+     * the path could acknowledge it. That is a loop, not a floor - the burst loss
+     * it caused is what made the Tuner raise the floor further.
+     *
+     * @param cwnd congestion window in messages
+     * @param mss maximum message size in bytes
+     * @param rtt smoothed round trip in ms
+     * @param minRate the configured pacing floor in bytes per second
+     * @return the pacing rate in bytes per second, or {@link Long#MAX_VALUE} when
+     *         the RTT, window or MSS is unset (pacing disabled)
+     * @since 0.9.72+
+     */
+    static long effectivePacingRate(int cwnd, int mss, int rtt, long minRate) {
+        if (rtt <= 0 || cwnd <= 0 || mss <= 0)
+            return Long.MAX_VALUE;
+        long derived = (long) cwnd * mss * 1000 / rtt;
+        if (minRate <= derived)
+            return derived;
+        // The floor only earns the right to outrun the window when the window's
+        // own pace would leave the stream idle between packets.
+        long spacing = derived > 0 ? (long) mss * 1000 / derived : Long.MAX_VALUE;
+        return spacing > PACING_FLOOR_STALL_MS ? minRate : derived;
     }
 
     /**
