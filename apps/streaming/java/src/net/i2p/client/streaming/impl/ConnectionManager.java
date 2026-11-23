@@ -1805,6 +1805,12 @@ class ConnectionManager {
           // connection's own established baseline (see Connection.stallVerdict).
           _context.statManager().createRequiredRateStat("stream.con.stallDetected", "Streams that stopped delivering bytes entirely", "Stream", RATES);
           _context.statManager().createRequiredRateStat("stream.con.throttleDetected", "Streams delivering far below their own established rate", "Stream", RATES);
+          // A congestion window that stays at the loss-cut floor for minutes. Neither
+          // verdict above can see it: bytes keep being acknowledged, just slowly, and
+          // a stream that small is never below the goodput floor. This is the case
+          // path rotation was written for, so it is measured before anything acts
+          // on it. The value is how long the window had been pinned, in ms.
+          _context.statManager().createRequiredRateStat("stream.con.windowPinned", "Milliseconds a stream's window stayed at the congestion floor", "Stream", RATES);
         // Stats for PacketQueue
         _context.statManager().createRequiredRateStat("stream.con.sendMessageSize", "Size of a message sent on a connection", "Stream", EVENT_RATES);
         _context.statManager().createRequiredRateStat("stream.con.sendDuplicateSize", "Size of a message resent on a connection", "Stream", EVENT_RATES);

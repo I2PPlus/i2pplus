@@ -472,6 +472,30 @@ class Connection {
     private static final long STALL_GRACE_MS = 30000;
 
     /**
+     * Congestion window, in messages, at or below which a connection counts as
+     * pinned at the floor rather than merely slow.
+     * <p>The graduated loss cut floors the window at 4 messages so repeated RTO
+     * events cannot collapse it below a usable minimum, so a window that stays
+     * under this ceiling is a connection that keeps losing and never recovers -
+     * the case path rotation was written for, and the one neither verdict can
+     * see: bytes are still being acknowledged, just slowly, and a stream that
+     * small is never below the goodput floor.
+     *
+     * @since 0.9.72+
+     */
+    static final int PINNED_WINDOW_CEILING_MSGS = 8;
+
+    /**
+     * How long the window must stay at or below {@link #PINNED_WINDOW_CEILING_MSGS}
+     * before it is reported, in ms.
+     * <p>Two minutes: at eight messages that is room for several round trips of
+     * growth, so a pin that survives it is not one transient cut.
+     *
+     * @since 0.9.72+
+     */
+    static final long PINNED_WINDOW_MS = 2 * 60 * 1000;
+
+    /**
      * Weight of a new goodput sample in the baseline EWMA, scaled by 100.
      *
      * @since 0.9.71+
@@ -512,6 +536,24 @@ class Connection {
      * @since 0.9.71+
      */
     private volatile long _floorSampleStart;
+
+    /**
+     * When the congestion window last sat above {@link #PINNED_WINDOW_CEILING_MSGS},
+     * or 0 while it is above it. Volatile: written on the ACK path, read by the
+     * floor-check timer and the stat page.
+     *
+     * @since 0.9.72+
+     */
+    private volatile long _windowPinnedSince;
+
+    /**
+     * Whether the current pin has been reported, so a connection pinned for an
+     * hour reports once instead of every sample. Cleared when the window
+     * recovers, so a later pin is reported again.
+     *
+     * @since 0.9.72+
+     */
+    private volatile boolean _windowPinnedReported;
 
     /**
      * Clock value of the most recent observed progress, for stall detection.
@@ -2486,7 +2528,74 @@ class Connection {
         _floorSampleBytes = 0;
         _floorSampleStart = now;
         _floorCheckEvent.scheduleCheck(FLOOR_SAMPLE_MS);
+        noteWindowPin(now);
         evaluateFloor(now, bps);
+    }
+
+    /**
+     * Track and report a congestion window stuck at the floor.
+     * <p>Telemetry only. Unlike a hard stall this does not mark the destination
+     * for tunnel rotation: a pinned window is a path that keeps losing without
+     * ever being proven dead, and rotating tunnels on it is a change to be made
+     * once the pin can be measured, not before.
+     *
+     * @param now clock value of the goodput sample that just closed
+     * @since 0.9.72+
+     */
+    private void noteWindowPin(long now) {
+        int window = _options.getWindowSize();
+        long since = noteWindowPinned(now, _windowPinnedSince, window, PINNED_WINDOW_CEILING_MSGS);
+        if (since == 0) {
+            _windowPinnedSince = 0;
+            _windowPinnedReported = false;
+            return;
+        }
+        _windowPinnedSince = since;
+        if (_windowPinnedReported || !windowPinnedLongEnough(since, now, PINNED_WINDOW_MS))
+            return;
+        _windowPinnedReported = true;
+        long age = now - since;
+        _context.statManager().addRateData("stream.con.windowPinned", age);
+        if (_log.shouldWarn()) {
+            _log.warn(shortLabel() + " -> Congestion window pinned at the floor * Window: " +
+                      window + " messages * Age: " + DataHelper.formatDuration(age));
+        }
+    }
+
+    /**
+     * Advance the pinned-window tracker for one sample.
+     * <p>Pure: it moves a timestamp and decides nothing else. A window above the
+     * ceiling clears the tracker, so the recovery edge is visible to the caller;
+     * a window at or below it keeps the time the pin began, so the pin's age is
+     * measured from the first sample that saw it, not from the last.
+     *
+     * @param now clock value at the sample
+     * @param pinnedSince the tracker as it stands, 0 when not pinned
+     * @param windowSize congestion window at this sample, in messages
+     * @param ceiling pin threshold, in messages
+     * @return the tracker to carry forward: 0 once the window has recovered,
+     *         otherwise the clock value the pin began at
+     * @since 0.9.72+
+     */
+    static long noteWindowPinned(long now, long pinnedSince, int windowSize, int ceiling) {
+        if (windowSize > ceiling)
+            return 0;
+        return pinnedSince > 0 ? pinnedSince : now;
+    }
+
+    /**
+     * Has the congestion window been pinned at the floor long enough to report?
+     * <p>Pure. The pin must have a start time: a tracker of 0 means the window
+     * is above the ceiling, not that it has been pinned since the epoch.
+     *
+     * @param pinnedSince clock value the current pin began at, 0 if not pinned
+     * @param now clock value at the sample
+     * @param requiredMs how long a pin must last before it counts, in ms
+     * @return true once the pin has run for requiredMs or longer
+     * @since 0.9.72+
+     */
+    static boolean windowPinnedLongEnough(long pinnedSince, long now, long requiredMs) {
+        return pinnedSince > 0 && now - pinnedSince >= requiredMs;
     }
 
     /**
