@@ -705,16 +705,17 @@ class ConnectionPacketHandler {
 
                 // One line per adjustment instead of a growth-mode line plus a
                 // result line. Growth names the rule that ran; when none did,
-                // Congested says why on its own line. The window is a count of
-                // messages in flight, not a byte size, and the full connection
-                // snapshot goes: this line ran 36,095 times in two log files at
-                // ~380 characters each, three quarters of that the snapshot.
+                // Congested says why beside it - one short clause does not earn
+                // its own continuation line. The window is a count of messages in
+                // flight, not a byte size, and the full connection snapshot goes:
+                // this line ran 36,095 times in two log files at ~380 characters
+                // each, three quarters of that the snapshot.
                 if (_log.shouldDebug()) {
                     _log.debug(con.shortLabel() + " -> Window adjusted: " + newWindowSize + " messages" +
                                " * Previous: " + oldWindow + " messages" +
                                "\n* Growth: " + (growth != null ? growth : "none") +
                                " * ACKed: " + acked + " packets * Resends: " + numResends +
-                               (growth != null ? "" : "\n* Congested: " + congested));
+                               (growth != null ? "" : " * Congested: " + congested));
                 }
             } else {
                 if (_log.shouldDebug()) {
