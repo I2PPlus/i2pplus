@@ -65,7 +65,7 @@ public class JSONRPC2Servlet extends HttpServlet {
      */
     private static final long FORM_NONCE_TTL_MS = 10 * 60 * 1000L;
     /**
-     * Password-form nonces this servlet has handed out, nonce -> the time it
+     * Password-form nonces this servlet has handed out, nonce -&gt; the time it
      * stops being usable. Held here rather than in the session because the
      * standalone server has no session manager at all: it wires a plain
      * ServletHandler, so getSession() throws there.
@@ -322,7 +322,7 @@ public class JSONRPC2Servlet extends HttpServlet {
      * Is this a token the given store handed out and not yet used? A match is
      * consumed here, so the same submission cannot be replayed.
      *
-     * @param nonces the tokens handed out, token -> the time each stops being usable
+     * @param nonces the tokens handed out, token -&gt; the time each stops being usable
      * @param submitted the token from the form, null if the field was left out
      * @param now the current time in ms
      * @return true if the token is present, unused and unexpired

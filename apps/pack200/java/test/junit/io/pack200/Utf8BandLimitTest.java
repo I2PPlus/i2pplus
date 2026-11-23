@@ -24,8 +24,19 @@ import junit.framework.TestCase;
 public class Utf8BandLimitTest extends TestCase {
 
     /**
+     * A test over the two UTF8 constant-pool checks in {@link PackageReader}.
+     * The checks are static, so the case holds no state of its own.
+     */
+    public Utf8BandLimitTest() {
+    }
+
+    /**
      * The shape a real packer produces: a prefix no longer than the string it
      * is shared with, and a total within the class file's own limit.
+     *
+     * @throws IOException if a run written this way is rejected, which is the
+     *                     test failing - the calls below assert acceptance by
+     *                     not throwing
      */
     public void testAcceptsWhatThePackerWrites() throws IOException {
         PackageReader.checkUtf8Run(0, 0, 0);
@@ -86,6 +97,9 @@ public class Utf8BandLimitTest extends TestCase {
      * legitimate packs. The unpacked class is not byte-identical to the input:
      * the packer reorders the constant pool, so the checks here are that a
      * class file came out, and that it is the same class file in size.
+     *
+     * @throws Exception if the class file cannot be read from the classpath,
+     *                   packed, or unpacked far enough to be measured
      */
     public void testRealClassStillRoundTrips() throws Exception {
         String name = "io/pack200/PackageReader.class";

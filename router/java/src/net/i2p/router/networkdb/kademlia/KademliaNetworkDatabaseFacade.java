@@ -4119,7 +4119,7 @@ return false;
      * The full base32 forms of the key and of the LeaseSet that was refused, on
      * continuation lines, but only when the two 8-character forms the failure
      * line already prints are identical.
-     * <p>A line reading "failed [i5dnly7y] -> Key does not match the LeaseSet
+     * <p>A line reading "failed [i5dnly7y] -&gt; Key does not match the LeaseSet
      * destination [i5dnly7y]" contradicts itself to anyone who cannot see the
      * rest of the hash; the measured case printed the same 8 characters on both
      * sides 1,639 times. The full forms show where the two hashes part company.

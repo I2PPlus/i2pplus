@@ -8,7 +8,7 @@ import org.junit.Test;
  * Tests for closing a hosted handshake the peer never completes.
  * <p>A peer that retransmits its SYN gets its SYN-ACK answered until the re-send cap
  * derived from its own connect window is spent, the cap
- * {@link Connection#computeSynAckResendCap(long, int)} derives from that window and
+ * {@link Connection#computeSynAckResendCap(long, long)} derives from that window and
  * the re-send spacing. After that the
  * duplicate SYN was simply dropped and the connection kept, so the handshake sat in
  * the dispatch table - a stream id, a table entry and the connection's buffers -

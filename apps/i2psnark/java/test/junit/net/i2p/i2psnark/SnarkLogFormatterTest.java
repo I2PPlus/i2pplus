@@ -199,7 +199,7 @@ public class SnarkLogFormatterTest {
     }
 
     /**
-     * The caller ends its lead-in at "->", so the space the segment returns is what puts
+     * The caller ends its lead-in at "-&gt;", so the space the segment returns is what puts
      * one space between the arrow and the first word.
      */
     @Test

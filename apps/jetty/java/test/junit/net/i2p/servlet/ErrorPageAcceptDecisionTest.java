@@ -287,6 +287,9 @@ public class ErrorPageAcceptDecisionTest {
      * error page written after the handler started a body - gives no writer
      * rather than an IllegalStateException out of the handler and into the
      * container. Jetty's own loop catches per charset and falls through to null.
+     *
+     * @throws Exception never - stubbing {@code getWriter()}, which declares
+     *                   IOException, is the only reason the clause is there
      */
     @Test
     public void aResponseThatCannotTakeAWriterGivesNoWriter() throws Exception {
@@ -302,6 +305,9 @@ public class ErrorPageAcceptDecisionTest {
      * The same response taken in order: the first charset that works is the one
      * used, and a name the JVM cannot encode is never put on the response. With
      * no header at all the default is the ISO-8859-1 Jetty would have used.
+     *
+     * @throws Exception never - stubbing {@code getWriter()}, which declares
+     *                   IOException, is the only reason the clause is there
      */
     @Test
     public void theFirstCharsetThatWorksIsUsed() throws Exception {

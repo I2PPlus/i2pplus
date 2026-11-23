@@ -60,9 +60,9 @@ public class SearchFailureReasonTest {
     }
 
     /**
-     * The three reasons are what the log prints after "failed -> ", so each is
-     * capitalized prose on one line, and short enough to leave the rest of the
-     * line for the peer count, elapsed time and window left that follow it.
+     * The three reasons are what the log prints after "failed -&gt; ", so each
+     * is capitalized prose on one line, and short enough to leave the rest of
+     * the line for the peer count, elapsed time and window left that follow it.
      */
     @Test
     public void reasonsAreFitToLog() {
