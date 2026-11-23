@@ -1825,8 +1825,12 @@ class ConnectionManager {
         // SYNs it burned doing so - 18,727 give-ups in one 80-minute log set, none
         // of them counted anywhere. The value is the hard SYN sends only, excluding
         // soft-failure resends and tail-loss probes - see Connection.synHardSends().
+        // A connection the peer opened counts its unanswered SYN-ACKs here too: the
+        // same budget decides both, and the two are told apart in the log entry, not
+        // in the stat.
         _context.statManager().createRequiredRateStat("stream.synUnackedSends",
-                "SYN sends that went unanswered when the connect gave up", "Stream", RATES);
+                "SYN or SYN-ACK sends that went unanswered when the handshake gave up",
+                "Stream", RATES);
         _context.statManager().createRequiredRateStat("stream.connectCooldownMs",
                 "Milliseconds parked in a destination's connect cooldown", "Stream", RATES);
         _context.statManager().createRequiredRateStat("stream.connectSlotWaitMs",

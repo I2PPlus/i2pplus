@@ -47,7 +47,20 @@ public class ConnectionLogFormatTest {
     public void synGiveUpEntryCountsTheUnansweredSends() {
         assertEquals("[abcdefgh] -> SYN not acknowledged, closing" +
                      "\n* SYN sends: 12 * Soft resends: 3 * Age: 9s",
-                     Connection.synGiveUpLine("[abcdefgh]", 12, 3, 9000L));
+                     Connection.synGiveUpLine("[abcdefgh]", false, 12, 3, 9000L));
+    }
+
+    /**
+     * A connection the peer opened never sends a SYN, so its give-up cannot
+     * report one as unanswered: the sequence-0 packet is the SYN-ACK, and
+     * "SYN not acknowledged" reads as a failed outbound connect on what is a
+     * server connection.
+     */
+    @Test
+    public void synGiveUpEntryNamesTheSynAckOnAnInboundConnection() {
+        assertEquals("[abcdefgh] -> SYN-ACK not acknowledged, closing" +
+                     "\n* SYN-ACK sends: 4 * Soft resends: 0 * Age: 13s",
+                     Connection.synGiveUpLine("[abcdefgh]", true, 4, 0, 13000L));
     }
 
     /**

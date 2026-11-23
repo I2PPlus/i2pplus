@@ -5110,14 +5110,21 @@ class Connection {
     }
 
     /**
-     * The entry for a connect that stops resending its SYN because the peer has
-     * never acknowledged it.
+     * The entry for a handshake that stops resending its synchronize packet
+     * because the peer has never acknowledged it.
      * <p>The send count is the point of the line: it says whether the give-up
      * fired on the send budget or on the wall clock, and 18,727 of these entries
      * in one 80-minute log set carried neither number. Only the hard sends are
      * evidence of an unanswered SYN - see {@link #synHardSends}.
+     * <p>Name the packet that went unanswered. A connection the peer opened never
+     * sends a SYN at all - its sequence-0 packet is the SYN-ACK - so logging that
+     * side as "SYN not acknowledged" describes the reverse of what died, and a
+     * reader looking for a failed outbound connect finds a server connection
+     * instead.
      *
      * @param label the connection's {@link #shortLabel()} prefix
+     * @param inbound true for a connection the peer opened, where the packet
+     *                going unanswered is our SYN-ACK
      * @param synSends hard SYN sends that went unanswered
      * @param softResends resends triggered by a soft failure, which never reached
      *                    the tunnel fabric and are not evidence of a dead path
@@ -5125,9 +5132,11 @@ class Connection {
      * @return the log entry, never null
      * @since 0.9.72+
      */
-    static String synGiveUpLine(String label, int synSends, int softResends, long ageMs) {
-        return label + " -> SYN not acknowledged, closing" +
-               "\n* SYN sends: " + synSends + " * Soft resends: " + softResends +
+    static String synGiveUpLine(String label, boolean inbound, int synSends,
+                                int softResends, long ageMs) {
+        String packet = inbound ? "SYN-ACK" : "SYN";
+        return label + " -> " + packet + " not acknowledged, closing" +
+               "\n* " + packet + " sends: " + synSends + " * Soft resends: " + softResends +
                " * Age: " + DataHelper.formatDuration(ageMs);
     }
 
@@ -5980,12 +5989,14 @@ class Connection {
                                                       getSynPhaseBudgetMs(),
                                                       packet.getNumSends(),
                                                       packet.getNumSoftResends()))) {
-                    // The SYN was never ACKed and the handshake has run out of
-                    // budget, so stop resending instead of running to maxResends
-                    // (~4 min). Two independent bounds: the send count
-                    // (getMaxSynSends(), scaled up from maxSynResends so it covers
-                    // the connect window) and the wall clock, measured from the SYN
-                    // packet's own creation (synPhaseAgeMs()) against
+                    // The synchronize packet was never ACKed and the handshake has
+                    // run out of budget, so stop resending instead of running to
+                    // maxResends (~4 min). On a connection the peer opened, the
+                    // sequence-0 packet is our SYN-ACK, not a SYN, and it is the
+                    // SYN-ACK that went unanswered. Two independent bounds: the send
+                    // count (getMaxSynSends(), scaled up from maxSynResends so it
+                    // covers the connect window) and the wall clock, measured from
+                    // the SYN packet's own creation (synPhaseAgeMs()) against
                     // getSynPhaseBudgetMs() — not from the connection's creation,
                     // which includes route lookup, LeaseSet fetch and the
                     // delayed-SYN wait, none of which are the peer's silence.
@@ -6007,7 +6018,7 @@ class Connection {
                                                 packet.getNumTlpProbes());
                     _context.statManager().addRateData("stream.synUnackedSends", synSends);
                     debugPeriodic("syn-give-up",
-                                  synGiveUpLine(shortLabel(), synSends,
+                                  synGiveUpLine(shortLabel(), _isInbound, synSends,
                                                 packet.getNumSoftResends(),
                                                 synPhaseAgeMs(_context.clock().now(),
                                                               packet.getCreatedOn())));
