@@ -721,9 +721,10 @@ public class IterativeSearchJob extends FloodSearchJob {
             // Ask anybody, they may not return the answer but they will return a few ff peers we can go look up,
             // so this situation should be temporary
             if (_log.shouldWarn() && uptime > 2*60*1000) {
-                _log.warn("Cannot query remote floodfills -> None known (this should resolve shortly)");
+                _log.warn("Cannot query remote floodfills -> None in NetDb we are able to ask");
             }
-            List<Hash> all = new ArrayList<>(_facade.getAllRouters());
+            List<Hash> all = new ArrayList<>(fallbackRouters(_facade.getAllRouters(),
+                                                             getContext().netDb().getAllRouters()));
             if (all.isEmpty()) {
                 if (_log.shouldLog(Log.ERROR) && uptime > 3*60*1000) {
                   _log.error("No peers in NetDb - reseed required");
@@ -972,6 +973,30 @@ public class IterativeSearchJob extends FloodSearchJob {
             if (closest.size() > cap) {closest.poll();}
         }
         candidates.addAll(closest);
+    }
+
+    /**
+     * The peers a search may fall back to asking when it has no floodfill it is
+     * able to ask.
+     * <p>They come from the main NetDb, not from the facade the search happens
+     * to run on. A client lookup runs on a client sub-DB facade, and
+     * {@link net.i2p.router.NetworkDatabaseFacade#getAllRouters()} is empty for every client
+     * DB by definition, so reading the fallback off the search's own facade
+     * reads a database that can never answer. On a live router holding 6,094
+     * routers, every floodfill it knew being below the 0.9.62 store gate, that
+     * made this fallback dead: 270 LeaseSet searches in 12 minutes logged
+     * "No peers in NetDb - reseed required" and failed in 3ms having asked
+     * nobody, while the routers to ask were in the other database all along.
+     *
+     * @param searchDb the routers the facade this search runs on can name -
+     *                 empty for a client sub-DB, the main NetDb's set otherwise
+     * @param mainDb the routers the router knows as a whole, from the main NetDb
+     * @return the set to choose fallback peers from, never null; empty only
+     *         when the router knows no routers at all
+     * @since 0.9.72+
+     */
+    static Set<Hash> fallbackRouters(Set<Hash> searchDb, Set<Hash> mainDb) {
+        return searchDb.isEmpty() ? mainDb : searchDb;
     }
 
     /**
