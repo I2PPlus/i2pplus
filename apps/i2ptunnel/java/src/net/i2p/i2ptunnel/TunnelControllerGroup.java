@@ -372,6 +372,20 @@ public class TunnelControllerGroup implements ClientApp {
         return total;
     }
 
+    /**
+     * How many server tunnels currently own a private handler pool. The Tuner
+     * divides the summed handler-thread budget across this count to get the
+     * ceiling any one tunnel's pool may reach - see
+     * {@code Tuner.perTunnelThreadCap}.
+     *
+     * @return the number of live server handler pools, 0 if none
+     * @since 0.9.72+
+     */
+    public static int getServerHandlerPoolCount() {
+        TunnelControllerGroup g = instance;
+        return g == null ? 0 : g._serverHandlers.size();
+    }
+
     /** Tuned by Tuner: default per-tunnel ceiling on server handler threads. */
     private static volatile int serverThreadsPerTunnel =
         Math.max(64, Math.min(SERVER_HANDLER_PER_TUNNEL_MAX, SystemVersion.getCores() * 16));

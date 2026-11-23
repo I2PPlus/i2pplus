@@ -1000,6 +1000,31 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private static int memoryDerivedClientThreadMax() {
         return Math.max(256, Math.min(16384, (int) (SystemVersion.getMaxMemory() / (2 * 1024 * 1024))));
     }
+    /**
+     * Ceiling for one server tunnel's private handler pool, given the summed
+     * handler-thread budget every server tunnel shares.
+     * <p>The per-tunnel ceiling and the summed budget used to be derived the same
+     * way, both from {@link #memoryDerivedClientThreadMax()}, so on a 4 GiB heap
+     * each tunnel's pool could reach the whole 2,048-thread budget and the
+     * ceilings summed to N times it. A live router moved both parameters to
+     * 2,044-2,048 in lockstep, because both read the same aggregate queue depth,
+     * and the only thing keeping the total honest was
+     * {@code TunnelControllerGroup.scaleDemandsToCeiling()} trimming the pools
+     * after they had been sized. Dividing the budget across the pools that have
+     * to share it is what makes the ceilings sum to the budget by construction.
+     *
+     * @param budget the summed handler-thread budget all server tunnels share
+     * @param pools how many server tunnels own a handler pool; 0, 1 or a failed
+     *              lookup (-1) leaves the whole budget to the one pool
+     * @param min the floor, so a large number of tunnels cannot starve one
+     * @param hardMax the parameter's own ceiling, above which it cannot go
+     * @return the ceiling for one tunnel's private pool, at least {@code min}
+     * @since 0.9.72+
+     */
+    static int perTunnelThreadCap(int budget, int pools, int min, int hardMax) {
+        int cap = pools > 1 ? budget / pools : budget;
+        return Math.max(min, Math.min(hardMax, cap));
+    }
     /** ML-KEM precalc min/max — each pair ~3.5KB, scale with cores and memory. */
     private static final int MLKEM_FACTOR = Math.max(MEM_FACTOR, CORE_FACTOR);
     /** Smallest ML-KEM precomputation pool allowed. */
@@ -14260,9 +14285,12 @@ protected int computeTarget(double observed) {
      * <p>Each server tunnel owns a private handler pool sized at most this cap
      * (unless the tunnel sets an explicit {@code i2ptunnel.server.threads}
      * override); the pools are summed under the global budget tuned by
-     * {@link I2PTunnelServerHandlerThreadsParam}. The same saturation policy as
-     * the global budget applies here so the default moves with aggregate load
-     * while a single flood stays contained to its own port.
+     * {@link I2PTunnelServerHandlerThreadsParam}. The cap is that budget divided
+     * across the server tunnels which have to share it, so the ceilings sum to
+     * the budget instead of every tunnel being allowed all of it - see
+     * {@link #perTunnelThreadCap(int, int, int, int)}. The same saturation
+     * policy as the global budget applies here so the default moves with
+     * aggregate load while a single flood stays contained to its own port.
      *
      * @since 0.9.71+
      */
@@ -14272,8 +14300,9 @@ protected int computeTarget(double observed) {
             super("i2ptunnel.server.threads", "I2PTunnel server threads per tunnel (default)",
                   SUB_TUNNEL,
                   2, 4096, 8, "i2ptunnel.serverHandler.queueDepth", _context);
-            // Bound the reachable ceiling at what the max heap can host as OS threads
-            // (see memoryDerivedClientThreadMax), same as the global budget param.
+            // Hard bound at what the max heap can host as OS threads (see
+            // memoryDerivedClientThreadMax). The ceiling actually applied is a
+            // share of that, per server tunnel - see computeTarget().
             _effMax = Math.min(_max, memoryDerivedClientThreadMax());
         }
 
@@ -14299,7 +14328,12 @@ protected int computeTarget(double observed) {
             double blockingTime = getAdditionalStat(_context, "i2ptunnel.serverHandler.blockingHandleTime");
             double active = getAdditionalStat(_context, "i2ptunnel.serverHandler.active");
             double synExpire = getAdditionalStat(_context, "stream.con.synExpireRate");
-            return computeServerHandlerThreads(current, _min, _effMax, observed, active,
+            // A share of the summed budget, recomputed each pass: the number of
+            // server tunnels changes as they are started and stopped, and the
+            // ceiling only stays honest if it tracks them.
+            int pools = I2PTunnelReflector.invokeGetInt("getServerHandlerPoolCount");
+            int cap = perTunnelThreadCap(memoryDerivedClientThreadMax(), pools, _min, _effMax);
+            return computeServerHandlerThreads(current, _min, cap, observed, active,
                                               blockingTime, jobLag, synExpire);
         }
     }
