@@ -1812,15 +1812,19 @@ class ConnectionManager {
         _context.statManager().createRequiredRateStat("stream.connectFailed", "Elapsed time (ms) of a failed outbound connect attempt", "Stream", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRequiredRateStat("stream.connectBackoffRefused", "Outbound connects refused by the destination's connect cooldown (no SYN sent)", "Stream", RATES);
         // A SYN-phase rotation asks the pool for a fresh outbound tunnel. Room is
-        // how much of the connect's own SYN budget was left when it was spent -
-        // enough for a spare tunnel, or not nearly enough for a build; opened is
-        // the gap between spending it and the SYN-ACK arriving, so the two together
-        // say whether the rotation is what opened the connect. 1,342 rotations ran
-        // through one log set with neither number recorded anywhere.
+        // how much of the handshake's own SYN budget was left when it was spent -
+        // enough for a spare tunnel, or not nearly enough for a build; opened is the
+        // gap between spending it and the synchronize packet being acknowledged, so
+        // the two together say whether the rotation is what opened the handshake.
+        // 1,342 rotations ran through one log set with neither number recorded
+        // anywhere. Both count either direction: on a connection the peer opened, the
+        // packet the fresh tunnel is there to carry is our SYN-ACK, and those are the
+        // majority. An earlier gate on the outbound side alone left opened reporting
+        // no events at all while the rotation ran 115 times a minute.
         _context.statManager().createRequiredRateStat("stream.synRotationRoomMs",
                 "Milliseconds of SYN-phase budget left when the outbound tunnel was rotated", "Stream", RATES);
         _context.statManager().createRequiredRateStat("stream.synRotationOpened",
-                "Milliseconds from an outbound tunnel rotation to the SYN-ACK that opened the connect", "Stream", RATES);
+                "Milliseconds from an outbound tunnel rotation to the handshake it opened", "Stream", RATES);
         // A connect that gives up on an unanswered SYN says nothing about how many
         // SYNs it burned doing so - 18,727 give-ups in one 80-minute log set, none
         // of them counted anywhere. The value is the hard SYN sends only, excluding

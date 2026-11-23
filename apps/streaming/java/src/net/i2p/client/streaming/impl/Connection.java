@@ -1501,9 +1501,11 @@ class Connection {
     }
 
     /**
-     * Count the one outbound-tunnel rotation this connect spent as what it was
-     * spent for, once the SYN-ACK arrives, and clear the tracker so a connection
-     * reports at most once.
+     * Count the one outbound-tunnel rotation this handshake spent as what it was
+     * spent for, once its synchronize packet is acknowledged, and clear the
+     * tracker so a connection reports at most once. The acknowledgement is the
+     * peer's SYN-ACK on a connection we opened, or its ACK of our SYN-ACK on one
+     * it opened.
      * <p>The value is the gap between spending the rotation and the handshake
      * completing - the only direct measure of what a rotation buys. Read beside
      * {@code stream.synRotationRoomMs}, which records how much SYN-phase budget
@@ -3788,10 +3790,16 @@ class Connection {
         // so the stall counter in timeReached() can reset.
         if (_highestAckedThrough.get() > oldHighest) {
             _ackProgress = true;
-            // The first ACK on an outbound connect is the SYN-ACK, and it settles
-            // the one question the rotation cost is measured against: whether the
-            // fresh tunnel it asked the pool for is what opened the handshake.
-            if (oldHighest < 0 && !_isInbound)
+            // The first ACK is the handshake completing: the peer's SYN-ACK on a
+            // connection we opened, its ACK of our SYN-ACK on one it opened. Either
+            // way it settles the one question the rotation cost is measured against -
+            // whether the fresh tunnel it asked the pool for is what opened the
+            // handshake. Gating this on !_isInbound hid every rotation on an inbound
+            // connection, and measured live those are the overwhelming majority
+            // (19 logged rotations carried 117, 127, 80 and 79 similar suppressed, all
+            // inbound), so the stat read "no events" while the rotation ran 115 times
+            // a minute.
+            if (oldHighest < 0)
                 noteSynRotationOpened();
         }
 
@@ -5141,6 +5149,31 @@ class Connection {
     }
 
     /**
+     * The entry for spending a handshake's one outbound-tunnel rotation.
+     * <p>The budget left is the point of the line: it says whether the rotation
+     * can ride a tunnel the pool already holds or has to start a build this
+     * handshake will not live to see.
+     * <p>Name the packet that went unanswered. On a connection the peer opened,
+     * the sequence-0 packet is our SYN-ACK, and the fresh outbound tunnel exists
+     * to carry that SYN-ACK - "SYN unacked" on that side reads as a failed
+     * outbound connect, which is the opposite connection.
+     *
+     * @param label the connection's {@link #shortLabel()} prefix
+     * @param inbound true for a connection the peer opened, where the packet
+     *                going unanswered is our SYN-ACK
+     * @param sends sends of that packet so far
+     * @param roomMs SYN-phase budget left, in ms, when the rotation was claimed
+     * @return the log entry, never null
+     * @since 0.9.72+
+     */
+    static String synRotationLine(String label, boolean inbound, int sends, long roomMs) {
+        String packet = inbound ? "SYN-ACK" : "SYN";
+        return label + " -> " + packet + " not acknowledged after " + sends +
+               " sends, rotating to a fresh outbound tunnel" +
+               " * Budget left: " + DataHelper.formatDuration(roomMs);
+    }
+
+    /**
      * The connection-manager half of a disconnect entry. Three disconnect paths
      * report it, and printing the boolean would read as "true" where the reader
      * needs to know whether the manager dropped the connection.
@@ -6069,15 +6102,17 @@ class Connection {
                                                                     packet.getCreatedOn()));
                         _context.statManager().addRateData("stream.synRotationRoomMs", room);
                         // 20,234 of these in one 80-minute window at DEBUG, 2.3% of the
-                        // whole log, nearly all of them one client tunnel dialing peers
-                        // that never answer - so throttled rather than per-send, and at a
-                        // level the standard config can see, because the budget left is
-                        // the number that says whether a rotated tunnel could ever pay.
+                        // whole log - so throttled rather than per-send, and at a level
+                        // the standard config can see, because the budget left is the
+                        // number that says whether a rotated tunnel could ever pay.
+                        // Measured live on 2026-11-23, they are not one client tunnel
+                        // dialing dead peers: 19 logged lines carried 117, 127, 80 and
+                        // 79 similar suppressed, and every one of them was an inbound
+                        // connection to a locally hosted server destination whose
+                        // SYN-ACK never arrived.
                         _log.infoThrottled("streaming-syn-rotate",
-                                           shortLabel() + " -> SYN unacked after " +
-                                           packet.getNumSends() + " sends, rotating to a " +
-                                           "fresh outbound tunnel * Budget left: " +
-                                           DataHelper.formatDuration(room));
+                                           synRotationLine(shortLabel(), _isInbound,
+                                                           packet.getNumSends(), room));
                     }
 
                     packet.setResendDelay(_options.getResendDelay() / 1000);

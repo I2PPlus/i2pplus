@@ -64,6 +64,30 @@ public class ConnectionLogFormatTest {
     }
 
     /**
+     * The rotation entry's number is the budget left, because that is what says
+     * whether a fresh tunnel could be used at all - a spare is instant, a build
+     * is not.
+     */
+    @Test
+    public void rotationEntryStatesTheBudgetLeft() {
+        assertEquals("[abcdefgh] -> SYN not acknowledged after 3 sends, " +
+                     "rotating to a fresh outbound tunnel * Budget left: 6s",
+                     Connection.synRotationLine("[abcdefgh]", false, 3, 6000L));
+    }
+
+    /**
+     * On a connection the peer opened, the packet the fresh outbound tunnel
+     * exists to carry is our SYN-ACK, and saying "SYN" here describes the other
+     * direction of connection.
+     */
+    @Test
+    public void rotationEntryNamesTheSynAckOnAnInboundConnection() {
+        assertEquals("[abcdefgh] -> SYN-ACK not acknowledged after 2 sends, " +
+                     "rotating to a fresh outbound tunnel * Budget left: 60s",
+                     Connection.synRotationLine("[abcdefgh]", true, 2, 60000L));
+    }
+
+    /**
      * The manager's result line names the outcome, then the reason, then how
      * long the attempt ran - never the method that wrote it.
      */
