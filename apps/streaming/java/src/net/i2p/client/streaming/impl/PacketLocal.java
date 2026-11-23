@@ -336,21 +336,51 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
         final Connection con = _connection;
         final long flight = _lastSend > 0 ? _context.clock().now() - _lastSend : -1;
         final long rtt = con != null ? con.getOptions().getRTT() : 0;
-        if (cnt >= Connection.FAST_RETRANSMIT_THRESHOLD && (!_retransmitted) && con != null &&
-            Connection.nackIsLossEvidence(flight, rtt)) {
+        if (!isNackStorm(cnt, _retransmitted, con != null)) {return;}
+        if (Connection.nackIsLossEvidence(flight, rtt)) {
             _retransmitted = true;
             con.newResendPacketEvent(this).fastRetransmit();
-
+            // Counted as well as logged: the decision is the single most
+            // consequential one in loss recovery, and its log line is debug on a
+            // logger the standard config does not enable.
+            _context.statManager().addRateData("stream.fastRetransmit", 1);
+            _log.infoThrottled("streaming-fast-retransmit",
+                               streamTag() + " -> Fast retransmit on the NACK storm" +
+                               "\n* NACKs: " + cnt + " * Since send: " +
+                               DataHelper.formatDuration(flight) +
+                               " * NACK floor: " + Connection.nackTrustFlightMs(rtt) + "ms");
+        } else {
+            _context.statManager().addRateData("stream.fastRetransmitDeclined", 1);
             if (_log.shouldDebug()) {
-                _log.debug("Resending on the NACK storm -> " + streamTag() +
-                           "\n* NACKs: " + cnt + " * Since send: " + flight +
-                           "ms * NACK floor: " + Connection.nackTrustFlightMs(rtt) + "ms");
+                _log.debug(streamTag() + " -> NACK storm not trusted as loss evidence" +
+                           "\n* NACKs: " + cnt + " * Since send: " +
+                           DataHelper.formatDuration(flight) +
+                           " * NACK floor: " + Connection.nackTrustFlightMs(rtt) + "ms");
             }
-        } else if (_log.shouldDebug()) {
-            _log.debug("Not resending on the NACK storm -> " + streamTag() +
-                       "\n* NACKs: " + cnt + " * Since send: " + flight +
-                       "ms * NACK floor: " + Connection.nackTrustFlightMs(rtt) + "ms");
         }
+    }
+
+    /**
+     * Pure decision: is this NACK one of a storm the fast-retransmit decision
+     * has to be made about?
+     * <p>Below {@link Connection#FAST_RETRANSMIT_THRESHOLD} there is nothing to
+     * decide, and the old code logged "not resending on the NACK storm" for the
+     * first and second NACK of a packet, about a storm that had not happened. A
+     * packet already fast-retransmitted, or one whose connection has gone, is
+     * not a decision either - and none of the three is counted in
+     * {@code stream.fastRetransmitDeclined}, which is what keeps that stat
+     * reading as declined decisions rather than every NACK received.
+     *
+     * @param nackCount NACKs for this packet so far, this one included
+     * @param alreadyRetransmitted true if this packet was fast-retransmitted
+     * @param hasConnection true while the packet is still bound to a connection
+     * @return true when the fast-retransmit decision must be made now
+     * @since 0.9.72+
+     */
+    static boolean isNackStorm(int nackCount, boolean alreadyRetransmitted,
+                               boolean hasConnection) {
+        return nackCount >= Connection.FAST_RETRANSMIT_THRESHOLD &&
+               !alreadyRetransmitted && hasConnection;
     }
 
     /**

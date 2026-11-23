@@ -1662,6 +1662,16 @@ class ConnectionManager {
         _context.statManager().createRateStat("stream.con.lifetimeDupBytesSent", "How many bytes we resend on a stream", "Stream", EVENT_RATES);
         _context.statManager().createRateStat("stream.con.lifetimeDupMessagesReceived", "Number of duplicate messages we receive on a stream", "Stream", RATES);
         registerRtxRatioStats(_context.statManager());
+        // Loss-recovery decisions. The fast-retransmit branch is a debug line on
+        // a logger the standard config does not enable, so the decision is
+        // counted here too: the pair separates "we acted on a NACK storm" from
+        // "we did not trust it yet", which is what S-03 changed.
+        _context.statManager().createRateStat("stream.fastRetransmit",
+                "Packets fast-retransmitted on a NACK storm before the retransmit timer fired",
+                "Stream", RATES);
+        _context.statManager().createRateStat("stream.fastRetransmitDeclined",
+                "NACK storms not trusted as loss evidence, the packet had not been in flight one way round",
+                "Stream", RATES);
         _context.statManager().createRequiredRateStat("stream.con.lifetimeRTT", "Final RTT when a stream closes", "Stream", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRequiredRateStat("stream.con.lifetimeSendWindowSize", "Final send window size when a stream closes", "Stream", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRateStat("stream.receiveActive", "Number of active streams when a new one is received (period being not yet dropped)", "Stream", RATES);
