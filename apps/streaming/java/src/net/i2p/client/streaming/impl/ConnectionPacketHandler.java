@@ -355,9 +355,13 @@ class ConnectionPacketHandler {
             con.incrementBytesReceived(packet.getPayloadSize());
 
             if (delayReq && packet.getOptionalDelay() <= 0) {
+                // The packet itself was described one line earlier, on this same
+                // thread and at this same level - the inbound-packet report above
+                // carries the sequence, the flags and the payload size. Repeating
+                // the dump here doubled every accepted packet in the log: a live
+                // router wrote 39,665 of these beside 39,665 inbound reports.
                 if (_log.shouldDebug())
-                    _log.debug("Scheduling immediate ACK -> " +
-                               packet.streamTag() + packet.formatInline());
+                    _log.debug("Scheduling immediate ACK -> " + packet.streamTag());
                 // honor request "almost" immediately
                 // Note: the delay below _may_ be a big limiter in how fast local "loopback" connections
                 // can go, however if it goes too fast then we start choking which causes
@@ -371,8 +375,7 @@ class ConnectionPacketHandler {
                     delay = con.getOptions().getSendAckDelay();
                 con.setNextSendTime(delay + _context.clock().now());
                 if (_log.shouldDebug())
-                    _log.debug("Scheduling ACK in " + delay + "ms -> " +
-                               packet.streamTag() + packet.formatInline());
+                    _log.debug("Scheduling ACK in " + delay + "ms -> " + packet.streamTag());
             }
         } else {
             if ((seqNum > 0) || (packet.getPayloadSize() > 0) || isSYN) {
