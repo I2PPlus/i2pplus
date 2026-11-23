@@ -548,7 +548,7 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
                 int afterQueued = _connection.getUnackedPacketsSent();
                 _log.debug("Slow send slot -> Took " + DataHelper.formatDuration(_acceptedOn - before) +
                            " * Queued behind: " + queued + " packets" +
-                           "\n* Window size: " + window + " * Accepted with: " + afterQueued + " queued" +
+                           "\n* Window size: " + window + " messages * Accepted with: " + afterQueued + " queued" +
                            (isCancelled() ? " * Cancelled after the slot" : "") +
                            "\n* " + packetDesc);
             }

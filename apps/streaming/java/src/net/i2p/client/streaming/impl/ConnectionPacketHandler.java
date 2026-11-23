@@ -734,13 +734,13 @@ class ConnectionPacketHandler {
 
     /**
      * Credit increment for the deterministic congestion-avoidance ratchet.
-     * Accumulated in 16.16 fixed-point; each whole unit corresponds to one
+     * Accumulated in 20.16 fixed-point; each whole unit corresponds to one
      * packet-in-flight increment on the congestion window.
      * <p>The expected value equals {@code effAcked / (caFactor * windowSize)},
      * which is the probability that the old random gate would have
      * incremented.
      *
-     * @param accum the 16.16 fixed-point accumulator so far
+     * @param accum the 20.16 fixed-point accumulator so far
      * @param effAcked effective number of packets ACKed this round
      * @param caFactor congestion-avoidance growth divisor
      * @param windowSize current congestion window

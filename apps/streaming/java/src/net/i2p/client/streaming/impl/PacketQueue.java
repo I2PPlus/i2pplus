@@ -352,7 +352,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
         } else {
             packet.incrementSends();
             if (con != null && _log.shouldDebug()) {
-                String suffix = "Window size: " + con.getOptions().getWindowSize() + " * RTO: " + con.getOptions().getRTO();
+                String suffix = "Window size: " + con.getOptions().getWindowSize() + " messages * RTO: " + con.getOptions().getRTO() + "ms";
                 con.getConnectionManager().getPacketHandler().displayPacket(packet, "SEND", suffix);
             }
             if (I2PSocketManagerFull.pcapWriter != null &&

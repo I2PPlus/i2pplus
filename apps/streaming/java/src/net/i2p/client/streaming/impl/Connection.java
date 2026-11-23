@@ -5138,10 +5138,10 @@ class Connection {
         // detail for investigating one connection, which is what debug is for.
         if  (_log.shouldDebug()) {
             buf.append("\n* Up: ").append(DataHelper.formatDuration(now - _createdOn))
-               .append(" * Window size: ").append(_options.getWindowSize())
-               .append(" * Congestion window: ").append(_congestionWindowEnd - _highestAckedThrough.get())
-               .append(" * RTT: ").append(_options.getRTT())
-               .append(" * RTO: ").append(_options.getRTO())
+               .append(" * Window size: ").append(_options.getWindowSize()).append(" messages")
+               .append(" * Congestion window: ").append(_congestionWindowEnd - _highestAckedThrough.get()).append(" messages")
+               .append(" * RTT: ").append(_options.getRTT()).append("ms")
+               .append(" * RTO: ").append(_options.getRTO()).append("ms")
             // not synchronized to avoid some kooky races
                .append(" * UnACKed out: ").append(_outboundPackets == null ? 0 : _outboundPackets.size())
                .append(" * UnACKed in: ").append(getUnackedPacketsReceived());
@@ -5149,15 +5149,17 @@ class Connection {
             long[] nacks = _inputStream.getNacks();
             if (nacks != null) {
                 missing = nacks.length;
-                buf.append(" [").append(missing).append(" missing]");
+                // A bracketed count reads as a broken link in the log viewer, and
+                // the number is a count of messages, not a hash.
+                buf.append(" * Missing: ").append(missing).append(" messages");
             }
             buf.append("\n* Sent: ").append(1 + _lastSendId.get())
                .append(" * Received: ").append(1 + _inputStream.getHighestBlockId() - missing)
                .append(" * ACKThru: ").append(_highestAckedThrough.get())
-               .append(" * SSThresh: ").append(_ssthresh)
-               .append(" * MinRTT: ").append(_options.getMinRTT())
-               .append(" * MaxWin: ").append(_options.getMaxWindowSize())
-               .append(" * MTU: ").append(_options.getMaxMessageSize());
+               .append(" * SSThresh: ").append(_ssthresh).append(" messages")
+               .append(" * MinRTT: ").append(_options.getMinRTT()).append("ms")
+               .append(" * MaxWin: ").append(_options.getMaxWindowSize()).append(" messages")
+               .append(" * MTU: ").append(_options.getMaxMessageSize()).append("B");
             if (getResetSent())
                 buf.append("\n* Reset sent: ").append(DataHelper.formatDuration(now - getResetSentOn())).append(" ago");
             if (getResetReceived())

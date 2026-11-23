@@ -157,7 +157,7 @@ class TCBShare {
             _log.debug("Congestion cache hit for [" +
                        remote.toShortBase64() + "] -> Local: [" +
                        local.toShortBase64() + "] * RTT: " + rtt + "ms"
-                       + "\n* RTT deviation: " + rttDev + "ms * Window: " + wdw + "B");
+                       + "\n* RTT deviation: " + rttDev + "ms * Window: " + wdw + " messages");
         }
         opts.loadFromCache(rtt,rttDev,wdw);
     }
