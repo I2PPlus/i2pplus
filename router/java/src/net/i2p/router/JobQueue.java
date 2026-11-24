@@ -973,24 +973,26 @@ public class JobQueue {
             return;
         }
 
-        int startKey = -1;
-        for (int i = 0; i < 10000; i++) {
-            if (!_queueRunners.containsKey(Integer.valueOf(i))) {
-                startKey = i;
-                break;
-            }
-        }
-        if (startKey < 0) startKey = _queueRunners.size();
+        int added = 0;
+        int candidate = 0;
 
-        for (int i = 0; i < count; i++) {
-            int key = startKey + i;
-            JobQueueRunner runner = new JobQueueRunner(_context, key);
-            _queueRunners.put(Integer.valueOf(key), runner);
+        while (added < count) {
+            Integer key = Integer.valueOf(candidate++);
+
+            // Scale-down may leave non-contiguous holes. Check each key
+            // independently so an existing live runner is never replaced.
+            if (_queueRunners.containsKey(key)) {
+                continue;
+            }
+
+            JobQueueRunner runner = new JobQueueRunner(_context, key.intValue());
+            _queueRunners.put(key, runner);
             runner.setName("JobQueue" + ThreadNames.seq(_runnerId.incrementAndGet()));
             if (_log.shouldDebug())
                 _log.debug("Starting a runner -> Key: " + key + " * Total runners: " + _queueRunners.size());
             runner.start();
             countRunnerCreated();
+            added++;
         }
 
         if (_log.shouldInfo()) {
