@@ -410,9 +410,10 @@ public class EstablishmentManager {
             e = e.getCause();
         String msg = e.getMessage();
         if (msg == null || msg.isEmpty()) {return e.getClass().getSimpleName();}
-        // the handshake state carries long chains; keep it to one readable line
+        // the handshake state carries long chains; keep the reason inside the
+        // house line, which it shares with the "* Reason: " label in front of it
         msg = msg.replace('\n', ' ').replace('\r', ' ').trim();
-        if (msg.length() > 120) {msg = msg.substring(0, 120) + "...";}
+        if (msg.length() > 80) {msg = msg.substring(0, 80) + "...";}
         // The message, not "ClassName: message". The reason is what the operator
         // reads, and the class of a handshake failure is an implementation detail
         // of whichever check happened to throw - the same rejection reaches this

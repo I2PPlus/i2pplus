@@ -1227,9 +1227,14 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                 // peer that gave up on us first, while a key or payload rejection is a
                 // real protocol failure. They were indistinguishable in the log.
                 long suppressed = EstablishmentManager.getCorruptConfirmSuppressed();
-                _log.warn("[SSU] Corrupt SessionConfirmed received from " + toShortString()
-                          + "\n* " + EstablishmentManager.corruptConfirmReason(re)
-                          + (suppressed > 0 ? " (suppressed " + suppressed + ")" : ""));
+                // The state we were in is the reason a confirmation is corrupt, so
+                // it goes after the arrow, and the root cause of the rejection on a
+                // bullet beside the count of lines this throttle already swallowed.
+                _log.warn("[SSU] Corrupt SessionConfirmed received from "
+                          + Addresses.toString(_aliceIP, _alicePort)
+                          + " -> Rejected in state " + _currentState
+                          + "\n* Reason: " + EstablishmentManager.corruptConfirmReason(re)
+                          + (suppressed > 0 ? " * Similar suppressed: " + suppressed : ""));
             }
             // Track probing attempts (skip if already blocklisted)
             if (!_context.blocklist().isBlocklisted(Addresses.toString(_aliceIP))) {
