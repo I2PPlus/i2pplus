@@ -2043,20 +2043,24 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                         if (_log.shouldInfo()) {
                             _log.info(getPrefix(requestId) + "Retrying after connection failure -> " + ioe.getMessage());
                         }
-                        long delayMs = clampToDeadlineMs(getConnectAttemptDelayMs(connectAttempts),
-                                                         connectDeadline, System.currentTimeMillis());
-                        if (delayMs <= 0) {
-                            // No budget left to sleep in; fail now rather than
-                            // start a walk the deadline would cut off.
+                        long sleepMs = connectRetrySleepMs(getConnectAttemptDelayMs(connectAttempts),
+                                                          connectDeadline, System.currentTimeMillis());
+                        if (sleepMs < 0) {
+                            // No budget left for another attempt; fail now rather than
+                            // start a walk the deadline would cut off. A 0 here means
+                            // the ladder asked for no pause, not that the budget is
+                            // gone, so it must fall through to the retry.
                             if (heldPermitDest != null) {
                                 releaseConnPermit(heldPermitDest);
                                 heldPermitDest = null;
                             }
                             throw ioe;
                         }
-                        try {Thread.sleep(delayMs);} catch (InterruptedException ie) {
-                            Thread.currentThread().interrupt();
-                            throw ioe;
+                        if (sleepMs > 0) {
+                            try {Thread.sleep(sleepMs);} catch (InterruptedException ie) {
+                                Thread.currentThread().interrupt();
+                                throw ioe;
+                            }
                         }
                     }
                 }
@@ -2908,6 +2912,35 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     static long getConnectAttemptDelayMs(int attempt) {
         if (attempt <= 1) {return 0;}
         return getConnectRetryDelayMs(attempt - 1);
+    }
+
+    /**
+     * How long to wait before the next connect attempt, told apart from whether
+     * another attempt fits at all. Pure decision — no clock access, safe for
+     * unit tests.
+     * <p>Clamping the ladder's delay to the deadline cannot answer both
+     * questions: {@link #getConnectAttemptDelayMs(int)} asks for 0 for the first
+     * retry, and a spent deadline clamps to 0 as well, so "retry now" and "no
+     * budget left" read identically. Measured live on 2026-11-24, that made the
+     * first retry impossible — a handshake that gave up at 8.8s logged
+     * "Retrying after connection failure" and failed 1ms later without sending a
+     * SYN, with 111s of the request's 120s connect budget unspent and three
+     * tunnel legs never walked. The retry is the one that rides the fresh
+     * outbound tunnel the failed handshake just replaced, so losing it converts
+     * a slow network into an error page.
+     *
+     * @param requestedDelayMs the pause the ladder asks for, 0 to proceed at once
+     * @param deadlineMs absolute deadline in ms since the epoch, or
+     *                   {@link I2PTunnelClientBase#NO_DEADLINE} for no shared budget
+     * @param nowMs current time in ms since the epoch
+     * @return the time to wait in ms, 0 to retry immediately, or -1 when the
+     *         deadline has passed and no further attempt fits
+     * @since 0.9.72+
+     */
+    static long connectRetrySleepMs(long requestedDelayMs, long deadlineMs, long nowMs) {
+        if (deadlineMs == NO_DEADLINE) {return Math.max(0, requestedDelayMs);}
+        if (isDeadlineExpired(deadlineMs, nowMs)) {return -1;}
+        return Math.min(Math.max(0, requestedDelayMs), deadlineMs - nowMs);
     }
 
     /**

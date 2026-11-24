@@ -265,4 +265,69 @@ public class ConnectRetryBudgetTest {
         assertEquals(2_000, I2PTunnelHTTPClient.getConnectRetryDelayMs(2));
         assertEquals(0, I2PTunnelHTTPClient.getConnectRetryDelayMs(0));
     }
+
+    // ---------- retry sleep vs. remaining budget ----------
+
+    /**
+     * The regression: an immediate retry inside a live deadline is 0 ms of sleep,
+     * not a stop. Measured live on 2026-11-24 a handshake gave up at 8.8s into a
+     * 120s request budget, logged "Retrying after connection failure", and failed
+     * 1ms later because the clamped 0 read as a spent deadline.
+     */
+    @Test
+    public void testImmediateRetryInsideALiveDeadlineStillRuns() {
+        long now = 1_000_000L;
+        long deadline = now + 111_200L;
+        assertEquals(0, I2PTunnelHTTPClient.connectRetrySleepMs(
+                I2PTunnelHTTPClient.getConnectAttemptDelayMs(1), deadline, now));
+    }
+
+    /** A spent deadline is the only thing that stops the retry, and it says so. */
+    @Test
+    public void testSpentDeadlineStopsTheRetry() {
+        long now = 1_000_000L;
+        assertEquals(-1, I2PTunnelHTTPClient.connectRetrySleepMs(0, now, now));
+        assertEquals(-1, I2PTunnelHTTPClient.connectRetrySleepMs(4_000, now - 1, now));
+    }
+
+    /** A pause longer than what is left is cut to what is left, not dropped. */
+    @Test
+    public void testPauseIsClampedToTheRemainingBudget() {
+        long now = 1_000_000L;
+        assertEquals(3_000, I2PTunnelHTTPClient.connectRetrySleepMs(8_000, now + 3_000, now));
+        assertEquals(1_000, I2PTunnelHTTPClient.connectRetrySleepMs(1_000, now + 90_000, now));
+    }
+
+    /** With no shared budget the ladder is passed through untouched. */
+    @Test
+    public void testNoDeadlinePassesTheLadderThrough() {
+        long now = 1_000_000L;
+        assertEquals(0, I2PTunnelHTTPClient.connectRetrySleepMs(0, I2PTunnelClientBase.NO_DEADLINE, now));
+        assertEquals(4_000, I2PTunnelHTTPClient.connectRetrySleepMs(
+                4_000, I2PTunnelClientBase.NO_DEADLINE, now));
+    }
+
+    /** A nonsensical negative pause means retry at once, never stop. */
+    @Test
+    public void testNegativePauseRetriesImmediately() {
+        long now = 1_000_000L;
+        assertEquals(0, I2PTunnelHTTPClient.connectRetrySleepMs(-5, now + 10_000, now));
+    }
+
+    /**
+     * The whole ladder walks inside the request budget: four retries at 0, 1s,
+     * 2s and 4s all fit in the 120s deadline after one 8.8s attempt, so the
+     * ceiling that bounds timeout attempts, not the clock, ends the walk.
+     */
+    @Test
+    public void testLadderFitsInsideTheRequestBudget() {
+        long now = 1_000_000L;
+        long deadline = now + I2PTunnelHTTPClient.REQUEST_CONNECT_DEADLINE_MS - 8_800L;
+        for (int attempt = 1; attempt <= 4; attempt++) {
+            long sleep = I2PTunnelHTTPClient.connectRetrySleepMs(
+                    I2PTunnelHTTPClient.getConnectAttemptDelayMs(attempt), deadline, now);
+            assertTrue("attempt " + attempt + " must be allowed to retry", sleep >= 0);
+            now += sleep;
+        }
+    }
 }
