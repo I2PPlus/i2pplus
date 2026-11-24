@@ -14,8 +14,15 @@ import static org.junit.Assert.*;
  */
 public class ConnectFailoverDecisionTest {
 
+    /**
+     * Holds the tunnel-failover decision cases; carries no per-test state, so
+     * the fresh instance JUnit builds per method costs nothing.
+     */
+    public ConnectFailoverDecisionTest() {}
+
     // ---------- shouldContinueFailover ----------
 
+    /** Legs remain worth trying while the pool is healthy and none is dead. */
     @Test
     public void testContinue_HealthyPoolWithinBudget() {
         assertTrue(I2PTunnelClientBase.shouldContinueFailover(4, 1, 0, false));
@@ -23,6 +30,7 @@ public class ConnectFailoverDecisionTest {
         assertTrue(I2PTunnelClientBase.shouldContinueFailover(4, 3, 1, false));
     }
 
+    /** The walk stops at the configured leg count, never past it. */
     @Test
     public void testContinue_StopsAtTunnelCount() {
         assertFalse(I2PTunnelClientBase.shouldContinueFailover(4, 4, 0, false));
@@ -30,12 +38,14 @@ public class ConnectFailoverDecisionTest {
         assertFalse(I2PTunnelClientBase.shouldContinueFailover(1, 1, 0, false));
     }
 
+    /** A pool with no usable tunnel and nothing building cannot be retried. */
     @Test
     public void testContinue_DeadPoolStopsImmediately() {
         assertFalse(I2PTunnelClientBase.shouldContinueFailover(4, 1, 0, true));
         assertFalse(I2PTunnelClientBase.shouldContinueFailover(4, 1, 1, true));
     }
 
+    /** A timeout on an early leg must not strand the legs still worth trying. */
     @Test
     public void testContinue_TimeoutStillWalksAllLegs() {
         // timeout on early legs must not stop the walk — remaining healthy
@@ -48,6 +58,7 @@ public class ConnectFailoverDecisionTest {
         assertFalse(I2PTunnelClientBase.shouldContinueFailover(4, 4, max, false));
     }
 
+    /** A no-route failure walks the configured legs on the tunnel budget alone. */
     @Test
     public void testContinue_NonTimeoutFailuresUseTunnelBudget() {
         // NoRoute (not timeout) still walks configured failover legs
@@ -58,6 +69,7 @@ public class ConnectFailoverDecisionTest {
 
     // ---------- shouldContinueFailover (poolBuilding) ----------
 
+    /** Builds in flight neither extend nor shorten the walk. */
     @Test
     public void testContinue_PoolBuildingStillWalksAllLegs() {
         // poolBuilding no longer extends or shortens the walk — all legs tried
@@ -67,6 +79,7 @@ public class ConnectFailoverDecisionTest {
         assertFalse(I2PTunnelClientBase.shouldContinueFailover(8, 8, max, false, true));
     }
 
+    /** The poolBuilding argument is compatibility only: same answer either way. */
     @Test
     public void testContinue_PoolNotBuildingSameAsBuilding() {
         // poolBuilding is retained for call-site compatibility only
@@ -77,12 +90,14 @@ public class ConnectFailoverDecisionTest {
         assertTrue(I2PTunnelClientBase.shouldContinueFailover(4, 3, max, false, false));
     }
 
+    /** A dead pool outranks builds in flight. */
     @Test
     public void testContinue_PoolBuildingStillStopsOnDeadPool() {
         assertFalse(I2PTunnelClientBase.shouldContinueFailover(8, 1, 0, true, true));
         assertFalse(I2PTunnelClientBase.shouldContinueFailover(8, 1, 1, true, true));
     }
 
+    /** Builds in flight do not buy a leg beyond the configured count. */
     @Test
     public void testContinue_PoolBuildingStillStopsAtTunnelCount() {
         assertFalse(I2PTunnelClientBase.shouldContinueFailover(4, 4, 0, false, true));
@@ -91,6 +106,7 @@ public class ConnectFailoverDecisionTest {
 
     // ---------- shouldOuterRetryConnect ----------
 
+    /** One outer retry is always allowed, so in-flight leg replacements land. */
     @Test
     public void testOuterRetry_AlwaysAllowsOneTimeoutRetry() {
         // even a healthy pool gets one outer retry so in-flight leg
@@ -102,18 +118,21 @@ public class ConnectFailoverDecisionTest {
                 1, 1, false, false, true, false));
     }
 
+    /** The general connect-retry count bounds the outer loop. */
     @Test
     public void testOuterRetry_StopsAtMaxRetries() {
         assertFalse(I2PTunnelClientBase.shouldOuterRetryConnect(
                 I2PTunnelHTTPClient.I2P_CONNECT_MAX_RETRIES, 1, true, false, false, false));
     }
 
+    /** A provably dead outbound pool ends the outer loop on the first failure. */
     @Test
     public void testOuterRetry_StopsWhenPoolDead() {
         assertFalse(I2PTunnelClientBase.shouldOuterRetryConnect(
                 1, 1, true, true, false, false));
     }
 
+    /** A second timeout wait is bought only while the pool is still building. */
     @Test
     public void testOuterRetry_TimeoutBudgetDependsOnPoolBuilding() {
         // healthy pool: one timeout wait is enough, no second
@@ -127,6 +146,7 @@ public class ConnectFailoverDecisionTest {
                 1, 2, true, false, true, false));
     }
 
+    /** A non-timeout failure is bounded by the retry count, not the clock. */
     @Test
     public void testOuterRetry_NonTimeoutUsesGeneralBudget() {
         assertTrue(I2PTunnelClientBase.shouldOuterRetryConnect(
@@ -137,6 +157,7 @@ public class ConnectFailoverDecisionTest {
 
     // ---------- isConnectTimeout ----------
 
+    /** Streaming's SYN give-up arrives wrapped, and must read as a timeout. */
     @Test
     public void testTimeout_NoRouteConnectionTimedOut() {
         // the live regression: NoRouteToHostException wrapping streaming SYN give-up
@@ -144,6 +165,7 @@ public class ConnectFailoverDecisionTest {
                 new NoRouteToHostException("Connection timed out")));
     }
 
+    /** Both timeout wordings of an interrupted IO failure classify alike. */
     @Test
     public void testTimeout_InterruptedIOException() {
         assertTrue(I2PTunnelClientBase.isConnectTimeout(
@@ -152,6 +174,7 @@ public class ConnectFailoverDecisionTest {
                 new InterruptedIOException("Read timed out")));
     }
 
+    /** The timeout wording may sit in the cause rather than the exception. */
     @Test
     public void testTimeout_CauseChain() {
         NoRouteToHostException wrapped = new NoRouteToHostException("unreachable");
@@ -159,6 +182,7 @@ public class ConnectFailoverDecisionTest {
         assertTrue(I2PTunnelClientBase.isConnectTimeout(wrapped));
     }
 
+    /** A refusal, or a failure the classifier does not know, is not a timeout. */
     @Test
     public void testTimeout_NotATimeout() {
         assertFalse(I2PTunnelClientBase.isConnectTimeout(null));
@@ -168,6 +192,7 @@ public class ConnectFailoverDecisionTest {
                 new java.io.IOException("Connection refused")));
     }
 
+    /** The 30s the per-leg connect windows are sized from by default. */
     @Test
     public void testDefaultConnectTimeoutIsThirtySeconds() {
         assertEquals(30_000L, I2PTunnelClientBase.DEFAULT_CONNECT_TIMEOUT);
