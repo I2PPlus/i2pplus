@@ -6438,6 +6438,40 @@ public class TunnelPool {
     }
 
     /**
+     * Whether a server pool must start replacing tunnels a lease-floor earlier,
+     * because the LeaseSet it publishes has fallen to that floor.
+     * <p>A pool at its target count is not the same thing as a pool that can
+     * publish a healthy LeaseSet.  Every tunnel it holds may be older than the
+     * expiry the published set already advertises, in which case the next mint
+     * re-signs the same short copy and the advertised life cannot move.
+     * Measured on a live router, hosted destinations published LeaseSets that
+     * lived 3m - the {@link #LEASE_MIN_REMAINING_MS} floor - while their pools
+     * sat at target with nothing building, and each re-mint logged a stored and
+     * a fresh expiry of the same 3m.  A LeaseSet advertised for 3m has to be
+     * re-looked-up by every client three times as often as one advertised for
+     * the 10m the lease cap allows.
+     * <p>Widening the window by the lease floor starts the replacement while the
+     * oldest tunnel can still carry a full-length lease, and it disengages by
+     * itself once the published set's life is back above the widened window, so
+     * the extra builds are spent only while the supply is short.
+     *
+     * @param isServerPool true for an inbound pool that publishes a LeaseSet
+     * @param publishedLeaseEnd end time of the earliest lease of the last LeaseSet
+     *                          this pool published, 0 if none
+     * @param now the current time in ms, from the router's clock
+     * @param leaseMinRemainingMs the lease floor - the least life a tunnel may
+     *                            have to contribute a lease
+     * @param preBuildWindowMs the ordinary proactive replacement window for this pool
+     * @return true to widen the replacement window by the lease floor
+     * @since 0.9.72+
+     */
+    static boolean needsLeaseAwarePreBuild(boolean isServerPool, long publishedLeaseEnd, long now,
+                                           long leaseMinRemainingMs, long preBuildWindowMs) {
+        if (!isServerPool || publishedLeaseEnd <= 0) {return false;}
+        return publishedLeaseEnd - now <= leaseMinRemainingMs + preBuildWindowMs;
+    }
+
+    /**
      * Record one build outcome in the fixed-width rate window.  Only results
      * where a build actually went to the network count — local skips
      * (NO_TUNNELS, NO_NETDB, SKIPPED, OTHER_FAILURE) are not evidence of
@@ -7765,7 +7799,18 @@ public class TunnelPool {
             // each failed attempt burns a full timeout (17-30s), so a
             // struggling pool must start its replacements earlier to land a
             // build in time (3min base, up to 6min at a 100% timeout rate).
-            long preBuildThreshold = now + computePreBuildWindowMs(getBuildTimeoutRate());
+            long preBuildWindow = computePreBuildWindowMs(getBuildTimeoutRate());
+            if (needsLeaseAwarePreBuild(isServerPool(), _lastPublishedEarliestLeaseEnd, now,
+                                        LEASE_MIN_REMAINING_MS, preBuildWindow)) {
+                preBuildWindow += LEASE_MIN_REMAINING_MS;
+                if (_log.shouldDebug()) {
+                    _log.debug(toString() + " -> Widening the replacement window to rebuild lease supply" +
+                               "\n* Published LeaseSet lives: " +
+                               DataHelper.formatDuration(_lastPublishedEarliestLeaseEnd - now) +
+                               " * Window: " + DataHelper.formatDuration(preBuildWindow));
+                }
+            }
+            long preBuildThreshold = now + preBuildWindow;
 
             TunnelStats stats = sweepExpiredAndCountTunnels(now, preBuildThreshold);
             logCleanupSummary(stats);
