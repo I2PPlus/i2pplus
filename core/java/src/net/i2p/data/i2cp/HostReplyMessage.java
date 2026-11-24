@@ -254,14 +254,45 @@ public class HostReplyMessage extends I2CPMessageImpl {
     public int getType() {
         return MESSAGE_TYPE;
     }
-/** Returns a string representation of this message. */
+    /**
+     * The words for a result code, so a reply can be read without the protocol
+     * document open. The number stays beside them for grepping.
+     *
+     * @param code one of the RESULT_* constants
+     * @return the description, never null
+     * @since 0.9.72+
+     */
+    public static final String getResultString(int code) {
+        switch (code) {
+            case RESULT_SUCCESS: return "SUCCESS";
+            case RESULT_FAILURE: return "FAILURE";
+            case RESULT_SECRET_REQUIRED: return "SECRET REQUIRED";
+            case RESULT_KEY_REQUIRED: return "KEY REQUIRED";
+            case RESULT_SECRET_AND_KEY_REQUIRED: return "SECRET AND KEY REQUIRED";
+            case RESULT_DECRYPTION_FAILURE: return "DECRYPTION FAILURE";
+            case RESULT_LEASESET_LOOKUP_FAILURE: return "LEASESET LOOKUP FAILURE";
+            case RESULT_LOOKUP_TYPE_UNSUPPORTED: return "LOOKUP TYPE UNSUPPORTED";
+            default: return "RESULT CODE: " + code;
+        }
+    }
+
+    /**
+     * A string representation of this message, as a log entry: the class on the
+     * first line, then one {@code " * "} bullet with the result and the
+     * identifiers. The bare session id the old form opened its bullet with read
+     * as an unlabelled number, and the result was a bare code. No arrow - the
+     * message that interpolates this one owns the `Event -&gt; Result` spine.
+     */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();
-        buf.append("HostReplyMessage ");
-        buf.append("\n* ").append(_sessionId);
-        buf.append(" RequestID: ").append(_reqID);
-        buf.append(" Result: ").append(_code);
+        buf.append("HostReplyMessage");
+        buf.append("\n* Result: ").append(getResultString(_code)).append(" (").append(_code).append(')');
+        // The number, not the SessionId object: its own toString() is
+        // "[SessionID 7]", which duplicated the label and squatted on the
+        // bracket form the console linkifier reserves for hashes.
+        buf.append(" * SessionID: ").append(_sessionId != null ? _sessionId.getSessionId() : -1);
+        buf.append(" * RequestID: ").append(_reqID);
         if (_code == RESULT_SUCCESS) {
             buf.append("\n* Destination: ").append(_dest);
         }

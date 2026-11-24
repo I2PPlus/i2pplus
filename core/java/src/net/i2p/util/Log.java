@@ -252,7 +252,7 @@ public class Log {
             return false;
         }
         String out = (d.suppressed > 0)
-            ? msg + " (" + d.suppressed + " similar suppressed)"
+            ? msg + "\n* Similar suppressed: " + d.suppressed
             : msg;
         log(priority, out);
         return true;

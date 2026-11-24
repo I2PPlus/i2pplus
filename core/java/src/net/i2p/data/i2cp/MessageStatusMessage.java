@@ -437,13 +437,20 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     public int getType() {
         return MESSAGE_TYPE;
     }
-/** Returns a string representation of this message. */
+    /**
+     * A string representation of this message, as a log entry: the class on the
+     * first line, then one {@code " * "} bullet with the status and the
+     * identifiers. The status is the words for the code, with the number beside
+     * them for grepping. No arrow - a toString() is the subject, and the message
+     * that interpolates it owns the `Event -&gt; Result` spine.
+     */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();
-        buf.append("MessageStatusMessage ");
-        buf.append(" [MsgID ").append(_messageId).append("] -> ").append(getStatusString(_status));
-        buf.append("\n* SessionID: ").append(_sessionId);
+        buf.append("MessageStatusMessage");
+        buf.append("\n* Status: ").append(getStatusString(_status)).append(" (").append(_status).append(')');
+        buf.append(" * MsgID: ").append(_messageId);
+        buf.append(" * SessionID: ").append(_sessionId);
         buf.append(" * Nonce: ").append(_nonce);
         if (_size > 0) {
             buf.append(" * Size: ").append(_size).append(" bytes");

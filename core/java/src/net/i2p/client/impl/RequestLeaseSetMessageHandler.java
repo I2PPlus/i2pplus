@@ -736,11 +736,11 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
         } catch (DataFormatException dfe) {
             if (isLS2 && leaseSet instanceof LeaseSet2) {
                 LeaseSet2 ls2 = (LeaseSet2) leaseSet;
-                _log.error("Unable to sign LeaseSet: " + dfe.getMessage() +
-                        " leases=" + leaseSet.getLeaseCount() +
-                        " published=" + ls2.getPublished() +
-                        " expires=" + ls2.getExpires() +
-                        " now=" + _context.clock().now());
+                _log.error("Unable to sign LeaseSet -> " + dfe.getMessage() +
+                        "\n* Leases: " + leaseSet.getLeaseCount() +
+                        " * Published: " + DataHelper.formatTime(ls2.getPublished()) +
+                        " * Expires: " + DataHelper.formatTime(ls2.getExpires()) +
+                        " * Now: " + DataHelper.formatTime(_context.clock().now()));
             } else {
                 _log.error("Unable to sign LeaseSet: " + dfe.getMessage());
             }

@@ -5477,10 +5477,13 @@ class Connection {
         // six hours, which buried the diagnostics the log exists to carry. It is
         // detail for investigating one connection, which is what debug is for.
         if  (_log.shouldDebug()) {
+            // Two bullets per group, not one: with the values filled in, a single
+            // line for the window and timing state ran to 116 characters and the
+            // counters to 125, both past the house limit.
             buf.append("\n* Up: ").append(DataHelper.formatDuration(now - _createdOn))
                .append(" * Window size: ").append(_options.getWindowSize()).append(" messages")
                .append(" * Congestion window: ").append(_congestionWindowEnd - _highestAckedThrough.get()).append(" messages")
-               .append(" * RTT: ").append(_options.getRTT()).append("ms")
+               .append("\n* RTT: ").append(_options.getRTT()).append("ms")
                .append(" * RTO: ").append(_options.getRTO()).append("ms")
             // not synchronized to avoid some kooky races
                .append(" * UnACKed out: ").append(_outboundPackets == null ? 0 : _outboundPackets.size())
@@ -5496,7 +5499,7 @@ class Connection {
             buf.append("\n* Sent: ").append(1 + _lastSendId.get())
                .append(" * Received: ").append(1 + _inputStream.getHighestBlockId() - missing)
                .append(" * ACKThru: ").append(_highestAckedThrough.get())
-               .append(" * SSThresh: ").append(_ssthresh).append(" messages")
+               .append("\n* SSThresh: ").append(_ssthresh).append(" messages")
                .append(" * MinRTT: ").append(_options.getMinRTT()).append("ms")
                .append(" * MaxWin: ").append(_options.getMaxWindowSize()).append(" messages")
                .append(" * MTU: ").append(_options.getMaxMessageSize()).append("B");

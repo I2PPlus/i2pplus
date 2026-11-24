@@ -63,10 +63,15 @@ class MessageStatusMessageHandler extends HandlerImpl {
 
             default: if (msg.isSuccessful()) {
                     if (_log.shouldDebug()) {
-                        _log.debug("Message delivery succeeded for [MsgID " + id + "]");
+                        _log.debug("Message delivery succeeded -> Closing the send state * MsgID: " + id);
                     }
                 } else {
-                    if (_log.shouldDebug()) _log.debug("Message delivery FAILED for [MsgID " + id + "] -> " + MessageStatusMessage.getStatusString(status));
+                    // The arrow points at the reason, and the reason is the status
+                    // words, not the number.
+                    if (_log.shouldDebug()) {
+                        _log.debug("Message delivery FAILED -> " +
+                                   MessageStatusMessage.getStatusString(status) + " * MsgID: " + id);
+                    }
                 }
                 session.receiveStatus((int) id, msg.getNonce(), status); // if (!skipStatus)
                 return;

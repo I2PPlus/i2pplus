@@ -1813,14 +1813,15 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             // replaced the diagnostic below with a stack trace.
             final String exMsg = DataHelper.messageOf(ex);
             if (exMsg.indexOf("Name or service not known") >= 0) {
-                if (_log.shouldInfo())
-                    _log.info("[HTTPServer] Request error: DNS error (blocked?)" +
-                              " for: " + exMsg.replace(": Name or service not known", "") +
-                              " " + tunnelId + " client=" + peerB32);
+                if (_log.shouldInfo()) {
+                    _log.info("[HTTPServer] Request error -> The backend name did not resolve, it may be blocked" +
+                              "\n* Detail: " + exMsg.replace(": Name or service not known", "") +
+                              clientSegments(tunnelId, peerB32));
+                }
             } else if (_log.shouldDebug()) {
-                _log.debug("[HTTPServer] Request error: " + exMsg +
-                           " " + tunnelId + " client=" + peerB32 +
-                           " backend=" + getSocketString(socket.getLocalPort()));
+                _log.debug("[HTTPServer] Request error -> " + exMsg +
+                           clientSegments(tunnelId, peerB32) +
+                           " * Backend: " + getSocketString(socket.getLocalPort()));
             }
         } catch (OutOfMemoryError oom) {
             // Often actually a file handle limit problem so we can safely send a response
@@ -1830,6 +1831,26 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 _log.error("[HTTPServer] Out of Memory error " + tunnelId + " -> " + oom.getMessage());
             }
         }
+    }
+
+    /**
+     * The tunnel and the client as {@code " * "} segments, for the request-error
+     * lines. The old form wrote them as {@code [nick / hash] client=base32} - a
+     * bare label welded onto the end of a sentence and a {@code key=value} pair,
+     * neither of which renders as a bullet the console can link.
+     *
+     * @param tunnelId "[nickname / hash]" label for this server tunnel, may be null
+     * @param peerB32 the client's base32 address, may be null
+     * @return the segments, "" when neither is known
+     * @since 0.9.72+
+     */
+    static String clientSegments(String tunnelId, String peerB32) {
+        StringBuilder buf = new StringBuilder(96);
+        if (tunnelId != null && !tunnelId.isEmpty()) {buf.append(" * Tunnel: ").append(tunnelId);}
+        if (peerB32 != null && !peerB32.isEmpty()) {
+            buf.append(" * Client: ").append(HttpHeaderFormatter.shortB32(peerB32));
+        }
+        return buf.toString();
     }
 
     /**
@@ -1901,8 +1922,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 // without ever sending a request generates thousands of these.
                 if (log.shouldDebug() && ste.getMessage() != null
                         && shouldLogRequestError(peerB32, ctx.clock().now())) {
-                    log.debug("[HTTPServer] Request error: " + ste.getMessage() +
-                              " " + tunnelId + " client=" + peerB32);
+                    log.debug("[HTTPServer] Request error -> " + ste.getMessage() +
+                              clientSegments(tunnelId, peerB32));
                 }
             }
             try {socket.close();}
@@ -1911,14 +1932,15 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         } catch (EOFException eofe) {
             if (requestCount > 0) {
                 if (log.shouldDebug())
-                     log.debug("[HTTPServer] Client closed awaiting request #" + requestCount + " " + tunnelId);
+                     log.debug("[HTTPServer] Client closed -> Waiting for request #" + requestCount +
+                               clientSegments(tunnelId, null));
             } else {
                 try {sendError(socket, ERR_BAD_REQUEST);}
                 catch (IOException ioe) { /* ignored */ }
                 if (log.shouldDebug() && eofe.getMessage() != null
                         && shouldLogRequestError(peerB32, ctx.clock().now())) {
-                    log.debug("[HTTPServer] Request error: " + eofe.getMessage() +
-                              " " + tunnelId + " client=" + peerB32);
+                    log.debug("[HTTPServer] Request error -> " + eofe.getMessage() +
+                              clientSegments(tunnelId, peerB32));
                 }
             }
             try {socket.close();}
@@ -1932,8 +1954,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 catch (IOException ioe) { /* ignored */ }
             }
             if (log.shouldDebug()) {
-                log.debug("[HTTPServer] Request error: Headers too large " +
-                          tunnelId + " client=" + peerB32);
+                log.debug("[HTTPServer] Request error -> Headers too large" +
+                          clientSegments(tunnelId, peerB32));
             }
             return null;
         } catch (RequestTooLongException rtle) {
@@ -1944,8 +1966,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 catch (IOException ioe) { /* ignored */ }
             }
             if (log.shouldDebug()) {
-                log.debug("[HTTPServer] Request error: URI too long " +
-                          tunnelId + " client=" + peerB32);
+                log.debug("[HTTPServer] Request error -> URI too long" +
+                          clientSegments(tunnelId, peerB32));
             }
             return null;
         } catch (BadRequestException bre) {
@@ -1956,8 +1978,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 catch (IOException ioe) { /* ignored */ }
             }
             if (log.shouldDebug() && bre.getMessage() != null) {
-                log.debug("[HTTPServer] Request error: " + bre.getMessage() +
-                          " " + tunnelId + " client=" + peerB32);
+                log.debug("[HTTPServer] Request error -> " + bre.getMessage() +
+                          clientSegments(tunnelId, peerB32));
             }
             return null;
         }
@@ -2229,8 +2251,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         // A hostname is neither a router hash nor a destination, so
         // loggableHost() prints it whole, unbracketed and length-bounded.
         if (_log.shouldDebug()) {
-            _log.debug("[HTTPServer] Incoming request for: " + loggableHost(hostname) +
-                       "\n* Tunnel: " + tunnelId + " * Client: [" + peerB32 + ']');
+            _log.debug("[HTTPServer] Incoming request -> Host: " + loggableHost(hostname) +
+                       "\n* Tunnel: " + tunnelId + " * Client: " + HttpHeaderFormatter.shortB32(peerB32));
         }
         if (hostname != null && !hostname.endsWith(".i2p") && !hostname.endsWith(".onion")) {
             // The client picks this header, so it is never resolved. A lookup
@@ -2510,8 +2532,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         getTunnel().getContext().statManager().addRateData("i2ptunnel.httpserver.blockingHandleTime", timeToHandle);
         if ((timeToHandle > 1500) && (_log.shouldInfo())) {
             _log.info("[HTTPServer] Slow first request -> Total: " + timeToHandle + "ms" +
-                      "\n* Client: [" + peerB32 + "] * Read headers: " + (afterHeaders-afterAccept) +
-                      "ms * Socket create: " + (afterSocket-afterHeaders) +
+                      "\n* Client: " + HttpHeaderFormatter.shortB32(peerB32) +
+                      " * Read headers: " + (afterHeaders-afterAccept) + "ms" +
+                      "\n* Socket create: " + (afterSocket-afterHeaders) +
                       "ms * Start runners: " + (afterHandle-afterSocket) + "ms");
          }
     }
@@ -2554,7 +2577,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 case 2: code = "KeepAlive"; break;
                 default: code = "Unknown";
            }
-           _log.debug("[HTTPServer] Waited " + timeToWait + "ms for response [#" + requestCount + "] to complete -> " + code);
+           _log.debug("[HTTPServer] Waited " + timeToWait + "ms for response #" + requestCount + " to complete -> " + code);
         }
         return waiter.get() == 2;
     }
@@ -2728,16 +2751,21 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         }
 
         /**
-         * Returns the URL suffix of a request line.
+         * The request's URL as a {@code \n* } continuation line, for the DEBUG
+         * lines that report a request and then end.
+         * <p>A request line is long enough that a same-bullet suffix pushes an
+         * already-full line well past the house limit, so where nothing follows it
+         * the URL earns its own bullet. It is never appended to a label that is
+         * interpolated mid-message: the transfer names in {@link Sender} are used
+         * inside {@code "\n* Direction: " + name + " * After: …"} and inside an
+         * IOException message, and a URL welded in there puts the consequence
+         * after the URL and runs the line to 183 characters.
          *
          * @param req the request line
-         * @return the path after the method, empty if malformed
+         * @return the path after the method on its own bullet, empty if malformed
          */
         private static String urlSuffix(String req) {
-            // A same-bullet suffix, not a "\n* " bullet: the result is appended to
-            // labels that are interpolated mid-message, where a bullet would put
-            // the consequence arrow after the URL.
-            return req != null && !req.isEmpty() && !req.equals("Unknown request") ? " * URL: " + req : "";
+            return req != null && !req.isEmpty() && !req.equals("Unknown request") ? "\n* URL: " + req : "";
         }
 
         /**
@@ -2905,14 +2933,14 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     // Push headers before the body handoff so TTFB does not
                     // wait on MessageOutputStream's passive flush interval.
                     compressedout.flush();
-                      s = new Sender(compressedout, serverin, "Server to Client (Gzip) " +
-                                     urlSuffix(req), _tunnelId, _log);
+                      s = new Sender(compressedout, serverin, "Server to Client (Gzip)",
+                                     _tunnelId, _log);
                     browserout = compressedout;
                 } else {
                     browserout.write(DataHelper.getUTF8(modifiedHeaders));
                     browserout.flush();
-                      s = new Sender(browserout, serverin, "Server to Client " +
-                                     urlSuffix(req), _tunnelId, _log);
+                      s = new Sender(browserout, serverin, "Server to Client",
+                                     _tunnelId, _log);
                 }
                 // Keep the local backend's read timeout in lockstep with the
                 // progress-scaled stall window, so a backend that pauses
@@ -2941,7 +2969,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                             fServerOut, fBrowserOut, fCompressedOut,
                             fBrowserIn, fServerIn, fReq);
                     bodySubmitted = handOffBody(_ioPool != null ? _ioPool.get() : null,
-                            body, "Server to Client" + urlSuffix(fReq), finish);
+                            body, "Server to Client", finish);
                     if (bodySubmitted) {
                         // Non-keepalive is already decided; publish waiter before
                         // the pool worker's finishTransfer so the caller does
@@ -2957,7 +2985,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     // Inline fallback: handOffBody already ran body + finish
                     return;
                 }
-                runOnIO(s, "Server to Client" + urlSuffix(req));
+                runOnIO(s, "Server to Client");
             } catch (SSLException she) {
                 if (_log.shouldError()) {_log.error("[HTTPServer] SSL error", she);}
                 try {
@@ -3121,7 +3149,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 i2pReset = status == I2PSocketException.STATUS_CONNECTION_RESET;
                 if (i2pReset) {
                     if (_log.shouldDebug()) {
-                        _log.debug("[HTTPServer] Received I2P RESET -> Resetting the local socket..." +
+                        _log.debug("[HTTPServer] Received I2P RESET -> Resetting the local socket" +
                                   urlSuffix(req));
                     }
                     try {_webserver.setSoLinger(true, 0);}
@@ -3133,7 +3161,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 boolean sockReset = msg != null && msg.contains("reset");
                 if (sockReset) {
                     if (_log.shouldDebug()) {
-                        _log.debug("[HTTPServer] Received socket RESET -> Resetting the I2P socket..." +
+                        _log.debug("[HTTPServer] Received socket RESET -> Resetting the I2P socket" +
                                   urlSuffix(req));
                     }
                     try {_browser.reset();}
@@ -3459,7 +3487,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          */
         @Override
         public void run() {
-            if (_log != null && _log.shouldDebug()) {_log.debug("[HTTPServer] Begin sending " + _name);}
+            if (_log != null && _log.shouldDebug()) {
+                _log.debug("[HTTPServer] Begin sending " + _name +
+                           describeTarget(_targetLabel, _requestLabel));
+            }
             long startNanos = System.nanoTime();
             _lastReadNanos = startNanos;
             _lastWriteNanos = startNanos;
@@ -3491,6 +3522,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                             _log.warnThrottled("httpserver-sender-stall",
                                                "[HTTPServer] No data from the sender -> Stopped the transfer" +
                                                "\n* Direction: " + _name +
+                                               describeTarget(_targetLabel, _requestLabel) +
                                                " * After: " + (stallNs / 1_000_000L) +
                                                "ms * Transferred: " + _bytesTransferred + " bytes");
                         }
@@ -3507,8 +3539,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 String target = describeTarget(_targetLabel, _requestLabel);
                 if (_log != null && _log.shouldInfo() && elapsed > 5_000_000_000L) {
                     double secs = elapsed / 1_000_000_000.0;
-                    // _name carries the URL suffix, so it goes last
-                    _log.info("[HTTPServer] Done sending " + _bytesTransferred + " bytes in " +
+                    _log.info("[HTTPServer] Done sending -> " + _bytesTransferred + " bytes in " +
                               String.format("%.1f", secs) + "s " + formatTransferRate(_bytesTransferred, secs) +
                               " * " + _name + target);
                 } else if (_log != null && _log.shouldDebug()) {
@@ -3525,12 +3556,16 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     sendErr.indexOf("Socket closed") >= 0 ||
                     sendErr.indexOf("Interrupted") >= 0) {
                     // client closed connection early, or thread interrupted for cancellation
-                    if (_log != null && _log.shouldDebug()) {_log.debug("[HTTPServer] Send error -> " + sendErr + " * " + _name);}
+                    if (_log != null && _log.shouldDebug()) {
+                        _log.debug("[HTTPServer] Send error -> " + sendErr + " * " + _name +
+                                   describeTarget(_targetLabel, _requestLabel));
+                    }
                 } else {
                     if (_log != null) {
                         _log.warnThrottled("httpserver-send-failed",
                                            "[HTTPServer] Send failed -> Aborting the transfer" +
-                                           "\n* Reason: " + sendErr + " * Direction: " + _name);
+                                           "\n* Reason: " + sendErr + " * Direction: " + _name +
+                                           describeTarget(_targetLabel, _requestLabel));
                     }
                 }
                 synchronized(this) {_failure = ioe;}

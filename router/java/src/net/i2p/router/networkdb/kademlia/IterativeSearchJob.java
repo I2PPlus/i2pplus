@@ -1424,7 +1424,8 @@ public class IterativeSearchJob extends FloodSearchJob {
             if (!_toTry.add(peer)) {return;} // already in the list
         }
         if (_log.shouldInfo()) {
-            _log.info("Received new Router [" + peer.toShortBase64() + "] from DbSearchReplyMsg " + (ri != null ? " -> Already known" : ""));
+            _log.info("Received new Router [" + peer.toShortBase64() + "] from DbSearchReplyMsg" +
+                      (ri != null ? " -> Already known" : " -> Added to the peers to try"));
         }
         retry();
     }

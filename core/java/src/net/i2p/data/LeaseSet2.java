@@ -723,11 +723,16 @@ public class LeaseSet2 extends LeaseSet {
         return _destination.hashCode();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * A string representation of this LeaseSet2, as a log entry: the class name
+     * first, then one {@code " * "} bullet per field. No leading space - a caller
+     * that writes {@code "Created and signed " + leaseSet} gets one sentence, not
+     * two spaces in the middle of it.
+     */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(128);
-        buf.append(" LeaseSet2");
+        buf.append("LeaseSet2");
         if (_destination != null) {
             buf.append("\n* Destination: ").append(_destination.toBase32());
         }
@@ -742,7 +747,7 @@ public class LeaseSet2 extends LeaseSet {
             buf.append("\n* Transient Expiry: ").append(Instant.ofEpochMilli(_transientExpires));
             buf.append("\n* Offline Signature: ").append(_offlineSignature);
         }
-        buf.append("\n* Published: ").append(!isUnpublished());
+        buf.append("\n* Unpublished: ").append(isUnpublished());
         if (isBlindedWhenPublished()) {buf.append("\n* Blinded: ").append(isBlindedWhenPublished());}
         buf.append("\n* Signature: ").append(_signature);
         buf.append("\n* Published: ").append(Instant.ofEpochMilli(_published));

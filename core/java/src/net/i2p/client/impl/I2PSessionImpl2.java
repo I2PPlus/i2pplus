@@ -32,6 +32,7 @@ import net.i2p.data.Destination;
 import net.i2p.data.SessionKey;
 import net.i2p.data.SessionTag;
 import net.i2p.data.i2cp.MessageId;
+import net.i2p.data.i2cp.MessageStatusMessage;
 import net.i2p.util.SimpleTimer2;
 
 /**
@@ -421,7 +422,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
         byte[] compressed = super.receiveMessage(msgId);
         if (compressed == null) {
             _log.warnThrottled("session-message-already-received",
-                               "[MsgID " + msgId + "] already received -> Nothing to return");
+                               "Message already received -> Nothing to return * MsgID: " + msgId);
             return null;
         }
         if (SHOULD_DECOMPRESS) { // future - check magic number to see whether to decompress
@@ -538,7 +539,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     public void receiveStatus(int msgId, long nonce, int status) {
         if (_log.shouldDebug()) {
             _log.debug(getPrefix() + "-> Received a send status * MsgID: " + msgId + " * Nonce: " + nonce +
-                       " * Status: " + status);
+                       " * Status: " + MessageStatusMessage.getStatusString(status) + " (" + status + ')');
         }
 
         MessageState state = null;
@@ -568,7 +569,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
         } else {
             if (_log.shouldInfo()) {
                 _log.info(getPrefix() + "-> No matching send state * MsgID: " + msgId + " * Nonce: " + nonce
-                          + " * Status: " + status);
+                          + " * Status: " + MessageStatusMessage.getStatusString(status) + " (" + status + ')');
             }
         }
     }

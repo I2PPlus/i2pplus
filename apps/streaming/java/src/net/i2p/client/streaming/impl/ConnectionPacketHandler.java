@@ -338,11 +338,15 @@ class ConnectionPacketHandler {
             // the connection opened a continuation line for each, so a fact of
             // under 90 characters took three. The connection names the stream pair,
             // so the stream IDs go too.
+            //
+            // The labels do not say "inbound": shortLabel() already reads
+            // `From: [peer] * To: [us]`, and the extra word pushed the longest of
+            // these lines, a duplicate with a payload, to 101 characters.
             String what;
             if (!allowAck) {what = "Non-SYN packet before the SYN";}
-            else if (isNew) {what = "New inbound packet";}
-            else if (packet.getPayloadSize() <= 0) {what = "ACK-only inbound packet";}
-            else {what = "Duplicate inbound packet";}
+            else if (isNew) {what = "New packet";}
+            else if (packet.getPayloadSize() <= 0) {what = "ACK-only packet";}
+            else {what = "Duplicate packet";}
             _log.debug(con.shortLabel() + " -> " + what +
                        " * Sequence: " + packet.getSequenceNum() + packet.formatInline());
         }

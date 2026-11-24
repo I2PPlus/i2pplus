@@ -149,13 +149,19 @@ public class MessagePayloadMessage extends I2CPMessageImpl {
         return MESSAGE_TYPE;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * A string representation of this message, as a log entry: the class on the
+     * first line, then one {@code " * "} bullet carrying the identifiers and the
+     * payload size. The values are labelled, not wrapped in hash brackets - the
+     * console linkifier parses {@code [xxxxxx]} as a router hash, so a bracketed
+     * {@code MsgID} reads as a broken link.
+     */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(); // NOPMD - AvoidUnnecessaryStringBuilderCreation
-        buf.append(" MessagePayloadMessage").append(" [MsgID ").append(_messageId).append("]")
-           .append("\n* SessionID: ").append(_sessionId)
-           .append(" [").append(_payload).append("]");
+        buf.append("MessagePayloadMessage").append("\n* MsgID: ").append(_messageId)
+           .append(" * SessionID: ").append(_sessionId)
+           .append(" * ").append(_payload);
         return buf.toString();
     }
 }

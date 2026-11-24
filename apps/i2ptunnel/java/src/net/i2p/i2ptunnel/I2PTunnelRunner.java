@@ -2393,9 +2393,9 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
             scheduleInitialResponseWatchdog();
             if (initialSocketData != null) {out.write(initialSocketData);} // this does not increment totalReceived
             if (_log.shouldLog(Log.DEBUG)) {
-                _log.debug("Initial data -> " + (initialI2PData != null ? initialI2PData.length : 0)
-                           + " bytes written to I2P, " + (initialSocketData != null ? initialSocketData.length : 0)
-                           + " bytes written to the socket, starting forwarders...");
+                _log.debug("Initial data -> Starting the forwarders"
+                           + " * Bytes to I2P: " + (initialI2PData != null ? initialI2PData.length : 0)
+                           + " * Bytes to the socket: " + (initialSocketData != null ? initialSocketData.length : 0));
 
             }
             if (_keepAliveSocket) {
@@ -2890,8 +2890,9 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
                     keepAliveTo = _keepAliveSocket;
                 }
                 if (_log.shouldLog(Log.INFO)) {
-                    _log.info(direction + " Done forwarding " + (_toI2P ? totalSent : totalReceived) + " bytes from [" + from + "] " +
-                              (keepAliveFrom ? "(KeepAlive)" : "") + " to [" + to + "] " + (keepAliveTo ? "(KeepAlive)" : ""));
+                    _log.info(direction + " Done forwarding " + (_toI2P ? totalSent : totalReceived) + " bytes" +
+                              " from [" + from + "]" + (keepAliveFrom ? " (KeepAlive)" : "") +
+                              " to [" + to + "]" + (keepAliveTo ? " (KeepAlive)" : ""));
                 }
                 if (!keepAliveFrom && in != null) {
                     try {in.close();}

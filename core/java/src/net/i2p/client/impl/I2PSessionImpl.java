@@ -1255,18 +1255,22 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
             if (handler != null) {
                 handler.handleMessage(message, this);
                 if (_log.shouldDebug()) {
-                    _log.debug(getPrefix() + "-> Received a message * Type: " + type
-                               + " * Handler: " + handler.getClass().getSimpleName());
+                    // Name the message, not just its type number: the number is what
+                    // the protocol document says, the name is what a reader at 3am
+                    // needs, and the handler says which code took it.
+                    _log.debug(getPrefix() + "-> Received " + message.getClass().getSimpleName() +
+                               " * Type: " + type + " * Handler: " + handler.getClass().getSimpleName());
                 }
             } else if (_log.shouldWarn()) {
-                _log.warn(getPrefix() + "-> Received an unknown or unhandleable message * Type: " + type);
+                _log.warn(getPrefix() + "-> Received an unhandleable message * Type: " + type);
             }
         } else {
             SubSession sub = _subsessionMap.get(id);
             if (sub != null) {
                 // it's for a subsession
                 sub.messageReceived(reader, message);
-                if (_log.shouldDebug()) {_log.debug(getPrefix() + "-> Received a message for a subsession * Type: " + type + " * Subsession: " + sub.getName());}
+                if (_log.shouldDebug()) {_log.debug(getPrefix() + "-> Received " + message.getClass().getSimpleName() +
+                                                    " for a subsession * Subsession: " + sub.getName());}
             } else if (id != null && type == SessionStatusMessage.MESSAGE_TYPE) {
                 // look for a subsession without a session
                 synchronized (_subsessionLock) {
@@ -1695,16 +1699,16 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
 
     /**
      * Try hard to make a decent identifier as this will appear in error logs.
-     * Returns " name state " with no arrow: the subject never owns the
-     * `Event -&gt; Result` spine, the message does, so a caller writes
+     * Returns "name state " with no arrow and no leading space: the subject never
+     * owns the `Event -&gt; Result` spine, the message does, so a caller writes
      * {@code getPrefix() + "-> Doing a thing"}. An arrow here doubled the
-     * spine at the 18 sites that supplied their own.
+     * spine at the 18 sites that supplied their own, and a leading space put a
+     * blank before the first capital of every one of those messages.
      *
      * @return the prefix string
      */
     protected final String getPrefix() {
         StringBuilder buf = new StringBuilder();
-        buf.append(' ');
         getName(buf);
         buf.append(' ').append(_state.toString()).append(' ');
         return buf.toString();
@@ -2392,15 +2396,20 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         }
     }
 
+    /**
+     * The session's identity for logging: the short hash of its own destination,
+     * then the name and state. Trimmed, so a session interpolated as a value -
+     * {@code " * Session: " + session} - does not end the log line with a space.
+     */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(64);
         if (_myDestination != null) {
             if (_shortHash == null)
                 _shortHash = _myDestination.calculateHash().toShortBase32();
-            buf.append("[").append(_shortHash).append("]");
-        } else {buf.append("[null dest] ");}
-        buf.append(getPrefix());
+            buf.append("[").append(_shortHash).append(']');
+        } else {buf.append("[null dest]");}
+        buf.append(' ').append(getPrefix().trim());
         return buf.toString();
     }
 }

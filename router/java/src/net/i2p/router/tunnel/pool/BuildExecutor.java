@@ -3584,14 +3584,19 @@ public class BuildExecutor implements Runnable {
                 if (_log.shouldInfo()) {
                     long rtt = _context.clock().now() - rv.getConfig(0).getCreation();
                     if (rtt < 0) {rtt = 0;}
-                    _log.info("Received late reply (RTT: " + rtt + "ms) for: " + rv);
+                    _log.info("Received late reply -> The build had already been timed out"
+                              + " * RTT: " + rtt + "ms * Tunnel: " + rv);
                 }
             } else {
                 if (_log.shouldDebug()) {
                     long rtt = _context.clock().now() - rv.getConfig(0).getCreation();
                     if (rtt < 0) {rtt = 0;}
-                    _log.debug("Removing from building map -> Reply received (RTT: " + rtt + "ms), map size: " +
-                               _currentlyBuildingMap.size() + ", for: " + rv);
+                    // The map holds one entry per build in flight, not a byte
+                    // count, and it is read after the remove, so it is what is
+                    // still outstanding once this reply has been taken out.
+                    _log.debug("Removing from building map -> Reply received"
+                               + " * RTT: " + rtt + "ms * Builds still in flight: " + _currentlyBuildingMap.size()
+                               + "\n* Tunnel: " + rv);
                 }
             }
         }

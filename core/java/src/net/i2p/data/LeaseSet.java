@@ -501,10 +501,16 @@ public class LeaseSet extends DatabaseEntry {
         return _destination.hashCode();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * A string representation of this LeaseSet, as a log entry: the class name
+     * first, then one {@code " * "} bullet per field. The class name leads so a
+     * caller writing {@code "Created and signed " + leaseSet} reads as a sentence
+     * instead of ending in a dangling space.
+     */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(128);
+        buf.append("LeaseSet");
         if (_destination != null) {
             buf.append("\n* Destination: [").append(_destination.calculateHash().toShortBase32()).append(']');
         }
