@@ -28,6 +28,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import net.i2p.crypto.SigAlgo;
 import net.i2p.crypto.SigType;
+import net.i2p.data.Base32;
 import net.i2p.data.Base64;
 import net.i2p.data.BlindData;
 import net.i2p.data.Certificate;
@@ -4141,18 +4142,25 @@ return false;
     }
 
     /**
-     * Say, in bytes, whether the two hashes the store failure names really differ.
-     * <p>On a live router, all 906 key-mismatch rejections that printed both full
-     * forms printed the same 52 characters twice - the entry's hash and the key
-     * it was refused under are the same 32 bytes, while the check that compares
-     * them still said they differ. A base32 form cannot show that contradiction
-     * to a reader, and without it the next window cannot tell a wrong reason from
-     * a wrong rendering. Naming the first differing byte does the same for the
-     * case where the two really do part company.
+     * Say, in bytes, whether the two hashes the store failure names really
+     * differ, and when the printed forms say otherwise, say why.
+     * <p>On a live router, every one of the 1,400-odd key-mismatch rejections in
+     * one log set printed the same 52 characters twice and then named byte 0 as
+     * the first difference. Both halves cannot be true: a base32 form's first
+     * character is the top five bits of byte 0, so any change to that byte
+     * changes the first or the second character. What the line prints are the
+     * cached renderings, not the bytes - {@link Hash} caches its base32 form on
+     * first request, and nothing refreshes it if the backing array is rewritten
+     * afterwards. The key is the side that can be rewritten: its 32 bytes come
+     * from the recyclable {@link net.i2p.util.SimpleByteCache} through the
+     * shared hash cache, while the entry's own hash is a fresh digest array
+     * nothing else holds. Recomputing the form from the live bytes names which
+     * side no longer describes itself and what it holds now, which is the only
+     * way to find the release that recycled a live hash's array.
      *
      * @param key the key the LeaseSet was stored under
      * @param lsHash the hash the LeaseSet itself carries
-     * @return a {@code \n* } continuation line, never empty
+     * @return {@code \n* } continuation lines, never empty
      * @since 0.9.72+
      */
     static String hashDiffClause(Hash key, Hash lsHash) {
@@ -4164,7 +4172,42 @@ return false;
         if (i >= a.length && i >= b.length) {
             return "\n* The two hashes are byte-identical -> The key check disagrees with the entry";
         }
-        return "\n* First difference at byte " + i + " of " + a.length;
+        StringBuilder sb = new StringBuilder(96);
+        sb.append("\n* First difference at byte ").append(i).append(" of ").append(a.length);
+        String keyNow = staleFormClause(key);
+        String lsNow = staleFormClause(lsHash);
+        if (keyNow != null || lsNow != null) {
+            sb.append("\n* The two forms printed above are cached, not live")
+              .append(" -> One side's bytes were rewritten after its form was rendered");
+            if (keyNow != null) {
+                sb.append("\n* Key bytes now: ").append(keyNow);
+            }
+            if (lsNow != null) {
+                sb.append("\n* LeaseSet bytes now: ").append(lsNow);
+            }
+        }
+        return sb.toString();
+    }
+
+    /**
+     * The base32 form the hash's bytes give right now, but only when that is
+     * not the form the hash prints.
+     * <p>{@link Hash} caches its base32 form the first time it is asked for, and
+     * its backing array is handed out by {@link Hash#toByteArray()}, so an array
+     * that goes back to the byte cache while a live hash still holds it is
+     * rewritten in place and the cached form silently becomes a description of
+     * the past. Comparing the two is what turns a self-contradictory failure
+     * line into a finding about the array.
+     *
+     * @param hash the hash to re-render from its current bytes
+     * @return the live form, or null when the cached form still matches the bytes
+     * @since 0.9.72+
+     */
+    static String staleFormClause(Hash hash) {
+        byte[] data = hash.toByteArray();
+        if (data == null) {return null;}
+        String live = Base32.encode(data) + ".b32.i2p";
+        return live.equals(hash.toBase32()) ? null : live;
     }
 
     /**

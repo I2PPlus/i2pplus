@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import net.i2p.data.Base32;
 import net.i2p.data.Hash;
 import org.junit.Test;
 
@@ -17,6 +18,11 @@ import org.junit.Test;
  * live router fetched one destination 1,639 times in 133 minutes, and every
  * fetch wrote a two-line WARN whose key and LeaseSet hashes printed the same 8
  * characters, so the line read as a contradiction.
+ * <p>Printing the full forms did not settle it either: every key-mismatch
+ * rejection in a 1 GB log set printed the same 52 characters twice and then
+ * named byte 0 as the first difference, which cannot both be true. The last
+ * group of cases pins that reasoning and what the line now says when a hash's
+ * cached form no longer describes its bytes.
  *
  * @since 0.9.72+
  */
@@ -119,11 +125,10 @@ public class StoreRejectionDecisionTest {
     }
 
     /**
-     * The measured case: on a live router, all 906 key-mismatch rejections that
-     * printed both full forms printed the same 52 characters twice - the two
-     * hashes are the same 32 bytes, so the reason and the bytes disagree, and
-     * the line has to say that rather than leave a reader to compare 52
-     * characters by eye.
+     * Two hashes that really are the same 32 bytes, refused for another reason
+     * - in the live log, an expired LeaseSet. The line has to say the hashes
+     * agree rather than leave a reader to compare 52 characters by eye and
+     * conclude the key check is broken.
      *
      * @since 0.9.72+
      */
@@ -175,6 +180,95 @@ public class StoreRejectionDecisionTest {
                              hash(0x01), null));
         assertEquals("", KademliaNetworkDatabaseFacade.fullHashClause(
                              null, hash(0x01)));
+    }
+
+    /**
+     * The premise the finding rests on: a base32 form cannot outlive a change
+     * to byte 0 without changing, because its first character is the top five
+     * bits of that byte and its second carries the other three. So a failure
+     * line printing one form twice beside "first difference at byte 0" is
+     * printing a stale rendering, not a matching pair.
+     *
+     * @since 0.9.72+
+     */
+    @Test
+    public void testByteZeroAlwaysShowsInTheFirstTwoCharacters() {
+        Hash h = hash(0x01);
+        String before = h.toBase32();
+        h.toByteArray()[0] = (byte) 0x80;
+        String after = Base32.encode(h.toByteArray()) + ".b32.i2p";
+        assertFalse("byte 0 left the form untouched: " + before,
+                    before.substring(0, 2).equals(after.substring(0, 2)));
+    }
+
+    /**
+     * The live case: the key's form was rendered long before the store was
+     * refused, and its backing array was rewritten in between, so the two forms
+     * agree while the bytes do not. The line has to name that and show what the
+     * bytes hold now, and it must not accuse the side that is honest.
+     *
+     * @since 0.9.72+
+     */
+    @Test
+    public void testAStaleFormIsNamedAndItsLiveBytesShown() {
+        Hash key = hash(0x01);
+        Hash ls = hash(0x01);
+        // Rendered once up front, as other lines about this destination do
+        key.toShortBase32();
+        // and then the backing array rewritten under the live hash
+        key.toByteArray()[0] = (byte) 0x7f;
+        String clause = KademliaNetworkDatabaseFacade.fullHashClause(key, ls);
+        assertTrue("the contradiction is named: " + clause,
+                   clause.contains("cached, not live"));
+        assertTrue("the byte offset is still there: " + clause,
+                   clause.contains("First difference at byte 0 of 32"));
+        String live = Base32.encode(key.toByteArray()) + ".b32.i2p";
+        assertTrue("what the bytes hold now: " + clause,
+                   clause.contains("\n* Key bytes now: " + live));
+        assertFalse("the honest side is not accused: " + clause,
+                    clause.contains("LeaseSet bytes now:"));
+    }
+
+    /**
+     * A hash whose cached form still matches its bytes is not reported as
+     * stale, so an ordinary mismatch stays the two lines it was.
+     *
+     * @since 0.9.72+
+     */
+    @Test
+    public void testAHonestMismatchClaimsNoStaleForm() {
+        Hash key = samePrefixDifferentTail(0x01);
+        Hash ls = hash(0x01);
+        key.toShortBase32();
+        ls.toShortBase32();
+        String clause = KademliaNetworkDatabaseFacade.fullHashClause(key, ls);
+        assertTrue("still names the byte: " + clause,
+                   clause.contains("First difference at byte 31 of 32"));
+        assertFalse("no stale-form claim: " + clause,
+                    clause.contains("cached, not live"));
+        assertEquals("still two lines: " + clause,
+                     clause.split("\n").length, 4);
+    }
+
+    /**
+     * When both sides were rewritten, both live forms go on the line - the
+     * reader cannot tell which one to distrust from a single live form.
+     *
+     * @since 0.9.72+
+     */
+    @Test
+    public void testBothStaleFormsAreShown() {
+        Hash key = hash(0x01);
+        Hash ls = hash(0x01);
+        key.toShortBase32();
+        ls.toShortBase32();
+        key.toByteArray()[0] = (byte) 0x7f;
+        ls.toByteArray()[31] = (byte) 0x55;
+        String clause = KademliaNetworkDatabaseFacade.fullHashClause(key, ls);
+        assertTrue("key live form: " + clause,
+                   clause.contains("Key bytes now:"));
+        assertTrue("LeaseSet live form: " + clause,
+                   clause.contains("LeaseSet bytes now:"));
     }
 
     /**
