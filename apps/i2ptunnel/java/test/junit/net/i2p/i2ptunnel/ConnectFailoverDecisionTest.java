@@ -172,4 +172,60 @@ public class ConnectFailoverDecisionTest {
     public void testDefaultConnectTimeoutIsThirtySeconds() {
         assertEquals(30_000L, I2PTunnelClientBase.DEFAULT_CONNECT_TIMEOUT);
     }
+
+    // ---------- attempt window vs. leg floor ----------
+
+    /**
+     * The regression: legs that die on streaming's SYN phase must still leave a
+     * second leg startable. Measured live on 2026-11-24 a leg gave up at 8.8s
+     * inside a 15s attempt window, 6.2s was left — under the 10s leg floor — and
+     * legs 2-4 were skipped for a pool that was holding four outbound tunnels.
+     */
+    @Test
+    public void testWalkReachesASecondLegWhenLegsDieFast() {
+        long start = 1_000_000L;
+        long request = start + I2PTunnelHTTPClient.REQUEST_CONNECT_DEADLINE_MS;
+        long attempt = I2PTunnelClientBase.attemptDeadlineMs(request, start);
+        assertEquals(2, walkLegs(start, attempt, 8_800L, 4));
+        // the window that caused it, kept as the contrast
+        assertEquals(1, walkLegs(start, start + 15_000L, 8_800L, 4));
+    }
+
+    /** A walk never starts a leg streaming would cut short. */
+    @Test
+    public void testWalkSkipsALegWithLessThanTheFloorLeft() {
+        long start = 1_000_000L;
+        assertEquals(-1, I2PTunnelClientBase.legConnectTimeoutMs(
+                I2PTunnelClientBase.DEFAULT_CONNECT_TIMEOUT, start + 9_999L, start));
+        assertEquals(10_000L, I2PTunnelClientBase.legConnectTimeoutMs(
+                I2PTunnelClientBase.DEFAULT_CONNECT_TIMEOUT, start + 10_000L, start));
+    }
+
+    /** Legs that run their whole window are still bounded by the attempt cap. */
+    @Test
+    public void testWalkStopsAtTheAttemptCap() {
+        long start = 1_000_000L;
+        long attempt = start + I2PTunnelClientBase.MAX_CONNECT_ATTEMPT_MS;
+        assertEquals(1, walkLegs(start, attempt, 20_000L, 4));
+    }
+
+    /**
+     * How many legs one walk starts when each one dies after legDeathMs. Mirrors
+     * the loop in createI2PSocketWithFailover: size the leg from the budget left,
+     * stop when the walk says the leg is not startable, and charge the leg's real
+     * cost against the clock.
+     */
+    private static int walkLegs(long startMs, long deadlineMs, long legDeathMs,
+                                int tunnelCount) {
+        int legs = 0;
+        long now = startMs;
+        while (legs < tunnelCount) {
+            long legMs = I2PTunnelClientBase.legConnectTimeoutMs(
+                    I2PTunnelClientBase.DEFAULT_CONNECT_TIMEOUT, deadlineMs, now);
+            if (legMs < 0) {break;}
+            legs++;
+            now += Math.min(legMs, legDeathMs);
+        }
+        return legs;
+    }
 }

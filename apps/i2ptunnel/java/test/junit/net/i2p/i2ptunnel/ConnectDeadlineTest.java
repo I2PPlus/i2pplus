@@ -249,13 +249,19 @@ public class ConnectDeadlineTest {
     }
 
     /**
-     * The attempt budget has to leave a startable leg: streaming floors a
-     * connect window at 10s and the walk skips a leg with less than that left.
+     * The attempt budget has to leave more than one startable leg. Streaming
+     * floors a connect window at 10s and the walk skips a leg with less than
+     * that left, so a window that fits exactly one leg is a failover in name
+     * only: measured live on 2026-11-24 a 15s window walked 1 leg of the 4 a
+     * pool was holding, and the log said so.
      */
     @Test
-    public void testAttemptBudgetStillBuysALeg() {
-        assertTrue(I2PTunnelClientBase.MAX_CONNECT_ATTEMPT_MS >= I2PTunnelClientBase.MIN_CONNECT_LEG_MS);
-        assertTrue(I2PTunnelClientBase.MAX_CONNECT_ATTEMPT_MS <= I2PTunnelClientBase.MAX_CONNECT_SPEND_MS);
+    public void testAttemptBudgetStillBuysTwoLegs() {
+        assertTrue(I2PTunnelClientBase.MAX_CONNECT_ATTEMPT_MS >=
+                   I2PTunnelClientBase.MIN_CONNECT_LEG_MS *
+                   I2PTunnelClientBase.MIN_FAILOVER_LEGS_PER_ATTEMPT);
+        assertTrue(I2PTunnelClientBase.MAX_CONNECT_ATTEMPT_MS <=
+                   I2PTunnelClientBase.MAX_CONNECT_SPEND_MS);
         // 30s of spend, 15s per attempt: the sizing must pay for the second try
         assertEquals(2, I2PTunnelClientBase.maxTimeoutConnectRetries(105_000, 15_000, false));
     }

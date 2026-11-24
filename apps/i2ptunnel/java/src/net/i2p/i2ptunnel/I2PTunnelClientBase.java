@@ -1209,19 +1209,36 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     static final long MAX_CONNECT_SPEND_MS = 30 * 1000;
 
     /**
-     * Wall time one failover walk may take, capped out of the request's
-     * {@link #MAX_CONNECT_SPEND_MS} budget by {@link #attemptDeadlineMs(long, long)}.
-     * <p>15s: above the slowest healthy handshake measured on a warm router
-     * (1.7s) and above streaming's 10s connect-window floor, so a real attempt
-     * still gets its full window, and small enough that the request keeps a
-     * second and third attempt in hand. With the SYN interval now sized from the
-     * window (see {@code Connection#fitSynBudgetToWindow}), a 15s attempt sends
-     * the full configured twelve SYNs across four or five different outbound
-     * tunnels before giving up.
+     * Failover legs one attempt window has to be able to hold. The attempt cap
+     * below is derived from this and {@link #MIN_CONNECT_LEG_MS} rather than
+     * picked, so the two cannot drift apart and leave the walk structurally
+     * unable to reach the leg the failover exists for.
+     * <p>Two, not one: the case the walk is for is a pool holding several
+     * outbound tunnels of which one is dropping SYNs, and a walk that can only
+     * ever start the first tunnel never gets to the working one.
      *
      * @since 0.9.72+
      */
-    static final long MAX_CONNECT_ATTEMPT_MS = 15 * 1000;
+    static final int MIN_FAILOVER_LEGS_PER_ATTEMPT = 2;
+
+    /**
+     * Wall time one failover walk may take, capped out of the request's
+     * {@link #MAX_CONNECT_SPEND_MS} budget by {@link #attemptDeadlineMs(long, long)}.
+     * <p>Sized from the leg floor, not picked. At 15s the walk could not fit two
+     * legs at all: measured live on 2026-11-24 a leg gave up on streaming's SYN
+     * phase after 8.8s, leaving 6.2s — under {@link #MIN_CONNECT_LEG_MS} — so
+     * {@link #legConnectTimeoutMs(long, long, long)} returned -1 and the log
+     * reported "Connect failed after 1/4 tunnel legs" for a pool that was
+     * holding four outbound tunnels. This javadoc claimed a 15s attempt "sends
+     * the full configured twelve SYNs across four or five different outbound
+     * tunnels"; it sent seven down one. Two minimum legs is the smallest window
+     * that reaches a second tunnel, and it stays inside
+     * {@link #MAX_CONNECT_SPEND_MS} so the retry ceiling still has a budget to
+     * size itself against.
+     *
+     * @since 0.9.72+
+     */
+    static final long MAX_CONNECT_ATTEMPT_MS = MIN_CONNECT_LEG_MS * MIN_FAILOVER_LEGS_PER_ATTEMPT;
 
     /**
      * Smallest per-attempt cost (ms) charged against the remaining deadline by
