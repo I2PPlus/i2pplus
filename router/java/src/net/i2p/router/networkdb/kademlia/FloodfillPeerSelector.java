@@ -9,6 +9,7 @@ package net.i2p.router.networkdb.kademlia;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import net.i2p.stat.RateConstants;
@@ -331,16 +332,25 @@ public class FloodfillPeerSelector extends PeerSelector {
         Set<Long> maskedIPs = new HashSet<>(cap);
         Set<Integer> ports = new HashSet<>(cap);
         Set<String> families = new HashSet<>(Math.max(4, cap / 8));
-        // split sorted list into 3 unsorted lists
+        // split sorted list into 4 unsorted lists
         List<Hash> rv = new ArrayList<>(howMany);
         List<Hash> okff = new ArrayList<>(howMany);
         List<Hash> badff = new ArrayList<>(howMany);
+        Map<Hash, Long> recentff = new HashMap<>(howMany);
         for (int i = 0; found < howMany && i < sorted.size(); i++) {
             Hash entry = sorted.get(i);
             if (entry == null) {continue;} // shouldn't happen
             if (uptime < 45*1000L) {break;}
-            // Skip recently-queried floodfills to spread load across concurrent searches
-            if (_facade.isRecentlyQueried(entry)) {
+            // Skip recently-queried floodfills to spread load across concurrent
+            // searches - but keep them, in case the search needs them after all.
+            // A LeaseSet lives only on the floodfills nearest its own hash, so a
+            // search that rotates away from every floodfill it asked a moment ago
+            // can fail for a live destination while the answer sits on a peer it
+            // is refusing to ask: two searches for the same key 8s apart queried
+            // 24 and 8 peers with zero overlap, and the 24-peer search failed.
+            long cooldownEnd = _facade.getQueryCooldownEnd(entry);
+            if (cooldownEnd > 0) {
+                recentff.put(entry, cooldownEnd);
                 continue;
             }
             // Deferred from the candidate build: this predicate costs a profile
@@ -373,7 +383,7 @@ public class FloodfillPeerSelector extends PeerSelector {
                 case BAD:   badff.add(entry); break;
             }
         }
-        logSelectionResults(rv, okff, badff, unqueryable);
+        logSelectionResults(rv, okff, badff, recentff.size(), unqueryable);
         // Shuffle within each tier so concurrent searches don't all pick
         // the same XOR-closest peers, distributing load across floodfills
         Collections.shuffle(rv, _context.random());
@@ -388,6 +398,22 @@ public class FloodfillPeerSelector extends PeerSelector {
             rv.add(badff.get(i));
             found++;
         }
+        // Last of all: the floodfills this router rotated away from because it
+        // asked them a moment ago. Reaching them is the difference between a
+        // LeaseSet lookup that succeeds and one that reports a live destination
+        // missing, because only the floodfills nearest the destination's own
+        // hash hold it. They go back in the order they went quiet - the peer
+        // asked longest ago first - so that reopening them does not turn into
+        // hammering one floodfill, which a floodfill answers by blocking us.
+        if (found < howMany) {
+            for (Hash h : rotatedFallback(recentff, howMany - found)) {
+                RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(h);
+                if (canAnswerLookup(info)) {
+                    rv.add(h);
+                    found++;
+                }
+            }
+        }
         // During the startup grace period, reserve more slots for BAD floodfills
         // to spread lookups wide and rebuild profile stats. After grace, revert
         // to the normal 2-slot profiling budget.
@@ -401,6 +427,36 @@ public class FloodfillPeerSelector extends PeerSelector {
             }
         }
 
+        return rv;
+    }
+
+    /**
+     * Pure decision: the floodfills a search rotated away from, in the order it
+     * stopped asking them, capped at the slots still open.
+     * <p>Each value is when that peer's query cooldown ends, in ms since the
+     * epoch, so the entry with the smallest value is the peer this router asked
+     * longest ago and can safest ask again. The rotation exists because a
+     * floodfill queried over and over by the same router in a short window
+     * answers by blocking the asker; ordering by remaining cooldown keeps this
+     * last-resort tier from undoing that.
+     *
+     * @param cooldownEnds peer hash to cooldown end time in ms since the epoch,
+     *                     every value in the future; empty when nothing rotated
+     * @param slots how many more peers the search may ask
+     * @return up to slots peers, the one asked longest ago first, never null
+     * @since 0.9.72+
+     */
+    static List<Hash> rotatedFallback(Map<Hash, Long> cooldownEnds, int slots) {
+        if (cooldownEnds.isEmpty() || slots <= 0)
+            return Collections.emptyList();
+        List<Map.Entry<Hash, Long>> byQuiet = new ArrayList<>(cooldownEnds.size());
+        byQuiet.addAll(cooldownEnds.entrySet());
+        byQuiet.sort(Comparator.comparingLong(Map.Entry::getValue));
+        int n = Math.min(slots, byQuiet.size());
+        List<Hash> rv = new ArrayList<>(n);
+        for (int i = 0; i < n; i++) {
+            rv.add(byQuiet.get(i).getKey());
+        }
         return rv;
     }
 
@@ -775,12 +831,15 @@ public class FloodfillPeerSelector extends PeerSelector {
      *                    wrap a reply to
      */
     private void logSelectionResults(List<Hash> good, List<Hash> ok, List<Hash> bad,
-                                     int unqueryable) {
+                                     int rotated, int unqueryable) {
         if (_log.shouldDebug()) {
             StringBuilder buf = new StringBuilder("Floodfill sort results:");
             if (!good.isEmpty()) {buf.append(PeerLogFormatter.peerList(good, "Good", good.size(), MAX_LOGGED_PEERS));}
             if (!ok.isEmpty()) {buf.append(PeerLogFormatter.peerList(ok, "OK", ok.size(), MAX_LOGGED_PEERS));}
             if (!bad.isEmpty()) {buf.append(PeerLogFormatter.peerList(bad, "Bad", bad.size(), MAX_LOGGED_PEERS));}
+            if (rotated > 0) {
+                buf.append("\n* Rotated out as recently queried: ").append(rotated);
+            }
             if (unqueryable > 0) {
                 buf.append("\n* Peers that cannot answer: ").append(unqueryable);
             }

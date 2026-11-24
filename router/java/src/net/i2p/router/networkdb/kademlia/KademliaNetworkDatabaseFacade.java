@@ -724,6 +724,21 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /**
+     * When a peer stops being "recently queried", so that a caller can rank
+     * rotated-out peers by how long ago it last asked them instead of treating
+     * every one of them as equally off-limits.
+     *
+     * @param peer the floodfill peer
+     * @return the cooldown end in ms since the epoch, or 0 if the peer is not in
+     *         the cooldown right now
+     * @since 0.9.72+
+     */
+    long getQueryCooldownEnd(Hash peer) {
+        Long expiration = _recentlyQueriedFloodfills.get(peer);
+        return expiration != null && expiration > System.currentTimeMillis() ? expiration : 0L;
+    }
+
+    /**
      * Mark a floodfill peer as recently queried. Other searches will avoid
      * this peer for the cooldown period.
      *
