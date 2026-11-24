@@ -511,6 +511,17 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         }
         if (shouldFloodOnStore(floodfillEnabled(), ds)) {flood(ds);}
         int jobs = storeJobCount(floodfillEnabled(), ds, floodfillParticipants.size());
+        // Sibling store jobs for one key must not all aim at the same floodfill.
+        // Each job asks for the floodfill nearest the key's routing key and is
+        // done as soon as that one replies, so with separate skip sets both jobs
+        // store to the same peer and the entry lands on a single floodfill - on a
+        // live router 9.1 LeaseSet stores a minute against 3.4 publishes a minute,
+        // about two sends for one copy. StoreState takes the skip set by reference
+        // and adds every peer it tries to it, so one shared set pushes the second
+        // job to the next nearest floodfill: two copies of the entry on the
+        // network for the same messages, and a searcher that cannot reach the
+        // first floodfill still finds the second.
+        Set<Hash> shared = sharedSkipSet(toIgnore);
         int idx = 0;
         for (Hash peer : floodfillParticipants) {
             if (idx >= jobs) {break;}
@@ -526,7 +537,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
                 public void timeReached() {
                     _context.jobQueue().addJob(new FloodfillStoreJob(
                         _context, FloodfillNetworkDatabaseFacade.this,
-                        key, ds, onSuccess, onFailure, sendTimeout, toIgnore));
+                        key, ds, onSuccess, onFailure, sendTimeout, shared));
                 }
             }.schedule(delay);
             if (_log.shouldInfo()) {
@@ -544,6 +555,24 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             }
             idx++;
         }
+    }
+
+    /**
+     * The skip set the store jobs for one entry share. A caller that passes its
+     * own set keeps it - every peer attempted is added to it, as documented on
+     * {@link #sendStore} - and a caller that passes none gets a set shared by
+     * every job this call starts, which is what stops the jobs from all storing
+     * to the same floodfill.
+     * <p>The set is handed to {@link StoreState} by reference and mutated from
+     * several job threads, so it must tolerate concurrent access.
+     *
+     * @param toIgnore the caller's set, or null
+     * @return the set to pass to each store job, never null
+     * @since 0.9.72+
+     */
+    static Set<Hash> sharedSkipSet(Set<Hash> toIgnore) {
+        return toIgnore != null ? toIgnore
+                                : Collections.newSetFromMap(new ConcurrentHashMap<Hash, Boolean>());
     }
 
     /**
