@@ -883,7 +883,12 @@ public class JobQueue {
      *
      * @param id the runner ID to remove
      */
-    void removeRunner(int id) {_queueRunners.remove(Integer.valueOf(id));}
+    synchronized void removeRunner(int id, JobQueueRunner runner) {
+        Integer key = Integer.valueOf(id);
+        if (_queueRunners.get(key) == runner) {
+            _queueRunners.remove(key);
+        }
+    }
 
     /**
      * Current number of active job runners.
