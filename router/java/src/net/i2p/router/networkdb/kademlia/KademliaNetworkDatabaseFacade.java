@@ -224,8 +224,44 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      */
     private final ConcurrentHashMap<Hash, Long> _recentlyQueriedFloodfills = new ConcurrentHashMap<>(1024);
 
-    /** Cooldown before a floodfill can be queried again in ms. */
-    private static final long RECENTLY_QUERIED_COOLDOWN = 60*1000L;
+    /**
+     * Ceiling on how long a floodfill stays rotated out, in ms. The cooldown in
+     * use is the smaller of this and the search window - see
+     * {@link #queryCooldownMs(long)}.
+     */
+    private static final long RECENTLY_QUERIED_MAX_COOLDOWN = 60*1000L;
+
+    /**
+     * Floor on the rotation, in ms, so a Tuner that drives the search window to
+     * its minimum cannot switch the load-spreading off entirely.
+     */
+    private static final long RECENTLY_QUERIED_MIN_COOLDOWN = 1000L;
+
+    /**
+     * Pure decision: how long a floodfill stays rotated out after a search asks
+     * it. Bounded by the search window, because the rotation only pays for
+     * itself while a search could still be asking that peer - a peer held out
+     * for longer than any search can run is held out past the point where the
+     * rotation protects anything. A flat minute did exactly that at a live
+     * router's lookup rate of several LeaseSet searches a second: it took the
+     * nearest floodfills, the only ones holding a destination's LeaseSet, out of
+     * every search that followed the first, and 5,192 searches in 40 minutes
+     * ended with no floodfill left to ask at all.
+     *
+     * @param maxSearchTimeMs the longest an iterative search may run, in ms,
+     *                        normally {@link IterativeSearchJob#getMaxSearchTime()};
+     *                        0 or less means the window is unknown
+     * @return the cooldown to apply, in ms, between
+     *         {@link #RECENTLY_QUERIED_MIN_COOLDOWN} and
+     *         {@link #RECENTLY_QUERIED_MAX_COOLDOWN}
+     * @since 0.9.72+
+     */
+    static long queryCooldownMs(long maxSearchTimeMs) {
+        if (maxSearchTimeMs <= 0)
+            return RECENTLY_QUERIED_MAX_COOLDOWN;
+        return Math.max(RECENTLY_QUERIED_MIN_COOLDOWN,
+                        Math.min(RECENTLY_QUERIED_MAX_COOLDOWN, maxSearchTimeMs));
+    }
 
     /**
      * Keys whose LeaseSet was just rejected by store validation, mapped to when
@@ -708,10 +744,12 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /**
-     * Check if a floodfill peer was queried recently (within cooldown period).
+     * Check if a floodfill peer is still rotated out of a selection because a
+     * search asked it recently.
      *
      * @param peer the floodfill peer
-     * @return true if the peer was queried within the last 60s
+     * @return true if the peer was queried inside the current cooldown, whose
+     *         length comes from {@link #queryCooldownMs(long)}
      */
     boolean isRecentlyQueried(Hash peer) {
         Long expiration = _recentlyQueriedFloodfills.get(peer);
@@ -745,7 +783,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * @param peer the floodfill peer
      */
     void markQueried(Hash peer) {
-        _recentlyQueriedFloodfills.put(peer, System.currentTimeMillis() + RECENTLY_QUERIED_COOLDOWN);
+        long cooldown = queryCooldownMs(IterativeSearchJob.getMaxSearchTime());
+        _recentlyQueriedFloodfills.put(peer, System.currentTimeMillis() + cooldown);
     }
 
     /**
