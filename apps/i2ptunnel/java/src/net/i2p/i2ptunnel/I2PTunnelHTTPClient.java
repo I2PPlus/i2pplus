@@ -2044,7 +2044,8 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                             _log.info(getPrefix(requestId) + "Retrying after connection failure -> " + ioe.getMessage());
                         }
                         long sleepMs = connectRetrySleepMs(getConnectAttemptDelayMs(connectAttempts),
-                                                          connectDeadline, System.currentTimeMillis());
+                                                          connectCooldownMs(ioe), connectDeadline,
+                                                          System.currentTimeMillis());
                         if (sleepMs < 0) {
                             // No budget left for another attempt; fail now rather than
                             // start a walk the deadline would cut off. A 0 here means
@@ -2938,9 +2939,46 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      * @since 0.9.72+
      */
     static long connectRetrySleepMs(long requestedDelayMs, long deadlineMs, long nowMs) {
-        if (deadlineMs == NO_DEADLINE) {return Math.max(0, requestedDelayMs);}
-        if (isDeadlineExpired(deadlineMs, nowMs)) {return -1;}
-        return Math.min(Math.max(0, requestedDelayMs), deadlineMs - nowMs);
+        return connectRetrySleepMs(requestedDelayMs, -1, deadlineMs, nowMs);
+    }
+
+    /**
+     * How long to wait before the next connect attempt, with the cooldown the
+     * last failure reported taken into account.
+     * <p>The ladder's pause and the destination's cooldown are different facts,
+     * and the ladder does not know about the cooldown. Measured on a live router
+     * on 2026-11-24, one HTTP connect slept 1s, 2s, 4s, 8s, 16s and 32s — 63s —
+     * against a 39s cooldown, and every attempt inside that window was refused in
+     * 0 ms: the request spent its whole connect budget asleep or refused and sent
+     * one SYN, never attempting again after the window lapsed. Waiting for the
+     * window instead of the ladder turns those seven dead attempts into one wait
+     * and one real attempt.
+     * <p>When the window cannot fit inside what the request has left, with a leg
+     * still startable afterwards, the answer is to stop rather than to sleep to
+     * the deadline and be refused again on the way out.
+     *
+     * @param requestedDelayMs the pause the ladder asks for, 0 to proceed at once
+     * @param cooldownMs the window the refusal reported, or -1 when the failure
+     *                   was not a cooldown refusal and no window is known
+     * @param deadlineMs absolute deadline in ms since the epoch, or
+     *                   {@link I2PTunnelClientBase#NO_DEADLINE} for no shared budget
+     * @param nowMs current time in ms since the epoch
+     * @return the time to wait in ms, 0 to retry immediately, or -1 when no
+     *         attempt fits once the wait is over
+     * @since 0.9.72+
+     */
+    static long connectRetrySleepMs(long requestedDelayMs, long cooldownMs, long deadlineMs,
+                                    long nowMs) {
+        long wait = Math.max(0, requestedDelayMs);
+        if (cooldownMs > wait) {wait = cooldownMs;}
+        if (deadlineMs == NO_DEADLINE) {return wait;}
+        long remainingMs = deadlineMs - nowMs;
+        if (remainingMs <= 0) {return -1;}
+        // Only a refusal tells us the peer is unreachable by construction; for it,
+        // an attempt cannot run before the window lapses, so the leg floor has to
+        // still fit afterwards or the wait buys nothing.
+        if (cooldownMs >= 0 && remainingMs - wait < I2PTunnelClientBase.MIN_CONNECT_LEG_MS) {return -1;}
+        return Math.min(wait, remainingMs);
     }
 
     /**

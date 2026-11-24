@@ -314,6 +314,84 @@ public class ConnectRetryBudgetTest {
         assertEquals(0, I2PTunnelHTTPClient.connectRetrySleepMs(-5, now + 10_000, now));
     }
 
+    // ---------- retry sleep vs. the destination's cooldown ----------
+
+    /**
+     * The regression: a refusal says when an attempt can next run, and the ladder
+     * does not know that. Measured live on 2026-11-24 one connect slept 1s, 2s,
+     * 4s, 8s, 16s and 32s — 63s — against a 39s cooldown, every attempt inside
+     * the window was refused in 0 ms, and the request died at its deadline having
+     * sent one SYN.
+     */
+    @Test
+    public void testRefusalWindowSetsThePause() {
+        long now = 1_000_000L;
+        long deadline = now + 111_200L;
+        assertEquals(40_000L, I2PTunnelHTTPClient.connectRetrySleepMs(
+                I2PTunnelHTTPClient.getConnectAttemptDelayMs(2), 40_000L, deadline, now));
+    }
+
+    /** A ladder pause longer than the window is still the longer of the two. */
+    @Test
+    public void testLadderWinsWhenItOutlastsTheWindow() {
+        long now = 1_000_000L;
+        assertEquals(16_000L, I2PTunnelHTTPClient.connectRetrySleepMs(
+                16_000L, 5_000L, now + 100_000L, now));
+    }
+
+    /**
+     * A window the request cannot outlast is a stop, not a sleep: an attempt
+     * cannot run before the window lapses, so sleeping to the deadline and being
+     * refused on the way out buys nothing.
+     */
+    @Test
+    public void testRefusalOutlivingTheBudgetStops() {
+        long now = 1_000_000L;
+        assertEquals(-1, I2PTunnelHTTPClient.connectRetrySleepMs(0, 160_000L, now + 100_000L, now));
+        // with the leg floor still reachable afterwards, the same wait is taken
+        assertEquals(85_000L, I2PTunnelHTTPClient.connectRetrySleepMs(
+                0, 85_000L, now + 95_000L, now));
+    }
+
+    /** No window known is not a window of zero: the ladder is used unchanged. */
+    @Test
+    public void testNoWindowIsNotTreatedAsZero() {
+        long now = 1_000_000L;
+        assertEquals(4_000L, I2PTunnelHTTPClient.connectRetrySleepMs(4_000L, -1, now + 5_000L, now));
+        assertEquals(0L, I2PTunnelHTTPClient.connectRetrySleepMs(0, -1, now + 100_000L, now));
+    }
+
+    /** A spent deadline stops a refusal too — the window does not extend the budget. */
+    @Test
+    public void testSpentDeadlineStopsARefusalRetry() {
+        long now = 1_000_000L;
+        assertEquals(-1, I2PTunnelHTTPClient.connectRetrySleepMs(0, 1_000L, now, now));
+    }
+
+    /** With no shared budget, the window is taken in full. */
+    @Test
+    public void testNoDeadlineTakesTheWholeWindow() {
+        long now = 1_000_000L;
+        assertEquals(40_000L, I2PTunnelHTTPClient.connectRetrySleepMs(
+                0, 40_000L, I2PTunnelClientBase.NO_DEADLINE, now));
+    }
+
+    /**
+     * End to end over the ladder: a refusal at attempt 1 parks for the window,
+     * and the attempt after it still has a full leg to run — the shape the live
+     * failure never reached.
+     */
+    @Test
+    public void testRefusalThenAFullAttemptStillFits() {
+        long now = 1_000_000L;
+        long deadline = now + I2PTunnelHTTPClient.REQUEST_CONNECT_DEADLINE_MS - 8_800L;
+        long sleep = I2PTunnelHTTPClient.connectRetrySleepMs(0, 39_000L, deadline, now);
+        assertEquals(39_000L, sleep);
+        long after = now + sleep;
+        assertTrue("leg floor unreachable after the wait",
+                   deadline - after >= I2PTunnelClientBase.MIN_CONNECT_LEG_MS);
+    }
+
     /**
      * The whole ladder walks inside the request budget: four retries at 0, 1s,
      * 2s and 4s all fit in the 120s deadline after one 8.8s attempt, so the
