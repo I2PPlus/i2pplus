@@ -4618,9 +4618,17 @@ public class TunnelPool {
             if (chargeDest) {
                 if (_log.shouldInfo() && shouldLogSendFailure(now, _lastAttributionLogTime)) {
                     _lastAttributionLogTime = now;
+                    // The status says which failure the router reported, and the
+                    // hops say which tunnel it happened on - without them every
+                    // soft failure looks alike, and a stalled download cannot be
+                    // told from a destination that simply stopped answering.
                     _log.info(toString() + " -> Soft send failure charged to the destination, "
-                              + "not the tunnel * Destination: [" + dest.toShortBase32() +
-                              "] * Timeouts from it: " + _softAttribution.failuresFrom(dest, now));
+                              + "not the tunnel"
+                              + "\n* Destination: [" + dest.toShortBase32() + ']'
+                              + " * Status: " + MessageStatusMessage.getStatusString(status) +
+                              " (" + status + ')'
+                              + " * Timeouts from it: " + _softAttribution.failuresFrom(dest, now)
+                              + describeHops(cfg));
                 }
             } else {
                 cfg.incrementSoftFailures();
@@ -4641,9 +4649,10 @@ public class TunnelPool {
             // time in the prefix is a wasted line, and for an unnamed
             // destination it is the same string twice.
             _log.info(toString() + " -> Data-phase failure on the " +
-                      tunnelDirection() + "tunnel (status: " + status +
-                      (soft ? ", soft" : "") +
-                      "), failures now " + failures +
+                      tunnelDirection() + "tunnel" +
+                      "\n* Status: " + MessageStatusMessage.getStatusString(status) +
+                      " (" + status + ')' +
+                      " * Failures now: " + failures +
                       describeHops(cfg));
         }
         // Condemning a tunnel only helps if another one is coming. Cached by
@@ -4697,7 +4706,9 @@ public class TunnelPool {
      * hop across many failures is the one to penalise.
      *
      * @param cfg the tunnel that failed, may be null
-     * @return a {@code  * Hops: [a] -> [b]} segment, empty when no hops are known
+     * @return a {@code "\n* Hops: [a] -> [b]"} bullet, empty when no hops are
+     *         known. It opens its own bullet - three hop hashes appended to an
+     *         already full {@code " * "} line put it past the house limit.
      * @since 0.9.71+
      */
     private static String describeHops(TunnelInfo cfg) {
@@ -4707,7 +4718,7 @@ public class TunnelPool {
         for (int hop = 0; hop < len; hop++) {
             Hash peer = cfg.getPeer(hop);
             if (peer == null) {continue;}
-            if (rv.length() == 0) {rv.append(" * Hops: ");}
+            if (rv.length() == 0) {rv.append("\n* Hops: ");}
             else {rv.append(" -> ");}
             rv.append('[').append(peer.toShortBase64()).append(']');
         }
