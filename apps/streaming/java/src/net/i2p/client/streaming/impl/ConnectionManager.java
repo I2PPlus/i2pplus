@@ -437,6 +437,36 @@ class ConnectionManager {
     }
 
     /**
+     * Pure decision: the ceiling this particular record may escalate to.
+     * <p>A connect that never established escalates only as far as the point where
+     * the gate stops waiting and refuses outright. Past that the window stops
+     * pacing the caller and starts locking the destination out, and a connect
+     * failure is weak evidence about a peer in a tunnel network: the path that
+     * failed is one of our outbound tunnels, not the peer's address. Measured on a
+     * live router on 2026-11-24, one destination that was demonstrably answering
+     * — its server re-sent the SYN-ACK two seconds after our client gave up —
+     * escalated to 4 strikes and a 40s window, and 308 legs were then refused in
+     * 0 ms against 49 that ever sent a SYN.
+     * <p>A stream that died <em>after</em> it established is different evidence,
+     * about a peer that was reached and then went away, and it keeps the full
+     * configured ceiling.
+     *
+     * @param record the destination's record {@code {failedOn, strikes, fromPath}},
+     *               or null when it has never failed
+     * @param maxMs the configured ceiling
+     * @param refuseAfterMs the cooldown left past which the gate refuses rather
+     *                      than waits, non-positive when refusal is switched off
+     * @return the ceiling to escalate to, never above {@code maxMs}
+     * @since 0.9.72+
+     */
+    static long destCooldownCeiling(long[] record, long maxMs, long refuseAfterMs) {
+        if (record != null && record[2] == 0 && refuseAfterMs > 0) {
+            return Math.min(maxMs, refuseAfterMs);
+        }
+        return maxMs;
+    }
+
+    /**
      * Pure decision: consult one destination's cooldown for a connect about to
      * run, with the caller's own connect window taken into account.
      * <p>The three outcomes live in one function because they were measured apart.
@@ -472,7 +502,8 @@ class ConnectionManager {
                                      long refuseAfterMs, long callerBudgetMs) {
         if (record == null || baseMs <= 0) {return new CooldownGate(false, 0, 0, 0);}
         int strikes = (int) Math.max(1, record[1]);
-        long cooldown = destCooldownMs(strikes, baseMs, maxMs);
+        long cooldown = destCooldownMs(strikes, baseMs,
+                                       destCooldownCeiling(record, maxMs, refuseAfterMs));
         long elapsed = now - record[0];
         if (!cooldownRunning(elapsed, cooldown)) {return new CooldownGate(false, 0, strikes, 0);}
         long remaining = cooldown - elapsed;

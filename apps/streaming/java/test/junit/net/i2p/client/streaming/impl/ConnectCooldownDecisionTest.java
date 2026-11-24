@@ -575,6 +575,68 @@ public class ConnectCooldownDecisionTest {
     }
 
     /**
+     * The escalation a connect-phase failure buys stops at the point where the
+     * gate would stop waiting and refuse outright. Past that the window is no
+     * longer pacing the caller, it is locking out a destination the caller has
+     * every reason to reach again — and in a tunnel network a connect failure is
+     * evidence about one of our outbound tunnels at least as often as about the
+     * peer. Measured live on 2026-11-24: a destination whose server re-sent the
+     * SYN-ACK two seconds after our client gave up reached 4 strikes, and 308
+     * legs were then refused in 0 ms against 49 that ever sent a SYN.
+     */
+    @Test
+    public void testConnectPhaseEscalationStopsAtTheRefuseThreshold() {
+        long now = 1_700_000_000_000L;
+        // 6 strikes: 160s for a stream that died after it established, 30s for a
+        // connect that never did.
+        long[] connect = new long[] {now - 1000, 6, 0};
+        long[] path = new long[] {now - 1000, 6, 1};
+        ConnectionManager.CooldownGate capped = gate(connect, now);
+        ConnectionManager.CooldownGate full = gate(path, now);
+        assertEquals(REFUSE_AFTER - 1000, capped.remainingMs);
+        assertFalse(capped.refused);
+        assertEquals(REFUSE_AFTER - 1000, capped.waitMs);
+        assertTrue(full.refused);
+        assertEquals(160 * 1000L - 1000, full.remainingMs);
+        // the strike count is still reported, capped window or not
+        assertEquals(6, capped.strikes);
+    }
+
+    /**
+     * Capping the escalation does not disarm the gate: a window the caller cannot
+     * sit out inside its own connect leg is still refused, so a dead destination
+     * costs one leg per window rather than one leg per attempt.
+     */
+    @Test
+    public void testCappedWindowStillRefusesACallerThatCannotWaitItOut() {
+        long now = 1_700_000_000_000L;
+        long[] connect = new long[] {now - 1000, 6, 0};
+        ConnectionManager.CooldownGate shortLeg = gate(connect, now, 10 * 1000L);
+        assertTrue(shortLeg.refused);
+        assertEquals(REFUSE_AFTER - 1000, shortLeg.remainingMs);
+        // a caller with the whole window in hand is held, not refused
+        ConnectionManager.CooldownGate longLeg = gate(connect, now, REFUSE_AFTER);
+        assertFalse(longLeg.refused);
+        assertEquals(REFUSE_AFTER - 1000, longLeg.waitMs);
+    }
+
+    /** The ceiling is a cap, never a floor, and switching refusal off leaves it alone. */
+    @Test
+    public void testCeilingFollowsTheRecordAndTheRefuseThreshold() {
+        long now = 1_700_000_000_000L;
+        long[] connect = new long[] {now - 1000, 3, 0};
+        long[] path = new long[] {now - 1000, 3, 1};
+        assertEquals(REFUSE_AFTER,
+                     ConnectionManager.destCooldownCeiling(connect, MAX, REFUSE_AFTER));
+        assertEquals(MAX, ConnectionManager.destCooldownCeiling(path, MAX, REFUSE_AFTER));
+        assertEquals(MAX, ConnectionManager.destCooldownCeiling(null, MAX, REFUSE_AFTER));
+        // refusal switched off: nothing to cap at, the configured ceiling stands
+        assertEquals(MAX, ConnectionManager.destCooldownCeiling(connect, MAX, 0));
+        // a refuse threshold above the ceiling cannot raise the ceiling
+        assertEquals(MAX, ConnectionManager.destCooldownCeiling(connect, MAX, MAX * 2));
+    }
+
+    /**
      * Once the window has run out the connect goes through and the record is
      * retired - the gate must not hold a destination past the window its failures
      * bought, and it must not refuse an attempt that is already allowed to run.
@@ -706,9 +768,11 @@ public class ConnectCooldownDecisionTest {
     /**
      * The whole cycle end to end: failures arriving a few seconds apart, each one
      * recorded through recordFailure() and each later attempt consulted through
-     * the gate, escalate until an attempt is refused instead of held. This is the
-     * sequence the counting defect hid - the refusals were happening and the stat
-     * that reports them stayed empty.
+     * the gate. This is the sequence the counting defect hid - the refusals were
+     * happening and the stat that reports them stayed empty.
+     * <p>A connect that never established stops escalating at the refuse
+     * threshold, so the attempt after the fourth failure is held rather than
+     * refused; what refuses it is a caller whose own leg cannot cover the window.
      */
     @Test
     public void testSustainedFailuresEscalateToARefusal() {
@@ -720,7 +784,7 @@ public class ConnectCooldownDecisionTest {
         assertEquals(BASE - 1000, gate(record, t + 1000).waitMs);
 
         // Failures spaced past the base window are separate events, so each one
-        // buys the next doubling: 10s, then 20s, then 40s.
+        // buys the next doubling: 10s, then 20s, then the ceiling.
         record = ConnectionManager.recordFailure(record, t + 8 * 1000, false, BASE);
         record = ConnectionManager.recordFailure(record, t + 20 * 1000, false, BASE);
         assertEquals(3, record[1]);
@@ -729,8 +793,17 @@ public class ConnectCooldownDecisionTest {
         record = ConnectionManager.recordFailure(record, t + 42 * 1000, false, BASE);
         assertEquals(4, record[1]);
         ConnectionManager.CooldownGate g = gate(record, t + 43 * 1000);
-        assertTrue(g.refused);
-        assertEquals(39 * 1000L, g.remainingMs);
+        assertFalse(g.refused);
+        assertEquals(REFUSE_AFTER - 1000, g.waitMs);
+        // The escalation stops there: a fifth failure cannot push a connect-phase
+        // record past the threshold at which the gate would stop waiting.
+        record = ConnectionManager.recordFailure(record, t + 80 * 1000, false, BASE);
+        assertEquals(5, record[1]);
+        assertEquals(REFUSE_AFTER - 1000, gate(record, t + 81 * 1000).waitMs);
+        // A caller whose leg cannot cover the window is refused all the same.
+        ConnectionManager.CooldownGate shortLeg = gate(record, t + 81 * 1000, 10 * 1000);
+        assertTrue(shortLeg.refused);
+        assertEquals(REFUSE_AFTER - 1000, shortLeg.remainingMs);
     }
 
     /**
