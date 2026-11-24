@@ -400,19 +400,34 @@ public class FloodfillPeerSelector extends PeerSelector {
         }
         // Last of all: the floodfills this router rotated away from because it
         // asked them a moment ago. Reaching them is the difference between a
-        // LeaseSet lookup that succeeds and one that reports a live destination
+        // LeaseSet lookup that succeeds and one that reports a destination
         // missing, because only the floodfills nearest the destination's own
         // hash hold it. They go back in the order they went quiet - the peer
         // asked longest ago first - so that reopening them does not turn into
         // hammering one floodfill, which a floodfill answers by blocking us.
+        int reasked = 0;
         if (found < howMany) {
             for (Hash h : rotatedFallback(recentff, howMany - found)) {
                 RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(h);
                 if (canAnswerLookup(info)) {
                     rv.add(h);
                     found++;
+                    reasked++;
                 }
             }
+        }
+        // The two numbers that say whether the rotation is starving lookups: how
+        // many floodfills it held back from this selection, and how many it then
+        // had to give back because nothing fresher could fill the slots. Held
+        // back with none given back is the healthy shape; a selection that gives
+        // back as many as it held back is one that has run out of floodfills it
+        // has not already beaten on, which is what a flat one-minute cooldown
+        // did at several LeaseSet searches a second.
+        if (!recentff.isEmpty()) {
+            _context.statManager().addRateData("netDb.floodfillRotatedOut", recentff.size());
+        }
+        if (reasked > 0) {
+            _context.statManager().addRateData("netDb.floodfillReasked", reasked);
         }
         // During the startup grace period, reserve more slots for BAD floodfills
         // to spread lookups wide and rebuild profile stats. After grace, revert
