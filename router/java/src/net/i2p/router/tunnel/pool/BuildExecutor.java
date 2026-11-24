@@ -2978,16 +2978,19 @@ public class BuildExecutor implements Runnable {
         if (_log.shouldDebug()) {
             _log.debug("Build requested: " + cfg + ", building map size: " + _currentlyBuildingMap.size());
         }
-        if (cfg.getLength() > 1 && !cfg.isBypassPacing() && hasBuildInFlightToFirstHop(cfg)) {
-            _context.statManager().addRateData("tunnel.buildPacedOut", 1);
-            if (_log.shouldDebug()) {
-                _log.debug("Build gated (pacing): first hop already in flight for " + cfg);
+        if (cfg.getLength() > 1 && !cfg.isBypassPacing()) {
+            FirstHopGate gate = firstHopGate(cfg);
+            if (gate != FirstHopGate.NONE) {
+                _context.statManager().addRateData("tunnel.buildPacedOut", 1);
+                if (_log.shouldDebug()) {
+                    logFirstHopGate(gate, cfg);
+                }
+                // Never sent to the network, so no timeout will fire — remove it
+                // now or the pool's _inProgress count leaks upward forever,
+                // starving every cap-guard that gates on in-progress builds.
+                cfg.getTunnelPool().removeInProgress(cfg);
+                return;
             }
-            // Never sent to the network, so no timeout will fire — remove it
-            // now or the pool's _inProgress count leaks upward forever,
-            // starving every cap-guard that gates on in-progress builds.
-            cfg.getTunnelPool().removeInProgress(cfg);
-            return;
         }
 
         // Stagger: minimum 2s between dispatches to the same first hop
@@ -3072,8 +3075,8 @@ public class BuildExecutor implements Runnable {
             if (buildPeer != null && !_context.commSystem().isEstablished(buildPeer)) {
                 _context.statManager().addRateData("tunnel.buildNoSession", 1);
                 if (_log.shouldDebug()) {
-                    _log.debug("Build gated (no session): first hop has no session for "
-                               + cfg);
+                    _log.debug("Build gated (no session) -> First hop [" +
+                               buildPeer.toShortBase64() + "] has no session\n* Tunnel: " + cfg);
                 }
                 cfg.getTunnelPool().removeInProgress(cfg);
                 return;
@@ -3111,6 +3114,25 @@ public class BuildExecutor implements Runnable {
     }
 
     /**
+     * Why a build was held back because of its first hop, or not held back.
+     * <p>The two reasons share a stat counter and used to share one log line, so
+     * a peer turned away for repeated failures was reported as "already in
+     * flight" — the one measurement that would say whether the pacing guard is
+     * too strict or the pool simply has too few usable first hops read as a
+     * single undifferentiated 78% gate rate on inbound exploratory pools.
+     *
+     * @since 0.9.72+
+     */
+    enum FirstHopGate {
+        /** Dispatch normally. */
+        NONE,
+        /** Another build is already riding this same first hop. */
+        IN_FLIGHT,
+        /** This peer has failed as a first hop too often recently to try again. */
+        RECENT_FAILURE
+    }
+
+    /**
      * Whether another build request is already in flight whose first hop
      * (the peer the request is dispatched to) matches this config's.
      * Prevents stacking multiple build requests onto a single peer while
@@ -3125,22 +3147,67 @@ public class BuildExecutor implements Runnable {
      * or the peer has recently failed repeatedly as first hop
      */
     private boolean hasBuildInFlightToFirstHop(PooledTunnelCreatorConfig cfg) {
+        return firstHopGate(cfg) != FirstHopGate.NONE;
+    }
+
+    /**
+     * Why this build's first hop holds it back.
+     *
+     * @param cfg the prospective build
+     * @return the reason to hold the build, {@link FirstHopGate#NONE} to dispatch it
+     * @since 0.9.72+
+     */
+    private FirstHopGate firstHopGate(PooledTunnelCreatorConfig cfg) {
         Hash firstHop = BuildRequestor.getBuildRequestPeer(cfg);
-        if (firstHop == null) {return false;}
-        if (hasRecentlyFailedAsFirstHop(firstHop)) {
-            if (_log.shouldDebug()) {
-                _log.debug("Skipping build for " + cfg +
-                           " — first hop [" + firstHop.toShortBase64() +
-                           "] has " + getFirstHopFailureCount(firstHop) + " recent failures");
-            }
-            return true;
+        if (firstHop == null) {return FirstHopGate.NONE;}
+        if (hasRecentlyFailedAsFirstHop(firstHop)) {return FirstHopGate.RECENT_FAILURE;}
+        if (countBuildsToFirstHop(_currentlyBuildingMap.values(), firstHop, cfg) > 0) {
+            return FirstHopGate.IN_FLIGHT;
         }
-        for (PooledTunnelCreatorConfig inFlight : _currentlyBuildingMap.values()) {
-            if (inFlight == cfg) {continue;}
-            Hash otherFirstHop = BuildRequestor.getBuildRequestPeer(inFlight);
-            if (firstHop.equals(otherFirstHop)) {return true;}
+        return FirstHopGate.NONE;
+    }
+
+    /**
+     * How many of the builds in flight are riding the same first hop, excluding
+     * the build being decided on.
+     *
+     * @param inFlight the configs currently awaiting a reply
+     * @param firstHop the peer the prospective build would be sent to, not null
+     * @param self the prospective build, skipped; may be null to count all
+     * @return the number of other builds sharing that first hop, 0 if none
+     * @since 0.9.72+
+     */
+    static int countBuildsToFirstHop(Iterable<PooledTunnelCreatorConfig> inFlight, Hash firstHop,
+                                     PooledTunnelCreatorConfig self) {
+        if (inFlight == null || firstHop == null) {return 0;}
+        int count = 0;
+        for (PooledTunnelCreatorConfig other : inFlight) {
+            if (other == self) {continue;}
+            if (firstHop.equals(BuildRequestor.getBuildRequestPeer(other))) {count++;}
         }
-        return false;
+        return count;
+    }
+
+    /**
+     * Report why a build was held back, naming the first hop and what it already
+     * carries, so the gate rate can be attributed to a reason instead of counted
+     * as one number.
+     *
+     * @param gate the reason returned by {@link #firstHopGate}
+     * @param cfg the build that was held back
+     * @since 0.9.72+
+     */
+    private void logFirstHopGate(FirstHopGate gate, PooledTunnelCreatorConfig cfg) {
+        Hash firstHop = BuildRequestor.getBuildRequestPeer(cfg);
+        String hop = firstHop != null ? "[" + firstHop.toShortBase64() + "]" : "the first hop";
+        if (gate == FirstHopGate.RECENT_FAILURE) {
+            _log.debug("Build gated (first hop failures) -> " + hop + " has " +
+                       getFirstHopFailureCount(firstHop) + " recent failures\n* Tunnel: " + cfg);
+        } else {
+            int shared = countBuildsToFirstHop(_currentlyBuildingMap.values(), firstHop, cfg);
+            _log.debug("Build gated (pacing) -> First hop " + hop + " already has a build in flight" +
+                       "\n* Builds to it: " + shared + " * Tunnel: " + cfg);
+        }
     }
 
     /**
