@@ -282,6 +282,73 @@ class ConnectionManager {
     static final String ERR_CONNECT_BACKOFF = "Connect deferred: destination in connect cooldown";
 
     /**
+     * What {@link #backoffError(long)} appends to {@link #ERR_CONNECT_BACKOFF} to
+     * carry how much of the window is still to run.
+     *
+     * @since 0.9.72+
+     */
+    static final String BACKOFF_LEFT = " * Cooldown left: ";
+
+    /**
+     * The error a refused connect carries: the refusal, plus the window a caller
+     * with a longer budget than the refused leg has to wait out.
+     * <p>The refusal alone made the wait unactionable. Measured on a live router
+     * on 2026-11-24, one HTTP connect walked 8 attempts: the first sent SYNs and
+     * failed, arming a 4-strike window, and the next seven were refused in 0 ms
+     * while the caller slept its fixed 1s, 2s, 4s, 8s, 16s and 32s ladder — 63s
+     * spent inside a 39s window, so it never made an attempt after the window
+     * lapsed and died at its deadline having sent one SYN. The caller knows its
+     * own deadline; it cannot know ours.
+     * <p>The remaining time is written as whole seconds rounded up, always with
+     * the {@code s} suffix and never escalated to minutes, because
+     * {@link #backoffRefusalMs(String)} parses this back and
+     * {@link DataHelper#formatDuration(long)} is one-way. Rounding up means the
+     * caller waits slightly long rather than slightly short.
+     *
+     * @param remainingMs the cooldown left before an attempt may run, in ms;
+     *                    non-positive means the window has run out
+     * @return the error string, never null
+     * @since 0.9.72+
+     */
+    static String backoffError(long remainingMs) {
+        long seconds = (Math.max(0, remainingMs) + 999) / 1000;
+        return ERR_CONNECT_BACKOFF + BACKOFF_LEFT + seconds + 's';
+    }
+
+    /**
+     * How much of a destination's connect cooldown a refused connect was told to
+     * wait out, read back out of the error {@link #backoffError(long)} produced.
+     * <p>An exact match on {@link #ERR_CONNECT_BACKOFF} is not enough: the
+     * message now carries the window, so the classification is a prefix test and
+     * the number is a separate read. Anything that is not a refusal, or is a
+     * refusal written by an older release without the window, reports -1 and the
+     * caller falls back to its own pacing.
+     *
+     * @param error the connect error, may be null
+     * @return the cooldown left in ms, or -1 when the error is not a refusal or
+     *         carries no window
+     * @since 0.9.72+
+     */
+    static long backoffRefusalMs(String error) {
+        if (error == null || !error.startsWith(ERR_CONNECT_BACKOFF + BACKOFF_LEFT)) {
+            return -1;
+        }
+        int at = (ERR_CONNECT_BACKOFF + BACKOFF_LEFT).length();
+        long ms = 0;
+        int digits = 0;
+        while (at < error.length() && Character.isDigit(error.charAt(at))) {
+            ms = ms * 10 + (error.charAt(at) - '0');
+            digits++;
+            at++;
+        }
+        // No digits, or not the seconds unit we write, is not our message.
+        if (digits == 0 || at >= error.length() || error.charAt(at) != 's') {
+            return -1;
+        }
+        return ms * 1000;
+    }
+
+    /**
      * Pure decision: should this connect refuse the destination's remaining
      * cooldown rather than sit it out?
      * <p>Waiting is right while the window is short: the application expects
@@ -426,7 +493,7 @@ class ConnectionManager {
      * @since 0.9.72+
      */
     static boolean isBackoffRefusal(String error) {
-        return ERR_CONNECT_BACKOFF.equals(error);
+        return error != null && error.startsWith(ERR_CONNECT_BACKOFF);
     }
 
     /**
@@ -2739,7 +2806,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
                   // outbound tunnel is used. The caller closes the connection, as
                   // it does for any connect that comes back with an error, and the
                   // shared outcome block below is what counts the refusal.
-                  con.setConnectionError(ERR_CONNECT_BACKOFF);
+                  con.setConnectionError(backoffError(gate.remainingMs));
                   refused = true;
                   _log.warnThrottled("connect-backoff-" + destHash.toShortBase64(),
                                      backoffRefusal(destHash, gate.remainingMs, gate.strikes));

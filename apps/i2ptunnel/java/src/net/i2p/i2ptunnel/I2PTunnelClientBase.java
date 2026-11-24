@@ -917,6 +917,10 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
         NoRouteToHostException lastEx = null;
         int timeoutFailures = 0;
         int legsFailed = 0;
+        // Legs streaming refused before a SYN went out. Counted apart from
+        // legsFailed because a refusal used no outbound tunnel and cost no time,
+        // so a walk of four refusals is not four attempts at four tunnels.
+        int legsRefused = 0;
         // The per-leg timeout has to travel on the options object, which the
         // caller owns and may reuse. Hold the caller's value so it is always
         // handed back unchanged: a shrunken timeout left behind would silently
@@ -963,11 +967,17 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
                     lastEx = e;
                     boolean timedOut = isConnectTimeout(e);
                     if (timedOut) {timeoutFailures++;}
-                    legsFailed++;
+                    // A refusal never reached the fabric, so it is not a leg in
+                    // the sense the summary reports: counting it as one is what
+                    // made a walk that tried no outbound tunnel at all read as
+                    // "4/4 tunnel legs".
+                    boolean coolingDown = isConnectCooldown(e);
+                    if (coolingDown) {legsRefused++;} else {legsFailed++;}
                     int state = poolState();
                     boolean poolDown = state <= -1;
                     boolean poolBuilding = state == 0;
-                    boolean more = shouldContinueFailover(tunnelCount, i + 1, timeoutFailures, poolDown, poolBuilding);
+                    boolean more = shouldContinueFailover(tunnelCount, i + 1, timeoutFailures,
+                                                          poolDown, poolBuilding, coolingDown);
                     // Per-leg detail is an intermediate step within one logical
                     // connect, so it belongs at DEBUG: at WARN it fanned a single
                     // failure out into one line per configured leg. The overall
@@ -983,13 +993,57 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
             opt.setConnectTimeout(callerTimeoutMs);
             opt.setMaxConnectTimeout(callerMaxMs);
         }
-        if (legsFailed > 0 && _log.shouldInfo()) {
-            _log.info("Connect failed after " + legsFailed + "/" + tunnelCount + " tunnel legs" +
-                      (timeoutFailures > 0 ? " (" + timeoutFailures + " timed out)" : "") + ": " +
-                      (lastEx != null ? lastEx.getMessage() : "no route to host"));
+        if (legsFailed > 0 || legsRefused > 0) {
+            if (_log.shouldInfo()) {
+                _log.info(walkFailureLine(legsFailed, legsRefused, timeoutFailures, tunnelCount,
+                                          lastEx != null ? lastEx.getMessage() : null));
+            }
         }
         throw (lastEx != null) ? lastEx :
             new NoRouteToHostException("Failed to connect after " + tunnelCount + " attempts");
+    }
+
+    /**
+     * The one line that reports a whole tunnel-failover walk.
+     * <p>It used to write "4/4 tunnel legs (4 timed out)" for a walk whose four
+     * legs were all refused by streaming before a SYN went out, so the count read
+     * as four outbound tunnels tried and the reason read as four timeouts. Legs
+     * that never reached the fabric are reported apart from legs that did, and a
+     * walk that never sent a SYN says so instead of counting legs.
+     * <p>The tallies move to a {@code \n* } continuation line when the reason is
+     * long enough to push the emitted line past the house limit.
+     *
+     * @param legsFailed legs that ran and failed, having used an outbound tunnel
+     * @param legsRefused legs streaming refused before a SYN was sent
+     * @param timeoutFailures legs that failed as a connect timeout
+     * @param tunnelCount legs configured for the walk
+     * @param reason the last leg's failure message, may be null
+     * @return the line to log, never null
+     * @since 0.9.72+
+     */
+    static String walkFailureLine(int legsFailed, int legsRefused, int timeoutFailures,
+                                  int tunnelCount, String reason) {
+        StringBuilder sb = new StringBuilder(128);
+        if (legsFailed == 0 && legsRefused > 0) {
+            // streaming has already logged the destination, the window and the
+            // strike count at WARN; repeating its message here only lengthens
+            // this line, and the exception carries it to the caller regardless.
+            sb.append("Connect refused before any SYN was sent -> Destination in connect cooldown");
+        } else {
+            sb.append("Connect failed after ").append(legsFailed).append('/').append(tunnelCount)
+              .append(" tunnel legs -> ")
+              .append(reason != null ? reason : "no route to host");
+        }
+        String timedOut = timeoutFailures > 0 ? " * Timed out: " + timeoutFailures : "";
+        String refused = legsRefused > 0 ? " * Refused: " + legsRefused : "";
+        String tallies = timedOut + refused;
+        if (tallies.isEmpty()) {return sb.toString();}
+        if (sb.length() + tallies.length() > 100) {
+            sb.append('\n').append(tallies.trim());
+        } else {
+            sb.append(tallies);
+        }
+        return sb.toString();
     }
 
     /**
@@ -1033,7 +1087,38 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      */
     static boolean shouldContinueFailover(int tunnelCount, int attemptsMade, int timeoutFailures,
                                           boolean poolDown, boolean poolBuilding) {
-        if (poolDown) {return false;}
+        return shouldContinueFailover(tunnelCount, attemptsMade, timeoutFailures, poolDown,
+                                      poolBuilding, false);
+    }
+
+    /**
+     * Whether another tunnel-failover attempt is worthwhile after a connect
+     * failure, including the case where streaming refused the attempt outright.
+     * <p>A refusal ends the walk. The failover exists to reach the destination by
+     * a <em>different outbound tunnel</em>, and a refusal is not a verdict about
+     * a tunnel: streaming gates it on the destination's cooldown, so once one leg
+     * is refused every remaining leg of the same walk is refused too, in the same
+     * millisecond, without a SYN and without an outbound tunnel being used.
+     * <p>Measured on a live router on 2026-11-24: a walk that should have tried
+     * four outbound tunnels reported "4/4 tunnel legs" having tried none of them
+     * — legs 1 through 3 were all refused at 0 ms — and across the window 308
+     * legs were refused against 49 that sent a SYN. Walking them cost nothing but
+     * it also bought nothing, and it hid from the log that the failover never ran.
+     *
+     * @param tunnelCount configured max failover legs (max inbound/outbound quantity)
+     * @param attemptsMade legs already attempted (1-based)
+     * @param timeoutFailures consecutive timeout-style failures so far
+     * @param poolDown true if {@link #poolIsDefinitivelyDown} was true after the failure
+     * @param poolBuilding true when {@link #poolState} reports builds in flight
+     * @param coolingDown true when the failure is streaming's cooldown refusal,
+     *                    carrying how long the destination is still cooling down
+     * @return true to try the next tunnel leg
+     * @since 0.9.72+
+     */
+    static boolean shouldContinueFailover(int tunnelCount, int attemptsMade, int timeoutFailures,
+                                          boolean poolDown, boolean poolBuilding,
+                                          boolean coolingDown) {
+        if (poolDown || coolingDown) {return false;}
         // Walk every configured leg: a timeout on leg 1 must not prevent
         // trying legs 2..N when the pool still has capacity.
         return attemptsMade < tunnelCount;
@@ -1448,6 +1533,98 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
             t = cause;
         }
         return false;
+    }
+
+    /**
+     * Streaming's wording for a connect it refused before a SYN went out, because
+     * the destination's own connect cooldown was still running, and the suffix it
+     * appends with how much of that window is left.
+     * <p>This mirrors {@code ConnectionManager.ERR_CONNECT_BACKOFF} and
+     * {@code ConnectionManager.BACKOFF_LEFT}. The two modules meet only through
+     * the exception message — {@code ConnectionManager} is package-private — so
+     * the wording is pinned by a test on each side rather than by a shared symbol.
+     *
+     * @since 0.9.72+
+     */
+    static final String CONNECT_COOLDOWN_ERROR =
+        "Connect deferred: destination in connect cooldown";
+
+    /**
+     * What {@link #CONNECT_COOLDOWN_ERROR} is followed by when the refusal
+     * carries its window.
+     *
+     * @since 0.9.72+
+     */
+    static final String CONNECT_COOLDOWN_LEFT = " * Cooldown left: ";
+
+    /**
+     * Did streaming refuse this connect outright, rather than a path failing to
+     * answer? The distinction decides what a retry can achieve: a leg that timed
+     * out says nothing about the other outbound tunnels the pool holds, so the
+     * failover walk should try them; a refusal is streaming's verdict about the
+     * <em>destination</em>, and every remaining leg of the walk will be refused
+     * the same way in the same instant.
+     * <p>Measured on a live router on 2026-11-24: 308 legs were refused in 0 ms
+     * against 49 that ever sent a SYN, and the walk still reported "4/4 tunnel
+     * legs" as though it had tried four outbound tunnels.
+     *
+     * @param e the throwable whose cause chain, up to eight links deep, is scanned
+     * @return true if the failure is a cooldown refusal, not a path failure
+     * @since 0.9.72+
+     */
+    static boolean isConnectCooldown(Throwable e) {
+        Throwable t = e;
+        int depth = 0;
+        while (t != null && depth++ < 8) {
+            String m = t.getMessage();
+            if (m != null && m.startsWith(CONNECT_COOLDOWN_ERROR)) {return true;}
+            Throwable cause = t.getCause();
+            if (cause == t) {break;}
+            t = cause;
+        }
+        return false;
+    }
+
+    /**
+     * How much longer the destination's connect cooldown has to run, as the
+     * refusal reported it.
+     * <p>The refusal is only useful if the caller can wait it out: a caller that
+     * sleeps on its own fixed ladder can spend its whole connect budget inside
+     * the window and still never make an attempt after it lapses. Measured live:
+     * one request slept 1s, 2s, 4s, 8s, 16s and 32s — 63s — against a 39s
+     * window, and died at its deadline without a second SYN.
+     *
+     * @param e the throwable whose cause chain, up to eight links deep, is scanned
+     * @return the cooldown left in ms, or -1 when the failure is not a refusal or
+     *         the refusal carried no window
+     * @since 0.9.72+
+     */
+    static long connectCooldownMs(Throwable e) {
+        Throwable t = e;
+        int depth = 0;
+        while (t != null && depth++ < 8) {
+            String m = t.getMessage();
+            if (m != null && m.startsWith(CONNECT_COOLDOWN_ERROR + CONNECT_COOLDOWN_LEFT)) {
+                int at = (CONNECT_COOLDOWN_ERROR + CONNECT_COOLDOWN_LEFT).length();
+                long seconds = 0;
+                int digits = 0;
+                while (at < m.length() && Character.isDigit(m.charAt(at))) {
+                    seconds = seconds * 10 + (m.charAt(at) - '0');
+                    digits++;
+                    at++;
+                }
+                // No digits, or not the seconds unit streaming writes, is not a
+                // window we can act on.
+                if (digits > 0 && at < m.length() && m.charAt(at) == 's') {
+                    return seconds * 1000;
+                }
+                return -1;
+            }
+            Throwable cause = t.getCause();
+            if (cause == t) {break;}
+            t = cause;
+        }
+        return -1;
     }
 
     /**

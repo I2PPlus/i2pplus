@@ -437,6 +437,69 @@ public class ConnectCooldownDecisionTest {
         assertFalse(ConnectionManager.isBackoffRefusal(Connection.ERR_CONNECTION_TIMED_OUT));
     }
 
+    /**
+     * The refusal wording is a contract, not prose: I2PTunnelClientBase matches
+     * this exact string to tell a refusal from a path failure, because
+     * ConnectionManager is package-private and cannot be referenced from there.
+     * Pinned here so a reword has to be changed on both sides in the same commit.
+     */
+    @Test
+    public void testRefusalWordingIsTheContractTheProxyMirrors() {
+        assertEquals("Connect deferred: destination in connect cooldown",
+                     ConnectionManager.ERR_CONNECT_BACKOFF);
+        assertEquals(" * Cooldown left: ", ConnectionManager.BACKOFF_LEFT);
+    }
+
+    /**
+     * A refusal has to say how long it lasts. Measured on a live router on
+     * 2026-11-24, a proxy connect slept its fixed 1s, 2s, 4s, 8s, 16s and 32s
+     * ladder — 63s — against a 39s window, and reached its deadline without ever
+     * attempting again after the window lapsed.
+     */
+    @Test
+    public void testRefusalCarriesItsWindow() {
+        String err = ConnectionManager.backoffError(39_412);
+        assertTrue(err.startsWith(ConnectionManager.ERR_CONNECT_BACKOFF));
+        assertTrue(ConnectionManager.isBackoffRefusal(err));
+        // whole seconds, rounded up: wait slightly long rather than slightly short
+        assertEquals(ConnectionManager.ERR_CONNECT_BACKOFF + " * Cooldown left: 40s", err);
+        assertEquals(40_000L, ConnectionManager.backoffRefusalMs(err));
+    }
+
+    /**
+     * The window survives the round trip, including the values a duration
+     * formatter would have rendered as minutes.
+     */
+    @Test
+    public void testRefusalWindowRoundTrips() {
+        long[] windows = {0, 1, 999, 1000, 1001, 30_000, 39_412, 60_000, 300_000, 599_999};
+        for (long ms : windows) {
+            long read = ConnectionManager.backoffRefusalMs(ConnectionManager.backoffError(ms));
+            assertTrue("window " + ms + " read back as " + read,
+                       read >= ms && read - ms < 1000);
+        }
+    }
+
+    /**
+     * Only our own refusal reports a window. A refusal written before this
+     * carried one, and anything that merely resembles the wording, reads as no
+     * window at all rather than as a wait the caller should take.
+     */
+    @Test
+    public void testRefusalWindowAbsentIsNotAGuess() {
+        assertEquals(-1, ConnectionManager.backoffRefusalMs(null));
+        assertEquals(-1, ConnectionManager.backoffRefusalMs(""));
+        assertEquals(-1, ConnectionManager.backoffRefusalMs(
+                ConnectionManager.ERR_CONNECT_BACKOFF));
+        assertEquals(-1, ConnectionManager.backoffRefusalMs(Connection.ERR_SYN_NOT_ACKNOWLEDGED));
+        assertEquals(-1, ConnectionManager.backoffRefusalMs(
+                ConnectionManager.ERR_CONNECT_BACKOFF + ConnectionManager.BACKOFF_LEFT + "s"));
+        assertEquals(-1, ConnectionManager.backoffRefusalMs(
+                ConnectionManager.ERR_CONNECT_BACKOFF + ConnectionManager.BACKOFF_LEFT + "39"));
+        assertEquals(-1, ConnectionManager.backoffRefusalMs(
+                ConnectionManager.ERR_CONNECT_BACKOFF + ConnectionManager.BACKOFF_LEFT + "39m"));
+    }
+
     // ---- cooldownGate ----
 
     /**

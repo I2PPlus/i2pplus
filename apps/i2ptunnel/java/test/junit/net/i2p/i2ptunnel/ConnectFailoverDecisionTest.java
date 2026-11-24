@@ -20,6 +20,20 @@ public class ConnectFailoverDecisionTest {
      */
     public ConnectFailoverDecisionTest() {}
 
+    /**
+     * Streaming's wording for a handshake that ran out of SYN retransmits, used
+     * here as the contrast case: a leg that reached the fabric and failed, as
+     * opposed to one that was refused before it started.
+     */
+    private static final String SYN_TIMEOUT = "Connection timed out: SYN not acknowledged";
+
+    /**
+     * A refusal exactly as streaming writes one: the wording plus the window that
+     * is still to run.
+     */
+    private static final String REFUSED = I2PTunnelClientBase.CONNECT_COOLDOWN_ERROR +
+                                          " * Cooldown left: 40s";
+
     // ---------- shouldContinueFailover ----------
 
     /** Legs remain worth trying while the pool is healthy and none is dead. */
@@ -196,6 +210,91 @@ public class ConnectFailoverDecisionTest {
     @Test
     public void testDefaultConnectTimeoutIsThirtySeconds() {
         assertEquals(30_000L, I2PTunnelClientBase.DEFAULT_CONNECT_TIMEOUT);
+    }
+
+    // ---------- cooldown refusals ----------
+
+    /**
+     * The regression: streaming refuses a connect on the destination's cooldown,
+     * so every remaining leg of the same walk is refused the same instant. A walk
+     * of four configured legs reported "4/4 tunnel legs" having used no outbound
+     * tunnel and sent no SYN; 308 legs were refused this way against 49 that ran.
+     */
+    @Test
+    public void testWalkStopsOnACooldownRefusal() {
+        assertFalse(I2PTunnelClientBase.shouldContinueFailover(4, 1, 0, false, false, true));
+        assertFalse(I2PTunnelClientBase.shouldContinueFailover(4, 2, 1, false, true, true));
+        // the same walk with a leg that actually ran keeps walking
+        assertTrue(I2PTunnelClientBase.shouldContinueFailover(4, 1, 1, false, false, false));
+    }
+
+    /** The refusal wording, pinned against streaming's, and its window suffix. */
+    @Test
+    public void testRefusalWordingMirrorsStreamings() {
+        assertEquals("Connect deferred: destination in connect cooldown",
+                     I2PTunnelClientBase.CONNECT_COOLDOWN_ERROR);
+        assertEquals(" * Cooldown left: ", I2PTunnelClientBase.CONNECT_COOLDOWN_LEFT);
+    }
+
+    /**
+     * A refusal is not a path failure: it says nothing about the outbound
+     * tunnels the pool holds, and it is not a timeout either, so it must not be
+     * counted against the timeout budget.
+     */
+    @Test
+    public void testRefusalIsNeitherATimeoutNorAPathFailure() {
+        NoRouteToHostException err = new NoRouteToHostException(REFUSED);
+        assertTrue(I2PTunnelClientBase.isConnectCooldown(err));
+        assertFalse(I2PTunnelClientBase.isConnectTimeout(err));
+        assertFalse(I2PTunnelClientBase.isConnectCooldown(
+                new NoRouteToHostException(SYN_TIMEOUT)));
+        assertFalse(I2PTunnelClientBase.isConnectCooldown(null));
+        // wrapped, as streaming's refusal reaches the proxy
+        NoRouteToHostException wrapped = new NoRouteToHostException("connect failed");
+        wrapped.initCause(new NoRouteToHostException(REFUSED));
+        assertTrue(I2PTunnelClientBase.isConnectCooldown(wrapped));
+    }
+
+    /**
+     * The window is what makes a refusal actionable: the caller can wait it out
+     * against its own deadline instead of sleeping on a ladder that has no
+     * relation to it. Anything without a window reads as -1, not as a guess.
+     */
+    @Test
+    public void testRefusalWindowIsReadNotGuessed() {
+        assertEquals(40_000L, I2PTunnelClientBase.connectCooldownMs(
+                new NoRouteToHostException(REFUSED)));
+        assertEquals(-1, I2PTunnelClientBase.connectCooldownMs(
+                new NoRouteToHostException(I2PTunnelClientBase.CONNECT_COOLDOWN_ERROR)));
+        assertEquals(-1, I2PTunnelClientBase.connectCooldownMs(
+                new NoRouteToHostException(REFUSED.replace("40s", "40m"))));
+        assertEquals(-1, I2PTunnelClientBase.connectCooldownMs(
+                new NoRouteToHostException(SYN_TIMEOUT)));
+        assertEquals(-1, I2PTunnelClientBase.connectCooldownMs(null));
+    }
+
+    /**
+     * The walk's summary line has to distinguish legs that ran from legs that
+     * were refused: "4/4 tunnel legs (4 timed out)" described a walk that tried
+     * no tunnel at all, and named the refusals as timeouts.
+     */
+    @Test
+    public void testWalkLineSeparatesRefusalsFromLegsThatRan() {
+        String allRefused = I2PTunnelClientBase.walkFailureLine(0, 4, 0, 4, REFUSED);
+        assertEquals("Connect refused before any SYN was sent -> "
+                     + "Destination in connect cooldown * Refused: 4", allRefused);
+        String oneRan = I2PTunnelClientBase.walkFailureLine(1, 0, 1, 4, SYN_TIMEOUT);
+        assertEquals("Connect failed after 1/4 tunnel legs -> "
+                     + SYN_TIMEOUT + " * Timed out: 1", oneRan);
+        // a long reason puts the tallies on their own line rather than overrunning it
+        String mixed = I2PTunnelClientBase.walkFailureLine(4, 3, 4, 7, SYN_TIMEOUT);
+        assertEquals("Connect failed after 4/7 tunnel legs -> "
+                     + SYN_TIMEOUT + "\n* Timed out: 4 * Refused: 3", mixed);
+        for (String entry : new String[] {allRefused, oneRan, mixed}) {
+            for (String emitted : entry.split("\n")) {
+                assertTrue("over 100: " + emitted, emitted.length() <= 100);
+            }
+        }
     }
 
     // ---------- attempt window vs. leg floor ----------
