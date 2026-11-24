@@ -2705,18 +2705,28 @@ public class TunnelPool {
     }
 
     /**
-     * When the paired opposite-direction pool is nearly empty (size &lt;= 1),
+     * When the paired opposite-direction pool is nearly empty (usable &lt;= 1),
      * its tunnels are slow/failed and cleanup may not catch up — nudge the
      * manager to pre-build a replacement now, throttled.
+     * <p>Both directions ask.  The guard used to be {@link #isServerPool()}, so
+     * only the inbound half of a client destination could raise the alarm, and a
+     * destination whose outbound half had decayed stayed that way: measured on a
+     * live router, 11 of 11 hosted destinations sat at or above their inbound
+     * target while their outbound half sat below it with nothing building
+     * (update.skank 4/4 inbound against 1/4 outbound).  The reply leg of a
+     * stream rides the destination's outbound tunnels, so the site stayed
+     * reachable and answered nothing — 1,346 resends skank-to-proxy against 16
+     * in the other direction, ending at the 60-send retransmit cap.
      */
     private void maybePreBuildReplacement() {
-        if (!isServerPool()) {return;}
+        if (_settings.isExploratory()) {return;}
         Hash dest = _settings.getDestination();
-        TunnelPool oppositePool = _manager.getOutboundPool(dest);
+        TunnelPool oppositePool = _settings.isInbound() ? _manager.getOutboundPool(dest)
+                                                       : _manager.getInboundPool(dest);
+        if (oppositePool == null) {return;}
         // Use usable count (not size()) so a pool of FAILING/FAILED tunnels
         // doesn't block pre-build — raw size would hide an effectively dead pool.
-        if (oppositePool == null || oppositePool.getUsableTunnelCount() > 1) {return;}
-        if (size() <= 1) {return;}
+        if (!shouldNudgePartnerBuild(size(), oppositePool.getUsableTunnelCount())) {return;}
         long nowMs = _context.clock().now();
         if (nowMs - _lastPreBuildTime < PRE_BUILD_THROTTLE_MS) {return;}
         _lastPreBuildTime = nowMs;
@@ -2732,6 +2742,8 @@ public class TunnelPool {
      * at boot expire together, all OB pools lose their paired IB tunnels
      * simultaneously, and 5+ EMERGENCY triggers fire at once.  Let tunnels
      * expire naturally (11 min) to stagger the removal.
+     * <p>The hold is bounded by this pool being no larger than it was asked to
+     * be — see {@link #shouldHoldInboundPruning(int, int, int, int)}.
      *
      * @return true to skip pruning
      */
@@ -2744,12 +2756,57 @@ public class TunnelPool {
         // doesn't hide a synchronized-collapse risk behind raw capacity.
         int oppositeUsable = oppositePool.getUsableTunnelCount();
         int oppositeMin = oppositePool.getSettings().getQuantity();
-        if (oppositeUsable >= oppositeMin) {return false;}
+        int configured = _settings.getTotalQuantity();
+        int held = _tunnels.size();
+        if (!shouldHoldInboundPruning(held, configured, oppositeUsable, oppositeMin)) {return false;}
         if (_log.shouldDebug()) {
             _log.debug(toString() + " -> Skipping tunnel cleanup" +
-                       " (paired outbound pool below target: " + oppositeUsable + "/" + oppositeMin + ")");
+                       "\n* Paired outbound pool below target: " + oppositeUsable + "/" + oppositeMin +
+                       " * Holding inbound: " + held + "/" + configured);
         }
         return true;
+    }
+
+    /**
+     * Whether an inbound (server) pool must hold off pruning while its paired
+     * outbound pool is short.
+     * <p>Holding inbound tunnels protects the destination only while the inbound
+     * half is no larger than configured.  Once it is over configured the extra
+     * tunnels are not reachability, they are slots the starved direction needs,
+     * and an unbounded hold turns a transient partner shortage into a permanent
+     * asymmetry: measured on a live router every hosted destination sat at or
+     * above its inbound count (10/8, 9/8, 5/4) while its outbound half decayed
+     * to 1/4 or 2/8 with nothing building.
+     *
+     * @param inboundCount tunnels this inbound pool currently holds
+     * @param inboundConfigured the count this pool was configured to hold
+     * @param partnerUsable usable tunnels in the paired outbound pool
+     * @param partnerMin the count the paired outbound pool was configured to hold
+     * @return true to skip this pool's pruning pass
+     * @since 0.9.72+
+     */
+    static boolean shouldHoldInboundPruning(int inboundCount, int inboundConfigured,
+                                            int partnerUsable, int partnerMin) {
+        return partnerUsable < partnerMin && inboundCount <= inboundConfigured;
+    }
+
+    /**
+     * Whether a pool asks the executor to re-poll for replacements because its
+     * paired opposite-direction pool is nearly empty.
+     * <p>A partner holding one usable tunnel is the state where its tunnels are
+     * slow or failed and its own cleanup may not notice in time, so the healthy
+     * side raises the alarm rather than waiting for the partner to empty.  The
+     * asking pool must itself have something to spare: a pool of one tunnel is
+     * the collapse the nudge exists to prevent, and a pool of none has nothing
+     * to protect.
+     *
+     * @param thisPoolSize tunnels this pool currently holds
+     * @param partnerUsable usable tunnels in the paired opposite-direction pool
+     * @return true to nudge the executor
+     * @since 0.9.72+
+     */
+    static boolean shouldNudgePartnerBuild(int thisPoolSize, int partnerUsable) {
+        return thisPoolSize > 1 && partnerUsable <= 1;
     }
 
     /**
