@@ -1060,12 +1060,26 @@ class Connection {
     static final long SYN_PHASE_BUDGET_MIN_MS = 8000;
 
     /**
-     * SYN sends to allow when the path has no RTT evidence yet, so the budget is
-     * sized from the retransmit interval alone.
+     * SYN sends the wall-clock budget must cover, so the phase never ends before
+     * the last probe it sent could have been answered.
+     * <p>Eight, not four. Measured on a live router on 2026-11-24, the outbound
+     * give-ups were concentrated at exactly four sends — 16 of them, at ages of
+     * 24s and 26s — which is this constant deciding, not the clock: on a path with
+     * no RTT sample the retransmit interval is the configured initial RTO, so four
+     * probes is about one window and the probe count binds first. Meanwhile the
+     * peer on the traced handshake was still answering: it re-sent the SYN-ACK in
+     * reply to the sixth SYN, roughly a second after our client stopped sending.
+     * The server side gives up on its SYN-ACK after four sends too, so a client
+     * that also stops at four guarantees both sides stop on the same probe with
+     * the two packets in flight past each other.
+     * <p>Eight probes is the smallest count that outlasts the peer's own patience
+     * on both sides. On a fast path it stays below the {@link #SYN_PHASE_BUDGET_MIN_MS}
+     * floor and changes nothing; on a slow one the connect window caps it, so the
+     * worst it can do is let the handshake use the window its caller asked for.
      *
      * @since 0.9.72+
      */
-    static final int SYN_PHASE_BUDGET_MIN_PROBES = 4;
+    static final int SYN_PHASE_BUDGET_MIN_PROBES = 8;
 
     /**
      * Wall-clock budget (ms) for the unacknowledged-SYN phase of a handshake.
@@ -1088,7 +1102,10 @@ class Connection {
      * window it lives inside. The probe floor matters because the Tuner walks the
      * interval out on a slow path: a budget of ten RTTs at a 12s interval would
      * otherwise end the phase after two probes, and a peer that answers on the
-     * third would never get the chance.
+     * third would never get the chance. It is also what binds on a path with no
+     * RTT sample at all, where the interval is the configured initial RTO: the
+     * give-ups measured on 2026-11-24 sat at exactly that probe count, at ages of
+     * 24s and 26s, with the peer still answering the sixth SYN a second later.
      *
      * @param connectWindowMs the effective connect window from
      *                        {@link #computeEffectiveConnectTimeout(long, int, long)}; 0

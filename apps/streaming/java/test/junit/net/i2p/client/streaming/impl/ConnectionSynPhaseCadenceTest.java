@@ -57,7 +57,7 @@ public class ConnectionSynPhaseCadenceTest {
         long budget = Connection.computeSynPhaseBudgetMs(PROXY_WINDOW_MS, -1, interval);
         int gap = Connection.computeRetransmitArmDelay(true, interval, INITIAL_RTO, false);
         assertEquals(1250, interval);
-        assertEquals(8000, budget);
+        assertEquals(10_000, budget);
         assertEquals("the armed gap is the interval the budget was sized from", interval, gap);
         assertTrue("first probe at " + gap + "ms must fit the " + budget + "ms budget", gap <= budget);
     }
@@ -67,11 +67,13 @@ public class ConnectionSynPhaseCadenceTest {
      * handshake budget before that pass can fire, so the peer never gets a
      * second SYN and the caller's retry loop never sees a probe it could have
      * answered on a different outbound tunnel.
+     * <p>Sized at the 10s leg floor the proxy's failover now asks for, which is
+     * the shortest window the probe floor cannot cover at the configured RTO.
      */
     @Test
     public void rtoGapSpendsTheBudgetBeforeTheFirstProbe() {
-        int interval = Connection.fitSynBudgetToWindow(INITIAL_RTO, PROXY_WINDOW_MS, CONFIGURED_SENDS);
-        long budget = Connection.computeSynPhaseBudgetMs(PROXY_WINDOW_MS, -1, interval);
+        int interval = Connection.fitSynBudgetToWindow(INITIAL_RTO, 10_000, CONFIGURED_SENDS);
+        long budget = Connection.computeSynPhaseBudgetMs(10_000, -1, interval);
         assertTrue("the 9s RTO gap overshoots the " + budget + "ms budget it was sized past",
                    INITIAL_RTO > budget);
     }

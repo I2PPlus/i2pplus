@@ -66,7 +66,7 @@ public class ConnectionSynPhaseBudgetTest {
     public void testFloorIsTwoWideIntervals() {
         assertEquals(8_000, Connection.SYN_PHASE_BUDGET_MIN_MS);
         assertEquals(Connection.SYN_PHASE_BUDGET_MIN_MS,
-                     Connection.computeSynPhaseBudgetMs(MEASURED_WINDOW_MS, NO_RTT, 2_000));
+                     Connection.computeSynPhaseBudgetMs(MEASURED_WINDOW_MS, NO_RTT, 1_000));
         assertTrue("the floor must outlast a healthy handshake",
                    Connection.SYN_PHASE_BUDGET_MIN_MS > 1_704);
     }
@@ -81,10 +81,10 @@ public class ConnectionSynPhaseBudgetTest {
         assertTrue("must fire well before the measured 10,446ms stall", budget < 10_446);
     }
 
-    /** A wide interval earns its probes: 4 x 4,000 ms is above the floor. */
+    /** A wide interval earns its probes: 8 x 4,000 ms is above the floor. */
     @Test
     public void testWideIntervalEarnsProbes() {
-        assertEquals(16_000, Connection.computeSynPhaseBudgetMs(MEASURED_WINDOW_MS, NO_RTT, 4_000));
+        assertEquals(32_000, Connection.computeSynPhaseBudgetMs(MEASURED_WINDOW_MS, NO_RTT, 4_000));
     }
 
     /** A zero or negative interval cannot earn probes, so the floor is the budget. */
@@ -106,20 +106,21 @@ public class ConnectionSynPhaseBudgetTest {
      */
     @Test
     public void testPeerRttSizesTheBudget() {
-        assertEquals(20_000, Connection.computeSynPhaseBudgetMs(MEASURED_WINDOW_MS, 2_000, 4_000));
+        // probes at this interval are 8 x 2,000 = 16,000, below the RTT-sized term
+        assertEquals(20_000, Connection.computeSynPhaseBudgetMs(MEASURED_WINDOW_MS, 2_000, 2_000));
     }
 
     /**
      * The probe floor: on a path whose interval the Tuner has walked out to 12s,
-     * ten RTTs of a 2s sample is 20,000 ms - two probes - so the phase would end
-     * before the third SYN reached the peer. Four probes at 12s is 48,000 ms and
-     * that governs. This is the case that made a torrent client's five-minute
+     * ten RTTs of a 2s sample is 20,000 ms - under two probes - so the phase would
+     * end before the third SYN reached the peer. Eight probes at 12s is 96,000 ms
+     * and that governs. This is the case that made a torrent client's five-minute
      * connect window die at twenty seconds.
      */
     @Test
     public void testProbeFloorGovernsAWalkedInterval() {
-        assertEquals(48_000, Connection.computeSynPhaseBudgetMs(300_000, 2_000, 12_000));
-        assertEquals(72_000, Connection.computeSynPhaseBudgetMs(300_000, 2_000, 18_000));
+        assertEquals(96_000, Connection.computeSynPhaseBudgetMs(300_000, 2_000, 12_000));
+        assertEquals(144_000, Connection.computeSynPhaseBudgetMs(300_000, 2_000, 18_000));
         // Still capped by the window it lives inside.
         assertEquals(39_650, Connection.computeSynPhaseBudgetMs(MEASURED_WINDOW_MS, 2_000, 12_000));
     }
@@ -129,7 +130,27 @@ public class ConnectionSynPhaseBudgetTest {
     public void testNoEvidenceIgnoresTheRttTerm() {
         assertEquals(Connection.computeSynPhaseBudgetMs(300_000, -1, 12_000),
                      Connection.computeSynPhaseBudgetMs(300_000, 0, 12_000));
-        assertEquals(48_000, Connection.computeSynPhaseBudgetMs(300_000, -1, 12_000));
+        assertEquals(96_000, Connection.computeSynPhaseBudgetMs(300_000, -1, 12_000));
+    }
+
+    /**
+     * The probe floor is what binds on a path with no RTT sample, where the
+     * interval is the configured initial RTO. Measured live on 2026-11-24 the
+     * outbound give-ups sat at exactly four sends, at ages of 24s and 26s, while
+     * the peer on the traced handshake re-sent the SYN-ACK in reply to a sixth SYN
+     * about a second after our client stopped sending. The server side gives up on
+     * its own SYN-ACK after four sends too, so a client that also stops at four
+     * stops on the very probe the peer is still answering.
+     */
+    @Test
+    public void testProbeFloorOutlastsThePeersOwnPatience() {
+        assertEquals(8, Connection.SYN_PHASE_BUDGET_MIN_PROBES);
+        // the live shape: no RTT sample, initial RTO 6s, a 20s leg - the window
+        // governs, so the handshake gets everything its caller offered it
+        assertEquals(20_000, Connection.computeSynPhaseBudgetMs(20_000, NO_RTT, 6_000));
+        // the traced handshake: RTT 894ms, interval 1,341ms. The old budget was
+        // ten RTTs, 8,940ms, and the SYN-ACK needed about 9.4s to land.
+        assertEquals(10_728, Connection.computeSynPhaseBudgetMs(20_000, 894, 1_341));
     }
 
     // ---------- evidence, not the seed ----------
@@ -272,7 +293,7 @@ public class ConnectionSynPhaseBudgetTest {
     /** The constants the budget arithmetic is read from. */
     @Test
     public void testConstants() {
-        assertEquals(4, Connection.SYN_PHASE_BUDGET_MIN_PROBES);
+        assertEquals(8, Connection.SYN_PHASE_BUDGET_MIN_PROBES);
         assertEquals(8_000, Connection.SYN_PHASE_BUDGET_MIN_MS);
         assertEquals(1_000, Connection.SYN_PHASE_BUDGET_RTT_PCT);
     }
