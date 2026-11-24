@@ -12,15 +12,25 @@ import net.i2p.data.LeaseSet;
 import net.i2p.data.TunnelId;
 
 /**
- * Pins the re-mint decision in {@link RepublishLeaseSetJob#shouldRemint}:
- * the emergency backstop (any viable lease once the stored copy is inside the
- * emergency window) versus the normal viability gate (extends expiry and
- * carries the required count).  These are the boundaries that keep a
- * deficit-ridden pool from letting a public LeaseSet lapse while preventing
- * re-mint treadmills on near-dead leases.
+ * Pins the re-mint decision in {@link RepublishLeaseSetJob#shouldRemint} - the
+ * emergency backstop, the normal viability gate, and the stale-stored-copy
+ * gate.  The backstop re-mints any viable lease once the stored copy is inside
+ * the emergency window; the normal gate requires the pool copy to extend the
+ * expiry and carry the required count; the stale gate re-mints when the stored
+ * copy advertises a lease for a tunnel the pool no longer holds.  These are the
+ * boundaries that keep a deficit-ridden pool from letting a public LeaseSet
+ * lapse while preventing re-mint treadmills on near-dead leases.
  */
 public class RemintDecisionTest {
+    /** Emergency window used by the tests, matching {@code EMERGENCY_REMINT_WINDOW}. */
     private static final long WINDOW = 2L * 60 * 1000;
+
+    /**
+     * JUnit creates one instance per test method; every decision under test is a
+     * static predicate, so the instance carries no state.
+     */
+    public RemintDecisionTest() {
+    }
 
     /**
      * Inside the emergency window a single viable lease against a higher
@@ -54,6 +64,63 @@ public class RemintDecisionTest {
      */
     @Test
     public void testHealthyPoolRemints() {
+        assertTrue(RepublishLeaseSetJob.shouldRemint(3, 2, true, 5L * 60 * 1000, WINDOW));
+    }
+
+    /**
+     * The regression: a stored copy advertising a tunnel the pool no longer
+     * holds re-mints even when the pool copy neither extends the expiry nor
+     * meets the required count.
+     *
+     * <p>Both other gates say wait. The stored copy has minutes of advertised
+     * life left, and its dead lease carries a longer end date than any live
+     * tunnel the pool holds, so {@code extendsExpiry} is false — the date
+     * comparison cannot see that the longer date belongs to a tunnel that is
+     * gone. Measured on a live router, 5 of 46 published leases named no live
+     * tunnel and one destination 2 of 2: it resolved, connected, and never
+     * answered.
+     */
+    @Test
+    public void testStaleStoredCopyRemintsWithoutExtendingExpiry() {
+        assertTrue(RepublishLeaseSetJob.shouldRemint(2, 3, false, 5L * 60 * 1000, WINDOW, true));
+    }
+
+    /**
+     * Without a stale lease the same counts defer, which is what keeps a
+     * deficit-ridden pool from publishing an unnecessarily thin copy.
+     */
+    @Test
+    public void testThinPoolStillDefersWhenTheStoredCopyIsLive() {
+        assertFalse(RepublishLeaseSetJob.shouldRemint(2, 3, false, 5L * 60 * 1000, WINDOW, false));
+    }
+
+    /**
+     * A pool holding no viable lease at all never re-mints, stale stored copy
+     * or not — there is nothing better to sign, and signing a near-dead lease
+     * would pull the published expiry forward rather than push it back.
+     */
+    @Test
+    public void testNoViableLeaseNeverRemintsEvenWhenStoredCopyIsStale() {
+        assertFalse(RepublishLeaseSetJob.shouldRemint(0, 2, false, 5L * 60 * 1000, WINDOW, true));
+    }
+
+    /**
+     * The stale flag is additive: inside the emergency window the backstop
+     * still fires on its own, with or without a stale lease.
+     */
+    @Test
+    public void testStaleFlagDoesNotWeakenTheEmergencyBackstop() {
+        assertTrue(RepublishLeaseSetJob.shouldRemint(1, 2, false, 60_000L, WINDOW, false));
+        assertTrue(RepublishLeaseSetJob.shouldRemint(1, 2, false, 60_000L, WINDOW, true));
+    }
+
+    /**
+     * The five-argument overload is the same decision with no stale lease, so
+     * callers that cannot see the pool's tunnels keep the old behaviour.
+     */
+    @Test
+    public void testFiveArgumentOverloadMatchesTheNoStaleCase() {
+        assertFalse(RepublishLeaseSetJob.shouldRemint(2, 3, false, 5L * 60 * 1000, WINDOW));
         assertTrue(RepublishLeaseSetJob.shouldRemint(3, 2, true, 5L * 60 * 1000, WINDOW));
     }
 

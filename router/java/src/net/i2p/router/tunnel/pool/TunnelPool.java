@@ -4273,6 +4273,62 @@ public class TunnelPool {
     }
 
     /**
+     * How many leases of an already-published LeaseSet name a tunnel this pool
+     * no longer holds.
+     * <p>A published set is a snapshot of the pool at mint time.  When the pool
+     * replaces a tunnel the stored copy keeps advertising the tunnel it was
+     * built from, and a client that picks that lease reaches a gateway with
+     * nothing behind it.  Measured on a live router, 5 of 46 published leases
+     * named no live inbound tunnel, and one destination's set carried 2 of 2
+     * dead — the destination resolved, connected, and never answered.
+     * <p>The re-mint gate cannot see this case: it compares lease <em>dates</em>,
+     * and a dead lease with a long date still looks better than a live one with
+     * a shorter date, so the swap is refused and the dead copy stays published.
+     *
+     * @param published the LeaseSet currently stored for this destination, may be
+     *                  null when nothing is published yet
+     * @return leases with no matching tunnel in this pool, 0 if none or unknown
+     * @since 0.9.72+
+     */
+    public int countLeasesWithoutTunnel(LeaseSet published) {
+        if (published == null) {return 0;}
+        int count = published.getLeaseCount();
+        if (count <= 0) {return 0;}
+        _tunnelsLock.lock();
+        try {
+            List<TunnelInfo> tunnels = new ArrayList<>(_tunnels);
+            int unmatched = 0;
+            for (int i = 0; i < count; i++) {
+                if (!holdsTunnelFor(tunnels, published.getLease(i))) {unmatched++;}
+            }
+            return unmatched;
+        } finally {_tunnelsLock.unlock();}
+    }
+
+    /**
+     * Whether the pool holds a tunnel matching one published lease.
+     * <p>The identity is the (gateway, receive tunnel id) pair — the same key
+     * {@link #markRotatedOut} uses to find the tunnel behind a rotated lease.
+     * A lease's gateway alone is not enough: the same peer can gateway two
+     * different tunnels, and only the id says which one a client will reach.
+     *
+     * @param tunnels the pool's current tunnels
+     * @param lease the lease to look for, may be null
+     * @return true if a tunnel in the list carries that lease
+     * @since 0.9.72+
+     */
+    static boolean holdsTunnelFor(List<TunnelInfo> tunnels, Lease lease) {
+        if (lease == null || tunnels == null) {return false;}
+        Hash gw = lease.getGateway();
+        TunnelId id = lease.getTunnelId();
+        if (gw == null || id == null) {return false;}
+        for (TunnelInfo tunnel : tunnels) {
+            if (id.equals(tunnel.getReceiveTunnelId(0)) && gw.equals(tunnel.getPeer(0))) {return true;}
+        }
+        return false;
+    }
+
+    /**
      * Record completeness state, build the LeaseSet object from the leases,
      * and refresh the publication bookkeeping fields.
      *

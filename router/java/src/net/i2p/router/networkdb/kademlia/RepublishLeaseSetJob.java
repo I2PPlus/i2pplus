@@ -686,6 +686,13 @@ public class RepublishLeaseSetJob extends JobImpl {
      * proceeds only when the pool copy extends the stored copy and
      * carries at least {@code required} viable leases, so the re-signed
      * LeaseSet is not unnecessarily thin.</li>
+     * <li><b>Stale stored copy</b>: the stored copy advertises a lease for a
+     * tunnel the pool no longer holds.  That copy is wrong, not thin, and the
+     * extension test cannot see it — a dead lease with a long date still
+     * out-dates a live one with a short date, so the normal gate refuses the
+     * swap and the dead copy stays published.  Measured on a live router, 5 of
+     * 46 published leases named no live tunnel, and one destination 2 of 2: it
+     * resolved, connected, and never answered.</li>
      * </ul>
      * A pool copy with no viable leases (all near-dead) never re-mints —
      * re-signing it would not push expiry forward, so it pads nothing but
@@ -704,6 +711,32 @@ public class RepublishLeaseSetJob extends JobImpl {
                                 long timeUntilExpiry, long emergencyRemintWindow) {
         if (freshCount <= 0) { return false; }
         if (timeUntilExpiry <= emergencyRemintWindow) { return true; }
+        return extendsExpiry && freshCount >= required;
+    }
+
+    /**
+     * Whether to re-mint, including the stale-stored-copy gate.
+     *
+     * @param freshCount number of pool leases with a viability window remaining
+     * @param required minimum viable leases for a normal (non-emergency) re-mint
+     * @param extendsExpiry true if the pool copy's latest lease exceeds the stored copy's
+     * @param timeUntilExpiry ms until the stored copy expires
+     * @param emergencyRemintWindow the emergency threshold in ms
+     * @param staleStoredCopy true when the stored copy advertises a lease for a
+     *                        tunnel the pool no longer holds
+     * @return true if the re-mint should be requested now
+     * @since 0.9.72+
+     */
+    static boolean shouldRemint(int freshCount, int required, boolean extendsExpiry,
+                                long timeUntilExpiry, long emergencyRemintWindow,
+                                boolean staleStoredCopy) {
+        if (freshCount <= 0) { return false; }
+        if (timeUntilExpiry <= emergencyRemintWindow) { return true; }
+        // A stored copy naming a tunnel the pool no longer holds is wrong, not
+        // thin. The extension test compares dates, and a dead lease with a long
+        // date out-dates a live one with a short date, so the normal gate would
+        // keep publishing the dead copy.
+        if (staleStoredCopy) { return true; }
         return extendsExpiry && freshCount >= required;
     }
 
@@ -860,13 +893,18 @@ public class RepublishLeaseSetJob extends JobImpl {
     private void refloatLeaseSet(LeaseSet storedLeaseSet, String name, long now, long timeUntilExpiry) {
         LeaseSet fresh = getFreshPoolLeaseSet();
         long freshTimeUntilExpiry = fresh != null ? fresh.getEarliestLeaseDate() - now : 0;
+        TunnelPool pool = getContext().tunnelManager().getInboundPool(_dest);
+        // The stored copy is a snapshot of the pool at mint time; every tunnel the
+        // pool has since replaced leaves a lease pointing at a gateway with
+        // nothing behind it.
+        int staleLeases = pool != null ? pool.countLeasesWithoutTunnel(storedLeaseSet) : 0;
         if (_log.shouldInfo()) {
             _log.info("Re-minting the LeaseSet " + name + " [" + shortHash() + "] -> Stored expiry " +
                        DataHelper.formatDuration(timeUntilExpiry) + ", fresh expiry " +
                        DataHelper.formatDuration(freshTimeUntilExpiry)
-                       + "\n* Fresh leases: " + (fresh != null ? fresh.getLeaseCount() : 0));
+                       + "\n* Fresh leases: " + (fresh != null ? fresh.getLeaseCount() : 0) +
+                       " * Stale stored leases: " + staleLeases);
         }
-        TunnelPool pool = getContext().tunnelManager().getInboundPool(_dest);
         int freshCount = countFreshLeases(fresh, now);
         int target = getTargetLeaseCount();
         boolean requested = false;
@@ -880,7 +918,11 @@ public class RepublishLeaseSetJob extends JobImpl {
         boolean extendsExpiry = freshTimeUntilExpiry > timeUntilExpiry;
         boolean emergency = timeUntilExpiry <= EMERGENCY_REMINT_WINDOW;
         boolean unchanged = sameLeaseTunnels(storedLeaseSet, fresh);
-        boolean ineffective = unchanged && !extendsExpiry;
+        // A stored copy advertising a tunnel we no longer hold is never a no-op,
+        // even when the pool copy reuses the same tunnel ids: sameLeaseTunnels()
+        // compares ids only, and a reused id behind a different gateway is a
+        // different path.
+        boolean ineffective = unchanged && !extendsExpiry && staleLeases == 0;
         // Supply pre-flight: inside the pre-flight window, do not sign a copy
         // built from near-floor leases if the pool is not stocked with fresh
         // ones and we still have time to wait.  Skipped inside the emergency
@@ -942,7 +984,8 @@ public class RepublishLeaseSetJob extends JobImpl {
             _lastIneffectiveRemint.remove(_dest);
         }
         if (fresh != null && shouldRemint(freshCount, required, extendsExpiry,
-                                          timeUntilExpiry, EMERGENCY_REMINT_WINDOW)) {
+                                          timeUntilExpiry, EMERGENCY_REMINT_WINDOW,
+                                          staleLeases > 0)) {
             // A re-mint that cannot improve anything is not an emergency worth
             // repeating at WARN; it is the steady state of a pool waiting on
             // builds, and saying so 170 times a burst buries the real alarms.
@@ -954,7 +997,9 @@ public class RepublishLeaseSetJob extends JobImpl {
                 _log.info("Requesting re-mint of LeaseSet" + name + " [" + shortHash() +
                           "]\n* Extends expiry from " + DataHelper.formatDuration(timeUntilExpiry) +
                           " to " + DataHelper.formatDuration(freshTimeUntilExpiry) + ", " +
-                          freshCount + "/" + target + " viable leases");
+                          freshCount + "/" + target + " viable leases" +
+                          (staleLeases > 0 ? "\n* Replacing " + staleLeases +
+                           " leases with no tunnel" : ""));
             }
             getContext().clientManager().requestLeaseSet(_dest, fresh);
             _remintDefers.remove(_dest);
