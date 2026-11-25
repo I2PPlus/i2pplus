@@ -23,12 +23,22 @@ import org.junit.Test;
  * one send per 9 s. Hence {@link Connection#synHardSends(int, int, int)} and one
  * rotation per connect.
  *
+ * <p>A send count is not a measure of time, though. SYN resends are paced at an
+ * interval that tracks the path, so the same count means a different amount of
+ * patience on every connection, and the count of two rotated at about 2 s on a
+ * fast path — one round trip. Hence
+ * {@link Connection#synRotationWaitedEnough(long, int)}, which asks the same
+ * question in periods of that interval.
+ *
  * @since 0.9.72+
  */
 public class ConnectionSynRotationDecisionTest {
 
     /** The production threshold, used by the cases that pin the constant. */
     private static final int ROTATE_AFTER = Connection.SYN_RESEND_ROTATION_SENDS;
+
+    /** The production time floor, used by the cases that pin the constant. */
+    private static final int PERIODS = Connection.SYN_ROTATION_MIN_PERIODS;
 
     /**
      * One instance per test method, as JUnit builds a fresh test object for each
@@ -143,5 +153,64 @@ public class ConnectionSynRotationDecisionTest {
     public void testHighThresholdNeverRotates() {
         assertFalse(Connection.synResendNeedsFreshTunnel(true, true, 10, 11));
         assertFalse(Connection.synResendNeedsFreshTunnel(true, true, 10, Integer.MAX_VALUE));
+    }
+
+    // ---------- the send count is not a measure of time ----------
+
+    /**
+     * The measured false positive: every rotation in a 15-minute window on
+     * 2026-11-25 fired with 18s left of a 20s phase, so about 2s in, against
+     * RTTs of 600-2,000ms on those same paths — one round trip, plus the retransmit
+     * already in flight. The resend interval is floored at
+     * {@link Connection#SYN_RTO_MIN}, so even the fastest path now waits 2.25s,
+     * past the 1.8s those rotations fired at.
+     */
+    @Test
+    public void testTwoSecondsIsNotEnoughOnAFastPath() {
+        assertFalse(Connection.synRotationWaitedEnough(1_830, Connection.SYN_RTO_MIN));
+        assertFalse(Connection.synRotationWaitedEnough(2_000, Connection.SYN_RTO_MIN));
+        assertTrue(Connection.synRotationWaitedEnough(3L * Connection.SYN_RTO_MIN,
+                                                      Connection.SYN_RTO_MIN));
+    }
+
+    /** The boundary is inclusive at three periods, on any interval. */
+    @Test
+    public void testRotatesAtThreePeriods() {
+        for (int interval : new int[] {Connection.SYN_RTO_MIN, 1_000, 2_000, 12_000}) {
+            long need = (long) PERIODS * interval;
+            assertFalse(Connection.synRotationWaitedEnough(need - 1, interval));
+            assertTrue(Connection.synRotationWaitedEnough(need, interval));
+        }
+    }
+
+    /**
+     * A slow path paced at a 12s interval has to be waited out in proportion:
+     * three probes is 36s, and a handshake that has only run 10s has said nothing
+     * about its tunnel.
+     */
+    @Test
+    public void testSlowPathWaitsInProportion() {
+        assertFalse(Connection.synRotationWaitedEnough(10_000, 12_000));
+        assertTrue(Connection.synRotationWaitedEnough(36_000, 12_000));
+    }
+
+    /** No interval to pace by means no clock to wait on — the send count decides. */
+    @Test
+    public void testNoIntervalMeansNoWait() {
+        assertTrue(Connection.synRotationWaitedEnough(0, 0));
+        assertTrue(Connection.synRotationWaitedEnough(0, -1));
+    }
+
+    /** A clock that stepped backwards has run no time, so it has not waited. */
+    @Test
+    public void testNegativeAgeHasNotWaited() {
+        assertFalse(Connection.synRotationWaitedEnough(-1, 750));
+        assertFalse(Connection.synRotationWaitedEnough(Long.MIN_VALUE, 750));
+    }
+
+    /** The floor is three periods, and it is a floor, not the whole patience. */
+    @Test
+    public void testFloorIsThreePeriods() {
+        assertEquals(3, PERIODS);
     }
 }

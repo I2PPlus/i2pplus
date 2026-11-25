@@ -3520,6 +3520,46 @@ class Connection {
     }
 
     /**
+     * Retransmit periods an unanswered SYN must outlast before a resend may
+     * rotate the connect onto a fresh outbound tunnel.
+     *
+     * @since 0.9.72+
+     */
+    static final int SYN_ROTATION_MIN_PERIODS = 3;
+
+    /**
+     * Pure decision: has this handshake waited long enough on the tunnel it
+     * picked for a rotation to be a verdict rather than a guess?
+     * <p>The send-count threshold alone is not a measure of time. SYN retransmits
+     * are paced at {@link #getSynRetransmitInterval()}, which tracks the path —
+     * 150% of a measured RTT, floored at {@link #SYN_RTO_MIN}, capped at the
+     * configured initial RTO — so a fixed send count means a different amount of
+     * patience on every path. Measured live on 2026-11-25, all 12 rotations in a
+     * 15-minute window fired with {@code Budget left: 18s} of a 20s phase, so at
+     * about 2s in, on the third send, against RTTs of 600-2,000ms on those same
+     * paths: one round trip, plus the retransmit that was already in flight. A
+     * merely slow peer is judged a dead one, and the rotation discards the tunnel
+     * a SYN-ACK may be travelling back on.
+     * <p>Three periods is the smallest count that cannot be explained by one lost
+     * SYN and one slow answer: the interval is already 1.5 round trips, so three
+     * of them is 4.5 RTTs of the peer's silence. It costs a fast path nothing —
+     * at a 750ms interval it moves the trigger from 1.8s to 2.25s — and it stops
+     * the no-sample path, paced at the initial RTO, from rotating before its
+     * first two SYNs could have been answered.
+     *
+     * @param ageMs how long the SYN has been unacknowledged, from
+     *              {@link #synPhaseAgeMs(long, long)}
+     * @param synIntervalMs the live inter-SYN retransmit interval (ms), the same
+     *                      value the phase's two budgets are sized from
+     * @return true if enough of the path's own clock has run to blame the tunnel
+     * @since 0.9.72+
+     */
+    static boolean synRotationWaitedEnough(long ageMs, int synIntervalMs) {
+        if (synIntervalMs <= 0) {return true;}
+        return ageMs >= (long) SYN_ROTATION_MIN_PERIODS * synIntervalMs;
+    }
+
+    /**
      * Pure decision: should this packet's retransmit be paced through the paced
      * queue rather than sent directly?
      * <p>The first {@link #IMMEDIATE_RETX_BURST} packets of a timer fire are sent
@@ -6144,18 +6184,22 @@ class Connection {
                     // healthy connects at the first PTO (2,656 rotations after a
                     // single real SYN), and re-arming it on every resend collapsed
                     // the SYN cadence to ~1 send per 9s, so: hard sends only, and
-                    // one rotation per connect.
+                    // one rotation per connect. The send count is not a measure of
+                    // time, though - the resend interval tracks the path - so the
+                    // age gate below is what makes the patience the same on every
+                    // path.
+                    long synAgeMs = synPhaseAgeMs(_context.clock().now(),
+                                                  packet.getCreatedOn());
                     if (synResendNeedsFreshTunnel(packet.isFlagSet(Packet.FLAG_SYNCHRONIZE),
                                                   _highestAckedThrough.get() < 0,
                                                   synHardSends(packet.getNumSends(),
                                                                packet.getNumSoftResends(),
                                                                packet.getNumTlpProbes()),
                                                   SYN_RESEND_ROTATION_SENDS)
+                        && synRotationWaitedEnough(synAgeMs, getSynRetransmitInterval())
                         && claimSynRotation()) {
                         setNextSendFreshConnection();
-                        long room = synRotationRoomMs(getSynPhaseBudgetMs(),
-                                                      synPhaseAgeMs(_context.clock().now(),
-                                                                    packet.getCreatedOn()));
+                        long room = synRotationRoomMs(getSynPhaseBudgetMs(), synAgeMs);
                         _context.statManager().addRateData("stream.synRotationRoomMs", room);
                         // 20,234 of these in one 80-minute window at DEBUG, 2.3% of the
                         // whole log - so throttled rather than per-send, and at a level
