@@ -4611,8 +4611,6 @@ public class TunnelPool {
         if (cfg == null || cfg.getTunnelFailed()) {return;}
         boolean soft = isSoftSendFailure(status);
         long now = _context.clock().now();
-        // A status-3 timeout is only evidence against the tunnel if the
-        // destination is not the common factor. See SoftFailureAttribution.
         Hash us = _context.routerHash();
         Hash hop = firstRemoteHop(cfg, us);
         // A status-3 timeout is only evidence against the tunnel if the
