@@ -50,7 +50,19 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
+import net.i2p.data.i2np.DataMessage;
+import net.i2p.data.i2np.DatabaseLookupMessage;
+import net.i2p.data.i2np.DatabaseSearchReplyMessage;
+import net.i2p.data.i2np.DatabaseStoreMessage;
+import net.i2p.data.i2np.GarlicMessage;
 import net.i2p.data.i2np.I2NPMessage;
+import net.i2p.data.i2np.OutboundTunnelBuildReplyMessage;
+import net.i2p.data.i2np.ShortTunnelBuildMessage;
+import net.i2p.data.i2np.TunnelBuildMessage;
+import net.i2p.data.i2np.TunnelBuildReplyMessage;
+import net.i2p.data.i2np.TunnelGatewayMessage;
+import net.i2p.data.i2np.VariableTunnelBuildMessage;
+import net.i2p.data.i2np.VariableTunnelBuildReplyMessage;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.router.RouterInfo;
@@ -230,6 +242,11 @@ public abstract class TransportImpl implements Transport {
 
         _context.statManager().createRequiredRateStat("transport.expiredOnQueueLifetime", "Time to process message expired in outbound queue (ms)", "Transport", RATES );
         _context.statManager().createRequiredRateStat("transport.expiredOnQueueCount", "Count of messages expired while queued", "Transport", RATES );
+        _context.statManager().createRequiredRateStat("transport.expiredOnQueueBuild", "Tunnel build requests expired while queued", "Transport", RATES );
+        _context.statManager().createRequiredRateStat("transport.expiredOnQueueBuildReply", "Tunnel build replies expired while queued", "Transport", RATES );
+        _context.statManager().createRequiredRateStat("transport.expiredOnQueueData", "Payload messages expired while queued (Data, Garlic, Gateway)", "Transport", RATES );
+        _context.statManager().createRequiredRateStat("transport.expiredOnQueueNetDb", "NetDb messages expired while queued (Lookup, Store, SearchReply)", "Transport", RATES );
+        _context.statManager().createRequiredRateStat("transport.expiredOnQueueOther", "Other messages expired while queued", "Transport", RATES );
         _context.statManager().createRequiredRateStat("transport.messagesDelivered", "Count of messages successfully delivered", "Transport", RATES );
         _context.statManager().createRequiredRateStat("transport.sendMessageFailureLifetime", "Lifetime of failed sent messages", "Transport", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRequiredRateStat("transport.receiveMessageSize", "Size of received messages (bytes)", "Transport", RATES);
@@ -568,6 +585,7 @@ public abstract class TransportImpl implements Transport {
             if (msg.getExpiration() < now) {
                 _context.statManager().addRateData("transport.expiredOnQueueLifetime", queueTime);
                 _context.statManager().addRateData("transport.expiredOnQueueCount", 1);
+                addExpiredQueueData(msg);
             }
             if (allowRequeue && ((msg.getExpiration() <= 0) || (msg.getExpiration() > now)) && (msg.getMessage() != null)) {
                 msg.resetCreatedTime();
@@ -620,6 +638,52 @@ public abstract class TransportImpl implements Transport {
             _context.profileManager().messageFailed(msg.getTarget().getIdentity().getHash(), style);
             _context.statManager().addRateData("transport.sendMessageFailureLifetime", lifetime);
         }
+    }
+
+    /**
+     * The per-kind statistic a message that expired in the outbound queue feeds.
+     * <p>The lifetime and count stats report that a few dozen messages a minute
+     * die with most of their window unused, and nothing about which ones, while
+     * the action differs by kind: an expired build request starves tunnel refill
+     * and is a queue-priority problem, an expired build reply only delays a
+     * stranger's tunnel, an expired payload is a stream the transports were
+     * already too busy to carry, and an expired Lookup or Store says our own
+     * NetDb work is losing the queue to transit traffic.
+     *
+     * @param typeId the I2NP message type id, 0 to 31
+     * @return the stat name the message counts under, never null
+     * @since 0.9.72+
+     */
+    static String expiredQueueStatName(int typeId) {
+        switch (typeId) {
+            case TunnelBuildMessage.MESSAGE_TYPE:
+            case VariableTunnelBuildMessage.MESSAGE_TYPE:
+            case ShortTunnelBuildMessage.MESSAGE_TYPE:
+                return "transport.expiredOnQueueBuild";
+            case TunnelBuildReplyMessage.MESSAGE_TYPE:
+            case VariableTunnelBuildReplyMessage.MESSAGE_TYPE:
+            case OutboundTunnelBuildReplyMessage.MESSAGE_TYPE:
+                return "transport.expiredOnQueueBuildReply";
+            case DataMessage.MESSAGE_TYPE:
+            case GarlicMessage.MESSAGE_TYPE:
+            case TunnelGatewayMessage.MESSAGE_TYPE:
+                return "transport.expiredOnQueueData";
+            case DatabaseLookupMessage.MESSAGE_TYPE:
+            case DatabaseStoreMessage.MESSAGE_TYPE:
+            case DatabaseSearchReplyMessage.MESSAGE_TYPE:
+                return "transport.expiredOnQueueNetDb";
+            default:
+                return "transport.expiredOnQueueOther";
+        }
+    }
+
+    /**
+     * Count an expired message under its kind as well as in the totals.
+     *
+     * @param msg the message that ran out of time in the outbound queue
+     */
+    private void addExpiredQueueData(OutNetMessage msg) {
+        _context.statManager().addRateData(expiredQueueStatName(msg.getMessageTypeId()), 1);
     }
 
     /**
