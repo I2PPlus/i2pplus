@@ -4805,6 +4805,21 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
      * deadline, so its recorded duration is the deadline it missed, and 2x that
      * is the room the failing population needs.
      * <p>
+     * That reasoning only holds while the failures are slower than the window.
+     * A round that never gets an answer is recorded <em>at</em> the window, so
+     * its duration is the window, and 2x the window is 2x the value being set:
+     * the window walks to maxTestPeriod and stays there, because the only input
+     * that could bring it back down is the window quoting itself. Measured live
+     * on 2026-11-25 with the window at its 15s ceiling: 19.3s average failure
+     * duration against a 2.0s average success, 31 outbound rounds failing a
+     * minute to 14 passing, 479 TestJob instances waiting in the job queue and
+     * 682 drain passes a minute refused by the in-flight gates. Every doomed
+     * round then holds an in-flight slot for the whole ceiling, new tunnels
+     * queue behind them untested, and client outbound pools sit at 2-5 tunnels
+     * of the 8 configured. {@link #timeoutArtifact} recognises that quote and
+     * keeps the passing rounds in charge, which puts the window back at 2x the
+     * measured 2.0s round.
+     * <p>
      * Always clamped to [minPeriod, maxPeriod], with min &lt;= max enforced by
      * construction so a crossed config can't widen the window unintentionally.
      * The pending-message expiration (and thus the reply selector) is tied to
@@ -4814,6 +4829,8 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
      *                         NaN if never measured
      * @param failedTimeAvgMs average {@code tunnel.testFailedTime} over the last minute,
      *                        NaN if never measured
+     * @param windowInForceMs average {@code tunnel.testPeriod} over the last minute - the
+     *                        window these samples were taken under - NaN if never measured
      * @param failureRatio share of last-minute rounds that failed, NaN if too few
      *                     rounds to judge, see {@link #testFailureRatio}
      * @param sendProcessingMs average {@code transport.sendProcessingTime}, NaN if unknown
@@ -4825,12 +4842,17 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
      * @since 0.9.72+
      */
     static int computeTestPeriod(double successTimeAvgMs, double failedTimeAvgMs,
-                                 double failureRatio, double sendProcessingMs,
-                                 int outLen, int replyLen, int minPeriod, int maxPeriod) {
+                                 double windowInForceMs, double failureRatio,
+                                 double sendProcessingMs, int outLen, int replyLen,
+                                 int minPeriod, int maxPeriod) {
         int period;
         if (outLen <= 0 || replyLen <= 0) {
             period = 15*1000;
         } else if (representativeSample(successTimeAvgMs, failureRatio)) {
+            period = (int) Math.round(2 * successTimeAvgMs);
+        } else if (timeoutArtifact(failedTimeAvgMs, windowInForceMs) &&
+                   !Double.isNaN(successTimeAvgMs) && successTimeAvgMs > 0) {
+            // The failures are the window talking, not the network.
             period = (int) Math.round(2 * successTimeAvgMs);
         } else if (worseLatency(successTimeAvgMs, failedTimeAvgMs) > 0) {
             // Most rounds are failing (or the success sample is unusable but the
@@ -4859,6 +4881,26 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
     static boolean representativeSample(double successTimeAvgMs, double failureRatio) {
         if (Double.isNaN(successTimeAvgMs) || successTimeAvgMs <= 0) return false;
         return Double.isNaN(failureRatio) || failureRatio <= UNREPRESENTATIVE_FAILURE_RATIO;
+    }
+
+    /**
+     * Whether the failure average is the window quoting itself rather than a
+     * measured network latency.
+     * <p>Pure. A round that gets no answer is timed out at the window, so its
+     * recorded duration is at least the window that was in force when it ran;
+     * such a sample says only "no answer arrived", and using it to widen the
+     * window sets the window from itself. A failure average <em>below</em> the
+     * window in force is the opposite case: those rounds were judged failed
+     * before the deadline, so their duration is a real measurement and the
+     * failing population is entitled to a wider window.
+     *
+     * @param failedTimeAvgMs average failed-round duration, NaN or &lt;= 0 if never measured
+     * @param windowInForceMs the window those rounds ran under, NaN or &lt;= 0 if unknown
+     * @return true when the failure average carries no latency information
+     * @since 0.9.72+
+     */
+    static boolean timeoutArtifact(double failedTimeAvgMs, double windowInForceMs) {
+        return failedTimeAvgMs > 0 && windowInForceMs > 0 && failedTimeAvgMs >= windowInForceMs;
     }
 
     /**
@@ -4966,6 +5008,7 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
         double failedTime = Double.NaN;
         double failureRatio = Double.NaN;
         double sendProcessing = Double.NaN;
+        double windowInForce = Double.NaN;
         int outLen = 0;
         int replyLen = 0;
         if (_outTunnel != null && _replyTunnel != null) {
@@ -5008,6 +5051,15 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
             failedTime = combineTestFailureAverage(clientRounds, clientAvgMs,
                                                    exploratoryRounds, exploratoryAvgMs);
             failureRatio = testFailureRatio(successRounds, failedRounds);
+            // The window these rounds ran under, so a failure recorded at the
+            // deadline can be recognised as the deadline and not mistaken for a
+            // slow reply. See timeoutArtifact().
+            RateStat pt = ctx.statManager().getRate("tunnel.testPeriod");
+            if (pt != null) {
+                Rate r = pt.getRate(60*1000L);
+                if (r != null && r.getLastEventCount() > 0)
+                    windowInForce = r.getAverageValue();
+            }
             RateStat tspt = ctx.statManager().getRate("transport.sendProcessingTime");
             if (tspt != null) {
                 Rate r = tspt.getRate(60*1000L);
@@ -5015,8 +5067,9 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
                     sendProcessing = r.getAverageValue();
             }
         }
-        return computeTestPeriod(successTime, failedTime, failureRatio, sendProcessing,
-                                 outLen, replyLen, getMinTestPeriod(), getMaxTestPeriod());
+        return computeTestPeriod(successTime, failedTime, windowInForce, failureRatio,
+                                 sendProcessing, outLen, replyLen,
+                                 getMinTestPeriod(), getMaxTestPeriod());
     }
 
     /**

@@ -22,6 +22,14 @@ import org.junit.Test;
  * share passes {@link TestJob#UNREPRESENTATIVE_FAILURE_RATIO} the window is
  * sized from the rounds that missed it instead.
  *
+ * <p>That second rule needs a guard of its own. A round that never gets an
+ * answer is timed out at the window, so its recorded duration is the window,
+ * and 2x the window is 2x the value being computed: the window walks to
+ * maxTestPeriod and stays there, quoting itself. The discriminator is the
+ * window in force - a failure average at or above it says only "no answer by
+ * the deadline", while a failure average below it was recorded before the
+ * deadline and is a real measurement.
+ *
  * <p>The rounds that missed it are recorded under two statistics - one for
  * client pools, one for exploratory - while the passes are recorded under one
  * for every pool, so the failure side has to fold both populations back
@@ -37,6 +45,9 @@ public class TestJobPeriodTest {
 
     /** A failure share above the bar, so the failing population sizes the window. */
     private static final double FAILING = 0.49d;
+
+    /** No window on record yet, so nothing can be read as the deadline quoting itself. */
+    private static final double NO_WINDOW = Double.NaN;
 
     /**
      * Runs the tunnel test window rules over a fixed set of samples.
@@ -55,22 +66,24 @@ public class TestJobPeriodTest {
     @Test
     public void testWindowIsTwoTimesMeasuredSuccess() {
         // observed avg ~2.3s -> ~4.6s window, within the default [3s, 15s] range
-        int period = TestJob.computeTestPeriod(2258, 2400, PASSING, 1241, 4, 4, 3000, 15000);
+        int period = TestJob.computeTestPeriod(2258, 2400, NO_WINDOW, PASSING, 1241, 4, 4,
+                                               3000, 15000);
         assertEquals(4516, period);
     }
 
     /** A fractional average is rounded to a whole millisecond, not truncated. */
     @Test
     public void testWindowRoundsToNearestMs() {
-        assertEquals(2001, TestJob.computeTestPeriod(1000.4, Double.NaN, PASSING, 500, 3, 3,
-                                                     1000, 15000));
+        assertEquals(2001, TestJob.computeTestPeriod(1000.4, Double.NaN, NO_WINDOW,
+                                                      PASSING, 500, 3, 3, 1000, 15000));
     }
 
     /** A slow measured network is capped by maxTestPeriod, not widened forever. */
     @Test
     public void testWindowScalesUpOnSlowNetwork() {
         // 8s measured success -> 16s window, capped by the 15s max
-        assertEquals(15000, TestJob.computeTestPeriod(8000, 8200, PASSING, 1241, 4, 4,
+        assertEquals(15000, TestJob.computeTestPeriod(8000, 8200, NO_WINDOW,
+                                                      PASSING, 1241, 4, 4,
                                                       3000, 15000));
     }
 
@@ -78,7 +91,8 @@ public class TestJobPeriodTest {
     @Test
     public void testWindowFlooredByMinPeriod() {
         // 1.2s measured success -> 2.4s target, below the 3s floor
-        assertEquals(3000, TestJob.computeTestPeriod(1200, 1300, PASSING, 1241, 4, 4,
+        assertEquals(3000, TestJob.computeTestPeriod(1200, 1300, NO_WINDOW,
+                                                     PASSING, 1241, 4, 4,
                                                      3000, 15000));
     }
 
@@ -88,15 +102,15 @@ public class TestJobPeriodTest {
      */
     @Test
     public void testUnknownRatioStillUsesSuccessAverage() {
-        assertEquals(4516, TestJob.computeTestPeriod(2258, Double.NaN, Double.NaN, 1241, 4, 4,
-                                                     3000, 15000));
+        assertEquals(4516, TestJob.computeTestPeriod(2258, Double.NaN, NO_WINDOW,
+                                                     Double.NaN, 1241, 4, 4, 3000, 15000));
     }
 
     /** The bar is inclusive: exactly 25% failing is still a passing cycle. */
     @Test
     public void testFailureRatioAtTheBarIsStillRepresentative() {
         assertTrue(TestJob.representativeSample(2258, TestJob.UNREPRESENTATIVE_FAILURE_RATIO));
-        assertEquals(4516, TestJob.computeTestPeriod(2258, 9000,
+        assertEquals(4516, TestJob.computeTestPeriod(2258, 9000, NO_WINDOW,
                                                      TestJob.UNREPRESENTATIVE_FAILURE_RATIO,
                                                      1241, 4, 4, 3000, 15000));
     }
@@ -106,14 +120,17 @@ public class TestJobPeriodTest {
     // =====================================================================
 
     /**
-     * The live signature: successes at 373ms, failures timed out at the 1.4s
-     * deadline and recorded at 2.1s, 49% of rounds failing. Sizing from the
-     * success mean keeps the window at its floor; sizing from the failures gives
-     * the failing population the room it missed.
+     * The live signature that motivated this branch: successes at 373ms, 49% of
+     * rounds failing, and failures recorded at 2.1s - under the 3s floor those
+     * rounds ran under, so the duration is a measured latency and not the
+     * deadline quoting itself. Sizing from the success mean keeps the window at
+     * its floor; sizing from the failures gives the failing population the room
+     * it missed.
      */
     @Test
     public void testFailingRoundsSizeTheWindow() {
-        int period = TestJob.computeTestPeriod(373, 2144, FAILING, 1241, 3, 3, 3000, 15000);
+        int period = TestJob.computeTestPeriod(373, 2144, 3000, FAILING,
+                                               1241, 3, 3, 3000, 15000);
         assertEquals(4288, period);
         assertTrue("the window must leave the deadline it was missing", period > 2144);
     }
@@ -121,8 +138,8 @@ public class TestJobPeriodTest {
     /** The failing population cannot widen the window past maxTestPeriod. */
     @Test
     public void testFailingPathStillCappedByMaxPeriod() {
-        assertEquals(15000, TestJob.computeTestPeriod(373, 9000, FAILING, 1241, 3, 3,
-                                                      3000, 15000));
+        assertEquals(15000, TestJob.computeTestPeriod(373, 9000, 15000, FAILING,
+                                                      1241, 3, 3, 3000, 15000));
     }
 
     /**
@@ -132,8 +149,50 @@ public class TestJobPeriodTest {
      */
     @Test
     public void testFailingWithoutFailureAverageKeepsTheFloor() {
-        assertEquals(3000, TestJob.computeTestPeriod(373, Double.NaN, FAILING, 1241, 3, 3,
-                                                     3000, 15000));
+        assertEquals(3000, TestJob.computeTestPeriod(373, Double.NaN, NO_WINDOW,
+                                                     FAILING, 1241, 3, 3, 3000, 15000));
+    }
+
+    /**
+     * The window quoting itself, the live signature of 2026-11-25: passes at
+     * 2.0s, failures recorded at 19.3s, and the window in force at its 15s
+     * ceiling - so every failure was timed out at the deadline and its duration
+     * is the deadline, not a reply time. Sizing from it asks for 38.5s, the
+     * clamp pins it at 15s, and the next minute measures 15s again: the window
+     * has no way back down. Sizing from the rounds that did answer puts it at
+     * 2x the measured 2.0s round.
+     */
+    @Test
+    public void testFailureAtTheWindowIsTheWindowTalking() {
+        int period = TestJob.computeTestPeriod(1972, 19291, 15000, FAILING,
+                                               94, 4, 4, 3000, 15000);
+        assertEquals(3944, period);
+        assertTrue("the ceiling must not be self-sustaining", period < 15000);
+    }
+
+    /**
+     * The other side of the same bar: a failure average below the window in
+     * force was recorded before its deadline, so it is a measured latency and
+     * the failing population does get a wider window.
+     */
+    @Test
+    public void testFailureBelowTheWindowIsAMeasurement() {
+        assertTrue(TestJob.timeoutArtifact(19291, 15000));
+        assertFalse(TestJob.timeoutArtifact(2144, 3000));
+        assertFalse("no window on record is no deadline to quote",
+                    TestJob.timeoutArtifact(19291, NO_WINDOW));
+        assertFalse("a zero stat is not a measurement",
+                    TestJob.timeoutArtifact(0, 15000));
+    }
+
+    /**
+     * A failing cycle whose failures carry no usable duration cannot fall back
+     * on the survivor mean either: the configured floor is what applies.
+     */
+    @Test
+    public void testArtifactNeedsAFailureAverageToFire() {
+        assertEquals(3000, TestJob.computeTestPeriod(373, Double.NaN, 15000, FAILING,
+                                                     1241, 3, 3, 3000, 15000));
     }
 
     /** The window is sized from whichever population is slower, not the faster. */
@@ -183,15 +242,16 @@ public class TestJobPeriodTest {
     public void testFallbackUsesTransportFormula() {
         // mainline formula: 3x sendProcessing + 2.5s per hop
         // 3*1241 + 2500*8 = 23723, clamped to the 15s max
-        assertEquals(15000, TestJob.computeTestPeriod(Double.NaN, Double.NaN, Double.NaN, 1241,
-                                                      4, 4, 3000, 15000));
+        assertEquals(15000, TestJob.computeTestPeriod(Double.NaN, Double.NaN, NO_WINDOW,
+                                                      Double.NaN, 1241, 4, 4, 3000, 15000));
     }
 
     /** With neither a test measurement nor a transport stat, the 15s base applies. */
     @Test
     public void testFallbackWithoutTransportStat() {
         // no transport stat -> 15s base + per-hop allowance, clamped to max
-        assertEquals(15000, TestJob.computeTestPeriod(Double.NaN, Double.NaN, Double.NaN,
+        assertEquals(15000, TestJob.computeTestPeriod(Double.NaN, Double.NaN, NO_WINDOW,
+                                                      Double.NaN,
                                                       Double.NaN, 4, 4, 3000, 15000));
     }
 
@@ -199,8 +259,8 @@ public class TestJobPeriodTest {
     @Test
     public void testFallbackWithinRangeOnShortTunnel() {
         // 3*100 + 2500*2 = 5300, inside [3000, 15000]
-        assertEquals(5300, TestJob.computeTestPeriod(Double.NaN, Double.NaN, Double.NaN, 100,
-                                                     1, 1, 3000, 15000));
+        assertEquals(5300, TestJob.computeTestPeriod(Double.NaN, Double.NaN, NO_WINDOW,
+                                                     Double.NaN, 100, 1, 1, 3000, 15000));
     }
 
     // =====================================================================
@@ -210,9 +270,11 @@ public class TestJobPeriodTest {
     /** A round with no tunnel pair to measure is not timed by a measured window. */
     @Test
     public void testNoTunnelsUsesFifteenSeconds() {
-        assertEquals(15000, TestJob.computeTestPeriod(2258, 2400, PASSING, 1241, 0, 0,
+        assertEquals(15000, TestJob.computeTestPeriod(2258, 2400, NO_WINDOW,
+                                                      PASSING, 1241, 0, 0,
                                                       3000, 15000));
-        assertEquals(15000, TestJob.computeTestPeriod(Double.NaN, Double.NaN, Double.NaN,
+        assertEquals(15000, TestJob.computeTestPeriod(Double.NaN, Double.NaN, NO_WINDOW,
+                                                      Double.NaN,
                                                       Double.NaN, -1, 0, 3000, 15000));
     }
 
@@ -221,7 +283,8 @@ public class TestJobPeriodTest {
     public void testCrossedConfigFloorsAtSmallerValue() {
         // min(20000) > max(5000): effective floor is the smaller value, so a
         // fast net is not forced into a 20s window by the crossed config
-        assertEquals(5000, TestJob.computeTestPeriod(2258, 2400, PASSING, 1241, 4, 4,
+        assertEquals(5000, TestJob.computeTestPeriod(2258, 2400, NO_WINDOW,
+                                                     PASSING, 1241, 4, 4,
                                                      20000, 5000));
     }
 
@@ -229,7 +292,8 @@ public class TestJobPeriodTest {
     @Test
     public void testCrossedConfigCapsAtLargerValue() {
         // min(10000) > max(7000): effective range [7000, 10000], floor wins here
-        assertEquals(7000, TestJob.computeTestPeriod(2258, 2400, PASSING, 1241, 4, 4,
+        assertEquals(7000, TestJob.computeTestPeriod(2258, 2400, NO_WINDOW,
+                                                     PASSING, 1241, 4, 4,
                                                      10000, 7000));
     }
 
@@ -237,14 +301,15 @@ public class TestJobPeriodTest {
     @Test
     public void testZeroSuccessTimeFallsBack() {
         // measured stat exists but is 0 -> fall back to the transport formula
-        assertEquals(15000, TestJob.computeTestPeriod(0, 0, Double.NaN, 1241, 4, 4,
+        assertEquals(15000, TestJob.computeTestPeriod(0, 0, NO_WINDOW, Double.NaN, 1241, 4, 4,
                                                       3000, 15000));
     }
 
     /** A negative average (a cross-clock artifact) is discarded, not used. */
     @Test
     public void testNegativeSuccessTimeFallsBack() {
-        assertEquals(15000, TestJob.computeTestPeriod(-1, -1, Double.NaN, 1241, 4, 4,
+        assertEquals(15000, TestJob.computeTestPeriod(-1, -1, NO_WINDOW,
+                                                      Double.NaN, 1241, 4, 4,
                                                       3000, 15000));
     }
 
