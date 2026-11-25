@@ -231,7 +231,7 @@ class JobQueueRunner extends I2PThread {
             }
         }
         if (_context.router().isAlive()) {_log.debug("Queue runner " + _id + " removed (idle)");}
-        _context.jobQueue().removeRunner(_id);
+        _context.jobQueue().removeRunner(_id, this);
     }
 
     /** Runs the job taken from the queue. */

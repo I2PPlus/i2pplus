@@ -2,6 +2,7 @@ package net.i2p.router;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Collections;
@@ -77,6 +78,14 @@ public class JobQueue {
 
     /** Integer (runnerId) to JobQueueRunner for created runners. */
     private final Map<Integer, JobQueueRunner> _queueRunners;
+    /**
+     * Highest runner key the allocator probes for a free slot. Keys are reused
+     * as runners retire and are replaced, so a dense run of occupied keys below
+     * this ceiling means the pool is at its practical size, and probing far past
+     * it would mint keys nothing else in the class expects to find. Package
+     * visible so the allocator's tests can pin where its probe stops.
+     */
+    static final int MAX_RUNNER_KEY = 10000;
     /** Counter to identify a job runner. */
     private static final AtomicInteger _runnerId = new AtomicInteger(0);
     /** List of jobs that are ready to run ASAP. */
@@ -860,16 +869,22 @@ public class JobQueue {
         if ((!_queueRunners.isEmpty()) && (!_allowParallelOperation)) return;
 
         if (_queueRunners.size() < numThreads) {
-            if (_log.shouldInfo()) {
-                _log.info("Increasing the number of queue runners from " + _queueRunners.size() + " to " + numThreads);
-            }
-            for (int i = _queueRunners.size(); i < numThreads; i++) {
-                JobQueueRunner runner = new JobQueueRunner(_context, i);
-                _queueRunners.put(Integer.valueOf(i), runner);
+            int before = _queueRunners.size();
+            // Lowest free keys, holes filled before the range is extended: a
+            // scale-down leaves non-contiguous keys behind, and starting at
+            // size() would put a new runner over a live one still in the map.
+            int[] keys = freeRunnerKeys(_queueRunners.keySet(), numThreads - before);
+            for (int key : keys) {
+                JobQueueRunner runner = new JobQueueRunner(_context, key);
+                _queueRunners.put(Integer.valueOf(key), runner);
                 runner.setName("JobQueue" + ThreadNames.seq(_runnerId.incrementAndGet()));
                 runner.setPriority(Thread.MAX_PRIORITY);
                 runner.start();
                 countRunnerCreated();
+            }
+            if (_log.shouldInfo()) {
+                _log.info("Increasing the number of queue runners from " + before +
+                          " to " + _queueRunners.size());
             }
         } else if (_log.shouldWarn()) {
             if (_queueRunners.size() == numThreads) {_log.warn("Already have " + numThreads + " threads");}
@@ -878,12 +893,38 @@ public class JobQueue {
     }
 
     /**
-     * Remove a queue runner from the registry.
+     * Removes an exiting runner from the registry, and only while it still
+     * holds the slot its key names.
+     *
+     * A runner key names a reusable slot, not permanent ownership. Scale-down
+     * unregisters an idle runner, a later scale-up hands that same key to a
+     * replacement, and only after that does the retired thread reach here.
+     * Removing by key alone would unregister the replacement instead: it keeps
+     * taking jobs, so it never goes idle, and nothing can retire it again while
+     * its thread outlives the registry's knowledge of it.
      * Package-private for use by {@link JobQueueRunner}.
      *
-     * @param id the runner ID to remove
+     * @param id the key the exiting runner was registered under
+     * @param runner the runner that is exiting, dropped only while it is still
+     *               the one registered under id
+     * @since 0.9.72+
      */
-    void removeRunner(int id) {_queueRunners.remove(Integer.valueOf(id));}
+    void removeRunner(int id, JobQueueRunner runner) {
+        // The two-argument remove is atomic, and JobQueueRunner does not
+        // override equals(), so the comparison is object identity.
+        _queueRunners.remove(Integer.valueOf(id), runner);
+    }
+
+    /**
+     * The runner holding a registry slot, if any. Package-private so a test can
+     * name the object that owns a key, which is what separates an owner's own
+     * cleanup from a stale runner deleting its replacement.
+     *
+     * @param id the key to look up
+     * @return the runner registered under it, or null when the slot is free
+     * @since 0.9.72+
+     */
+    JobQueueRunner registeredRunner(int id) {return _queueRunners.get(Integer.valueOf(id));}
 
     /**
      * Current number of active job runners.
@@ -959,10 +1000,11 @@ public class JobQueue {
     }
 
     /**
-     * Add additional job runners to the pool.
+     * Add additional job runners to the pool. Fewer than requested may start
+     * when no free registry keys are left below {@link #MAX_RUNNER_KEY}.
      * Package-private for use by JobQueueScaler.
      *
-     * @param count the number of runners to add
+     * @param count the number of runners to add, or 0 or fewer for none
      * @since 0.9.68+
      */
     synchronized void addRunners(int count) {
@@ -973,17 +1015,8 @@ public class JobQueue {
             return;
         }
 
-        int startKey = -1;
-        for (int i = 0; i < 10000; i++) {
-            if (!_queueRunners.containsKey(Integer.valueOf(i))) {
-                startKey = i;
-                break;
-            }
-        }
-        if (startKey < 0) startKey = _queueRunners.size();
-
-        for (int i = 0; i < count; i++) {
-            int key = startKey + i;
+        int[] keys = freeRunnerKeys(_queueRunners.keySet(), count);
+        for (int key : keys) {
             JobQueueRunner runner = new JobQueueRunner(_context, key);
             _queueRunners.put(Integer.valueOf(key), runner);
             runner.setName("JobQueue" + ThreadNames.seq(_runnerId.incrementAndGet()));
@@ -994,8 +1027,39 @@ public class JobQueue {
         }
 
         if (_log.shouldInfo()) {
-            _log.info("Added " + count + " runners -> Total runners: " + _queueRunners.size());
+            _log.info("Added " + keys.length + (keys.length == count ? "" : " of " + count) +
+                      " runners -> Total runners: " + _queueRunners.size());
         }
+    }
+
+    /**
+     * Picks registry keys that no runner currently holds.
+     *
+     * Scale-down retires whichever runners happen to be idle, so the free keys
+     * are normally holes through the live range rather than a block above it. An
+     * allocator that takes the first hole and then claims the next count keys in
+     * sequence puts a new runner over every live one inside that range; the
+     * runner it replaced keeps working, unregistered, where no scale-down can
+     * reach it again. Each key is therefore tested on its own.
+     *
+     * @param occupied the keys with a runner registered right now, read only,
+     *                 never null, may be empty
+     * @param count how many keys to find, or 0 or fewer for none
+     * @return up to count distinct keys in ascending order, none of them
+     *         occupied; fewer than count once the probe reaches
+     *         {@link #MAX_RUNNER_KEY} with slots still wanted
+     * @since 0.9.72+
+     */
+    static int[] freeRunnerKeys(Set<Integer> occupied, int count) {
+        if (count <= 0) {return new int[0];}
+
+        int[] keys = new int[count];
+        int found = 0;
+        for (int key = 0; key <= MAX_RUNNER_KEY && found < count; key++) {
+            if (!occupied.contains(Integer.valueOf(key))) {keys[found++] = key;}
+        }
+
+        return found == count ? keys : Arrays.copyOf(keys, found);
     }
 
     /**
