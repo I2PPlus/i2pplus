@@ -4628,7 +4628,7 @@ public class TunnelPool {
                               + " * Status: " + MessageStatusMessage.getStatusString(status) +
                               " (" + status + ')'
                               + " * Timeouts from it: " + _softAttribution.failuresFrom(dest, now)
-                              + describeHops(cfg));
+                              + describeHops(cfg, _context.routerHash()));
                 }
             } else {
                 cfg.incrementSoftFailures();
@@ -4653,7 +4653,7 @@ public class TunnelPool {
                       "\n* Status: " + MessageStatusMessage.getStatusString(status) +
                       " (" + status + ')' +
                       " * Failures now: " + failures +
-                      describeHops(cfg));
+                      describeHops(cfg, _context.routerHash()));
         }
         // Condemning a tunnel only helps if another one is coming. Cached by
         // ProfileOrganizer, so reading it per report is a map hit, not six
@@ -4697,27 +4697,31 @@ public class TunnelPool {
     }
 
     /**
-     * Name the hops of a failed tunnel so a data-phase failure is attributable.
+     * Name the remote hops of a failed tunnel so a data-phase failure is
+     * attributable.
      * <p>{@code TunnelInfo#toString()} identifies the tunnel only by nickname,
      * which for a client tunnel is the destination nickname — so every soft
      * failure in a pool looked identical and there was no way to tell whether
      * one peer was failing repeatedly or the failures were spread across the
-     * pool. Hop 0 is the peer adjacent to us, so a peer recurring at the same
+     * pool. Our own hop is left out: it is the same value on every line, so it
+     * reads as one peer being blamed for all of them, and a log line carrying
+     * our own hash is an anonymity leak. A peer recurring at the first remote
      * hop across many failures is the one to penalise.
      *
      * @param cfg the tunnel that failed, may be null
-     * @return a {@code "\n* Hops: [a] -> [b]"} bullet, empty when no hops are
-     *         known. It opens its own bullet - three hop hashes appended to an
-     *         already full {@code " * "} line put it past the house limit.
+     * @param us our own router hash, skipped where it is a hop, may be null
+     * @return a {@code "\n* Hops: [a] -> [b]"} bullet, empty when no remote hop
+     *         is known. It opens its own bullet - three hop hashes appended to
+     *         an already full {@code " * "} line put it past the house limit.
      * @since 0.9.71+
      */
-    private static String describeHops(TunnelInfo cfg) {
+    private static String describeHops(TunnelInfo cfg, Hash us) {
         if (cfg == null) {return "";}
         StringBuilder rv = new StringBuilder(64);
         int len = cfg.getLength();
         for (int hop = 0; hop < len; hop++) {
             Hash peer = cfg.getPeer(hop);
-            if (peer == null) {continue;}
+            if (peer == null || peer.equals(us)) {continue;}
             if (rv.length() == 0) {rv.append("\n* Hops: ");}
             else {rv.append(" -> ");}
             rv.append('[').append(peer.toShortBase64()).append(']');
@@ -8479,8 +8483,15 @@ public class TunnelPool {
             StringBuilder sb = new StringBuilder("Tunnel created for pool: " + cfg);
             if (peers != null) {
                 sb.append("\n* Peers: ");
+                Hash us = _context.routerHash();
                 for (int i = 0; i < peers.size(); i++) {
-                    if (i > 0) sb.append("[").append(peers.get(i).toShortBase64()).append("] ");
+                    Hash peer = peers.get(i);
+                    // Our own hop is not a peer to name here, and it is not at a
+                    // fixed position - index 0 on one role, the last hop on the
+                    // other - so test the hash rather than the index.
+                    if (i > 0 && peer != null && !peer.equals(us)) {
+                        sb.append('[').append(peer.toShortBase64()).append("] ");
+                    }
                 }
             }
             _log.debug(sb.toString());
