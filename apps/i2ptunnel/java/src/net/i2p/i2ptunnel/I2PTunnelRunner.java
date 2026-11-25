@@ -6,6 +6,7 @@ package net.i2p.i2ptunnel;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InterruptedIOException;
 import java.io.OutputStream;
 import java.io.PushbackInputStream;
 import java.net.Socket;
@@ -24,6 +25,7 @@ import net.i2p.client.streaming.I2PSocketException;
 import net.i2p.data.ByteArray;
 import net.i2p.data.DataHelper;
 import net.i2p.i2ptunnel.util.LimitOutputStream.DoneCallback;
+import net.i2p.stat.RateConstants;
 import net.i2p.util.ByteCache;
 import net.i2p.util.Clock;
 import net.i2p.util.I2PAppThread;
@@ -292,6 +294,15 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
      * @since 0.9.71+
      */
     static final long BODY_STALL_READ_TIMEOUT_MS = 30 * 1000;
+
+    /**
+     * Sample periods for the body-transfer stats. A stalled download is a
+     * per-transfer event, so the one-minute view is the one that shows whether
+     * it is happening now, and the hour view is what an operator compares
+     * against the transfers that finished.
+     */
+    private static final long[] BODY_RATES = {
+        RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR };
     /**
      * Deadline for the very first response byte after a request is written
      * upstream (ms). Without it, a peer that accepts the connection but never
@@ -768,6 +779,15 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
     private volatile long totalSent;
     /** Total bytes received from I2P. */
     private volatile long totalReceived;
+    /**
+     * Epoch-ms the receive forward last went silent mid-body, 0 when no stall
+     * is awaiting a resume. Set where the read timeout ends a streaming body and
+     * cleared by the first byte that arrives afterwards, so the gap measures the
+     * resume itself - the part of a stalled download a browser waits for.
+     *
+     * @since 0.9.72+
+     */
+    private volatile long _bodyStalledMs;
     /** Prevent the no-data failure callback from firing more than once across
      * the synchronous completion block and the exception/finally paths. */
     private boolean _noDataHandled;
@@ -2749,6 +2769,41 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
     }
 
     /**
+     * Record one of the body-transfer stats, registering it first. A stat that
+     * was never registered drops its data silently, and
+     * {@code createRequiredRateStat} is idempotent, so the registration rides
+     * along with the sample the way the server tunnel's I/O stats do.
+     *
+     * @param name the stat name as the console sees it
+     * @param description what the console shows beside it
+     * @param value the sample, a count or a duration in ms
+     * @since 0.9.72+
+     */
+    private void bodyStat(String name, String description, long value) {
+        I2PAppContext ctx = I2PAppContext.getGlobalContext();
+        if (ctx == null) {return;}
+        ctx.statManager().createRequiredRateStat(name, description, "I2PTunnel", BODY_RATES);
+        ctx.statManager().addRateData(name, value);
+    }
+
+    /**
+     * Note that bytes are arriving again after a mid-body stall, and how long
+     * the browser waited for it. Nothing else in the router measures this: the
+     * stream stays open with its window open, the tunnel looks healthy, and the
+     * only symptom is a download that stops and starts.
+     *
+     * @since 0.9.72+
+     */
+    private void noteBodyResumed() {
+        long stalledAt = _bodyStalledMs;
+        if (stalledAt <= 0) {return;}
+        _bodyStalledMs = 0;
+        bodyStat("i2ptunnel.client.bodyResumeTime",
+                 "Gap from a mid-body stall to the resumed byte (ms)",
+                 Clock.getInstance().now() - stalledAt);
+    }
+
+    /**
      * Forward data in one direction between two streams.
      * Reads from the input stream and writes to the output stream
      * until the stream is closed or an error occurs.
@@ -2780,6 +2835,13 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
          * local side stopped accepting data and the write is parked.
          */
         private volatile long _writeStartedMs;
+        /**
+         * Epoch-ms the last body chunk arrived on this forward, 0 before the
+         * first one. Used only to measure the gap between chunks.
+         */
+        private long _lastBodyByteMs;
+        /** Longest gap between body chunks seen on this forward, ms, 0 if none. */
+        private long _maxBodyIdleMs;
 
         /**
          * Forwards data between a local socket and the tunnel.
@@ -2796,6 +2858,42 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
             _callback = cb;
             direction = (toI2P ? "[To I2P]" : "[From I2P]");
             _cache = ByteCache.getInstance(32, NETWORK_BUFFER_SIZE);
+        }
+
+        /**
+         * Fold the gap since the previous body chunk into this forward's idle
+         * maximum. Nothing else measures this gap: the stream underneath stays
+         * open with its window open, and the tunnel reports healthy while the
+         * transfer goes silent.
+         */
+        private void noteBodyBytes() {
+            long now = Clock.getInstance().now();
+            long last = _lastBodyByteMs;
+            _lastBodyByteMs = now;
+            if (last > 0 && now - last > _maxBodyIdleMs) {_maxBodyIdleMs = now - last;}
+        }
+
+        /**
+         * Note a body that went silent past the read timeout, and fold the
+         * silence into the idle maximum — the timeout is what ends a stalled
+         * transfer, so without it the gap that stalled it is never measured.
+         *
+         * @param ex the exception that ended this forward; only a read timeout
+         *           on a streaming body counts
+         */
+        private void noteBodyStall(IOException ex) {
+            if (_toI2P || !_stallArmed || !(ex instanceof InterruptedIOException)) {return;}
+            long now = Clock.getInstance().now();
+            long last = _lastBodyByteMs;
+            long idle = last > 0 ? now - last : 0;
+            if (idle > _maxBodyIdleMs) {_maxBodyIdleMs = idle;}
+            _bodyStalledMs = now;
+            bodyStat("i2ptunnel.client.bodyStalled",
+                     "Body transfers that went silent past the read timeout (count)", 1);
+            if (_log.shouldWarn()) {
+                _log.warn("A body transfer went silent mid-stream -> Idle: " +
+                          DataHelper.formatDuration(idle) + " * Received: " + totalReceived + " bytes");
+            }
         }
 
         /**
@@ -2824,9 +2922,11 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
                             if (!_stallArmed) {
                                 _stallArmed = true;
                                 noteFirstResponseByte();
+                                noteBodyResumed();
                                 try {i2ps.setReadTimeout(BODY_STALL_READ_TIMEOUT_MS);}
                                 catch (RuntimeException re) { /* older socket impl */ }
                             }
+                            noteBodyBytes();
                             // Count the upstream bytes BEFORE the browser write. If the
                             // browser socket is already closed (e.g. Pipe closed under a
                             // congested stream), the write throws and the bytes would
@@ -2873,6 +2973,7 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
             } catch (IOException ex) {
                 if (_log.shouldDebug())
                     _log.debug(direction + " IO Error: " + ex);
+                noteBodyStall(ex);
                 _failure = ex;
                 synchronized (finishLock) {
                     finished = true;
@@ -2880,6 +2981,11 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
                 }
             } finally {
                 _cache.release(ba);
+                if (!_toI2P && _maxBodyIdleMs > 0) {
+                    bodyStat("i2ptunnel.client.bodyIdleTime",
+                             "Longest gap between body bytes on one transfer (ms)",
+                             _maxBodyIdleMs);
+                }
                 boolean keepAliveFrom;
                 boolean keepAliveTo;
                 if (_toI2P) {
