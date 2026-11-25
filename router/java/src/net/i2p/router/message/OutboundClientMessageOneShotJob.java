@@ -5,8 +5,10 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Supplier;
 import net.i2p.client.SendMessageOptions;
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.SessionKeyManager;
@@ -524,6 +526,8 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         ctx.statManager().createRateStat("client.leaseSetSkipCooldown", "Send skipped (LS fail cooldown active)", "ClientMessages", RATES);
         ctx.statManager().createRateStat("client.leaseSetSkipInFlight", "Send skipped (LS lookup already running for this dest)", "ClientMessages", RATES);
         ctx.statManager().createRequiredRateStat("client.sendAckTime", "Message round trip time (ms)", "ClientMessages", RATES);
+        ctx.statManager().createRateStat("client.sendStallRotate", "Send moved to another outbound tunnel after a stream stalled", "ClientMessages", RATES);
+        ctx.statManager().createRateStat("client.sendStallRotateNone", "Stall rotation found no alternative outbound tunnel", "ClientMessages", RATES);
     }
 
     public String getName() {return "Outbound client message";}
@@ -1763,6 +1767,10 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                         getContext().commSystem().isBacklogged(tunnel.getPeer(1));
                     boolean stalled = backlogged ? false : isStalledForRotation();
                     if (!backlogged && !stalled) {
+                        // Reusing it, and the stall mark that set it aside has
+                        // expired, so stop holding this tunnel apart from the
+                        // pool for this pair.
+                        _cache.stalledTunnelCache.remove(_hashPair, tunnel);
                         return tunnel;
                     }
                     // backlogged or stalled
@@ -1785,8 +1793,18 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 } // else no longer valid
                 _cache.tunnelCache.remove(_hashPair);
             }
-            // Pick a new tunnel
-            tunnel = selectOutboundTunnel();
+            // Pick a new tunnel. A tunnel set aside for a stall is skipped when
+            // the pool offers another: a backlog is re-checked on every send, a
+            // stall is a timer, so a plain draw can land straight back on the
+            // path that just stopped delivering and ride it for another while.
+            TunnelInfo setAside = _cache.stalledTunnelCache.get(_hashPair);
+            if (setAside != null && !isStalledForRotation()) {
+                // The mark has expired since it was written; holding the tunnel
+                // apart any longer would exclude a healthy path on old evidence.
+                _cache.stalledTunnelCache.remove(_hashPair, setAside);
+                setAside = null;
+            }
+            tunnel = setAside != null ? selectStallReplacement(setAside) : selectOutboundTunnel();
             if (tunnel != null) {
                 _cache.tunnelCache.put(_hashPair, tunnel);
                 _cache.tunnelStartTime.put(_hashPair, Long.valueOf(getContext().clock().now()));
@@ -1811,6 +1829,58 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         // hurts reliability? let's try picking at random again
         //Hash gw = _lease.getGateway();
         return getContext().tunnelManager().selectOutboundTunnel(_from.calculateHash());
+    }
+
+    /**
+     * Draw candidate outbound tunnels and return one that is not the tunnel
+     * this pair was last using.
+     * <p>Drawing more than one and choosing among the distinct ones matters: a
+     * single draw from a pool of N returns the tunnel being replaced with
+     * probability 1/N, which for a small client pool is most of the time.
+     *
+     * @param avoid the tunnel to skip, never null here
+     * @param drawer supplies pool tunnels one at a time; a null ends the draws
+     * @param rnd source of the choice among the distinct candidates
+     * @return a different tunnel when the pool offers one, otherwise
+     *         {@code avoid} itself
+     * @since 0.9.72+
+     */
+    static TunnelInfo selectDistinctOutboundTunnel(TunnelInfo avoid, Supplier<TunnelInfo> drawer,
+                                                   Random rnd) {
+        List<TunnelInfo> candidates = new ArrayList<>(MAX_ROTATION_CANDIDATES);
+        for (int i = 0; i < MAX_ROTATION_CANDIDATES; i++) {
+            TunnelInfo t = drawer.get();
+            if (t == null) {break;}
+            if (!candidates.contains(t)) {candidates.add(t);}
+        }
+        return OutboundCache.pickDistinctTunnel(avoid, candidates, rnd);
+    }
+
+    /**
+     * Choose the outbound tunnel for a pair whose cached tunnel was set aside
+     * because the stream to this destination stalled.
+     * <p>The set-aside tunnel is skipped whenever the pool offers another. It is
+     * used when the pool offers none: the send still has to go out, and a
+     * destination whose only outbound path is the stalled one is better served
+     * by a slow send than by no send at all.
+     *
+     * @param setAside the tunnel held apart for this pair, never null
+     * @return the tunnel to send through, never null
+     * @since 0.9.72+
+     */
+    private TunnelInfo selectStallReplacement(TunnelInfo setAside) {
+        TunnelInfo alt = selectDistinctOutboundTunnel(setAside, this::selectOutboundTunnel,
+                                                      getContext().random());
+        boolean rotated = alt != setAside;
+        getContext().statManager().addRateData(rotated ? "client.sendStallRotate"
+                                                      : "client.sendStallRotateNone", 1);
+        if (_log.shouldDebug()) {
+            _log.debug("Stall rotation for " + _toString + " -> " +
+                       (rotated ? "Moved to another outbound tunnel"
+                                : "Pool holds no other outbound tunnel") +
+                       "\n* " + alt);
+        }
+        return alt;
     }
 
     /**
@@ -1893,15 +1963,8 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                            + " -> Client pool holds one outbound tunnel");
             return null;
         }
-        List<TunnelInfo> candidates = new ArrayList<>(MAX_ROTATION_CANDIDATES);
-        for (int i = 0; i < MAX_ROTATION_CANDIDATES; i++) {
-            TunnelInfo t = selectOutboundTunnel();
-            if (t == null)
-                break;
-            if (!candidates.contains(t))
-                candidates.add(t);
-        }
-         TunnelInfo rotated = OutboundCache.pickDistinctTunnel(cached, candidates, getContext().random());
+        TunnelInfo rotated = selectDistinctOutboundTunnel(cached, this::selectOutboundTunnel,
+                                                          getContext().random());
          if (rotated == null || rotated == cached) {
              // Rotation saturated: the pool currently offers only the tunnel the
              // previous connection used.  Do NOT ride it to the same timeout -

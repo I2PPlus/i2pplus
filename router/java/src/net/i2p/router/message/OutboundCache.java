@@ -47,9 +47,12 @@ public class OutboundCache {
     final ConcurrentHashMap<HashPair, TunnelInfo> backloggedTunnelCache = new ConcurrentHashMap<>(128, 0.9f, 16);
     /**
      * Cache for tunnels set aside because the stream to that destination
-     * stalled. Held apart from tunnelCache so the pair reselects, and drained
-     * with the backlogged cache so an entry cannot pin a dead tunnel. Purely
-     * advisory: the caller still returns a tunnel when every candidate is here.
+     * stalled. Held apart from tunnelCache so the pair reselects, and read on
+     * the reselect so the draw cannot land straight back on the path that just
+     * stopped delivering. Drained with the backlogged cache so an entry cannot
+     * pin a dead tunnel, and dropped when the pair goes back to using it.
+     * Purely advisory: the caller still uses this tunnel when the pool offers
+     * no other.
      * @since 0.9.71+
      */
     final ConcurrentHashMap<HashPair, TunnelInfo> stalledTunnelCache = new ConcurrentHashMap<>(128, 0.9f, 16);
