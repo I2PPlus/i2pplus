@@ -349,7 +349,36 @@ public class TunnelPool {
      */
     static long updatedAvgTestDuration(long avg, long sample) {
         if (avg <= 0) {return Math.max(0, sample);}
-        return (long)(avg * 0.9 + sample * 0.1);
+        return (long)(avg * DURATION_SMOOTHING + sample * (1 - DURATION_SMOOTHING));
+    }
+
+    /**
+     * Weight the previous average keeps when a new observation arrives, or when
+     * a round produces no observation at all. Shared by
+     * {@link #updatedAvgTestDuration(long, long)} and
+     * {@link #decayedAvgTestDuration(long)} so the two move at the same rate.
+     *
+     * @since 0.9.72+
+     */
+    static final double DURATION_SMOOTHING = 0.9;
+
+    /**
+     * Pull the rolling test-duration average one smoothing step toward zero,
+     * for a round that produced no latency measurement at all.
+     * <p>A round that never gets an answer is timed out at the window, so its
+     * duration <em>is</em> the window, and feeding that back into the average
+     * that widens the window is the same loop that pinned
+     * {@link TestJob#computeTestPeriod} to its ceiling: the timeout quotes
+     * itself and the window has no way back down. Only a round that actually
+     * answered says anything about how long a live round needs, so a silent
+     * round counts as evidence that the window was longer than it needed to be.
+     *
+     * @param avg current average, 0 if none
+     * @return the average pulled toward zero, never negative
+     * @since 0.9.72+
+     */
+    static long decayedAvgTestDuration(long avg) {
+        return avg <= 0 ? 0 : (long)(avg * DURATION_SMOOTHING);
     }
 
     /**
@@ -396,13 +425,21 @@ public class TunnelPool {
     static final double MAX_ADAPTIVE_TEST_MULTIPLIER = 2.0;
 
     /**
-     * Record a completed test duration and adapt this pool's test window.
+     * Record what a completed round says about latency, and adapt this pool's
+     * test window.
+     * <p>A round that answered carries a duration; a round that was timed out
+     * carries the deadline it missed, which says nothing about how long a live
+     * round needs. Only the first is fed to the average, and the second pulls
+     * it down - see {@link #decayedAvgTestDuration(long)}.
      *
      * @param durationMs elapsed test time, ms
+     * @param measured true when the round produced an answer, false when it was
+     *                 timed out at the window
      * @since 0.9.71+
      */
-    void updateAdaptiveTestDuration(long durationMs) {
-        long avg = updatedAvgTestDuration(_adaptiveAvgTestDuration, durationMs);
+    void updateAdaptiveTestDuration(long durationMs, boolean measured) {
+        long avg = measured ? updatedAvgTestDuration(_adaptiveAvgTestDuration, durationMs)
+                            : decayedAvgTestDuration(_adaptiveAvgTestDuration);
         _adaptiveAvgTestDuration = avg;
         _adaptiveTestMultiplier = updatedAdaptiveTestMultiplier(_adaptiveTestMultiplier, avg);
     }

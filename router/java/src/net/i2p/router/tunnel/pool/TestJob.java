@@ -3686,10 +3686,12 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
        * Called after each test completion (success or failure).
        *
        * @param durationMs the test duration in ms
+       * @param measured true when the round answered, false when it was timed out
+       *                 at the window and its duration is that window
        * @since 0.9.71+
        */
-      private void updateTestDuration(long durationMs) {
-          _pool.updateAdaptiveTestDuration(durationMs);
+      private void updateTestDuration(long durationMs, boolean measured) {
+          _pool.updateAdaptiveTestDuration(durationMs, measured);
       }
 
 
@@ -3724,7 +3726,7 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
 
         // Update success history for adaptive testing frequency
         updateSuccessHistory(true);
-        updateTestDuration(ms);
+        updateTestDuration(ms, true);
 
         ctx.statManager().addRateData("tunnel.testSuccessLength", _cfg.getLength());
         ctx.statManager().addRateData("tunnel.testSuccessTime", ms);
@@ -4429,8 +4431,11 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
      * Handles a test that timed out or failed.
      *
      * @param timeToFail ms spent before the failure was noticed
+     * @param replyArrived true when the far end answered late, making the
+     *                     duration a measured latency; false when the round was
+     *                     timed out, making it the deadline it missed
      */
-    private void testFailed(long timeToFail) {
+    private void testFailed(long timeToFail, boolean replyArrived) {
         if (_pool == null || !_pool.isAlive()) {
             cleanupTunnelTracking();
             decrementIfCounted();
@@ -4440,7 +4445,7 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
         // test says nothing about the local hop, and counting it there would report
         // an unreachable hop for tunnels that are working.
         noteLocalHopAttribution();
-        updateTestDuration(timeToFail);
+        updateTestDuration(timeToFail, replyArrived);
         // The verdict is kept, not just counted: a far endpoint known
         // unreachable is a fault the tunnel owns, and it is what lets a tunnel
         // that is carrying traffic be dropped on a test failure alone.
@@ -5393,7 +5398,9 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
             if (_successTime < _testPeriod) {
                 testSuccessful((int) _successTime);
             } else {
-                testFailed(_successTime);
+                // The far end did answer, after the window closed. That duration
+                // is a latency the pool can learn from, unlike a silent round.
+                testFailed(_successTime, true);
             }
         }
 
@@ -5452,7 +5459,9 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
             if (!claimRound(_token)) {return;}
             clearTestTags();
             releaseRound(_token);
-            testFailed(getContext().clock().now() - _started);
+            // Nothing ever answered: the elapsed time is the window this round
+            // ran under, not a latency, so it must not widen that window.
+            testFailed(getContext().clock().now() - _started, false);
         }
     }
 

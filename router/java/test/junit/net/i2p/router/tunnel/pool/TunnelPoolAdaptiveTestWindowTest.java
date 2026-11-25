@@ -6,7 +6,8 @@ import org.junit.Test;
 
 /**
  * Tests the pool-owned adaptive test-window policy in
- * {@link TunnelPool#updatedAvgTestDuration(long, long)} and
+ * {@link TunnelPool#updatedAvgTestDuration(long, long)},
+ * {@link TunnelPool#decayedAvgTestDuration(long)} and
  * {@link TunnelPool#updatedAdaptiveTestMultiplier(double, long)}.
  *
  * <p>These lived on {@link TestJob}, which is constructed per build-request
@@ -20,6 +21,13 @@ import org.junit.Test;
  * @since 0.9.71+
  */
 public class TunnelPoolAdaptiveTestWindowTest {
+
+    /**
+     * Holds nothing: every case feeds the policy helpers their own average,
+     * sample and multiplier.
+     */
+    public TunnelPoolAdaptiveTestWindowTest() {
+    }
 
     /** The first sample seeds the average outright. */
     @Test
@@ -94,5 +102,69 @@ public class TunnelPoolAdaptiveTestWindowTest {
         // line at 0.5 (pinned by TunnelPoolPreEmergencyTest), and beyond half
         // the burst would fire against pools that are barely thin.
         assertTrue(TunnelPool.PRE_EMERGENCY_FRACTION <= 0.5);
+    }
+
+    /**
+     * A round that never answered is timed out at the window, so its duration
+     * <em>is</em> the window. Read as a latency it holds the average above
+     * {@link TunnelPool#SLOW_TEST_AVG_MS} and the window at its widened ceiling
+     * - the same loop that pinned the test window on 2026-11-25. Pulling the
+     * average down instead gives the window a way back.
+     */
+    @Test
+    public void testSilentRoundPullsTheAverageDown() {
+        long avg = 9000;
+        long decayed = TunnelPool.decayedAvgTestDuration(avg);
+        assertTrue("a silent round must move the average: " + decayed, decayed < avg);
+        assertEquals((long)(avg * TunnelPool.DURATION_SMOOTHING), decayed);
+        for (int i = 0; i < 100; i++) {
+            decayed = TunnelPool.decayedAvgTestDuration(decayed);
+        }
+        assertEquals("repeated silence reaches the floor", 0L, decayed);
+        assertEquals("and a 1ms average does not stick there", 0L,
+                     TunnelPool.decayedAvgTestDuration(1));
+    }
+
+    /** No average, and a negative one, decay to nothing - never to a negative duration. */
+    @Test
+    public void testDecayCannotGoNegative() {
+        assertEquals(0L, TunnelPool.decayedAvgTestDuration(0));
+        assertEquals(0L, TunnelPool.decayedAvgTestDuration(-5));
+    }
+
+    /**
+     * The decay and the smoother pull the same distance, so the difference
+     * between a silent round and an instant one is what the multiplier learns
+     * from the average, not how hard either one moves it.
+     */
+    @Test
+    public void testDecayMatchesTheSmootherStep() {
+        assertEquals(TunnelPool.updatedAvgTestDuration(9000, 0),
+                     TunnelPool.decayedAvgTestDuration(9000));
+    }
+
+    /**
+     * The consequence the change exists for: a pool whose rounds time out keeps
+     * its window at the ceiling while their deadlines are being fed in as
+     * latency, and walks it back to the floor once they are read as silence.
+     */
+    @Test
+    public void testSilentRoundsNarrowWhatTimedLatencyWouldKeepWide() {
+        double widened = 1.0;
+        long avg = TunnelPool.updatedAvgTestDuration(0, 15000);
+        for (int i = 0; i < 10; i++) {
+            avg = TunnelPool.updatedAvgTestDuration(avg, 15000);
+            widened = TunnelPool.updatedAdaptiveTestMultiplier(widened, avg);
+        }
+        assertEquals("a deadline fed as latency pins the window at the cap",
+                     TunnelPool.MAX_ADAPTIVE_TEST_MULTIPLIER, widened, 0.0001);
+
+        double narrowed = TunnelPool.MAX_ADAPTIVE_TEST_MULTIPLIER;
+        long silent = 15000;
+        for (int i = 0; i < 60; i++) {
+            silent = TunnelPool.decayedAvgTestDuration(silent);
+            narrowed = TunnelPool.updatedAdaptiveTestMultiplier(narrowed, silent);
+        }
+        assertEquals("silence walks the window back to the floor", 1.0, narrowed, 0.0001);
     }
 }
