@@ -482,6 +482,9 @@
    * @returns {void}
    */
   function removeIframeListeners(iframe) {
+    const entry = settings.get(iframe.id);
+
+    if (entry !== undefined && entry.parentWatcher !== null) {entry.parentWatcher.disconnect();}
     settings.delete(iframe.id);
   }
 
@@ -503,6 +506,40 @@
       warn(iframeId, `Removing IFrame [${iframeId}] failed -> ${error.message}`);
     }
     removeIframeListeners(iframe);
+  }
+
+  /**
+   * Watches the frame's parent for the frame leaving the page.
+   *
+   * A frame that is removed and re-inserted in the same batch of mutations was
+   * moved, not closed - a page that re-parents its own frame is the current
+   * user. Closing on the removal would pull a live, visible frame out of its new
+   * home and reload the framed page, so the watcher follows the frame to its new
+   * parent and only closes it once the element is actually off the document.
+   *
+   * @param {Element} iframe the frame to watch
+   * @returns {void}
+   */
+  function watchFrameParent(iframe) {
+    const entry = settings.get(iframe.id);
+
+    // a frame the host has already forgotten has nothing left to watch
+    if (entry === undefined) {return;}
+    if (entry.parentWatcher !== null) {entry.parentWatcher.disconnect();}
+    entry.parentWatcher = null;
+    if (iframe.parentNode === null) {return;}
+
+    const watcher = new MutationObserver(mutations => {
+      for (const mutation of mutations) {
+        for (const removed of mutation.removedNodes) {
+          if (removed !== iframe) {continue;}
+          if (iframe.isConnected) {watchFrameParent(iframe);}
+          else {closeIFrame(iframe);}
+        }
+      }
+    });
+    watcher.observe(iframe.parentNode, {childList: true});
+    entry.parentWatcher = watcher;
   }
 
   /**
@@ -662,6 +699,8 @@
       iframe,
       zeroSized: false,
       paddingBorder: 0,
+      /** Watches this frame's parent for the frame leaving the page. */
+      parentWatcher: null,
       remoteHost: iframe.src && iframe.src.split('/').slice(0, 3).join('/')
     };
 
@@ -746,15 +785,7 @@
       trigger('iFrame.onload', createInitMsg(iframeId), iframe, iframeId, true);
     }
 
-    if (iframe.parentNode) {
-      new MutationObserver(mutations => {
-        for (const mutation of mutations) {
-          for (const removed of mutation.removedNodes) {
-            if (removed === iframe) {closeIFrame(iframe);}
-          }
-        }
-      }).observe(iframe.parentNode, {childList: true});
-    }
+    watchFrameParent(iframe);
 
     iframe.addEventListener('load', iFrameLoaded);
     trigger('init', createInitMsg(iframeId), iframe, iframeId, true);

@@ -209,24 +209,32 @@ function loadConsole(frames) {
  *
  * @param {number} height the height the frame's tagged element reports
  * @param {string} [markup] the rest of the frame's body
+ * @param {Object} [frameElement] the host's iframe element as the framed page
+ *   sees it through window.frameElement, or null for a page that cannot read it
  * @returns {Object} the frame's window and listeners, everything it posted at
  *   its parent, the observers it armed, its queued timers, and ways to change
  *   its content height
  */
-function loadFrame(height, markup = '<span id="endOfPage" data-iframe-height></span>') {
+function loadFrame(height, markup = '<span id="endOfPage" data-iframe-height></span>',
+                   frameElement = null) {
   const {document} = parseHTML(`<!DOCTYPE HTML><html><head></head><body>${markup}</body></html>`);
   const tagged = document.querySelector("[data-iframe-height]");
-  // linkedom lays nothing out, so the tagged element reports the height the
-  // test is asking about
-  if (tagged !== null) {
-    tagged.getBoundingClientRect = () => ({bottom: height, right: 400, top: 0, left: 0});
-  }
   const {window, handlers, timers, observed} = fakeWindow(document, `${ORIGIN}/graph.html`);
+  // linkedom lays nothing out, so the tagged element reports the height the test
+  // is asking about. A browser's getBoundingClientRect() is viewport-relative, so
+  // the fake reports the document edge less whatever the page is scrolled by.
+  if (tagged !== null) {
+    tagged.getBoundingClientRect = () => ({bottom: height - window.scrollY, right: 400, top: 0, left: 0});
+  }
   const toParent = [];
   window.parent = {
     postMessage: (msg, targetOrigin) => toParent.push({msg, targetOrigin}),
     location: {origin: ORIGIN}
   };
+  // a same-origin framed page can read its own frame element, which is how it
+  // finds the height the host is really showing rather than the one it last
+  // reported. null is what a cross-origin host looks like from inside.
+  window.frameElement = frameElement;
   vm.runInNewContext(CHILD_SRC, window);
   return {
     document,
@@ -315,9 +323,15 @@ function lastOf(box, type) {
  */
 function handshake(host, frame, height) {
   const init = host.posted.get(frame)[0].msg;
-  const frameSide = loadFrame(height);
+  // a same-origin framed page reads the host's frame element, so the height the
+  // host has applied is visible from inside the frame, as it is in a browser
+  const frameElement = {get clientHeight() {return parseInt(frame.style.height, 10) || 0;}};
+  const frameSide = loadFrame(height, undefined, frameElement);
   deliver(frameSide.handlers, init, host.window);
   const answer = lastOf(host.inbox, "init");
+  // and the host sizes the frame to that first report, which is what every
+  // console page does before the tests start changing the content
+  if (answer !== null) {hostApplies(host, answer);}
   return {frameSide, answer};
 }
 
@@ -472,6 +486,49 @@ test("the frame stays quiet while its content is unchanged", () => {
   frameSide.observed[0].cb([{type: "childList", target: frameSide.window.document.body}]);
   runTimers(frameSide.timers);
   assert.equal(lastOf(host.inbox, "mutationObserver"), null);
+});
+
+test("the frame measures its document, not its viewport", () => {
+  const host = loadHost(FRAME);
+  host.window.iFrameResize(CONSOLE_OPTIONS, "#graph");
+  const frame = host.document.querySelector("iframe");
+  const {frameSide} = handshake(host, frame, 640);
+
+  // a frame shorter than its page scrolls, and the bounding rect is viewport
+  // relative, so a scrolled page has to add the scroll back or it reports
+  // itself short by exactly how far it is scrolled
+  frameSide.window.scrollY = 200;
+  frameSide.grow(200);
+  host.inbox.length = 0;
+  frameSide.observed[0].cb([{type: "childList", target: frameSide.window.document.body}]);
+  runTimers(frameSide.timers);
+
+  const again = lastOf(host.inbox, "mutationObserver");
+  assert.ok(again, `a scrolled page still reports its full height: ${JSON.stringify(host.inbox)}`);
+  assert.equal(parseChild(again).height, 840, "the scroll is not part of the height");
+});
+
+test("a frame left taller than its page shrinks back", () => {
+  const host = loadHost(FRAME);
+  host.window.iFrameResize(CONSOLE_OPTIONS, "#graph");
+  const frame = host.document.querySelector("iframe");
+  const {frameSide} = handshake(host, frame, 640);
+
+  // the host ends up showing a height the frame never reported: a report
+  // deferred to an animation frame that never ran, a min/max clamp, a frame
+  // element the page replaced. The frame's own record agrees with its page, so
+  // only a comparison against the screen undoes the dead space left below it.
+  frame.style.height = "905px";
+  host.inbox.length = 0;
+  frameSide.observed[0].cb([{type: "childList", target: frameSide.window.document.body}]);
+  runTimers(frameSide.timers);
+
+  const again = lastOf(host.inbox, "mutationObserver");
+  assert.ok(again, `the frame corrects a height it did not report: ${JSON.stringify(host.inbox)}`);
+  assert.equal(parseChild(again).height, 640);
+
+  hostApplies(host, again);
+  assert.equal(frame.style.height, "640px", "and the dead space under the page goes away");
 });
 
 test("the frame reports again when a resource finishes loading", () => {
@@ -741,9 +798,8 @@ test("the host runs onInit when the frame first reports", () => {
   host.window.iFrameResize({...CONSOLE_OPTIONS, onInit: () => {inits++;}}, "#graph");
   const frame = host.document.querySelector("iframe");
 
-  const {frameSide, answer} = handshake(host, frame, 640);
-  hostApplies(host, answer);
-  assert.equal(inits, 1, "the console scrolls a framed page to the top when it loads");
+  const {frameSide} = handshake(host, frame, 640);
+  assert.equal(inits, 1, "the console sizes the frame and runs onInit once when it loads");
 
   frameSide.grow(200);
   frameSide.observed[0].cb([{type: "childList", target: frameSide.window.document.body}]);

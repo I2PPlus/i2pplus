@@ -278,6 +278,26 @@ test("a frame taken out of the page stops being sized", () => {
   assert.ok(page.document.getElementById("graph") === null, "and re-adopting a gone frame is harmless");
 });
 
+test("a frame the page moves keeps its size and its listeners", () => {
+  const page = loadHost(`<div id="from"><iframe id="graph" src="${ORIGIN}/g.html"></iframe></div>` +
+                        `<div id="to"></div>`);
+  page.win.iFrameResize({}, "#graph");
+  const frame = page.document.getElementById("graph");
+
+  // a refresh that re-parents the frame rather than replacing it removes and
+  // re-inserts the same element in one batch; closing on the removal would pull
+  // a live, visible frame out of its new home and reload the framed page
+  page.document.getElementById("to").appendChild(frame);
+  // the fake observer records each registration, so take the list as it stands
+  // before the callback re-arms the watcher on the frame's new parent
+  const batch = [{type: "childList", removedNodes: [frame], addedNodes: [frame]}];
+  for (const entry of [...page.observed]) {entry.cb(batch);}
+
+  assert.ok(frame.isConnected, "the frame stays where the page put it");
+  assert.doesNotThrow(() => deliver(page, "[iFrameSizer]graph:300:0:size", frame.contentWindow));
+  assert.equal(frame.style.height, "300px", "and it is still sized in its new parent");
+});
+
 test("the host reads a frame's box once, however many reports arrive", () => {
   const page = loadHost(`<iframe id="graph" src="${ORIGIN}/g.html"></iframe>`);
   page.win.iFrameResize({tolerance: 0}, "#graph");

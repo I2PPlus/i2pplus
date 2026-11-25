@@ -53,8 +53,8 @@
   /** The window the host half runs in; taken from the init message. */
   let target = window.parent;
 
-  /** Last size reported to the host, so an unchanged page stays quiet. */
-  let height = 0;
+  /** Last height reported to the host, so an unchanged page stays quiet. */
+  let lastReported = 0;
 
   /** Listeners that re-measure the page, kept so autoResize(false) can remove them. */
   const triggerListeners = {};
@@ -232,8 +232,15 @@
     const started = Date.now();
     let maxVal = 0;
 
+    // getBoundingClientRect() is viewport-relative while the height reported is
+    // the document's, so the scroll offset has to be added back: a page that is
+    // scrolled when it measures - which happens while the frame is still shorter
+    // than its content - otherwise reports short by exactly how far it is scrolled.
+    const scrollOffset = side === 'bottom' ? window.scrollY : window.scrollX;
+
     for (const element of elements) {
-      const elVal = element.getBoundingClientRect()[side] + getCssPixels(`margin${sideName}`, element);
+      const elVal = element.getBoundingClientRect()[side] +
+                    getCssPixels(`margin${sideName}`, element) + scrollOffset;
       if (elVal > maxVal) {maxVal = elVal;}
     }
 
@@ -506,19 +513,43 @@
   }
 
   /**
-   * True when a change is big enough to be worth reporting.
+   * The content height the host is showing for this frame, read from the frame
+   * element itself. The last report says what this page sent, not what landed:
+   * a report can be deferred to an animation frame that never ran, clamped by
+   * the host's min/max, or lost to a replaced frame element. Comparing against
+   * the screen, not the record, is what lets the next content change undo the
+   * drift. `clientHeight` is the content box, which is what this page reports,
+   * so the host's padding and border do not skew it.
    *
-   * @param {number} next the height measured now
-   * @returns {boolean} true when the host should be told
+   * @returns {number} the height in pixels, or -1 when a cross-origin host
+   *   hides the element, which leaves the last report as the only comparison
    */
-  function isSizeChangeDetected(next) {
-    return Math.abs(height - next) > tolerance;
+  function shownHeight() {
+    try {
+      return window.frameElement === null ? -1 : window.frameElement.clientHeight;
+    } catch (forbidden) {
+      // A cross-origin ancestor makes frameElement throw rather than return null.
+      return -1;
+    }
   }
 
   /**
-   * Measures the page and reports it when the measurement changed. Width is
-   * always 0: the console sizes frames by height only, and measuring width
-   * would cost two more layout reads on every pass.
+   * True when a measurement differs enough from what the host is showing to be
+   * worth a round trip.
+   *
+   * @param {number} next the height measured now
+   * @param {number} shown what the host is showing, or -1 to fall back to the
+   *   last report
+   * @returns {boolean} true when the host should be told
+   */
+  function isSizeChangeDetected(next, shown) {
+    return Math.abs((shown >= 0 ? shown : lastReported) - next) > tolerance;
+  }
+
+  /**
+   * Measures the page and reports it when the measurement differs from what the
+   * host is showing. Width is always 0: the console sizes frames by height only,
+   * and measuring width would cost two more layout reads on every pass.
    *
    * @param {string} triggerEvent the message type to send
    * @param {string} triggerEventDesc what caused it, for the log
@@ -528,9 +559,9 @@
   function sizeIFrame(triggerEvent, triggerEventDesc, customHeight) {
     const currentHeight = customHeight === undefined ? getHeight[heightCalcMode]() : customHeight;
 
-    if (isSizeChangeDetected(currentHeight) || triggerEvent === 'init') {
-      height = currentHeight;
-      sendMsg(height, 0, triggerEvent);
+    if (triggerEvent === 'init' || isSizeChangeDetected(currentHeight, shownHeight())) {
+      lastReported = currentHeight;
+      sendMsg(lastReported, 0, triggerEvent);
     } else {
       log('No change in size detected');
     }
