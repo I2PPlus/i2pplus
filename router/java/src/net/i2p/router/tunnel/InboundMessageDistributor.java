@@ -472,7 +472,7 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                         }
                     } else if (_client != null && _client.equals(to)) {
                         if (_log.shouldDebug()) {
-                            _log.debug("Received data message for client [" + _client.toString().substring(0,8) + "]");
+                            _log.debug("Received data message for client [" + _client.toShortBase32() + "]");
                         }
                         DataMessage dm = (DataMessage)data;
                         Payload payload = new Payload();
@@ -485,8 +485,8 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                         if (tgt != null && _client.equals(tgt.getAliasOf())) {
                             // same as above, just different log
                             if (_log.shouldDebug()) {
-                                _log.debug("Received data message for client ["+ _client.toString().substring(0,8) +
-                                           "] targeting Shared Client destination [" + to.toString().substring(0,8) + "]");
+                                _log.debug("Received data message for client [" + _client.toShortBase32() +
+                                           "] targeting Shared Client destination [" + to.toShortBase32() + ']');
                             }
                             DataMessage dm = (DataMessage)data;
                             Payload payload = new Payload();
@@ -494,15 +494,31 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                             ClientMessage m = new ClientMessage(to, payload);
                             _context.clientManager().messageReceived(m);
                         } else {
-                            if (_log.shouldError()) {
-                                _log.error("Received data message for client [" + _client.toString().substring(0,8) +
-                                           "] -> Wrong target: [" + to.toString().substring(0,8) + "]");
-                            }
+                            // The peer sent us data for a destination we do not
+                            // serve on this tunnel: it held a lease whose gateway
+                            // is us, for a destination our pool no longer holds.
+                            // We drop the message and nothing else breaks, so this
+                            // is a warning about the sender's stale LeaseSet, not
+                            // an error in our state. The nickname says which of our
+                            // pools it arrived on, which the hash alone does not,
+                            // and both hashes are the base32 form the console
+                            // linkifier parses. Throttled, because one sender with
+                            // a stale LeaseSet flushed 136 of these in 55 seconds.
+                            _log.warnThrottled("imd-wrong-target",
+                                               "Data message for " + _clientNickname +
+                                               " [" + _client.toShortBase32() + ']' +
+                                               " -> Wrong target: [" + to.toShortBase32() + ']' +
+                                               " * MsgID: " + msg.getUniqueId());
                         }
                     } else {
-                        if (_log.shouldError()) {
-                            _log.error("Received data message via Exploratory tunnel targeting destination [" + to.toString().substring(0,8) + "]");
-                        }
+                        // Same drop on an exploratory inbound tunnel: the message
+                        // names a destination we do not serve, so there is no
+                        // client at the end of the tunnel to hand it to.
+                        _log.warnThrottled("imd-exploratory-wrong-target",
+                                           "Data message via an exploratory tunnel" +
+                                           " -> No client for target: [" +
+                                           to.toShortBase32() + ']' +
+                                           " * MsgID: " + msg.getUniqueId());
                     }
                     return;
 
@@ -511,10 +527,12 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                 // Targeted messages are usually dropped, but it is safe to
                 // allow distribute() to evaluate the message.
                 if (_log.shouldInfo())
-                    _log.info("Clove targeted [" + instructions.getRouter().toShortBase64() + "] via " +
-                              "[TunnelId" + instructions.getTunnelId() + "] -> Handling recursively to prevent leakage... \n* " +
-                              "Message type: " + data.getClass().getSimpleName() +  ((_client != null) ?
-                              "; Client " + _clientNickname + " [" +_client.toString().substring(0,8) + "]" : ""));
+                    _log.info("Clove targeted [" + instructions.getRouter().toShortBase64() +
+                              "] -> Handling it recursively to prevent leakage" +
+                              "\n* Tunnel ID: " + instructions.getTunnelId() +
+                              " * Message: " + data.getClass().getSimpleName() +
+                              ((_client != null) ? " * Client: " + _clientNickname +
+                                                   " [" + _client.toShortBase32() + ']' : ""));
                 distribute(data, instructions.getRouter(), instructions.getTunnelId());
                 return;
 
