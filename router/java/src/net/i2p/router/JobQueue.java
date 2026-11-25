@@ -238,6 +238,12 @@ public class JobQueue {
         // churn was invisible in a running router. This is the counter that makes the
         // scaler's thread traffic measurable. Read the add count, not the average.
         _context.statManager().createRateStat("jobQueue.runnerThreadCreations", "Job runner threads created", "JobQueue", RATES);
+        // The registry's size says how many runners the queue believes it has; this
+        // counts the threads actually inside a runner loop. They are recorded on the
+        // same check so a reader can put the two side by side: live threads above the
+        // registry count are runners that lost their slot, or never had one, and are
+        // still pulling jobs off the queue.
+        _context.statManager().createRateStat("jobQueue.runnerThreads", "Job runner threads actually running", "JobQueue", RATES);
         // Removed: jobQueue.testJobHardLimit (already documented in GraphGroups as removed from the console). It was never emitted, so it read as an
         // absent stat rather than a zero one, and every graph, Tuner rule and health
         // check that referenced it silently no-oped. Nothing here was measured.
@@ -935,6 +941,21 @@ public class JobQueue {
      */
     public int getActiveRunnerCount() {
         return _queueRunners.size();
+    }
+
+    /**
+     * How many runner threads are inside their loop right now, in every job
+     * queue this JVM holds. Read beside {@link #getActiveRunnerCount()}: the
+     * registry's size is what the queue believes it has and what the scaler
+     * sizes from, this is what is really running. A count above the registry's
+     * is a runner that lost its slot, or never had one, and is still pulling
+     * jobs - outside every limit the scaler enforces.
+     *
+     * @return the number of live runner threads, at least 0
+     * @since 0.9.72+
+     */
+    int getLiveRunnerThreadCount() {
+        return JobQueueRunner.getLiveThreadCount();
     }
 
     /**

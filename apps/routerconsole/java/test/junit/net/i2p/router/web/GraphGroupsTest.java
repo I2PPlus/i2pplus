@@ -384,13 +384,18 @@ public class GraphGroupsTest {
         // router dwarfs the real counts, flattening them against the baseline. runnerCount
         // is thread occupancy rather than queue depth, so it answers a different question
         // and reading the two off one axis invites a comparison that does not hold.
+        // runnerThreads is the other half of that pair - the threads actually running,
+        // against the slots the registry holds - and it stays ungrouped beside it so the
+        // two are read side by side on the stats page, never plotted as a queue depth.
         List<String> depth = GraphGroups.members("jobQueueDepth");
         assertFalse(depth.contains("jobQueue.testJobCount"));
         assertFalse(depth.contains("jobQueue.runnerCount"));
+        assertFalse(depth.contains("jobQueue.runnerThreads"));
         assertTrue(depth.contains("jobQueue.queuedJobs"));
         assertTrue(depth.contains("jobQueue.readyJobs"));
         assertNull(GraphGroups.groupOf("jobQueue.testJobCount"));
         assertNull(GraphGroups.groupOf("jobQueue.runnerCount"));
+        assertNull(GraphGroups.groupOf("jobQueue.runnerThreads"));
     }
 
     // ---- subsystem prefix ----

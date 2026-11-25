@@ -39,11 +39,11 @@ import net.i2p.util.SystemVersion;
  * </ul>
  * <p>
  * <strong>Resource Saturation Gates:</strong>
- * Scale-up is suppressed (not just limited) when the bottleneck is resource
- * saturation rather than thread count. Emergency signals (critical lag, wedged
- * jobs, a severe backlog, dropped jobs) override the suppression, but only when
- * the machine itself has room — a queue that is behind because the CPU is full
- * or the bandwidth limiter is holding its jobs is not answered by another
+ * Scale-up is suppressed, not merely limited, when the bottleneck is resource
+ * saturation rather than thread count. Emergency signals - critical lag, wedged
+ * jobs, a severe backlog, dropped jobs - override the suppression, but only
+ * when the machine itself has room: a queue that is behind because the CPU is
+ * full or the bandwidth limiter is holding its jobs is not answered by another
  * thread.
  * <ul>
  * <li>CPU saturation: {@code router.cpuLoad} &gt; 85%</li>
@@ -836,6 +836,23 @@ class JobQueueScaler implements Runnable {
 
         // Record current runner count for monitoring
         _context.statManager().addRateData("jobQueue.runnerCount", activeRunners);
+
+        // The threads actually running, on the same check as the registry's
+        // count above, so the two can be read side by side.
+        int liveThreads = _jobQueue.getLiveRunnerThreadCount();
+        _context.statManager().addRateData("jobQueue.runnerThreads", liveThreads);
+        if (liveThreads > activeRunners) {
+            // More threads than slots: runners that lost their registry entry,
+            // or were never registered, and are still taking jobs. They sit
+            // outside every limit the scaler enforces, and nothing else says
+            // they exist.
+            if (_log.shouldWarn()) {
+                _log.warnThrottled("jq-orphan-runners",
+                                   "Runner threads exceed the registered runners -> Orphans: " +
+                                   (liveThreads - activeRunners) + " * Registered: " + activeRunners +
+                                   " * Threads: " + liveThreads);
+            }
+        }
 
         // The feedback check judges a scale-up on worst-lag, and the only
         // worst-lag available was the instantaneous sample of one check

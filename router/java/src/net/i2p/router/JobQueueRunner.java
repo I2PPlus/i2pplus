@@ -1,5 +1,7 @@
 package net.i2p.router;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import net.i2p.stat.RateStat;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
@@ -39,6 +41,18 @@ class JobQueueRunner extends I2PThread {
     private volatile JobQueue.InFlight _inFlight;
     /** When the last job ended, stats update included. */
     private volatile long _lastEnd;
+    /**
+     * How many runner threads are inside their loop right now, across every
+     * JobQueue in this JVM. The registry's size says how many runners the queue
+     * believes it has; this says how many threads are actually running, and the
+     * difference is a runner that lost its registry slot, or never got one, and
+     * is still pulling jobs. A thread that exits by any path - idle retirement,
+     * the queue closing, or an Error escaping a job - takes itself off the
+     * count.
+     *
+     * @since 0.9.72+
+     */
+    private static final AtomicInteger _liveThreads = new AtomicInteger();
 
     /**
      * Cached "{@code jobQueue.jobRun}" handle, resolved on first use.
@@ -77,6 +91,20 @@ class JobQueueRunner extends I2PThread {
     public Job getCurrentJob() {
         JobQueue.InFlight f = _inFlight;
         return f != null ? f._job : null;
+    }
+
+    /**
+     * How many runner threads are inside their loop right now, in every job
+     * queue this JVM holds. Read beside {@link JobQueue#getActiveRunnerCount()}
+     * to see whether the registry and the threads agree: a count above the
+     * registry's is a runner that lost its slot, or never had one, and is still
+     * pulling jobs off the queue.
+     *
+     * @return the number of live runner threads, at least 0
+     * @since 0.9.72+
+     */
+    static int getLiveThreadCount() {
+        return _liveThreads.get();
     }
     /**
      * The most recently completed job.
@@ -142,94 +170,106 @@ class JobQueueRunner extends I2PThread {
     }
 
     public void run() {
-        long lastActive;
-        resolveStats();
-        while (_keepRunning && _context.jobQueue().isAlive()) {
-            Job job = null;
-            try {
-                job = _context.jobQueue().getNext();
-                if (job == null) {
-                    if (_context.router().isAlive() && _log.shouldError()) {
-                        _log.error("Failed to pull next job from queue while router alive -> Retrying the pull");
-                    }
-                    continue;
-                }
-                // Single clock read per iteration, reused as the job's start
-                // instant, its queue wait origin and its lag origin.
-                long now = _context.clock().now();
-
-                long enqueuedTime = 0;
-                if (job instanceof JobImpl) {
-                    long when = ((JobImpl)job).getMadeReadyOn();
-                    if (when <= 0) {
-                        if (_log.shouldError()) {
-                            _log.errorThrottled("jqr-never-made-ready",
-                                                "Job was never made ready -> " + job.getName() +
-                                                " has no ready timestamp");
-                        }
-                    } else {enqueuedTime = now - when;}
-                }
-
-                _currentJob = job;
-                _lastJob = null;
-                if (_log.shouldDebug()) {
-                    _log.debug(job.getName() + " -> [Runner " + _id + "] running");
-                }
-                long origStartAfter = job.getTiming().getStartAfter();
-                long doStart = now;
-                job.getTiming().start(doStart);
-                // One volatile write publishes the job and its start instant
-                // together, so a reader cannot pair them inconsistently.
-                _inFlight = new JobQueue.InFlight(job, doStart);
+        // Counted before anything else can fail, and released in the finally
+        // that covers the whole method, so a runner that exits idle, is retired
+        // by a scale-down, or dies with an Error escaping the loop always takes
+        // itself off the count. The registry's size says how many runners the
+        // queue believes it has; this says how many threads are running.
+        _liveThreads.incrementAndGet();
+        try {
+            long lastActive;
+            resolveStats();
+            while (_keepRunning && _context.jobQueue().isAlive()) {
+                Job job = null;
                 try {
-                    runCurrentJob();
-                } finally {
-                    // Retire the record on every path: a job that dies with an
-                    // Error escaping runCurrentJob() must not leave the
-                    // watchdog reading a job that runs forever.
-                    _inFlight = null;
-                }
-                long beforeUpdate = _context.clock().now();
-                job.getTiming().end(beforeUpdate);
-                long duration = job.getTiming().getActualEnd() - job.getTiming().getActualStart();
-                _context.jobQueue().updateStats(job, doStart, origStartAfter, duration);
-
-                long lag = doStart - origStartAfter;
-                if (lag < 0) {lag = 0;}
-
-                RateStat jobRunStat = _jobRunStat;
-                if (jobRunStat != null) {jobRunStat.addData(duration, duration);}
-                RateStat jobLagStat = _jobLagStat;
-                if (jobLagStat != null) {jobLagStat.addData(lag);}
-                RateStat jobWaitStat = _jobWaitStat;
-                if (jobWaitStat != null) {jobWaitStat.addData(enqueuedTime, enqueuedTime);}
-
-                if (duration > 1500) {
-                    _context.statManager().addRateData("jobQueue.jobRunSlow", duration, duration);
-                    if (_log.shouldWarn() && doStart-origStartAfter > 100) {
-                        _log.warn("Completed " + _currentJob + " in " + duration
-                                  + "ms -> Lag: " + (doStart-origStartAfter) + "ms");
-                    } else if (_log.shouldInfo()) {
-                        _log.info("Completed " + _currentJob + " in " + duration + "ms");
+                    job = _context.jobQueue().getNext();
+                    if (job == null) {
+                        if (_context.router().isAlive() && _log.shouldError()) {
+                            _log.error("Failed to pull next job from queue while router alive -> Retrying the pull");
+                        }
+                        continue;
                     }
-                }
+                    // Single clock read per iteration, reused as the job's start
+                    // instant, its queue wait origin and its lag origin.
+                    long now = _context.clock().now();
 
-                lastActive = _context.clock().now();
-                // Reuses the post-update reading instead of a second one taken
-                // immediately before the slow-job branch; the warning threshold
-                // is 1s, far beyond the microseconds that separates them.
-                if (lastActive - beforeUpdate > 1000 && _log.shouldWarn()) {
-                    _log.warnThrottled("jqr-stats-update-slow",
-                                       "Updating stats for " + job.getName() + " took " +
-                                       (lastActive - beforeUpdate) + "ms -> Longer than a second");
+                    long enqueuedTime = 0;
+                    if (job instanceof JobImpl) {
+                        long when = ((JobImpl)job).getMadeReadyOn();
+                        if (when <= 0) {
+                            if (_log.shouldError()) {
+                                _log.errorThrottled("jqr-never-made-ready",
+                                                    "Job was never made ready -> " + job.getName() +
+                                                    " has no ready timestamp");
+                            }
+                        } else {enqueuedTime = now - when;}
+                    }
+
+                    _currentJob = job;
+                    _lastJob = null;
+                    if (_log.shouldDebug()) {
+                        _log.debug(job.getName() + " -> [Runner " + _id + "] running");
+                    }
+                    long origStartAfter = job.getTiming().getStartAfter();
+                    long doStart = now;
+                    job.getTiming().start(doStart);
+                    // One volatile write publishes the job and its start instant
+                    // together, so a reader cannot pair them inconsistently.
+                    _inFlight = new JobQueue.InFlight(job, doStart);
+                    try {
+                        runCurrentJob();
+                    } finally {
+                        // Retire the record on every path: a job that dies with an
+                        // Error escaping runCurrentJob() must not leave the
+                        // watchdog reading a job that runs forever.
+                        _inFlight = null;
+                    }
+                    long beforeUpdate = _context.clock().now();
+                    job.getTiming().end(beforeUpdate);
+                    long duration = job.getTiming().getActualEnd() - job.getTiming().getActualStart();
+                    _context.jobQueue().updateStats(job, doStart, origStartAfter, duration);
+
+                    long lag = doStart - origStartAfter;
+                    if (lag < 0) {lag = 0;}
+
+                    RateStat jobRunStat = _jobRunStat;
+                    if (jobRunStat != null) {jobRunStat.addData(duration, duration);}
+                    RateStat jobLagStat = _jobLagStat;
+                    if (jobLagStat != null) {jobLagStat.addData(lag);}
+                    RateStat jobWaitStat = _jobWaitStat;
+                    if (jobWaitStat != null) {jobWaitStat.addData(enqueuedTime, enqueuedTime);}
+
+                    if (duration > 1500) {
+                        _context.statManager().addRateData("jobQueue.jobRunSlow", duration, duration);
+                        if (_log.shouldWarn() && doStart-origStartAfter > 100) {
+                            _log.warn("Completed " + _currentJob + " in " + duration
+                                      + "ms -> Lag: " + (doStart-origStartAfter) + "ms");
+                        } else if (_log.shouldInfo()) {
+                            _log.info("Completed " + _currentJob + " in " + duration + "ms");
+                        }
+                    }
+
+                    lastActive = _context.clock().now();
+                    // Reuses the post-update reading instead of a second one taken
+                    // immediately before the slow-job branch; the warning threshold
+                    // is 1s, far beyond the microseconds that separates them.
+                    if (lastActive - beforeUpdate > 1000 && _log.shouldWarn()) {
+                        _log.warnThrottled("jqr-stats-update-slow",
+                                           "Updating stats for " + job.getName() + " took " +
+                                           (lastActive - beforeUpdate) + "ms -> Longer than a second");
+                    }
+                    _lastJob = _currentJob;
+                    _currentJob = null;
+                    _lastEnd = lastActive;
+                } catch (Exception t) {
+                    _log.log(Log.CRIT, "Job failed" + (job != null ? ": " + job.getName() : "") + " * Runner " + _id, t);
                 }
-                _lastJob = _currentJob;
-                _currentJob = null;
-                _lastEnd = lastActive;
-            } catch (Exception t) {
-                _log.log(Log.CRIT, "Job failed" + (job != null ? ": " + job.getName() : "") + " * Runner " + _id, t);
             }
+        } finally {
+            // The one exit path out of the loop, whatever ended it.
+            _liveThreads.decrementAndGet();
         }
+
         if (_context.router().isAlive()) {_log.debug("Queue runner " + _id + " removed (idle)");}
         _context.jobQueue().removeRunner(_id, this);
     }
