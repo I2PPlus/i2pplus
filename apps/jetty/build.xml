@@ -456,8 +456,15 @@
 
   <target name="jarUpToDate">
     <uptodate property="jar.uptodate" targetfile="${jetty.pkg.dir}/jetty-i2p.jar">
-      <srcfiles dir="${build.dir}/obj" includes="**/*.class"/>
-      <!-- <srcfiles dir= "resources"/> -->
+      <!-- Compare against the sources, not the obj dir. obj is only what the jar
+           was assembled from last time, so a jar that once missed a class file is
+           "up to date" against it forever: the class is older than the jar, the jar
+           is never rebuilt, and every module that compiles against jetty-i2p.jar
+           fails on a symbol that plainly exists in the tree. That is how a
+           jetty-i2p.jar without OriginCheck survived four builds and broke
+           i2psnark's compile. -->
+      <srcfiles dir="./java/src" includes="**/*.java"/>
+      <srcfiles file="resources/log4j.properties"/>
     </uptodate>
     <condition property="shouldListChanges">
       <and>
