@@ -197,6 +197,12 @@ class JobQueueScaler implements Runnable {
     private static final int DEFAULT_SCALE_DOWN_LAG_THRESHOLD = 5; // 5ms (scale down when lag is moderate)
     /** Default backlog ratio needed to scale up. */
     private static final double DEFAULT_SCALE_UP_JOBS_RATIO = 2.0; // 2x (require real backlog, not just 1 extra job)
+    /**
+     * Multiple of that ratio at which the backlog is severe rather than merely
+     * high: the queue is not jittering, it is behind, and the scale-up acts on
+     * the first check that sees it instead of waiting out the sustained count.
+     */
+    private static final int SEVERE_BACKLOG_MULTIPLIER = 2;
     /** Runners added per scale-up. */
     private static final int DEFAULT_SCALE_UP_STEP = 1;
     /**
@@ -829,8 +835,10 @@ class JobQueueScaler implements Runnable {
         long timeSinceLastScale = now - _lastScaleTime;
         boolean inCooldown = timeSinceLastScale < getCooldownPeriod();
 
-        int minRunners = getMinRunnersDynamic();
         int maxRunners = _currentMaxRunners;
+        // The floor, including any runners subsystems are holding under lease.
+        // Leases expire on this pass, not on a timer event.
+        int effectiveMin = getEffectiveMinRunners();
 
         // Get active job duration for monitoring
         long activeJobMaxDuration = _jobQueue.getMaxActiveJobDuration();
@@ -854,6 +862,43 @@ class JobQueueScaler implements Runnable {
                        + " * Dropped jobs: " + jobsBeingDropped);
         }
 
+        // === Scale-up triggers, worked out before the feedback window ===
+        // The verdict on the last scale-up holds every decision for
+        // FEEDBACK_CHECKS_AFTER_SCALE checks, and a degraded verdict holds it for
+        // two more: up to four checks, 8s at the default interval, in which a
+        // queue that has gone critically behind cannot be answered. The triggers
+        // are therefore read here, and a critical one opens the window.
+        double ratioThreshold = getScaleUpJobsRatio();
+        double jobsRatio = activeRunners > 0 ? (double) readyJobs / activeRunners : 0;
+        boolean highLag = maxLag > lagThreshold;
+        boolean highMessageDelay = messageDelay > msgDelayThreshold;
+        boolean highAvgLag = avgLag >= lagThreshold;
+        boolean highBacklog = readyJobs > 0 && jobsRatio > ratioThreshold;
+        boolean criticalLag = maxLag > lagThreshold * 10 || messageDelay > msgDelayThreshold * 10;
+        boolean slowActiveJobs = activeJobMaxDuration > lagThreshold * 50; // 50x the lag threshold
+        boolean criticalSlowJobs = activeJobMaxDuration > lagThreshold * 100; // 100x = wedged
+        boolean severeBacklog = severeBacklog(readyJobs, activeRunners, ratioThreshold);
+
+        // TestJobs run 10-30s per invocation, occupying a runner slot without
+        // contributing to "productive" job throughput. When queued TestJobs
+        // exceed a threshold relative to active runners, we need headroom
+        // so shorter tasks (searches, builds) aren't starved.
+        // Use getReadyTestJobCount() to exclude future-scheduled timed jobs,
+        // which don't consume runner resources.
+        int testJobCount = _jobQueue.getReadyTestJobCount();
+        boolean testJobsDominant = testJobCount > 2 && activeRunners > 2
+            && (double) testJobCount / activeRunners > 0.25;
+
+        boolean hasTrendSignal = rapidQueueGrowth || messageDelaySpike || delayAccelerating ||
+                                 jobsBeingDropped || jobsSlowing || testJobsDominant;
+
+        // Anything that says the queue is behind now, not trending that way:
+        // these act on the first check and are not held by the feedback window,
+        // the cooldown, or, for dropped jobs, the circuit breaker.
+        boolean floorUnmet = effectiveMin > activeRunners && activeRunners < maxRunners;
+        boolean emergencyNow = criticalLag || criticalSlowJobs || severeBacklog || jobsBeingDropped ||
+                               floorUnmet;
+
         // Check if we need to evaluate feedback from last scale-up
         if (_preScaleSnapshot != null) {
             if (!isFeedbackEnabled()) {
@@ -863,6 +908,20 @@ class JobQueueScaler implements Runnable {
                 _preScaleSnapshot = null;
                 _checksSinceLastScale = 0;
                 _degradedFeedbackChecks = 0;
+            } else if (emergencyNow) {
+                // A critical condition outranks the verdict on the last scale-up.
+                // Its runners are already in the pool and have had their checks;
+                // holding the queue behind while a judgement is completed costs
+                // more than the judgement is worth. The snapshot is dropped, not
+                // judged, so the scale-up neither rolls back nor trips the breaker.
+                _preScaleSnapshot = null;
+                _checksSinceLastScale = 0;
+                _degradedFeedbackChecks = 0;
+                if (_log.shouldInfo()) {
+                    _log.info("Feedback window abandoned -> Queue is behind now" +
+                              "\n* Max lag: " + DataHelper.formatDuration(maxLag) +
+                              " * Ready jobs: " + readyJobs + " * Runners: " + activeRunners);
+                }
             } else {
                 _checksSinceLastScale++;
 
@@ -889,7 +948,8 @@ class JobQueueScaler implements Runnable {
                     _log.info("Circuit breaker reset -> Cooldown expired, scale-up attempts allowed again");
                 }
             } else if (!jobsBeingDropped) {
-                checkScaleDown(activeRunners, readyJobs, maxLag, avgLag, minRunners, inCooldown);
+                checkScaleDown(activeRunners, readyJobs, maxLag, avgLag, effectiveMin, inCooldown,
+                               testJobCount, testJobsDominant);
                 return;
             } else if (_log.shouldInfo()) {
                 _log.info("Circuit breaker bypassed -> Jobs being dropped" +
@@ -906,31 +966,8 @@ class JobQueueScaler implements Runnable {
         // not thread count. Emergency signals override the suppression.
         boolean suppressNormal = cpuSaturated || gcStorm || networkCongested || bwSaturated;
 
-        // TestJobs run 10-30s per invocation, occupying a runner slot without
-        // contributing to "productive" job throughput. When queued TestJobs
-        // exceed a threshold relative to active runners, we need headroom
-        // so shorter tasks (searches, builds) aren't starved.
-        // Use getReadyTestJobCount() to exclude future-scheduled timed jobs,
-        // which don't consume runner resources.
-        int testJobCount = _jobQueue.getReadyTestJobCount();
-        boolean testJobsDominant = testJobCount > 2 && activeRunners > 2
-            && (double) testJobCount / activeRunners > 0.25;
-
         if (canScaleUp) {
-            double jobsRatio = activeRunners > 0 ? (double) readyJobs / activeRunners : 0;
-            double ratioThreshold = getScaleUpJobsRatio();
-
             long effectiveDelay = Math.max(maxLag, messageDelay);
-            boolean highLag = maxLag > lagThreshold;
-            boolean highMessageDelay = messageDelay > msgDelayThreshold;
-            boolean highAvgLag = avgLag >= lagThreshold;
-            boolean highBacklog = readyJobs > 0 && jobsRatio > ratioThreshold;
-            boolean criticalLag = maxLag > lagThreshold * 10 || messageDelay > msgDelayThreshold * 10;
-            boolean slowActiveJobs = activeJobMaxDuration > lagThreshold * 50; // 500ms+ = stuck
-            boolean criticalSlowJobs = activeJobMaxDuration > lagThreshold * 100; // 1s+ = wedged
-
-            boolean hasTrendSignal = rapidQueueGrowth || messageDelaySpike || delayAccelerating ||
-                                     jobsBeingDropped || jobsSlowing || testJobsDominant;
 
             // Emergency signals bypass the suppression gate
             boolean emergencySignal = criticalLag || criticalSlowJobs || jobsBeingDropped;
@@ -941,12 +978,14 @@ class JobQueueScaler implements Runnable {
                     jobsSlowing || testJobsDominant) {
                     _consecutiveScaleUpChecks++;
                     if (sustainedOrEmergency(_consecutiveScaleUpChecks, criticalLag, criticalSlowJobs,
-                                             jobsBeingDropped)) {
+                                             jobsBeingDropped, severeBacklog)) {
                         shouldScaleUp = true;
                         if (_log.shouldInfo()) {
-                            // Conditional signals, joined with the house separator;
-                            // the leading separator goes when the first signals are off.
+                            // The continuation line carries the level each signal
+                            // was measured against, then the signals that fired,
+                            // joined with the house separator.
                             StringBuilder info = new StringBuilder(128);
+                            info.append(" * Lag threshold: ").append(lagThreshold).append("ms");
                             if (criticalLag)
                                 info.append(" * Critical delay: ").append(effectiveDelay).append("ms");
                             if (criticalSlowJobs)
@@ -961,12 +1000,10 @@ class JobQueueScaler implements Runnable {
                                     .append(" (").append(testJobCount * 100 / Math.max(activeRunners, 1))
                                     .append("% of runners)");
                             if (suppressNormal && emergencySignal)
-                                info.append(" * Emergency override, CPU ").append(cpuLoad)
-                                    .append("% * GC pause ").append(gcPause).append("ms");
-                            _log.info("Scaling up immediately -> Lag threshold " + lagThreshold +
-                                      "ms exceeded, runners " + activeRunners + '/' + maxRunners +
-                                      ", ready jobs " + readyJobs +
-                                      (info.length() > 0 ? "\n*" + info.substring(3) : ""));
+                                info.append(" * Emergency override * CPU: ").append(cpuLoad).append('%')
+                                    .append(" * GC pause: ").append(gcPause).append("ms");
+                            _log.info("Scaling up immediately -> Runners: " + activeRunners + '/' + maxRunners +
+                                      " * Ready jobs: " + readyJobs + "\n*" + info.substring(3));
                         }
                     }
                 } else {
@@ -984,10 +1021,10 @@ class JobQueueScaler implements Runnable {
             }
         }
 
-        // External floor: scale up to meet subsystem-requested minimum,
-        // bypassing normal trigger conditions
-        int effectiveMin = getEffectiveMinRunners();
-        if (!shouldScaleUp && effectiveMin > activeRunners && canScaleUp) {
+        // External floor: a subsystem's standing request is an explicit demand,
+        // not a signal read off the queue's jitter, so it does not wait out the
+        // cooldown. The ceiling and an open circuit breaker still apply.
+        if (!shouldScaleUp && floorUnmet && !_scalingUpDisabled) {
             shouldScaleUp = true;
         }
 
@@ -1009,7 +1046,8 @@ class JobQueueScaler implements Runnable {
                 scaleUp(runnersToAdd, readyJobs, maxLag, avgLag, messageDelay);
             }
         } else {
-            checkScaleDown(activeRunners, readyJobs, maxLag, avgLag, effectiveMin, inCooldown);
+            checkScaleDown(activeRunners, readyJobs, maxLag, avgLag, effectiveMin, inCooldown,
+                           testJobCount, testJobsDominant);
         }
     }
 
@@ -1021,18 +1059,19 @@ class JobQueueScaler implements Runnable {
      * @param maxLag ms the oldest ready job has waited, logged with the action
      * @param avgLag ms average lag of the ready jobs, compared with the
      *               scale-down lag threshold
-     * @param minRunners the floor the runner count may not be reduced below
+     * @param minRunners the floor the runner count may not be reduced below,
+     *                   including any runners held under lease
      * @param inCooldown true when a scale action happened recently enough to
      *                   suppress another one
+     * @param testJobCount ready TestJobs, counted once for the whole check
+     * @param testJobsDominant true when those TestJobs hold enough of the
+     *                         runners that a quiet lag sample means nothing
      */
     private void checkScaleDown(int activeRunners, int readyJobs, long maxLag, long avgLag,
-                                int minRunners, boolean inCooldown) {
+                                int minRunners, boolean inCooldown, int testJobCount,
+                                boolean testJobsDominant) {
         // Don't scale down when TestJobs dominate — they occupy runners for 10-30s,
         // so a low lag snapshot doesn't mean we have excess capacity.
-        // Exclude future-scheduled timed TestJobs, which don't consume runner resources.
-        int testJobCount = _jobQueue.getReadyTestJobCount();
-        boolean testJobsDominant = testJobCount > 2 && activeRunners > 2
-            && (double) testJobCount / activeRunners > 0.25;
         if (testJobsDominant) {
             if (_log.shouldDebug()) {
                 _log.debug("Scale-down blocked -> Test jobs: " + testJobCount +
@@ -1203,6 +1242,24 @@ class JobQueueScaler implements Runnable {
     }
 
     /**
+     * Pure decision: is the backlog far past the depth the runner pool can
+     * serve? Twice the ratio that opens the ordinary backlog trigger. At that
+     * depth the queue is not jittering, it is behind, and waiting out the
+     * sustained checks costs the whole queue the delay that the extra runners
+     * would have removed two checks ago.
+     *
+     * @param readyJobs jobs ready to run now
+     * @param activeRunners runners in effect now
+     * @param ratioThreshold the job-to-runner ratio that opens the backlog
+     *                       trigger
+     * @return true when the backlog is severe enough to act on at once
+     * @since 0.9.72+
+     */
+    static boolean severeBacklog(int readyJobs, int activeRunners, double ratioThreshold) {
+        return activeRunners > 0 && readyJobs > activeRunners * ratioThreshold * SEVERE_BACKLOG_MULTIPLIER;
+    }
+
+    /**
      * Pure decision: has the backlog wanted runners for long enough to act on,
      * or is this check an emergency that cannot wait?
      * <p>
@@ -1210,8 +1267,9 @@ class JobQueueScaler implements Runnable {
      * signal fires on ordinary jitter: 51 scale-ups and 63 scale-downs, 167
      * runner threads created, in 2.25 hours of checks on a router whose worst
      * ready-job lag averaged 0.38ms. Only a lag past the critical multiple, a
-     * wedged active job, or jobs being dropped is an emergency. A trend is a
-     * reason to start counting, not a reason to skip the count.
+     * wedged active job, jobs being dropped, or a backlog past the severe ratio
+     * is an emergency. A trend is a reason to start counting, not a reason to
+     * skip the count.
      *
      * @param consecutiveChecks checks in a row that wanted a scale-up
      * @param criticalLag true when the worst lag or the send delay is ten times
@@ -1219,13 +1277,15 @@ class JobQueueScaler implements Runnable {
      * @param criticalSlowJobs true when an active job has run past the wedged
      *                         multiple of the lag threshold
      * @param jobsBeingDropped true when the queue dropped jobs in the last minute
+     * @param severeBacklog true when the ready depth is past the severe ratio
      * @return true when this check may scale up
      * @since 0.9.72+
      */
     static boolean sustainedOrEmergency(int consecutiveChecks, boolean criticalLag,
-                                        boolean criticalSlowJobs, boolean jobsBeingDropped) {
+                                        boolean criticalSlowJobs, boolean jobsBeingDropped,
+                                        boolean severeBacklog) {
         return consecutiveChecks >= SUSTAINED_CHECKS_REQUIRED || criticalLag || criticalSlowJobs ||
-               jobsBeingDropped;
+               jobsBeingDropped || severeBacklog;
     }
 
     /**
@@ -1343,13 +1403,13 @@ class JobQueueScaler implements Runnable {
             _consecutiveFailedScaleUps++;
 
             if (_log.shouldInfo()) {
-                _log.info("Scale-up failed -> Rolling back " + snapshot.runnersAdded +
-                          " runners, " + _consecutiveFailedScaleUps + " consecutive failures"
-                          + "\n* Average lag " + snapshot.avgLag + "ms to " + currentAvgLag + "ms"
-                          + " * Maximum lag " + snapshot.smoothMaxLag + "ms to " + smoothMaxLag + "ms"
-                          + " * Ready jobs " + snapshot.smoothReadyJobs + " to " + smoothReadyJobs
-                          + " * Send delay " + snapshot.messageDelay + "ms to " +
-                          currentMessageDelay + "ms");
+                _log.info("Scale-up failed -> Rolling back the runners it added" +
+                          "\n* Runners to remove: " + snapshot.runnersAdded +
+                          " * Consecutive failures: " + _consecutiveFailedScaleUps +
+                          "\n* Average lag: " + snapshot.avgLag + "ms to " + currentAvgLag + "ms" +
+                          " * Maximum lag: " + snapshot.smoothMaxLag + "ms to " + smoothMaxLag + "ms" +
+                          "\n* Ready jobs: " + snapshot.smoothReadyJobs + " to " + smoothReadyJobs +
+                          " * Send delay: " + snapshot.messageDelay + "ms to " + currentMessageDelay + "ms");
             }
 
             // Rollback: remove the runners we just added

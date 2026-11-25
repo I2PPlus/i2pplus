@@ -89,22 +89,47 @@ public class JobQueueScalerTrendTest {
      */
     @Test
     public void aTrendMustBeSustained() {
-        assertFalse(JobQueueScaler.sustainedOrEmergency(0, false, false, false));
-        assertFalse(JobQueueScaler.sustainedOrEmergency(1, false, false, false));
-        assertFalse(JobQueueScaler.sustainedOrEmergency(2, false, false, false));
-        assertTrue(JobQueueScaler.sustainedOrEmergency(3, false, false, false));
-        assertTrue(JobQueueScaler.sustainedOrEmergency(4, false, false, false));
+        assertFalse(JobQueueScaler.sustainedOrEmergency(0, false, false, false, false));
+        assertFalse(JobQueueScaler.sustainedOrEmergency(1, false, false, false, false));
+        assertFalse(JobQueueScaler.sustainedOrEmergency(2, false, false, false, false));
+        assertTrue(JobQueueScaler.sustainedOrEmergency(3, false, false, false, false));
+        assertTrue(JobQueueScaler.sustainedOrEmergency(4, false, false, false, false));
     }
 
     /**
-     * A lag at the critical multiple, a wedged active job, or jobs being
-     * dropped cannot wait out the count.
+     * A lag at the critical multiple, a wedged active job, jobs being dropped,
+     * or a backlog past the severe ratio cannot wait out the count.
      */
     @Test
     public void anEmergencySkipsTheCount() {
-        assertTrue(JobQueueScaler.sustainedOrEmergency(1, true, false, false));
-        assertTrue(JobQueueScaler.sustainedOrEmergency(1, false, true, false));
-        assertTrue(JobQueueScaler.sustainedOrEmergency(1, false, false, true));
+        assertTrue(JobQueueScaler.sustainedOrEmergency(1, true, false, false, false));
+        assertTrue(JobQueueScaler.sustainedOrEmergency(1, false, true, false, false));
+        assertTrue(JobQueueScaler.sustainedOrEmergency(1, false, false, true, false));
+        assertTrue(JobQueueScaler.sustainedOrEmergency(1, false, false, false, true));
+    }
+
+    /**
+     * The severe ratio is twice the ratio that opens the ordinary backlog
+     * trigger, measured against the pool that has to serve the queue. With a
+     * 2.0 ratio and 19 runners, the ordinary trigger opens at 38 ready jobs and
+     * the severe one at 76.
+     */
+    @Test
+    public void severeBacklogIsTwiceTheBacklogTrigger() {
+        assertFalse(JobQueueScaler.severeBacklog(38, 19, 2.0));
+        assertFalse(JobQueueScaler.severeBacklog(76, 19, 2.0));
+        assertTrue(JobQueueScaler.severeBacklog(77, 19, 2.0));
+        // the measured idle depth is nowhere near it
+        assertFalse(JobQueueScaler.severeBacklog(4, 19, 2.0));
+    }
+
+    /**
+     * With no runners there is no ratio to measure against, and the queue is
+     * behind by definition — but the decision does not divide by nothing.
+     */
+    @Test
+    public void noRunnersIsNotASevereRatio() {
+        assertFalse(JobQueueScaler.severeBacklog(100, 0, 2.0));
     }
 
     /**
