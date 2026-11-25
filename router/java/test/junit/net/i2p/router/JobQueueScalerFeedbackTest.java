@@ -14,19 +14,30 @@ import org.junit.Test;
  * the worst lag against one other sample, and it compared the transport send
  * delay against the <em>job lag</em> baseline — two unrelated metrics — so a
  * scale-up was rolled back for load that extra runners were never going to
- * absorb.
+ * absorb. It also read the trigger's 1-minute dropped-jobs window, which still
+ * held the drops that had justified the scale-up, and reported them as evidence
+ * against it.
  *
  * @since 0.9.72+
  */
 public class JobQueueScalerFeedbackTest {
 
     /**
-     * A quiet queue: 10 ms avg lag, 100 ms send delay, 20 ready, 50 ms worst.
+     * The scale-up verdict's cases. Every case calls the static decision on a
+     * snapshot built directly, so the instance holds no state and needs no
+     * router or job queue.
+     */
+    public JobQueueScalerFeedbackTest() {
+    }
+
+    /**
+     * A quiet queue: 10 ms avg lag, 100 ms send delay, 20 ready, 50 ms worst,
+     * no jobs dropped.
      *
      * @return a pre-scale snapshot carrying those values
      */
     private static JobQueueScaler.PreScaleSnapshot quiet() {
-        return new JobQueueScaler.PreScaleSnapshot(10L, 2, 100L, 20L, 50L);
+        return new JobQueueScaler.PreScaleSnapshot(10L, 2, 100L, 20L, 50L, 0L);
     }
 
     /** Unchanged load is not a failure. */
@@ -88,7 +99,7 @@ public class JobQueueScalerFeedbackTest {
     @Test
     public void zeroBaselinesDegradeNothing() {
         JobQueueScaler.PreScaleSnapshot zero =
-            new JobQueueScaler.PreScaleSnapshot(0L, 2, 0L, 0L, 0L);
+            new JobQueueScaler.PreScaleSnapshot(0L, 2, 0L, 0L, 0L, 0L);
         assertFalse(JobQueueScaler.feedbackDegraded(zero, 1000L, 1000L, false, false, 1000L, 1000L));
     }
 
@@ -96,7 +107,26 @@ public class JobQueueScalerFeedbackTest {
     @Test
     public void zeroBaselinesDoNotMaskEmergencies() {
         JobQueueScaler.PreScaleSnapshot zero =
-            new JobQueueScaler.PreScaleSnapshot(0L, 2, 0L, 0L, 0L);
+            new JobQueueScaler.PreScaleSnapshot(0L, 2, 0L, 0L, 0L, 0L);
         assertTrue(JobQueueScaler.feedbackDegraded(zero, 0L, 0L, true, false, 0L, 0L));
+    }
+
+    /** Jobs dropped after the scale-up are the ones that count against it. */
+    @Test
+    public void dropsAfterTheScaleCount() {
+        assertTrue(JobQueueScaler.droppedSinceScale(7L, 6L));
+        assertTrue(JobQueueScaler.droppedSinceScale(1L, 0L));
+    }
+
+    /**
+     * The drops that justified the scale-up are still inside the trigger's
+     * 1-minute window when the verdict is taken, and they say nothing about the
+     * runners that were added to answer them.
+     */
+    @Test
+    public void dropsBeforeTheScaleDoNotCount() {
+        assertFalse(JobQueueScaler.droppedSinceScale(6L, 6L));
+        assertFalse(JobQueueScaler.droppedSinceScale(3L, 6L));
+        assertFalse(JobQueueScaler.droppedSinceScale(0L, 0L));
     }
 }

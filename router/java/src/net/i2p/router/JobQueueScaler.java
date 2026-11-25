@@ -57,6 +57,9 @@ import net.i2p.util.SystemVersion;
  * before the scale</li>
  * <li>If lag, maxLag, message delay, or ready jobs INCREASED after scaling,
  * rolls back — but only after 2 checks in a row look degraded</li>
+ * <li>Jobs dropped after the scale event force the rollback. Drops from before
+ * it are the reason the scale was made, so the verdict compares the stat's event
+ * count against the count captured before the scale, not the trigger's window</li>
  * <li>After 5 failed scale attempts, circuit breaker opens — stops scaling up</li>
  * <li>Tracks memory usage to prevent OOM conditions</li>
  * </ul>
@@ -283,6 +286,12 @@ class JobQueueScaler implements Runnable {
         final long smoothReadyJobs;
         /** 1-minute average worst job lag at the capture, in ms. */
         final long smoothMaxLag;
+        /**
+         * Dropped-job events counted when the scale event was taken. The stat's
+         * event count only ever rises, so the difference against it is the jobs
+         * dropped after the scale — the ones that say something about it.
+         */
+        final long droppedEvents;
 
         /**
          * Captures the queue values a scale-up verdict is judged against.
@@ -292,14 +301,16 @@ class JobQueueScaler implements Runnable {
          * @param messageDelay the transport send delay at the capture, in milliseconds
          * @param smoothReadyJobs the 1-minute average ready jobs at the capture
          * @param smoothMaxLag the 1-minute average worst job lag, in milliseconds
+         * @param droppedEvents the dropped-job event count at the capture
          */
         PreScaleSnapshot(long avgLag, int runnersAdded, long messageDelay,
-                        long smoothReadyJobs, long smoothMaxLag) {
+                        long smoothReadyJobs, long smoothMaxLag, long droppedEvents) {
             this.avgLag = avgLag;
             this.runnersAdded = runnersAdded;
             this.messageDelay = messageDelay;
             this.smoothReadyJobs = smoothReadyJobs;
             this.smoothMaxLag = smoothMaxLag;
+            this.droppedEvents = droppedEvents;
         }
     }
 
@@ -926,7 +937,7 @@ class JobQueueScaler implements Runnable {
                 _checksSinceLastScale++;
 
                 if (_checksSinceLastScale >= FEEDBACK_CHECKS_AFTER_SCALE) {
-                    evaluateScalingFeedback(activeRunners, avgLag, messageDelay, jobsBeingDropped,
+                    evaluateScalingFeedback(activeRunners, avgLag, messageDelay,
                                             oneMinuteAverage("jobQueue.readyJobs"),
                                             oneMinuteAverage("jobQueue.maxLag"));
                 }
@@ -1383,20 +1394,20 @@ class JobQueueScaler implements Runnable {
      * @param currentAvgLag ms average lag now, compared with the pre-scale average
      * @param currentMessageDelay ms transport send delay now, compared with the
      *                            send delay captured before the scale
-     * @param currentDroppedJobs true when the queue has dropped jobs since the
-     *                           snapshot, which forces a rollback
      * @param smoothReadyJobs 1-minute average ready jobs now
      * @param smoothMaxLag ms 1-minute average worst ready-job lag now
      */
     private void evaluateScalingFeedback(int currentRunners, long currentAvgLag,
-                                        long currentMessageDelay, boolean currentDroppedJobs,
+                                        long currentMessageDelay,
                                         long smoothReadyJobs, long smoothMaxLag) {
         if (_preScaleSnapshot == null) return;
 
         PreScaleSnapshot snapshot = _preScaleSnapshot;
         boolean memoryCritical = getMemoryUsagePercent() > MEMORY_CRITICAL_PERCENT;
+        boolean droppedSince = droppedSinceScale(lifetimeEvents("jobQueue.droppedJobs"),
+                                                 snapshot.droppedEvents);
         boolean degraded = feedbackDegraded(snapshot, currentAvgLag, currentMessageDelay,
-                                            currentDroppedJobs, memoryCritical,
+                                            droppedSince, memoryCritical,
                                             smoothReadyJobs, smoothMaxLag);
 
         if (degraded) {
@@ -1485,7 +1496,7 @@ class JobQueueScaler implements Runnable {
      * @param snapshot the state captured before the scale-up
      * @param currentAvgLag ms average job lag now
      * @param currentMessageDelay ms transport send delay now
-     * @param currentDroppedJobs true when jobs have been dropped since the scale
+     * @param droppedSinceScale true when jobs have been dropped since the scale-up
      * @param memoryCritical true when the heap is near full
      * @param smoothReadyJobs 1-minute average ready jobs now
      * @param smoothMaxLag ms 1-minute average worst ready-job lag now
@@ -1493,10 +1504,10 @@ class JobQueueScaler implements Runnable {
      * @since 0.9.72+
      */
     static boolean feedbackDegraded(PreScaleSnapshot snapshot, long currentAvgLag,
-                                    long currentMessageDelay, boolean currentDroppedJobs,
+                                    long currentMessageDelay, boolean droppedSinceScale,
                                     boolean memoryCritical, long smoothReadyJobs, long smoothMaxLag) {
         // dropped jobs and a full heap are emergencies, one sample is enough
-        if (currentDroppedJobs || memoryCritical) {return true;}
+        if (droppedSinceScale || memoryCritical) {return true;}
         if (snapshot.avgLag > 0 && currentAvgLag > snapshot.avgLag * LAG_INCREASE_THRESHOLD) {return true;}
         if (snapshot.smoothMaxLag > 0
             && smoothMaxLag > snapshot.smoothMaxLag * LAG_INCREASE_THRESHOLD) {return true;}
@@ -1519,6 +1530,40 @@ class JobQueueScaler implements Runnable {
         if (stat == null) {return 0;}
         Rate rate = stat.getRate(RateConstants.ONE_MINUTE);
         return rate != null ? (long) rate.getAverageValue() : 0;
+    }
+
+    /**
+     * The number of events a rate has recorded since the process started. It
+     * only ever rises, so a difference between two readings is the events that
+     * happened between them — which is what a windowed rate cannot give, because
+     * its window still holds the events from before the point being measured.
+     *
+     * @param name the rate stat's name
+     * @return the event count, 0 when the stat is absent
+     * @since 0.9.72+
+     */
+    private long lifetimeEvents(String name) {
+        RateStat stat = _context.statManager().getRate(name);
+        return stat != null ? stat.getLifetimeEventCount() : 0;
+    }
+
+    /**
+     * Pure decision: has the queue dropped jobs since the scale-up being judged?
+     * <p>
+     * The trigger reads a 1-minute window, and the drops that justified the
+     * scale-up are still inside it when the verdict is taken two checks later —
+     * so reading the window again reported the reason for the scale as evidence
+     * against it, and a drop storm rolled back every scale-up it caused and
+     * opened the circuit breaker on top. The comparison is made on the stat's
+     * event count instead, captured before the scale and read after it.
+     *
+     * @param eventsNow dropped-job events counted now
+     * @param eventsBefore the count captured before the scale-up
+     * @return true when jobs have been dropped since the scale-up
+     * @since 0.9.72+
+     */
+    static boolean droppedSinceScale(long eventsNow, long eventsBefore) {
+        return eventsNow > eventsBefore;
     }
 
     /**
@@ -1550,7 +1595,8 @@ class JobQueueScaler implements Runnable {
         if (isFeedbackEnabled()) {
             _preScaleSnapshot = new PreScaleSnapshot(avgLag, count, messageDelay,
                                                     oneMinuteAverage("jobQueue.readyJobs"),
-                                                    oneMinuteAverage("jobQueue.maxLag"));
+                                                    oneMinuteAverage("jobQueue.maxLag"),
+                                                    lifetimeEvents("jobQueue.droppedJobs"));
         }
 
         _jobQueue.addRunners(count);
