@@ -94,10 +94,17 @@ class JobQueueScaler implements Runnable {
     private int _lastScaleUpCount;
     /** Post-scale checks in a row that judged the last scale-up a failure. */
     private int _degradedFeedbackChecks;
-    /** Runner limit from the config. */
-    private int _configuredMaxRunners;
-    /** Runner limit in effect right now. */
-    private int _currentMaxRunners;
+    /**
+     * Runner limit from the config, re-read every tenth check so a change to
+     * {@code router.maxJobRunners} takes effect without a restart.
+     */
+    private volatile int _configuredMaxRunners;
+    /**
+     * Runner limit in effect right now. Written by the scaler thread and read by
+     * {@link JobQueue#getMaxRunnerCount()} from whatever thread asks, so it is
+     * volatile.
+     */
+    private volatile int _currentMaxRunners;
 
     /** State captured before the last scale, for feedback. */
     private PreScaleSnapshot _preScaleSnapshot;
@@ -187,6 +194,20 @@ class JobQueueScaler implements Runnable {
     private static final long RUNNER_MEMORY_ESTIMATE = 2 * MB; // ~2MB per thread (stack + overhead)
     /** Share of the heap allowed for runner threads. */
     private static final double MAX_MEMORY_PERCENTAGE = 0.10; // Use max 10% of heap for runners
+    /**
+     * Share of the heap still free that runners may claim. Half, so a scale-up
+     * cannot take the heap to the edge on the strength of a reading taken before
+     * the last allocation burst.
+     */
+    private static final double FREE_MEMORY_SHARE = 0.5;
+    /**
+     * Runners the CPU ceiling allows on a machine with few cores. Two per core
+     * is roughly where context switching starts costing more than the extra
+     * thread earns; the floor keeps a small machine at a workable count and
+     * matches the core cap in {@link JobQueue#getMaxRunnerCount()}, so the two
+     * cannot disagree about how many runners may exist.
+     */
+    private static final int MIN_CPU_BASED_RUNNERS = 16;
 
     /** The default interval between checks is 2 seconds. */
     private static final long DEFAULT_SCALE_CHECK_INTERVAL = 2000; // 2 seconds (less frequent checks reduce overhead)
@@ -422,52 +443,61 @@ class JobQueueScaler implements Runnable {
     }
 
     /**
-     * Calculate max runners based on available RAM.
-     * Prevents OOM by limiting runners to use max 10% of heap.
+     * The runner ceiling for the heap and CPU this router has right now. Logged
+     * by {@link #recalculateMaxRunners()} only when it changes: this runs every
+     * tenth check, and logging it every time put an INFO line in the log every
+     * 20 seconds for the life of the router.
      *
-     * @param configuredMax the configured maximum from properties
-     * @return the lower of configuredMax*2 or RAM-based limit
+     * @param configuredMax the configured runner count from the properties
+     * @return the ceiling, never below the minimum runner count
      */
     private int calculateMaxRunnersBasedOnRAM(int configuredMax) {
         long maxMemory = SystemVersion.getMaxMemory();
-        long maxRunnerMemory = (long) (maxMemory * MAX_MEMORY_PERCENTAGE);
-        int ramBasedMax = (int) (maxRunnerMemory / RUNNER_MEMORY_ESTIMATE);
-
-        // Also consider current memory pressure
-        long usedMemory = getUsedMemory();
-        long freeMemory = maxMemory - usedMemory;
-        int freeMemoryBasedMax = (int) ((freeMemory * 0.5) / RUNNER_MEMORY_ESTIMATE); // Only use 50% of free mem
-
-        // CPU-based cap: more than 2× cores causes context-switching death spirals
-        int cores = SystemVersion.getCores();
-        int cpuBasedMax = Math.max(cores * 2, 8);
-
-        int effectiveMax = Math.min(ramBasedMax, freeMemoryBasedMax);
-        int targetMax = configuredMax * 2;
-        int finalMax = Math.min(targetMax, Math.min(effectiveMax, cpuBasedMax));
-
-        // Ensure at least minimum
-        finalMax = Math.max(getMinRunnersDynamic(), finalMax);
-
-        if (_log.shouldInfo()) {
-            _log.info("Max runners is " + finalMax + " -> Configured " + configuredMax +
-                      ", RAM based " + ramBasedMax + ", free memory based " + freeMemoryBasedMax +
-                      "\n* Memory: " + (usedMemory/MB) + "MB of " + (maxMemory/MB) + "MB");
-        }
-
-        return finalMax;
+        return runnerCeiling(configuredMax, maxMemory, maxMemory - getUsedMemory(),
+                             SystemVersion.getCores(), getMinRunnersDynamic());
     }
 
     /**
-     * Recalculate max runners based on current memory conditions.
-     * Called periodically to adapt to changing memory pressure.
+     * Pure decision: the most runners this router may have. Four ceilings, and
+     * the lowest of them wins — twice what the operator configured, the share of
+     * the heap a runner thread may take, half the heap still free, and twice the
+     * CPU cores, past which the context switches cost more than the threads
+     * earn. The floor is the minimum runner count: a router that cannot afford
+     * its own minimum still gets it, because running with fewer is not a choice
+     * the scaler can make.
+     *
+     * @param configuredMax the configured runner count, doubled for the ceiling
+     * @param maxMemory the heap ceiling in bytes
+     * @param freeMemory bytes of that heap not in use right now
+     * @param cores CPU cores available
+     * @param minRunners the floor the ceiling may not fall below
+     * @return the most runners this router may have
+     * @since 0.9.72+
+     */
+    static int runnerCeiling(int configuredMax, long maxMemory, long freeMemory, int cores,
+                             int minRunners) {
+        int ramBasedMax = (int) ((maxMemory * MAX_MEMORY_PERCENTAGE) / RUNNER_MEMORY_ESTIMATE);
+        int freeBasedMax = (int) ((freeMemory * FREE_MEMORY_SHARE) / RUNNER_MEMORY_ESTIMATE);
+        int cpuBasedMax = Math.max(cores * 2, MIN_CPU_BASED_RUNNERS);
+        int ceiling = Math.min(configuredMax * 2, Math.min(Math.min(ramBasedMax, freeBasedMax), cpuBasedMax));
+        return Math.max(minRunners, ceiling);
+    }
+
+    /**
+     * Recalculate the runner ceiling from the current configuration and memory
+     * conditions. Run every tenth check, so a change to
+     * {@code router.maxJobRunners} takes effect within 20 seconds of being
+     * written — the configured value used to be read once in the constructor and
+     * never again, and the setter that claimed to handle configuration changes
+     * had no callers.
      */
     private void recalculateMaxRunners() {
+        _configuredMaxRunners = _context.getProperty(JobQueue.PROP_MAX_RUNNERS, JobQueue.runners);
         int newMax = calculateMaxRunnersBasedOnRAM(_configuredMaxRunners);
         if (newMax != _currentMaxRunners) {
             if (_log.shouldInfo()) {
-                _log.info("Adjusting max runners from " + _currentMaxRunners + " to " + newMax +
-                         " based on current memory conditions");
+                _log.info("Adjusting the runner ceiling -> Was: " + _currentMaxRunners +
+                          " * Now: " + newMax + " * Configured runners: " + _configuredMaxRunners);
             }
             _currentMaxRunners = newMax;
         }
@@ -538,9 +568,9 @@ class JobQueueScaler implements Runnable {
         scalerThread.start();
 
         if (_log.shouldInfo()) {
-            _log.info("JobQueueScaler started. Min runners: " + getMinRunnersDynamic() +
-                     ", Max runners: " + _currentMaxRunners +
-                     ", Feedback enabled: " + isFeedbackEnabled());
+            _log.info("JobQueueScaler started -> Min runners: " + getMinRunnersDynamic() +
+                      " * Max runners: " + _currentMaxRunners +
+                      " * Feedback enabled: " + isFeedbackEnabled());
         }
     }
 
@@ -1787,17 +1817,5 @@ class JobQueueScaler implements Runnable {
      */
     public int getCurrentMaxRunners() {
         return _currentMaxRunners;
-    }
-
-    /**
-     * Update the maximum runner limit (called when configuration changes).
-     * @param configuredMax the new limit from configuration, before the RAM cap is applied
-     */
-    public void updateMaxRunners(int configuredMax) {
-        _configuredMaxRunners = configuredMax;
-        _currentMaxRunners = calculateMaxRunnersBasedOnRAM(configuredMax);
-        if (_log.shouldInfo()) {
-            _log.info("Updated max runners to: " + _currentMaxRunners);
-        }
     }
 }
