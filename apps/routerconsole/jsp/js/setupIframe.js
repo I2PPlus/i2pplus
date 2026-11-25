@@ -2,8 +2,9 @@
  * @module setupIframe
  * @description Marks a page that is running inside an iframe with the "iframed"
  * class, which the webapps' own scripts test to decide whether to talk to their
- * host page. The end-of-page marker used for height reporting is added by
- * iframeResizer.contentWindow.js, which every framed page loads alongside this.
+ * host page. The end-of-page marker the height is measured from is emitted by
+ * the webapp's own footer; iframeResizer.contentWindow.js, which every framed
+ * page loads alongside this, adds one only for a page that does not.
  * @author dr|z3d
  * @license AGPL3 or later
  */
