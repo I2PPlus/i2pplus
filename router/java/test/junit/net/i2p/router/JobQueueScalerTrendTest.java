@@ -1,21 +1,24 @@
 package net.i2p.router;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
 /**
- * The scaler's early-warning signals: when a growing queue is a trend worth
- * acting on, and when a backlog has wanted runners long enough to act.
+ * The scaler's load signals: when a growing queue is a trend worth acting on,
+ * when a backlog has wanted runners long enough to act, and when the queue is
+ * loaded enough to be called an overload at all.
  *
- * <p>Both used to be looser than the router's own noise. A ready depth of four
- * jobs moving by three between two checks counted as rapid growth, and any
+ * <p>All three used to be looser than the router's own noise. A ready depth of
+ * four jobs moving by three between two checks counted as rapid growth, and any
  * trend signal waived the three-check requirement entirely, so one sample could
  * open a scale event. Measured on a running router over 4,059 checks: 51
  * scale-ups, 63 scale-downs and 167 runner threads created, while the worst
  * ready-job lag averaged 0.38ms — the scaler was churning threads against a
- * queue that was never behind.
+ * queue that was never behind. The same noise put 207 "episodes", averaging
+ * 2.4s each, into {@code jobQueue.loadRecoveryTime}.
  *
  * @since 0.9.72+
  */
@@ -102,5 +105,33 @@ public class JobQueueScalerTrendTest {
         assertTrue(JobQueueScaler.sustainedOrEmergency(1, true, false, false));
         assertTrue(JobQueueScaler.sustainedOrEmergency(1, false, true, false));
         assertTrue(JobQueueScaler.sustainedOrEmergency(1, false, false, true));
+    }
+
+    /**
+     * The lag limit follows the router's own average once that average is above
+     * the level worth acting on, and the action level until then. A router
+     * averaging a millisecond of lag is not loaded by a three millisecond
+     * jitter.
+     */
+    @Test
+    public void theLoadLagLimitFollowsTheRouterNotTheJitter() {
+        // the measured idle router: 1ms average lag against a 10ms action level
+        assertEquals(20, JobQueueScaler.loadLagLimit(1, 10));
+        assertEquals(20, JobQueueScaler.loadLagLimit(0, 10));
+        // a router that really is behind: its own average sets the bar
+        assertEquals(400, JobQueueScaler.loadLagLimit(200, 10));
+    }
+
+    /**
+     * An unthrottled router reports no send delay at all, so the baseline
+     * cannot be the whole limit — the floor is the delay that would justify
+     * scaling up.
+     */
+    @Test
+    public void theLoadDelayLimitHasAFloor() {
+        assertEquals(250, JobQueueScaler.loadMessageDelayLimit(0, 200));
+        assertEquals(250, JobQueueScaler.loadMessageDelayLimit(1, 200));
+        // a router already sending 400ms behind: its own baseline sets the bar
+        assertEquals(500, JobQueueScaler.loadMessageDelayLimit(400, 200));
     }
 }

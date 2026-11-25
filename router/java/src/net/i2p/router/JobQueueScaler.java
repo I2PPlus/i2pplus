@@ -165,6 +165,19 @@ class JobQueueScaler implements Runnable {
     /** Jobs added per check that count as backlog growth. */
     private static final int QUEUE_GROWTH_RATE_THRESHOLD = 2; // jobs/check interval
 
+    /**
+     * Multiple of the router's own average lag at which a load episode starts.
+     * Floored at the scale-up lag threshold, so a router that normally runs at
+     * under a millisecond of lag does not take a few milliseconds of jitter for
+     * an overload.
+     */
+    private static final int LOAD_EPISODE_LAG_MULTIPLIER = 2;
+    /**
+     * Multiple of the 12s median send delay at which a load episode starts,
+     * floored at the send delay that justifies scaling up.
+     */
+    private static final double LOAD_EPISODE_MSG_DELAY_MULTIPLIER = 1.25;
+
     /** One megabyte, for the memory limits. */
     private static final long MB = 1024 * 1024L;
     /** A runner thread is estimated at 2 MB of heap. */
@@ -555,11 +568,14 @@ class JobQueueScaler implements Runnable {
     }
 
     /**
-     * Check interval in milliseconds.
-     * @return the check interval
+     * Check interval in milliseconds, floored at 100 ms. A 0 or negative
+     * interval would spin the scaler thread against a queue it cannot drain any
+     * faster by looking at it more often.
+     *
+     * @return the check interval, at least 100
      */
     private long getCheckInterval() {
-        return _context.getProperty(PROP_SCALE_CHECK_INTERVAL, (int) DEFAULT_SCALE_CHECK_INTERVAL);
+        return Math.max(100, _context.getProperty(PROP_SCALE_CHECK_INTERVAL, (int) DEFAULT_SCALE_CHECK_INTERVAL));
     }
 
     /**
@@ -575,27 +591,35 @@ class JobQueueScaler implements Runnable {
     }
 
     /**
-     * Lag threshold for scaling up.
-     * @return the scale up lag threshold
+     * Lag threshold for scaling up, floored at 1 ms. Every lag trigger is a
+     * multiple of this value, so a 0 in the config puts them all at zero and
+     * any non-zero lag, and any job that ran at all, reads as an overload.
+     *
+     * @return the scale up lag threshold, at least 1
      */
     private int getScaleUpLagThreshold() {
-        return _context.getProperty(PROP_SCALE_UP_LAG, DEFAULT_SCALE_UP_LAG_THRESHOLD);
+        return Math.max(1, _context.getProperty(PROP_SCALE_UP_LAG, DEFAULT_SCALE_UP_LAG_THRESHOLD));
     }
 
     /**
-     * Message delay threshold for scaling up.
-     * @return the scale up message delay threshold
+     * Message delay threshold for scaling up, floored at 1 ms for the same
+     * reason as the lag threshold: the critical-delay trigger is ten times it.
+     *
+     * @return the scale up message delay threshold, at least 1
      */
     private int getScaleUpMessageDelayThreshold() {
-        return _context.getProperty(PROP_SCALE_UP_MSG_DELAY, DEFAULT_SCALE_UP_MESSAGE_DELAY_THRESHOLD);
+        return Math.max(1, _context.getProperty(PROP_SCALE_UP_MSG_DELAY, DEFAULT_SCALE_UP_MESSAGE_DELAY_THRESHOLD));
     }
 
     /**
-     * Lag threshold for scaling down.
-     * @return the scale down lag threshold
+     * Lag threshold for scaling down, floored at 1 ms. A 0 asks for an average
+     * lag below zero, which no check has, and the pool would never come back
+     * down from a burst.
+     *
+     * @return the scale down lag threshold, at least 1
      */
     private int getScaleDownLagThreshold() {
-        return _context.getProperty(PROP_SCALE_DOWN_LAG, DEFAULT_SCALE_DOWN_LAG_THRESHOLD);
+        return Math.max(1, _context.getProperty(PROP_SCALE_DOWN_LAG, DEFAULT_SCALE_DOWN_LAG_THRESHOLD));
     }
 
     /**
@@ -673,8 +697,13 @@ class JobQueueScaler implements Runnable {
         int activeRunners = _jobQueue.getActiveRunnerCount();
         int readyJobs = _jobQueue.getReadyCount();
         long maxLag = _jobQueue.getMaxLag();
-        long avgLag = (long) _context.statManager().getRate("jobQueue.jobLag").getRate(RateConstants.ONE_MINUTE).getAverageValue();
+        long avgLag = oneMinuteAverage("jobQueue.jobLag");
         long now = _context.clock().now();
+
+        // The lag and send-delay levels every trigger below compares against,
+        // read once for the whole check.
+        int lagThreshold = getScaleUpLagThreshold();
+        int msgDelayThreshold = getScaleUpMessageDelayThreshold();
 
         // === Resource saturation signals (gates) ===
         // CPU saturation: don't scale up into contention — the bottleneck is CPU, not threads
@@ -739,7 +768,7 @@ class JobQueueScaler implements Runnable {
             Rate jobRunRate = jobRunRs.getRate(RateConstants.ONE_MINUTE);
             if (jobRunRate != null) avgJobDuration = (long) jobRunRate.getAverageValue();
         }
-        boolean jobsSlowing = avgJobDuration > getScaleUpLagThreshold() * 5; // avg job > 50ms = systemic
+        boolean jobsSlowing = avgJobDuration > lagThreshold * 5; // 5x the lag threshold = systemic
 
         // Record memory usage stat
         _context.statManager().addRateData("jobQueue.memoryUsedPercent", (long) getMemoryUsagePercent());
@@ -760,21 +789,26 @@ class JobQueueScaler implements Runnable {
         }
 
         // === Load recovery tracking ===
-        // Episode starts when either metric exceeds its adaptive threshold:
-        //   maxLag > 2×  avgLag (1-min average of jobQueue.jobLag)
-        //   messageDelay > 1.25× baselineMsgDelay (12s median of transport.sendProcessingTime)
-        // Thresholds adapt to each router's normal operating level automatically.
-        long maxLagThreshold = 2 * Math.max(avgLag, 1);
-        long msgDelayThresholdRec = (long)(1.25 * Math.max(baselineMsgDelay, 1));
-        boolean loaded = maxLag > maxLagThreshold || messageDelay > msgDelayThresholdRec;
+        // An episode starts when either metric passes its limit and ends when
+        // both fall back under it:
+        //   maxLag &gt; 2x the 1-minute average of jobQueue.jobLag
+        //   messageDelay &gt; 1.25x the 12s median of the transport send delay
+        // Both limits adapt to the router's own operating level, but are floored
+        // at the levels that justify scaling up. A router averaging 1ms of lag
+        // and no send delay would otherwise take a 3ms jitter for an overload:
+        // 207 such episodes, averaging 2.4s each, were recorded in 2.25 hours of
+        // checks on a router whose worst ready-job lag averaged 0.38ms.
+        long loadLagLimit = loadLagLimit(avgLag, lagThreshold);
+        long loadDelayLimit = loadMessageDelayLimit(baselineMsgDelay, msgDelayThreshold);
+        boolean loaded = maxLag > loadLagLimit || messageDelay > loadDelayLimit;
         if (loaded) {
             if (_loadEpisodeStart == 0) {
                 _loadEpisodeStart = now;
                 if (_log.shouldDebug()) {
                     _log.debug("Load episode started -> Max lag: " + DataHelper.formatDuration(maxLag) +
-                               " (limit: " + DataHelper.formatDuration(maxLagThreshold) + ")" +
+                               " (limit: " + DataHelper.formatDuration(loadLagLimit) + ")" +
                                "\n* Message delay: " + DataHelper.formatDuration(messageDelay) +
-                               " (limit: " + DataHelper.formatDuration(msgDelayThresholdRec) + ")");
+                               " (limit: " + DataHelper.formatDuration(loadDelayLimit) + ")");
                 }
             }
         } else if (_loadEpisodeStart > 0) {
@@ -783,9 +817,9 @@ class JobQueueScaler implements Runnable {
                 _context.statManager().addRateData("jobQueue.loadRecoveryTime", recoveryTime);
                 _lastRecoveryTime = recoveryTime;
                 if (_log.shouldInfo()) {
-                    _log.info("Load episode recovered in " + recoveryTime + "ms" +
-                              " (maxLag: " + maxLag + "ms," +
-                              " msgDelay: " + messageDelay + "ms)");
+                    _log.info("Load episode recovered -> Duration: " + DataHelper.formatDuration(recoveryTime) +
+                              " * Max lag: " + DataHelper.formatDuration(maxLag) +
+                              " * Message delay: " + DataHelper.formatDuration(messageDelay));
                 }
             }
             _loadEpisodeStart = 0;
@@ -882,10 +916,8 @@ class JobQueueScaler implements Runnable {
 
         if (canScaleUp) {
             double jobsRatio = activeRunners > 0 ? (double) readyJobs / activeRunners : 0;
-            int lagThreshold = getScaleUpLagThreshold();
             double ratioThreshold = getScaleUpJobsRatio();
 
-            int msgDelayThreshold = getScaleUpMessageDelayThreshold();
             long effectiveDelay = Math.max(maxLag, messageDelay);
             boolean highLag = maxLag > lagThreshold;
             boolean highMessageDelay = messageDelay > msgDelayThreshold;
@@ -964,7 +996,7 @@ class JobQueueScaler implements Runnable {
                 // External floor: just reach the requested level
                 step = Math.min(effectiveMin, maxRunners) - activeRunners;
             } else {
-                step = scaleUpStep(maxLag, getScaleUpLagThreshold(), rapidQueueGrowth, queueGrowth,
+                step = scaleUpStep(maxLag, lagThreshold, rapidQueueGrowth, queueGrowth,
                                    jobsBeingDropped, testJobsDominant, testJobCount);
             }
 
@@ -1103,6 +1135,41 @@ class JobQueueScaler implements Runnable {
      */
     static boolean rapidQueueGrowth(int queueGrowth, int readyJobs, int activeRunners) {
         return queueGrowth > QUEUE_GROWTH_RATE_THRESHOLD && readyJobs * 2 > activeRunners;
+    }
+
+    /**
+     * Pure decision: the worst ready-job lag that still counts as a healthy
+     * queue. Twice the router's own 1-minute average, but never below twice the
+     * lag that justifies scaling up. A router averaging 1ms of lag would
+     * otherwise record an overload episode for a 3ms jitter, and 207 of those,
+     * averaging 2.4s each, went into {@code jobQueue.loadRecoveryTime} in 2.25
+     * hours of checks.
+     *
+     * @param avgLag ms 1-minute average lag of the ready jobs, 0 with no data
+     * @param lagThreshold ms of lag that justifies scaling up, at least 1
+     * @return ms of worst ready-job lag above which the queue counts as loaded
+     * @since 0.9.72+
+     */
+    static long loadLagLimit(long avgLag, int lagThreshold) {
+        return LOAD_EPISODE_LAG_MULTIPLIER * Math.max(avgLag, lagThreshold);
+    }
+
+    /**
+     * Pure decision: the transport send delay that still counts as a healthy
+     * queue. 1.25 times the 12s median of the delay, but never below 1.25 times
+     * the delay that justifies scaling up: an unthrottled router reports no
+     * send delay at all, so a baseline of nothing would put the limit at a
+     * millisecond and call any send at all an overload.
+     *
+     * @param baselineMsgDelay ms median send delay over the last 12s, 0 when the
+     *                         router is not throttling
+     * @param msgDelayThreshold ms of send delay that justifies scaling up, at
+     *                          least 1
+     * @return ms of send delay above which the queue counts as loaded
+     * @since 0.9.72+
+     */
+    static long loadMessageDelayLimit(long baselineMsgDelay, int msgDelayThreshold) {
+        return (long) (LOAD_EPISODE_MSG_DELAY_MULTIPLIER * Math.max(baselineMsgDelay, msgDelayThreshold));
     }
 
     /**
