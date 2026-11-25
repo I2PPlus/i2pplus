@@ -221,6 +221,9 @@ export function partition(heights, columns, limit, chrome, starts) {
   const runs = Math.min(Math.max(1, Math.floor(columns)), count);
   const cap = limit > 0 ? limit : 0;
   const wrap = chrome > 0 && starts && starts.length === count ? chrome : 0;
+  // The block flags are optional. Without them no column repeats a header, so
+  // they all read as 0 and the two reads below need no guard of their own.
+  const firsts = wrap > 0 ? starts : new Array(count).fill(0);
   const index = [];
   for (let i = 0; i < count; i++) {index.push(i);}
   if (runs <= 1) {return [index];}
@@ -228,13 +231,13 @@ export function partition(heights, columns, limit, chrome, starts) {
   const blocks = new Array(count + 1).fill(0);
   for (let i = 0; i < count; i++) {
     prefix[i + 1] = prefix[i] + heights[i];
-    blocks[i + 1] = blocks[i] + (starts[i] ? 1 : 0);
+    blocks[i + 1] = blocks[i] + (firsts[i] ? 1 : 0);
   }
   // What a run from unit j to unit i costs: its units, and one wrapper for every
   // block that starts inside it, and one more if it opens in the middle of a
   // block, where that block's header has to be drawn again.
   const height = (j, i) => prefix[i] - prefix[j] +
-      wrap * (blocks[i] - blocks[j] + (starts[j] ? 0 : 1));
+      wrap * (blocks[i] - blocks[j] + (firsts[j] ? 0 : 1));
   // A cut's cost is the overflow of all its runs plus its tallest run, in that
   // order of importance, folded into one number: overflow is counted in units of
   // SCALE, far more than any run can measure, so the smaller number always
