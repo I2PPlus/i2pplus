@@ -44,7 +44,19 @@ class MessagePayloadMessageHandler extends HandlerImpl {
     @Override
     public void handleMessage(I2CPMessage message, I2PSessionImpl session) {
         if (_log.shouldDebug()) {
-            _log.debug("Handling " + message + "\n* Session: " + session);
+            // One line, and the session named once. This is the chattiest DEBUG in
+            // the router - 21,046 arrivals in 22 minutes of log - and it took three
+            // lines: the class name, then the message's own toString() putting the
+            // MsgID, the session id and the payload on a second bullet, then the
+            // session on a third. The numeric session id is the same fact the
+            // session string carries - hash, nickname and state - and every other
+            // site that logs the message object prints it, so this line does not
+            // repeat it. The payload object supplies its own "Payload: N bytes"
+            // key, so naming it here again would print the word twice.
+            MessagePayloadMessage pm = (MessagePayloadMessage) message;
+            _log.debug(session + " -> Handling " + pm.getClass().getSimpleName() +
+                       " (MsgID: " + pm.getMessageId() + ')' +
+                       " * " + pm.getPayload());
         }
         try {
             MessagePayloadMessage msg = (MessagePayloadMessage) message;
