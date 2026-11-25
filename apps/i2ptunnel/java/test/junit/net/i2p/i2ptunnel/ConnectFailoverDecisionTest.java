@@ -320,24 +320,30 @@ public class ConnectFailoverDecisionTest {
     public void testWalkSkipsALegWithLessThanTheFloorLeft() {
         long start = 1_000_000L;
         assertEquals(-1, I2PTunnelClientBase.legConnectTimeoutMs(
-                I2PTunnelClientBase.DEFAULT_CONNECT_TIMEOUT, start + 9_999L, start));
+                I2PTunnelClientBase.DEFAULT_CONNECT_TIMEOUT, start + 9_999L, start, 4));
         assertEquals(10_000L, I2PTunnelClientBase.legConnectTimeoutMs(
-                I2PTunnelClientBase.DEFAULT_CONNECT_TIMEOUT, start + 10_000L, start));
+                I2PTunnelClientBase.DEFAULT_CONNECT_TIMEOUT, start + 10_000L, start, 4));
     }
 
-    /** Legs that run their whole window are still bounded by the attempt cap. */
+    /**
+     * Legs that run their whole budget are still bounded by the attempt cap - and
+     * the cap now delivers the two legs it is sized for. Before the share was
+     * divided, the first leg took the entire window, ran to streaming's SYN
+     * give-up inside it, and this walk came out at one leg of four.
+     */
     @Test
     public void testWalkStopsAtTheAttemptCap() {
         long start = 1_000_000L;
         long attempt = start + I2PTunnelClientBase.MAX_CONNECT_ATTEMPT_MS;
-        assertEquals(1, walkLegs(start, attempt, 20_000L, 4));
+        assertEquals(I2PTunnelClientBase.MIN_FAILOVER_LEGS_PER_ATTEMPT,
+                     walkLegs(start, attempt, 20_000L, 4));
     }
 
     /**
      * How many legs one walk starts when each one dies after legDeathMs. Mirrors
-     * the loop in createI2PSocketWithFailover: size the leg from the budget left,
-     * stop when the walk says the leg is not startable, and charge the leg's real
-     * cost against the clock.
+     * the loop in createI2PSocketWithFailover: size the leg from the share of the
+     * budget left, stop when the walk says the leg is not startable, and charge
+     * the leg's real cost against the clock.
      */
     private static int walkLegs(long startMs, long deadlineMs, long legDeathMs,
                                 int tunnelCount) {
@@ -345,7 +351,8 @@ public class ConnectFailoverDecisionTest {
         long now = startMs;
         while (legs < tunnelCount) {
             long legMs = I2PTunnelClientBase.legConnectTimeoutMs(
-                    I2PTunnelClientBase.DEFAULT_CONNECT_TIMEOUT, deadlineMs, now);
+                    I2PTunnelClientBase.DEFAULT_CONNECT_TIMEOUT, deadlineMs, now,
+                    tunnelCount - legs);
             if (legMs < 0) {break;}
             legs++;
             now += Math.min(legMs, legDeathMs);

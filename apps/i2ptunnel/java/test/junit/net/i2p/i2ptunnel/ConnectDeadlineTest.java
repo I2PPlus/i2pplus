@@ -145,10 +145,10 @@ public class ConnectDeadlineTest {
     public void testLegTimeoutNoDeadlinePassesThrough() {
         long now = System.currentTimeMillis();
         assertEquals(30_000, I2PTunnelClientBase.legConnectTimeoutMs(
-                30_000, I2PTunnelClientBase.NO_DEADLINE, now));
+                30_000, I2PTunnelClientBase.NO_DEADLINE, now, 1));
         // legacy: no timeout requested and no shared budget keeps 0 (unlimited)
         assertEquals(0, I2PTunnelClientBase.legConnectTimeoutMs(
-                0, I2PTunnelClientBase.NO_DEADLINE, now));
+                0, I2PTunnelClientBase.NO_DEADLINE, now, 1));
     }
 
     /**
@@ -161,9 +161,9 @@ public class ConnectDeadlineTest {
         long now = 1_000;
         long deadline = now + 120_000;
         assertEquals(I2PTunnelClientBase.DEFAULT_CONNECT_TIMEOUT,
-                     I2PTunnelClientBase.legConnectTimeoutMs(0, deadline, now));
+                     I2PTunnelClientBase.legConnectTimeoutMs(0, deadline, now, 1));
         assertEquals(I2PTunnelClientBase.DEFAULT_CONNECT_TIMEOUT,
-                     I2PTunnelClientBase.legConnectTimeoutMs(-1, deadline, now));
+                     I2PTunnelClientBase.legConnectTimeoutMs(-1, deadline, now, 1));
     }
 
     /**
@@ -174,11 +174,38 @@ public class ConnectDeadlineTest {
     @Test
     public void testLegTimeoutClampedToRemainingBudget() {
         // 40s remaining shrinks a 60s request
-        assertEquals(40_000, I2PTunnelClientBase.legConnectTimeoutMs(60_000, 50_000, 10_000));
+        assertEquals(40_000, I2PTunnelClientBase.legConnectTimeoutMs(60_000, 50_000, 10_000, 1));
         // budget larger than the request: the request is honored
-        assertEquals(30_000, I2PTunnelClientBase.legConnectTimeoutMs(30_000, 130_000, 10_000));
+        assertEquals(30_000, I2PTunnelClientBase.legConnectTimeoutMs(30_000, 130_000, 10_000, 1));
         // exactly the 10s floor still runs
-        assertEquals(10_000, I2PTunnelClientBase.legConnectTimeoutMs(30_000, 20_000, 10_000));
+        assertEquals(10_000, I2PTunnelClientBase.legConnectTimeoutMs(30_000, 20_000, 10_000, 1));
+    }
+
+    /**
+     * A leg takes its share of what is left, not all of it. The attempt window is
+     * sized to hold {@link I2PTunnelClientBase#MIN_FAILOVER_LEGS_PER_ATTEMPT} legs
+     * at the floor; a leg that claims the whole window leaves less than the floor
+     * for the next one, and the walk reaches only the outbound tunnel it started
+     * on. Measured live on 2026-11-25 a four-leg walk against a pool holding two
+     * live tunnels logged "Connect failed after 1/4 tunnel legs" with the single
+     * leg running 18s of a 20s window.
+     */
+    @Test
+    public void testLegTimeoutTakesItsShareOfTheWindow() {
+        long now = 10_000;
+        long window = now + I2PTunnelClientBase.MAX_CONNECT_ATTEMPT_MS;
+        long share = I2PTunnelClientBase.MIN_CONNECT_LEG_MS;
+        // four legs configured, two fit: each gets the window divided by two
+        assertEquals(share, I2PTunnelClientBase.legConnectTimeoutMs(30_000, window, now, 4));
+        assertEquals(share, I2PTunnelClientBase.legConnectTimeoutMs(30_000, window, now, 2));
+        // one leg left to run: it takes the whole remainder, not the share
+        assertEquals(I2PTunnelClientBase.MAX_CONNECT_ATTEMPT_MS,
+                     I2PTunnelClientBase.legConnectTimeoutMs(60_000, window, now, 1));
+        // a window wide enough for the configured legs divides by that count
+        long wide = now + 60_000;
+        assertEquals(15_000, I2PTunnelClientBase.legConnectTimeoutMs(60_000, wide, now, 4));
+        // a window that fits only one leg at the floor gives that leg the remainder
+        assertEquals(12_000, I2PTunnelClientBase.legConnectTimeoutMs(30_000, now + 12_000, now, 4));
     }
 
     /**
@@ -188,9 +215,9 @@ public class ConnectDeadlineTest {
      */
     @Test
     public void testLegTimeoutSkipsBelowFloor() {
-        assertEquals(-1, I2PTunnelClientBase.legConnectTimeoutMs(30_000, 19_999, 10_000));
-        assertEquals(-1, I2PTunnelClientBase.legConnectTimeoutMs(30_000, 10_000, 10_000));
-        assertEquals(-1, I2PTunnelClientBase.legConnectTimeoutMs(0, 10_000, 12_000));
+        assertEquals(-1, I2PTunnelClientBase.legConnectTimeoutMs(30_000, 19_999, 10_000, 4));
+        assertEquals(-1, I2PTunnelClientBase.legConnectTimeoutMs(30_000, 10_000, 10_000, 4));
+        assertEquals(-1, I2PTunnelClientBase.legConnectTimeoutMs(0, 10_000, 12_000, 4));
     }
 
     // ---------- per-leg cap and per-attempt budget ----------
@@ -419,7 +446,7 @@ public class ConnectDeadlineTest {
         long caller = opt.getConnectTimeout();
         try {
             // one leg: 40s of a 50s deadline is left, shrinking 60s to 40s
-            long leg = I2PTunnelClientBase.legConnectTimeoutMs(opt.getConnectTimeout(), 50_000, 10_000);
+            long leg = I2PTunnelClientBase.legConnectTimeoutMs(opt.getConnectTimeout(), 50_000, 10_000, 1);
             assertEquals(40_000, leg);
             opt.setConnectTimeout(leg);
             assertEquals(40_000, opt.getConnectTimeout());

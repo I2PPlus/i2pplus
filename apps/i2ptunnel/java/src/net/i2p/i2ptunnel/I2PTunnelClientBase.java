@@ -935,10 +935,12 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
                     throw new NoRouteToHostException("Connect deadline expired before first attempt");
                 }
                 // Fit this leg into the time left: substitute a real timeout when
-                // none was requested, shrink to the remaining budget, and skip
-                // the leg entirely when the budget is below streaming's 10s
-                // connect floor (attempting it would only burn the deadline).
-                long legTimeoutMs = legConnectTimeoutMs(opt.getConnectTimeout(), deadlineMs, now);
+                // none was requested, shrink to the share of the remaining budget
+                // this leg is owed, and skip the leg entirely when the budget is
+                // below streaming's 10s connect floor (attempting it would only
+                // burn the deadline).
+                long legTimeoutMs = legConnectTimeoutMs(opt.getConnectTimeout(), deadlineMs, now,
+                                                        tunnelCount - i);
                 if (legTimeoutMs < 0 && deadlineMs != NO_DEADLINE) {
                     if (lastEx != null) {break;}
                     throw new NoRouteToHostException("Connect deadline expired before first attempt");
@@ -1309,17 +1311,18 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     /**
      * Wall time one failover walk may take, capped out of the request's
      * {@link #MAX_CONNECT_SPEND_MS} budget by {@link #attemptDeadlineMs(long, long)}.
-     * <p>Sized from the leg floor, not picked. At 15s the walk could not fit two
-     * legs at all: measured live on 2026-11-24 a leg gave up on streaming's SYN
-     * phase after 8.8s, leaving 6.2s — under {@link #MIN_CONNECT_LEG_MS} — so
-     * {@link #legConnectTimeoutMs(long, long, long)} returned -1 and the log
-     * reported "Connect failed after 1/4 tunnel legs" for a pool that was
-     * holding four outbound tunnels. This javadoc claimed a 15s attempt "sends
-     * the full configured twelve SYNs across four or five different outbound
-     * tunnels"; it sent seven down one. Two minimum legs is the smallest window
-     * that reaches a second tunnel, and it stays inside
-     * {@link #MAX_CONNECT_SPEND_MS} so the retry ceiling still has a budget to
-     * size itself against.
+     * <p>Sized from the leg floor, not picked: it has to hold
+     * {@link #MIN_FAILOVER_LEGS_PER_ATTEMPT} legs at {@link #MIN_CONNECT_LEG_MS},
+     * and it stays inside {@link #MAX_CONNECT_SPEND_MS} so the retry ceiling still
+     * has a budget to size itself against.
+     * <p>The window alone does not deliver those legs. Measured live on
+     * 2026-11-24 a 15s window left 6.2s after a leg died at 8.8s, under the leg
+     * floor, and the walk reported "Connect failed after 1/4 tunnel legs" for a
+     * pool holding four outbound tunnels. Raising the window to 20s changed
+     * nothing: {@link #legConnectTimeoutMs(long, long, long, int)} gave the first
+     * leg {@code min(30s, 20s)}, streaming ran it to its SYN give-up at 18s, and
+     * the same one-leg walk came out the other end. The window is only honoured
+     * because each leg now takes its share of it.
      *
      * @since 0.9.72+
      */
@@ -1424,18 +1427,33 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * is passed through untouched, preserving legacy behavior for callers
      * that have not adopted the shared budget.
      *
+     * <p>The leg also takes no more than its share of what is left. Handing a leg
+     * the whole remaining window is what made a four-leg walk die on the first
+     * tunnel: the leg ran to streaming's SYN give-up, the seconds left fell under
+     * {@link #MIN_CONNECT_LEG_MS}, and the walk reported one leg of four while the
+     * pool held several outbound tunnels. The share is sized by how many legs the
+     * time left can still hold at the floor, so the window is spent on the tunnels
+     * the failover exists to try rather than on the first one it finds.
+     *
      * @param requestedMs the leg timeout the options carry; {@code <= 0} means no timeout requested
      * @param deadlineMs absolute deadline in ms since the epoch, or {@link #NO_DEADLINE}
      * @param nowMs current time in ms since the epoch
+     * @param legsRemaining legs this walk has still not started, this one included
      * @return the timeout to apply to the options, or {@code -1} to skip this leg
-     * @since 0.9.71+
+     * @since 0.9.71+ (the {@code legsRemaining} share is 0.9.72+)
      */
-    static long legConnectTimeoutMs(long requestedMs, long deadlineMs, long nowMs) {
+    static long legConnectTimeoutMs(long requestedMs, long deadlineMs, long nowMs,
+                                    int legsRemaining) {
         if (deadlineMs == NO_DEADLINE) {return requestedMs;}
         long remainingMs = isDeadlineExpired(deadlineMs, nowMs) ? 0 : deadlineMs - nowMs;
         if (remainingMs < MIN_CONNECT_LEG_MS) {return -1;}
         long budgeted = requestedMs > 0 ? requestedMs : DEFAULT_CONNECT_TIMEOUT;
-        return Math.min(budgeted, remainingMs);
+        // Never plan for more legs than the floor can fit, or every leg ends up
+        // below it and the walk starts none. Dividing by that count keeps each
+        // share at or above the floor without a further clamp.
+        long fits = Math.max(1, remainingMs / MIN_CONNECT_LEG_MS);
+        long legs = Math.min(Math.max(1, legsRemaining), fits);
+        return Math.min(budgeted, remainingMs / legs);
     }
 
     /**
