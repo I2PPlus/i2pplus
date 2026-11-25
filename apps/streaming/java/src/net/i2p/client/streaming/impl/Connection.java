@@ -540,6 +540,14 @@ class Connection {
     private volatile int _floorSamples;
 
     /**
+     * Whether the periodic floor check has been armed for this connection.
+     * Set once, on the first acknowledged progress, so the timer is not
+     * re-scheduled by every ACK batch afterwards.
+     * @since 0.9.72+
+     */
+    private volatile boolean _floorCheckArmed;
+
+    /**
      * Bytes counted toward the sample open at {@link #_floorSampleStart}. Only
      * the ACK path touches this one; it is volatile with the rest of the group
      * for cross-thread visibility of each field on its own, not because volatile
@@ -2624,6 +2632,25 @@ class Connection {
     }
 
     /**
+     * Whether the periodic floor check should run for a connection.
+     * <p>One acknowledged-progress observation is enough to start looking. The
+     * hard-stall rule in {@link #stallVerdict} needs no baseline and no goodput
+     * windows, so arming the check only once the floor has three windows means a
+     * transfer that goes silent inside its first 30 seconds is never examined
+     * for a stall at all — the detector exists but never runs. A connection that
+     * has never been acknowledged is left to the retransmit machinery, which
+     * already owns that case.
+     *
+     * @param lastProgressAt clock value of the last acknowledged progress, 0 if
+     *                       the connection has never made any
+     * @return true once the periodic check should be running
+     * @since 0.9.72+
+     */
+    static boolean shouldArmFloorCheck(long lastProgressAt) {
+        return lastProgressAt > 0;
+    }
+
+    /**
      * Record acknowledged progress and, when a goodput window has closed, fold
      * its rate into the baseline and evaluate the floor.
      * <p>Called from the ACK path outside {@code _outboundPacketsLock}. Only
@@ -2644,6 +2671,16 @@ class Connection {
         // so the stall grace trips once and every healthy connection then
         // reports STALLED for the rest of its life.
         _lastProgressAt = now;
+        // Arm the periodic check here rather than after three goodput windows.
+        // The hard-stall rule needs no baseline and no samples (see
+        // stallVerdict), so a transfer that goes quiet inside its first 30s is
+        // never examined at all if the check waits for the floor to be ready:
+        // measured live on 2026-11-25 a proxy body went silent for 162 seconds
+        // and stream.con.stallDetected had no events at all.
+        if (!_floorCheckArmed && shouldArmFloorCheck(_lastProgressAt)) {
+            _floorCheckArmed = true;
+            _floorCheckEvent.arm();
+        }
         _floorSampleBytes += Math.max(0, ackedPackets) * (long) Math.max(0, messageSize);
         long elapsed = now - _floorSampleStart;
         if (elapsed < FLOOR_SAMPLE_MS) {
@@ -2760,17 +2797,15 @@ class Connection {
             _floorBaselineBps = updatedBaseline(_floorBaselineBps, bps, FLOOR_EWMA_PERCENT);
         }
         _floorSamples++;
-        if (_floorSamples == FLOOR_MIN_SAMPLES) {
-            _floorCheckEvent.arm();
-        }
     }
     /**
      * Periodic evaluation of the throughput floor.
      * <p>The ACK path can only reach the floor while bytes are being
      * acknowledged, so a connection that has gone entirely quiet would never
      * be examined and a hard stall would be undetectable from there. This
-     * timer closes that gap. It is armed only once a baseline exists, so
-     * connections that never transfer data do not pay for it.
+     * timer closes that gap. It is armed at the first acknowledged progress,
+     * so a connection that has never had anything acknowledged does not pay
+     * for it — the retransmit machinery already owns that case.
      *
      * @since 0.9.71+
      */
@@ -2786,7 +2821,7 @@ class Connection {
             setFuzz(500);
         }
 
-        /** Start the periodic check now that a baseline is available. */
+        /** Start the periodic check for a connection that has made progress. */
         void arm() {
             schedule(FLOOR_SAMPLE_MS);
         }
@@ -2802,7 +2837,11 @@ class Connection {
 
         @Override
         public void timeReached() {
-            if (!_connected.get() || _floorSamples < FLOOR_MIN_SAMPLES) {
+            // No sample-count guard here: the hard-stall rule needs no
+            // baseline, and bailing out used to stop the chain as well as the
+            // verdict, so a connection that stalled before its third goodput
+            // window was never examined again.
+            if (!_connected.get()) {
                 return;
             }
             long now = _context.clock().now();

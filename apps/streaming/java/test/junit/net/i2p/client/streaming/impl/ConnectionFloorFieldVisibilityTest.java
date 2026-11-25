@@ -26,12 +26,20 @@ import org.junit.Test;
  */
 public class ConnectionFloorFieldVisibilityTest {
 
-    /** Every floor-detector field shared between the ACK path and the timer thread. */
+    /**
+     * Reads the declaration through reflection and holds nothing of its own.
+     */
+    public ConnectionFloorFieldVisibilityTest() {
+    }
+
+    /** Every floor-detector field shared between the ACK path and the timer thread,
+     *  plus the arming latch the ACK path holds the timer behind. */
     private static final List<String> FLOOR_FIELDS = Arrays.asList(
         "_floorBaselineBps",
         "_floorSamples",
         "_floorSampleBytes",
         "_floorSampleStart",
+        "_floorCheckArmed",
         "_lastProgressAt",
         "_floorBelowCount",
         "_lastStallState");
