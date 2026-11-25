@@ -38,6 +38,9 @@ import net.i2p.util.SystemVersion;
  * <li>GC storm: {@code router.gcPauseTime} &gt; 50 ms/min</li>
  * <li>Network congestion: {@code tunnel.buildSuccessRate} &lt; 50%</li>
  * <li>Bandwidth saturation: bwLimiter.outboundDelayedTime &gt; 500ms</li>
+ * <li>No saturation signal enlarges the step a scale-up adds: if threads are
+ * not the bottleneck, adding more of them because of that bottleneck is
+ * contradictory, so the step is sized by the backlog alone</li>
  * </ul>
  * <p>
  * <strong>Feedback Mechanism:</strong>
@@ -177,6 +180,13 @@ class JobQueueScaler implements Runnable {
     private static final double DEFAULT_SCALE_UP_JOBS_RATIO = 2.0; // 2x (require real backlog, not just 1 extra job)
     /** Runners added per scale-up. */
     private static final int DEFAULT_SCALE_UP_STEP = 1;
+    /**
+     * Most runners one scale-up pass may add, however many backlog signals
+     * fired. Each scale event creates OS threads and the feedback check can
+     * only roll the pass back after it has run, so the cap keeps one bad check
+     * from doubling the pool.
+     */
+    private static final int MAX_SCALE_UP_STEP = 8;
     /**
      * Minimum runners removed per scale-down. A floor, not a target: the
      * removal is bounded by half the excess above the minimum and by what the
@@ -945,36 +955,16 @@ class JobQueueScaler implements Runnable {
 
         // Execute scaling
         if (shouldScaleUp) {
-            int scaleUpStep;
+            int step;
             if (effectiveMin > activeRunners) {
                 // External floor: just reach the requested level
-                scaleUpStep = Math.min(effectiveMin, maxRunners) - activeRunners;
+                step = Math.min(effectiveMin, maxRunners) - activeRunners;
             } else {
-                scaleUpStep = Math.max(DEFAULT_SCALE_UP_STEP, 2);
-                if (maxLag > 1000) {
-                    scaleUpStep = Math.max(scaleUpStep, 4);
-                } else if (maxLag > 500) {
-                    scaleUpStep = Math.max(scaleUpStep, 3);
-                }
-                int lagThreshold = getScaleUpLagThreshold();
-                if (maxLag > lagThreshold * 5) {
-                    scaleUpStep = Math.min(6, (int) (maxLag / lagThreshold / 2));
-                }
-                if (rapidQueueGrowth) {
-                    scaleUpStep = Math.min(8, scaleUpStep + queueGrowth / QUEUE_GROWTH_RATE_THRESHOLD);
-                }
-                if (networkCongested) {
-                    scaleUpStep = Math.min(8, scaleUpStep + 1);
-                }
-                if (jobsBeingDropped) {
-                    scaleUpStep = Math.min(8, scaleUpStep + 2);
-                }
-                if (testJobsDominant) {
-                    scaleUpStep = Math.min(8, scaleUpStep + Math.max(1, testJobCount / 3));
-                }
+                step = scaleUpStep(maxLag, getScaleUpLagThreshold(), rapidQueueGrowth, queueGrowth,
+                                   jobsBeingDropped, testJobsDominant, testJobCount);
             }
 
-            int targetRunners = Math.min(activeRunners + scaleUpStep, maxRunners);
+            int targetRunners = Math.min(activeRunners + step, maxRunners);
             int runnersToAdd = targetRunners - activeRunners;
 
             if (runnersToAdd > 0) {
@@ -1039,6 +1029,56 @@ class JobQueueScaler implements Runnable {
                 _consecutiveScaleDownChecks = 0;
             }
         }
+    }
+
+    /**
+     * Pure decision: how many runners one scale-up pass adds, from the backlog
+     * signals that justified it. The oldest job's delay sets the size on its own
+     * scale, and each other signal adds to it, all bounded by
+     * {@link #MAX_SCALE_UP_STEP}.
+     * <p>
+     * Network congestion is deliberately not an input. Congestion already
+     * suppresses a routine scale-up at the trigger, so the only pass that gets
+     * here while the network is congested was forced by critical lag or dropped
+     * jobs. Charging congestion for an extra runner at that point contradicts
+     * the gate above it, which treats congestion as evidence that the bottleneck
+     * is not thread count. One signal gets one response, and it is the gate's.
+     *
+     * @param maxLag ms the oldest ready job has waited
+     * @param lagThreshold ms of lag that justifies a scale-up, the configured
+     *                     threshold; 0 or less disables the delay-proportional
+     *                     step rather than dividing by it
+     * @param rapidQueueGrowth true when the ready queue grew faster than
+     *                         {@link #QUEUE_GROWTH_RATE_THRESHOLD} jobs per check
+     * @param queueGrowth jobs added to the ready queue since the last check
+     * @param jobsBeingDropped true when the queue is dropping jobs outright
+     * @param testJobsDominant true when queued TestJobs hold enough of the
+     *                         runners that the shorter jobs are starved
+     * @param testJobCount ready TestJobs in the queue
+     * @return runners to add, at least 2 and at most {@link #MAX_SCALE_UP_STEP}
+     * @since 0.9.72+
+     */
+    static int scaleUpStep(long maxLag, int lagThreshold, boolean rapidQueueGrowth, int queueGrowth,
+                           boolean jobsBeingDropped, boolean testJobsDominant, int testJobCount) {
+        int step = Math.max(DEFAULT_SCALE_UP_STEP, 2);
+        if (maxLag > 1000) {
+            step = Math.max(step, 4);
+        } else if (maxLag > 500) {
+            step = Math.max(step, 3);
+        }
+        if (lagThreshold > 0 && maxLag > lagThreshold * 5) {
+            step = Math.min(6, (int) (maxLag / lagThreshold / 2));
+        }
+        if (rapidQueueGrowth) {
+            step = Math.min(MAX_SCALE_UP_STEP, step + queueGrowth / QUEUE_GROWTH_RATE_THRESHOLD);
+        }
+        if (jobsBeingDropped) {
+            step = Math.min(MAX_SCALE_UP_STEP, step + 2);
+        }
+        if (testJobsDominant) {
+            step = Math.min(MAX_SCALE_UP_STEP, step + Math.max(1, testJobCount / 3));
+        }
+        return step;
     }
 
     /**
