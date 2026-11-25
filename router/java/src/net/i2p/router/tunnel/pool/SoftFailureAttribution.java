@@ -103,11 +103,15 @@ class SoftFailureAttribution {
     static final int HOP_DESTS_TRACKED = 8;
 
     /**
-     * Ceiling on tracked hops. A pool has a bounded number of tunnels and each
-     * contributes a handful of hops, so this only has to be larger than the
-     * working set.
+     * Ceiling on tracked hops, sized from the working set rather than guessed at
+     * it. A pool keeps a dozen tunnels and rebuilds them every few minutes, so
+     * the hops it has sent through inside one window are a multiple of the pool
+     * size: the 2026-11-25 audit window saw 133 distinct first hops across the
+     * pools. A ceiling below that evicts the quietest entry on every insert past
+     * it, and the quietest entry is the hop whose pile-up is still accumulating
+     * between bursts, so the count the decision reads would restart.
      */
-    static final int MAX_TRACKED_HOPS = 64;
+    static final int MAX_TRACKED_HOPS = 256;
 
     /**
      * The part of a tally entry the decay and the prune both need: when the key
@@ -203,9 +207,7 @@ class SoftFailureAttribution {
             seen[0] = h._count;
             return h;
         });
-        if (_histories.size() > MAX_TRACKED_DESTINATIONS) {
-            pruneStale(_histories, MAX_TRACKED_DESTINATIONS, now);
-        }
+        pruneIfNeeded(_histories, MAX_TRACKED_DESTINATIONS, now);
         if (seen[0] <= DEST_CONTRIBUTION_CAP) {return true;}
         return hopCarriesThePileUp(hop, dest, now);
     }
@@ -240,9 +242,7 @@ class SoftFailureAttribution {
                        h._dests.size() >= HOP_DISTINCT_DESTS;
             return h;
         });
-        if (_hops.size() > MAX_TRACKED_HOPS) {
-            pruneStale(_hops, MAX_TRACKED_HOPS, now);
-        }
+        pruneIfNeeded(_hops, MAX_TRACKED_HOPS, now);
         return blame[0];
     }
 
@@ -293,15 +293,31 @@ class SoftFailureAttribution {
     int trackedHops() {return _hops.size();}
 
     /**
+     * Prune a tally that has grown past its ceiling, with a slack band above the
+     * ceiling so the prune is not paid on every failure once the map is sitting
+     * at the ceiling. Without the band, a working set at the ceiling means one
+     * insert, one prune, one sort, per failure, for as long as the burst lasts.
+     *
+     * @param map the tally to prune, keyed by destination or by hop
+     * @param ceiling entries to keep once pruned
+     * @param now current time in ms
+     */
+    private static <T extends Tracked> void pruneIfNeeded(Map<Hash, T> map,
+                                                          int ceiling, long now) {
+        if (map.size() <= ceiling + (ceiling >> 2)) {return;}
+        pruneStale(map, ceiling, now);
+    }
+
+    /**
      * Drop tally entries whose history decayed, and if the map is still over its
-     * ceiling, the quietest ones. Only reached once a map passes its ceiling, so
-     * the sort is not on the hot path.
+     * ceiling, the quietest ones. Only reached once a map passes its ceiling plus
+     * the slack band, so the sort is not on the hot path.
      *
      * @param map the tally to prune, keyed by destination or by hop
      * @param ceiling entries to keep
      * @param now current time in ms
      */
-    private static <T extends Tracked> void pruneStale(ConcurrentHashMap<Hash, T> map,
+    private static <T extends Tracked> void pruneStale(Map<Hash, T> map,
                                                        int ceiling, long now) {
         map.entrySet().removeIf(e -> now - e.getValue()._lastSeen > WINDOW_MS);
         int over = map.size() - ceiling;

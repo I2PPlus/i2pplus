@@ -79,6 +79,19 @@ public class SoftFailureAttributionTest {
     }
 
     /**
+     * The largest size a tally can hold between prunes. The ceiling is only what
+     * a prune trims down to, not the point at which one runs — a map sitting at
+     * the ceiling would otherwise pay a sort on every insert — so the map is
+     * allowed to ride a quarter of the ceiling above it first.
+     *
+     * @param ceiling the tally's own ceiling constant
+     * @return the ceiling plus the slack band a prune waits for
+     */
+    private static int bound(int ceiling) {
+        return ceiling + (ceiling >> 2);
+    }
+
+    /**
      * With no destination in the report there is nothing else to blame, so the
      * failure is charged to the tunnel exactly as it was before attribution.
      */
@@ -164,14 +177,17 @@ public class SoftFailureAttributionTest {
 
     /**
      * A router talks to far more destinations than the tally can hold, so the
-     * map must stay bounded instead of growing with the address book.
+     * map must stay bounded instead of growing with the address book. The bound
+     * is the ceiling plus the slack band a prune waits for, so the map is never
+     * sorted on every insert once the working set sits at the ceiling.
      */
     @Test
     public void tallyIsBoundedOverManyDestinations() {
         for (int i = 0; i < SoftFailureAttribution.MAX_TRACKED_DESTINATIONS * 3; i++) {
             _attr.countsAgainstTunnel(dest(i), BASE);
         }
-        assertTrue(_attr.trackedDestinations() <= SoftFailureAttribution.MAX_TRACKED_DESTINATIONS);
+        assertTrue(_attr.trackedDestinations() <=
+                   bound(SoftFailureAttribution.MAX_TRACKED_DESTINATIONS));
     }
 
     /**
@@ -319,11 +335,14 @@ public class SoftFailureAttributionTest {
 
     /**
      * Every tunnel in every pool contributes a hop, so the hop tally needs a
-     * ceiling of its own, pruned the same way the destination tally is.
+     * ceiling of its own, pruned the same way the destination tally is. The
+     * ceiling is only the target of a prune, not the point at which one happens
+     * - a map sitting at the ceiling would otherwise pay a sort on every insert -
+     * so the bound the tally actually holds is the ceiling plus its slack band.
      */
     @Test
     public void hopTallyIsBounded() {
-        for (int h = 0; h < SoftFailureAttribution.MAX_TRACKED_HOPS + 8; h++) {
+        for (int h = 0; h < SoftFailureAttribution.MAX_TRACKED_HOPS * 2; h++) {
             Hash a = dest(h * 2 + 1);
             Hash b = dest(h * 2 + 2);
             for (int i = 0; i < 2 * SoftFailureAttribution.DEST_CONTRIBUTION_CAP; i++) {
@@ -333,6 +352,34 @@ public class SoftFailureAttributionTest {
                 _attr.countsAgainstTunnel(i % 2 == 0 ? a : b, hop(h), BASE);
             }
         }
-        assertTrue(_attr.trackedHops() <= SoftFailureAttribution.MAX_TRACKED_HOPS);
+        assertTrue(_attr.trackedHops() <= bound(SoftFailureAttribution.MAX_TRACKED_HOPS));
+    }
+
+    /**
+     * A hop whose pile-up is still building must keep its count while the pool
+     * works through its tunnels. The live router showed 133 distinct first hops
+     * in one audit window, and a hop that fails in bursts is the quietest entry
+     * in the tally between them, so a ceiling at or below that working set evicts
+     * the one entry the decision is waiting on and restarts its count.
+     */
+    @Test
+    public void pileUpSurvivesThePrune() {
+        Hash a = dest(1);
+        Hash b = dest(2);
+        Hash watched = hop(0);
+        // Five failures to each of two destinations: the first three charge the
+        // tunnel, the fourth and fifth are excused and land on the hop.
+        for (int i = 0; i < 5; i++) {
+            _attr.countsAgainstTunnel(a, watched, BASE);
+            _attr.countsAgainstTunnel(b, watched, BASE);
+        }
+        assertEquals(4, _attr.exemptFailuresThrough(watched, BASE));
+        // The pool turns over: every other hop in the window fails as well.
+        for (int h = 1; h < SoftFailureAttribution.MAX_TRACKED_HOPS; h++) {
+            for (int i = 0; i < 2 * SoftFailureAttribution.DEST_CONTRIBUTION_CAP; i++) {
+                _attr.countsAgainstTunnel(i % 2 == 0 ? a : b, hop(h), BASE);
+            }
+        }
+        assertEquals(4, _attr.exemptFailuresThrough(watched, BASE));
     }
 }
