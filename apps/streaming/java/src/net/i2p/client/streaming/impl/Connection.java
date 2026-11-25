@@ -205,6 +205,16 @@ class Connection {
     private long _retransmitStallSince;
 
     /**
+     * Clock value at which a stalled connection was handed a different outbound
+     * tunnel, or 0 when it has kept the one it started with. The liveness backstop
+     * measures its give-up budget from here rather than from the packet's creation,
+     * once per connection, so the path that replaces a stalled one is tried for the
+     * budget it is being given instead of the remainder of the old path's. See
+     * {@link #stuckLifetimeAnchor(long, long)}.
+     */
+    private volatile long _pathReanchoredOn;
+
+    /**
      * How long the retransmit timer must go without forward ACK progress before the
      * connection is called stalled. Matches {@link #STALL_GRACE_MS} so the timer-driven
      * and the goodput-driven detectors agree on what "stalled" means rather than one
@@ -2858,7 +2868,13 @@ class Connection {
         try {
             Destination remote = getRemotePeer();
             if (remote == null) {return;}
-            StallRegistry.markStalled(remote.getHash(), _context.clock().now());
+            long now = _context.clock().now();
+            StallRegistry.markStalled(remote.getHash(), now);
+            // Once per connection. The point is that the tunnel the router prefers
+            // from here gets its own full trial, not the remainder of the budget
+            // the abandoned path burned; re-anchoring again on every stall would
+            // let a stream that keeps stalling never reach the backstop at all.
+            _pathReanchoredOn = stuckLifetimeReanchor(now, _pathReanchoredOn);
         } catch (RuntimeException re) {
             // Never let a telemetry path break a live stream.
             if (_log.shouldWarn()) {
@@ -3108,8 +3124,48 @@ class Connection {
     }
 
     /**
+     * What the liveness backstop measures its give-up budget from.
+     * <p>A stalled connection is handed a different outbound tunnel and the packet
+     * that stalled is retransmitted out of that one. Measured from the packet's
+     * creation, the trial the new path gets is whatever was left when the old one
+     * was abandoned: read live on 2026-11-25, a stream that stalled 30s into the
+     * 90s give-up window had 60s left for a tunnel that had not yet carried a
+     * single byte, and one that stalled late had almost none. Anchor at the
+     * hand-over instead, so each path is tried for the budget it is being given.
+     *
+     * @param createdOn creation time of the oldest unacked packet, in ms since
+     *                  epoch, or &lt;= 0 if unknown
+     * @param reanchoredOn when this connection was handed a new tunnel, or 0 if it
+     *                     never was
+     * @return the later of the two, so a connection that never rotated keeps the
+     *         creation-anchored deadline it has always had
+     * @since 0.9.72+
+     */
+    static long stuckLifetimeAnchor(long createdOn, long reanchoredOn) {
+        return reanchoredOn > createdOn ? reanchoredOn : createdOn;
+    }
+
+    /**
+     * Pure decision: the clock value a connection should record for the hand-over
+     * that moves its liveness anchor.
+     * <p>The first stall only, so the backstop can be postponed exactly once. A
+     * stream that stalls repeatedly on each new path in turn would otherwise move
+     * its own deadline forward forever and never be closed, which is the failure
+     * mode the backstop exists to bound.
+     *
+     * @param now current time in ms since epoch
+     * @param already the hand-over already recorded, or 0 if there is none
+     * @return {@code now} if no hand-over has been recorded yet, otherwise the one
+     *         already recorded
+     * @since 0.9.72+
+     */
+    static long stuckLifetimeReanchor(long now, long already) {
+        return already != 0 ? already : now;
+    }
+
+    /**
      * Pure predicate: has the oldest unacked packet been in flight beyond the
-     * worst-case retransmit budget, measured from CREATION?
+     * worst-case retransmit budget, measured from the anchor the caller supplies?
      * <p>The worst case is one transmission per RTO for the full per-packet
      * retransmit budget, which the caller computes from the configured
      * {@code maxResends * maxRto} before calling. Anchoring the budget at
@@ -3126,8 +3182,10 @@ class Connection {
      * caller as the retransmit budget times the maximum single
      * retransmit timeout; {@code <= 0} disables the check
      * @param now current time in ms since epoch
-     * @param createdOn creation time of the oldest packet, in ms since epoch
-     * ({@link net.i2p.client.streaming.impl.PacketLocal#getCreatedOn}), or &lt;= 0 if unknown
+     * @param createdOn the anchor to measure from, in ms since epoch: the creation
+     * time of the oldest packet
+     * ({@link net.i2p.client.streaming.impl.PacketLocal#getCreatedOn}), or the later
+     * path hand-over from {@link #stuckLifetimeAnchor(long, long)}; &lt;= 0 if unknown
      * @return true if the packet has been in flight beyond the budget and
      * recovery is presumed dead
      * @since 0.9.71+
@@ -6331,15 +6389,23 @@ synchronized boolean checkRetransmitStall() {
                 if (first == null) return false;
             }
             long now = _context.clock().now();
-            if (stuckLifetimeExceeded(_options.getStallGiveupMs(), now,
-                                        first.getValue().getCreatedOn())) {
+            long createdOn = first.getValue().getCreatedOn();
+            long anchor = stuckLifetimeAnchor(createdOn, _pathReanchoredOn);
+            if (stuckLifetimeExceeded(_options.getStallGiveupMs(), now, anchor)) {
                 // Throttled, and with no shouldWarn() guard: a stalled stream lands
                 // here on every retransmit pass, and the suppressor has to see each
-                // occurrence for its collapsed count to be right.
+                // occurrence for its collapsed count to be right. Both ages are
+                // printed when they differ, because the shorter one is what this
+                // decision measured and a reader comparing the line against the
+                // configured budget has to be able to tell which is which.
                 _log.warnThrottled("connStalled",
-                                   "Oldest unacked packet stalled (" +
-                                   (now - first.getValue().getCreatedOn()) +
-                                   "ms) -> Forcing disconnect for " + getRemotePeerString());
+                                   "Oldest unacked packet stalled -> Forcing disconnect for " +
+                                   getRemotePeerString() +
+                                   "\n* Stalled on this path: " +
+                                   DataHelper.formatDuration(now - anchor) +
+                                   (anchor == createdOn ? "" :
+                                    " * Packet unacked for: " +
+                                    DataHelper.formatDuration(now - createdOn)));
                 return true;
             }
             long inactivityWindow = effectiveInactivityTimeout(_options.getInactivityTimeout(),
