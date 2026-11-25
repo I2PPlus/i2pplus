@@ -265,7 +265,14 @@ build_jetty() {
     echo "ERROR: no compatible javac release flag found" >&2
     return 1
   fi
-  javac $JAVAC_RELEASE -Xlint:-options -cp "$cp" -d "$out" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/util/ServletUtil.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/util/WriterOutputStream.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/util/JspC.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/I2PErrorPageErrorHandler.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/I2PDefaultServlet.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/WebAppProviderConfiguration.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/RequestWrapper.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/ErrorServlet.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/filters/XSSRequestWrapper.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/filters/XI2PLocationFilter.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/filters/XSSFilter.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/jetty/JettyXmlConfigurationParser.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/jetty/I2PRequestLog.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/jetty/I2PLogger.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/jetty/JettyStart.java" 2>&1
+  # Compile the whole tree, not a hand-kept list of files. A list silently misses
+  # whatever is added to it: OriginCheck.java was never named, so it never reached
+  # jetty-i2p.jar, and the failure surfaced four modules away as `cannot find
+  # symbol` in i2psnark's compile. An argfile because the list is long enough to
+  # be unreadable inline.
+  local srcs="${out}/jetty-sources.txt"
+  find "${REPO_ROOT}/apps/jetty/java/src" -name '*.java' | sort > "$srcs"
+  javac $JAVAC_RELEASE -Xlint:-options -cp "$cp" -d "$out" "@${srcs}" 2>&1
   local src_d="$out"
   (cd "$src_d" && jar cf jetty-i2p.jar net/)
   # Copy needed jetty lib jars to build dir for other modules
