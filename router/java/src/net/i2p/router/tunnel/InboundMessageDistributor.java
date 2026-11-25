@@ -494,21 +494,23 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                             ClientMessage m = new ClientMessage(to, payload);
                             _context.clientManager().messageReceived(m);
                         } else {
-                            // The peer sent us data for a destination we do not
-                            // serve on this tunnel: it held a lease whose gateway
-                            // is us, for a destination our pool no longer holds.
-                            // We drop the message and nothing else breaks, so this
-                            // is a warning about the sender's stale LeaseSet, not
-                            // an error in our state. The nickname says which of our
-                            // pools it arrived on, which the hash alone does not,
-                            // and both hashes are the base32 form the console
-                            // linkifier parses. Throttled, because one sender with
-                            // a stale LeaseSet flushed 136 of these in 55 seconds.
+                            // The message names a destination this tunnel does not
+                            // serve, so there is nobody to hand it to and it is
+                            // dropped. Nothing else breaks, so it is reported as a
+                            // warning about the sender rather than an error in our
+                            // own state. The usual cause is a LeaseSet that
+                            // outlived the tunnel it advertised, but the line
+                            // cannot prove that, and it cannot name the sender
+                            // either - an inbound tunnel does not carry one. The
+                            // nickname says which of our pools it arrived on, which
+                            // the hash alone does not, and both hashes are the
+                            // base32 form the console linkifier parses. Throttled,
+                            // because one sender flushed 136 of these in 55 seconds.
                             _log.warnThrottled("imd-wrong-target",
                                                "Data message for " + _clientNickname +
                                                " [" + _client.toShortBase32() + ']' +
                                                " -> Wrong target: [" + to.toShortBase32() + ']' +
-                                               " * MsgID: " + msg.getUniqueId());
+                                               " * MsgID: " + data.getUniqueId());
                         }
                     } else {
                         // Same drop on an exploratory inbound tunnel: the message
@@ -518,7 +520,7 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                                            "Data message via an exploratory tunnel" +
                                            " -> No client for target: [" +
                                            to.toShortBase32() + ']' +
-                                           " * MsgID: " + msg.getUniqueId());
+                                           " * MsgID: " + data.getUniqueId());
                     }
                     return;
 
