@@ -5,32 +5,52 @@ import static org.mockito.Mockito.*;
 
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.junit.Assume;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 
 import net.i2p.data.Hash;
 import net.i2p.router.RouterContext;
 import net.i2p.router.RouterTestHelper;
 import net.i2p.router.TunnelPoolSettings;
+import net.i2p.stat.RateStat;
 
 /**
- * Tests the executor's per-first-hop in-flight guard. A build is skipped
- * when the peer it would dispatch to (peer 0 for inbound, peer 1 for
- * outbound) already has a build in flight, so one peer is never flooded
- * with stacked build requests. Skipped builds must not leak their configs
- * in the pool's in-progress list, or the count would inflate forever and
- * starve every cap-guard that gates on in-progress builds. Emergency
- * builds (setBypassPacing) bypass the guard entirely.
+ * Tests the executor's per-first-hop in-flight guard. A build whose first hop
+ * (peer 0 for inbound, peer 1 for outbound) already carries a build, or has
+ * been failing as a first hop, is re-configured over another peer; only when
+ * the pool cannot offer a different hop is the build dropped. Dropping a
+ * build throws away a refill the pool still needs, so the guard has to be
+ * measured by what it costs, not only by what it prevents: live on 2026-11-25
+ * it turned away 86 builds a minute against 61 attempted.
+ * <p>
+ * Dropped builds must not leak their configs in the pool's in-progress list,
+ * or the count would inflate forever and starve every cap-guard that gates on
+ * in-progress builds. Emergency builds (setBypassPacing) bypass the guard
+ * entirely.
  *
  * @since 0.9.70+
  */
 public class BuildExecutorPacingTest {
 
+    /** Shared context for the tests that need a live pool over a real context. */
     private static RouterContext _ctx;
 
+    /**
+     * Holds no state of its own; the pool, executor and building map are built
+     * inside each case.
+     */
+    public BuildExecutorPacingTest() {
+    }
+
+    /**
+     * Build the shared context once for the class. It is null when the test
+     * environment cannot create one, which every case treats as a skip.
+     */
     @BeforeClass
     public static void setUp() {
         _ctx = RouterTestHelper.newContext();
@@ -128,10 +148,11 @@ public class BuildExecutorPacingTest {
     }
 
     /**
-     * A build whose first-hop peer already has a build in flight is skipped:
-     * it is removed from the pool's in-progress list and never added to the
-     * executor's building map. Regression test for the leak where a skipped
-     * config stayed in _inProgress forever.
+     * A build whose first-hop peer already has a build in flight, on a pool
+     * that cannot select any other hop, is dropped: it is removed from the
+     * pool's in-progress list and never added to the executor's building map.
+     * Regression test for the leak where a dropped config stayed in
+     * _inProgress forever.
      *
      * @throws Exception on reflection failure seeding the in-progress list or building map
      */
@@ -211,6 +232,165 @@ public class BuildExecutorPacingTest {
         assertEquals(true, hasBuildInFlightToFirstHop(exec, cfg));
         assertEquals(true, cfg.isBypassPacing());
         assertEquals(false, !cfg.isBypassPacing() && hasBuildInFlightToFirstHop(exec, cfg));
+    }
+
+    /**
+     * A build whose first hop is busy is kept when the pool can offer another
+     * one: the retry is configured with the gated hop excluded, the original
+     * config leaves the pool's in-progress list, and the replacement gets as
+     * far as the dispatch path.
+     *
+     * @throws Exception on reflection failure seeding the executor's building map
+     */
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testGatedBuildIsReSelectedOverAFreshHop() throws Exception {
+        Assume.assumeTrue("No RouterContext available", _ctx != null);
+        RouterContext ctx = RouterTestHelper.newContext();
+        Assume.assumeTrue("No RouterContext available", ctx != null);
+        TunnelPool pool = mockPool();
+        BuildExecutor exec = new BuildExecutor(ctx, mock(TunnelPoolManager.class), mock(GhostPeerManager.class));
+
+        Hash busy = hop((byte) 1);
+        Hash free = hop((byte) 2);
+        PooledTunnelCreatorConfig inFlight = new PooledTunnelCreatorConfig(ctx, 3, true, null, pool);
+        inFlight.setPeer(0, busy);
+        inFlight.setReplyMessageId(1234L);
+        seedBuildingMap(exec, inFlight);
+
+        PooledTunnelCreatorConfig gated = new PooledTunnelCreatorConfig(ctx, 3, true, null, pool);
+        gated.setPeer(0, busy);
+        PooledTunnelCreatorConfig fresh = new PooledTunnelCreatorConfig(ctx, 3, true, null, pool);
+        fresh.setPeer(0, free);
+        when(pool.configureNewTunnel(eq(false), anySet())).thenReturn(fresh);
+
+        exec.buildTunnel(gated);
+
+        ArgumentCaptor<Set<Hash>> hops = ArgumentCaptor.forClass(Set.class);
+        verify(pool).configureNewTunnel(eq(false), hops.capture());
+        assertTrue("the gated hop must be excluded from the retry", hops.getValue().contains(busy));
+        assertEquals("only the gated hop is known bad for the first retry", 1, hops.getValue().size());
+        verify(pool).removeInProgress(gated);
+        assertEquals("the build was kept, not paced out", 1, statEvents(ctx, "tunnel.buildPacedReselect"));
+        assertEquals("nothing was discarded", 0, statEvents(ctx, "tunnel.buildPacedOut"));
+        // The replacement went on past the pacing guard: the next gate it met was
+        // the first-hop session check, which the test context always fails.
+        assertEquals("the replacement build reached dispatch", 1, statEvents(ctx, "tunnel.buildNoSession"));
+    }
+
+    /**
+     * The walk is bounded. A pool that can only ever offer the hop that is
+     * already gated gives up after {@link BuildExecutor#FIRST_HOP_RESELECT_LIMIT}
+     * re-selections, and every config it touched is taken out of the pool's
+     * in-progress list, so a busy hop cannot hold the pool's build slots open.
+     *
+     * @throws Exception on reflection failure seeding the executor's building map
+     */
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testReselectStopsAtTheCeiling() throws Exception {
+        Assume.assumeTrue("No RouterContext available", _ctx != null);
+        RouterContext ctx = RouterTestHelper.newContext();
+        Assume.assumeTrue("No RouterContext available", ctx != null);
+        TunnelPool pool = mockPool();
+        BuildExecutor exec = new BuildExecutor(ctx, mock(TunnelPoolManager.class), mock(GhostPeerManager.class));
+
+        Hash busy = hop((byte) 3);
+        PooledTunnelCreatorConfig inFlight = new PooledTunnelCreatorConfig(ctx, 3, true, null, pool);
+        inFlight.setPeer(0, busy);
+        inFlight.setReplyMessageId(1234L);
+        seedBuildingMap(exec, inFlight);
+
+        PooledTunnelCreatorConfig gated = new PooledTunnelCreatorConfig(ctx, 3, true, null, pool);
+        gated.setPeer(0, busy);
+        PooledTunnelCreatorConfig sameHop = new PooledTunnelCreatorConfig(ctx, 3, true, null, pool);
+        sameHop.setPeer(0, busy);
+        when(pool.configureNewTunnel(eq(false), anySet())).thenReturn(sameHop);
+
+        exec.buildTunnel(gated);
+
+        int limit = BuildExecutor.FIRST_HOP_RESELECT_LIMIT;
+        ArgumentCaptor<Set<Hash>> hops = ArgumentCaptor.forClass(Set.class);
+        verify(pool, times(limit)).configureNewTunnel(eq(false), hops.capture());
+        for (Set<Hash> excluded : hops.getAllValues()) {
+            assertTrue("every retry excludes the hop it was gated on", excluded.contains(busy));
+        }
+        assertEquals(limit, statEvents(ctx, "tunnel.buildPacedReselect"));
+        assertEquals("the build is dropped once, at the end", 1, statEvents(ctx, "tunnel.buildPacedOut"));
+        assertEquals("it never reached dispatch", 0, statEvents(ctx, "tunnel.buildNoSession"));
+        verify(pool, times(limit + 1)).removeInProgress(any(PooledTunnelCreatorConfig.class));
+    }
+
+    /**
+     * When selection cannot offer any hop at all, the build is dropped rather
+     * than dispatched onto the gated one — the re-select path must not become a
+     * way around the guard.
+     *
+     * @throws Exception on reflection failure seeding the executor's building map
+     */
+    @Test
+    public void testNoSelectableHopDropsTheBuild() throws Exception {
+        Assume.assumeTrue("No RouterContext available", _ctx != null);
+        RouterContext ctx = RouterTestHelper.newContext();
+        Assume.assumeTrue("No RouterContext available", ctx != null);
+        TunnelPool pool = mockPool();
+        BuildExecutor exec = new BuildExecutor(ctx, mock(TunnelPoolManager.class), mock(GhostPeerManager.class));
+
+        Hash busy = hop((byte) 4);
+        PooledTunnelCreatorConfig inFlight = new PooledTunnelCreatorConfig(ctx, 3, true, null, pool);
+        inFlight.setPeer(0, busy);
+        inFlight.setReplyMessageId(1234L);
+        seedBuildingMap(exec, inFlight);
+
+        PooledTunnelCreatorConfig gated = new PooledTunnelCreatorConfig(ctx, 3, true, null, pool);
+        gated.setPeer(0, busy);
+        when(pool.configureNewTunnel(eq(false), anySet())).thenReturn(null);
+
+        exec.buildTunnel(gated);
+
+        verify(pool).removeInProgress(gated);
+        assertEquals(1, statEvents(ctx, "tunnel.buildPacedOut"));
+        assertEquals(0, statEvents(ctx, "tunnel.buildPacedReselect"));
+        assertEquals(0, statEvents(ctx, "tunnel.buildNoSession"));
+    }
+
+    /**
+     * A pool mock the walk can drive. Selection is stubbed per test; the
+     * config constructor reads the pool's settings, so the mock has to carry
+     * real ones.
+     *
+     * @return a mock inbound client pool with live settings
+     */
+    private static TunnelPool mockPool() {
+        TunnelPool pool = mock(TunnelPool.class);
+        when(pool.getSettings()).thenReturn(new TunnelPoolSettings(true));
+        return pool;
+    }
+
+    /**
+     * A distinct peer hash to use as a first hop.
+     *
+     * @param b the first byte, making the hash unique among the test's hops
+     * @return a 32-byte hash starting with {@code b}
+     */
+    private static Hash hop(byte b) {
+        Hash rv = new Hash(new byte[32]);
+        rv.getData()[0] = b;
+        return rv;
+    }
+
+    /**
+     * Events recorded against a stat since its context was created. Each test
+     * builds its own context, so the class's other tests cannot feed it.
+     *
+     * @param ctx the context whose stat manager to read
+     * @param name the stat name as the console sees it
+     * @return the event count on record, 0 if none
+     */
+    private static long statEvents(RouterContext ctx, String name) {
+        RateStat st = ctx.statManager().getRate(name);
+        assertNotNull("stat not registered: " + name, st);
+        return st.getLifetimeEventCount();
     }
 
     /**

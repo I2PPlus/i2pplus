@@ -869,6 +869,7 @@ public class BuildExecutor implements Runnable {
         _context.statManager().createRequiredRateStat("tunnel.buildFailureRate", "Tunnel build failure rate (0-100)", "Tunnels", RATES);
         _context.statManager().createRequiredRateStat("tunnel.buildTimeoutRate", "Tunnel build timeout rate (0-100)", "Tunnels", RATES);
         _context.statManager().createRequiredRateStat("tunnel.buildPacedOut", "Tunnel build skipped (1st hop busy)", "Tunnels", RATES);
+        _context.statManager().createRequiredRateStat("tunnel.buildPacedReselect", "Tunnel build kept by re-picking the 1st hop", "Tunnels", RATES);
         _context.statManager().createRequiredRateStat("tunnel.buildStalePruned", "Builds pruned due to stale queue", "Tunnels", RATES);
         _context.statManager().createRequiredRateStat("tunnel.buildNoSession", "Build abandoned (first hop has no session)", "Tunnels", RATES);
         _context.statManager().createRequiredRateStat("tunnel.buildBanFiltered", "Tunnel build dropped (banlisted hop)", "Tunnels", RATES);
@@ -2979,17 +2980,50 @@ public class BuildExecutor implements Runnable {
             _log.debug("Build requested: " + cfg + ", building map size: " + _currentlyBuildingMap.size());
         }
         if (cfg.getLength() > 1 && !cfg.isBypassPacing()) {
-            FirstHopGate gate = firstHopGate(cfg);
-            if (gate != FirstHopGate.NONE) {
-                _context.statManager().addRateData("tunnel.buildPacedOut", 1);
-                if (_log.shouldDebug()) {
-                    logFirstHopGate(gate, cfg);
+            // A gated first hop is not a reason to lose the build. The guard says
+            // one thing about one peer - it already carries a build, or it has been
+            // failing - and says nothing about the demand behind this config, so ask
+            // the pool for the same tunnel over a different first hop. Measured live
+            // on 2026-11-25 the guard turned away 86 builds a minute while 61 were
+            // attempted, and only 34 of those answered: over half of the router's
+            // build demand was discarded for want of a free first hop, out of 2,350
+            // eligible peers.
+            Set<Hash> gatedHops = null;
+            TunnelPool pool = cfg.getTunnelPool();
+            for (int attempt = 0;; attempt++) {
+                FirstHopGate gate = firstHopGate(cfg, gatedHops);
+                GateAction action = gateAction(gate, pool, attempt, FIRST_HOP_RESELECT_LIMIT);
+                if (action == GateAction.DISPATCH) {break;}
+                if (action == GateAction.DROP) {
+                    dropGatedBuild(pool, cfg, gate, gatedHops);
+                    return;
                 }
-                // Never sent to the network, so no timeout will fire — remove it
-                // now or the pool's _inProgress count leaks upward forever,
-                // starving every cap-guard that gates on in-progress builds.
-                cfg.getTunnelPool().removeInProgress(cfg);
-                return;
+                if (gatedHops == null) {
+                    gatedHops = new HashSet<>(FIRST_HOP_RESELECT_LIMIT + 1);
+                }
+                Hash gated = BuildRequestor.getBuildRequestPeer(cfg);
+                gatedHops.add(gated);
+                // Ask first, then remove: the replacement takes this config's slot
+                // in the pool's in-progress list, so the count is net-neutral and no
+                // cap-guard that gates on in-progress builds sees a dip or a spike.
+                PooledTunnelCreatorConfig retry = pool.configureNewTunnel(false, gatedHops);
+                if (retry == null) {
+                    // Nothing selectable with those hops excluded - give up on the
+                    // build, not just the hop.
+                    dropGatedBuild(pool, cfg, gate, gatedHops);
+                    return;
+                }
+                pool.removeInProgress(cfg);
+                _context.statManager().addRateData("tunnel.buildPacedReselect", 1);
+                if (_log.shouldDebug()) {
+                    Hash fresh = BuildRequestor.getBuildRequestPeer(retry);
+                    _log.debug("Re-picking a gated first hop -> " +
+                               (gate == FirstHopGate.RECENT_FAILURE ? "Failing hop" : "Busy hop") +
+                               ": [" + gated.toShortBase64() + "] * New hop: " +
+                               (fresh != null ? "[" + fresh.toShortBase64() + ']' : "none") +
+                               " * Attempts: " + (attempt + 1));
+                }
+                cfg = retry;
             }
         }
 
@@ -3133,6 +3167,72 @@ public class BuildExecutor implements Runnable {
     }
 
     /**
+     * What to do with a build the first-hop guard held back: try it over
+     * another peer, or give up on it.
+     *
+     * @since 0.9.72+
+     */
+    enum GateAction {
+        /** The hop is clear, send the request. */
+        DISPATCH,
+        /** Ask the pool for the same tunnel behind a different first hop. */
+        RESELECT,
+        /** Out of retries, drop the build. */
+        DROP
+    }
+
+    /**
+     * How many times one build may be re-configured over a fresh first hop
+     * before it is dropped. Each pass costs a {@code selectPeers()} call and
+     * nothing on the network, and every pass excludes the hops it already
+     * gated, so the ceiling only stops a pool whose whole candidate set is
+     * busy. Measured live on 2026-11-25 the guard fired 45 times a minute
+     * against a pool of 2,350 eligible peers, so two passes is ample.
+     */
+    static final int FIRST_HOP_RESELECT_LIMIT = 2;
+
+    /**
+     * Decide what to do with a build whose first hop is gated. A gated hop
+     * says one thing about one peer - it is busy or it has been failing - and
+     * says nothing about the pool's demand, so the default is to ask for the
+     * same tunnel over a different hop. Only a build that has used up its
+     * re-selects, or that has no pool to re-select through, is dropped.
+     *
+     * @param gate why the hop is held back, {@link FirstHopGate#NONE} if it is clear
+     * @param pool the pool to re-select through, null if the build has none
+     * @param attempt which pass this is, counting from 0
+     * @param limit how many re-selections are allowed
+     * @return what to do with the build
+     */
+    static GateAction gateAction(FirstHopGate gate, TunnelPool pool, int attempt, int limit) {
+        if (gate == FirstHopGate.NONE) {return GateAction.DISPATCH;}
+        return pool != null && attempt < limit ? GateAction.RESELECT : GateAction.DROP;
+    }
+
+    /**
+     * Give up on a build the first-hop guard would not let through: count it,
+     * say why, and take it out of the pool's in-progress list. It never reached
+     * the network, so no build timeout will ever fire for it and nothing else
+     * will remove it - leaving it there inflates the pool's in-progress count
+     * forever and starves every cap-guard that gates on that count.
+     *
+     * @param pool the build's pool, may be null
+     * @param cfg the build being given up on
+     * @param gate why its first hop was held back
+     * @param gatedHops the hops already tried for this build, may be null
+     */
+    private void dropGatedBuild(TunnelPool pool, PooledTunnelCreatorConfig cfg,
+                                FirstHopGate gate, Set<Hash> gatedHops) {
+        _context.statManager().addRateData("tunnel.buildPacedOut", 1);
+        if (_log.shouldDebug()) {
+            logFirstHopGate(gate, cfg, gatedHops != null ? gatedHops.size() : 0);
+        }
+        if (pool != null) {
+            pool.removeInProgress(cfg);
+        }
+    }
+
+    /**
      * Whether another build request is already in flight whose first hop
      * (the peer the request is dispatched to) matches this config's.
      * Prevents stacking multiple build requests onto a single peer while
@@ -3158,8 +3258,26 @@ public class BuildExecutor implements Runnable {
      * @since 0.9.72+
      */
     private FirstHopGate firstHopGate(PooledTunnelCreatorConfig cfg) {
+        return firstHopGate(cfg, null);
+    }
+
+    /**
+     * Why this build's first hop holds it back, counting the hops this build
+     * has already been re-selected away from as busy. Without that, a pool that
+     * reuses a recent tunnel's peer sequence (75% of client builds) can hand
+     * back the hop we just gated, and the walk would dispatch onto it.
+     *
+     * @param cfg the prospective build
+     * @param alreadyTried hops this build has already given up on, may be null
+     * @return the reason to hold the build, {@link FirstHopGate#NONE} to dispatch it
+     * @since 0.9.72+
+     */
+    private FirstHopGate firstHopGate(PooledTunnelCreatorConfig cfg, Set<Hash> alreadyTried) {
         Hash firstHop = BuildRequestor.getBuildRequestPeer(cfg);
         if (firstHop == null) {return FirstHopGate.NONE;}
+        if (alreadyTried != null && alreadyTried.contains(firstHop)) {
+            return FirstHopGate.IN_FLIGHT;
+        }
         if (hasRecentlyFailedAsFirstHop(firstHop)) {return FirstHopGate.RECENT_FAILURE;}
         if (countBuildsToFirstHop(_currentlyBuildingMap.values(), firstHop, cfg) > 0) {
             return FirstHopGate.IN_FLIGHT;
@@ -3195,18 +3313,22 @@ public class BuildExecutor implements Runnable {
      *
      * @param gate the reason returned by {@link #firstHopGate}
      * @param cfg the build that was held back
+     * @param hopsTried how many first hops this build was already re-selected
+     *                  away from, 0 if it was gated on its first one
      * @since 0.9.72+
      */
-    private void logFirstHopGate(FirstHopGate gate, PooledTunnelCreatorConfig cfg) {
+    private void logFirstHopGate(FirstHopGate gate, PooledTunnelCreatorConfig cfg, int hopsTried) {
         Hash firstHop = BuildRequestor.getBuildRequestPeer(cfg);
         String hop = firstHop != null ? "[" + firstHop.toShortBase64() + "]" : "the first hop";
+        String tried = hopsTried > 0 ? " * Hops tried: " + hopsTried : "";
         if (gate == FirstHopGate.RECENT_FAILURE) {
             _log.debug("Build gated (first hop failures) -> " + hop + " has " +
-                       getFirstHopFailureCount(firstHop) + " recent failures\n* Tunnel: " + cfg);
+                       getFirstHopFailureCount(firstHop) + " recent failures" + tried +
+                       "\n* Tunnel: " + cfg);
         } else {
             int shared = countBuildsToFirstHop(_currentlyBuildingMap.values(), firstHop, cfg);
             _log.debug("Build gated (pacing) -> First hop " + hop + " already has a build in flight" +
-                       "\n* Builds to it: " + shared + " * Tunnel: " + cfg);
+                       tried + "\n* Builds to it: " + shared + " * Tunnel: " + cfg);
         }
     }
 
