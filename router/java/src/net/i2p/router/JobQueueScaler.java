@@ -1350,6 +1350,24 @@ class JobQueueScaler implements Runnable {
     }
 
     /**
+     * Pure decision: how many of the runners a failed scale-up added may be
+     * taken back? No more than it added, and never past the floor — which
+     * counts the runners other subsystems hold under lease. The rollback used to
+     * floor itself at the configured minimum alone and so took back a runner a
+     * subsystem was still counting on, which the floor path then handed straight
+     * back on the next check: a pair of thread creations for nothing.
+     *
+     * @param runnersAdded runners the scale-up added
+     * @param currentRunners runners in effect now
+     * @param floor the runner count may not go below, leases included
+     * @return runners to remove, 0 when there is nothing to take back
+     * @since 0.9.72+
+     */
+    static int rollbackCount(int runnersAdded, int currentRunners, int floor) {
+        return Math.max(0, Math.min(runnersAdded, currentRunners - floor));
+    }
+
+    /**
      * Evaluate whether the last scale-up actually helped, and roll it back if
      * it did not.
      * <p>
@@ -1360,7 +1378,8 @@ class JobQueueScaler implements Runnable {
      * reading destroyed the threads the scale-up had just created, and the next
      * scale-up made them again.
      *
-     * @param currentRunners runner count now, caps how many added runners roll back
+     * @param currentRunners runner count now, which with the floor caps how many
+     *                       added runners roll back
      * @param currentAvgLag ms average lag now, compared with the pre-scale average
      * @param currentMessageDelay ms transport send delay now, compared with the
      *                            send delay captured before the scale
@@ -1412,8 +1431,10 @@ class JobQueueScaler implements Runnable {
                           " * Send delay: " + snapshot.messageDelay + "ms to " + currentMessageDelay + "ms");
             }
 
-            // Rollback: remove the runners we just added
-            int runnersToRemove = Math.min(snapshot.runnersAdded, currentRunners - getMinRunnersDynamic());
+            // Rollback: remove the runners we just added, but not past the floor
+            // the queue is held to — leases included.
+            int runnersToRemove = rollbackCount(snapshot.runnersAdded, currentRunners,
+                                                getEffectiveMinRunners());
             if (runnersToRemove > 0) {
                 int removed = _jobQueue.removeIdleRunners(runnersToRemove);
                 if (removed > 0) {
