@@ -23,6 +23,12 @@ import net.i2p.util.SystemVersion;
  * <ul>
  * <li>Scale UP when: readyJobs &gt; activeRunners * scaleUpJobsRatio OR maxLag
  * &gt; scaleUpLagThreshold</li>
+ * <li>A scale-up then needs SUSTAINED_CHECKS_REQUIRED checks in a row that want
+ * it, unless the lag is at the critical multiple, an active job is wedged, or
+ * jobs are being dropped — a trend signal starts the count, it does not skip
+ * it</li>
+ * <li>The queue-growth trend counts only once the backlog is approaching the
+ * runner pool, so ordinary jitter in a shallow queue is not a trend</li>
  * <li>Scale DOWN when: readyJobs &lt; activeRunners AND avgLag &lt; scaleDownLagThreshold (sustained)</li>
  * <li>A scale-down must also wait out a dwell after a scale-up, and may never
  * remove more than that scale-up added, so one quiet interval cannot undo it</li>
@@ -722,7 +728,7 @@ class JobQueueScaler implements Runnable {
         boolean networkCongested = !Double.isNaN(buildSuccessRate) && buildSuccessRate < 50.0;
 
         // Trend-derived early warning signals
-        boolean rapidQueueGrowth = queueGrowth > QUEUE_GROWTH_RATE_THRESHOLD;
+        boolean rapidQueueGrowth = rapidQueueGrowth(queueGrowth, readyJobs, activeRunners);
         boolean messageDelaySpike = baselineMsgDelay > 5 && messageDelay > baselineMsgDelay * BASELINE_MULTIPLIER;
         boolean delayAccelerating = delayDelta > 5 && queueGrowth > 0;
 
@@ -896,14 +902,12 @@ class JobQueueScaler implements Runnable {
             boolean emergencySignal = criticalLag || criticalSlowJobs || jobsBeingDropped;
 
             if (emergencySignal || !suppressNormal) {
-                // Under trend signals, skip the sustained-checks delay
-                int effectiveSustainedRequired = hasTrendSignal ? 1 : SUSTAINED_CHECKS_REQUIRED;
-
                 if (highBacklog || highLag || highMessageDelay || highAvgLag || slowActiveJobs ||
                     rapidQueueGrowth || messageDelaySpike || delayAccelerating || jobsBeingDropped ||
                     jobsSlowing || testJobsDominant) {
                     _consecutiveScaleUpChecks++;
-                    if (_consecutiveScaleUpChecks >= effectiveSustainedRequired || criticalLag || criticalSlowJobs) {
+                    if (sustainedOrEmergency(_consecutiveScaleUpChecks, criticalLag, criticalSlowJobs,
+                                             jobsBeingDropped)) {
                         shouldScaleUp = true;
                         if (_log.shouldInfo()) {
                             // Conditional signals, joined with the house separator;
@@ -1079,6 +1083,52 @@ class JobQueueScaler implements Runnable {
             step = Math.min(MAX_SCALE_UP_STEP, step + Math.max(1, testJobCount / 3));
         }
         return step;
+    }
+
+    /**
+     * Pure decision: is the ready queue growing early enough, and deep enough,
+     * to be worth runners before the backlog-ratio gate opens?
+     * <p>
+     * Growth on its own is noise on a shallow queue: measured on a running
+     * router, the ready depth sits near four jobs and moves by three between
+     * two checks with nobody waiting for any of them. The backlog therefore has
+     * to be approaching the pool that serves it — half of it here, against the
+     * ratio gate's double — before the growth means anything.
+     *
+     * @param queueGrowth jobs added to the ready queue since the last check
+     * @param readyJobs jobs ready to run now
+     * @param activeRunners runners in effect now
+     * @return true when the growth is an early warning worth acting on
+     * @since 0.9.72+
+     */
+    static boolean rapidQueueGrowth(int queueGrowth, int readyJobs, int activeRunners) {
+        return queueGrowth > QUEUE_GROWTH_RATE_THRESHOLD && readyJobs * 2 > activeRunners;
+    }
+
+    /**
+     * Pure decision: has the backlog wanted runners for long enough to act on,
+     * or is this check an emergency that cannot wait?
+     * <p>
+     * The sustained count used to be waived for any trend signal, and a trend
+     * signal fires on ordinary jitter: 51 scale-ups and 63 scale-downs, 167
+     * runner threads created, in 2.25 hours of checks on a router whose worst
+     * ready-job lag averaged 0.38ms. Only a lag past the critical multiple, a
+     * wedged active job, or jobs being dropped is an emergency. A trend is a
+     * reason to start counting, not a reason to skip the count.
+     *
+     * @param consecutiveChecks checks in a row that wanted a scale-up
+     * @param criticalLag true when the worst lag or the send delay is ten times
+     *                    its threshold
+     * @param criticalSlowJobs true when an active job has run past the wedged
+     *                         multiple of the lag threshold
+     * @param jobsBeingDropped true when the queue dropped jobs in the last minute
+     * @return true when this check may scale up
+     * @since 0.9.72+
+     */
+    static boolean sustainedOrEmergency(int consecutiveChecks, boolean criticalLag,
+                                        boolean criticalSlowJobs, boolean jobsBeingDropped) {
+        return consecutiveChecks >= SUSTAINED_CHECKS_REQUIRED || criticalLag || criticalSlowJobs ||
+               jobsBeingDropped;
     }
 
     /**
