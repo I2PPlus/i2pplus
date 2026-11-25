@@ -1255,11 +1255,12 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
             if (handler != null) {
                 handler.handleMessage(message, this);
                 if (_log.shouldDebug()) {
-                    // Name the message, not just its type number: the number is what
-                    // the protocol document says, the name is what a reader at 3am
-                    // needs, and the handler says which code took it.
+                    // Name the message, and keep the type number beside the name for
+                    // grepping. The handler is not named: it is looked up by type, so
+                    // it was always the message class plus "Handler" - the same word
+                    // twice on one line, and this line is the chattiest in the router.
                     _log.debug(getPrefix() + "-> Received " + message.getClass().getSimpleName() +
-                               " * Type: " + type + " * Handler: " + handler.getClass().getSimpleName());
+                               " (Type: " + type + ')');
                 }
             } else if (_log.shouldWarn()) {
                 _log.warn(getPrefix() + "-> Received an unhandleable message * Type: " + type);
