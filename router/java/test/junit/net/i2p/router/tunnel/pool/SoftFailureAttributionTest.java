@@ -8,13 +8,23 @@ import org.junit.Test;
 import net.i2p.data.Hash;
 
 /**
- * Tests for {@link SoftFailureAttribution}, the per-destination tally that
- * decides whether a soft (status-3) send failure counts against the tunnel
- * that carried it. A destination may charge at most
- * {@link SoftFailureAttribution#DEST_CONTRIBUTION_CAP} tunnels' worth of
- * credit per window, so one unreachable peer cannot retire every egress
- * tunnel that tried it, while a tunnel that fails against many destinations
- * is still retired.
+ * Tests for {@link SoftFailureAttribution}, the tally that decides whether a
+ * soft (status-3) send failure counts against the tunnel that carried it. A
+ * destination may charge at most
+ * {@link SoftFailureAttribution#DEST_CONTRIBUTION_CAP} tunnels' worth of credit
+ * per window, so one unreachable peer cannot retire every egress tunnel that
+ * tried it, while a tunnel that fails against many destinations is still
+ * retired.
+ *
+ * <p>The second dimension is the hop. Once a destination is excused its further
+ * failures cost the pool nothing, and a tally with only that rule can excuse
+ * every failure in sight without ever asking whether they all rode the same
+ * peer — measured live, one destination had absorbed 1,040 soft failures while
+ * 68 failures were spread over ten different hops, and no tunnel was charged for
+ * any of them. So a hop that carries
+ * {@link SoftFailureAttribution#HOP_EXEMPT_CAP} excused failures for
+ * {@link SoftFailureAttribution#HOP_DISTINCT_DESTS} destinations is charged
+ * back to the tunnel.
  *
  * @since 0.9.72+
  */
@@ -50,6 +60,21 @@ public class SoftFailureAttributionTest {
         byte[] data = new byte[Hash.HASH_LENGTH];
         data[0] = (byte) i;
         data[1] = (byte) (i >>> 8);
+        return new Hash(data);
+    }
+
+    /**
+     * A tunnel hop distinct from every destination and from every other index —
+     * the two tallies are keyed by Hash, and a hop that collided with a
+     * destination would let one test's destinations feed the other's hops.
+     *
+     * @param i index whose third and fourth bytes become the hash prefix
+     * @return a hop hash no destination or other index produces
+     */
+    private static Hash hop(int i) {
+        byte[] data = new byte[Hash.HASH_LENGTH];
+        data[2] = (byte) i;
+        data[3] = (byte) (i >>> 8);
         return new Hash(data);
     }
 
@@ -172,5 +197,142 @@ public class SoftFailureAttributionTest {
     public void unknownDestinationReportsNoFailures() {
         assertEquals(0, _attr.failuresFrom(dest(9), BASE));
         assertEquals(0, _attr.failuresFrom(null, BASE));
+    }
+
+    // ---------- the hop dimension ----------
+
+    /**
+     * A destination past its cap is excused for the rest of the window, and if
+     * every excused failure rode the same hop, that hop is the common factor,
+     * not the destinations. Two destinations is enough to say so: one is what the
+     * destination cap already excuses.
+     */
+    @Test
+    public void oneHopCarryingTwoDestinationsIsCharged() {
+        Hash a = dest(1);
+        Hash b = dest(2);
+        Hash h = hop(7);
+        for (int i = 0; i < 2 * SoftFailureAttribution.DEST_CONTRIBUTION_CAP; i++) {
+            assertTrue("the first failures still charge the tunnel",
+                       _attr.countsAgainstTunnel(i % 2 == 0 ? a : b, h, BASE));
+        }
+        for (int i = 0; i < SoftFailureAttribution.HOP_EXEMPT_CAP - 1; i++) {
+            assertFalse("a pile-up below the hop cap stays excused",
+                        _attr.countsAgainstTunnel(i % 2 == 0 ? a : b, h, BASE + i));
+        }
+        assertTrue("the hop has carried the cap across two destinations",
+                   _attr.countsAgainstTunnel(a, h, BASE + 100));
+        assertTrue("and it stays charged until the tally decays",
+                   _attr.countsAgainstTunnel(b, h, BASE + 101));
+    }
+
+    /**
+     * The pile-up has to span more than one destination. One destination timing
+     * out through one hop is exactly the case the destination cap was written to
+     * excuse, and the hop rule must not undo it.
+     */
+    @Test
+    public void oneDestinationThroughOneHopStaysExempt() {
+        Hash a = dest(1);
+        Hash h = hop(7);
+        for (int i = 0; i < SoftFailureAttribution.DEST_CONTRIBUTION_CAP; i++) {
+            _attr.countsAgainstTunnel(a, h, BASE);
+        }
+        for (int i = 0; i < SoftFailureAttribution.HOP_EXEMPT_CAP * 4; i++) {
+            assertFalse(_attr.countsAgainstTunnel(a, h, BASE + i));
+        }
+    }
+
+    /**
+     * Two destinations, but not enough excused failures through their shared hop
+     * yet — the boundary is the hop cap, not the destination count.
+     */
+    @Test
+    public void aPileUpBelowTheHopCapStaysExempt() {
+        Hash a = dest(1);
+        Hash b = dest(2);
+        Hash h = hop(7);
+        for (int i = 0; i < 2 * SoftFailureAttribution.DEST_CONTRIBUTION_CAP; i++) {
+            _attr.countsAgainstTunnel(i % 2 == 0 ? a : b, h, BASE);
+        }
+        for (int i = 0; i < SoftFailureAttribution.HOP_EXEMPT_CAP - 1; i++) {
+            assertFalse(_attr.countsAgainstTunnel(i % 2 == 0 ? a : b, h, BASE + i));
+        }
+        assertEquals(SoftFailureAttribution.HOP_EXEMPT_CAP - 1,
+                     _attr.exemptFailuresThrough(h, BASE));
+    }
+
+    /**
+     * A caller that cannot name the hop leaves the destination rule in charge —
+     * the hop dimension measures, it does not guess.
+     */
+    @Test
+    public void unnamedHopKeepsTheDestinationExempt() {
+        Hash a = dest(1);
+        for (int i = 0; i < SoftFailureAttribution.DEST_CONTRIBUTION_CAP; i++) {
+            _attr.countsAgainstTunnel(a, null, BASE);
+        }
+        for (int i = 0; i < SoftFailureAttribution.HOP_EXEMPT_CAP * 4; i++) {
+            assertFalse(_attr.countsAgainstTunnel(a, null, BASE + i));
+        }
+        assertEquals(0, _attr.trackedHops());
+        assertEquals(0, _attr.exemptFailuresThrough(null, BASE));
+    }
+
+    /**
+     * The excused count is what the hop rule decides on, and it is not the
+     * destination's count: the destination tally reports 1,040 while the hop
+     * tally reports what this hop carried.
+     */
+    @Test
+    public void excusedFailuresAreCountedPerHop() {
+        Hash a = dest(1);
+        Hash h = hop(7);
+        for (int i = 0; i < SoftFailureAttribution.DEST_CONTRIBUTION_CAP; i++) {
+            _attr.countsAgainstTunnel(a, h, BASE);
+        }
+        assertEquals("charged failures are not excused ones", 0,
+                     _attr.exemptFailuresThrough(h, BASE));
+        _attr.countsAgainstTunnel(a, h, BASE + 1);
+        assertEquals(1, _attr.exemptFailuresThrough(h, BASE + 1));
+    }
+
+    /**
+     * A hop that has been quiet for a window starts clean, so a hop condemned
+     * once is not condemned in advance for the next tunnel that uses it.
+     */
+    @Test
+    public void quietHopTallyDecays() {
+        Hash a = dest(1);
+        Hash b = dest(2);
+        Hash h = hop(7);
+        for (int i = 0; i < SoftFailureAttribution.DEST_CONTRIBUTION_CAP; i++) {
+            _attr.countsAgainstTunnel(a, h, BASE);
+            _attr.countsAgainstTunnel(b, h, BASE);
+        }
+        for (int i = 0; i < SoftFailureAttribution.HOP_EXEMPT_CAP; i++) {
+            _attr.countsAgainstTunnel(i % 2 == 0 ? a : b, h, BASE);
+        }
+        long later = BASE + SoftFailureAttribution.WINDOW_MS + 1;
+        assertEquals(0, _attr.exemptFailuresThrough(h, later));
+    }
+
+    /**
+     * Every tunnel in every pool contributes a hop, so the hop tally needs a
+     * ceiling of its own, pruned the same way the destination tally is.
+     */
+    @Test
+    public void hopTallyIsBounded() {
+        for (int h = 0; h < SoftFailureAttribution.MAX_TRACKED_HOPS + 8; h++) {
+            Hash a = dest(h * 2 + 1);
+            Hash b = dest(h * 2 + 2);
+            for (int i = 0; i < 2 * SoftFailureAttribution.DEST_CONTRIBUTION_CAP; i++) {
+                _attr.countsAgainstTunnel(i % 2 == 0 ? a : b, hop(h), BASE);
+            }
+            for (int i = 0; i < SoftFailureAttribution.HOP_EXEMPT_CAP; i++) {
+                _attr.countsAgainstTunnel(i % 2 == 0 ? a : b, hop(h), BASE);
+            }
+        }
+        assertTrue(_attr.trackedHops() <= SoftFailureAttribution.MAX_TRACKED_HOPS);
     }
 }

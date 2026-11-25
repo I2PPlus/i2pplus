@@ -4613,7 +4613,13 @@ public class TunnelPool {
         long now = _context.clock().now();
         // A status-3 timeout is only evidence against the tunnel if the
         // destination is not the common factor. See SoftFailureAttribution.
-        boolean chargeDest = soft && !_softAttribution.countsAgainstTunnel(dest, now);
+        Hash us = _context.routerHash();
+        Hash hop = firstRemoteHop(cfg, us);
+        // A status-3 timeout is only evidence against the tunnel if the
+        // destination is not the common factor - and the hop is named so the
+        // exemption cannot hide a hop that never delivers. See
+        // SoftFailureAttribution.
+        boolean chargeDest = soft && !_softAttribution.countsAgainstTunnel(dest, hop, now);
         if (soft) {
             if (chargeDest) {
                 if (_log.shouldInfo() && shouldLogSendFailure(now, _lastAttributionLogTime)) {
@@ -4621,14 +4627,19 @@ public class TunnelPool {
                     // The status says which failure the router reported, and the
                     // hops say which tunnel it happened on - without them every
                     // soft failure looks alike, and a stalled download cannot be
-                    // told from a destination that simply stopped answering.
+                    // told from a destination that simply stopped answering. The
+                    // excused count is how many of this destination's timeouts
+                    // this same hop has already been forgiven for, which is the
+                    // number that turns the exemption back on the hop.
                     _log.info(toString() + " -> Soft send failure charged to the destination, "
                               + "not the tunnel"
                               + "\n* Destination: [" + dest.toShortBase32() + ']'
                               + " * Status: " + MessageStatusMessage.getStatusString(status) +
                               " (" + status + ')'
                               + " * Timeouts from it: " + _softAttribution.failuresFrom(dest, now)
-                              + describeHops(cfg, _context.routerHash()));
+                              + describeHops(cfg, us)
+                              + "\n* Excused failures through this hop: " +
+                              _softAttribution.exemptFailuresThrough(hop, now));
                 }
             } else {
                 cfg.incrementSoftFailures();
@@ -4653,7 +4664,7 @@ public class TunnelPool {
                       "\n* Status: " + MessageStatusMessage.getStatusString(status) +
                       " (" + status + ')' +
                       " * Failures now: " + failures +
-                      describeHops(cfg, _context.routerHash()));
+                      describeHops(cfg, us));
         }
         // Condemning a tunnel only helps if another one is coming. Cached by
         // ProfileOrganizer, so reading it per report is a map hit, not six
@@ -4727,6 +4738,33 @@ public class TunnelPool {
             rv.append('[').append(peer.toShortBase64()).append(']');
         }
         return rv.toString();
+    }
+
+    /**
+     * The first hop of a tunnel that is not us, for the attribution's second
+     * dimension.
+     * <p>Once a destination is excused as the common factor, its further
+     * timeouts cost the pool nothing, and nothing asks whether they all rode the
+     * same peer. Naming one peer per failure is what lets
+     * {@link SoftFailureAttribution} notice the pile-up. Our own hop is skipped:
+     * it is the same value on every call, so it would collect every failure in
+     * the pool and blame the router for its own destinations.
+     *
+     * @param cfg the tunnel that carried the failed message, may be null
+     * @param us our own router hash, skipped where it is a hop, may be null
+     * @return the peer to charge alongside the destination, null if the tunnel
+     *         has no remote hop to name
+     * @since 0.9.72+
+     */
+    private static Hash firstRemoteHop(TunnelInfo cfg, Hash us) {
+        if (cfg == null) {return null;}
+        int len = cfg.getLength();
+        for (int hop = 0; hop < len; hop++) {
+            Hash peer = cfg.getPeer(hop);
+            if (peer == null || peer.equals(us)) {continue;}
+            return peer;
+        }
+        return null;
     }
 
     /**
