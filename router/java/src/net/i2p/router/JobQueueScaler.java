@@ -877,28 +877,30 @@ class JobQueueScaler implements Runnable {
         }
 
         // Don't scale up if circuit breaker is open — but jobs being dropped
-        // is an emergency that overrides the breaker. Without this bypass, the
-        // breaker permanently freezes the runner count while droppedJob pressure
-        // continues to climb.
+        // is an emergency that overrides the breaker, and the cooldown with it.
+        // Without this bypass, the breaker permanently freezes the runner count
+        // while droppedJob pressure continues to climb.
         if (_scalingUpDisabled) {
             if (timeSinceLastScale > getCooldownPeriod()) {
                 _scalingUpDisabled = false;
                 _consecutiveFailedScaleUps = 0;
                 _isInExtendedCooldown = false;
                 if (_log.shouldInfo()) {
-                    _log.info("Circuit breaker reset: cooldown expired, allowing scale-up attempts");
+                    _log.info("Circuit breaker reset -> Cooldown expired, scale-up attempts allowed again");
                 }
             } else if (!jobsBeingDropped) {
                 checkScaleDown(activeRunners, readyJobs, maxLag, avgLag, minRunners, inCooldown);
                 return;
             } else if (_log.shouldInfo()) {
-                _log.info("Circuit breaker bypass: jobs being dropped, allowing emergency scale-up");
+                _log.info("Circuit breaker bypassed -> Jobs being dropped" +
+                          " * Runners: " + activeRunners + '/' + maxRunners);
             }
         }
 
         // Determine if we should scale up
         boolean shouldScaleUp = false;
-        boolean canScaleUp = !inCooldown && activeRunners < maxRunners && !_scalingUpDisabled;
+        boolean canScaleUp = canScaleUp(inCooldown, activeRunners, maxRunners, _scalingUpDisabled,
+                                       jobsBeingDropped);
 
         // Suppress normal scale-up when resource saturation is the bottleneck,
         // not thread count. Emergency signals override the suppression.
@@ -1065,6 +1067,34 @@ class JobQueueScaler implements Runnable {
                 _consecutiveScaleDownChecks = 0;
             }
         }
+    }
+
+    /**
+     * Pure decision: may this check add runners at all?
+     * <p>
+     * The cooldown and the circuit breaker both hold scale-ups back, and jobs
+     * being dropped outranks both: the breaker exists because scale-ups were not
+     * helping, and a queue that has begun shedding work is the one condition
+     * where not trying is worse than trying. The bypass used to be only a log
+     * line: the breaker, and the cooldown that the same branch implies, both
+     * still blocked the scale-up, and the pass fell through to the scale-down
+     * path while the queue was dropping jobs. The feedback check is what bounds
+     * the churn this can cause — every scale-up arms a snapshot, and the checks
+     * that follow judge it.
+     *
+     * @param inCooldown true when a scale event happened too recently for another
+     * @param activeRunners runners in effect now
+     * @param maxRunners the ceiling this queue may hold
+     * @param scalingUpDisabled true while the circuit breaker is open
+     * @param jobsBeingDropped true when the queue dropped jobs in the last minute
+     * @return true when this check may add runners
+     * @since 0.9.72+
+     */
+    static boolean canScaleUp(boolean inCooldown, int activeRunners, int maxRunners,
+                              boolean scalingUpDisabled, boolean jobsBeingDropped) {
+        if (activeRunners >= maxRunners) {return false;}
+        boolean breakerOverride = scalingUpDisabled && jobsBeingDropped;
+        return (breakerOverride || !scalingUpDisabled) && (jobsBeingDropped || !inCooldown);
     }
 
     /**
