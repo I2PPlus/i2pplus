@@ -36,6 +36,6 @@
 <p id=fullhistory><a href=/history.txt target=_blank><%=intl._t("View the full change log")%></a></p>
 </div>
 </div>
-<script src=/js/changelog.js></script>
+<script type=module src=/js/changelog.js></script>
 </body>
 </html>
