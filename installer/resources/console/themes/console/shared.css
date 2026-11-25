@@ -246,3 +246,37 @@ a.ring-cell-link{text-decoration:none;color:inherit}
   #banconfig label::before{margin:0 0 0 -4px;height:32px}
   #banconfig .nowrap{min-width:0;margin-left:8px}
 }
+/* Change log. changelog.js rebuilds the <pre>'s text as the list it describes -
+   one unit per entry, a nested list for each entry's sub-list - and lays those
+   units into columns it cuts only between whole entries. The theme's own
+   #changelog pre rules still size and paint the box, and still lay the page out
+   when the script has not run, so everything here is hung off the classes the
+   script adds and only overrides what the rebuilt layout needs: flex instead of
+   a multi-column box, the body font instead of the terminal one, and prose that
+   wraps rather than pre-formatted text. The count, width and gap of the columns
+   come from the theme's own column-count, column-width and column-gap, which
+   changelog.js reads off the box, so the dotted rule between columns sits where
+   the theme's column-rule would have put it. The star and bullet icons are the
+   theme's own images, drawn from the elements instead of from a marker
+   character in the text, which is what lets the prose wrap to the column. */
+#help #changelog pre.reflowed{display:flex;align-items:flex-start;white-space:normal;overflow:auto;font-family:var(--bodyfont)}
+#help #changelog pre.reflowed.sideways{overflow-y:hidden}
+#changelog pre.reflowed .changelog-col{box-sizing:border-box;flex:0 0 auto;min-width:0;min-height:100%;position:relative}
+/* The rule between two columns is drawn in the space between them, at the point
+   their theme-given gap is centred on, so it costs the columns no width and the
+   box shows exactly as many of them as the theme asked for. Its height is the
+   box's own, which changelog.js measures and hands down as --changelog-rule: a
+   column taller than the box, from one entry that cannot be cut any smaller,
+   would otherwise carry a rule past the box and one taller than its neighbours. */
+#changelog pre.reflowed .changelog-col+.changelog-col::before{position:absolute;top:0;height:var(--changelog-rule, 100%);left:calc(var(--changelog-gap, 60px)/-2);border-left:var(--dotted);content:""}
+#changelog pre.reflowed .block{margin:0 0 14px;padding:0 10px 12px;border-bottom:var(--dotted)}
+#changelog pre.reflowed .block.last{border-bottom:0}
+#changelog pre.reflowed .date{margin:0 0 4px;font-size:105%;font-weight:700;line-height:1.75}
+#changelog pre.reflowed .unit{margin:0 0 9px}
+#changelog pre.reflowed .head{position:relative;margin:0;padding-left:18px;line-height:1.5;text-align:left;overflow-wrap:break-word;font-size:102%;font-weight:500}
+#changelog pre.reflowed .head::before{position:absolute;left:2px;top:.35em;width:11px;height:11px;background:var(--star) no-repeat center center/contain;content:""}
+#changelog pre.reflowed .cont{margin:0;padding-left:18px;line-height:1.5;text-align:left;overflow-wrap:break-word}
+#changelog pre.reflowed .items{margin:4px 0 0;padding:0 0 0 16px;list-style:none;font-weight:400}
+#changelog pre.reflowed .items>li{position:relative;margin:0 0 4px 4px;padding-left:16px;line-height:1.5;text-align:left;overflow-wrap:break-word;font-size:102%}
+#changelog pre.reflowed .items>li::before{position:absolute;left:2px;top:.55em;width:7px;height:7px;background:var(--tunn_active) no-repeat center center/contain;content:""}
+#changelog pre.reflowed .tail{display:none}

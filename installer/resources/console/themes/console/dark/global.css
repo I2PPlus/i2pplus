@@ -93,7 +93,7 @@ button::-moz-focus-inner,input::-moz-focus-inner{outline:none;border:0}
 :-moz-broken{display:none}
 
 html,body{min-height:100%;background:#000}
-html{scrollbar-color:#131 #000}
+html{scrollbar-color:#131 #0000}
 body{font-family:var(--bodyfont);color:var(--ink);background:var(--hstripe);background-size:100% 4px,2048px}
 .iframed body{background:var(--vstripe) #000;background-size:100% 4px}
 a:link,a:visited{word-wrap:break-word;text-decoration:none;font-weight:700;color:var(--a)}
@@ -130,7 +130,7 @@ p{text-align:justify;line-height:1.6}
 p:empty{display:none}
 pre,textarea,.widescroll{scrollbar-color:rgba(16,48,16,.4) #0000;transition:ease scrollbar-color .5s}
 pre{overflow-x:auto;text-align:left;font:500 8.5pt var(--monospaced)}
-pre:hover,textarea:hover,.widescroll:hover{scrollbar-color:rgba(24,80,24,.8) rgba(0,0,0,.9);transition:ease scrollbar-color .2s}
+pre:hover,textarea:hover,.widescroll:hover{scrollbar-color:#151 #0000;transition:ease scrollbar-color .2s}
 select{margin:5px 10px;padding:7px 24px 7px 12px;min-width:110px;color:var(--a);font-size:8pt;font-weight:700;text-overflow:ellipsis;outline:none;box-shadow:var(--btn_shadow);border:1px solid #000;border-radius:2px;background:var(--dropdown) no-repeat right 10px center/10px,var(--btn);cursor:pointer;-moz-appearance:none;-webkit-appearance:none;appearance:none}
 select:hover,select:focus{color:var(--hover);border:1px solid #f60}
 select:hover,select:focus,select:active{color:var(--hover);box-shadow:var(--btn_shadow_hover);background:#000 var(--dropdown_hover) no-repeat right 10px center/10px}
