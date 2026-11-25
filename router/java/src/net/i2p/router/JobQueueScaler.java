@@ -29,20 +29,28 @@ import net.i2p.util.SystemVersion;
  * it</li>
  * <li>The queue-growth trend counts only once the backlog is approaching the
  * runner pool, so ordinary jitter in a shallow queue is not a trend</li>
- * <li>Scale DOWN when: readyJobs &lt; activeRunners AND avgLag &lt; scaleDownLagThreshold (sustained)</li>
+ * <li>Scale DOWN when: readyJobs &lt; activeRunners AND avgLag &lt;
+ * scaleDownLagThreshold, sustained over the scale-down check count</li>
  * <li>A scale-down must also wait out a dwell after a scale-up, and may never
  * remove more than that scale-up added, so one quiet interval cannot undo it</li>
- * <li>Bounds: min runners = max(4, cores), max runners = min(2 * {@code router.maxJobRunners}, RAM-based limit)</li>
+ * <li>Bounds: min runners = max(4, cores) plus any held under lease, max runners
+ * = min(2 * {@code router.maxJobRunners}, RAM-based limit, 2 per core), and the
+ * configured value is re-read every tenth check rather than once at startup</li>
  * </ul>
  * <p>
  * <strong>Resource Saturation Gates:</strong>
  * Scale-up is suppressed (not just limited) when the bottleneck is resource
- * saturation rather than thread count. Emergency signals (critical lag,
- * wedged jobs, dropped jobs) override the suppression.
+ * saturation rather than thread count. Emergency signals (critical lag, wedged
+ * jobs, a severe backlog, dropped jobs) override the suppression, but only when
+ * the machine itself has room — a queue that is behind because the CPU is full
+ * or the bandwidth limiter is holding its jobs is not answered by another
+ * thread.
  * <ul>
  * <li>CPU saturation: {@code router.cpuLoad} &gt; 85%</li>
  * <li>GC storm: {@code router.gcPauseTime} &gt; 50 ms/min</li>
- * <li>Network congestion: {@code tunnel.buildSuccessRate} &lt; 50%</li>
+ * <li>Network congestion: {@code tunnel.buildSuccessRate} &lt; 50% — suppresses
+ * an ordinary scale-up only. Congestion is what the queue's own exploratory and
+ * LeaseSet jobs relieve, so an emergency still acts on it</li>
  * <li>Bandwidth saturation: bwLimiter.outboundDelayedTime &gt; 500ms</li>
  * <li>No saturation signal enlarges the step a scale-up adds: if threads are
  * not the bottleneck, adding more of them because of that bottleneck is
@@ -288,6 +296,12 @@ class JobQueueScaler implements Runnable {
     private static final int CPU_SATURATION_THRESHOLD = 85; // % — skip scale-up if CPU saturated
     /** GC pause ms per minute above which scale-up is skipped. */
     private static final long GC_STORM_THRESHOLD = 50; // ms/min — skip scale-up if GC pause time is high
+    /**
+     * Average outbound bandwidth delay, in ms, above which the queue is
+     * bandwidth-bound and scale-up is skipped: the jobs are waiting on the
+     * limiter, not on a runner.
+     */
+    private static final long BANDWIDTH_DELAY_THRESHOLD = 500;
 
     /**
      * The queue state captured before a scale-up, for the feedback check that
@@ -778,7 +792,7 @@ class JobQueueScaler implements Runnable {
             Rate bwRate = bwRs.getRate(RateConstants.ONE_MINUTE);
             if (bwRate != null) bwDelay = (long) bwRate.getAverageValue();
         }
-        boolean bwSaturated = bwDelay > 500; // 500ms+ avg outbound delay = bandwidth-bound
+        boolean bwSaturated = bwDelay > BANDWIDTH_DELAY_THRESHOLD;
 
         // Get message delay from throttle (how backed up we are processing messages)
         long messageDelay = _context.throttle().getMessageDelay();
@@ -935,10 +949,12 @@ class JobQueueScaler implements Runnable {
 
         // Anything that says the queue is behind now, not trending that way:
         // these act on the first check and are not held by the feedback window,
-        // the cooldown, or, for dropped jobs, the circuit breaker.
+        // the cooldown, or, for dropped jobs, the circuit breaker. A subsystem's
+        // lease is an explicit demand and counts the same way.
         boolean floorUnmet = effectiveMin > activeRunners && activeRunners < maxRunners;
-        boolean emergencyNow = criticalLag || criticalSlowJobs || severeBacklog || jobsBeingDropped ||
-                               floorUnmet;
+        boolean emergencyNow = emergencyActionable(criticalLag, criticalSlowJobs, severeBacklog,
+                                                   jobsBeingDropped, cpuSaturated, gcStorm,
+                                                   bwSaturated) || floorUnmet;
 
         // Check if we need to evaluate feedback from last scale-up
         if (_preScaleSnapshot != null) {
@@ -1010,10 +1026,7 @@ class JobQueueScaler implements Runnable {
         if (canScaleUp) {
             long effectiveDelay = Math.max(maxLag, messageDelay);
 
-            // Emergency signals bypass the suppression gate
-            boolean emergencySignal = criticalLag || criticalSlowJobs || jobsBeingDropped;
-
-            if (emergencySignal || !suppressNormal) {
+            if (emergencyNow || !suppressNormal) {
                 if (highBacklog || highLag || highMessageDelay || highAvgLag || slowActiveJobs ||
                     rapidQueueGrowth || messageDelaySpike || delayAccelerating || jobsBeingDropped ||
                     jobsSlowing || testJobsDominant) {
@@ -1040,7 +1053,7 @@ class JobQueueScaler implements Runnable {
                                 info.append(" * Test jobs: ").append(testJobCount)
                                     .append(" (").append(testJobCount * 100 / Math.max(activeRunners, 1))
                                     .append("% of runners)");
-                            if (suppressNormal && emergencySignal)
+                            if (suppressNormal && emergencyNow)
                                 info.append(" * Emergency override * CPU: ").append(cpuLoad).append('%')
                                     .append(" * GC pause: ").append(gcPause).append("ms");
                             _log.info("Scaling up immediately -> Runners: " + activeRunners + '/' + maxRunners +
@@ -1175,6 +1188,61 @@ class JobQueueScaler implements Runnable {
         if (activeRunners >= maxRunners) {return false;}
         boolean breakerOverride = scalingUpDisabled && jobsBeingDropped;
         return (breakerOverride || !scalingUpDisabled) && (jobsBeingDropped || !inCooldown);
+    }
+
+    /**
+     * Pure decision: is the bottleneck the machine rather than the runner
+     * count? Too little CPU left, a GC storm masquerading as lag, and a queue
+     * held up by the bandwidth limiter are all conditions where a further
+     * runner makes them worse, not better.
+     * <p>
+     * A low tunnel build success rate is deliberately not one of them. Transit
+     * and bandwidth pressure is what the queue's own work relieves — the
+     * exploratory, profile and LeaseSet jobs that find better paths and rebuild
+     * the tunnels — so congestion is a reason to run those jobs sooner.
+     *
+     * @param cpuSaturated true when the CPU is past its saturation threshold
+     * @param gcStorm true when GC pause time is past its threshold
+     * @param bwSaturated true when the average outbound delay is past its
+     *                    threshold, so jobs are waiting on the limiter
+     * @return true when adding runners cannot help
+     * @since 0.9.72+
+     */
+    static boolean localResourcesSaturated(boolean cpuSaturated, boolean gcStorm,
+                                           boolean bwSaturated) {
+        return cpuSaturated || gcStorm || bwSaturated;
+    }
+
+    /**
+     * Pure decision: does this check report the queue behind now, rather than
+     * trending that way, in a way more runners would answer?
+     * <p>
+     * These are the signals that act on the first check instead of waiting out
+     * the sustained count, the feedback window, the cooldown or the circuit
+     * breaker. They are only worth acting on while the bottleneck is the runner
+     * count: a queue that is behind because the machine is out of CPU, or
+     * because the bandwidth limiter is holding its jobs, is answered by neither
+     * more threads nor a faster queue.
+     *
+     * @param criticalLag true when the worst lag or the send delay is ten times
+     *                    its threshold
+     * @param criticalSlowJobs true when an active job has run past the wedged
+     *                         multiple of the lag threshold
+     * @param severeBacklog true when the ready depth is past the severe ratio
+     * @param jobsBeingDropped true when the queue dropped jobs in the last minute
+     * @param cpuSaturated true when the CPU is past its saturation threshold
+     * @param gcStorm true when GC pause time is past its threshold
+     * @param bwSaturated true when the average outbound delay is past its
+     *                    threshold
+     * @return true when this check should answer at once
+     * @since 0.9.72+
+     */
+    static boolean emergencyActionable(boolean criticalLag, boolean criticalSlowJobs,
+                                       boolean severeBacklog, boolean jobsBeingDropped,
+                                       boolean cpuSaturated, boolean gcStorm,
+                                       boolean bwSaturated) {
+        if (localResourcesSaturated(cpuSaturated, gcStorm, bwSaturated)) {return false;}
+        return criticalLag || criticalSlowJobs || severeBacklog || jobsBeingDropped;
     }
 
     /**

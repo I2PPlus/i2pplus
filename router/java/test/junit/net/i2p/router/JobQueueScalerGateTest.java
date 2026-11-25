@@ -8,7 +8,8 @@ import org.junit.Test;
 
 /**
  * The limits on what the scaler may do to the runner count: the gates in front
- * of a scale-up, and the floor under every removal — the configured minimum plus
+ * of a scale-up, which conditions are urgent enough to skip the pacing they
+ * impose, and the floor under every removal — the configured minimum plus
  * whatever subsystems are holding under lease.
  *
  * <p>The breaker's dropped-jobs override used to be only a log line. The branch
@@ -16,8 +17,11 @@ import org.junit.Test;
  * cooldown in place, so no scale-up could follow it, and the pass went on to the
  * scale-down path while the queue was shedding work. The rollback floored itself
  * at the configured minimum alone and so took back runners a subsystem was still
- * counting on, which the floor path handed straight back on the next check.
- * These pin which conditions the override outranks, and where a removal stops.
+ * counting on, which the floor path handed straight back on the next check. And
+ * the emergency override answered a dropped-job storm with more threads even
+ * when the machine was out of CPU or the bandwidth limiter was holding the
+ * queue. These pin which conditions the override outranks, where a removal
+ * stops, and when more runners cannot help at all.
  *
  * @since 0.9.72+
  */
@@ -119,5 +123,61 @@ public class JobQueueScalerGateTest {
         // 12 runners, a base minimum of 4, and a lease holding 6 of them
         assertEquals(2, JobQueueScaler.rollbackCount(4, 12, 10));
         assertEquals(0, JobQueueScaler.rollbackCount(4, 10, 10));
+    }
+
+    /**
+     * A queue that is behind because the machine is out of CPU, or because the
+     * bandwidth limiter is holding its jobs, is not answered by another thread.
+     */
+    @Test
+    public void anEmergencyIsNotActionableWhenTheMachineIsTheBottleneck() {
+        assertFalse(JobQueueScaler.emergencyActionable(true, false, false, false,
+                                                       true, false, false));
+        assertFalse(JobQueueScaler.emergencyActionable(false, true, false, false,
+                                                       false, true, false));
+        assertFalse(JobQueueScaler.emergencyActionable(false, false, true, false,
+                                                       false, false, true));
+        assertFalse(JobQueueScaler.emergencyActionable(true, true, true, true,
+                                                       true, true, true));
+    }
+
+    /**
+     * With the machine's own resources free, each of the four signals is
+     * actionable on the first check that sees it.
+     */
+    @Test
+    public void anEmergencyIsActionableWhenRunnersAreTheBottleneck() {
+        assertTrue(JobQueueScaler.emergencyActionable(true, false, false, false,
+                                                       false, false, false));
+        assertTrue(JobQueueScaler.emergencyActionable(false, true, false, false,
+                                                       false, false, false));
+        assertTrue(JobQueueScaler.emergencyActionable(false, false, true, false,
+                                                       false, false, false));
+        assertTrue(JobQueueScaler.emergencyActionable(false, false, false, true,
+                                                       false, false, false));
+    }
+
+    /**
+     * A quiet check reports no emergency at all, whatever the machine is doing.
+     */
+    @Test
+    public void aQuietCheckIsNeverAnEmergency() {
+        assertFalse(JobQueueScaler.emergencyActionable(false, false, false,
+                                                       false, false, false, false));
+        assertFalse(JobQueueScaler.emergencyActionable(false, false, false,
+                                                       false, true, true, true));
+    }
+
+    /**
+     * A low tunnel build success rate is congestion, and congestion is what the
+     * queue's own exploratory and LeaseSet jobs relieve, so it is not counted
+     * with the machine's own saturation.
+     */
+    @Test
+    public void networkCongestionIsNotLocalSaturation() {
+        assertFalse(JobQueueScaler.localResourcesSaturated(false, false, false));
+        assertTrue(JobQueueScaler.localResourcesSaturated(true, false, false));
+        assertTrue(JobQueueScaler.localResourcesSaturated(false, true, false));
+        assertTrue(JobQueueScaler.localResourcesSaturated(false, false, true));
     }
 }
