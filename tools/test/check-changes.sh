@@ -237,6 +237,11 @@ if [ ${#SRC[@]} -gt 0 ]; then
         [ -d "$d" ] && find "$d" -name '*.java' -exec touch {} +
     done < <(test_roots)
 fi
+# The tally below reads whatever TEST-*.xml is in REPORTS. If the suite above fails to
+# compile, ant writes no new reports and the tally is printed from the last run that did —
+# a broken build then reports the previous run's green count. Clear the directory first so
+# a compile failure shows up as `tests: 0`, never as someone else's pass.
+rm -rf "$REPORTS"
 ant -q -f "$BUILD" $ANTPROPS "${TARGET:-junit.test}" 2>&1 | rg -n 'error:|BUILD' | head -12
 REPORTS="$REPORTS" python3 - <<'EOF'
 import glob, os, xml.etree.ElementTree as ET
