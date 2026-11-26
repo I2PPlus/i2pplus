@@ -5364,6 +5364,24 @@ class Connection {
     }
 
     /**
+     * The entry for a stalled established connection rotating its outbound tunnel.
+     * <p>The run length and the firing count are what make the line actionable:
+     * they say whether this is one lost packet or a tunnel that is not carrying
+     * anything, and the rotation is the router's answer to the second case.
+     *
+     * @param label the connection's {@link #shortLabel()} prefix
+     * @param ageMs how long the connection has gone without forward ACK progress
+     * @param firings retransmit timer firings in that run
+     * @return the log entry, never null
+     * @since 0.9.72+
+     */
+    static String stallRotationLine(String label, long ageMs, int firings) {
+        return label + " -> No forward ACK progress for " + DataHelper.formatDuration(ageMs) +
+               " across " + firings + " retransmit firings" +
+               "\n* Rotating the next send to a fresh outbound tunnel";
+    }
+
+    /**
      * The connection-manager half of a disconnect entry. Three disconnect paths
      * report it, and printing the boolean would read as "true" where the reader
      * needs to know whether the manager dropped the connection.
@@ -5952,11 +5970,23 @@ class Connection {
             if (stallDetected) {
                 if (shouldLogStallEdge(true, _retransmitStallLogged)) {
                     _retransmitStallLogged = true;
+                    // The stall edge is the only signal an established connection
+                    // gets that its outbound tunnel is the problem, and until now it
+                    // was only ever logged: a measured IRC path carried 16 retransmit
+                    // firings of one packet for 91s without a single packet coming
+                    // back, and the application's own patience ran out first. Arm the
+                    // fresh-tunnel flag the send path already honours, so the next
+                    // packet of this pass - resends go through PacketQueue.enqueue()
+                    // too - leaves on a different tunnel. Once per stall episode, on
+                    // the same edge as the WARN: a stall that keeps stalling has to
+                    // still reach the liveness backstop.
+                    setNextSendFreshConnection();
+                    _context.statManager().addRateData("stream.con.stallRotation", 1);
                     if (_log.shouldWarn()) {
                         _log.warnThrottled("streaming-no-ack-progress",
-                                           shortLabel() + " -> No forward ACK progress for "
-                                           + (getRetransmitStallAgeMs(_context.clock().now()) / 1000L)
-                                           + "s across " + _retransmitCount + " retransmit firings");
+                                           stallRotationLine(shortLabel(),
+                                                             getRetransmitStallAgeMs(_context.clock().now()),
+                                                             _retransmitCount));
                     }
                 }
             } else if (_retransmitStallLogged) {
@@ -6376,9 +6406,10 @@ class Connection {
         /**
          * Records a retransmit timer firing and detects stalls.
          * If ackPackets() was called since the last retransmit, resets the
-         * counter. Otherwise increments it; after 2 consecutive firings
-         * without ACK progress, signals a tunnel rotation via
-         * _nextSendFreshConnection.
+         * counter. Otherwise increments it, and reports a stall once the run
+         * without forward ACK progress passes RETRANSMIT_STALL_MS on a
+         * connection the handshake has established. The caller turns that edge
+         * into a tunnel rotation via _nextSendFreshConnection.
          *
          * @return true if a retransmit stall was detected
          * @since 0.9.71+

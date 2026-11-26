@@ -117,4 +117,29 @@ public class ConnectionLogFormatTest {
         assertEquals("Unknown", Connection.inactivityActionName(-1));
         assertEquals("Unknown", Connection.inactivityActionName(3));
     }
+
+    /**
+     * A stalled established stream says what it measured and what it does about
+     * it: the run length and firing count say whether one packet was lost or the
+     * tunnel is carrying nothing, and the fresh tunnel is the answer to the
+     * second case.
+     */
+    @Test
+    public void stallEntryStatesTheStallAndTheRotation() {
+        assertEquals("[abcdefgh] -> No forward ACK progress for 30s across 16 retransmit firings" +
+                     "\n* Rotating the next send to a fresh outbound tunnel",
+                     Connection.stallRotationLine("[abcdefgh]", 30000L, 16));
+    }
+
+    /**
+     * The run length comes from the unit formatter, not from dividing by 1000:
+     * a stall of minutes has to read as minutes, where the arithmetic form
+     * printed 185s.
+     */
+    @Test
+    public void stallEntryFormatsTheRunLengthInItsOwnUnits() {
+        assertEquals("[abcdefgh] -> No forward ACK progress for 3m across 24 retransmit firings" +
+                     "\n* Rotating the next send to a fresh outbound tunnel",
+                     Connection.stallRotationLine("[abcdefgh]", 185000L, 24));
+    }
 }

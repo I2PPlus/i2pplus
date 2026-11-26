@@ -1946,6 +1946,13 @@ class ConnectionManager {
           // connection's own established baseline (see Connection.stallVerdict).
           _context.statManager().createRequiredRateStat("stream.con.stallDetected", "Streams that stopped delivering bytes entirely", "Stream", RATES);
           _context.statManager().createRequiredRateStat("stream.con.throttleDetected", "Streams delivering far below their own established rate", "Stream", RATES);
+          // The answer to a stall, not another way to see it: an established stream
+          // with no forward ACK progress for RETRANSMIT_STALL_MS puts its next send -
+          // resends go through PacketQueue.enqueue() too - on a different outbound
+          // tunnel. Counted once per stall episode, so against stallDetected it says
+          // how often a stalled stream changed path instead of only reporting that it
+          // was stuck.
+          _context.statManager().createRequiredRateStat("stream.con.stallRotation", "Established streams that changed outbound tunnel on a retransmit stall", "Stream", RATES);
           // A congestion window that stays at the loss-cut floor for minutes. Neither
           // verdict above can see it: bytes keep being acknowledged, just slowly, and
           // a stream that small is never below the goodput floor. This is the case
