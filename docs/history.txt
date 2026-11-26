@@ -1,35 +1,62 @@
+2026-11-26 dr|z3d
+  * I2PTunnel:
+    - Hold an IRC connection through a multi-minute latency spike on the path
+      to its server - streaming's 90s unacked-packet bound and 300s silence
+      window end the session first; 21 remote-silence disconnects in 24
+      minutes of DEBUG, every one just past the 300s window
+    - Bound an idle IRC socket read at that same 320s, not the 10 minutes it
+      waited out outright, and let the tunnel's own readTimeout win
+  * I2PSnark:
+    - Tell the frame host to re-measure when a refresh rewrites the table - a
+      row dropped by an active filter, or a status change that moves a torrent
+      out of one, left the container at the old height for a whole refresh cycle
+  * Streaming:
+    - A stalled established stream puts its next send on a fresh outbound
+      tunnel instead of only logging the stall - one IRC path burned 16
+      retransmit firings of a single packet over 91s with nothing coming back
+  * Console:
+    - Drag and wheel-roll the performance graphs through time, on /graphs and
+      /graph; the window is carried as wall-clock, so one page of graphs at
+      1-, 5- and 15-minute rates keeps one timeframe
+    - A gesture moves every graph with the pointer once the box has proved it
+      can redraw one inside the budget - 26 graphs land in 25-78ms here - and
+      previews one and commits the rest where it cannot
+    - The readout's crosshair steps aside for the gesture it is standing in,
+      and the wheel goes back to being a scroll at the ends of the zoom
+
 2026-11-25 dr|z3d
   * Router:
-    - No runner takes or loses a slot another one holds - an exiting runner
-      removing by key deleted its replacement's registration; PR #1331
-    - Stop the job-queue scaler rebuilding its thread pool against a queue
-      that was never behind - 51 scale-ups, 63 down and 167 threads created
-      in 2.25h, while worst ready-job lag averaged 0.38ms
-    - Answer a queue that is behind now - the verdict on the last scale-up
-      held every decision for 8s, and the breaker's bypass was only a log line
-    - Count the runner threads the queue never sees - a runner that lost its
-      slot keeps taking jobs, outside every limit, invisible but in a dump
+    - Stop the job-queue scaler resizing on a queue that was never behind, and
+      answer the one that is; no runner takes or loses a slot another holds,
+      and the runners the queue never sees are counted; PR #1331 deleted one
     - Charge the hop carrying every excused send failure - 1,040 sat on one
-      destination - and keep our own permanent hash out of the hop list
-    - Name the pool a wrong-target message arrived on, and the status and
-      tunnel a failed send carried; 136 ERRORs in 55s from one peer
+      destination - and keep our own hash out of the hop list; 136 ERRORs in 55s
+    - Size the tunnel test window, and the multiplier over it, off the rounds
+      that answered - 19.3s failures were the 15s window quoting itself
+    - Keep a build whose first hop is busy and re-pick the hop - the gate
+      discarded whole builds at the gateway; 85.8/min paced out
+    - Send the next message off a tunnel a stream stalled on - the stall mark
+      had no reader, so the re-draw landed back on it one send in N
+    - One line per NetDb search query, not three; 440,000 lines in 23 minutes
+    - Print a refused LeaseSet's key in full only when the key check failed
   * Streaming:
-    - Wait for the path's clock before rotating a connect - the trigger
-      counted sends; 12 fired 2s into a 20s phase
-    - Give a replacement tunnel its own stall budget - the give-up deadline
-      was anchored at the packet, so a fresh path got 10s of a 90s window
+    - Wait for the path's clock before rotating a connect, and give a
+      replacement tunnel its own 90s budget, not the packet's 10s left
+    - Judge a stall from the first acknowledged byte - the check armed only
+      after three goodput windows; a body silent 162s was never examined
+  * I2PTunnel:
+    - Try the outbound tunnels a connect failover exists for - one leg took the
+      whole 20s window - and measure a proxied body's silence mid-download; pack
+      the request header dump tighter, 10,600 lines on pairs that never vary
   * Core:
-    - Put a payload arrival on one line instead of three, and stop naming the
-      handler the type names; 21,046 arrivals in 22 minutes
+    - Put a payload arrival on one line instead of three; 21,046 in 22 minutes
   * Transport:
-    - Say which state made a SessionConfirmed corrupt - it was welded onto
-      the peer's address with no label, and the cause rode a bare bullet
+    - Say which state made a SessionConfirmed corrupt, unlabeled and welded on
+    - Say which kind of message dies in the outbound queue; 33 a minute at 11s
   * Console:
-    - Shrink an iframe when its framed page does - it compared a measurement
-      with its own last report, not the height on screen
+    - Shrink an iframe when its framed page does, not its own last report
   * Build:
-    - Compile the jetty tree into jetty-i2p.jar, not a hand-kept file list,
-      and judge the jar against its sources
+    - Compile the jetty tree into jetty-i2p.jar, not a hand-kept file list
 
 2026-11-24 dr|z3d
   * NetDb:
