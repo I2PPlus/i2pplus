@@ -1176,16 +1176,21 @@ public class IterativeSearchJob extends FloodSearchJob {
         dlm.setSearchKey(_key);
         dlm.setSearchType(_isLease ? DatabaseLookupMessage.Type.LS : DatabaseLookupMessage.Type.RI);
 
-        if (_log.shouldDebug()) {
+        if (_log.shouldDebug() && _key != null && peer != null) {
             // This query's ordinal: the counter is taken once the lookup is
-            // dispatched, below, so this one is the next number.
+            // dispatched, below, so this one is the next number. The two flags
+            // only earn their own line when one of them is set - both were
+            // false on 63% of the 153k queries in two log files.
             int attempt = _queriesSent + 1;
-            if (_key != null && peer != null) {
-                _log.debug("IterativeSearch for " + (_isLease ? "LeaseSet" : "Router") +
-                           " " + keyText() + " -> Attempt " + attempt +
-                           "\n* Querying: [" + peer.toShortBase64() + "]" +
-                           " * Direct: " + isDirect + " * Reply via client tunnel: " + isClientReplyTunnel);
+            StringBuilder buf = new StringBuilder(96);
+            buf.append("IterativeSearch for ").append(_isLease ? "LeaseSet " : "Router ")
+               .append(keyText()).append(" -> Attempt ").append(attempt)
+               .append(" to [").append(peer.toShortBase64()).append(']');
+            if (isDirect || isClientReplyTunnel) {
+                buf.append("\n* Direct: ").append(isDirect)
+                   .append(" * Client reply tunnel: ").append(isClientReplyTunnel);
             }
+            _log.debug(buf.toString());
         }
         if (peer != null) {_sentTime.put(peer, Long.valueOf(now));}
         getContext().statManager().addRateData("netDb.searchMessageCount", 1);
@@ -1438,9 +1443,17 @@ public class IterativeSearchJob extends FloodSearchJob {
             if (_failedPeers.contains(peer) || _unheardFrom.contains(peer) || _skippedPeers.contains(peer)) {return;} // already tried or skipped
             if (!_toTry.add(peer)) {return;} // already in the list
         }
-        if (_log.shouldInfo()) {
-            _log.info("Received new Router [" + peer.toShortBase64() + "] from DbSearchReplyMsg" +
-                      (ri != null ? " -> Already known" : " -> Added to the peers to try"));
+        if (ri != null) {
+            // 45,340 of the 46,611 lines this site wrote said "already known" -
+            // a peer we already had, added to the list to try. The interesting
+            // case is the one that follows, a Floodfill we did not have.
+            if (_log.shouldDebug()) {
+                _log.debug("Router [" + peer.toShortBase64() + "] in a DbSearchReplyMsg" +
+                           " -> Already known, added to the peers to try");
+            }
+        } else if (_log.shouldInfo()) {
+            _log.info("Router [" + peer.toShortBase64() + "] in a DbSearchReplyMsg" +
+                      " -> New to us, added to the peers to try");
         }
         retry();
     }
