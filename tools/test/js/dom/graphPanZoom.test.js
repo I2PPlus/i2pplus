@@ -191,15 +191,21 @@ test("a settled span becomes the minutes the graph configuration holds", async (
   assert.equal(m.configMinutes(96 * 300000), 480);
 });
 
-test("a form's fields become one url-encoded body, one value per name", async () => {
+test("a form's fields become one url-encoded body, the FIRST value per name", async () => {
   const m = await load();
-  // A form holds a repeated name for each checkbox whether or not it is checked; the
-  // body must carry one value per name, the checked one, as a real submit does.
+  // The console's slider boxes are a checked input followed by a hidden one carrying the
+  // opposite value, so a form holds the name twice. A servlet's getParameter() answers
+  // with the first, so the first is what the body must carry: keeping the last instead
+  // posts the hidden value for every option the page has switched on, and one save
+  // turns glow, smoothing, the legend and the rest off.
   const fields = [["action", "Save"], ["nonce", "CN123"], ["periodCount", "480"],
-                  ["hideRestarts", "false"], ["hideRestarts", "true"]];
-  assert.equal(m.formBody(fields), "action=Save&nonce=CN123&periodCount=480&hideRestarts=true");
-  assert.equal(m.formBody(fields, {periodCount: 90}),
-               "action=Save&nonce=CN123&periodCount=90&hideRestarts=true");
+                  ["graphGlow", "true"], ["graphGlow", "false"],
+                  ["hideRestarts", "true"], ["hideRestarts", "false"]];
+  assert.equal(m.formBody(fields),
+               "action=Save&nonce=CN123&periodCount=480&graphGlow=true&hideRestarts=true");
+  // An override still wins over both halves of the pair.
+  assert.equal(m.formBody(fields, {periodCount: 90, nonce: "CN999"}),
+               "action=Save&nonce=CN999&periodCount=90&graphGlow=true&hideRestarts=true");
   assert.equal(m.formBody([["q", "a b&c"]]), "q=a%20b%26c");
   assert.equal(m.formBody(null), "");
 });
@@ -241,10 +247,12 @@ test("a roll that can move the window cancels the page scroll before it awaits a
   assert.equal(cancelled, 1, "cancelled synchronously, before the metadata fetch");
 });
 
-test("a roll at the end of the zoom goes back to being a page scroll", async () => {
+test("a roll over a graph is the page's scroll nowhere, even at the end of the zoom", async () => {
   const m = await load();
   globalThis.fetch = () => Promise.resolve({ok: false});
-  // Already at the shortest window the module allows: rolling up further has nowhere to go.
+  // Already at the shortest window the module allows: rolling up further has nowhere to
+  // go. The wheel is still cancelled, because a page that starts scrolling under a
+  // wheel that is zooming a graph moves the graph off the screen mid-gesture.
   const atFloor = {
     closest: (sel) => (sel === "img.statimage" ? atFloor : null),
     getAttribute: () => null,
@@ -255,7 +263,27 @@ test("a roll at the end of the zoom goes back to being a page scroll", async () 
   let cancelled = 0;
   m.onWheel({target: atFloor, deltaY: -120, deltaMode: 0, clientX: 200, clientY: 50,
              preventDefault: () => {cancelled++;}});
-  assert.equal(cancelled, 0, "the wheel is the page's again");
+  assert.equal(cancelled, 1, "the wheel is claimed even where the zoom cannot move");
+});
+
+test("a roll over the box holding a graph belongs to that graph", async () => {
+  const m = await load();
+  globalThis.fetch = () => Promise.resolve({ok: false});
+  const img = {
+    closest: (sel) => (sel === "img.statimage" ? img : null),
+    getAttribute: () => null,
+    src: "http://127.0.0.1:7657/viewstat.jsp?stat=router.activePeers&period=60000&periodCount=480",
+    naturalWidth: 379,
+    getBoundingClientRect: () => ({left: 0, top: 0, width: 379, height: 178}),
+  };
+  // The console wraps every graph in .graphContainer; a roll on the box's border has to
+  // reach the graph inside it, not fall through to the page.
+  const box = {closest: (sel) => (sel === ".graphContainer" ? box : null),
+               querySelector: (sel) => (sel === "img.statimage" ? img : null)};
+  let cancelled = 0;
+  m.onWheel({target: box, deltaY: -120, deltaMode: 0, clientX: 200, clientY: 50,
+             preventDefault: () => {cancelled++;}});
+  assert.equal(cancelled, 1);
 });
 
 test("a roll anywhere else keeps the page's own scroll", async () => {
@@ -274,6 +302,24 @@ test("a graph takes its drag gesture back from the page's own scrolling", async 
   // A touch or pen drag is a scroll gesture by default and the browser claims it, so
   // the pan never sees a move; touch-action has to be set before the surface is touched.
   assert.match(rules, /img\.statimage\s*\{\s*touch-action:\s*none/);
+});
+
+test("the native drag of a graph or of the link wrapped around it is cancelled", async () => {
+  const m = await load();
+  const img = {closest: (sel) => (sel === "img.statimage" ? img : null)};
+  let cancelled = 0;
+  m.onDragStart({target: img, preventDefault: () => {cancelled++;}});
+  assert.equal(cancelled, 1, "the image itself");
+  // Every console graph sits inside a link - to the single-graph page from the list,
+  // back to the list from the single graph - and a drag that starts on the link is
+  // dragged by the browser as a link unless it is cancelled there too.
+  const box = {closest: (sel) => (sel === ".graphContainer" ? box : null),
+               querySelector: (sel) => (sel === "img.statimage" ? img : null)};
+  m.onDragStart({target: box, preventDefault: () => {cancelled++;}});
+  assert.equal(cancelled, 2, "the container holding it");
+  // Somewhere else on the page, a drag is the page's own business.
+  m.onDragStart({target: {closest: () => null}, preventDefault: () => {cancelled++;}});
+  assert.equal(cancelled, 2, "not a graph");
 });
 
 test("a drag keeps winding the timeframe past the edge of the graph", async () => {

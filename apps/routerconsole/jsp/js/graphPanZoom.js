@@ -37,9 +37,6 @@ const FAN_OUT_KEY = "i2p.graphRenderMs";
 /** ms of gesture silence after which the settled span is written to the config. */
 const CONFIG_SETTLE_MS = 1500;
 
-/** ms a nonce read from the page stays worth posting before it is re-read. */
-const NONCE_MAX_MS = 45000;
-
 /** Graph images a gesture may start on. */
 const GRAPH_SELECTOR = "img.statimage";
 
@@ -65,6 +62,13 @@ const WHEEL_PIXELS_PER_NOTCH = 100;
 
 /** Drag distance before a press becomes a pan, so a click stays a click. */
 const DRAG_SLOP_PX = 4;
+
+/**
+ * ms after a pan is released that the click the browser fires from the same press is
+ * thrown away. Every graph is a link - to the single-graph page on /graphs, back to the
+ * list on /graph - and a pan released over one of them is otherwise a visit to it.
+ */
+const CLICK_SUPPRESS_MS = 300;
 
 /** ms of wheel silence after which the pending window is committed. */
 const WHEEL_COMMIT_MS = 150;
@@ -244,6 +248,12 @@ export function configMinutes(spanMs, minMinutes = 5, maxMinutes = 131040) {
  * no parameters at all, saves with a 200, and changes nothing - so the body is built
  * here rather than handed to fetch as form data.
  *
+ * <p>Where a name appears twice, the FIRST value wins, because that is what the server
+ * reads: the slider boxes in the graph form are a checked input followed by a hidden
+ * one carrying the opposite value, and a servlet's getParameter() answers with the first
+ * of them. Keeping the last instead posts the hidden value for every option the page
+ * has switched on, and one save turns glow, smoothing, the legend and the rest off.
+ *
  * @function formBody
  * @param {Array<Array<string>>} fields name and value pairs, as a form holds them, a
  *                                      repeated name for each unchecked duplicate box
@@ -251,11 +261,16 @@ export function configMinutes(spanMs, minMinutes = 5, maxMinutes = 131040) {
  * @returns {string} the url-encoded body
  */
 export function formBody(fields, overrides) {
-  const one = {};
-  (fields || []).forEach((pair) => {one[pair[0]] = pair[1];});
-  Object.keys(overrides || {}).forEach((key) => {one[key] = String(overrides[key]);});
-  return Object.keys(one).map((key) => encodeURIComponent(key) + "=" +
-          encodeURIComponent(one[key])).join("&");
+  const one = new Map();
+  (fields || []).forEach((pair) => {
+    if (!one.has(pair[0])) {one.set(pair[0], pair[1]);}
+  });
+  Object.keys(overrides || {}).forEach((key) => {one.set(key, String(overrides[key]));});
+  let body = "";
+  one.forEach((value, key) => {
+    body += (body ? "&" : "") + encodeURIComponent(key) + "=" + encodeURIComponent(value);
+  });
+  return body;
 }
 
 /** Metadata cache, keyed by the image URL without its cache-busting time. */
@@ -321,8 +336,6 @@ export {metaFor};
 let pending = null;
 /** The graph the running gesture started on. */
 let anchor = null;
-/** The src each touched graph had before the gesture, for the double-click reset. */
-const originals = new WeakMap();
 /** Timer for the wheel commit. */
 let commitTimer = null;
 /** Frame handle for the drag preview. */
@@ -333,6 +346,8 @@ let fanned = false;
 let holdTimer = null;
 /** Timer that ends the claim a roll of the wheel holds over the page. */
 let claimTimer = null;
+/** ms after a pan's release during which the browser's own click is swallowed. */
+let suppressClickUntil = 0;
 /** ms the last graph render took, -1 until one has been timed. */
 let fanOutMs = rememberedFanOut();
 /** Timer for the deferred configuration write. */
@@ -357,7 +372,6 @@ function applyWindow(img, win) {
   const offsetMs = Math.min(maxMs, Math.max(0, win.offsetMs));
   const counts = windowParams(spanMs, offsetMs, periodMs);
   if (!counts.periodCount) {return;}
-  if (!originals.has(img)) {originals.set(img, img.src);}
   const url = new URL(img.src, location.href);
   url.searchParams.set("periodCount", String(counts.periodCount));
   if (counts.end > 0) {url.searchParams.set("end", String(counts.end));}
@@ -434,34 +448,37 @@ function rememberedFanOut() {
 }
 
 /**
- * The form's CSRF nonce, refreshed when it has gone stale.
+ * A CSRF nonce for our own POST, minted by re-reading the page that carries the form.
  *
- * <p>The console mints a nonce per page and ages it out, so a page left open through a
- * quiet afternoon posts a nonce the session no longer accepts and the save is refused.
- * A fresh one costs one GET of the page that carries the form.
+ * <p>The console issues one nonce per form and consumes it on the first POST that
+ * carries it, so posting the nonce already sitting in the page's form spends it: our
+ * save succeeds and the Save button the user then presses is refused for a bad nonce.
+ * Minting our own costs one GET of the page and leaves the form's nonce unspent.
  *
- * @function freshNonce
+ * <p>The nonce also ages out - a page left open through a quiet afternoon carries one
+ * the session no longer accepts - which re-reading the page fixes in the same pass.
+ *
+ * @function mintNonce
  * @param {HTMLFormElement} form the configuration form on the page
- * @returns {Promise<string>} a nonce to post, possibly the one already in the form
+ * @returns {Promise<string>} a nonce to post; the form's own only if the page cannot be
+ *                            re-read, and that fallback spends it
  */
-async function freshNonce(form) {
-  const field = form.querySelector("[name=nonce]");
-  const current = field ? field.value : "";
-  if (current && Date.now() - nonceAt < NONCE_MAX_MS) {return current;}
+async function mintNonce(form) {
   try {
     const response = await fetch(form.getAttribute("action") || "/graphs", {credentials: "same-origin"});
-    if (!response.ok) {return current;}
-    const html = await response.text();
-    const found = /name=nonce value=([^ >]*)/.exec(html);
-    if (found && found[1]) {
-      if (field) {field.value = found[1];}
-      nonceAt = Date.now();
-      return found[1];
+    if (response.ok) {
+      const html = await response.text();
+      const found = /name=nonce value=([^ >]*)/.exec(html);
+      if (found && found[1]) {
+        nonceAt = Date.now();
+        return found[1];
+      }
     }
   } catch (e) {
-    // A page that cannot be re-read posts the nonce it already has.
+    // A page that cannot be re-read falls back to the nonce it already has.
   }
-  return current;
+  const field = form.querySelector("[name=nonce]");
+  return field ? field.value : "";
 }
 
 /**
@@ -486,12 +503,15 @@ async function saveConfig(win) {
   savedMinutes = minutes;
   const fields = [];
   new FormData(form).forEach((value, key) => {fields.push([key, value]);});
-  const nonce = await freshNonce(form);
-  if (nonce) {fields.push(["nonce", nonce]);}
+  const nonce = await mintNonce(form);
   try {
     const response = await fetch(form.getAttribute("action") || "/graphs", {
       method: "POST",
-      body: formBody(fields, {periodCount: minutes}),
+      // The minted nonce goes in as an override, not another field: the form's own
+      // nonce is already in the field list, and the first value for a name is the one
+      // the server reads, so appending a second would post the spent one and leave this
+      // one unused.
+      body: formBody(fields, {periodCount: minutes, nonce: nonce}),
       credentials: "same-origin",
       headers: {"content-type": "application/x-www-form-urlencoded"},
     });
@@ -576,7 +596,7 @@ function endGesture() {
  */
 async function onPointerDown(event) {
   if (event.button !== 0) {return;}
-  const img = event.target.closest ? event.target.closest(GRAPH_SELECTOR) : null;
+  const img = graphUnder(event.target);
   if (!img) {return;}
   beginGesture();
   const meta = await metaFor(img);
@@ -589,6 +609,8 @@ async function onPointerDown(event) {
   const startOffset = pending.offsetMs;
   const startX = event.clientX;
   const spanMs = pending.spanMs;
+  /** Whether this press travelled far enough to be a pan rather than a click. */
+  let panned = false;
   /**
    * Follows the pointer until it is released.
    * @function onMove
@@ -605,6 +627,7 @@ async function onPointerDown(event) {
     offset = panOffsetMs(offset, spanMs, area.width, move.clientX - lastX);
     lastX = move.clientX;
     if (Math.abs(lastX - startX) < DRAG_SLOP_PX) {return;}
+    panned = true;
     pending = {spanMs: spanMs, offsetMs: offset};
     preview();
   };
@@ -617,6 +640,7 @@ async function onPointerDown(event) {
     document.removeEventListener("pointermove", onMove);
     document.removeEventListener("pointerup", onUp);
     document.removeEventListener("pointercancel", onUp);
+    if (panned) {suppressClickUntil = Date.now() + CLICK_SUPPRESS_MS;}
     if (pending && anchor) {
       // A live drag has already re-pointed every graph on the last frame; only a
       // preview drag still owes the rest of the page its window.
@@ -639,23 +663,48 @@ async function onPointerDown(event) {
  * @param {WheelEvent} event the wheel movement
  * @returns {Promise<void>} when the geometry needed to anchor the zoom is read
  */
+/**
+ * The graph a gesture belongs to.
+ *
+ * <p>The console wraps every graph in a .graphContainer span, and on the single-graph
+ * page the image sits inside a link back to the graph list. A press or a roll that
+ * lands on the box's border, or on the link rather than on the plot, belongs to that
+ * graph all the same, so the lookup walks up to the box and back down to its image.
+ *
+ * @function graphUnder
+ * @param {Element} target the event's target
+ * @returns {?HTMLImageElement} the graph under the pointer, null if there is none
+ */
+function graphUnder(target) {
+  if (!target || !target.closest) {return null;}
+  const img = target.closest(GRAPH_SELECTOR);
+  if (img) {return img;}
+  const box = target.closest(".graphContainer");
+  return box ? box.querySelector(GRAPH_SELECTOR) : null;
+}
+
 async function onWheel(event) {
-  const img = event.target.closest ? event.target.closest(GRAPH_SELECTOR) : null;
+  // Claimed over a graph image or the box that holds it: the console wraps every graph
+  // in .graphContainer, and a roll that lands on its border belongs to that graph as
+  // much as one that lands on the plot.
+  const img = graphUnder(event.target);
   if (!img) {return;}
-  // The clamp is decided here, synchronously, before anything is awaited: the browser
-  // commits a wheel scroll as the listeners run, so a preventDefault that arrives after
-  // the metadata has come back is one the page never hears about. The span the image is
-  // already showing and its own rate period are both in its src, which is enough to know
-  // whether this notch can move the window at all.
+  // The wheel belongs to the graph whenever the pointer is over it - at the ends of the
+  // zoom as much as in the middle of one. A roll that has run out of span is swallowed,
+  // not handed back: a page that suddenly scrolls under a wheel that is zooming a graph
+  // moves the graph the user is looking at off the screen mid-gesture.
+  //
+  // Cancelled here, synchronously, before anything is awaited: the browser commits a
+  // wheel scroll as the listeners run, so a preventDefault that arrives after the
+  // metadata has come back is one the page never hears about.
+  event.preventDefault();
   const params = new URL(img.src, location.href).searchParams;
   const periodMs = periodMsOf(params);
   const win = windowOf(params, periodMs);
   const notches = wheelNotches(event.deltaY, event.deltaMode);
   const nextSpan = zoomSpan(win.spanMs, notches, MAX_PERIODS * periodMs);
-  // At either end of the zoom the roll has nowhere to go, and the wheel goes back to
-  // being a scroll: that is how the page is reachable from a graph that fills it.
+  // At either end of the zoom the window cannot move, and the roll is spent on that.
   const rolls = notches !== 0 && nextSpan !== win.spanMs;
-  if (rolls) {event.preventDefault();}
   // Claimed before the await for the same reason the scroll is cancelled there: the
   // readout has to be out of the way before the first frame of the gesture paints.
   if (rolls) {beginGesture();}
@@ -685,24 +734,6 @@ async function onWheel(event) {
 }
 
 /**
- * Puts a graph back on the live window it was first drawn with.
- * @function onDoubleClick
- * @param {MouseEvent} event the double click
- * @returns {void}
- */
-function onDoubleClick(event) {
-  const img = event.target.closest ? event.target.closest(GRAPH_SELECTOR) : null;
-  if (!img) {return;}
-  const original = originals.get(img);
-  if (!original) {return;}
-  graphs().forEach((other) => {
-    const src = originals.get(other);
-    if (src) {other.src = src;}
-  });
-  originals.delete(img);
-}
-
-/**
  * Keeps the browser's own image drag from taking the press over.
  *
  * An <img> is draggable by default, and the native drag begins the moment the press
@@ -715,9 +746,28 @@ function onDoubleClick(event) {
  * @returns {void}
  */
 function onDragStart(event) {
-  const img = event.target.closest ? event.target.closest(GRAPH_SELECTOR) : null;
-  if (!img) {return;}
+  if (!graphUnder(event.target)) {return;}
   event.preventDefault();
+}
+
+/**
+ * Throws away the click a pan leaves behind.
+ *
+ * <p>A pan is a press, a travel and a release, and the browser reads exactly that as a
+ * click on whatever is under the pointer when the hand stops. Every graph is wrapped in
+ * a link - to the single-graph page from the list, back to the list from the single
+ * graph - so a pan released over its own graph would navigate to it. Only a press that
+ * travelled is swallowed: a click that was a click still opens the graph.
+ *
+ * @function onClick
+ * @param {MouseEvent} event the click the pan generated
+ * @returns {void}
+ */
+function onClick(event) {
+  if (Date.now() < suppressClickUntil && graphUnder(event.target)) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
 }
 
 /** ms a roll over a graph stays claimed after the last notch, so a slow roll is one gesture. */
@@ -772,7 +822,9 @@ export function initGraphPanZoom() {
   // capture so the zoom is claimed before the page's own scroll handling, and
   // passive:false because the gesture cancels the scroll at the clamp boundary.
   document.addEventListener("wheel", onWheel, {passive: false, capture: true});
-  document.addEventListener("dblclick", onDoubleClick);
+  // capture, so the click a pan leaves behind is stopped before the link around the
+  // graph can act on it
+  document.addEventListener("click", onClick, true);
 }
 
 // A module script is deferred, so on a page that is already parsed the event it would
@@ -800,4 +852,4 @@ export function graphPanZoomState() {
  * handler's scroll cancellation has to land before anything is awaited, because the
  * browser commits the scroll as the listeners run.
  */
-export {onWheel, onPointerDown};
+export {onWheel, onPointerDown, onDragStart, onClick};
