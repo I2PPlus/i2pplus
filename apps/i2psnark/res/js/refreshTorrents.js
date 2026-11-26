@@ -572,6 +572,13 @@ async function doRefresh(options = {}) {
   if (changed !== false) {
     await initHandlers();
     await showBadge();
+    // Ask the host to re-measure now, at the point this page knows its table
+    // changed - a row dropped by an active filter, or a torrent whose status moved
+    // it out of the filter. The frame's own mutation-driven measure can land while
+    // the morph is still in flight, and nothing else re-measures until the next
+    // tick, so the container keeps the old height for a whole refresh cycle.
+    // No-op in a top-level page, where parentIFrame is never set.
+    window.parentIFrame?.size();
   }
   // The payload carries the server's screen log stamp; fetch the log only when it
   // moved, so an unchanged log costs no request and a changed one updates instantly.
