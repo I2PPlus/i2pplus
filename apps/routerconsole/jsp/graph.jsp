@@ -29,5 +29,6 @@
 <jsp:getProperty name="graphHelper" property="singleStat"/>
 </div>
 <script src="/js/graphTooltip.js?<%=net.i2p.CoreVersion.VERSION%>" type=module></script>
+<script src="/js/graphPanZoom.js?<%=net.i2p.CoreVersion.VERSION%>" type=module></script>
 </body>
 </html>

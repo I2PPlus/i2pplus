@@ -733,6 +733,11 @@ function onPointerOver(event) {
 function onPointerMove(event) {
   const img = event.target;
   if (!img || img.tagName !== "IMG" || !img.classList.contains("statimage")) { return; }
+  // While a pan or roll is running the page carries this class and the overlay is hidden
+  // by it. Measuring and repositioning a readout nobody is looking at costs a frame of
+  // layout on every move of a gesture that is already spending its frames redrawing
+  // graphs, so the gesture gets the frame.
+  if (document.documentElement.classList.contains("graphPanZoomGesture")) { return; }
   // offsetX/offsetY are in the image's own box, so no layout read is needed for the input.
   pending = {target: img, offsetX: event.offsetX, offsetY: event.offsetY};
   if (!frameQueued) {
