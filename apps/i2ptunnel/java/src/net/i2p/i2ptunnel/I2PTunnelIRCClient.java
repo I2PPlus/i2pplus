@@ -35,15 +35,12 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
     /** List of Destination objects that we point at. */
     private final List<I2PSocketAddress> _addrs;
     /**
-     * How long a read may wait before the connection is dropped, 10 min;
-     * the application should time out its ping before this.
-     */
-    private static final long DEFAULT_READ_TIMEOUT = 10 * (long) 60 * 1000;
-    /**
      * Read timeout in milliseconds applied to each client socket, adjustable with
-     * setReadTimeout() after the tunnel is built.
+     * setReadTimeout() after the tunnel is built. Resolved by
+     * {@link #readTimeoutMs(Properties)}: the operator's value if the tunnel
+     * configures one, otherwise the IRC latency tolerance.
      */
-    protected long readTimeout = DEFAULT_READ_TIMEOUT;
+    protected long readTimeout;
     /** Whether DCC connections are supported. */
     private final boolean _dccEnabled;
     /** Serves inbound DCC connections, if any. Volatile: created on the filter thread, closed under the outer monitor. */
@@ -95,6 +92,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
         if (opts.getProperty(I2PSocketOptions.PROP_MAX_CONNECT_TIMEOUT) == null)
             opts.setProperty(I2PSocketOptions.PROP_MAX_CONNECT_TIMEOUT, "300000");
         setLatencyTolerantOptions(opts);
+        readTimeout = readTimeoutMs(opts);
         if (opts.getProperty("i2cp.leaseSetEncType") == null)
             opts.setProperty("i2cp.leaseSetEncType", "4,0");
 
@@ -324,6 +322,34 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
             opts.setProperty(PROP_STALL_GIVEUP_MS, tolerance);
         if (opts.getProperty(PROP_INACTIVITY_TIMEOUT) == null)
             opts.setProperty(PROP_INACTIVITY_TIMEOUT, tolerance);
+    }
+
+    /**
+     * Read timeout (ms) to put on an IRC client socket: the tunnel's own
+     * i2p.streaming.readTimeout if it configures a positive one, otherwise
+     * {@link #IRC_LATENCY_TOLERANCE_MS}. The socket is opened with the tunnel's
+     * options and then given this value outright, so without the lookup an
+     * operator-set read timeout would be quietly replaced by ours. Package-visible
+     * and it reads nothing but its argument, so the precedence is testable
+     * without a tunnel.
+     *
+     * @param opts the tunnel's client options, may be null
+     * @return the read timeout in ms, always positive
+     * @since 0.9.72+
+     */
+    static long readTimeoutMs(Properties opts) {
+        String configured = opts == null ?
+                            null : opts.getProperty(I2PSocketOptions.PROP_READ_TIMEOUT);
+        if (configured != null) {
+            try {
+                long ms = Long.parseLong(configured.trim());
+                if (ms > 0)
+                    return ms;
+            } catch (NumberFormatException e) {
+                // not a number - use the tolerance
+            }
+        }
+        return IRC_LATENCY_TOLERANCE_MS;
     }
 
     /**
