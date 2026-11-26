@@ -42,6 +42,14 @@ public class GraphHelper extends FormHandler {
     private int _width;
     /** Graph height in pixels. */
     private int _height;
+    /**
+     * Single-graph width in pixels. Kept apart from {@link #_width} because the graphs
+     * page draws two dozen small images from the same settings and one big image from
+     * these: sizing the big one must not turn the grid into a wall of the same size.
+     */
+    private int _singleWidth;
+    /** Single-graph height in pixels, see {@link #_singleWidth}. */
+    private int _singleHeight;
     /** Seconds between graph refreshes. */
     private int _refreshDelaySeconds;
     /** Whether the settings are saved to the config. */
@@ -68,6 +76,10 @@ public class GraphHelper extends FormHandler {
     private static final String PROP_X = "routerconsole.graphX";
     /** Config key for the graph height. */
     private static final String PROP_Y = "routerconsole.graphY";
+    /** Config key for the single-graph page's width. */
+    private static final String PROP_SINGLE_X = "routerconsole.graphSingleX";
+    /** Config key for the single-graph page's height. */
+    private static final String PROP_SINGLE_Y = "routerconsole.graphSingleY";
     /** Config key for the refresh delay. */
     private static final String PROP_REFRESH = "routerconsole.graphRefresh";
     /** Config key for the period count. */
@@ -90,6 +102,14 @@ public class GraphHelper extends FormHandler {
     private static final String PROP_UTC = "routerconsole.graphUtc";
     /** Default refresh delay, in seconds. */
     private static final int DEFAULT_REFRESH = 1*60;
+    /**
+     * Default single-graph width in pixels. This is the size the page's own
+     * Larger/Wider/Narrower links are scaled from, so it is what the page has always
+     * looked like, not a new look.
+     */
+    private static final int DEFAULT_SINGLE_X = 1000;
+    /** Default single-graph height in pixels, see {@link #DEFAULT_SINGLE_X}. */
+    private static final int DEFAULT_SINGLE_Y = 280;
     /** Default number of stat periods shown. */
     private static final int DEFAULT_PERIODS = 60;
     /** The legend is shown by default. */
@@ -137,6 +157,8 @@ public class GraphHelper extends FormHandler {
         super.setContextId(contextId);
         _width = _context.getProperty(PROP_X, DEFAULT_X);
         _height = _context.getProperty(PROP_Y, DEFAULT_Y);
+        _singleWidth = _context.getProperty(PROP_SINGLE_X, DEFAULT_SINGLE_X);
+        _singleHeight = _context.getProperty(PROP_SINGLE_Y, DEFAULT_SINGLE_Y);
         _periodCount = _context.getProperty(PROP_PERIODS, DEFAULT_PERIODS);
         _refreshDelaySeconds = _context.getProperty(PROP_REFRESH, DEFAULT_REFRESH);
         _showEvents = _context.getBooleanProperty(PROP_EVENTS);
@@ -264,44 +286,81 @@ public class GraphHelper extends FormHandler {
     }
 
     /**
-     * Sets the image height in pixels.
+     * Sets the image height in pixels, from the graphs page's form.
+     *
+     * <p>This is the size of the two dozen small images on that page. The single-graph
+     * page has its own size, {@link #setSingleH}, so making one graph big does not turn
+     * the grid into a wall of the same size.
      *
      * @param str image height in pixels; non-numeric text is ignored and numbers
      *            are clamped to MIN_Y..MAX_Y
      */
     public void setHeight(String str) {
-        setH(str);
-    }
-
-    /**
-     * Shorter form of {@link #setHeight} bound to the h= URL parameter.
-     *
-     * @param str image height in pixels; non-numeric text is ignored and numbers
-     *            are clamped to MIN_Y..MAX_Y
-     */
-    public void setH(String str) {
         try {_height = Math.max(MIN_Y, Math.min(Integer.parseInt(str), MAX_Y));}
         catch (NumberFormatException nfe) { /* ignored */ }
     }
 
     /**
-     * Sets the image width in pixels.
+     * Short form of {@link #setHeight}, bound to the h= URL parameter.
+     *
+     * <p>Unlike the form's height=, this one also sizes the single graph: on that page
+     * h= is how the page's own Taller/Shorter links carry the size from click to click.
+     *
+     * @param str image height in pixels; non-numeric text is ignored and numbers
+     *            are clamped to MIN_Y..MAX_Y
+     */
+    public void setH(String str) {
+        setHeight(str);
+        setSingleH(str);
+    }
+
+    /**
+     * Sets the single-graph height in pixels, from the singleW/singleH form fields the
+     * console's pan-and-zoom module posts.
+     *
+     * @param str height in pixels; non-numeric text is ignored and numbers are clamped
+     *            to MIN_Y..MAX_Y
+     * @since 0.9.72+
+     */
+    public void setSingleH(String str) {
+        try {_singleHeight = Math.max(MIN_Y, Math.min(Integer.parseInt(str), MAX_Y));}
+        catch (NumberFormatException nfe) { /* ignored */ }
+    }
+
+    /**
+     * Sets the image width in pixels, from the graphs page's form. See
+     * {@link #setHeight} for why this is kept apart from the single graph's width.
      *
      * @param str image width in pixels; non-numeric text is ignored and numbers
      *            are clamped to MIN_X..MAX_X
      */
     public void setWidth(String str) {
-        setW(str);
+        try {_width = Math.max(MIN_X, Math.min(Integer.parseInt(str), MAX_X));}
+        catch (NumberFormatException nfe) { /* ignored */ }
     }
 
     /**
-     * Shorter form of {@link #setWidth} bound to the w= URL parameter.
+     * Short form of {@link #setWidth}, bound to the w= URL parameter, and like
+     * {@link #setH} it sizes the single graph as well.
      *
      * @param str image width in pixels; non-numeric text is ignored and numbers
      *            are clamped to MIN_X..MAX_X
      */
     public void setW(String str) {
-        try {_width = Math.max(MIN_X, Math.min(Integer.parseInt(str), MAX_X));}
+        setWidth(str);
+        setSingleW(str);
+    }
+
+    /**
+     * Sets the single-graph width in pixels, from the singleW/singleH form fields the
+     * console's pan-and-zoom module posts.
+     *
+     * @param str width in pixels; non-numeric text is ignored and numbers are clamped
+     *            to MIN_X..MAX_X
+     * @since 0.9.72+
+     */
+    public void setSingleW(String str) {
+        try {_singleWidth = Math.max(MIN_X, Math.min(Integer.parseInt(str), MAX_X));}
         catch (NumberFormatException nfe) { /* ignored */ }
     }
 
@@ -446,7 +505,7 @@ public class GraphHelper extends FormHandler {
         if (combined) {
             buf.append("<span class=graphContainer><a href=\"/graph?stat=bw.combined")
                .append(AMP).append("c=").append(3 * _periodCount)
-               .append(AMP).append("w=1000").append(AMP).append("h=280\">");
+               .append(singleSize()).append("\">");
 
             String title = _t("Combined bandwidth graph");
             buf.append("<img class=statimage src=\"").append(STAT_PARAM).append("bw.combined")
@@ -489,8 +548,7 @@ public class GraphHelper extends FormHandler {
                .append(r.getPeriod())
                .append(AMP)
                .append("c=").append(3 * _periodCount)
-               .append(AMP)
-               .append("w=1000").append(AMP).append("h=280");
+               .append(singleSize());
             if (_showEvents) buf.append(AMP).append("showEvents=1");
             buf.append("\">");
 
@@ -561,7 +619,7 @@ public class GraphHelper extends FormHandler {
             out.append("<span class=graphContainer><a href=\"").append(GRAPH_HREF)
                .append(encId)
                .append(AMP).append("c=").append(3 * _periodCount)
-               .append(AMP).append("w=1000").append(AMP).append("h=280")
+               .append(singleSize())
                .append("\">")
                .append("<img class=statimage border=0 src=\"").append(STAT_PARAM)
                .append(encId)
@@ -670,48 +728,52 @@ public class GraphHelper extends FormHandler {
            .append(AMP).append("period=").append(period)
            .append(PERIOD_COUNT_PARAM).append(_periodCount)
            .append(AMP).append("end=").append(_end)
-           .append(WIDTH_PARAM).append(_width)
-           .append(HEIGHT_PARAM).append(_height)
+           .append(WIDTH_PARAM).append(_singleWidth)
+           .append(HEIGHT_PARAM).append(_singleHeight)
            .append(HIDE_LEGEND_PARAM).append(_hideLegend)
            .append(HIDE_RESTARTS_PARAM).append(_graphHideRestarts)
            .append(TIME_PARAM).append(now)
            .append("\"></a></span>\n</div>\n<p id=graphopts>\n");
 
-        if (_width < MAX_X && _height < MAX_Y) {
-            buf.append(link(_stat, _showEvents, _periodCount, _end, _width * 3 / 2, _height * 3 / 2, _hideLegend, _graphHideRestarts));
+        // Every size link below is scaled from the single graph's own size, so the page
+        // chains that size from click to click without ever consulting the grid's.
+        int width = _singleWidth;
+        int height = _singleHeight;
+        if (width < MAX_X && height < MAX_Y) {
+            buf.append(link(_stat, _showEvents, _periodCount, _end, width * 3 / 2, height * 3 / 2, _hideLegend, _graphHideRestarts));
             buf.append(_t("Larger")).append("</a> - ");
         }
-        if (_width > MIN_X && _height > MIN_Y) {
-            buf.append(link(_stat, _showEvents, _periodCount, _end, _width * 2 / 3, _height * 2 / 3, _hideLegend, _graphHideRestarts));
+        if (width > MIN_X && height > MIN_Y) {
+            buf.append(link(_stat, _showEvents, _periodCount, _end, width * 2 / 3, height * 2 / 3, _hideLegend, _graphHideRestarts));
             buf.append(_t("Smaller")).append("</a> - ");
         }
-        if (_height < MAX_Y) {
-            buf.append(link(_stat, _showEvents, _periodCount, _end, _width, _height * 3 / 2, _hideLegend, _graphHideRestarts));
+        if (height < MAX_Y) {
+            buf.append(link(_stat, _showEvents, _periodCount, _end, width, height * 3 / 2, _hideLegend, _graphHideRestarts));
             buf.append(_t("Taller")).append("</a> - ");
         }
-        if (_height > MIN_Y) {
-            buf.append(link(_stat, _showEvents, _periodCount, _end, _width, _height * 2 / 3, _hideLegend, _graphHideRestarts));
+        if (height > MIN_Y) {
+            buf.append(link(_stat, _showEvents, _periodCount, _end, width, height * 2 / 3, _hideLegend, _graphHideRestarts));
             buf.append(_t("Shorter")).append("</a> - ");
         }
-        if (_width < MAX_X) {
-            buf.append(link(_stat, _showEvents, _periodCount, _end, _width * 3 / 2, _height, _hideLegend, _graphHideRestarts));
+        if (width < MAX_X) {
+            buf.append(link(_stat, _showEvents, _periodCount, _end, width * 3 / 2, height, _hideLegend, _graphHideRestarts));
             buf.append(_t("Wider")).append("</a> - ");
         }
-        if (_width > MIN_X) {
-            buf.append(link(_stat, _showEvents, _periodCount, _end, _width * 2 / 3, _height, _hideLegend, _graphHideRestarts));
+        if (width > MIN_X) {
+            buf.append(link(_stat, _showEvents, _periodCount, _end, width * 2 / 3, height, _hideLegend, _graphHideRestarts));
             buf.append(_t("Narrower")).append("</a>");
         }
         buf.append("<br>");
         if (_periodCount < MAX_C) {
-            buf.append(link(_stat, _showEvents, _periodCount * 2, _end, _width, _height, _hideLegend, _graphHideRestarts));
+            buf.append(link(_stat, _showEvents, _periodCount * 2, _end, width, height, _hideLegend, _graphHideRestarts));
             buf.append(_t("Larger interval")).append("</a> - ");
         }
         if (_periodCount > MIN_C) {
-            buf.append(link(_stat, _showEvents, _periodCount / 2, _end, _width, _height, _hideLegend, _graphHideRestarts));
+            buf.append(link(_stat, _showEvents, _periodCount / 2, _end, width, height, _hideLegend, _graphHideRestarts));
             buf.append(_t("Smaller interval")).append("</a> - ");
         }
         if (_periodCount < MAX_C) {
-            buf.append(link(_stat, _showEvents, _periodCount, _end + _periodCount, _width, _height, _hideLegend, _graphHideRestarts));
+            buf.append(link(_stat, _showEvents, _periodCount, _end + _periodCount, width, height, _hideLegend, _graphHideRestarts));
             buf.append(_t("Previous interval")).append("</a>");
         }
         if (_end > 0) {
@@ -722,17 +784,17 @@ public class GraphHelper extends FormHandler {
             if (_periodCount < MAX_C) {
                 buf.append(" - ");
             }
-            buf.append(link(_stat, _showEvents, _periodCount, end, _width, _height, _hideLegend, _graphHideRestarts));
+            buf.append(link(_stat, _showEvents, _periodCount, end, width, height, _hideLegend, _graphHideRestarts));
             buf.append(_t("Next interval")).append("</a> ");
         }
         if (!"bw.combined".equals(_stat)) {
             buf.append(" - ");
-            buf.append(link(_stat, !_showEvents, _periodCount, _end, _width, _height, _hideLegend, _graphHideRestarts));
+            buf.append(link(_stat, !_showEvents, _periodCount, _end, width, height, _hideLegend, _graphHideRestarts));
             buf.append(_showEvents ? _t("Plot averages") : _t("plot events"));
             buf.append("</a>");
         }
         buf.append(" - ");
-        buf.append(link(_stat, _showEvents, _periodCount, _end, _width, _height, _hideLegend, _graphHideRestarts));
+        buf.append(link(_stat, _showEvents, _periodCount, _end, width, height, _hideLegend, _graphHideRestarts));
         buf.append(_hideLegend ? _t("Show Legend") : _t("Hide Legend"));
         buf.append("</a>\n</p>\n");
         return buf.toString();
@@ -771,6 +833,21 @@ public class GraphHelper extends FormHandler {
                 sb.append('%').append(HEX[c >> 4]).append(HEX[c & 0xf]);
         }
         return sb.toString();
+    }
+
+    /**
+     * The size parameters of a link from the graphs page to the single-graph page.
+     *
+     * <p>The single graph's own saved size, not a fixed one: a graph opened from the grid
+     * opens at the size it was last left at, so a resize made on the single-graph page
+     * survives a trip back to the grid and comes back. The grid's width and height are the
+     * size of its two dozen thumbnails and have nothing to say about this one.
+     *
+     * @return the url parameters, each preceded by an ampersand
+     * @since 0.9.72+
+     */
+    private String singleSize() {
+        return AMP + "w=" + _singleWidth + AMP + "h=" + _singleHeight;
     }
 
     /**
@@ -981,6 +1058,8 @@ public class GraphHelper extends FormHandler {
     private void saveSettings() {
         if (_width != _context.getProperty(PROP_X, DEFAULT_X) ||
             _height != _context.getProperty(PROP_Y, DEFAULT_Y) ||
+            _singleWidth != _context.getProperty(PROP_SINGLE_X, DEFAULT_SINGLE_X) ||
+            _singleHeight != _context.getProperty(PROP_SINGLE_Y, DEFAULT_SINGLE_Y) ||
             _periodCount != _context.getProperty(PROP_PERIODS, DEFAULT_PERIODS) ||
             _refreshDelaySeconds != _context.getProperty(PROP_REFRESH, DEFAULT_REFRESH) ||
             _showEvents != _context.getBooleanProperty(PROP_EVENTS) ||
@@ -996,6 +1075,8 @@ public class GraphHelper extends FormHandler {
             Map<String, String> changes = new HashMap<>();
             changes.put(PROP_X, Integer.toString(_width));
             changes.put(PROP_Y, Integer.toString(_height));
+            changes.put(PROP_SINGLE_X, Integer.toString(_singleWidth));
+            changes.put(PROP_SINGLE_Y, Integer.toString(_singleHeight));
             changes.put(PROP_PERIODS, Integer.toString(_periodCount));
             changes.put(PROP_REFRESH, Integer.toString(_refreshDelaySeconds));
             changes.put(PROP_EVENTS, Boolean.toString(_showEvents));

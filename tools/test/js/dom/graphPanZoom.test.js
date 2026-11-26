@@ -178,6 +178,73 @@ test("a fan-out is live only once the box has proved it is quick enough", async 
   assert.equal(m.fanOutLive(NaN, 400), false);
 });
 
+test("a part of a graph on the screen is a graph on the screen", async () => {
+  const m = await load();
+  const box = (top, bottom) => ({top: top, bottom: bottom, left: 0, right: 296});
+  assert.equal(m.inViewport(box(10, 70), 800, 600), true, "wholly inside");
+  assert.equal(m.inViewport(box(-40, 20), 800, 600), true, "its bottom half is showing");
+  assert.equal(m.inViewport(box(580, 640), 800, 600), true, "its top half is showing");
+  assert.equal(m.inViewport(box(600, 660), 800, 600), false, "starts at the fold");
+  assert.equal(m.inViewport(box(-120, -60), 800, 600), false, "scrolled past");
+  // Off to the side is off the screen too: the graphs page wraps at any width.
+  assert.equal(m.inViewport({top: 10, bottom: 70, left: 900, right: 1196}, 800, 600), false);
+});
+
+test("a drag snaps by how wide a window it is moving", async () => {
+  const m = await load();
+  const minute = 60000, hour = 60 * minute, day = 24 * hour, week = 7 * day, month = 30 * day, year = 365 * day;
+  // The largest rung the window is at least three steps wide.
+  const want = [
+    [9 * minute, minute, "nine minutes is nine minute steps"],
+    [15 * minute, 5 * minute, "a quarter of an hour steps by five minutes"],
+    [20 * minute, 5 * minute, "twenty minutes is four five-minute steps"],
+    [30 * minute, 10 * minute, "the module's floor is half an hour"],
+    [60 * minute, 10 * minute, "an hour is six ten-minute steps, not two thirty-minute"],
+    [90 * minute, 30 * minute, "an hour and a half steps by the half hour"],
+    [2 * hour + 59 * minute, 30 * minute, "a hair under three hour steps falls to the half hour"],
+    [3 * hour, hour, "three hours is three hour steps"],
+    [8 * hour, hour, "the default window on this box"],
+    [3 * day, day, "three days steps by the day"],
+    [30 * day, week, "a month steps by the week, not the month"],
+    [91 * day, month, "three months steps by the month"],
+    [3 * year, year, "three years steps by the year"],
+  ];
+  for (const [span, quantum, why] of want) {
+    assert.equal(m.snapQuantumMs(span), quantum, why + " (" + (span / minute) + "m window)");
+  }
+  // A rung the window is only one or two steps wide is skipped: the drag would spend
+  // itself crossing a single step, and the graph would look stuck rather than quick.
+  assert.equal(m.snapQuantumMs(2 * minute), 0, "two minutes is not three minute steps");
+  assert.equal(m.snapQuantumMs(2 * day), hour, "two days is not three day steps");
+  assert.equal(m.snapQuantumMs(89 * day), week, "just under three months is not three month steps");
+  // Nearest, not down: a window dragged 25 minutes past an hour stays on that hour, and
+  // one dragged 35 minutes past it moves to the next.
+  assert.equal(m.snapOffsetMs(61 * minute, hour), hour);
+  assert.equal(m.snapOffsetMs(95 * minute, hour), 2 * hour);
+  assert.equal(m.snapOffsetMs(0, hour), 0, "now stays now");
+  // A quantum of 0 leaves the pointer's own position alone.
+  assert.equal(m.snapOffsetMs(123456, 0), 123456);
+  assert.equal(m.snapOffsetMs(-5000, hour), 0, "never forward of now");
+  // Most frames of a drag land on the quantum the frame before already used, and that is
+  // the whole saving: the same picture is not asked for twice. Thirty steps of 10px across
+  // an 8h window drawn 296px wide is 16 minutes of travel a step, so the window moves once
+  // every four steps - 8 renders for the drag, not 30. The travel accumulates unsnapped,
+  // because snapping it would drop every step under half a quantum and a slow drag would
+  // never move the window at all.
+  const stepMs = 10 * (8 * hour / 296);
+  let raw = 0;
+  let published = 0;
+  let changes = 0;
+  for (let step = 0; step < 30; step++) {
+    raw += stepMs;
+    const before = published;
+    published = m.snapOffsetMs(raw, hour);
+    if (published !== before) {changes++;}
+  }
+  assert.equal(changes, 8, "8 hours of travel is 8 renders, not 30");
+  assert.ok(published > 7.9 * hour && published < 8.3 * hour, "and it ends where the pointer left it");
+});
+
 test("a settled span becomes the minutes the graph configuration holds", async () => {
   const m = await load();
   // The configuration is one number for the whole page, in minutes: each graph's own
@@ -189,6 +256,113 @@ test("a settled span becomes the minutes the graph configuration holds", async (
   assert.equal(m.configMinutes(4 * 365 * 86400000), 131040, "three months of minutes");
   // A 5-minute rate showing 96 periods is the same 8 hours, so the same 480 goes in.
   assert.equal(m.configMinutes(96 * 300000), 480);
+});
+
+test("a ctrl-drag sizes a graph one px of graph per px of pointer", async () => {
+  const m = await load();
+  // The pointer is holding the graph's own edge, so the rate has to be 1:1 or the edge
+  // drifts away from the finger mid-drag.
+  assert.equal(m.sizeFromDrag(296, 50, 160, 7680), 346);
+  assert.equal(m.sizeFromDrag(296, -50, 160, 7680), 246);
+  // Travel is added a step at a time, and the clamp holds at each step, so a long drag
+  // past the bound stays at the bound instead of running away and coming back.
+  let width = 296;
+  for (let step = 0; step < 100; step++) {width = m.sizeFromDrag(width, 100, 160, 7680);}
+  assert.equal(width, 7680, "the largest graph the console draws");
+  for (let step = 0; step < 200; step++) {width = m.sizeFromDrag(width, -100, 160, 7680);}
+  assert.equal(width, 160, "the smallest graph the console draws");
+  // A graph with no size in its src starts at the floor rather than at NaN, which would
+  // make every later size NaN and the graph never draw at all.
+  assert.equal(m.sizeFromDrag(NaN, 40, 160, 7680), 200);
+  // The bounds a gesture hands in are the picture's, not the plot's: the pointer is on the
+  // picture, and the caller widens the console's plot bounds by that graph's own chrome, so
+  // the plot inside never leaves what the console will draw.
+  assert.equal(m.sizeFromDrag(896, 50, 160 + 83, 7680 + 83), 946);
+});
+
+test("a graph is asked for its box less the chrome it draws around the plot", async () => {
+  const m = await load();
+  // Measured on this router at the graphs page's own parameters: asked for the same
+  // 813x140 plot, a plain stat's picture comes back 896x270 and the combined bandwidth
+  // tile's 896x308. Same plot, 38px more legend, and the page pins every graph box to one
+  // size - so one plot for the whole page is either too big for one tile or too small for
+  // the other.
+  const plain = {width: 83, height: 130};
+  const tile = {width: 83, height: 168};
+  const box = {width: 896, height: 308};
+  assert.deepEqual(m.plotFor(plain, box), {width: 813, height: 178});
+  assert.deepEqual(m.plotFor(tile, box), {width: 813, height: 140});
+  // Each picture comes out at the box, which is what the single pin needs.
+  assert.equal(m.plotFor(plain, box).width + plain.width, m.plotFor(tile, box).width + tile.width);
+  assert.equal(m.plotFor(plain, box).height + plain.height, m.plotFor(tile, box).height + tile.height);
+  // The clamp is on the plot, because that is what the console refuses to draw outside.
+  assert.deepEqual(m.plotFor(plain, {width: 10, height: 10}), {width: 160, height: 40});
+  assert.deepEqual(m.plotFor(plain, {width: 99999, height: 99999}), {width: 7680, height: 4320});
+});
+
+test("a graph keeps the size of the axis a gesture never moved", async () => {
+  const m = await load();
+  // A plain stat and the combined bandwidth tile, both drawn 579px wide and 283px tall at
+  // this router's own parameters - the tile spends 38px more on two legends and is asked for
+  // a 38px shorter plot to make the pictures match.
+  const src = (w, h) => "http://127.0.0.1:7657/viewstat.jsp?stat=x&width=" + w + "&height=" + h;
+  const plain = {src: src(496, 153), naturalWidth: 579, naturalHeight: 283};
+  const tile = {src: src(496, 115), naturalWidth: 579, naturalHeight: 283};
+  // A ctrl-drag 121px wider says nothing about height. Every graph keeps the height it was
+  // drawn at: a page that pinned the box to the anchor graph's height instead would redraw
+  // every other graph at that height, and the graphs would change proportions rather than
+  // scale.
+  assert.deepEqual(m.requestedBoxFor([plain, tile], {width: 700}), {width: 700, height: 283});
+  assert.deepEqual(m.requestedBoxFor([plain, tile], {height: 400}), {width: 579, height: 400});
+  // Both axes: the biggest box on the page, so nothing is clipped by the single pin.
+  assert.deepEqual(m.requestedBoxFor([plain, tile], {width: 700, height: 400}), {width: 700, height: 400});
+  // A graph whose picture has not come back yet is sized like its neighbours, not at zero,
+  // or the pin would collapse to nothing while one tile is still loading.
+  const loading = {src: src(496, 153), naturalWidth: 0, naturalHeight: 0};
+  assert.deepEqual(m.requestedBoxFor([plain, loading], {width: 700}), {width: 700, height: 283});
+  // Nothing on the page has a size at all - a graph pulled from another router's console -
+  // and there is no box to pin.
+  assert.equal(m.requestedBoxFor([{src: "http://127.0.0.1:7657/viewstat.jsp?stat=x"}], {width: 700}), null);
+  assert.equal(m.requestedBoxFor([], {width: 700}), null);
+  // A window that sized nothing leaves every graph where it is, so the box is simply the
+  // biggest picture on the page - which is what the page's own pin would have written.
+  assert.deepEqual(m.requestedBoxFor([plain, tile], {}), {width: 579, height: 283});
+});
+
+test("a ctrl-roll sizes a graph by the same step a zoom moves time", async () => {
+  const m = await load();
+  assert.equal(m.sizeFromRoll(280, 1, 40, 4320), 350);
+  assert.equal(m.sizeFromRoll(280, -1, 40, 4320), 224);
+  assert.equal(m.sizeFromRoll(280, 0, 40, 4320), 280, "a notchless roll changes nothing");
+  // One notch undoes the one before it, whatever the size started at.
+  assert.equal(m.sizeFromRoll(m.sizeFromRoll(1000, 3, 40, 4320), -3, 40, 4320), 1000);
+  let height = 280;
+  for (let step = 0; step < 40; step++) {height = m.sizeFromRoll(height, 1, 40, 4320);}
+  assert.equal(height, 4320, "the tallest graph the console draws");
+  for (let step = 0; step < 400; step++) {height = m.sizeFromRoll(height, -1, 40, 4320);}
+  assert.equal(height, 40, "the shortest graph the console draws");
+});
+
+test("the size a gesture writes is named for the page that owns it", async () => {
+  const m = await load();
+  const win = {spanMs: 8 * 3600000, offsetMs: 0, width: 1500, height: 420};
+  // The graphs page's width and height are the size of its two dozen small images; the
+  // single-graph page's singleW and singleH are its own. One key cannot serve both: a
+  // 1500px single graph saved into the grid's keys is a wall of 1500px images.
+  assert.deepEqual(m.configFields(win, false), {periodCount: 480, width: 1500, height: 420});
+  assert.deepEqual(m.configFields(win, true), {periodCount: 480, singleW: 1500, singleH: 420});
+  // A gesture that only moved through time says nothing about size, so the form's own
+  // width and height fields, which hold what is saved, go through untouched.
+  assert.deepEqual(m.configFields({spanMs: 8 * 3600000, offsetMs: 3600000}, false), {periodCount: 480});
+  assert.deepEqual(m.configFields({spanMs: 8 * 3600000, offsetMs: 0}, true), {periodCount: 480});
+  // A page opened at a size by one of the single page's own Larger/Taller links carries a
+  // c= of its own - three times the saved count for a tile that plots send and receive
+  // together - and that is a look at one stat's history, not a preference. Only the size
+  // is saved.
+  assert.deepEqual(m.configFields({width: 1500, height: 420}, true), {singleW: 1500, singleH: 420});
+  assert.deepEqual(m.configFields({width: 1500, height: 420}, false), {width: 1500, height: 420});
+  // A save that names nothing leaves every setting the router holds alone.
+  assert.deepEqual(m.configFields({}, true), {});
 });
 
 test("a form's fields become one url-encoded body, the FIRST value per name", async () => {
@@ -217,6 +391,16 @@ test("the module reports what it has measured and what it has saved", async () =
   assert.equal(st.renderMs, -1);
   assert.equal(st.savedMinutes, -1);
   assert.equal(st.live, false);
+  assert.ok(Number.isInteger(st.graphs) && st.graphs >= 0, "the count on the page");
+  assert.ok(Number.isInteger(st.visible) && st.visible <= st.graphs, "the count on the screen");
+  // The biggest picture on the page and the plot that picture becomes in the configuration.
+  // Whether the shim has anything drawn is its own business - other suites leave images in
+  // the shared document - so what is pinned here is that the two travel together and the
+  // plot never outruns the box it was reduced from.
+  assert.equal(st.plot === null, st.box === null, "a plot without a box, or the reverse, is a bug");
+  if (st.box) {
+    assert.ok(st.plot.width <= st.box.width && st.plot.height <= st.box.height, "the plot sits inside its box");
+  }
   // Whether the shim's document resolves an element by id is its own business; what
   // matters is that the caller can branch on this without guessing at the DOM.
   assert.equal(typeof st.form, "boolean");

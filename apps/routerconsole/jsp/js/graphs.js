@@ -8,6 +8,7 @@
  */
 
 import { onVisible, onHidden } from "/js/onVisible.js";
+import { pinGraphBoxes, tallestBox } from "./graphBoxes.js";
 
 (() => {
   const d = document,
@@ -155,7 +156,12 @@ import { onVisible, onHidden } from "/js/onVisible.js";
   }
 
   /**
-   * Applies the natural dimensions of the first graph image to the container style.
+   * Pins every graph box to the size of the biggest picture on the page.
+   *
+   * The biggest, not the first: a box smaller than the picture inside it clips that
+   * picture, and the combined bandwidth and group tiles draw taller than the plain stats
+   * beside them, because a legend for two rates costs more room than a legend for one.
+   *
    * @async
    * @function applyDimensions
    * @returns {Promise<boolean>} True if dimensions were applied successfully
@@ -164,25 +170,25 @@ import { onVisible, onHidden } from "/js/onVisible.js";
     const styleElem = query("style#gwrap");
     if (!styleElem) return false;
 
-    const firstImg = query(".statimage");
-    if (!firstImg) return false;
+    const images = d.querySelectorAll(".statimage");
+    if (!images.length) return false;
 
     try {
-      await firstImg.decode();
+      await images[0].decode();
     } catch (error) {
       return false;
     }
 
-    const w = firstImg.naturalWidth;
-    const h = firstImg.naturalHeight;
-    if (w <= 40 || h <= 20) {
+    const box = tallestBox(images);
+    if (!box || box.width <= 40 || box.height <= 20) {
       return false;
     }
+    pinGraphBoxes(styleElem, box);
 
-    const css = `.graphContainer { width: ${w + 4}px; height: ${h + 4}px; }`;
-    if (styleElem.innerText !== css) {
-      styleElem.innerText = css;
-    }
+    // The tallest graph is often the last one in, and a pin written before it lands is
+    // smaller than the grid needs. Re-pin once every picture is in hand.
+    const all = Array.from(images, (img) => img.decode());
+    Promise.allSettled(all).then(() => pinGraphBoxes(styleElem, tallestBox(images)));
     return true;
   }
 
