@@ -48,9 +48,9 @@ import net.i2p.util.SystemVersion;
  * <ul>
  * <li>CPU saturation: {@code router.cpuLoad} &gt; 85%</li>
  * <li>GC storm: {@code router.gcPauseTime} &gt; 50 ms/min</li>
- * <li>Network congestion: {@code tunnel.buildSuccessRate} &lt; 50% — suppresses
- * an ordinary scale-up only. Congestion is what the queue's own exploratory and
- * LeaseSet jobs relieve, so an emergency still acts on it</li>
+ * <li>Network congestion: retained as transport context, but not treated as
+ * local resource saturation or as an independent reason to suppress
+ * queue-local demand</li>
  * <li>Bandwidth saturation: bwLimiter.outboundDelayedTime &gt; 500ms</li>
  * <li>No saturation signal enlarges the step a scale-up adds: if threads are
  * not the bottleneck, adding more of them because of that bottleneck is
@@ -1036,9 +1036,10 @@ class JobQueueScaler implements Runnable {
         boolean canScaleUp = canScaleUp(inCooldown, activeRunners, maxRunners, _scalingUpDisabled,
                                        jobsBeingDropped);
 
-        // Suppress normal scale-up when resource saturation is the bottleneck,
-        // not thread count. Emergency signals override the suppression.
-        boolean suppressNormal = cpuSaturated || gcStorm || networkCongested || bwSaturated;
+        // Suppress scale-up when local resource saturation is the bottleneck,
+        // not thread count. Network congestion remains diagnostic context;
+        // queue-local demand determines whether more runners are needed.
+        boolean suppressNormal = localResourcesSaturated(cpuSaturated, gcStorm, bwSaturated);
 
         if (canScaleUp) {
             long effectiveDelay = Math.max(maxLag, messageDelay);
@@ -1268,12 +1269,10 @@ class JobQueueScaler implements Runnable {
      * scale, and each other signal adds to it, all bounded by
      * {@link #MAX_SCALE_UP_STEP}.
      * <p>
-     * Network congestion is deliberately not an input. Congestion already
-     * suppresses a routine scale-up at the trigger, so the only pass that gets
-     * here while the network is congested was forced by critical lag or dropped
-     * jobs. Charging congestion for an extra runner at that point contradicts
-     * the gate above it, which treats congestion as evidence that the bottleneck
-     * is not thread count. One signal gets one response, and it is the gate's.
+     * Network congestion is deliberately not an input. Queue-local demand
+     * determines whether scaling is justified, while CPU, GC, and bandwidth
+     * saturation are evaluated separately at the trigger. Congestion therefore
+     * neither suppresses the decision nor enlarges the number of runners added.
      *
      * @param maxLag ms the oldest ready job has waited
      * @param lagThreshold ms of lag that justifies a scale-up, the configured
