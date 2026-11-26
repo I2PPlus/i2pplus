@@ -104,8 +104,10 @@ public class StoreRejectionDecisionTest {
 
     /**
      * When the two 8-character forms the failure line prints are the same, the
-     * line contradicts itself, so the full forms go on continuation lines: the
-     * only way a reader can see where the two hashes part company.
+     * line contradicts itself, so the refused LeaseSet's full form goes on a
+     * continuation line: the only way a reader can see where the two hashes
+     * part company. The key's full form is not repeated - the failure line
+     * already names that destination.
      *
      * @since 0.9.72+
      */
@@ -113,22 +115,23 @@ public class StoreRejectionDecisionTest {
     public void testIdenticalShortFormsPrintTheFullForms() {
         Hash key = hash(0x01);
         Hash ls = samePrefixDifferentTail(0x01);
-        String clause = KademliaNetworkDatabaseFacade.fullHashClause(key, ls);
-        assertTrue("key on its own line: " + clause,
-                   clause.contains("\n* Key: " + key.toBase32()));
+        String clause =
+            KademliaNetworkDatabaseFacade.fullHashClause(key, ls, true);
         assertTrue("LeaseSet on its own line: " + clause,
                    clause.contains("\n* LeaseSet: " + ls.toBase32()));
+        assertFalse("the key is not named twice in full: " + clause,
+                    clause.contains("\n* Key: "));
         assertTrue("where they part company: " + clause,
                    clause.contains("First difference at byte 31 of 32"));
-        assertTrue("three continuation lines: " + clause,
-                   clause.split("\n").length == 4);
+        assertTrue("two continuation lines: " + clause,
+                   clause.split("\n").length == 3);
     }
 
     /**
-     * Two hashes that really are the same 32 bytes, refused for another reason
-     * - in the live log, an expired LeaseSet. The line has to say the hashes
-     * agree rather than leave a reader to compare 52 characters by eye and
-     * conclude the key check is broken.
+     * Two hashes that really are the same 32 bytes, refused even though the key
+     * check is what failed. The line has to say the hashes agree rather than
+     * leave a reader to compare 52 characters by eye and conclude the key check
+     * is broken.
      *
      * @since 0.9.72+
      */
@@ -137,13 +140,30 @@ public class StoreRejectionDecisionTest {
         Hash key = hash(0x01);
         Hash same = hash(0x01);
         String clause = KademliaNetworkDatabaseFacade.fullHashClause(key,
-                                                                     same);
+                                                                    same, true);
         assertTrue("the verdict is there: " + clause,
                    clause.contains("The two hashes are byte-identical"));
         assertTrue("and it points at what disagrees: " + clause,
                    clause.contains("-> The key check disagrees"));
         assertFalse("no byte offset when there is none: " + clause,
                     clause.contains("First difference"));
+    }
+
+    /**
+     * The live case: a LeaseSet expired 39h ago. The key check passed, so the
+     * reason on the first line is the whole story and the hash clause adds
+     * nothing - 4 of these in one log set, each spending three lines to repeat
+     * a destination the line had already named.
+     *
+     * @since 0.9.72+
+     */
+    @Test
+    public void testAStaleEntryAddsNothing() {
+        Hash key = hash(0x01);
+        assertEquals("", KademliaNetworkDatabaseFacade.fullHashClause(
+                             key, hash(0x01), false));
+        assertEquals("", KademliaNetworkDatabaseFacade.fullHashClause(
+                             key, samePrefixDifferentTail(0x01), false));
     }
 
     /**
@@ -175,11 +195,11 @@ public class StoreRejectionDecisionTest {
     @Test
     public void testDifferentShortFormsAddNothing() {
         assertEquals("", KademliaNetworkDatabaseFacade.fullHashClause(
-                             hash(0x01), hash(0x02)));
+                             hash(0x01), hash(0x02), true));
         assertEquals("", KademliaNetworkDatabaseFacade.fullHashClause(
-                             hash(0x01), null));
+                             hash(0x01), null, true));
         assertEquals("", KademliaNetworkDatabaseFacade.fullHashClause(
-                             null, hash(0x01)));
+                             null, hash(0x01), true));
     }
 
     /**
@@ -217,7 +237,8 @@ public class StoreRejectionDecisionTest {
         key.toShortBase32();
         // and then the backing array rewritten under the live hash
         key.toByteArray()[0] = (byte) 0x7f;
-        String clause = KademliaNetworkDatabaseFacade.fullHashClause(key, ls);
+        String clause =
+            KademliaNetworkDatabaseFacade.fullHashClause(key, ls, true);
         assertTrue("the contradiction is named: " + clause,
                    clause.contains("cached, not live"));
         assertTrue("the byte offset is still there: " + clause,
@@ -241,13 +262,14 @@ public class StoreRejectionDecisionTest {
         Hash ls = hash(0x01);
         key.toShortBase32();
         ls.toShortBase32();
-        String clause = KademliaNetworkDatabaseFacade.fullHashClause(key, ls);
+        String clause =
+            KademliaNetworkDatabaseFacade.fullHashClause(key, ls, true);
         assertTrue("still names the byte: " + clause,
                    clause.contains("First difference at byte 31 of 32"));
         assertFalse("no stale-form claim: " + clause,
                     clause.contains("cached, not live"));
-        assertEquals("still two lines: " + clause,
-                     clause.split("\n").length, 4);
+        assertEquals("the LeaseSet form plus the byte offset: " + clause,
+                     clause.split("\n").length, 3);
     }
 
     /**
@@ -264,7 +286,8 @@ public class StoreRejectionDecisionTest {
         ls.toShortBase32();
         key.toByteArray()[0] = (byte) 0x7f;
         ls.toByteArray()[31] = (byte) 0x55;
-        String clause = KademliaNetworkDatabaseFacade.fullHashClause(key, ls);
+        String clause =
+            KademliaNetworkDatabaseFacade.fullHashClause(key, ls, true);
         assertTrue("key live form: " + clause,
                    clause.contains("Key bytes now:"));
         assertTrue("LeaseSet live form: " + clause,

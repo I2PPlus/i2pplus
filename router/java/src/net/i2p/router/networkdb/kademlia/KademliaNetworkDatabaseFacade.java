@@ -2566,7 +2566,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                     sb.append(", published ").append(leaseDate(ls2.getPublished(), now))
                       .append(", expires ").append(leaseDate(ls2.getExpires(), now));
                 }
-                sb.append(fullHashClause(key, leaseSet.getHash()));
+                sb.append(fullHashClause(key, leaseSet.getHash(),
+                                         !key.equals(leaseSet.getHash())));
                 _log.warnThrottled(storeRejectKey(key), sb.toString());
             }
             throw new IllegalArgumentException("Invalid NetDbStore attempt -> " + err);
@@ -4171,28 +4172,31 @@ return false;
     }
 
     /**
-     * The full base32 forms of the key and of the LeaseSet that was refused, on
-     * continuation lines, but only when the two 8-character forms the failure
-     * line already prints are identical.
+     * What the refused LeaseSet's own destination is, in full, and where it
+     * differs from the key - but only when the rejection was the key check.
      * <p>A line reading "failed [i5dnly7y] -&gt; Key does not match the LeaseSet
      * destination [i5dnly7y]" contradicts itself to anyone who cannot see the
      * rest of the hash; the measured case printed the same 8 characters on both
-     * sides 1,639 times. The full forms show where the two hashes part company.
+     * sides 1,639 times. Every other rejection - an expired LeaseSet, a bad
+     * signature - needs nothing more than the reason the first line already
+     * carries, and the key is named there, so its full form is not repeated
+     * here. The byte offset from {@link #hashDiffClause(Hash, Hash)} is what
+     * shows where the two part company.
      *
      * @param key the key the LeaseSet was stored under
      * @param lsHash the hash the LeaseSet itself carries, may be null
-     * @return {@code "\n* "} continuation lines, including the byte-level verdict
-     *         from {@link #hashDiffClause(Hash, Hash)}, or an empty string when
-     *         the short forms already tell the story
+     * @param keyMismatch true when the rejection was the key check; a rejection
+     *                    for any other reason prints nothing extra
+     * @return {@code "\n* "} continuation lines, or an empty string when the
+     *         first line already tells the story
      * @since 0.9.72+
      */
-    static String fullHashClause(Hash key, Hash lsHash) {
-        if (key == null || lsHash == null) {return "";}
+    static String fullHashClause(Hash key, Hash lsHash, boolean keyMismatch) {
+        if (key == null || lsHash == null || !keyMismatch) {return "";}
         String a = key.toShortBase32();
         String b = lsHash.toShortBase32();
         if (a == null || b == null || !a.equals(b)) {return "";}
-        return "\n* Key: " + key.toBase32() + "\n* LeaseSet: " + lsHash.toBase32() +
-               hashDiffClause(key, lsHash);
+        return "\n* LeaseSet: " + lsHash.toBase32() + hashDiffClause(key, lsHash);
     }
 
     /**
