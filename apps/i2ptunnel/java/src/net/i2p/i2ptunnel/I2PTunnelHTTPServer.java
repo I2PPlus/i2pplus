@@ -1716,9 +1716,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     // otherwise impossible to attribute to a backend. Log the
                     // resolved target and both timeout budgets: the I2P-side
                     // per-read budget and the local socket's header-read budget.
-                    _log.debug("[HTTPServer] " + toString() + " -> Read timeout: " + readTimeout + "ms"
-                               + " * Header read timeout: " + SERVER_READ_TIMEOUT_GET + "ms"
-                               + "\n* Client: " + peerB32);
+                    _log.debug("[HTTPServer] " + toString() + " -> Read timeout: " +
+                               (readTimeout > 0 ? readTimeout + "ms" : "none") +
+                               " * Header read timeout: " + SERVER_READ_TIMEOUT_GET + "ms" +
+                               "\n* Client: " + peerB32);
                 }
 
                 // Instead of i2ptunnelrunner, use something that reads the HTTP
@@ -1737,7 +1738,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
                 String modifiedHeader = HttpHeaderFormatter.formatHeaders(headers, command);
                 if (_log.shouldDebug()) {
-                    _log.debug("[HTTPServer] Modified headers" +
+                    // What goes to the local backend, after our own header
+                    // rewrites - not what the browser sent, which the INFO line
+                    // above reports.
+                    _log.debug("[HTTPServer] Sending to the backend" +
                                HttpHeaderFormatter.formatHeadersForLog(headers, command));
                 }
                 else if (_log.shouldInfo() && !command.toString().toLowerCase().contains("head")) {
@@ -2951,7 +2955,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     catch (IOException ioe) { /* socket gone; the copy fails on its next read */ }
                 });
                 if (_log.shouldDebug())
-                    _log.debug("[HTTPServer] Running server-to-browser Compressed? " + _shouldCompress + " KeepAlive? " + _keepalive +
+                    _log.debug("[HTTPServer] Started the server-to-browser copy -> Compressed: " +
+                               _shouldCompress + " * Keep-alive: " + _keepalive +
                                urlSuffix(req));
                 // Non-keepalive: submit the body and free the handler thread
                 // immediately. Keepalive still waits (runOnIO) so the next
@@ -3098,7 +3103,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             if (serverin != null) try { serverin.close(); } catch (IOException ioe) { /* ignored */ }
             try { _webserver.close(); } catch (IOException ioe) { /* ignored */ }
             if (_log.shouldDebug()) {
-                _log.debug("Finished server-to-browser: Compressed? " + _shouldCompress + " KeepAlive? " + _keepalive +
+                _log.debug("[HTTPServer] Finished the server-to-browser copy -> Compressed: " +
+                           _shouldCompress + " * Keep-alive: " + _keepalive +
                            urlSuffix(req));
             }
         }
