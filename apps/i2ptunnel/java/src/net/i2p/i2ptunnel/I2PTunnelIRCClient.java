@@ -94,6 +94,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
             opts.setProperty(I2PSocketOptions.PROP_CONNECT_TIMEOUT, "180000");
         if (opts.getProperty(I2PSocketOptions.PROP_MAX_CONNECT_TIMEOUT) == null)
             opts.setProperty(I2PSocketOptions.PROP_MAX_CONNECT_TIMEOUT, "300000");
+        setLatencyTolerantOptions(opts);
         if (opts.getProperty("i2cp.leaseSetEncType") == null)
             opts.setProperty("i2cp.leaseSetEncType", "4,0");
 
@@ -265,6 +266,64 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
             }
         }
 
+    }
+
+    /**
+     * How long an IRC connection may stay quiet - no forward progress, no packet
+     * from the peer - before it is dropped, in ms (320s).
+     * <p>An IRC session is long-lived and mostly idle, and a multi-hop path to a
+     * server can go silent for minutes without being dead: a congested hop, the
+     * server's own load, or one of our tunnels rebuilt under the session. The
+     * router-wide streaming bounds are sized for transfers that would otherwise
+     * hang - a 90s wall-clock bound on an unacked packet of an established stream,
+     * and a 300s remote-silence window - and the silence bound is what closes
+     * connections here: 21 remote-silence disconnects in 24 minutes of DEBUG,
+     * every one of them a few seconds past the 300s window. One figure for all of
+     * the IRC bounds also keeps the application-level read from ending a session
+     * the transport was still willing to carry, while staying short enough that a
+     * peer that is really gone is dropped in one pass. The per-packet resend
+     * budget outlasts this (60 sends at the 8s RTO ceiling), so the wall-clock
+     * bound is the one that binds.
+     *
+     * @since 0.9.72+
+     */
+    static final long IRC_LATENCY_TOLERANCE_MS = 320 * 1000L;
+
+    /**
+     * Client option key for the wall-clock bound an established stream may hold an
+     * unacked packet with no forward progress. Mirrors the streaming module's
+     * {@code ConnectionOptions.PROP_STALL_GIVEUP_MS}: the two modules meet only
+     * through these option properties, so the key is written out here.
+     *
+     * @since 0.9.72+
+     */
+    static final String PROP_STALL_GIVEUP_MS = "i2p.streaming.stallGiveupMs";
+
+    /**
+     * Client option key for how long the peer may stay silent before streaming
+     * drops the connection. Mirrors the streaming module's
+     * {@code ConnectionOptions.PROP_INACTIVITY_TIMEOUT}.
+     *
+     * @since 0.9.72+
+     */
+    static final String PROP_INACTIVITY_TIMEOUT = "i2p.streaming.inactivityTimeout";
+
+    /**
+     * Raises the two streaming teardown bounds an IRC session trips to
+     * {@link #IRC_LATENCY_TOLERANCE_MS}. A value the operator set in
+     * i2ptunnel.config wins outright and is left alone. Package-visible, and it
+     * touches nothing but its argument, so the keys and the non-overriding rule
+     * are testable without a tunnel.
+     *
+     * @param opts the tunnel's client options, modified in place, non-null
+     * @since 0.9.72+
+     */
+    static void setLatencyTolerantOptions(Properties opts) {
+        String tolerance = Long.toString(IRC_LATENCY_TOLERANCE_MS);
+        if (opts.getProperty(PROP_STALL_GIVEUP_MS) == null)
+            opts.setProperty(PROP_STALL_GIVEUP_MS, tolerance);
+        if (opts.getProperty(PROP_INACTIVITY_TIMEOUT) == null)
+            opts.setProperty(PROP_INACTIVITY_TIMEOUT, tolerance);
     }
 
     /**
