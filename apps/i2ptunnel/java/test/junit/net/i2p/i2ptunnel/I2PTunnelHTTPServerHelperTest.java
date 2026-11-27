@@ -276,6 +276,18 @@ public class I2PTunnelHTTPServerHelperTest {
         assertEquals(0, sock.closeCount);
     }
 
+    /**
+     * A header the client did not send is named as absent, never printed as
+     * "null" where a value should have been.
+     */
+    @Test
+    public void testLogHeaderOrAbsent() {
+        assertEquals("Accept-Encoding: gzip",
+                     I2PTunnelHTTPServer.logHeaderOrAbsent("Accept-Encoding", "gzip"));
+        assertEquals("no Accept-Encoding", I2PTunnelHTTPServer.logHeaderOrAbsent("Accept-Encoding", null));
+        assertEquals("no Accept-Encoding", I2PTunnelHTTPServer.logHeaderOrAbsent("Accept-Encoding", ""));
+    }
+
     private static final String OPT_REJECT_INPROXY = "rejectInproxy";
     private static final String OPT_REJECT_REFERER = "rejectReferer";
     private static final String OPT_REJECT_USER_AGENTS = "rejectUserAgents";

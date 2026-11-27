@@ -1729,7 +1729,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 // Accept-Encoding: values, and gzips the payload
                 boolean allowGZIP = isGzipAllowed(opts);
                 if (_log.shouldDebug() && ((enc != null && !enc.isEmpty()) || altEnc != null && !altEnc.isEmpty())) {
-                    _log.debug("[HTTPServer] Encoding header: " + enc + "/" + altEnc);
+                    _log.debug("[HTTPServer] Request encoding -> " +
+                               logHeaderOrAbsent("Accept-Encoding", enc) + " * " +
+                               logHeaderOrAbsent("X-Accept-Encoding", altEnc));
                 }
                 boolean alt = hasGzipEncoding(altEnc);
                 boolean useGZIP = alt || hasGzipEncoding(enc);
@@ -1737,16 +1739,19 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 if (alt) {headers.remove("X-Accept-Encoding");}
 
                 String modifiedHeader = HttpHeaderFormatter.formatHeaders(headers, command);
+                // What is dumped here is the map after our own rewrites - the
+                // destination headers added and Accept-Encoding replaced - so it
+                // is not what the browser sent, and nothing has been written yet:
+                // the request goes out in the CompressedRequestor below. Both
+                // levels report the same thing in the same words, so a request
+                // reads the same at INFO as it does at DEBUG.
                 if (_log.shouldDebug()) {
-                    // What goes to the local backend, after our own header
-                    // rewrites - not what the browser sent, which the INFO line
-                    // above reports.
-                    _log.debug("[HTTPServer] Sending to the backend" +
+                    _log.debug("[HTTPServer] Forwarding request headers" +
                                HttpHeaderFormatter.formatHeadersForLog(headers, command));
                 }
                 else if (_log.shouldInfo() && !command.toString().toLowerCase().contains("head")) {
-                    String compactHeaders = HttpHeaderFormatter.formatHeadersCompact(headers, command);
-                    _log.info("[HTTPServer] Received request headers" + compactHeaders);
+                    _log.info("[HTTPServer] Forwarding request headers" +
+                              HttpHeaderFormatter.formatHeadersForLog(headers, command));
                 }
 
                 boolean compress = allowGZIP && useGZIP;
@@ -2072,6 +2077,19 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             if (c < '0' || c > '9') {return false;}
         }
         return true;
+    }
+
+    /**
+     * A header pair for the log, or the words for the client not having sent it,
+     * so a dump never prints "null" where no value was ever taken.
+     *
+     * @param name the header name, as it is written in the request
+     * @param value the header value as the client sent it, may be null or empty
+     * @return the pair, or "no" plus the name when there is no value to report
+     * @since 0.9.72+
+     */
+    static String logHeaderOrAbsent(String name, String value) {
+        return value != null && !value.isEmpty() ? name + ": " + value : "no " + name;
     }
 
     /**

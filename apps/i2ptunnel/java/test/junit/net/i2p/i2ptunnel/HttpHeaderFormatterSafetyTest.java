@@ -71,13 +71,17 @@ public class HttpHeaderFormatterSafetyTest {
         assertEquals(out, 3, countOccurrences(out, "\r\n"));
     }
 
+    /**
+     * The log dump keeps a hostile value on one line, so a header cannot forge
+     * extra lines in the log the way it forges them in the wire form.
+     */
     @Test
-    public void testFormatHeadersCompactStripsLineBreaks() {
+    public void testFormatHeadersForLogStripsLineBreaks() {
         Map<String, List<String>> headers = new LinkedHashMap<String, List<String>>();
         headers.put("Host", Collections.singletonList("example.com"));
         headers.put("X-Evil", Collections.singletonList("ok\r\nInjected: header"));
 
-        String out = HttpHeaderFormatter.formatHeadersCompact(headers,
+        String out = HttpHeaderFormatter.formatHeadersForLog(headers,
                 new StringBuilder("GET / HTTP/1.1"));
         assertTrue(out, out.contains("X-Evil: okInjected: header"));
         assertFalse(out, out.contains("\r"));
@@ -96,13 +100,19 @@ public class HttpHeaderFormatterSafetyTest {
         }
     }
 
+    /**
+     * A tracker query with a lone peer_id and no '&amp;' is cut at the question
+     * mark - the old compact formatter threw substring(0, -1) on exactly that
+     * shape.
+     */
     @Test
-    public void testCompactLonePeerIdNoAmpersand() {
-        // A lone peer_id=... query has no '&'; substring(0, -1) threw.
-        java.util.Map<String, java.util.List<String>> headers = new java.util.HashMap<>();
-        String out = HttpHeaderFormatter.formatHeadersCompact(headers,
-                new StringBuilder("GET /?peer_id=abc HTTP/1.1"));
-        assertTrue(out, out.contains("/..."));
+    public void testLonePeerIdQueryIsCut() {
+        Map<String, List<String>> headers = new LinkedHashMap<String, List<String>>();
+        StringBuilder request = new StringBuilder("GET /?peer_id=");
+        while (request.length() < HttpHeaderFormatter.MAX_REQUEST + 30) {request.append('a');}
+        request.append(" HTTP/1.1");
+        String out = HttpHeaderFormatter.formatHeadersForLog(headers, request);
+        assertTrue(out, out.endsWith("GET /?... HTTP/1.1"));
         assertFalse(out, out.contains("peer_id"));
     }
 

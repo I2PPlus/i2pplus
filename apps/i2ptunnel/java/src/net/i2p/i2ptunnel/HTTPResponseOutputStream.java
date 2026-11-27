@@ -386,8 +386,8 @@ class HTTPResponseOutputStream extends FilterOutputStream {
 
         boolean shouldCompress = shouldCompress();
         if (_log.shouldDebug())
-            _log.debug("Wrote the headers -> GZIP: " + _gzip + " Compressed: " + shouldCompress +
-                       " Keep-alive in: " + _keepAliveIn + " out: " + _keepAliveOut);
+            _log.debug("Wrote the headers -> GZIP: " + _gzip + " * Compressed: " + shouldCompress +
+                       "\n* Keep-alive in: " + _keepAliveIn + " * Keep-alive out: " + _keepAliveOut);
 
         if (_headerBuffer.getData().length == CACHE_SIZE)
             _cache.release(_headerBuffer);
@@ -444,10 +444,10 @@ class HTTPResponseOutputStream extends FilterOutputStream {
             throw new IOException("Cannot Range-resume: unexpected HTTP status " + _statusCode);
         }
         if (_log.shouldDebug()) {
-            _log.debug("Body resume headers -> Status: " + _statusCode +
+            _log.debug("Range resume headers accepted -> Status: " + _statusCode +
                        " * Skip: " + _resumeSkipBytes + " bytes" +
-                       " * Body so far: " + _bodyReceived + " bytes" +
-                       " * Content length: " + _dataExpected + " bytes");
+                       "\n* Body so far: " + _bodyReceived + " bytes" +
+                       " * Content-Length: " + _dataExpected + " bytes");
         }
     }
 
@@ -559,7 +559,13 @@ class HTTPResponseOutputStream extends FilterOutputStream {
                 }
 
                 if (_log.shouldDebug()) {
-                    _log.debug("Response header -> [" + key + ": " + val + ']');
+                    // A header pair is a segment, not a bracketed value - the
+                    // brackets the log viewer parses are for hashes. The value
+                    // is cut like any other dumped one: a Set-Cookie or a JWT
+                    // runs past 500 characters.
+                    String logged =
+                        HttpHeaderFormatter.shortValue(HttpHeaderFormatter.stripLineBreaks(val));
+                    _log.debug("Response header -> " + key + ": " + logged);
                 }
 
                 String lcKey = key.toLowerCase(Locale.US);
@@ -618,8 +624,11 @@ class HTTPResponseOutputStream extends FilterOutputStream {
                             lcVal.contains("domain=.i2p")) {
                             // Strip privacy-damaging "supercookies" for i2p and b32.i2p
                             // See RFC 6265 and http://publicsuffix.org/
-                            if (_log.shouldInfo())
-                                _log.info("Stripped a supercookie header -> " + key + ": " + val);
+                            if (_log.shouldInfo()) {
+                                String stripped =
+                                    HttpHeaderFormatter.shortValue(HttpHeaderFormatter.stripLineBreaks(val));
+                                _log.info("Stripped a supercookie header -> " + key + ": " + stripped);
+                            }
                             break;
                         }
                     }
