@@ -7292,6 +7292,32 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
+     * Whether the file list offers a download to the browser as text, so a
+     * click shows it instead of saving it. The MIME type the console detects
+     * decides it, or one of the plain-text extensions the detector does not
+     * know on its own.
+     * <p>
+     * Those extensions are a table of lower-case ASCII suffixes, so the fold of
+     * the name names a locale instead of following the machine's - under a
+     * Turkish default locale an upper-case I folds to a dotless ı, a name
+     * written as SETUP.INI stops matching its own extension, and the file is
+     * offered as a download. {@link #getMimeType(String)} folds the same name
+     * with {@link Locale#US} already.
+     *
+     * @param path the link path to the file, as written into the href
+     * @param mime the MIME type detected for it, "" when nothing was detected
+     * @return true if the browser is offered the file as text
+     * @since 0.9.72+
+     */
+    static boolean isTextFile(String path, String mime) {
+        if (mime.startsWith("text/") || mime.equals("application/javascript") ||
+            mime.equals("application/json") || mime.equals("application/xml")) {return true;}
+        String lc = path.toLowerCase(Locale.US);
+        return lc.endsWith(".asc") || lc.endsWith(".bat") || lc.endsWith(".ini") ||
+               lc.endsWith(".md5") || lc.endsWith(".sh") || lc.endsWith(".url");
+    }
+
+    /**
      * List the files in a directory and wrap each in a FileAndIndex with the given remaining
      * array.
      *
@@ -8472,11 +8498,7 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean isAudio = isAudio(mime);
         boolean isVideo = !isAudio && isVideo(mime);
         boolean isImage = mime.startsWith("image/");
-        boolean isText = mime.startsWith("text/") || mime.equals("application/javascript") ||
-                         mime.equals("application/json") || mime.equals("application/xml") ||
-                         path.toLowerCase().endsWith(".asc") || path.toLowerCase().endsWith(".bat") ||
-                         path.toLowerCase().endsWith(".ini") || path.toLowerCase().endsWith(".md5") ||
-                         path.toLowerCase().endsWith(".sh") || path.toLowerCase().endsWith(".url");
+        boolean isText = isTextFile(path, mime);
         boolean isPDF = mime.equals("application/pdf");
         if (isAudio || isImage || isVideo || mime.equals("application/pdf")) {
             int semicolonIndex = mime.indexOf(';');
