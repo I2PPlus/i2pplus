@@ -26,6 +26,16 @@ public class HttpHeaderFormatter {
     /** Splits a header block at each CRLF. */
     private static final Pattern NEWLINE_SPLIT = Pattern.compile("\r\n");
 
+    /** Splits a request line into its method, target and version. */
+    private static final Pattern SPACE_SPLIT = Pattern.compile(" ");
+
+    /**
+     * A Host value that may be folded into the request target: a hostname or
+     * IPv4 literal with an optional port, as the client wrote it. An IPv6
+     * literal in brackets is not matched, and is left as a header of its own.
+     */
+    private static final Pattern HOST_VALUE = Pattern.compile("[A-Za-z0-9.\\-]+(:[0-9]{1,5})?");
+
     /**
      * Formats headers into an HTTP request/response string.
      * <p>
@@ -147,11 +157,15 @@ public class HttpHeaderFormatter {
     /**
      * Request lines longer than this are cut at the query string. A tracker or
      * client request carries a whole base64 destination in the query, which is
-     * the same destination the headers already name.
+     * the same destination the headers already name. The cap is
+     * {@link #LINE_BUDGET} less the 11 characters of the {@code * Request: }
+     * label the line opens with, so a request line never puts an emitted log
+     * line over the house budget on its own - which matters now that the
+     * authority from Host is folded into the target and lengthens it.
      *
      * @since 0.9.72+
      */
-    static final int MAX_REQUEST = 96;
+    static final int MAX_REQUEST = 77;
 
     /**
      * Header values longer than this are cut. No log line is readable once a
@@ -203,6 +217,13 @@ public class HttpHeaderFormatter {
      * viewer links, over-long values are cut, and pairs that carry no
      * information are dropped. What is left is packed onto continuation lines
      * up to {@link #LINE_BUDGET} rather than spending a line per header.
+     * <p>
+     * The header pairs come first and the request line last, because the pairs
+     * say who is asking and the request says what for - and the request line is
+     * the one segment that cannot share its line, so putting it first pushed
+     * every short pair onto a second line after it. The {@code Host} the client
+     * sent is folded into the request target rather than repeated as a pair of
+     * its own, the way an absolute-form request line writes it.
      *
      * @param headers the HTTP headers map (header name to list of values)
      * @param command the request command line (e.g., "GET / HTTP/1.1")
@@ -211,7 +232,13 @@ public class HttpHeaderFormatter {
      */
     public static String formatHeadersForLog(Map<String, List<String>> headers, StringBuilder command) {
         StringBuilder buf = new StringBuilder(128 + headers.size() * 32);
-        buf.append("\n* Request: ").append(shortRequest(stripLineBreaks(command.toString().trim())));
+        String request = stripLineBreaks(command.toString().trim());
+        String host = foldableHost(headers);
+        String folded = requestWithHost(request, host);
+        // The authority is named once: either it went into the target because we
+        // put it there, or the client wrote an absolute-form target and named it
+        // itself.
+        boolean hostIsRedundant = folded != null || (host != null && targetIsAbsolute(request));
         Set<String> seen = new HashSet<>(headers.size() * 2);
         int used = 0;
         for (Map.Entry<String, List<String>> e : headers.entrySet()) {
@@ -227,6 +254,7 @@ public class HttpHeaderFormatter {
                 if (seen.add(lc + shortB32)) {used = appendSegment(buf, used, name + ": " + shortB32);}
                 continue;
             }
+            if (hostIsRedundant && lc.equals("host")) {continue;}
             for (String val : values) {
                 String value = shortValue(stripLineBreaks(val.trim()));
                 if (isBoilerplate(lc, value)) {continue;}
@@ -234,7 +262,90 @@ public class HttpHeaderFormatter {
                 used = appendSegment(buf, used, name + ": " + value);
             }
         }
+        buf.append("\n* Request: ").append(shortRequest(folded != null ? folded : request));
         return buf.toString();
+    }
+
+    /**
+     * The Host header value, if the request has one that can be folded into its
+     * target. The first usable one wins; a request line may name only one
+     * authority.
+     *
+     * @param headers the HTTP headers map, may be empty
+     * @return the authority as the client wrote it, or null when there is no
+     *         Host or it is not a plain hostname with an optional port
+     * @since 0.9.72+
+     */
+    static String foldableHost(Map<String, List<String>> headers) {
+        for (Map.Entry<String, List<String>> e : headers.entrySet()) {
+            List<String> values = e.getValue();
+            if (values == null || values.isEmpty()) {continue;}
+            if (!"host".equals(stripLineBreaks(e.getKey().trim()).toLowerCase())) {continue;}
+            String value = stripLineBreaks(values.get(0).trim());
+            if (HOST_VALUE.matcher(value).matches()) {return value;}
+            // A Host that is not a plain authority - a bracketed IPv6 literal,
+            // or junk a client or an attacker put there - stays a pair of its
+            // own, where shortValue() can cut it and the dump cannot be read as
+            // naming a host it does not.
+            return null;
+        }
+        return null;
+    }
+
+    /**
+     * The request line with the authority written into its target, as an
+     * absolute-form request line does: {@code GET host/path HTTP/1.1}. This
+     * tunnel serves plain HTTP, so no scheme is invented for the folded form,
+     * and a client that did write one keeps what it wrote - an
+     * <code>http://</code> is the assumed default and is dropped, an
+     * <code>https://</code> is a fact about the request and is kept.
+     *
+     * @param request the request line, already stripped of line breaks
+     * @param host the authority to fold in, or null when there is none
+     * @return the request line with the authority in its target, or null when
+     *         the target is not a path this can be folded into
+     * @since 0.9.72+
+     */
+    static String requestWithHost(String request, String host) {
+        if (host == null) {return null;}
+        String target = requestTarget(request);
+        if (target == null) {return null;}
+        String absolute = null;
+        if (target.startsWith("http://")) {absolute = target.substring(7);}
+        else if (target.startsWith("/")) {absolute = host + target;}
+        else {return null;}
+        String[] parts = SPACE_SPLIT.split(request);
+        StringBuilder buf = new StringBuilder(request.length() + host.length());
+        buf.append(parts[0]).append(' ').append(absolute);
+        for (int i = 2; i < parts.length; i++) {buf.append(' ').append(parts[i]);}
+        return buf.toString();
+    }
+
+    /**
+     * The request target, the second token of the request line, or null when the
+     * line is too short to have one.
+     *
+     * @param request the request line, non-null
+     * @return the target as the client wrote it, or null when there is none
+     * @since 0.9.72+
+     */
+    static String requestTarget(String request) {
+        String[] parts = SPACE_SPLIT.split(request);
+        return parts.length >= 2 ? parts[1] : null;
+    }
+
+    /**
+     * Does the request target name its own authority - an absolute-form request
+     * line, {@code GET http://host/path HTTP/1.1}? When it does, the Host header
+     * repeats what the target already says, and the dump does not need both.
+     *
+     * @param request the request line, non-null
+     * @return true if the target carries a scheme and an authority
+     * @since 0.9.72+
+     */
+    static boolean targetIsAbsolute(String request) {
+        String target = requestTarget(request);
+        return target != null && (target.startsWith("http://") || target.startsWith("https://"));
     }
 
     /**
@@ -242,8 +353,8 @@ public class HttpHeaderFormatter {
      * continuation line only when the current one is full.
      *
      * @param buf the dump being built
-     * @param used characters used on the current continuation line, 0 when the
-     *             last line written was the request line
+     * @param used characters used on the current continuation line, 0 when no
+     *             pair has been written on one yet
      * @param segment the pair to append
      * @return characters used on the current continuation line afterwards
      */
@@ -264,7 +375,9 @@ public class HttpHeaderFormatter {
 
     /**
      * Cuts a request line to what a reader can actually scan, keeping the
-     * method, the path and the protocol version.
+     * method, the authority and path, and the protocol version. The result is
+     * never longer than {@link #MAX_REQUEST}, so a request line cannot put an
+     * emitted log line over the budget no matter what the client asked for.
      *
      * @param request the request line, non-null
      * @return the request line, or its head plus an ellipsis when over
@@ -276,8 +389,11 @@ public class HttpHeaderFormatter {
         String tail = request.endsWith("HTTP/1.1") ? " HTTP/1.1" :
                       request.endsWith("HTTP/1.0") ? " HTTP/1.0" : "";
         int q = request.indexOf('?');
-        if (q > 0) {return request.substring(0, q) + "?..." + tail;}
-        return request.substring(0, MAX_REQUEST) + "..." + tail;
+        if (q > 0) {
+            int room = MAX_REQUEST - tail.length() - 4;
+            return request.substring(0, Math.min(q, room)) + "?..." + tail;
+        }
+        return request.substring(0, MAX_REQUEST - tail.length() - 3) + "..." + tail;
     }
 
     /**

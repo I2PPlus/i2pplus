@@ -2,6 +2,7 @@ package net.i2p.i2ptunnel;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
@@ -16,7 +17,9 @@ import org.junit.Test;
  * Unit tests for the log form of the HTTP header dump. The wire form names the
  * client destination three times, once as a 500 character base64 blob, and a
  * tracker request repeats it again in the query string, so the log form keeps
- * the base32 head and cuts everything else.
+ * the base32 head and cuts everything else. The header pairs come first and the
+ * request line last, with the Host folded into the request target instead of
+ * repeated as a pair of its own.
  *
  * @since 0.9.72+
  */
@@ -104,15 +107,15 @@ public class HttpHeaderFormatterLogTest {
     }
 
     /**
-     * The same header sent twice is one line, so a repeat cannot bury the
+     * The same header sent twice is one pair, so a repeat cannot bury the
      * request the line is about.
      */
     @Test
     public void testRepeatedValuesCollapse() {
         Map<String, List<String>> headers = new LinkedHashMap<String, List<String>>();
-        headers.put("Host", Arrays.asList("skank.i2p", "skank.i2p"));
+        headers.put("X-Trace", Arrays.asList("abc", "abc"));
         String out = HttpHeaderFormatter.formatHeadersForLog(headers, new StringBuilder("GET / HTTP/1.1"));
-        assertEquals("\n* Request: GET / HTTP/1.1\n* Host: skank.i2p", out);
+        assertEquals("\n* X-Trace: abc\n* Request: GET / HTTP/1.1", out);
     }
 
     /**
@@ -124,9 +127,9 @@ public class HttpHeaderFormatterLogTest {
     public void testEmptyValueIsDropped() {
         Map<String, List<String>> headers = new LinkedHashMap<String, List<String>>();
         headers.put("Accept-Encoding", Collections.singletonList(""));
-        headers.put("Host", Collections.singletonList("skank.i2p"));
+        headers.put("Range", Collections.singletonList("bytes=100-"));
         String out = HttpHeaderFormatter.formatHeadersForLog(headers, new StringBuilder("GET / HTTP/1.1"));
-        assertEquals("\n* Request: GET / HTTP/1.1\n* Host: skank.i2p", out);
+        assertEquals("\n* Range: bytes=100-\n* Request: GET / HTTP/1.1", out);
     }
 
     /**
@@ -144,8 +147,9 @@ public class HttpHeaderFormatterLogTest {
     }
 
     /**
-     * Short pairs share a continuation line, so a three-header request costs
-     * two lines rather than four.
+     * Short pairs share a continuation line, and the request line follows them
+     * on one of its own, so a three-header request costs two lines rather than
+     * four.
      */
     @Test
     public void testShortPairsShareALine() {
@@ -154,8 +158,7 @@ public class HttpHeaderFormatterLogTest {
         headers.put("Range", Collections.singletonList("bytes=100-"));
         headers.put("Accept", Collections.singletonList("*/*"));
         String out = HttpHeaderFormatter.formatHeadersForLog(headers, new StringBuilder("GET / HTTP/1.1"));
-        assertEquals("\n* Request: GET / HTTP/1.1\n* Host: skank.i2p * Range: bytes=100- * " +
-                     "Accept: */*", out);
+        assertEquals("\n* Range: bytes=100- * Accept: */*\n* Request: GET skank.i2p/ HTTP/1.1", out);
     }
 
     /**
@@ -182,6 +185,84 @@ public class HttpHeaderFormatterLogTest {
     }
 
     /**
+     * The request the router actually serves: who is asking on one line, what
+     * for on the next, with the authority the client sent folded into the
+     * request target instead of repeated beside it.
+     */
+    @Test
+    public void testTrackerRequestFoldsTheHostIntoTheTarget() {
+        Map<String, List<String>> headers = new LinkedHashMap<String, List<String>>();
+        headers.put("X-I2P-DestB32", Collections.singletonList(B32));
+        headers.put("User-Agent", Collections.singletonList("I2PSocketEepGet"));
+        headers.put("Host", Collections.singletonList("opentracker.skank.i2p"));
+        String out = HttpHeaderFormatter.formatHeadersForLog(
+            headers, new StringBuilder("GET /a?info_hash=%9b%26%02%1ca%25S&peer_id=%00%00%00&ip=" +
+                                       B64 + ".i2p HTTP/1.1"));
+        assertEquals("\n* X-I2P-DestB32: [cznm7wm6] * User-Agent: I2PSocketEepGet" +
+                     "\n* Request: GET opentracker.skank.i2p/a?... HTTP/1.1", out);
+    }
+
+    /**
+     * The tunnel serves plain HTTP, so a folded target invents no scheme. An
+     * absolute-form target keeps what the client wrote: an http:// is the
+     * assumed default and is dropped, an https:// is a fact about the request
+     * and stays. Either way the Host pair is a repeat of the target and goes.
+     */
+    @Test
+    public void testSchemeIsNotInvented() {
+        assertEquals("\n* Request: GET skank.i2p/a HTTP/1.1", dump("skank.i2p", "GET /a HTTP/1.1"));
+        assertEquals("\n* Request: GET skank.i2p/a HTTP/1.1",
+                     dump("skank.i2p", "GET http://skank.i2p/a HTTP/1.1"));
+        assertEquals("\n* Request: GET https://skank.i2p/a HTTP/1.1",
+                     dump("skank.i2p", "GET https://skank.i2p/a HTTP/1.1"));
+    }
+
+    /**
+     * A Host that is not a plain authority - a bracketed IPv6 literal, or junk
+     * someone put there - is not moved into the request line, where it would
+     * read as the host the request was for. It stays a pair, cut like any other
+     * over-long value, and the request line is left as the client wrote it.
+     */
+    @Test
+    public void testJunkHostStaysAPair() {
+        assertEquals("\n* Host: [::1]:8080\n* Request: GET /a HTTP/1.1",
+                     dump("[::1]:8080", "GET /a HTTP/1.1"));
+        assertEquals("\n* Host: skank.i2p * Host: x\n* Request: GET /a HTTP/1.1",
+                     dump("skank.i2p * Host: x", "GET /a HTTP/1.1"));
+    }
+
+    /**
+     * A request line with no query to cut is still cut, so the authority folded
+     * into it cannot push the emitted line past the budget.
+     */
+    @Test
+    public void testFoldedRequestStaysInsideTheBudget() {
+        StringBuilder path = new StringBuilder("GET /");
+        while (path.length() < 200) {path.append("segment/");}
+        String out = dump("opentracker.skank.i2p", path.append(" HTTP/1.1").toString());
+        for (String line : out.split("\n")) {
+            assertTrue("line over budget (" + line.length() + "): " + line,
+                       line.length() <= HttpHeaderFormatter.LINE_BUDGET);
+        }
+        assertTrue(out, out.endsWith("... HTTP/1.1"));
+    }
+
+    /**
+     * A request line with no target, or one that is not a path, is left alone -
+     * there is nothing to fold an authority into.
+     */
+    @Test
+    public void testUnfoldableTargetsAreLeftAlone() {
+        assertNull(HttpHeaderFormatter.requestTarget("GET"));
+        assertFalse(HttpHeaderFormatter.targetIsAbsolute("OPTIONS * HTTP/1.1"));
+        assertTrue(HttpHeaderFormatter.targetIsAbsolute("GET http://skank.i2p/a HTTP/1.1"));
+        assertNull(HttpHeaderFormatter.requestWithHost("OPTIONS * HTTP/1.1", "skank.i2p"));
+        assertNull(HttpHeaderFormatter.requestWithHost("GET", "skank.i2p"));
+        assertEquals("\n* Host: skank.i2p\n* Request: OPTIONS * HTTP/1.1",
+                     dump("skank.i2p", "OPTIONS * HTTP/1.1"));
+    }
+
+    /**
      * A distinct value of a fixed length, so the packing arithmetic is stable.
      *
      * @param i the index to vary the value by
@@ -192,5 +273,19 @@ public class HttpHeaderFormatterLogTest {
         buf.append("v").append(i).append('-');
         while (buf.length() < 20) {buf.append('x');}
         return buf.toString();
+    }
+
+    /**
+     * The log dump for a single Host header and a request line, the shape most
+     * of these cases need.
+     *
+     * @param host the Host value, or null to send no Host at all
+     * @param request the request line
+     * @return the formatted dump
+     */
+    private static String dump(String host, String request) {
+        Map<String, List<String>> headers = new LinkedHashMap<String, List<String>>();
+        if (host != null) {headers.put("Host", Collections.singletonList(host));}
+        return HttpHeaderFormatter.formatHeadersForLog(headers, new StringBuilder(request));
     }
 }
