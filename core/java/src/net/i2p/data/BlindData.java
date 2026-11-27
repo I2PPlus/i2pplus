@@ -235,6 +235,9 @@ public class BlindData {
      * Gets the blinded signing public key for the current day.
      *
      * @return The blinded key for the current day, non-null
+     * @throws IllegalArgumentException if the blinded key cannot be derived, a
+     *                                  malformed key or an unsupported blinded
+     *                                  signature type
      */
     public SigningPublicKey getBlindedPubKey() {
         calculate();
@@ -255,6 +258,9 @@ public class BlindData {
      * Gets the hash of the blinded key for the current day.
      *
      * @return The hash of the blinded key for the current day
+     * @throws IllegalArgumentException if the blinded key cannot be derived, a
+     *                                  malformed key or an unsupported blinded
+     *                                  signature type
      */
     public Hash getBlindedHash() {
         calculate();
@@ -265,6 +271,9 @@ public class BlindData {
      * Gets the alpha value for the current day.
      *
      * @return Alpha for the current day
+     * @throws IllegalArgumentException if the blinded key cannot be derived, a
+     *                                  malformed key or an unsupported blinded
+     *                                  signature type
      */
     public SigningPrivateKey getAlpha() {
         calculate();
@@ -322,7 +331,14 @@ public class BlindData {
         return _authKey;
     }
 
-    /** Calculates the blinded key, hash and destination. */
+    /**
+     * Calculates the blinded key, hash and alpha, skipping the work when the
+     * routing key modifier has not changed since the last calculation.
+     *
+     * @throws IllegalArgumentException if the blinded key cannot be derived, a
+     *                                  malformed key or an unsupported blinded
+     *                                  signature type
+     */
     private synchronized void calculate() {
         if (_context.isRouterContext()) {
             RoutingKeyGenerator gen = _context.routingKeyGenerator();

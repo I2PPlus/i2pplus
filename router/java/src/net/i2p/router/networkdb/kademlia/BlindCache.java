@@ -11,6 +11,7 @@ import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -219,6 +220,9 @@ class BlindCache {
      * Add blinded lookup data to the cache.
      *
      * @param bd the blind data to place in the in-memory caches
+     * @throws IllegalArgumentException if the blinded key cannot be derived, a
+     *                                  malformed key or an unsupported blinded
+     *                                  signature type
      * @since 0.9.41 from {@link #addToCache(BlindData)}
      */
     private void storeInCache(BlindData bd) {
@@ -276,11 +280,21 @@ class BlindCache {
 
     /**
      * Refresh all the data at midnight.
+     * <p>
+     * An entry whose blinded key cannot be re-derived for the new day is dropped
+     * from the cache instead of aborting the pass. One bad entry would otherwise
+     * leave every entry after it without a reverse-cache mapping, and the caller
+     * in the routing key job with an exception instead of a requeue.
      */
     public synchronized void rollover() {
         _reverseCache.clear();
-        for (BlindData bd : _cache.values()) {
-            _reverseCache.put(bd.getBlindedPubKey(), bd);
+        for (Iterator<BlindData> iter = _cache.values().iterator(); iter.hasNext(); ) {
+            BlindData bd = iter.next();
+            try {
+                _reverseCache.put(bd.getBlindedPubKey(), bd);
+            } catch (IllegalArgumentException iae) {
+                iter.remove();
+            }
         }
     }
 
