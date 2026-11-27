@@ -2816,7 +2816,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
         long now = _context.clock().now();
         String routerId = getRouterId(routerInfo);
-        String caps = routerInfo.getCapabilities() != null ? routerInfo.getCapabilities().toUpperCase() : "";
+        String caps = capsAsWritten(routerInfo);
         Hash h = routerInfo.getIdentity().getHash();
         if (h == null) {_context.banlist().banlistRouterForever(Hash.FAKE_HASH, "Null RouterInfo hash"); return "Null RouterInfo hash";}
         boolean isUs = h.equals(_context.routerHash());
@@ -2875,6 +2875,38 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      */
     private String getRouterId(RouterInfo routerInfo) {
         return routerInfo.getIdentity().getHash().toShortBase64();
+    }
+
+    /**
+     * The capabilities of a router as the NetDb checks read them: exactly as the
+     * peer wrote them.
+     * <p>
+     * A capability letter is case-significant - the floodfill flag is the
+     * lower-case 'f' {@link FloodfillNetworkDatabaseFacade#CAPABILITY_FLOODFILL}
+     * and every other capability the router reads is written upper case, so an
+     * upper-case 'F' names nothing. Folding the string, as this method used to,
+     * therefore left no floodfill in it, and a floodfill reached the ban log and
+     * the ban's own cause as an ordinary router.
+     *
+     * @param routerInfo the router being validated, null yields nothing
+     * @return the capability string, empty when the peer declared none
+     * @since 0.9.72+
+     */
+    static String capsAsWritten(RouterInfo routerInfo) {
+        String caps = routerInfo != null ? routerInfo.getCapabilities() : null;
+        return caps != null ? caps : "";
+    }
+
+    /**
+     * Does this capability string declare a floodfill? The flag is lower-case,
+     * so the string has to be the peer's own - see {@link #capsAsWritten}.
+     *
+     * @param caps the capability string as the peer wrote it, null is not a floodfill
+     * @return true if the peer declared the floodfill capability
+     * @since 0.9.72+
+     */
+    static boolean isFloodfillCaps(String caps) {
+        return caps != null && caps.indexOf(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL) >= 0;
     }
 
     /**
@@ -2971,7 +3003,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         refreshConfig(_context);
         String country = _context.commSystem().getCountry(h);
         if (country == null) country = "unknown";
-        boolean isFF = caps.contains("f");
+        boolean isFF = isFloodfillCaps(caps);
         boolean isStrict = _context.commSystem().isInStrictCountry();
         boolean isHidden = _context.router().isHidden();
         boolean blockMyCountry = _cachedBlockMyCountry;
@@ -3028,7 +3060,7 @@ return false;
         if (!_context.banlist().isXgBanEnabled()) return false;
         if (isRouterXG(routerInfo, h.equals(_context.routerHash()))) {
             if (!_context.banlist().isBanlisted(h)) {
-                boolean isFF = caps != null && caps.contains("f");
+                boolean isFF = isFloodfillCaps(caps);
                 String ipPort = TransportImpl.getRouterIPPort(routerInfo);
                 if (_log.shouldInfo()) {
                     _log.info("Banning Router [" + routerId + "] -> X tier and G Cap (probable botnet participant)");
