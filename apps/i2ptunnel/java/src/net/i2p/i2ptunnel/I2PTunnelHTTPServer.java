@@ -1749,7 +1749,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     _log.debug("[HTTPServer] Forwarding request headers" +
                                HttpHeaderFormatter.formatHeadersForLog(headers, command));
                 }
-                else if (_log.shouldInfo() && !command.toString().toLowerCase().contains("head")) {
+                else if (_log.shouldInfo() &&
+                         !command.toString().toLowerCase(Locale.US).contains("head")) {
                     _log.info("[HTTPServer] Forwarding request headers" +
                               HttpHeaderFormatter.formatHeadersForLog(headers, command));
                 }

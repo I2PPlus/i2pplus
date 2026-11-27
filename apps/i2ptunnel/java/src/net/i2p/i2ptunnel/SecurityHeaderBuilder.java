@@ -2,6 +2,7 @@ package net.i2p.i2ptunnel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -129,7 +130,7 @@ public class SecurityHeaderBuilder {
             .anyMatch(key -> key.equalsIgnoreCase("Cache-Control"));
         List<String> cacheControlList = headers.get("Cache-Control");
 
-        if (cacheControlList != null && cacheControlList.contains("none".toLowerCase())) {
+        if (cacheControlList != null && cacheControlList.contains("none")) {
             headers.remove("Cache-Control");
             cacheControlList = null;
         }
@@ -153,7 +154,7 @@ public class SecurityHeaderBuilder {
         boolean immutableCache = MimeTypeDetector.isImmutableCache(mimeType);
 
         if (cacheControlList != null) {
-            boolean hasNoCache = hasCacheControl && cacheControlList.contains("no-cache".toLowerCase());
+            boolean hasNoCache = hasCacheControl && cacheControlList.contains("no-cache");
             if (hasNoCache && immutableCache) {
                 headers.remove("Cache-Control");
                 I2PTunnelHTTPServer.setEntry(headers, "Cache-Control", "private, max-age=31536000, immutable");}
@@ -261,7 +262,7 @@ public class SecurityHeaderBuilder {
         if (hasNone || hasPostCheck) {
             List<String> newList = new ArrayList<>();
             for (String s : cacheControlList) {
-                String lc = s.toLowerCase();
+                String lc = s.toLowerCase(Locale.US);
                 if (!lc.equals("none") && !lc.equals("post-check")) {
                     newList.add(s);
                 }

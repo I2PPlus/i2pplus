@@ -591,7 +591,9 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
                     // Shadows instance _log
                     Log logger = getTunnel().getContext().logManager().getLog(I2PTunnelClientBase.class);
                     String exmsg = ise.getMessage();
-                    boolean fail = !_buildingTunnels || (exmsg != null && exmsg.toLowerCase().contains("session limit exceeded"));
+                    boolean limitExceeded = exmsg != null &&
+                                            exmsg.toLowerCase(Locale.US).contains("session limit exceeded");
+                    boolean fail = !_buildingTunnels || limitExceeded;
                     if (!fail && ++retries < MAX_RETRIES) {
                         // Only log after multiple consecutive failures (3+) to avoid noise during normal startup
                         // Users don't need to see "retrying" messages - they'll see "Tunnel started" on success

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -183,7 +184,7 @@ public class HttpHeaderFormatter {
             List<String> values = e.getValue();
             if (values == null || values.isEmpty()) {continue;}
             String name = stripLineBreaks(e.getKey().trim());
-            String lc = name.toLowerCase();
+            String lc = name.toLowerCase(Locale.US);
             // Three spellings of one destination: keep the base32, which is the
             // short one, and drop the hash and the base64 blob as repeats.
             if (lc.equals("x-i2p-destb64") || lc.equals("x-i2p-desthash")) {continue;}
@@ -250,7 +251,8 @@ public class HttpHeaderFormatter {
         for (Map.Entry<String, List<String>> e : headers.entrySet()) {
             List<String> values = e.getValue();
             if (values == null || values.isEmpty()) {continue;}
-            if (!"host".equals(stripLineBreaks(e.getKey().trim()).toLowerCase())) {continue;}
+            String name = stripLineBreaks(e.getKey().trim()).toLowerCase(Locale.US);
+            if (!"host".equals(name)) {continue;}
             String value = stripLineBreaks(values.get(0).trim());
             if (HOST_VALUE.matcher(value).matches()) {return value;}
             // A Host that is not a plain authority - a bracketed IPv6 literal,

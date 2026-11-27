@@ -110,7 +110,11 @@ public class BlacklistBean {
         if (content == null) {
             return false;
         }
-        address = address.trim().toLowerCase();
+        // Trim only. The compare below is equalsIgnoreCase(), which folds each
+        // character without a locale, while a toLowerCase() here would fold an
+        // upper-case I to a dotless ı under a Turkish default locale and the
+        // address would then match nothing in the file.
+        address = address.trim();
         String[] lines = NEWLINE_SPLIT.split(content);
         for (String line : lines) {
             if (line.trim().equalsIgnoreCase(address)) {

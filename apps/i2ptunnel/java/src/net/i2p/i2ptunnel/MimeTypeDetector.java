@@ -1,6 +1,7 @@
 package net.i2p.i2ptunnel;
 
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 /**
@@ -72,7 +73,11 @@ public class MimeTypeDetector {
      * <p>
      * If the URL contains a query string, it is stripped before checking
      * the extension. If no matching extension is found or the URL is null,
-     * returns "application/octet-stream" as a safe default.
+     * returns "application/octet-stream" as a safe default. The table is
+     * lowercase ASCII, so the fold to lower case names a locale rather than
+     * following the machine's: under a Turkish default locale an upper-case I
+     * folds to a dotless ı, and a scan named <code>SCAN.TIF</code> would stop
+     * matching its own entry.
      * </p>
      *
      * @param url the URL or file path to detect the MIME type for; may be null
@@ -83,7 +88,7 @@ public class MimeTypeDetector {
             return "application/octet-stream";
         }
 
-        String lcUrl = url.toLowerCase();
+        String lcUrl = url.toLowerCase(Locale.US);
         int queryIndex = lcUrl.indexOf("?");
         if (queryIndex != -1) {
             lcUrl = lcUrl.substring(0, queryIndex);
