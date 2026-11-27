@@ -122,6 +122,13 @@ class NTCP2Payload {
         int i = off;
         final int end = off + length;
         while (i < end) {
+            // A block header is three bytes. Reading a shorter one takes the
+            // length from past the end of the frame - the read buffer is reused,
+            // so those bytes are the previous frame's, and a peer that ends a
+            // frame with one or two stray bytes gets a phantom block out of them.
+            if (end - i < BLOCK_HEADER_SIZE)
+                throw new IOException("Truncated block header at offset " + (i - off) +
+                                      ", " + (end - i) + " of " + BLOCK_HEADER_SIZE + " bytes present");
             int type = payload[i++] & 0xff;
             checkBlockOrder(isHandshake, blocks, gotPadding, gotTermination, type);
             int len = (int) DataHelper.fromLong(payload, i, 2);
@@ -275,10 +282,15 @@ class NTCP2Payload {
      * @param len the block's data length, including the flag byte
      * @param isHandshake true for the handshake frame, passed on to the callback
      * @throws IOException if the RouterInfo cannot be read
-     * @throws DataFormatException if the RouterInfo is too big, or the callback rejects it
+     * @throws DataFormatException if the block is empty or too big, or the callback
+     *                             rejects the RouterInfo
      */
     private static void processRouterInfo(I2PAppContext ctx, PayloadCallback cb, byte[] payload,
                                           int i, int len, boolean isHandshake) throws IOException, DataFormatException {
+        // The flag byte is part of the block. A zero-length block reads the flag
+        // from outside it and then hands readBytes a negative length.
+        if (len < 1)
+            throw new DataFormatException("RouterInfo block has no flag byte");
         int flag = payload[i] & 0xff;
         if (len - 1 > RouterInfo.MAX_UNCOMPRESSED_SIZE)
             throw new DataFormatException("RouterInfo too big: " + (len - 1));

@@ -418,6 +418,68 @@ public class NTCP2PayloadTest {
         }
     }
 
+    /**
+     * A frame ending in one or two stray bytes has no block header there. The
+     * length is read past the end of the frame, and the read buffer is reused, so
+     * those bytes belong to the previous frame - the peer gets a phantom block or
+     * an index-out-of-bounds rather than a clean error.
+     */
+    @Test
+    public void testTruncatedBlockHeader() {
+        Assume.assumeTrue("No RouterContext available", _ctx != null);
+        byte[] payload = new byte[] {(byte) 254, 0, 0, (byte) 99, 0};
+        try {
+            Recorder rec = new Recorder();
+            NTCP2Payload.processPayload(_ctx, rec, payload, 0, payload.length, false);
+            fail("no exception thrown");
+        } catch (IOException e) {
+            assertTrue(e.getMessage(), e.getMessage().contains("Truncated block header"));
+        } catch (DataFormatException | I2NPMessageException e) {
+            fail("wrong exception: " + e);
+        }
+    }
+
+    /**
+     * The same stray bytes with a buffer that goes on past the frame, which is how
+     * the read state hands the payload over. Without the check the stale byte is
+     * read as a block type and the frame is rejected for the wrong reason.
+     */
+    @Test
+    public void testTruncatedBlockHeaderInALargerBuffer() {
+        Assume.assumeTrue("No RouterContext available", _ctx != null);
+        byte[] payload = new byte[16];
+        payload[0] = (byte) 254;
+        payload[3] = (byte) 99;
+        try {
+            Recorder rec = new Recorder();
+            NTCP2Payload.processPayload(_ctx, rec, payload, 0, 4, false);
+            fail("no exception thrown");
+        } catch (IOException e) {
+            assertTrue(e.getMessage(), e.getMessage().contains("Truncated block header"));
+        } catch (DataFormatException | I2NPMessageException e) {
+            fail("wrong exception: " + e);
+        }
+    }
+
+    /**
+     * A ROUTERINFO block with no data has no flag byte to read, and the payload
+     * length left for the RouterInfo itself is negative.
+     */
+    @Test
+    public void testEmptyRIBlock() {
+        Assume.assumeTrue("No RouterContext available", _ctx != null);
+        byte[] payload = new byte[] {2, 0, 0};
+        try {
+            Recorder rec = new Recorder();
+            NTCP2Payload.processPayload(_ctx, rec, payload, 0, payload.length, false);
+            fail("no exception thrown");
+        } catch (DataFormatException e) {
+            assertTrue(e.getMessage(), e.getMessage().contains("no flag byte"));
+        } catch (IOException | I2NPMessageException e) {
+            fail("wrong exception: " + e);
+        }
+    }
+
     @Test
     public void testIllegalBlockAfterPadding() throws Exception {
         Assume.assumeTrue("No RouterContext available", _ctx != null);
