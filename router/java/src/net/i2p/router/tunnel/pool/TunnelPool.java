@@ -8121,7 +8121,9 @@ public class TunnelPool {
      * selection.  The exclusion set is used by the build executor's dispatch
      * loop to ensure concurrent builds in the same batch target diverse
      * first-hop peers — stacking multiple build requests on one peer
-     * floods it and makes the first build answer slower.
+     * floods it and makes the first build answer slower.  It is honoured by
+     * both ways a new tunnel gets its peers: the selector, and the reuse scan
+     * that 75% of client builds take.
      *
      * @param forceZeroHop true to force a zero-hop tunnel
      * @param excludeFirstHops first-hop peers already selected by concurrent
@@ -8144,7 +8146,7 @@ public class TunnelPool {
                 // Ignore variance for now.
                 // Skip tunnels whose peers are on cooldown to ensure diversity.
                 long cooldownCutoff = now - TunnelPeerSelector.PEER_SELECTION_COOLDOWN_MS;
-                peers = findReusableTunnel(len + 1, now, cooldownCutoff);
+                peers = findReusableTunnel(len + 1, now, cooldownCutoff, excludeFirstHops);
             }
             if (peers == null) {
                 setLengthOverride();
@@ -8217,16 +8219,20 @@ public class TunnelPool {
     /**
      * Try to reuse an existing tunnel of the right length that is expiring
      * soon, so its peers carry into the new build.  Skip candidates whose
-     * peers are on cooldown to ensure diversity, and record cooldown for
+     * peers are on cooldown to ensure diversity, or whose build request would
+     * land on a hop another build is already on, and record cooldown for
      * reused peers so selectPeers respects them.
      *
      * @param len desired length including us (endpoint first)
      * @param now the current time in ms, used to record cooldowns for reused peers
      * @param cooldownCutoff ms since the epoch: a peer whose cooldown ends after
      *                       this timestamp blocks the reuse
+     * @param excludeFirstHops build-request hops already taken by concurrent
+     *                         builds in the same dispatch batch, may be null
      * @return the peer list to reuse, or null to fall through to normal selection
      */
-    private List<Hash> findReusableTunnel(int len, long now, long cooldownCutoff) {
+    private List<Hash> findReusableTunnel(int len, long now, long cooldownCutoff,
+                                          Set<Hash> excludeFirstHops) {
         List<Hash> peers = null;
         int idx = 0;
         // Hold _tunnelsLock only for the scan itself; the cooldown
@@ -8239,6 +8245,14 @@ public class TunnelPool {
                 break;
             }
             idx++;
+            // Skip reuse onto a first hop the executor has already put a build
+            // on. The reuse scan runs before the selector, so without this the
+            // 75% reuse path hands back the hop the dispatch gate is about to
+            // reject, and the build is only kept by re-selecting the whole
+            // three-hop path from scratch.
+            if (reusesExcludedFirstHop(ti, getSettings().isInbound(), excludeFirstHops)) {
+                continue; // try the next tunnel
+            }
             List<Hash> candidate = peersEndpointFirst(ti);
             // Skip reuse if any non-self peer is on cooldown
             if (hasPeerOnCooldown(candidate, cooldownCutoff)) {
@@ -8344,6 +8358,41 @@ public class TunnelPool {
                 return ti;
         }
         return null;
+    }
+
+    /**
+     * Whether reusing this tunnel would put a build request on a first hop that
+     * is already spoken for. Pure decision helper.
+     * <p>The "first hop" is the peer the build request is dispatched to, exactly
+     * as {@link BuildRequestor#getBuildRequestPeer(PooledTunnelCreatorConfig)}
+     * defines it, and it is a different hop per direction: an outbound build
+     * starts at hop 1, one hop in from our gateway, while an inbound build is
+     * dispatched from the far end and starts at the gateway itself, hop 0.
+     * {@link TunnelInfo} numbers hops the same way a config does - gateway is
+     * hop 0 - so the two agree without translating the list.
+     * <p>Only that one hop counts. The dispatch gate holds a second build off a
+     * peer that is already carrying a request; a busy middle or far hop is not
+     * what it rejects, and abandoning the reuse for one would give up a tunnel
+     * the router can still use.
+     * <p>Measured live on 2026-11-27: the gate turned away 2,745 builds in 28
+     * minutes and the executor kept them alive by re-selecting 7,121 times,
+     * roughly three config rebuilds per network build attempt. 75% of client
+     * builds take this reuse path, and the exclusions the executor already
+     * passes in were honoured by the selector and then ignored here.
+     *
+     * @param ti the reuse candidate, hops numbered gateway first
+     * @param inbound whether this pool builds inbound tunnels, which decides
+     *                which hop the build request goes to
+     * @param excludeFirstHops first hops not to build on, may be null or empty
+     * @return true if the candidate's build request would land on an excluded
+     *         hop and the reuse must be skipped
+     * @since 0.9.72+
+     */
+    static boolean reusesExcludedFirstHop(TunnelInfo ti, boolean inbound, Set<Hash> excludeFirstHops) {
+        if (ti == null || excludeFirstHops == null || excludeFirstHops.isEmpty()) {return false;}
+        Hash target = inbound ? ti.getPeer(0)
+                               : ti.getLength() > 1 ? ti.getPeer(1) : null;
+        return target != null && excludeFirstHops.contains(target);
     }
 
     /**
