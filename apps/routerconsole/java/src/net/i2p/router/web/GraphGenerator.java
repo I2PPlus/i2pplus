@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -559,7 +560,7 @@ public class GraphGenerator implements Runnable, ClientApp {
          * @return {@code cause=count} when empty, otherwise {@code cause=count (oldest Ns origin)}
          */
         String describe() {
-            String name = _cause.name().toLowerCase();
+            String name = _cause.name().toLowerCase(Locale.US);
             if (_count <= 0) {
                 return name + "=0";
             }

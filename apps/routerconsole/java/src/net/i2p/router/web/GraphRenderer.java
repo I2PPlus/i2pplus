@@ -690,25 +690,28 @@ class GraphRenderer {
             cfg.noDecimalPlace = meta.noDecimalPlace;
             cfg.singleDecimalPlace = meta.singleDecimalPlace;
         } else {
-            // Legacy heuristic fallback (should rarely trigger)
+            // Legacy heuristic fallback (should rarely trigger). The name is
+            // folded once and as ASCII, and every test below reads that fold:
+            // the keywords are ASCII, so a fold that followed the machine's
+            // locale would turn an upper-case I in a stat name into a dotless ı
+            // and pick the wrong units for the axis.
+            String lc = name.toLowerCase(Locale.US);
             cfg.singleDecimalPlace = true;
             cfg.noDecimalPlace = false;
-            boolean isByteOrRate = name.toLowerCase().contains("b/s") || name.toLowerCase().contains("bps")
-                    || name.toLowerCase().contains("bandwidth") || name.toLowerCase().contains("byte")
-                    || name.toLowerCase().contains("memory");
-            boolean isSize = name.toLowerCase().contains("size") || name.toLowerCase().contains("memory")
-                    || name.toLowerCase().contains("bytecache");
+            boolean isByteOrRate = lc.contains("b/s") || lc.contains("bps") ||
+                                   lc.contains("bandwidth") || lc.contains("byte") || lc.contains("memory");
+            boolean isSize = lc.contains("size") || lc.contains("memory") || lc.contains("bytecache");
             if (isSize && !cfg.showEvents) {
                 cfg.base = 1024;
                 cfg.singleDecimalPlace = false;
             } else {
                 cfg.base = 1000;
             }
-            if (name.toLowerCase().contains("percent") || name.contains("%")) {
+            if (lc.contains("percent") || name.contains("%")) {
                 cfg.noDecimalPlace = true;
-            } else if (!isByteOrRate || name.toLowerCase().contains("keyset") || name.toLowerCase().contains("keysize")) {
+            } else if (!isByteOrRate || lc.contains("keyset") || lc.contains("keysize")) {
                 // Count-like metrics
-                if (!name.toLowerCase().endsWith("rate")) {
+                if (!lc.endsWith("rate")) {
                     cfg.noDecimalPlace = true;
                 }
             }

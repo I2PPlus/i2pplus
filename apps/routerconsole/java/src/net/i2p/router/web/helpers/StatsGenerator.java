@@ -46,7 +46,7 @@ public class StatsGenerator {
     public void generateCSV(Writer out, String filter) throws IOException {
         StringBuilder buf = new StringBuilder(512);
         boolean hasFilter = filter != null && !filter.isEmpty();
-        String lcFilter = hasFilter ? filter.toLowerCase() : null;
+        String lcFilter = hasFilter ? lowerFilter(filter) : null;
         buf.append("group,stat,type,period,description,average_value,last_event_count,lifetime_events\n");
         out.write(buf.toString());
         buf.setLength(0);
@@ -55,7 +55,7 @@ public class StatsGenerator {
         for (Map.Entry<String, SortedSet<String>> entry : groups.entrySet()) {
             String group = entry.getKey();
             for (String stat : entry.getValue()) {
-                if (hasFilter && !stat.toLowerCase().contains(lcFilter)) continue;
+                if (hasFilter && !matchesFilter(stat, lcFilter)) continue;
                 if (_context.statManager().isFrequency(stat)) {
                     FrequencyStat freq = _context.statManager().getFrequency(stat);
                     if (freq == null) continue;
@@ -118,7 +118,7 @@ public class StatsGenerator {
     public void generateStatsPage(Writer out, boolean showAll, String filter) throws IOException {
         StringBuilder buf = new StringBuilder(16*1024);
         boolean hasFilter = filter != null && !filter.isEmpty();
-        String lcFilter = hasFilter ? filter.toLowerCase() : null;
+        String lcFilter = hasFilter ? lowerFilter(filter) : null;
 
         buf.append("<div class=\"confignav\">");
 
@@ -131,7 +131,7 @@ public class StatsGenerator {
             if (hasFilter) {
                 boolean anyMatch = false;
                 for (String stat : entry.getValue()) {
-                    if (stat.toLowerCase().contains(lcFilter)) {anyMatch = true; break;}
+                    if (matchesFilter(stat, lcFilter)) {anyMatch = true; break;}
                 }
                 if (!anyMatch) continue;
             }
@@ -164,7 +164,7 @@ public class StatsGenerator {
             if (hasFilter) {
                 boolean anyMatch = false;
                 for (String stat : stats) {
-                    if (stat.toLowerCase().contains(lcFilter)) {anyMatch = true; break;}
+                    if (matchesFilter(stat, lcFilter)) {anyMatch = true; break;}
                 }
                 if (!anyMatch) continue;
             }
@@ -177,7 +177,7 @@ public class StatsGenerator {
             out.append(buf);
             buf.setLength(0);
             for (String stat : stats) {
-                if (hasFilter && !stat.toLowerCase().contains(lcFilter)) continue;
+                if (hasFilter && !matchesFilter(stat, lcFilter)) continue;
                 buf.append("<li class=statsName id=\"").append(stat.replace(" ", "_").replace("[", "").replace("]", ""))
                    .append("\"><b>").append(stat).append("</b> ");
                 if (_context.statManager().isFrequency(stat)) {renderFrequency(stat, buf);}
@@ -350,6 +350,37 @@ public class StatsGenerator {
      */
     static String downloadName(String name) {
         return DataHelper.escapeHTML(name.replace('.', '_').replace(' ', '_'));
+    }
+
+    /**
+     * The stats filter as it is compared: folded to lower case ASCII.
+     *
+     * <p>Stat names are ASCII, and so is the text typed into the filter box, so
+     * the fold names a locale instead of following the machine's. Under a
+     * Turkish default locale an upper-case I folds to a dotless ı, and a filter
+     * of "JobQueue" or "InstallationID" then matches no stat at all - the page
+     * comes back empty rather than wrong.
+     *
+     * @param filter the filter as typed, not null or empty
+     * @return the text every stat name is compared against
+     * @since 0.9.72+
+     */
+    static String lowerFilter(String filter) {
+        return filter.toLowerCase(Locale.US);
+    }
+
+    /**
+     * Does this stat name contain the filter, ignoring case? Both sides are
+     * folded, so a name registered in upper case and a filter typed in lower
+     * case still find each other.
+     *
+     * @param stat the stat name as registered
+     * @param lcFilter the filter from {@link #lowerFilter(String)}
+     * @return true if the stat is kept by the filter
+     * @since 0.9.72+
+     */
+    static boolean matchesFilter(String stat, String lcFilter) {
+        return stat.toLowerCase(Locale.US).contains(lcFilter);
     }
 
     /** Formatter for plain numbers. */

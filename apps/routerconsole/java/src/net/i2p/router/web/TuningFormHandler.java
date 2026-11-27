@@ -3,6 +3,7 @@ package net.i2p.router.web;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.SortedMap;
 import net.i2p.router.CommSystemFacade;
@@ -4261,7 +4262,7 @@ public class TuningFormHandler extends FormHandler {
             addFormError(_t("Invalid value") + ": " + param + "." + field + " = " + value);
             return;
         }
-        String key = param + "." + field.toLowerCase();
+        String key = param + "." + field.toLowerCase(Locale.US);
         changes.put(key, String.valueOf(parsed));
     }
 
