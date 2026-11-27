@@ -555,8 +555,63 @@ public class TunnelDispatcher implements Service {
         _context.statManager().createRequiredRateStat("tunnel.firstHopSendFailure",
                 "Spaced send failures to the first hop of an outbound tunnel", "Tunnels", RATES);
         BatchedPreprocessor.registerStats(_context.statManager(), RATES);
+        registerDistributorStats(_context.statManager(), RATES);
         registerFragmentStats(_context.statManager());
     }
+
+/**
+ * Declare the counters written by the message distributors and receivers -
+ * {@link InboundGatewayReceiver}, {@link OutboundReceiver},
+ * {@link TunnelParticipant}, {@link OutboundMessageDistributor},
+ * {@link InboundMessageDistributor} and {@link OutboundTunnelEndpoint}. Each of
+ * those classes carries a comment saying its stat declarations live here, and
+ * until now none of them were here, so every one of those writes went to a name
+ * StatManager had never created and was discarded.
+ * <p>
+ * The four <code>LookupSuccess</code> counters are outcome markers, not counts:
+ * a 1 means the next-hop RouterInfo was found and the message was sent, a 0
+ * means it was not, so the stat's average is the hit ratio of that path and a
+ * falling one is a NetDb problem behind a tunnel that looks healthy. The rest
+ * count messages dropped or forwarded.
+ * <p>
+ * Declared as required, like the fragment counters: {@code createRateStat()} is
+ * a no-op unless <code>stat.full</code> is set and its default is false, so a
+ * plain declaration would leave these dark on a stock router.
+ * <p>
+ * Package-visible and static so a unit test can assert the registration without
+ * standing up a whole router.
+ *
+ * @param sm the stat manager to declare into
+ * @param periods the rate periods to record on
+ * @since 0.9.72+
+ */
+static void registerDistributorStats(StatManager sm, long[] periods) {
+    sm.createRequiredRateStat("tunnel.inboundLookupSuccess",
+            "Inbound gateway next-hop lookup (1 found, 0 missing)", "Tunnels", periods);
+    sm.createRequiredRateStat("tunnel.outboundLookupSuccess",
+            "Outbound gateway first-hop lookup (1 found, 0 missing)", "Tunnels", periods);
+    sm.createRequiredRateStat("tunnel.participantLookupSuccess",
+            "Transit tunnel next-hop lookup (1 found, 0 missing)", "Tunnels", periods);
+    sm.createRequiredRateStat("tunnel.distributeLookupSuccess",
+            "RouterInfo lookup behind an I2NP dispatch (1 found, 0 missing)", "Tunnels", periods);
+    // emitted by OutboundMessageDistributor when the new-connection throttle refuses a target
+    sm.createRequiredRateStat("tunnel.dropAtOBEP",
+            "I2NP messages dropped at the outbound endpoint (messages)", "Tunnels", periods);
+    // emitted by InboundMessageDistributor for a DatabaseStore reply token arriving down a
+    // tunnel that cannot carry the answer back; the event duration is the message type
+    sm.createRequiredRateStat("tunnel.dropDangerousClientTunnelMessage",
+            "Messages dropped down a client tunnel for a reply token they cannot answer (messages)",
+            "Tunnels", periods);
+    sm.createRequiredRateStat("tunnel.dropDangerousExplTunnelMessage",
+            "Messages dropped down an exploratory tunnel for a reply token they cannot answer (messages)",
+            "Tunnels", periods);
+    // emitted by InboundMessageDistributor for the data message a load test is carried in
+    sm.createRequiredRateStat("tunnel.handleLoadClove",
+            "Load-test data messages received as cloves (messages)", "Tunnels", periods);
+    // emitted by OutboundTunnelEndpoint when it forwards a RouterInfo store it was asked to relay
+    sm.createRequiredRateStat("tunnel.outboundTunnelEndpointFwdRIDSM",
+            "RouterInfo store messages forwarded by an outbound endpoint (messages)", "Tunnels", periods);
+}
 
 /**
  * Declare the rate stats emitted by {@link FragmentHandler} on the endpoint
