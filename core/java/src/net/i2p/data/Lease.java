@@ -217,13 +217,18 @@ public class Lease extends DataStructureImpl {
         return (int) _end ^ DataHelper.hashCode(_gateway) ^ DataHelper.hashCode(_tunnelId);
     }
 
-    /** Returns a string representation of this Lease. */
+    /**
+     * A string representation of this Lease, as log-entry bullets: the gateway
+     * in the six-character Base64 a router is printed as, the end time, and the
+     * tunnel ID. The brackets are only around the hash - the console log viewer
+     * linkifies a bracketed token, so a bracketed ID reads as a broken link.
+     */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(128); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         buf.append("\n* Gateway: [").append(_gateway.toShortBase64()).append("]");
         buf.append(" * Expires: ").append(DataHelper.formatTime(_end));
-        buf.append(" [TunnelID ").append(_tunnelId).append("]");
+        buf.append(" * TunnelID: ").append(_tunnelId);
         return buf.toString();
     }
 }

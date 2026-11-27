@@ -95,4 +95,30 @@ public class LeaseTest extends StructureTest {
         lease.setTunnelId(null);
         assertFalse(lease.equals(null));
     }
+
+    /**
+     * The log form brackets only the gateway. The console log viewer linkifies a
+     * bracketed token, so a bracketed tunnel ID reads as a broken link and hides
+     * the hash that belongs there, and the gateway has to stay the six-character
+     * Base64 a router is printed as - an eight-character Base32 token resolves as
+     * a lease set, not a router.
+     */
+    @Test
+    public void logFormBracketsOnlyTheGateway() {
+        Lease lease = new Lease();
+        lease.setEndDate(new Date(1000 * 60 * 2));
+        byte[] h = new byte[Hash.HASH_LENGTH];
+        for (int i = 0; i < h.length; i++) {
+            h[i] = (byte) i;
+        }
+        Hash gw = new Hash(h);
+        lease.setGateway(gw);
+        lease.setTunnelId(new TunnelId(2984416034L));
+
+        String s = lease.toString();
+        assertTrue(s, s.startsWith("\n* Gateway: [" + gw.toShortBase64() + "]"));
+        assertTrue(s, s.contains(" * TunnelID: 2984416034"));
+        assertFalse(s, s.contains("[TunnelID"));
+        assertEquals("only the gateway is bracketed: " + s, 1, s.chars().filter(c -> c == '[').count());
+    }
 }
