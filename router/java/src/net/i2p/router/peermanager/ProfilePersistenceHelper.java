@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Properties;
 import java.util.Set;
 import java.util.zip.GZIPInputStream;
@@ -259,7 +260,9 @@ _context.statManager().createRequiredRateStat(STAT_STORED_PROFILES,
                 buf.append(HR).append(NL).append(NL);
                 buf.append("# ").append("Version: ").append(version != null ? version : "unknown").append(NL);
                 buf.append("# ").append("Signature: ").append(DataHelper.stripHTML(info.getIdentity().getSigningPublicKey().getType().toString())).append(NL);
-                buf.append("# ").append("Capabilities: ").append(DataHelper.stripHTML(info.getCapabilities()).toUpperCase().replace("XO", "X").replace("PO", "P")).append(NL);
+                String caps = DataHelper.stripHTML(info.getCapabilities()).toUpperCase(Locale.US)
+                                      .replace("XO", "X").replace("PO", "P");
+                buf.append("# ").append("Capabilities: ").append(caps).append(NL);
                 if (speed > 0) {buf.append("# ").append("Speed: ").append(speed).append(" B/s").append(NL);}
                 if (capacity > 0) {buf.append("# ").append("Capacity: ").append(capacity).append(capacity == 1 ? " tunnel" : " tunnels").append(" per hour").append(NL);}
                 if (integration > 0) {buf.append("# ").append("Integration: ").append(integration).append(integration == 1 ? " peer" : " peers").append(NL);}

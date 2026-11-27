@@ -735,7 +735,7 @@ public class BanLogger {
         if (durationStr == null || durationStr.isEmpty()) {
             return now;
         }
-        durationStr = durationStr.trim().toUpperCase();
+        durationStr = durationStr.trim().toUpperCase(Locale.US);
         if ("FOREVER".equals(durationStr)) {
             return Long.MAX_VALUE;
         }

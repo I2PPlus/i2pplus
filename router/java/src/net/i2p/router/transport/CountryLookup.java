@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -392,6 +393,12 @@ public class CountryLookup {
      * <p>
      * Multi-part TLDs (co.uk, com.au, ...) are recognized so the registrable
      * domain is returned rather than a bare second-level label.
+     * <p>
+     * The name is folded to lower case before that table is consulted, and the
+     * fold names a locale instead of following the machine's: several entries
+     * hold an I (co.il, org.il, k12.il), and under a Turkish default locale an
+     * upper-case I in the name folds to a dotless ı, the entry stops matching,
+     * and the domain comes back one label short.
      *
      * @param hostname the reverse DNS host name to reduce to its registrable domain
      * @return domain name only from reverse dns hostname lookups
@@ -400,7 +407,7 @@ public class CountryLookup {
     public static String getDomain(String hostname) {
         if (hostname == null || hostname.isEmpty()) return "";
 
-        hostname = hostname.toLowerCase().trim();
+        hostname = hostname.toLowerCase(Locale.US).trim();
         if (hostname.startsWith(".")) hostname = hostname.substring(1);
 
         // Filter out empty or whitespace-only parts (malformed RDNS entries with spaces)

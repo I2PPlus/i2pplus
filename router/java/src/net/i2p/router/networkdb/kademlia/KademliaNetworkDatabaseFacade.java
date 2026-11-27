@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -4448,16 +4449,33 @@ return false;
     private synchronized Set<String> getBlockedCountries() {
         Set<String> cached = _blockedCountries;
         if (cached != null) return cached;
-        String blockCountries = _context.getProperty(PROP_BLOCK_COUNTRIES, DEFAULT_BLOCK_COUNTRIES);
-        if (blockCountries.isEmpty()) {
-            cached = Collections.emptySet();
-        } else {
-            cached = Arrays.stream(COMMA_SPLIT.split(blockCountries.trim().toLowerCase()))
-                         .filter(s -> !s.isEmpty())
-                         .collect(Collectors.toSet());
-        }
+        cached = parseCountryList(_context.getProperty(PROP_BLOCK_COUNTRIES, DEFAULT_BLOCK_COUNTRIES));
         _blockedCountries = cached;
         return cached;
+    }
+
+    /**
+     * The country codes of router.blockCountries, in the form the blocking check
+     * looks them up in: split on the separators, folded to lower case ASCII, and
+     * the empty fields dropped.
+     * <p>
+     * The GeoIP answer the set is tested against is lower case already, so a
+     * fold that follows the machine's locale breaks only this side of the
+     * comparison - under a Turkish default locale an operator's "IL" becomes a
+     * dotless ı, and the ban for Israel then matches nothing while reading as if
+     * it were in force.
+     * <p>
+     * Pure, so the parsing can be unit tested without a router.
+     *
+     * @param blockCountries the property as configured, may be null or empty
+     * @return the codes to block, never null
+     * @since 0.9.72+
+     */
+    static Set<String> parseCountryList(String blockCountries) {
+        if (blockCountries == null || blockCountries.isEmpty()) {return Collections.emptySet();}
+        return Arrays.stream(COMMA_SPLIT.split(blockCountries.trim().toLowerCase(Locale.US)))
+                     .filter(s -> !s.isEmpty())
+                     .collect(Collectors.toSet());
     }
 
     /**
