@@ -219,6 +219,9 @@ echo "=== javac (clean room)"
 if [ ${#SRC[@]} -gt 0 ]; then
     OUT="$TMPDIR_BASE/gates-out"
     rm -rf "$OUT"
+    # JDK 8 javac will not create the -d root itself, only the package
+    # directories under it, so a missing root is a usage error, not a compile error.
+    mkdir -p "$OUT"
     javac -nowarn -d "$OUT" -sourcepath "$SOURCEPATH" -cp "$CP" "${SRC[@]}" 2>&1 |
         grep -v -i deprecat
     echo "javac done"
