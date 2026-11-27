@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -258,14 +259,19 @@ public abstract class FormHandler {
     /**
      * Check for common XSS patterns.
      *
+     * <p>The patterns are ASCII, so the fold to lower case names a locale
+     * instead of following the machine's: under a Turkish default locale an
+     * upper-case I folds to a dotless ı, and an upper-case {@code <IFRAME>}
+     * stops looking like one.
+     *
      * @param val the value to test; null or empty is not XSS
      * @return true if the value contains a script tag, inline event handler or
      *         another common XSS pattern
      * @since 0.9.70+
      */
-    private boolean containsXSS(String val) {
+    static boolean containsXSS(String val) {
         if (val == null || val.isEmpty()) return false;
-        String lower = val.toLowerCase();
+        String lower = val.toLowerCase(Locale.US);
         return lower.contains("<script") || lower.contains("javascript:") ||
                lower.contains("onerror=") || lower.contains("onload=") ||
                lower.contains("onclick=") || lower.contains("<iframe") ||

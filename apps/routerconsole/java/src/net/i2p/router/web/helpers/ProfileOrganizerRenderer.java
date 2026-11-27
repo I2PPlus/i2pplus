@@ -415,15 +415,7 @@ class ProfileOrganizerRenderer {
                 String whoisShort = domainCache.computeIfAbsent(rl, key -> {
                     String whois = CommSystemFacadeImpl.getDomain(key);
                     domainFullCache.put(key, whois);
-                    return WHOIS_PAREN.matcher(whois).replaceAll("").toLowerCase().trim()
-                                      .replace("latin american and caribbean ip address regional registry", "lacnic")
-                                      .replace("asia pacific network information centre", "apnic")
-                                      .replace("mediacom communications corp", "mediacom")
-                                      .replace(", inc", "")
-                                      .replace(" inc", "")
-                                      .replace(" llc", "")
-                                      .replace("administered by ", "")
-                                      .trim();
+                    return shortWhois(whois);
                 });
                 String whois = domainFullCache.get(rl);
                 buf.append("<span hidden>[XHost]</span><span class=rlookup title=\"")
@@ -1329,6 +1321,33 @@ class ProfileOrganizerRenderer {
         public int compare(FloodfillRow left, FloodfillRow right) {
             return left.hourFailPct - right.hourFailPct;
         }
+    }
+
+    /**
+     * The whois answer shortened for the peers table's cell: the parenthesised
+     * blocks cut, the registry names the operator recognises replaced by their
+     * acronyms, and the corporate suffixes dropped.
+     * <p>
+     * The text is matched against a table of lower-case ASCII phrases, so the
+     * fold names a locale instead of following the machine's: under a Turkish
+     * default locale an upper-case I folds to a dotless ı, "Inc" and "LLC" stop
+     * matching their entries, and the cell keeps the long form it was meant to
+     * shorten.
+     *
+     * @param whois the whois answer for a host, as the lookup returned it
+     * @return the text to show in the cell
+     * @since 0.9.72+
+     */
+    static String shortWhois(String whois) {
+        return WHOIS_PAREN.matcher(whois).replaceAll("").toLowerCase(Locale.US).trim()
+                          .replace("latin american and caribbean ip address regional registry", "lacnic")
+                          .replace("asia pacific network information centre", "apnic")
+                          .replace("mediacom communications corp", "mediacom")
+                          .replace(", inc", "")
+                          .replace(" inc", "")
+                          .replace(" llc", "")
+                          .replace("administered by ", "")
+                          .trim();
     }
 
     /**
