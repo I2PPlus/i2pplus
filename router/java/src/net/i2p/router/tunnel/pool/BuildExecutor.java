@@ -2349,47 +2349,7 @@ public class BuildExecutor implements Runnable {
 
         if (expired != null) {
             for (PooledTunnelCreatorConfig cfg : expired) {
-                if (_log.shouldInfo()) {
-                    Long used = expiredTimeouts.get(cfg.getReplyMessageId());
-                    long secs = used != null ? used / 1000 : _adaptiveTimeout / 1000;
-                    _log.info("Timeout (" + secs + "s) waiting for tunnel build reply -> " + cfg.toShortString());
-                }
-
-                penalizeTimeout(cfg);
-
-                TunnelPool pool = cfg.getTunnelPool();
-                if (pool != null) {
-                    pool.buildComplete(cfg, Result.TIMEOUT);
-                }
-                // Update per-pool failure tracking so pool backoff engages on
-                // consecutive timeouts (same as BuildExecutor.buildComplete()
-                // does for BAD_RESPONSE/OTHER_FAILURE).
-                if (pool != null) {
-                    long[] state = getOrCreatePoolState(pool);
-                    synchronized (state) {
-                        if (state[0] < _consecutiveFailureThreshold) {
-                            state[0]++;
-                        }
-                        if (state[0] >= _consecutiveFailureThreshold) {
-                            state[1] = _context.clock().now() + jitteredBackoff();
-                        }
-                    }
-                }
-                updateBuildStats(Result.TIMEOUT, cfg.isInbound());
-                recordBuildDirection(cfg, Result.TIMEOUT);
-                if (cfg.getDestination() == null) {
-                    _context.statManager().addRateData("tunnel.buildExploratoryExpire", 1);
-                } else {
-                    _context.statManager().addRateData("tunnel.buildClientExpire", 1);
-                }
-                // Per-hop attribution on every expiry. The WARN reporter below is
-                // throttled to one per minute globally (~1 in 19000 observed), so it
-                // cannot show which hop position fails; these stats can.
-                noteExpiredHopAttribution(cfg);
-                if (_log.shouldWarn() && shouldLogBuildExpiry(_context.clock().now()))
-                    logExpiredBuildWarn(cfg);
-                if (_log.shouldDebug())
-                    logExpiredPeers(cfg);
+                handleExpiredBuild(cfg, expiredTimeouts);
             }
         }
 
@@ -2425,6 +2385,74 @@ public class BuildExecutor implements Runnable {
     }
 
     /**
+     * Handle one build that expired with no reply: penalise the peers, tell the
+     * pool, and count where the build died.
+     * <p>This sweep is the only path that ever sees a build nobody answered -
+     * {@link #buildComplete(PooledTunnelCreatorConfig, Result, String)} runs only
+     * when something replied - so whatever the reply path records for a failure
+     * has to be recorded here too, or that failure is invisible to it. It was
+     * not: the first-hop failure history, the record the recently-failed-first-
+     * hop gate reads, was written only from {@link #buildComplete}, so an
+     * unanswered build never charged its first hop and the gate never fired.
+     * Measured live on 2026-11-27 over 15 minutes: 1,263 expiries attributed to
+     * a peer whose transport was up and that answered nothing, and no gate
+     * logged a failing hop even once.
+     *
+     * @param cfg the expired build's config, non-null
+     * @param expiredTimeouts the adaptive timeout each expired build was held
+     *                        to, keyed by reply message id, may be null
+     * @since 0.9.72+
+     */
+    void handleExpiredBuild(PooledTunnelCreatorConfig cfg, Map<Long, Long> expiredTimeouts) {
+        if (_log.shouldInfo()) {
+            Long used = expiredTimeouts != null ? expiredTimeouts.get(cfg.getReplyMessageId()) : null;
+            long secs = used != null ? used / 1000 : _adaptiveTimeout / 1000;
+            _log.info("Timeout (" + secs + "s) waiting for tunnel build reply -> " + cfg.toShortString());
+        }
+
+        penalizeTimeout(cfg);
+
+        TunnelPool pool = cfg.getTunnelPool();
+        if (pool != null) {
+            pool.buildComplete(cfg, Result.TIMEOUT);
+        }
+        // Update per-pool failure tracking so pool backoff engages on
+        // consecutive timeouts (same as BuildExecutor.buildComplete()
+        // does for BAD_RESPONSE/OTHER_FAILURE).
+        if (pool != null) {
+            long[] state = getOrCreatePoolState(pool);
+            synchronized (state) {
+                if (state[0] < _consecutiveFailureThreshold) {
+                    state[0]++;
+                }
+                if (state[0] >= _consecutiveFailureThreshold) {
+                    state[1] = _context.clock().now() + jitteredBackoff();
+                }
+            }
+        }
+        // Charge the hop the request was dispatched to, the same charge
+        // buildComplete() makes for a build that was answered badly. Without it
+        // the only builds that ever reach the first-hop history are the ones that
+        // got a reply, which is the minority of what goes wrong.
+        recordFirstHopFailure(BuildRequestor.getBuildRequestPeer(cfg));
+        updateBuildStats(Result.TIMEOUT, cfg.isInbound());
+        recordBuildDirection(cfg, Result.TIMEOUT);
+        if (cfg.getDestination() == null) {
+            _context.statManager().addRateData("tunnel.buildExploratoryExpire", 1);
+        } else {
+            _context.statManager().addRateData("tunnel.buildClientExpire", 1);
+        }
+        // Per-hop attribution on every expiry. The WARN reporter below is
+        // throttled to one per minute globally (~1 in 19000 observed), so it
+        // cannot show which hop position fails; these stats can.
+        noteExpiredHopAttribution(cfg);
+        if (_log.shouldWarn() && shouldLogBuildExpiry(_context.clock().now()))
+            logExpiredBuildWarn(cfg);
+        if (_log.shouldDebug())
+            logExpiredPeers(cfg);
+    }
+
+    /**
      * Penalize the peers of an expired build.  Only the hop the build
      * request was dispatched to — the gateway (peer 0) for inbound, the
      * next hop (peer 1) for outbound, per
@@ -2432,13 +2460,10 @@ public class BuildExecutor implements Runnable {
      * failed to deliver a reply; the other hops may never have received
      * the request, or may be waiting downstream of a silent peer.  Blaming
      * them all shrinks the pool on innocent peers during network-wide
-     * no-reply events, so the profile penalty and ghost mark go to the
-     * contacted hop only.  The per-tier expire stat and the didNotReply
-     * debug log stay per-hop for accounting and triage.
-     * <p>
-     * Every non-self hop is additionally cooled down out of the immediate
-     * retry selection ({@link #cooldownFailedPeers(PooledTunnelCreatorConfig)}),
-     * since any of them may have been the silent one.
+     * no-reply events, so the profile penalty, the ghost mark and the
+     * retry cooldown all go to the contacted hop only.  The per-tier
+     * expire stat and the didNotReply debug log stay per-hop for
+     * accounting and triage.
      *
      * @param cfg the expired build config, non-null
      * @since 0.9.71+
@@ -3419,7 +3444,7 @@ public class BuildExecutor implements Runnable {
      * @return true if the peer has exceeded the failure threshold
      * @since 0.9.71+
      */
-    private boolean hasRecentlyFailedAsFirstHop(Hash hash) {
+    boolean hasRecentlyFailedAsFirstHop(Hash hash) {
         if (hash == null) {return false;}
         long[] state = _firstHopFailureHistory.get(hash);
         if (state == null) {return false;}
