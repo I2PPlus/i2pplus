@@ -933,6 +933,10 @@ public class TestJobBatchQueueTest {
                 anyString(), eq("Tunnels"), same(periods));
         verify(stats).createRequiredRateStat(eq("tunnel.postKickDeferralExhausted"),
                 anyString(), eq("Tunnels"), same(periods));
+        verify(stats).createRequiredRateStat(eq("tunnel.testExploratorySkipped"),
+                anyString(), eq("Tunnels"), same(periods));
+        verify(stats).createRequiredRateStat(eq("tunnel.testFailedDataTrust"),
+                anyString(), eq("Tunnels"), same(periods));
         verifyNoMoreInteractions(stats);
     }
 }

@@ -977,7 +977,7 @@ public class TestJob extends JobImpl {
     }
 
     /**
-     * Register the batch-dispatch rate stats this class writes, so
+     * Register the test-path rate stats this class writes, so
      * {@code addRateData()} records real rates instead of reporting invalid
      * names.  Called once per router context from
      * {@code TunnelPoolManager}'s constructor.
@@ -1021,6 +1021,16 @@ public class TestJob extends JobImpl {
                 "Paired-pool kicks exhausted (count)", "Tunnels", periods);
         stats.createRequiredRateStat("tunnel.postKickDeferralExhausted",
                 "Deferral budget exhausted (count)", "Tunnels", periods);
+        // Both written since the commits that added them and never declared, so
+        // addRateData() dropped every sample: neither name reached the stats
+        // page, and the lag guard's skips and the traffic-trust exemptions both
+        // looked like counters that existed.
+        stats.createRequiredRateStat("tunnel.testExploratorySkipped",
+                "Exploratory tunnel test skipped under job lag (tunnel length in hops)",
+                "Tunnels", periods);
+        stats.createRequiredRateStat("tunnel.testFailedDataTrust",
+                "Tunnel test failure exempted on recent real traffic (verified bytes transferred)",
+                "Tunnels", periods);
     }
 
     /**
