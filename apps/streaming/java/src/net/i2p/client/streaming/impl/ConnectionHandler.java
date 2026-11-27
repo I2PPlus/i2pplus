@@ -768,7 +768,7 @@ class ConnectionHandler {
      * handed to one {@link OrphanCloser}: a close waits for its CLOSE to be
      * acknowledged, up to {@code i2p.streaming.disconnectTimeout} - two minutes by
      * default - and this method runs inside the handler's monitor, which
-     * {@link #setRestartPending()}, a reopen, {@link #setAcceptTimeout(long)} and
+     * {@link #setRestartPending()}, a reopen, {@link #setAcceptTimeout(int)} and
      * the {@link SynReaper}'s scale-up all need. A slow accept loop is exactly what
      * builds a backlog of these, several of them to peers that never answer.
      */
