@@ -4671,10 +4671,8 @@ public class TunnelPool {
                               + "\n* Destination: [" + dest.toShortBase32() + ']'
                               + " * Status: " + MessageStatusMessage.getStatusString(status) +
                               " (" + status + ')'
-                              + " * Timeouts from it: " + _softAttribution.failuresFrom(dest, now)
-                              + describeHops(cfg, us)
-                              + "\n* Excused failures through this hop: " +
-                              _softAttribution.exemptFailuresThrough(hop, now));
+                              + " * Timeouts / excused failures: " + _softAttribution.failuresFrom(dest, now)
+                              + describeHops(cfg, us) + " / " + _softAttribution.exemptFailuresThrough(hop, now));
                 }
             } else {
                 cfg.incrementSoftFailures();
@@ -4768,7 +4766,7 @@ public class TunnelPool {
         for (int hop = 0; hop < len; hop++) {
             Hash peer = cfg.getPeer(hop);
             if (peer == null || peer.equals(us)) {continue;}
-            if (rv.length() == 0) {rv.append("\n* Hops: ");}
+            if (rv.length() == 0) {rv.append(" * Hops: ");}
             else {rv.append(" -> ");}
             rv.append('[').append(peer.toShortBase64()).append(']');
         }
@@ -5986,7 +5984,7 @@ public class TunnelPool {
             String boost = _consecutiveEmergencies > 0 ?
                 " * Dynamic target: " + Math.min(target + _consecutiveEmergencies, target + MAX_EMERGENCY_BOOST) : "";
             _log.info(toString() + " -> Pruning " + toRemove.size() + " non-GOOD tunnels" +
-                      "\n* Good: " + goodCount + " * Remaining: " + (goodCount + reserve) + boost);
+                      "\n* Good tunnels: " + goodCount + " * Tunnels left: " + (goodCount + reserve) + boost);
         }
         removeTunnelsBatch(toRemove);
         // Refresh LeaseSet after batch removal (normally done per-tunnel in removeTunnel).
