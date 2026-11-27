@@ -16,7 +16,7 @@ import org.junit.Test;
  * the round was actually routed through - is not usable: whether the round is
  * charged to the tunnel at all ({@code TestJob#chargePartnerRound}), the stat
  * event chosen ({@code TestJob#partnerVerdict}), the gateway tag from
- * {@code TestJob#partnerTag(TunnelInfo)}, and the three WARN lines built by
+ * {@code TestJob#partnerTag(TunnelInfo, Hash)}, and the three WARN lines built by
  * {@code TestJob#partnerSuspectLine}, {@code TestJob#partnerShortLine} and
  * {@code TestJob#partnerChargedLine}.
  *
@@ -170,25 +170,61 @@ public class TestJobPartnerAttributionTest {
     /** A round with no partner at all has no gateway to name. */
     @Test
     public void missingPartnerHasNoGateway() {
-        assertEquals("none", TestJob.partnerTag(null));
+        assertEquals("none", TestJob.partnerTag(null, null));
     }
 
     /**
      * A real partner is named by its gateway, bracketed, so the line stays
-     * greppable and the two partner lines cannot disagree about the form.
+     * greppable and the two partner lines cannot disagree about the form. The
+     * hash is the six-character Base64 a router is printed as: an
+     * eight-character Base32 token is what the console linkifier reads as a
+     * lease set, so the old form linked to the wrong object.
      */
     @Test
     public void partnerIsNamedByItsGateway() {
         TunnelInfo partner = mock(TunnelInfo.class);
-        byte[] bits = new byte[Hash.HASH_LENGTH];
-        for (int i = 0; i < bits.length; i++) {
-            bits[i] = (byte) i;
-        }
-        Hash gw = new Hash(bits);
+        Hash gw = hash(1);
         when(partner.getGateway()).thenReturn(gw);
-        String tag = TestJob.partnerTag(partner);
-        assertEquals("[" + gw.toShortBase32() + "]", tag);
+        String tag = TestJob.partnerTag(partner, hash(9));
+        assertEquals("[" + gw.toShortBase64() + "]", tag);
         assertTrue("gateway must stay bracketed: " + tag, tag.startsWith("[") && tag.endsWith("]"));
+        assertEquals("not the six characters a router is printed as: " + tag, 8, tag.length());
+    }
+
+    /**
+     * An outbound partner has us as its gateway, and our own hash is a constant
+     * in these lines and a permanent identifier in a pasted log, so it is
+     * written as {@code [Us]}.
+     */
+    @Test
+    public void ourOwnGatewayIsNotNamedByHash() {
+        TunnelInfo partner = mock(TunnelInfo.class);
+        Hash us = hash(4);
+        when(partner.getGateway()).thenReturn(us);
+        assertEquals("[Us]", TestJob.partnerTag(partner, us));
+    }
+
+    /**
+     * A partner whose gateway is unknown still gets a segment rather than a
+     * hole.
+     */
+    @Test
+    public void aPartnerWithNoGatewayIsNamedNone() {
+        TunnelInfo partner = mock(TunnelInfo.class);
+        when(partner.getGateway()).thenReturn(null);
+        assertEquals("[none]", TestJob.partnerTag(partner, hash(9)));
+    }
+
+    /**
+     * A hash of the given seed, distinct per seed.
+     *
+     * @param seed the byte every position of the hash is built from
+     * @return the hash, never null
+     */
+    private static Hash hash(int seed) {
+        byte[] bits = new byte[Hash.HASH_LENGTH];
+        java.util.Arrays.fill(bits, (byte) seed);
+        return new Hash(bits);
     }
 
     // ---------------- the three log lines ----------------
@@ -281,7 +317,7 @@ public class TestJobPartnerAttributionTest {
      */
     @Test
     public void missingPartnerStillNamesTheGatewaySegment() {
-        String tag = TestJob.partnerTag(null);
+        String tag = TestJob.partnerTag(null, null);
         assertTrue(TestJob.partnerSuspectLine(tag, false, 1, BUDGET)
                    .contains("Partner gateway: none"));
         assertTrue(TestJob.partnerChargedLine(tag, BUDGET)

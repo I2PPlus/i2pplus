@@ -1580,7 +1580,8 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
             ProfileOrganizer po = ctx.profileOrganizer();
             boolean established = ctx.commSystem().isEstablished(firstHop);
             boolean connecting = ctx.commSystem().isConnecting(firstHop);
-            log.info("First hop accepted at tier " + tier + " -> Gateway [" + firstHop.toShortBase32() + "]" +
+            log.info("First hop accepted at tier " + tier + " -> Gateway " +
+                     PeerLogFormatter.routerHashTag(firstHop, ctx.routerHash()) +
                      (established || connecting ? " has a transport session" : " has no transport session") +
                      "\n* Attempts: " + attempt + " of " + attempts +
                      " * Remaining candidates: " + remaining +

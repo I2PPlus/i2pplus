@@ -7,6 +7,7 @@ import net.i2p.data.router.RouterInfo;
 import net.i2p.router.CommSystemFacade.Status;
 import net.i2p.router.RouterContext;
 import net.i2p.router.transport.TransportManager;
+import net.i2p.router.util.PeerLogFormatter;
 import net.i2p.util.Log;
 
     /**
@@ -100,8 +101,8 @@ import net.i2p.util.Log;
             if (ctx.commSystem().isEstablished(to)) {
                 if (ctx.commSystem().wasUnreachable(to)) {
                     if (log.shouldWarn()) {
-                        log.warn("Cannot connect: we control from, but [" +
-                                 to.toString().substring(0,6) + "] is unreachable");
+                        log.warn("Cannot connect: we control from, but " +
+                                 PeerLogFormatter.routerHashTag(to, us) + " is unreachable");
                     }
                     return false;
                 }
@@ -113,8 +114,8 @@ import net.i2p.util.Log;
             if (ctx.commSystem().isEstablished(from)) {
                 if (ctx.commSystem().wasUnreachable(from)) {
                     if (log.shouldWarn()) {
-                        log.warn("Cannot connect: we control to, but [" +
-                                 from.toString().substring(0,6) + "] is unreachable");
+                        log.warn("Cannot connect: we control to, but " +
+                                 PeerLogFormatter.routerHashTag(from, us) + " is unreachable");
                     }
                     return false;
                 }
@@ -145,9 +146,9 @@ import net.i2p.util.Log;
 
         boolean rv = (ct & cf) != 0;
         if (!rv && log.shouldWarn()) {
-            log.warn("Cannot connect [" +
-                     (usf ? "Our Router" : from.toString().substring(0,6)) + "] with mask " + cf + " -> [" +
-                     (ust ? "Our Router" : to.toString().substring(0,6)) + "] with mask " + ct);
+            log.warn("Cannot connect " + PeerLogFormatter.routerHashTag(from, us) +
+                     " with mask " + cf + " -> " + PeerLogFormatter.routerHashTag(to, us) +
+                     " with mask " + ct);
         }
         // When neither peer is us, check our own reachability as a proxy.
         // If we can't reach a tunnel participant, they're unlikely to reliably
@@ -158,9 +159,9 @@ import net.i2p.util.Log;
                     ctx.commSystem().wasUnreachable(to)) {
                     if (log.shouldWarn()) {
                         log.warn("Cannot connect, non-self pair rejected -> A participant is unreachable"
-                                 + "\n* From [" + from.toShortBase32() + "] unreachable: " +
+                                 + "\n* From " + PeerLogFormatter.routerHashTag(from, us) + " unreachable: " +
                                  ctx.commSystem().wasUnreachable(from)
-                                 + " * To [" + to.toShortBase32() + "] unreachable: " +
+                                 + " * To " + PeerLogFormatter.routerHashTag(to, us) + " unreachable: " +
                                  ctx.commSystem().wasUnreachable(to));
                     }
                     return false;

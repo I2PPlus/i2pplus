@@ -10,6 +10,7 @@ import net.i2p.data.i2np.TunnelDataMessage;
 import net.i2p.data.i2np.UnknownI2NPMessage;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.RouterContext;
+import net.i2p.router.util.PeerLogFormatter;
 import net.i2p.util.Log;
 import net.i2p.util.SyntheticREDQueue;
 
@@ -177,27 +178,27 @@ class OutboundTunnelEndpoint {
                         _context.statManager().addRateData("tunnel.outboundTunnelEndpointFwdRIDSM", 1);
                         if (_log.shouldLog(Log.INFO))
                             _log.infoThrottled("obep-forward-ridsm",
-                                               "Outbound endpoint forwarding a RouterInfo DatabaseStore message to [" +
-                                               toRouter.toShortBase32() + "]" +
+                                               "Outbound endpoint forwarding a RouterInfo DatabaseStore message to " +
+                                               PeerLogFormatter.routerHashTag(toRouter, _context.routerHash()) +
                                                "\n* From tunnel: " + _config.getReceiveTunnelId() +
-                                               " [MsgID " + msg.getUniqueId() + "]");
+                                               " * MsgID: " + msg.getUniqueId());
                     } else {
                         _lsdsm++;
                         if (_log.shouldLog(Log.INFO))
                             _log.infoThrottled("obep-forward-lsdsm",
-                                               "Outbound endpoint forwarding a LeaseSet DatabaseStore message to [" +
-                                               toRouter.toShortBase32() + "]" +
+                                               "Outbound endpoint forwarding a LeaseSet DatabaseStore message to " +
+                                               PeerLogFormatter.routerHashTag(toRouter, _context.routerHash()) +
                                                "\n* From tunnel: " + _config.getReceiveTunnelId() +
-                                               " [MsgID " + msg.getUniqueId() + "]");
+                                               " * MsgID: " + msg.getUniqueId());
                     }
                 } else {
                     _i2npmsg++;
                     if (_log.shouldLog(Log.INFO))
                         _log.infoThrottled("obep-forward-i2np",
-                                           "Outbound endpoint forwarding an I2NP message to [" +
-                                           toRouter.toShortBase32() + "]" +
+                                           "Outbound endpoint forwarding an I2NP message to " +
+                                           PeerLogFormatter.routerHashTag(toRouter, _context.routerHash()) +
                                            "\n* Type: " + msg.getType() + " * From tunnel: " +
-                                           _config.getReceiveTunnelId() + " [MsgID " + msg.getUniqueId() + "]");
+                                           _config.getReceiveTunnelId() + " * MsgID: " + msg.getUniqueId());
                 }
             }
             int size = msg.getMessageSize();

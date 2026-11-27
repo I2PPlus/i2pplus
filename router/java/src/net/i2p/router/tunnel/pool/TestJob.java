@@ -38,6 +38,7 @@ import net.i2p.router.crypto.ratchet.RatchetSessionTag;
 import net.i2p.router.networkdb.kademlia.MessageWrapper;
 import net.i2p.router.peermanager.ProfileOrganizer;
 import net.i2p.router.tunnel.TunnelCreatorConfig;
+import net.i2p.router.util.PeerLogFormatter;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
 import net.i2p.stat.StatManager;
@@ -4255,14 +4256,18 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
      * brackets, or the word {@code none} when the round had no partner at all.
      * <p>Split out so the two partner lines cannot disagree about what a
      * missing partner looks like, and so the bracketing stays a single
-     * greppable form.
+     * greppable form. The hash is the six-character Base64 a router is printed
+     * as - the console linkifier reads an eight-character Base32 token as a
+     * lease set - and our own gateway, which is the case for every outbound
+     * partner, is written as {@code [Us]}.
      *
      * @param partner the tunnel the round was routed through, may be null
+     * @param us this router's own hash, may be null
      * @return the tag to print, never null
      * @since 0.9.72+
      */
-    static String partnerTag(TunnelInfo partner) {
-        return partner != null ? "[" + partner.getGateway().toShortBase32() + "]" : "none";
+    static String partnerTag(TunnelInfo partner, Hash us) {
+        return partner != null ? PeerLogFormatter.routerHashTag(partner.getGateway(), us) : "none";
     }
 
     /**
@@ -4535,15 +4540,16 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
             if (charge) {
                 _cfg.clearPartnerDeferrals();
                 _log.warnThrottled("testPartnerSuspectCharged",
-                                   partnerChargedLine(partnerTag(partner), MAX_PARTNER_DEFERRALS));
+                                   partnerChargedLine(partnerTag(partner, getContext().routerHash()),
+                                                      MAX_PARTNER_DEFERRALS));
             } else {
                 if (shortPaired) {
                     _log.warnThrottled("testPartnerPairedShort",
-                                       partnerShortLine(partnerTag(partner), pairedTunnels,
+                                       partnerShortLine(partnerTag(partner, getContext().routerHash()), pairedTunnels,
                                                         MIN_PAIRED_POOL_TUNNELS, partnerDeferrals));
                 } else {
                     _log.warnThrottled("testPartnerSuspect",
-                                       partnerSuspectLine(partnerTag(partner), _partnerFallback,
+                                       partnerSuspectLine(partnerTag(partner, getContext().routerHash()), _partnerFallback,
                                                           partnerDeferrals, MAX_PARTNER_DEFERRALS));
                 }
                 deferForMissingPartner(_pool.getPairedPool(),
@@ -5212,7 +5218,7 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
                 _log.warn("Test deadlock after " + deferrals + " deferrals, no " +
                           direction + " partner -> Kick and post-kick budgets spent, failing the tunnel" +
                           "\n* Length: " + _cfg.getLength() + " hops" +
-                          " * Gateway: [" + _cfg.getGateway().toShortBase32() + "]");
+                          " * Gateway: " + PeerLogFormatter.routerHashTag(_cfg.getGateway(), getContext().routerHash()));
             }
             _cfg.incrementTestFailures();
             _cfg.setTestFailed();
@@ -5227,7 +5233,7 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
                 _log.warn("Test deadlock after " + deferrals + " deferrals, no " + direction +
                           " partner -> Rebuilding the paired pool and retrying" +
                           "\n* Length: " + _cfg.getLength() + " hops" +
-                          " * Gateway: [" + _cfg.getGateway().toShortBase32() + "]");
+                          " * Gateway: " + PeerLogFormatter.routerHashTag(_cfg.getGateway(), getContext().routerHash()));
             }
             if (paired != null) {paired.ensureSufficientTunnels();}
             // Restart the window so the paired pool is kicked once per
@@ -5244,7 +5250,7 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
                 _log.warn("Test deadlock after " + deferrals + " deferrals, no " + direction +
                           " partner -> Paired-pool kick budget spent, deferring" +
                           "\n* Length: " + _cfg.getLength() + " hops" +
-                          " * Gateway: [" + _cfg.getGateway().toShortBase32() + "]");
+                          " * Gateway: " + PeerLogFormatter.routerHashTag(_cfg.getGateway(), getContext().routerHash()));
             }
         } else {
             ctx.statManager().addRateData("tunnel.testDeferred", _cfg.getLength());
