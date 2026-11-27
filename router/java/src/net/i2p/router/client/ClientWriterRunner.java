@@ -21,35 +21,59 @@ class ClientWriterRunner implements Runnable {
     private final ClientConnectionRunner _runner;
     /** The router context the writer runs in. */
     private final RouterContext _context;
+    /** Smallest queue the tuner may set, in messages - the floor a value is clamped up to. */
+    static final int MIN_QUEUE_SIZE = 32;
     /**
-     * Max messages queued per client before blocking.
+     * Largest queue the tuner may set, in messages. Every queue is also built
+     * with this as its hard capacity, so the memory one client can hold stays
+     * bounded however far the cap is raised.
+     */
+    static final int MAX_QUEUE_SIZE = 2048;
+    /** Queue size in messages in force until the tuner changes it. */
+    static final int DEFAULT_QUEUE_SIZE = 256;
+
+    /**
+     * Max messages queued per client before an offer is refused. Read on every
+     * offer, not only when the queue is built, so a change reaches a connection
+     * that is already running - see {@link #addMessage}.
      *
      * @since 0.9.70+ mutable for adaptive tuning
      */
-    private static volatile int queueSize = 256;
+    private static volatile int queueSize = DEFAULT_QUEUE_SIZE;
 
     /**
-     * The current size of the message queue.
+     * The current queue size in messages - the cap an offer is checked against,
+     * not the capacity of any one queue.
+     *
      * @return the queue size
      * @since 0.9.70+
      */
     public static int getQueueSize() { return queueSize; }
 
     /**
-     * Update the message queue size, clamped to the supported range.
-     * @param val the new queue size
+     * Update the message queue size, clamped to the supported range. Applies to
+     * connections already established as well as new ones: the cap is compared
+     * against the queue's depth when a message is offered, so a long-running
+     * client is not stuck with the limit that was in force when it connected.
+     *
+     * @param val the new queue size in messages
      * @since 0.9.70+
      */
-    public static void setQueueSize(int val) { queueSize = Math.max(32, Math.min(2048, val)); }
+    public static void setQueueSize(int val) {
+        queueSize = Math.max(MIN_QUEUE_SIZE, Math.min(MAX_QUEUE_SIZE, val));
+    }
 
     /**
-     * Creates a new client writer runner.
+     * Creates a new client writer runner. The queue is sized to the largest
+     * supported queue, and {@link #addMessage} holds it to the current cap, so
+     * raising the cap does not need the queue rebuilt.
+     *
      * @param ctx the router context
      * @param runner the client connection runner
      */
     public ClientWriterRunner(RouterContext ctx, ClientConnectionRunner runner) {
         _context = ctx;
-        _messagesToWrite = new LinkedBlockingQueue<>(queueSize);
+        _messagesToWrite = new LinkedBlockingQueue<>(MAX_QUEUE_SIZE);
         _runner = runner;
         ctx.statManager().createRequiredRateStat("client.writerQueueFull",
                                           "I2CP writer queue overflow drops", "ClientMessages",
@@ -59,12 +83,17 @@ class ClientWriterRunner implements Runnable {
     /**
      * Add this message to the writer's queue
      * <p>
-     * Nonblocking, throws exception if queue is full.
+     * Nonblocking. Refused once the queue holds the current cap's worth of
+     * messages, or once it reaches the hard capacity behind it.
      * @param msg the message to add
      * @throws I2CPMessageException if the queue is full
      */
     public void addMessage(I2CPMessage msg) throws I2CPMessageException {
-        boolean success = _messagesToWrite.offer(msg);
+        // The cap is compared here, not baked into the queue at construction,
+        // so the tuner reaches a client that has been connected for days: the
+        // queue keeps its capacity and only this limit moves. Shrinking below
+        // the current depth refuses messages until the writer drains it.
+        boolean success = _messagesToWrite.size() < queueSize && _messagesToWrite.offer(msg);
         if (!success) {
             _context.statManager().addRateData("client.writerQueueFull", 1);
             throw new I2CPMessageException("I2CP write to queue failed");
