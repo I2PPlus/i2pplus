@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -93,8 +94,10 @@ class BanlistRenderer {
             return null;
         }
         // Check if the hostname is just the IP in different form
-        String normalizedIp = IP_HOSTNAME_NORMALIZE.matcher(ip.toLowerCase()).replaceAll("");
-        String normalizedHostname = IP_HOSTNAME_NORMALIZE.matcher(hostname.toLowerCase()).replaceAll("");
+        String lcIp = ip.toLowerCase(Locale.US);
+        String lcHostname = hostname.toLowerCase(Locale.US);
+        String normalizedIp = IP_HOSTNAME_NORMALIZE.matcher(lcIp).replaceAll("");
+        String normalizedHostname = IP_HOSTNAME_NORMALIZE.matcher(lcHostname).replaceAll("");
         if (normalizedHostname.equals(normalizedIp) || normalizedHostname.contains(normalizedIp)) {
             return null;
         }
@@ -302,6 +305,52 @@ class BanlistRenderer {
     }
 
     /**
+     * Is this a ban on a hash rather than on a router? The Blocklist bans
+     * addresses by hash and writes "Hash" into the cause, and those entries do
+     * not belong in the router table or its count. The hash-pattern detector's
+     * own bans are the exception: its cause holds "hash" as well, and the peer
+     * it banned is a router, so that one stays in.
+     *
+     * @param cause the ban cause as logged, not null
+     * @return true if the entry is a hash ban to leave out of the router table
+     * @since 0.9.72+
+     */
+    static boolean isHashBan(String cause) {
+        String lc = cause.toLowerCase(Locale.US);
+        return lc.contains("hash") && !lc.contains("hashpatterndetector");
+    }
+
+    /**
+     * Is the banned router a floodfill? The cause says so in words, or the
+     * router's capabilities carry the floodfill flag.
+     *
+     * @param cause the ban cause as logged, not null
+     * @param caps the router's capability string, null when it is not known
+     * @return true if the banned router is a floodfill
+     * @since 0.9.72+
+     */
+    static boolean isFloodfillBan(String cause, String caps) {
+        return cause.toLowerCase(Locale.US).contains("floodfill") ||
+               (caps != null && caps.indexOf('f') >= 0);
+    }
+
+    /**
+     * A GeoIP country code in the form the flag image and the table's sort key
+     * use: lower-case ASCII, or {@code xx} when the lookup knows nothing. The
+     * fold names a locale because the codes are ASCII - under a Turkish default
+     * locale Israel's {@code IL} folds to a dotless ı, and the flag image and
+     * the country name both miss it.
+     *
+     * @param geoCountry the code from the lookup, null or empty for no answer
+     * @return the code to render, never null
+     * @since 0.9.72+
+     */
+    static String normalizeCountryCode(String geoCountry) {
+        if (geoCountry == null || geoCountry.isEmpty() || "xx".equals(geoCountry)) {return "xx";}
+        return geoCountry.toLowerCase(Locale.US);
+    }
+
+    /**
      * Escapes a value for the ban table. Most of the table's columns carry text
      * a peer wrote about itself - its version, its capabilities, a hostname, an
      * address taken out of a ban cause - and the console's CSP stops a script
@@ -405,17 +454,13 @@ class BanlistRenderer {
             Banlist.Entry entry = e.getValue();
             long expires = entry.expireOn - now;
             if (expires <= 0 || key.equals(Hash.FAKE_HASH) || entry.cause == null ||
-                (entry.cause.toLowerCase().contains("hash") &&
-                 !entry.cause.toLowerCase().contains("hashpatterndetector"))) {
+                isHashBan(entry.cause)) {
                 continue;
             }
             String b64 = key.toBase64();
             String caps = capsMap.get(b64);
             if (caps == null) {caps = getRouterCaps(key);}
-            if (entry.cause.toLowerCase().contains("floodfill") ||
-                (caps != null && caps.indexOf('f') >= 0)) {
-                count++;
-            }
+            if (isFloodfillBan(entry.cause, caps)) {count++;}
         }
         return count;
     }
@@ -505,8 +550,7 @@ class BanlistRenderer {
             long expires = entry.expireOn - now;
             String expireString = DataHelper.formatDuration2(expires);
             if (expires <= 0 || key.equals(Hash.FAKE_HASH) || entry.cause == null ||
-                (entry.cause.toLowerCase().contains("hash") &&
-                 !entry.cause.toLowerCase().contains("hashpatterndetector"))) {
+                isHashBan(entry.cause)) {
                 continue;
             }
             String b64 = key.toBase64();
@@ -516,10 +560,7 @@ class BanlistRenderer {
             }
             buf.append("<tr");
             if (fragmentKeys) {buf.append(" data-key=\"").append(b64, 0, KEY_LEN).append("\"");}
-            if (entry.cause.toLowerCase().contains("floodfill") ||
-                (caps != null && caps.indexOf('f') >= 0)) {
-                buf.append(" class=\"banFF\"");
-            }
+            if (isFloodfillBan(entry.cause, caps)) {buf.append(" class=\"banFF\"");}
             buf.append(">");
             String reason = _t(entry.cause, entry.causeCode).trim();
             // Get IP from hash if not in reason
@@ -529,7 +570,7 @@ class BanlistRenderer {
             if (ipBytes != null) {
                 ip = Addresses.toString(ipBytes);
             }
-            String lcReason = reason.toLowerCase();
+            String lcReason = reason.toLowerCase(Locale.US);
             String extractedIP = null;
             if (lcReason.startsWith("blocklist")) {
                 extractedIP = causeAddress(reason);
@@ -570,9 +611,7 @@ class BanlistRenderer {
             // GeoIP lookup for country flag - try hash first, then IP
             String countryCode = "xx";
             String geoCountry = _context.commSystem().getCountry(key);
-            if (geoCountry != null && !geoCountry.isEmpty() && !"xx".equals(geoCountry)) {
-                countryCode = geoCountry.toLowerCase();
-            }
+            if (geoCountry != null) {countryCode = normalizeCountryCode(geoCountry);}
             // Fallback to IP lookup if hash lookup failed or returned "xx"
             if (("xx".equals(countryCode) || countryCode.isEmpty()) && ip != null && !ip.isEmpty()) {
                 // Check if ipPort was actually in the map (for debugging)
@@ -589,9 +628,9 @@ class BanlistRenderer {
                     _context.commSystem().queueLookup(geoIpBytes);
                 }
                 String ipGeoCountry = _context.commSystem().getCountry(ip);
-                if (ipGeoCountry != null && !ipGeoCountry.isEmpty() && !"xx".equals(ipGeoCountry)) {
-                    countryCode = ipGeoCountry.toLowerCase();
-                } else if (_context.logManager().getLog(BanlistRenderer.class).shouldLog(Log.DEBUG)) {
+                countryCode = normalizeCountryCode(ipGeoCountry);
+                if ("xx".equals(countryCode) &&
+                    _context.logManager().getLog(BanlistRenderer.class).shouldLog(Log.DEBUG)) {
                     _context.logManager().getLog(BanlistRenderer.class).debug(
                         "GeoIP lookup failed for IP: " + ip + ", geoCountry=" + ipGeoCountry);
                 }
@@ -659,9 +698,7 @@ class BanlistRenderer {
                      _context.commSystem().queueLookup(geoIpBytes);
                  }
                  String geoCountry = _context.commSystem().getCountry(ip);
-                 if (geoCountry != null && !geoCountry.isEmpty() && !"xx".equals(geoCountry)) {
-                     countryCode = geoCountry.toLowerCase();
-                 }
+                 if (geoCountry != null) {countryCode = normalizeCountryCode(geoCountry);}
              }
             if ("unknown".equals(countryCode)) {
                 countryCode = "xx";

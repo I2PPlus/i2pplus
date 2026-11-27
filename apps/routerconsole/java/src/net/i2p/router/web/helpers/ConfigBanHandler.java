@@ -4,6 +4,7 @@ import static net.i2p.router.web.helpers.ConfigBanHelper.*;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Locale;
 import java.util.regex.Pattern;
 import net.i2p.router.web.FormHandler;
 
@@ -242,7 +243,9 @@ public class ConfigBanHandler extends FormHandler {
      * Set custom country codes.
      * @param val the country codes
      */
-    public void setCustomCountryCodes(String val) { _customCountryCodes = val != null ? val.trim().toLowerCase() : ""; }
+    public void setCustomCountryCodes(String val) {
+        _customCountryCodes = val != null ? val.trim().toLowerCase(Locale.US) : "";
+    }
 
     /**
      * Save ban configuration settings.
@@ -407,15 +410,20 @@ public class ConfigBanHandler extends FormHandler {
     /**
      * Validate country codes - only allow valid 2-letter codes.
      *
+     * <p>The codes are ASCII, so the fold to lower case names a locale rather
+     * than following the machine's: under a Turkish default locale "IL" folds to
+     * a dotless ı, fails the two-letter pattern, and the operator's ban for
+     * Israel would be dropped without a word.
+     *
      * @param input the codes as entered, comma or space separated, may be null or empty
      * @return the valid codes lower-cased and joined with commas, invalid codes dropped
      */
-    private String validateCountryCodes(String input) {
+    static String validateCountryCodes(String input) {
         if (input == null || input.isEmpty()) return "";
         StringBuilder result = new StringBuilder();
         String[] codes = COMMA_SPLIT.split(input);
         for (String code : codes) {
-            code = code.trim().toLowerCase();
+            code = code.trim().toLowerCase(Locale.US);
             if (code.length() == 2 && COUNTRY_CODE.matcher(code).matches()) {
                 if (result.length() > 0) result.append(",");
                 result.append(code);
