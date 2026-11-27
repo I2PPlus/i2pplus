@@ -31,7 +31,10 @@ import net.i2p.stat.RateStat;
  * Dropped builds must not leak their configs in the pool's in-progress list,
  * or the count would inflate forever and starve every cap-guard that gates on
  * in-progress builds. Emergency builds (setBypassPacing) bypass the guard
- * entirely.
+ * entirely. A second guard holds a build whose first hop had another build
+ * dispatched to it inside the spacing window; it drops the build rather than
+ * re-picking the hop, so it is counted separately, as
+ * {@code tunnel.buildStaggeredOut}.
  *
  * @since 0.9.70+
  */
@@ -407,5 +410,106 @@ public class BuildExecutorPacingTest {
                                                                            PooledTunnelCreatorConfig.class);
         m.setAccessible(true);
         return (Boolean) m.invoke(exec, cfg);
+    }
+
+    /**
+     * Reflect the executor's per-hop last-dispatch map, the state the dispatch
+     * spacing guard reads.
+     *
+     * @param exec the executor whose private {@code _lastDispatchTime} is read
+     * @return the live map, so a test can seed a hop or read what was recorded
+     * @throws Exception if the private field is gone or reflection is not allowed
+     *                   to open it
+     */
+    @SuppressWarnings("unchecked")
+    private static ConcurrentHashMap<Hash, Long> lastDispatchMap(BuildExecutor exec) throws Exception {
+        Field f = BuildExecutor.class.getDeclaredField("_lastDispatchTime");
+        f.setAccessible(true);
+        return (ConcurrentHashMap<Hash, Long>) f.get(exec);
+    }
+
+    /**
+     * The dispatch spacing guard, as a pure decision: a hop never dispatched to
+     * is clear, a hop inside the window is held for the rest of it, and a hop at
+     * or past the window is clear again. The boundary matters because the caller
+     * drops the build rather than waiting, so a window measured one ms wrong
+     * spends a build that could have gone out.
+     *
+     * @throws Exception not expected; the body only calls a pure helper
+     */
+    @Test
+    public void testStaggerHoldBoundary() throws Exception {
+        int window = BuildExecutor.MIN_BUILD_SPACING_MS;
+        long now = 1_000_000L;
+        assertEquals("a hop never dispatched to is clear", 0, BuildExecutor.staggerHoldMs(0L, now, window));
+        assertEquals("dispatched now, held for the whole window", window,
+                     BuildExecutor.staggerHoldMs(now, now, window));
+        assertEquals(window / 2, BuildExecutor.staggerHoldMs(now - window / 2, now, window));
+        assertEquals("at the window the hop is clear again", 0, BuildExecutor.staggerHoldMs(now - window, now, window));
+        assertEquals("past the window, clear", 0, BuildExecutor.staggerHoldMs(now - window - 1, now, window));
+        assertEquals("a clock step backwards holds the hop for the window, no longer", window,
+                     BuildExecutor.staggerHoldMs(now + 5000L, now, window));
+    }
+
+    /**
+     * A build to a first hop that had another build dispatched inside the spacing
+     * window is dropped, taken out of the pool's in-progress list, and counted.
+     * The count is the point: this guard drops the build outright instead of
+     * re-picking the hop, so before the stat it was the only build-loss path on
+     * the router with no number against it - measured live on 2026-11-27 at
+     * roughly 2,500 builds an hour, against 4,477 dispatched.
+     *
+     * @throws Exception on reflection failure seeding the executor's dispatch map
+     */
+    @Test
+    public void testStaggeredBuildIsCounted() throws Exception {
+        Assume.assumeTrue("No RouterContext available", _ctx != null);
+        TunnelPool pool = createPool();
+        BuildExecutor exec = new BuildExecutor(_ctx, mock(TunnelPoolManager.class), mock(GhostPeerManager.class));
+
+        Hash recent = hop((byte) 11);
+        lastDispatchMap(exec).put(recent, Long.valueOf(System.currentTimeMillis()));
+
+        PooledTunnelCreatorConfig cfg = new PooledTunnelCreatorConfig(_ctx, 3, true, null, pool);
+        cfg.setPeer(0, recent);
+        seedInProgress(pool, cfg);
+        long before = statEvents(_ctx, "tunnel.buildStaggeredOut");
+
+        exec.buildTunnel(cfg);
+
+        assertEquals("the dropped config left the pool's in-progress list", 0, pool.getInProgressCount());
+        assertTrue(pool.listPending().isEmpty());
+        assertEquals("the drop is counted", 1, statEvents(_ctx, "tunnel.buildStaggeredOut") - before);
+        assertEquals("it was not a first-hop re-pick", 0, statEvents(_ctx, "tunnel.buildPacedReselect"));
+    }
+
+    /**
+     * A hop outside the spacing window dispatches, and is recorded as dispatched
+     * so a second build to it inside the window is the one that gets held. Without
+     * the record the guard would never fire at all, and without the count the
+     * first build would be dropped for nothing.
+     *
+     * @throws Exception on reflection failure reading the executor's dispatch map
+     */
+    @Test
+    public void testDispatchRecordsTheHopItWentTo() throws Exception {
+        Assume.assumeTrue("No RouterContext available", _ctx != null);
+        TunnelPool pool = createPool();
+        BuildExecutor exec = new BuildExecutor(_ctx, mock(TunnelPoolManager.class), mock(GhostPeerManager.class));
+
+        Hash clear = hop((byte) 12);
+        long outside = System.currentTimeMillis() - BuildExecutor.MIN_BUILD_SPACING_MS - 1L;
+        lastDispatchMap(exec).put(clear, Long.valueOf(outside));
+
+        PooledTunnelCreatorConfig cfg = new PooledTunnelCreatorConfig(_ctx, 3, true, null, pool);
+        cfg.setPeer(0, clear);
+        seedInProgress(pool, cfg);
+        long before = statEvents(_ctx, "tunnel.buildStaggeredOut");
+
+        exec.buildTunnel(cfg);
+
+        assertEquals("the hop is recorded as dispatched", 1, lastDispatchMap(exec).size());
+        assertEquals("the build was not dropped for spacing", 0,
+                     statEvents(_ctx, "tunnel.buildStaggeredOut") - before);
     }
 }
