@@ -363,7 +363,7 @@ class SymmetricState implements Destroyable, Cloneable {
         try {
             hash.digest(output, outputOffset, outputLength);
         } catch (DigestException e) {
-            Arrays.fill(output, outputOffset, outputLength, (byte)0);
+            Arrays.fill(output, outputOffset, outputOffset + outputLength, (byte)0);
         }
     }
 
@@ -413,7 +413,7 @@ class SymmetricState implements Destroyable, Cloneable {
             hash.update(output, outputOffset, hashLength);
             hash.digest(output, outputOffset, outputLength);
         } catch (DigestException e) {
-            Arrays.fill(output, outputOffset, outputLength, (byte)0);
+            Arrays.fill(output, outputOffset, outputOffset + outputLength, (byte)0);
         } finally {
             Noise.destroy(block);
         }

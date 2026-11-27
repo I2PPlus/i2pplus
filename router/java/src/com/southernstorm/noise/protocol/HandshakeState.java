@@ -811,7 +811,8 @@ public static final String PATTERN_ID_XKHFS_512_SSU2 = "XKhfs512-SSU2";
             // If we failed, then clear any sensitive data that may have
             // already been written to the message buffer.
             if (!success) {
-                Arrays.fill(message, messageOffset, message.length - messageOffset, (byte)0);
+                // clear to end of buffer
+                Arrays.fill(message, messageOffset, message.length, (byte)0);
                 action = FAILED;
             }
         }
@@ -1016,7 +1017,8 @@ public static final String PATTERN_ID_XKHFS_512_SSU2 = "XKhfs512-SSU2";
             // If we failed, then clear any sensitive data that may have
             // already been written to the payload buffer.
             if (!success) {
-                Arrays.fill(payload, payloadOffset, payload.length - payloadOffset, (byte)0);
+                // clear to end of buffer
+                Arrays.fill(payload, payloadOffset, payload.length, (byte)0);
                 action = FAILED;
             }
         }
