@@ -34,6 +34,7 @@ import net.i2p.router.util.PeerLogFormatter;
 import net.i2p.router.util.RandomIterator;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
+import net.i2p.stat.StatManager;
 
 /**
  * This is where we implement semi-Kademlia with the floodfills, by selecting
@@ -53,6 +54,22 @@ public class FloodfillPeerSelector extends PeerSelector {
      * list would emit a line of unbounded length.
      */
     private static final int MAX_LOGGED_PEERS = 16;
+
+    /** Rate periods for the two rotation counters. */
+    private static final long[] RATES = RateConstants.SHORT_TERM_RATES;
+
+    /**
+     * Counts the floodfills one selection rotated away from because it had
+     * asked them a moment ago. Package-visible so the test can name exactly what
+     * the selection writes.
+     */
+    static final String STAT_ROTATED_OUT = "netDb.floodfillRotatedOut";
+
+    /**
+     * Counts the rotated floodfills the same selection had to ask anyway,
+     * because nothing fresher filled its slots.
+     */
+    static final String STAT_REASKED = "netDb.floodfillReasked";
 
     /** The floodfill's own database facade. */
     private final KademliaNetworkDatabaseFacade _facade;
@@ -124,6 +141,34 @@ public class FloodfillPeerSelector extends PeerSelector {
         _facade = facade;
         _banLogger = new BanLogger();
         _banLogger.initialize(ctx);
+        createRotationStats(ctx.statManager(), RATES);
+    }
+
+    /**
+     * Register the two counters the rotation tier reports, so the names the
+     * selection writes exist to be written to.
+     * <p>
+     * {@link net.i2p.stat.StatManager#addRateData(String, long)} looks the name
+     * up and drops the write when the stat was never created, so a counter added
+     * without its registration counts nothing while looking like a working one.
+     * Both rotation counters did exactly that from the commit that added them
+     * until this registration: neither name reached the stats page, and the
+     * starvation question the tier was sized against - how many floodfills a
+     * selection held back, and how many it gave back - stayed unmeasured.
+     * Registering here, beside the code that writes them, keeps a name and its
+     * counter from drifting apart again.
+     *
+     * @param stats the manager to register against
+     * @param periods the rate periods to keep, the short-term set in production
+     * @since 0.9.72+
+     */
+    static void createRotationStats(StatManager stats, long[] periods) {
+        stats.createRateStat(STAT_ROTATED_OUT,
+                             "Floodfills a selection rotated away from as recently asked",
+                             "NetworkDatabase", periods);
+        stats.createRateStat(STAT_REASKED,
+                             "Rotated floodfills a selection had to ask anyway to fill its slots",
+                             "NetworkDatabase", periods);
     }
 
     /**
@@ -424,10 +469,10 @@ public class FloodfillPeerSelector extends PeerSelector {
         // has not already beaten on, which is what a flat one-minute cooldown
         // did at several LeaseSet searches a second.
         if (!recentff.isEmpty()) {
-            _context.statManager().addRateData("netDb.floodfillRotatedOut", recentff.size());
+            _context.statManager().addRateData(STAT_ROTATED_OUT, recentff.size());
         }
         if (reasked > 0) {
-            _context.statManager().addRateData("netDb.floodfillReasked", reasked);
+            _context.statManager().addRateData(STAT_REASKED, reasked);
         }
         // During the startup grace period, reserve more slots for BAD floodfills
         // to spread lookups wide and rebuild profile stats. After grace, revert
