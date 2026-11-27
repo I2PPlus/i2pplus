@@ -1356,7 +1356,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 // end first line processing
 
                 } else {
-                    if (lowercaseLine.startsWith("connection: ")) {
+                    if (lowercaseLine.startsWith("connection:")) {
                         if (lowercaseLine.contains("upgrade")) {
                             // pass through for websocket
                             preserveConnectionHeader = true;
@@ -1374,30 +1374,30 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                             }
                             continue;
                         }
-                    } else if (lowercaseLine.startsWith("keep-alive: ") ||
-                               lowercaseLine.startsWith("proxy-connection: ")) {
+                    } else if (lowercaseLine.startsWith("keep-alive:") ||
+                               lowercaseLine.startsWith("proxy-connection:")) {
                         if (lowercaseLine.contains("close")) {
                             keepalive = false;
                         }
                         continue;
-                    } else if (lowercaseLine.startsWith("host: ") && !usingWWWProxy && !usingInternalOutproxy) {
+                    } else if (lowercaseLine.startsWith("host:") && !usingWWWProxy && !usingInternalOutproxy) {
                         // Note that we only pass the original Host: line through to the outproxy
                         // But we don't create a Host: line if it wasn't sent to us
                         line = "Host: " + host;
                         if (_log.shouldDebug()) {
                             _log.debug(getPrefix(requestId) + "Setting Host: " + host);
                         }
-                    } else if (lowercaseLine.startsWith("user-agent: ")) {
+                    } else if (lowercaseLine.startsWith("user-agent:")) {
                         // save for deciding whether to offer address book form
-                        userAgent = lowercaseLine.substring(12);
+                        userAgent = headerValue(lowercaseLine, "user-agent");
                         if (!_sendUserAgent) {
                             line = null;
                             continue;
                         }
-                    } else if (lowercaseLine.startsWith("accept: ")) {
+                    } else if (lowercaseLine.startsWith("accept:")) {
                         // captured before any spoofing below rewrites it, for the
                         // cross-network check when no Fetch Metadata was sent
-                        accept = lowercaseLine.substring(8).trim();
+                        accept = headerValue(lowercaseLine, "accept");
                         if (!_sendAccept) {
                             // Replace with a standard one if possible
                             boolean html = lowercaseLine.indexOf("text/html") > 0;
@@ -1418,15 +1418,15 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                         // strip the accept-blah headers, as they vary dramatically from
                         // browser to browser
                         // But allow Accept-Encoding: gzip, deflate
-                        if (lowercaseLine.startsWith("accept-encoding: ")) {
+                        if (lowercaseLine.startsWith("accept-encoding:")) {
                             allowGzip = lowercaseLine.contains("gzip");
                         } else if (!_sendAccept) {
                             line = null;
                             continue;
                         }
-                    } else if (lowercaseLine.startsWith("referer: ")) {
+                    } else if (lowercaseLine.startsWith("referer:")) {
                         // save for address helper form below
-                        referer = line.substring(9);
+                        referer = headerValue(line, "referer");
                         if (!_sendReferer) {
                             try {
                                 // Either strip or rewrite the referer line
@@ -1456,27 +1456,27 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                 continue; // completely strip the line
                             }
                         } // else allow
-                    } else if (lowercaseLine.startsWith("sec-fetch-dest: ")) {
+                    } else if (lowercaseLine.startsWith("sec-fetch-dest:")) {
                         // captured for the cross-network check below, and forwarded as-is
-                        secFetchDest = lowercaseLine.substring(16).trim();
-                    } else if (lowercaseLine.startsWith("sec-fetch-mode: ")) {
-                        secFetchMode = lowercaseLine.substring(16).trim();
-                    } else if (lowercaseLine.startsWith("via: ") && !_sendVia) {
+                        secFetchDest = headerValue(lowercaseLine, "sec-fetch-dest");
+                    } else if (lowercaseLine.startsWith("sec-fetch-mode:")) {
+                        secFetchMode = headerValue(lowercaseLine, "sec-fetch-mode");
+                    } else if (lowercaseLine.startsWith("via:") && !_sendVia) {
                         line = null;
                         continue; // completely strip the line
-                    } else if (lowercaseLine.startsWith("from: ")) {
+                    } else if (lowercaseLine.startsWith("from:")) {
                         line = null;
                         continue; // completely strip the line
-                    } else if (lowercaseLine.startsWith("authorization: ntlm ")) {
+                    } else if (isNtlmAuthorization(lowercaseLine)) {
                         // Block Windows NTLM after 401
                         line = null;
                         continue;
-                    } else if (lowercaseLine.startsWith("proxy-authorization: ")) {
+                    } else if (lowercaseLine.startsWith("proxy-authorization:")) {
                         // This should be for us. It is a
                         // hop-by-hop header, and we definitely want to block Windows NTLM after a far-end 407.
                         // Response to far-end shouldn't happen, as we
                         // strip Proxy-Authenticate from the response in HTTPResponseOutputStream
-                        authorization = line.substring(21);  // "proxy-authorization: ".length()
+                        authorization = headerValue(line, "proxy-authorization");
                         line = null;
                         continue;
                     } else if (lowercaseLine.startsWith("icy")) {
@@ -2835,6 +2835,44 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             Thread.currentThread().interrupt();
             return false;
         }
+    }
+
+    /**
+     * The value of a request header line, with the whitespace between the colon
+     * and the value removed. RFC 9112 5.3 allows any number of spaces and tabs
+     * there, and none at all, so a header is matched on its name and colon and
+     * the value starts after the colon - a fixed offset past "name: " reads the
+     * value of a compact header from the middle of the word.
+     * <p>
+     * Pure function - no context access, safe for unit tests.
+     *
+     * @param line the header line, in the case the client sent it where the
+     *             value is forwarded
+     * @param name the header name, lower case, without its colon
+     * @return the value, trimmed; empty when the client sent none
+     * @since 0.9.72+
+     */
+    static String headerValue(String line, String name) {
+        return line.substring(name.length() + 1).trim();
+    }
+
+    /**
+     * Whether a request line is an NTLM Authorization, which is blocked after a
+     * far-end 401. The value is what is matched, not the literal
+     * {@code "authorization: ntlm "}: a client that writes its headers compact
+     * is still blocked, and a Basic header whose base64 happens to contain
+     * "ntlm" is not.
+     * <p>
+     * Pure predicate - no context access, safe for unit tests.
+     *
+     * @param lowercaseLine the request line, lower-cased by the caller
+     * @return true if the line is an Authorization header whose value starts
+     *         with ntlm
+     * @since 0.9.72+
+     */
+    static boolean isNtlmAuthorization(String lowercaseLine) {
+        return lowercaseLine.startsWith("authorization:") &&
+               headerValue(lowercaseLine, "authorization").startsWith("ntlm");
     }
 
     /**
