@@ -538,12 +538,23 @@ public class TunnelDispatcher implements Service {
         // 10m period used for tunnel capacity planning (smoother average than 1m)
         _context.statManager().createRequiredRateStat("tunnel.participatingMessageCountAvgPerTunnel", "Estimated participating messages per tunnel lifetime", "Tunnels [Participating]", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES });
         _context.statManager().createRateStat("tunnel.ownedMessageCount", "Messages sent through a tunnel we created", "Tunnels", RATES);
-        _context.statManager().createRateStat("tunnel.failedCompletelyMessages", "Messages sent through a prematurely failed tunnel", "Tunnels", RATES);
+        // Both failure counters are required, not plain: createRateStat() is a
+        // no-op unless stat.full is set and its default is false, so on a stock
+        // router a tunnel that lost messages would report nothing at all.
+        _context.statManager().createRequiredRateStat("tunnel.failedCompletelyMessages", "Messages sent through a prematurely failed tunnel", "Tunnels", RATES);
         // Removed: tunnel.failedPartially (no emission). It was never emitted, so it read as an
         // absent stat rather than a zero one, and every graph, Tuner rule and health
         // check that referenced it silently no-oped. Nothing here was measured.
+        // The name remove() actually emits is tunnel.failedPartiallyMessages, and
+        // it was written without ever being declared, so the same silence carried
+        // over under the new name: a tunnel we created that lost messages without
+        // failing outright counted nothing.
+        _context.statManager().createRequiredRateStat("tunnel.failedPartiallyMessages",
+                "Messages sent through a tunnel we created that lost messages without failing (messages)",
+                "Tunnels", RATES);
         _context.statManager().createRequiredRateStat("tunnel.firstHopSendFailure",
                 "Spaced send failures to the first hop of an outbound tunnel", "Tunnels", RATES);
+        BatchedPreprocessor.registerStats(_context.statManager(), RATES);
         registerFragmentStats(_context.statManager());
     }
 

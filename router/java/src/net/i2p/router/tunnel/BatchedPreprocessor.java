@@ -2,6 +2,7 @@ package net.i2p.router.tunnel;
 
 import java.util.List;
 import net.i2p.router.RouterContext;
+import net.i2p.stat.StatManager;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
@@ -66,6 +67,89 @@ class BatchedPreprocessor extends TrivialPreprocessor {
     /** Minimum delay even under full pressure (ms) -- avoids busy-wait retry storms. */
     static final long MIN_FLUSH_DELAY = 2L;
 
+    /** Send batches built in one preprocess pass, recorded only when there was more than one. */
+    static final String STAT_BATCH_COUNT = "tunnel.batchCount";
+    /** Messages still queued because a preprocess pass chose not to flush. */
+    static final String STAT_BATCH_DELAY = "tunnel.batchDelay";
+    /** Time left before the delayed flush is due. */
+    static final String STAT_BATCH_DELAY_AMOUNT = "tunnel.batchDelayAmount";
+    /** Messages flushed after waiting, with the time waited as the event duration. */
+    static final String STAT_BATCH_DELAY_SENT = "tunnel.batchDelaySent";
+    /** Messages left queued behind a flush, with the flushed count as the event duration. */
+    static final String STAT_BATCH_FLUSH_REMAINING = "tunnel.batchFlushRemaining";
+    /** Tunnel messages sent filled within the batching window. */
+    static final String STAT_BATCH_FULL = "tunnel.batchFullFragments";
+    /** Messages carried together in one multi-message batch. */
+    static final String STAT_BATCH_MULTIPLE = "tunnel.batchMultipleCount";
+    /** Flush delay chosen for the messages then queued. */
+    static final String STAT_BATCH_PENDING_DELAY = "tunnel.batchPendingDelay";
+    /** Buffer and queue pressure the flush delay is scaled by. */
+    static final String STAT_BATCH_PRESSURE = "tunnel.batchPressure";
+    /** Bytes of the tunnel message left unused when a short flush was padded out. */
+    static final String STAT_BATCH_SMALL = "tunnel.batchSmallFragments";
+
+    /**
+     * Register the batching counters this class writes, so
+     * {@code addRateData()} records real rates instead of discarding the write.
+     * <p>
+     * {@link net.i2p.stat.StatManager#addRateData(String, long)} looks the name
+     * up and drops the write when no such stat was created, so a counter written
+     * without its registration reports nothing while looking like a working one.
+     * All ten here were in that state: the constructor's comment claimed the
+     * registrations had moved to TunnelDispatcher, and TunnelDispatcher had never
+     * created any of them, so the batching path - how long messages wait, how
+     * full the messages come out, how much is spent on padding - was entirely
+     * unmeasured on a live router. The names are constants shared by the write
+     * sites and the registration so the two cannot drift apart again.
+     * <p>
+     * They are declared as required, not plain: {@code createRateStat()} is a
+     * no-op unless <code>stat.full</code> is set, and its default is false, so a
+     * plain declaration would leave the batching path dark on a stock router for
+     * the second time.
+     * <p>
+     * Units: the delay counters are ms, pressure is a percent, padding is bytes,
+     * and the rest count messages or batches. The two counters carrying an event
+     * duration ({@code batchDelaySent}, {@code batchFlushRemaining}) hold message
+     * counts as the value and ms or message counts as the duration, so their
+     * averages are per-message, not per-event.
+     *
+     * @param stats the context's stat manager, never null
+     * @param periods the rate periods to record on, never null
+     * @since 0.9.72+
+     */
+    static void registerStats(StatManager stats, long[] periods) {
+        stats.createRequiredRateStat(STAT_BATCH_COUNT,
+                             "Send batches built in one preprocess pass (batches)",
+                             "Tunnels", periods);
+        stats.createRequiredRateStat(STAT_BATCH_DELAY,
+                             "Messages left queued when a preprocess pass did not flush (messages)",
+                             "Tunnels", periods);
+        stats.createRequiredRateStat(STAT_BATCH_DELAY_AMOUNT,
+                             "Time left before a delayed flush is due (ms)",
+                             "Tunnels", periods);
+        stats.createRequiredRateStat(STAT_BATCH_DELAY_SENT,
+                             "Messages flushed after waiting, event duration is the time waited (messages)",
+                             "Tunnels", periods);
+        stats.createRequiredRateStat(STAT_BATCH_FLUSH_REMAINING,
+                             "Messages still queued after a flush, event duration is the messages flushed (messages)",
+                             "Tunnels", periods);
+        stats.createRequiredRateStat(STAT_BATCH_FULL,
+                             "Tunnel messages filled within the batching window (messages)",
+                             "Tunnels", periods);
+        stats.createRequiredRateStat(STAT_BATCH_MULTIPLE,
+                             "Messages carried in one multi-message batch (messages)",
+                             "Tunnels", periods);
+        stats.createRequiredRateStat(STAT_BATCH_PENDING_DELAY,
+                             "Flush delay chosen for the queued messages (ms)",
+                             "Tunnels", periods);
+        stats.createRequiredRateStat(STAT_BATCH_PRESSURE,
+                             "Buffer and queue pressure driving the flush delay (percent)",
+                             "Tunnels", periods);
+        stats.createRequiredRateStat(STAT_BATCH_SMALL,
+                             "Bytes of the tunnel message left unused by padding (bytes)",
+                             "Tunnels", periods);
+    }
+
     /**
      * Create a new preprocessor for batched tunnel messages.
      *
@@ -75,7 +159,8 @@ class BatchedPreprocessor extends TrivialPreprocessor {
     public BatchedPreprocessor(RouterContext ctx, String name) {
         super(ctx);
         _name = name;
-        // all createRateStat() moved to TunnelDispatcher
+        // Stats are registered once per router by TunnelDispatcher.initializeStats(),
+        // which calls registerStats() - one instance of this class per tunnel role.
     }
 
     /** Full preprocessed message size in bytes (1003). */
@@ -131,7 +216,7 @@ class BatchedPreprocessor extends TrivialPreprocessor {
             rv = getSendDelay();
         }
         if (shouldStat)
-            _context.statManager().addRateData("tunnel.batchDelayAmount", Math.max(0, rv));
+            _context.statManager().addRateData(STAT_BATCH_DELAY_AMOUNT, Math.max(0, rv));
         return rv;
     }
 
@@ -154,14 +239,14 @@ class BatchedPreprocessor extends TrivialPreprocessor {
         int fullnessPct = (int) (allocated * 100L / FULL_SIZE);
         int queuePct = pendingSize * 100 / FORCE_BATCH_FLUSH;
         int pressure = Math.min(100, Math.max(fullnessPct, queuePct));
-        _context.statManager().addRateData("tunnel.batchPressure", pressure);
+        _context.statManager().addRateData(STAT_BATCH_PRESSURE, pressure);
         long maxDelay = getSendDelay();
         long delay = MIN_FLUSH_DELAY + (maxDelay - MIN_FLUSH_DELAY) * (100L - pressure) / 100;
         if (delay < MIN_FLUSH_DELAY)
             delay = MIN_FLUSH_DELAY;
         if (delay > maxDelay)
             delay = maxDelay;
-        _context.statManager().addRateData("tunnel.batchPendingDelay", delay);
+        _context.statManager().addRateData(STAT_BATCH_PENDING_DELAY, delay);
         return delay;
     }
 
@@ -242,7 +327,7 @@ class BatchedPreprocessor extends TrivialPreprocessor {
                     }
                     if (_pendingSince > 0) {
                         long waited = _context.clock().now() - _pendingSince;
-                        _context.statManager().addRateData("tunnel.batchDelaySent", pending.size(), waited);
+                        _context.statManager().addRateData(STAT_BATCH_DELAY_SENT, pending.size(), waited);
                     }
 
                     // Send the message
@@ -253,7 +338,7 @@ class BatchedPreprocessor extends TrivialPreprocessor {
                         beforeSend = 0;
                     _pendingSince = 0;
                     send(pending, 0, i, sender, rec);
-                    _context.statManager().addRateData("tunnel.batchFullFragments", 1);
+                    _context.statManager().addRateData(STAT_BATCH_FULL, 1);
                     long afterSend;
                     if (timingBuf != null)
                         afterSend = System.currentTimeMillis();
@@ -286,7 +371,7 @@ class BatchedPreprocessor extends TrivialPreprocessor {
                         _writeDelayBatch.add(cur.getLifetime(), cur.getData().length);
                     }
                     if (i > 0)
-                        _context.statManager().addRateData("tunnel.batchMultipleCount", (long) i+1);
+                        _context.statManager().addRateData(STAT_BATCH_MULTIPLE, (long) i+1);
                     allocated = 0;
                     batchCount++;
                     if (timingBuf != null) {
@@ -324,11 +409,11 @@ class BatchedPreprocessor extends TrivialPreprocessor {
                     // not even a full message, but we want to flush it anyway
 
                     if (pending.size() > 1)
-                        _context.statManager().addRateData("tunnel.batchMultipleCount", pending.size());
-                    _context.statManager().addRateData("tunnel.batchDelaySent", pending.size(), 0);
+                        _context.statManager().addRateData(STAT_BATCH_MULTIPLE, pending.size());
+                    _context.statManager().addRateData(STAT_BATCH_DELAY_SENT, pending.size(), 0);
 
                     send(pending, 0, pending.size()-1, sender, rec);
-                    _context.statManager().addRateData("tunnel.batchSmallFragments", (long) FULL_SIZE - allocated);
+                    _context.statManager().addRateData(STAT_BATCH_SMALL, (long) FULL_SIZE - allocated);
 
                     // Remove everything in the outgoing message from the pending queue
                     int beforeSize = pending.size();
@@ -348,7 +433,7 @@ class BatchedPreprocessor extends TrivialPreprocessor {
                         // as a proxy for current traffic pressure
                         _pendingSince = _context.clock().now();
                         _pendingDelay = computePendingDelay(allocated, pending.size());
-                        _context.statManager().addRateData("tunnel.batchFlushRemaining", pending.size(), beforeSize);
+                        _context.statManager().addRateData(STAT_BATCH_FLUSH_REMAINING, pending.size(), beforeSize);
                         if (_log.shouldInfo())
                             display(allocated, pending, "\n* Flushed pending messages in buffer, some remain...");
 
@@ -366,7 +451,7 @@ class BatchedPreprocessor extends TrivialPreprocessor {
                             _pendingSince = 0;
                         }
                         if (batchCount > 1)
-                            _context.statManager().addRateData("tunnel.batchCount", batchCount);
+                            _context.statManager().addRateData(STAT_BATCH_COUNT, batchCount);
                         if (_log.shouldInfo())
                             display(allocated, pending, "Flushed messages: " + (beforeSize) + ", none remaining after " + delayAmount + "ms");
 
@@ -381,13 +466,13 @@ class BatchedPreprocessor extends TrivialPreprocessor {
                     // won't get here, we returned
                 } else {
                     // We didn't flush. Note that the messages remain on the pending list.
-                    _context.statManager().addRateData("tunnel.batchDelay", pending.size());
+                    _context.statManager().addRateData(STAT_BATCH_DELAY, pending.size());
                     if (_pendingSince <= 0) {
                         _pendingSince = _context.clock().now();
                         _pendingDelay = computePendingDelay(allocated, pending.size());
                     }
                     if (batchCount > 1)
-                        _context.statManager().addRateData("tunnel.batchCount", batchCount);
+                        _context.statManager().addRateData(STAT_BATCH_COUNT, batchCount);
                     // not yet time to send the delayed flush
                     if (_log.shouldInfo())
                         display(allocated, pending, "Not flushing pending messages in buffer (too early)");
