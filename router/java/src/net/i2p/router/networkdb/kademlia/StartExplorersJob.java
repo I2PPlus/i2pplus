@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
-import java.util.Random;
 import java.util.Set;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
