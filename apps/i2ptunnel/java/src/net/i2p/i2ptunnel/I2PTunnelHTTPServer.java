@@ -2075,6 +2075,44 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
+     * Does the request, as the client sent it, declare a body still to come?
+     * Pure decision, read from the raw header block, because the response
+     * thread holds the bytes to forward and not the parsed map.
+     * <p>Only GET and HEAD are asked this, and only when the client has already
+     * sent bytes past its headers. A request with no
+     * <code>Content-Length</code>, or one that says zero, has no body by
+     * definition, so whatever is waiting behind it is the next pipelined
+     * request, not the tail of this one. A length this method cannot read as a
+     * plain number counts as a body: {@link #framingError(java.util.Map)}
+     * rejects the non-canonical forms before this runs, and a body that cannot
+     * be sized is one that has to be forwarded rather than guessed away.
+     *
+     * @param headers the raw request headers, request line first, may be null
+     * @return true if a body may still be arriving and must be forwarded
+     * @since 0.9.72+
+     */
+    static boolean hasDeclaredBody(String headers) {
+        if (headers == null || headers.isEmpty()) {return true;}
+        String[] lines = NEWLINE_SPLIT.split(headers);
+        for (int i = 1; i < lines.length; i++) {
+            String line = lines[i];
+            int colon = line.indexOf(':');
+            if (colon <= 0) {continue;}
+            String name = line.substring(0, colon).trim();
+            String value = line.substring(colon + 1).trim();
+            if ("transfer-encoding".equalsIgnoreCase(name)) {return true;}
+            if (!"content-length".equalsIgnoreCase(name)) {continue;}
+            if (!isCanonicalLength(value)) {return true;}
+            try {
+                if (Long.parseLong(value) > 0) {return true;}
+            } catch (NumberFormatException nfe) {
+                return true;  // digits, but too many to be a length we can size
+            }
+        }
+        return false;
+    }
+
+    /**
      * Every value sent for a header, whatever case the sender used for its name -
      * the parsed map keeps the names as they arrived.
      *
@@ -2891,7 +2929,14 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 boolean isHead = _headers != null && _headers.startsWith("HEAD ");
                 boolean isGet = _headers != null && _headers.startsWith("GET ");
                 boolean isPost = _headers != null && _headers.startsWith("POST ");
-                if (!(isGet || isHead) || _upgrade || browserin.available() > 0) {  // just in case
+                // A GET or HEAD that declared no body has nothing left to pump:
+                // bytes already waiting behind it are the client's next
+                // pipelined request, and the keep-alive loop reads them as one.
+                // Ending the connection there gave up a reuse the client had
+                // asked for and handed the backend that request as this one's
+                // body.
+                if (!(isGet || isHead) || _upgrade ||
+                    (browserin.available() > 0 && hasDeclaredBody(_headers))) {
                     // Unless this is POST, set a huge
                     // timeout and rely on the server to do the actual timeout
                     _browser.setReadTimeout(isPost ?
