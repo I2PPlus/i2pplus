@@ -16,7 +16,7 @@ public class Points implements Comparable<Points> {
     private double points;
     /** Why the points are what they are. */
     private final List<String> reasons;
-    /** Format used when writing the points out. */
+    /** Format used when writing the points out, shared, and held by {@link #fmt}. */
     private static final DecimalFormat TWO_DECIMALS = new DecimalFormat("#0.00");
 
     /**
@@ -67,11 +67,32 @@ public class Points implements Comparable<Points> {
      * @param reason may not contain '%'
      * @since 0.9.38
      */
-    @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
     public synchronized void addPoints(double d, String reason) {
         points += d;
-        String rsn = TWO_DECIMALS.format(d) + ": " + reason;
-        reasons.add(rsn);
+        reasons.add(fmt(d) + ": " + reason);
+    }
+
+    /**
+     * The amount of a penalty or credit as it is written into a reason: two
+     * decimals, in the locale the console reads numbers in.
+     * <p>
+     * The formatter is one object shared by every Points instance, and
+     * DecimalFormat is not thread-safe - two formats at once can share its
+     * internal digit buffer and write each other's digits. This holds the
+     * formatter itself, so the amount is right whatever the caller holds; {@code
+     * SybilRenderer} guards its own static formatter the same way. JDK 8 takes a
+     * fast path for this pattern that keeps its digits in locals, so the race is
+     * not visible there - it is the pattern on later JDKs, where that fast path
+     * is gone.
+     *
+     * @param val the amount to format
+     * @return the amount with two decimals
+     * @since 0.9.72+
+     */
+    private static String fmt(double val) {
+        synchronized (TWO_DECIMALS) {
+            return TWO_DECIMALS.format(val);
+        }
     }
 
     public int compareTo(Points r) {
