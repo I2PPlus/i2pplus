@@ -173,6 +173,15 @@ class ConnectionPacketHandler {
         final long seqNum = packet.getSequenceNum();
         // Whether the packet has the SYN flag set.
         final boolean isSYN = packet.isFlagSet(Packet.FLAG_SYNCHRONIZE);
+        if (isSYN && seqNum != 0) {
+            // The spec requires a SYN's sequence number to be zero. A nonzero one
+            // would be keyed on by the input stream's accept check as if it named
+            // a block already queued, which it cannot.
+            _log.warnThrottled("streaming-syn-bad-seq",
+                               ConnectionHandler.badSynLine(seqNum, con.getRemotePeer()));
+            packet.releasePayload();
+            return;
+        }
         // The wire carries only 32 bits of the sequence space; resolve the
         // value into our receive space before it is compared against anything
         // we track locally (message ids, ready blocks). Sequence 0 means

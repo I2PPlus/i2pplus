@@ -928,6 +928,16 @@ class ConnectionHandler {
                         syn.releasePayload();
                         continue;
                     }
+                    long badSeq = syn.getSequenceNum();
+                    if (badSeq != 0) {
+                        // The spec requires a SYN's sequence number to be zero. A
+                        // nonzero one would be keyed on downstream - by the packet
+                        // handler and by the input stream's accept check - as if it
+                        // named a block already queued, which it cannot.
+                        syn.releasePayload();
+                        _log.warnThrottled("streaming-syn-bad-seq", badSynLine(badSeq, syn.getOptionalFrom()));
+                        continue;
+                    }
                     // Check for duplicate/retransmitted SYN
                     Destination from = syn.getOptionalFrom();
                     if (from != null) {
@@ -1251,6 +1261,30 @@ class ConnectionHandler {
             // a failed enqueue (dead queue) must not consume re-send budget
             con.recordSynAckResend(_context.clock().now());
         }
+    }
+
+    /**
+     * The WARN line for an inbound SYN dropped because the spec requires a SYN's
+     * sequence number to be zero and this one is not. The number and the sender
+     * are both printed because the drop is only actionable if a reader can tell
+     * one flooding destination apart from many clients whose implementation is
+     * simply wrong.
+     * <p>
+     * Idempotent and side-effect free so it can be unit-tested. Both ingress
+     * paths report the drop through this one formatter, so the message stays one
+     * greppable class of drop rather than two similar ones.
+     *
+     * @param seqNum the sequence number the SYN carried, never zero
+     * @param from the destination that sent it, null if the packet carried no
+     *             source
+     * @return the single-line message, with the destination bracketed so the
+     *         console links it
+     * @since 0.9.72+
+     */
+    static String badSynLine(long seqNum, Destination from) {
+        return "Dropping SYN -> Sequence number is not zero"
+               + " * Seq: " + seqNum
+               + (from != null ? " * From: [" + from.calculateHash().toShortBase32() + "]" : "");
     }
 
     /**
