@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Servlet filter tests</title>
+</head>
+<body>
+<p>
+    Tests for the filters the webapps declare in their <code>web.xml</code>:
+    {@code OriginFilter}, the cross-origin POST refusal the address book reaches
+    through a filter mapping, and {@code XSSRequestWrapper}, the parameter
+    scrubber the console and all three webapps wrap every request in.
+</p>
+
+<p>
+    The decision rules themselves live with the classes they guard — the Origin
+    rule is pinned beside it in the <code>servlet.util</code> suite — so what is
+    covered here is the wiring: which methods a filter guards, which requests it
+    lets through untouched, and that a refusal stops the chain instead of
+    reporting a refusal and carrying out the change anyway. No Jetty, socket or
+    webapp is started; the requests are mocked. {@code ant test} in
+    <code>apps/jetty</code> runs each {@code *Test.java}.
+</p>
+</body>
+</html>

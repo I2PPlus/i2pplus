@@ -22,6 +22,22 @@
     <filter-class>net.i2p.servlet.filters.XSSFilter</filter-class>
   </filter>
 
+  <!-- The address book's forms carry a "serial" field, which is the book's own
+       record version and not a CSRF token, so nothing here refused a cross-origin
+       POST: a page on another origin could delete, add or import entries with the
+       operator's session. The rule is the shared OriginCheck, the one I2PSnark and
+       SusiMail apply in their own doPost. First in the chain so a refused POST
+       never builds the XSS request wrapper it will not use. -->
+  <filter>
+    <filter-name>OriginFilter</filter-name>
+    <filter-class>net.i2p.servlet.filters.OriginFilter</filter-class>
+  </filter>
+
+  <filter-mapping>
+    <filter-name>OriginFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
   <filter-mapping>
     <filter-name>XSSFilter</filter-name>
     <url-pattern>/*</url-pattern>
