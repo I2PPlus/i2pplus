@@ -406,7 +406,7 @@ A negative rate sets the default.</i><br>
 <%
     if (ipg == PAGE_BANDWIDTH_TEST) {
 %>
-<script nonce=<%=cspNonce%>>
+<script nonce="<%=cspNonce%>">
   let bwRefresh = setInterval(function() {
     var xhrwizard = new XMLHttpRequest();
     xhrwizard.open("GET", "/wizard?page=" + <%=PAGE_BANDWIDTH_CONFIG%>, true);

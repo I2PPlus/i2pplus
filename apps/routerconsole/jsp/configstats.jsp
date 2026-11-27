@@ -56,6 +56,6 @@
 </div>
 <script src=/js/configstats.js type=module></script>
 <script src=/js/toggleElements.js></script>
-<script nonce=<%=cspNonce%> type=module>setupToggles(".statgroup", ".statgroup+graphableStat", "table-row", true, false);</script>
+<script nonce="<%=cspNonce%>" type=module>setupToggles(".statgroup", ".statgroup+graphableStat", "table-row", true, false);</script>
 </body>
 </html>

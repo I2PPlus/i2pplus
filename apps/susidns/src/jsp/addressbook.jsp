@@ -454,7 +454,7 @@
 <script src=/js/clickToClose.js></script>
 <script src=/js/jdenticon.js></script>
 <script src=/susidns/js/clearSearch.js></script>
-<script nonce=<%=cspNonce%>>window.jdenticon_config = { padding: 0, saturation: {color: 1, grayscale: 0} };</script>
+<script nonce="<%=cspNonce%>">window.jdenticon_config = { padding: 0, saturation: {color: 1, grayscale: 0} };</script>
 <c:if test="<%=deadHosts%>"><script src=/susidns/js/toggleAllHosts.js></script></c:if>
 </body>
 </html>

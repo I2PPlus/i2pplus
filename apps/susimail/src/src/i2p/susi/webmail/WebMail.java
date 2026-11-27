@@ -3085,7 +3085,7 @@ public class WebMail extends HttpServlet {
                .append("<script src=/js/iframeResizer/iframeResizer.contentWindow.js></script>\n")
                .append("<script src=\"/js/iframeResizer/updatedEvent.js\"></script>\n")
                .append("<script src=\"/susimail/js/notifications.js?").append(CoreVersion.VERSION).append("\"></script>\n")
-               .append("<script nonce=").append(cspNonce).append(">const theme = \"").append(theme).append("\";</script>\n")
+               .append(ServletUtil.scriptOpen(cspNonce, "")).append("const theme = \"").append(theme).append("\";</script>\n")
                .append("<script src=/js/detectPageZoom.js></script>\n")
                .append("<script src=/js/autologout.js></script>\n")
                .append("<style>body{display:none;pointer-events:none}</style>\n")

@@ -20,7 +20,7 @@
 <%  if (useSoraFont) { %><link href=/themes/fonts/Sora.css rel=stylesheet>
 <%  } else { %><link href=/themes/fonts/OpenSans.css rel=stylesheet><% } %>
 <%=intl.title("Page Not Found")%>
-<script nonce=<%=cspNonce%>>if (top.location.href !== location.href) top.location.href = location.href;</script>
+<script nonce="<%=cspNonce%>">if (top.location.href !== location.href) top.location.href = location.href;</script>
 </head>
 <body id=console_404>
 

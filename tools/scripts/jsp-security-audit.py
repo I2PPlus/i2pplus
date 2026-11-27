@@ -34,6 +34,13 @@ Rules
                             getter is server-derived and passes; a value the page
                             never assigns (a pageContext attribute set in Java) is
                             a blind spot and is reported as such, not as a finding.
+  csp-nonce-unquoted        a nonce= attribute of a script, style or link tag whose
+                            value is not quoted. The nonce is Base64 and carries a
+                            slash in about one response in three, and an unquoted
+                            attribute value ends at the first slash - the page then
+                            names a fragment of the nonce the header holds whole,
+                            and CSP blocks that inline script. A form field named
+                            nonce is a value, not an attribute, and is not a finding.
 
 Usage: jsp-security-audit.py [path ...] [--verbose] [--json] [--rule RULE]
        [--app APP] [--selftest]
@@ -71,6 +78,13 @@ ALLOW_CATCH = re.compile(r'catch\s*\([^)]*\)\s*\{[^}]*?(?P<name>\w*[Aa]llowed\w*
 # serial, issued by BaseBean.getSerial() and matched by isAuthorizedAction().
 NONCE = re.compile(r'name[= ]*"?(?:nonce|serial)\b|getNonce\(|getSerial\(|'
                    r'isAuthorizedAction\(|CSSHelper', re.I)
+
+# A CSP nonce is Base64, so it carries a slash - about one response in three -
+# and an unquoted attribute value ends at the first slash. The browser is then
+# left holding the first part of the nonce while the header names all of it, and
+# CSP blocks every inline script on the page.
+NONCE_ATTR = re.compile(r'<(?:script|style|link)\b[^>]*?\snonce\s*=\s*'
+                        r'(?P<val>[^"\'\s>]+)', re.I)
 
 # Where a value in a page can come from the request at all. A scriptlet variable
 # is only as safe as what was assigned to it, so the search follows assignments.
@@ -221,6 +235,11 @@ def check_page(path, text, expanded, findings, blind):
                 findings.add('script-output-unescaped', path, body,
                              base + em.start(), expr)
 
+    # csp-nonce-unquoted
+    for m in NONCE_ATTR.finditer(body):
+        findings.add('csp-nonce-unquoted', path, body, m.start('val'),
+                     m.group('val'))
+
 
 # The CSRF rules, over pages short enough to read in one line each. A rule that
 # reports 0 across the tree may be reporting 0 because it matches nothing.
@@ -254,12 +273,23 @@ PAGE_FIXTURES = (
      '<% if (!OriginCheck.isAllowed(request)) { return; } %>'
      '<form method=POST action="save"><input type=hidden name=serial value="7">'
      '</form>', ()),
+    ('an unquoted CSP nonce is cut at the first slash of its Base64 value',
+     '<script nonce=<%=cspNonce%>>var x = 1;</script>',
+     ('csp-nonce-unquoted',)),
+    ('so is a nonce written after another attribute of the tag',
+     '<script type=module nonce=<%=cspNonce%>>import x from "y";</script>',
+     ('csp-nonce-unquoted',)),
+    ('a quoted CSP nonce is what the rule asks for and is not a finding',
+     '<script nonce="<%=cspNonce%>">var x = 1;</script>', ()),
+    ('a nonce in a form field is a value, not an attribute to quote',
+     '<form method=POST action="save"><input type=hidden name=nonce '
+     'value="<%=n%>"></form>', ()),
 )
 
 
 def selftest():
     """
-    Run the two CSRF rules over PAGE_FIXTURES.
+    Run the CSRF rules and the CSP-nonce rule over PAGE_FIXTURES.
 
     Each fixture names what the rule owes the reader, so a regex widened to fit one
     page is caught the moment it stops reporting another.

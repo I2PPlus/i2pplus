@@ -995,7 +995,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append(isStandalone() ? " class=standalone" : "")
            .append(" style=\"background:").append(pageBackground).append("\">\n<head>\n")
            .append("<meta charset=utf-8>\n<meta name=viewport content=\"width=device-width, initial-scale=1\">\n")
-           .append("<script nonce=").append(cspNonce).append(">const theme = \"").append(theme).append("\";</script>\n");
+           .append(ServletUtil.scriptOpen(cspNonce, "")).append("const theme = \"").append(theme).append("\";</script>\n");
 
         if (!isConfigure && !isStandalone()) {
             buf.append("<link rel=preload as=script href=/js/iframeResizer/updatedEvent.js>\n")
@@ -1036,7 +1036,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("</title>\n");
 
         if (!isConfigure) {
-            buf.append("<script nonce=").append(cspNonce).append(">\n")
+            buf.append(ServletUtil.scriptOpen(cspNonce, "")).append("\n")
                .append("  const deleteMsg = \"").append(_t("Are you sure you want to delete {0} and all downloaded data?")).append("\";\n")
                .append("  const postDeleteMsg = \"").append(_t("Deleting <b>{0}</b> and all associated data...")).append("\";\n")
                .append("  const removeMsg = \"").append(_t("Are you sure you want to delete torrent file {0} and associated metadata?")).append("\";\n")
@@ -1048,7 +1048,7 @@ public class I2PSnarkServlet extends BasicServlet {
                .append("  window.snarkPageSize = snarkPageSize;\n")
                .append("  window.snarkRefreshDelay = snarkRefreshDelay;\n")
                 .append("  window.totalSnarks = totalSnarks;\n</script>\n");
-             buf.append("<script nonce=").append(cspNonce).append(" type=module>\n")
+             buf.append(ServletUtil.scriptOpen(cspNonce, "type=module")).append("\n")
                .append("  import {initSnarkRefresh} from \"").append(resourcePath).append("js/refreshTorrents.js\";\n")
                .append("  document.addEventListener(\"DOMContentLoaded\", initSnarkRefresh);\n</script>\n");
             if (delay > 0) {
@@ -6163,13 +6163,13 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean enableLightbox = _manager.util().enableLightbox();
         if (enableLightbox) {
             buf.append("<link rel=stylesheet href=").append(_resourcePath).append("lightbox.css>\n")
-               .append("<script nonce=").append(cspNonce).append(" type=module>\n")
+               .append(ServletUtil.scriptOpen(cspNonce, "type=module")).append("\n")
                .append("  import {Lightbox} from \"").append(_resourcePath).append("js/lightbox.js\";\n")
                .append("  var lightbox = new Lightbox();lightbox.load();\n")
                .append("</script>\n");
         }
         int delay = _manager.getRefreshDelaySeconds();
-        buf.append("<script nonce=").append(cspNonce).append(" type=module>\n")
+        buf.append(ServletUtil.scriptOpen(cspNonce, "type=module")).append("\n")
            .append("  window.snarkRefreshDelay = ").append(delay).append(";\n")
            .append("  import {initSnarkRefresh} from \"").append(_resourcePath).append("js/refreshTorrents.js\";\n")
            .append("  document.addEventListener(\"DOMContentLoaded\", initSnarkRefresh, true);\n")
@@ -6292,7 +6292,7 @@ public class I2PSnarkServlet extends BasicServlet {
             }
         }
 
-        buf.append("<script nonce=").append(cspNonce).append(">const theme = \"").append(theme).append("\";</script>\n")
+        buf.append(ServletUtil.scriptOpen(cspNonce, "")).append("const theme = \"").append(theme).append("\";</script>\n")
            .append("<noscript><style>.script{display:none}</style></noscript>\n") // hide javascript-dependent buttons when js is unavailable
            .append("<link rel=\"shortcut icon\" href=\"")
            .append(_contextPath).append(WARBASE)

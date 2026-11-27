@@ -32,7 +32,7 @@
 </div>
 <script src="/js/iframeResizer/iframeResizer.js"></script>
 <script src="/js/iframeResizer/initResizer.js"></script>
-<script nonce=<%=cspNonce%>>document.addEventListener("updated", function() {initResizer("susimailframe");});</script>
+<script nonce="<%=cspNonce%>">document.addEventListener("updated", function() {initResizer("susimailframe");});</script>
 <style>body.modal{overflow:hidden;height:100vh}#susimailframe{display:block!important;pointer-events:auto!important}#webmail::before{width:100%;animation:fade .3s linear .7s both}</style>
 </body>
 </html>

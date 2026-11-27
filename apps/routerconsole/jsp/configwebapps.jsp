@@ -36,7 +36,7 @@
 </div>
 </div>
 <script src=/js/refreshOnClick.js></script>
-<script nonce=<%=cspNonce%>>
+<script nonce="<%=cspNonce%>">
   const webappsForm = document.getElementById("form_webapps");
   const processForm = document.getElementById("processForm");
   webappsForm.addEventListener("submit", () => {progressx.show(theme)});

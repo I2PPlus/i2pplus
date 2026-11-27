@@ -21,7 +21,7 @@
 </div>
 <script src=/js/tablesort/sortShared.js></script>
 <script src=/js/tablesort/tablesort.js></script>
-<script nonce=<%=cspNonce%> type=module>
+<script nonce="<%=cspNonce%>" type=module>
   import {refreshElements} from "/js/refreshElements.js";
   refreshElements("#activeStreams", "/samdebug", 10000);
 </script>

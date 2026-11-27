@@ -65,6 +65,6 @@
 </form>
 </div>
 <script src=/js/toggleElements.js></script>
-<script nonce=<%=cspNonce%>>document.addEventListener("DOMContentLoaded", () => setupToggles("#passwordheading", "#passwordheading+form", "block"));</script>
+<script nonce="<%=cspNonce%>">document.addEventListener("DOMContentLoaded", () => setupToggles("#passwordheading", "#passwordheading+form", "block"));</script>
 </body>
 </html>

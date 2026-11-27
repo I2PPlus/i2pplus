@@ -4,7 +4,7 @@
 <%=intl.title("config advanced")%>
 </head>
 <body>
-<script nonce=<%=cspNonce%>>
+<script nonce="<%=cspNonce%>">
   progressx.show(theme);progressx.progress(0.1);
   const msgKeyRemove = "<%=intl._t("Key <b>{0}</b> selected for removal. To commit the change, save the configuration, or cancel to restore the key.")%>";
 </script>
@@ -77,7 +77,7 @@
 </div>
 </div>
 <script src=/js/toggleElements.js></script>
-<script nonce=<%=cspNonce%>>document.addEventListener("DOMContentLoaded", () => { setupToggles("#ffconf", "#ffconf+form", "block"); });</script>
+<script nonce="<%=cspNonce%>">document.addEventListener("DOMContentLoaded", () => { setupToggles("#ffconf", "#ffconf+form", "block"); });</script>
 <% if (isAdvanced) { %>
 <script src=/js/advconfig.js type=module></script>
 <noscript><style>#advancedsettings{display:block!important}</style></noscript>

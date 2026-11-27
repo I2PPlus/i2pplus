@@ -29,7 +29,7 @@
 %>
 <% if (!net.i2p.router.web.ContentOnly.isContentOnly(request)) { %>
 <%=intl.title(pageTitle)%>
-<script nonce=<%=cspNonce%>>
+<script nonce="<%=cspNonce%>">
 const translate_encType = "<%=intl._t("Encryption type")%>";
 const translate_encTypes = "<%=intl._t("Encryption types")%>";
 const translate_sigType = "<%=intl._t("Signature type")%>";

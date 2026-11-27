@@ -3,7 +3,7 @@
 <%@include file="head.jsi"%>
 <%=intl.title("config plugins")%>
 <style>input.default{width:1px;height:1px;visibility:hidden}</style>
-<script nonce=<%=cspNonce%>>var deleteMessage = "<%=intl._t("Are you sure you want to delete {0}?")%>";</script>
+<script nonce="<%=cspNonce%>">var deleteMessage = "<%=intl._t("Are you sure you want to delete {0}?")%>";</script>
 <script src="/js/configclients.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 </head>
 <body>
@@ -130,6 +130,6 @@
 </div>
 <script src=/js/configplugins.js></script>
 <script src=/js/toggleElements.js></script>
-<script nonce=<%=cspNonce%> type=module>setupToggles("#pconfig", "#plugmanage", "block");</script>
+<script nonce="<%=cspNonce%>" type=module>setupToggles("#pconfig", "#plugmanage", "block");</script>
 </body>
 </html>

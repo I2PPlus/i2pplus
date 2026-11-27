@@ -152,4 +152,29 @@ public class ServletUtil {
         RandomSource.getInstance().nextBytes(nonce);
         return Base64.getEncoder().encodeToString(nonce);
     }
+
+    /**
+     * The opening tag of an inline script that this response's CSP nonce
+     * allows, with the nonce quoted.
+     * <p>
+     * The quoting is the whole point. A nonce is Base64, so it carries
+     * {@code /} and {@code +} - roughly one response in three has a slash - and
+     * an unquoted attribute value ends at the first slash. The browser then
+     * holds a nonce of the first eight characters or so while the header names
+     * all twenty-four, and CSP blocks the script: the page loads looking normal
+     * with its sorting, toggling and theme scripts dead.
+     *
+     * @param nonce the nonce for this response, from {@link #getCSPNonce()}
+     * @param attrs extra attributes for the tag, e.g. {@code "type=module"},
+     *              empty for none
+     * @return the opening tag, ending at the close of the tag, no body
+     * @since 0.9.72+
+     */
+    public static String scriptOpen(String nonce, String attrs) {
+        StringBuilder buf = new StringBuilder(48);
+        buf.append("<script nonce=\"").append(nonce).append('"');
+        if (!attrs.isEmpty()) {buf.append(' ').append(attrs);}
+        buf.append('>');
+        return buf.toString();
+    }
 }

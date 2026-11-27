@@ -70,7 +70,7 @@
 <jsp:getProperty name="peerhelper" property="blocklistSummary"/>
 </div>
 <script src=/js/toggleElements.js></script>
-<script nonce=<%=cspNonce%>>document.addEventListener("DOMContentLoaded", () => setupToggles("#ipbans", "#bannedips", "table"));</script>
+<script nonce="<%=cspNonce%>">document.addEventListener("DOMContentLoaded", () => setupToggles("#ipbans", "#bannedips", "table"));</script>
 <noscript><style>#bannedips{display:table!important}</style></noscript>
 </body>
 </html>

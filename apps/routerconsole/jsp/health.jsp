@@ -33,12 +33,12 @@
 </div>
 <script src=/js/toggleElements.js></script>
 <script src=/js/refreshElements.js type=module></script>
-<script nonce=<%=cspNonce%>>
+<script nonce="<%=cspNonce%>">
   document.addEventListener("DOMContentLoaded", () => {
     setupToggles(".toggle-head", ".ring-section", "block", false, false);
   });
 </script>
-<script nonce=<%=cspNonce%> type=module>
+<script nonce="<%=cspNonce%>" type=module>
   import {refreshElements} from "/js/refreshElements.js";
   var targets = "#hsPerfRings, #hsTransportRings, #hsNetworkRings";
   <% if (healthHelper.isFloodfill()) { %>targets += ", #hsFFRings";<% } %>

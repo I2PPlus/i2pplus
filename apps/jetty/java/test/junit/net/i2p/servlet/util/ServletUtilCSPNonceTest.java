@@ -20,6 +20,12 @@ import org.junit.Test;
  * the two servlets used to do, and it is what the width and the distinctness
  * below are here to keep from coming back.
  *
+ * <p>The other half is that the nonce reaches the page as an attribute, and a
+ * Base64 value carries a slash - which ends an unquoted attribute value. A page
+ * that writes it unquoted names a fragment of the nonce the header holds whole,
+ * and CSP blocks every inline script on it, so the tests here also pin that the
+ * tag helper quotes it.
+ *
  * @since 0.9.72+
  */
 public class ServletUtilCSPNonceTest {
@@ -75,21 +81,64 @@ public class ServletUtilCSPNonceTest {
     }
 
     /**
-     * The console writes the nonce into an unquoted attribute on several pages,
-     * so the encoding may not produce a character that ends an attribute value:
-     * no padding, no quote, no angle bracket, no backtick, no whitespace.
+     * The nonce is Base64, so it carries a slash or a plus in about one draw in
+     * three - the characters that end an unquoted attribute value. That is why
+     * the tag helper quotes it, and it is what the two tests below pin.
      */
     @Test
-    public void testTheNonceStaysInsideAnUnquotedAttribute() {
+    public void testTheAlphabetCarriesCharactersThatEndAnAttribute() {
+        boolean found = false;
+        for (int i = 0; i < SAMPLES; i++) {
+            String nonce = ServletUtil.getCSPNonce();
+            if (nonce.indexOf('/') >= 0 || nonce.indexOf('+') >= 0) {found = true;}
+        }
+        assertTrue("no draw in " + SAMPLES + " carried a slash or a plus, " +
+                   "so the alphabet changed and the quoting needs rethinking", found);
+    }
+
+    /**
+     * A slash in the nonce has to survive the tag whole. Written unquoted, the
+     * attribute ends at the first slash: the browser holds the first part of the
+     * nonce while the header names all 24 characters, and CSP blocks every inline
+     * script on the page - the page looks normal with its sorting, toggling and
+     * theme scripts dead.
+     */
+    @Test
+    public void testASlashInANonceSurvivesTheTag() {
+        String nonce = "kKxB7BTpKA/eYGQgwm+uu00V";
+        String tag = ServletUtil.scriptOpen(nonce, "");
+        assertEquals("<script nonce=\"" + nonce + "\">", tag);
+    }
+
+    /**
+     * Every draw is held inside the quotes the helper opens, and only a quote or
+     * an angle bracket could break out of them - the Base64 alphabet carries
+     * neither, and the helper is what keeps the tag well formed whatever it is.
+     */
+    @Test
+    public void testEveryDrawStaysInsideTheQuotes() {
         for (int i = 0; i < SAMPLES; i++) {
             String nonce = ServletUtil.getCSPNonce();
             for (int j = 0; j < nonce.length(); j++) {
                 char c = nonce.charAt(j);
-                boolean ok = c != '=' && c != '"' && c != '\'' && c != '<' && c != '>' &&
-                             c != '`' && c != ' ' && c != '\t' && c != '\r' && c != '\n';
+                boolean ok = c != '"' && c != '<' && c != '>' && c != ' ' && c != '\t' &&
+                             c != '\r' && c != '\n';
                 assertTrue("nonce " + nonce + " carries " + c +
-                           ", which ends an unquoted attribute", ok);
+                           ", which would break the tag", ok);
             }
+            String tag = ServletUtil.scriptOpen(nonce, "");
+            assertEquals("<script nonce=\"" + nonce + "\">", tag);
         }
+    }
+
+    /**
+     * Extra attributes of the tag go after the quoted nonce, not inside the
+     * value: the module scripts on the console pages are written this way.
+     */
+    @Test
+    public void testExtraAttributesFollowTheQuotedNonce() {
+        assertEquals("<script nonce=\"abc\" type=module>",
+                     ServletUtil.scriptOpen("abc", "type=module"));
+        assertEquals("<script nonce=\"a/b+c\">", ServletUtil.scriptOpen("a/b+c", ""));
     }
 }

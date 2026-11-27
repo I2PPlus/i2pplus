@@ -48,7 +48,7 @@
 <jsp:getProperty name="infohelper" property="console"/>
 </div>
 <script src=/js/refreshElements.js type=module></script>
-<script nonce=<%=cspNonce%> type=module>
+<script nonce="<%=cspNonce%>" type=module>
   import {refreshElements} from "/js/refreshElements.js";
   refreshElements(".ajax", "/info", 30000);
 </script>

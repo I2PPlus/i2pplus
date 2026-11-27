@@ -13,7 +13,7 @@
     if (allowRefresh) {out.print(graphHelper.getRefreshMeta());}
     out.print("\n");
 %>
-<script nonce=<%=cspNonce%>>
+<script nonce="<%=cspNonce%>">
   window.graphRefreshInterval = <% out.print(graphHelper.getRefreshValue() * 1000); %>;
   var graphCount = <% out.print(graphHelper.countGraphs()); %>;
 </script>

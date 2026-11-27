@@ -53,7 +53,7 @@ boolean noAuth = !_hasConsolePW;
 else if (lang.equals("ar") || lang.equals("fa")) {%> <link rel=stylesheet href="<%=themePath%>console_ar.css?version=<%=v%>"> <% }
 else if (lang.equals("bo")) {%> <link rel=stylesheet href="<%=themePath%>console_bo.css?version=<%=v%>"> <% } %>
 <% if (hasOverride) {%> <link href=<%=themePath%>override.css rel=stylesheet> <% } %>
-<script nonce=<%=cspNonce%>>
+<script nonce="<%=cspNonce%>">
   if (top.location.href !== location.href) top.location.href = location.href;
   const refresh = parseInt(<%=intl.getRefresh()%>, 10);
   const cspNonce = "<%=cspNonce%>";
