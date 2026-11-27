@@ -413,7 +413,13 @@ public class FileUtil {
         if (!target.exists()) throw new FileNotFoundException("Requested file does not exist: " + path);
         String targetStr = target.getCanonicalPath();
         String rootDirStr = rootDir.getCanonicalPath();
-        if (!targetStr.startsWith(rootDirStr)) throw new FileNotFoundException("Requested file is outside the root dir: " + path);
+        // Require a path-separator boundary so that a sibling directory whose name
+        // shares the root's prefix (e.g. "docs" vs. "docs-old") cannot pass the check.
+        String rootPrefix = rootDirStr.endsWith(File.separator)
+                          ? rootDirStr
+                          : rootDirStr + File.separator;
+        if (!targetStr.startsWith(rootPrefix))
+            throw new FileNotFoundException("Requested file is outside the root dir: " + path);
 
         try (FileInputStream in = new FileInputStream(target)) {
             DataHelper.copy(in, out);
