@@ -31,10 +31,10 @@ import net.i2p.stat.RateStat;
  * Dropped builds must not leak their configs in the pool's in-progress list,
  * or the count would inflate forever and starve every cap-guard that gates on
  * in-progress builds. Emergency builds (setBypassPacing) bypass the guard
- * entirely. A second guard holds a build whose first hop had another build
- * dispatched to it inside the spacing window; it drops the build rather than
- * re-picking the hop, so it is counted separately, as
- * {@code tunnel.buildStaggeredOut}.
+ * entirely. A second guard holds a hop that was sent a request inside the
+ * spacing window; it is answered the same way - exclude the hop and ask the
+ * pool again - and only the builds the re-pick could not save are counted
+ * separately, as {@code tunnel.buildStaggeredOut}.
  *
  * @since 0.9.70+
  */
@@ -452,12 +452,11 @@ public class BuildExecutorPacingTest {
     }
 
     /**
-     * A build to a first hop that had another build dispatched inside the spacing
-     * window is dropped, taken out of the pool's in-progress list, and counted.
-     * The count is the point: this guard drops the build outright instead of
-     * re-picking the hop, so before the stat it was the only build-loss path on
-     * the router with no number against it - measured live on 2026-11-27 at
-     * roughly 2,500 builds an hour, against 4,477 dispatched.
+     * A build whose first hop was sent a request inside the spacing window is
+     * held, and when the pool has no other hop to offer it is dropped and
+     * counted as a spacing loss rather than a pacing one. The count is the
+     * point: measured live on 2026-11-27 this guard discarded about 2,500
+     * builds an hour against 4,477 dispatched, and not one of them was counted.
      *
      * @throws Exception on reflection failure seeding the executor's dispatch map
      */
@@ -474,13 +473,17 @@ public class BuildExecutorPacingTest {
         cfg.setPeer(0, recent);
         seedInProgress(pool, cfg);
         long before = statEvents(_ctx, "tunnel.buildStaggeredOut");
+        long beforePaced = statEvents(_ctx, "tunnel.buildPacedOut");
 
         exec.buildTunnel(cfg);
 
         assertEquals("the dropped config left the pool's in-progress list", 0, pool.getInProgressCount());
         assertTrue(pool.listPending().isEmpty());
-        assertEquals("the drop is counted", 1, statEvents(_ctx, "tunnel.buildStaggeredOut") - before);
-        assertEquals("it was not a first-hop re-pick", 0, statEvents(_ctx, "tunnel.buildPacedReselect"));
+        assertEquals("the drop is counted as a spacing loss", 1,
+                     statEvents(_ctx, "tunnel.buildStaggeredOut") - before);
+        assertEquals("and not as a busy-hop pacing loss", 0, statEvents(_ctx, "tunnel.buildPacedOut") - beforePaced);
+        assertEquals("the re-pick found no other hop, so none was made", 0,
+                     statEvents(_ctx, "tunnel.buildPacedReselect"));
     }
 
     /**

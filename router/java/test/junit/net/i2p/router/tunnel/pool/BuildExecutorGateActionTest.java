@@ -9,8 +9,9 @@ import org.junit.Test;
  * Pins the executor's decision when a build's first hop is gated: keep the
  * build and ask the pool for another hop, or give up on it. The guard only
  * says one thing about one peer - it already carries a build, or it has been
- * failing as a first hop - and says nothing about the demand behind the build,
- * so discarding the build throws away a refill the pool still needs. Measured
+ * failing as a first hop, or it was sent a request inside the dispatch spacing
+ * window - and says nothing about the demand behind the build, so discarding
+ * the build throws away a refill the pool still needs. Measured
  * live on 2026-11-25 the guard turned away 86 builds a minute while 61 were
  * attempted: more than half of the router's build demand was being discarded
  * for want of a free first hop.
@@ -43,9 +44,10 @@ public class BuildExecutorGateActionTest {
     }
 
     /**
-     * Both gate reasons re-select. A busy hop and a hop that has been failing
-     * are equally uninformative about the rest of the peer set, so neither
-     * ends the build while another hop can still be asked for.
+     * All three gate reasons re-select. A busy hop, a hop that has been failing
+     * as a first hop, and a hop that was sent a request a moment ago are equally
+     * uninformative about the rest of the peer set, so none of them ends the
+     * build while another hop can still be asked for.
      */
     @Test
     public void testGatedHopReselects() {
@@ -55,6 +57,8 @@ public class BuildExecutorGateActionTest {
                          BuildExecutor.gateAction(BuildExecutor.FirstHopGate.IN_FLIGHT, pool, attempt, LIMIT));
             assertEquals(BuildExecutor.FirstHopGate.RECENT_FAILURE + " * attempt " + attempt, BuildExecutor.GateAction.RESELECT,
                          BuildExecutor.gateAction(BuildExecutor.FirstHopGate.RECENT_FAILURE, pool, attempt, LIMIT));
+            assertEquals(BuildExecutor.FirstHopGate.STAGGERED + " * attempt " + attempt, BuildExecutor.GateAction.RESELECT,
+                         BuildExecutor.gateAction(BuildExecutor.FirstHopGate.STAGGERED, pool, attempt, LIMIT));
         }
     }
 
@@ -71,6 +75,8 @@ public class BuildExecutorGateActionTest {
                                                                LIMIT, LIMIT));
         assertEquals(BuildExecutor.GateAction.DROP, BuildExecutor.gateAction(BuildExecutor.FirstHopGate.RECENT_FAILURE, pool,
                                                                LIMIT + 5, LIMIT));
+        assertEquals(BuildExecutor.GateAction.DROP, BuildExecutor.gateAction(BuildExecutor.FirstHopGate.STAGGERED, pool,
+                                                               LIMIT, LIMIT));
     }
 
     /**
@@ -81,6 +87,7 @@ public class BuildExecutorGateActionTest {
     @Test
     public void testNoPoolDrops() {
         assertEquals(BuildExecutor.GateAction.DROP, BuildExecutor.gateAction(BuildExecutor.FirstHopGate.IN_FLIGHT, null, 0, LIMIT));
+        assertEquals(BuildExecutor.GateAction.DROP, BuildExecutor.gateAction(BuildExecutor.FirstHopGate.STAGGERED, null, 0, LIMIT));
         assertEquals(BuildExecutor.GateAction.DISPATCH, BuildExecutor.gateAction(BuildExecutor.FirstHopGate.NONE, null, 0, LIMIT));
     }
 

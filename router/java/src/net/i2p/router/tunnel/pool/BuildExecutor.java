@@ -784,9 +784,10 @@ public class BuildExecutor implements Runnable {
      * <p>Unlike {@link #spacingDelay(long, long)}, which paces whole build
      * passes, this guards one peer: two builds dispatched to the same first hop
      * inside the window are the second one being spent on a peer that is already
-     * carrying a build. The caller drops that build rather than re-picking the
-     * hop, so the window has to be measured against a floor the caller can act
-     * on, and a hop never dispatched to is never held.
+     * carrying a build. The caller holds the build off that hop and asks the pool
+     * for another one, so the window is the only thing keeping a peer from
+     * receiving two requests inside two seconds, and a hop never dispatched to
+     * is never held.
      *
      * @param lastDispatch when that hop last had a build dispatched to it, in ms,
      *                     or 0 when it never has
@@ -3019,6 +3020,14 @@ public class BuildExecutor implements Runnable {
      * stacking requests on one peer floods it and makes the first build
      * answer slower.  Zero-hop tunnels build inline, unguarded.
      * <p>
+     * The same guard holds a hop that was sent a request inside {@link
+     * #MIN_BUILD_SPACING_MS}. Either way the build is not lost: the pool is
+     * asked for the same tunnel behind a different first hop, up to {@link
+     * #FIRST_HOP_RESELECT_LIMIT} times, and the build is dropped only when the
+     * pool has no other hop to offer. Emergency builds (setBypassPacing) skip
+     * the guard, but their dispatch is still recorded against the spacing
+     * window.
+     * <p>
      * Early ban filtering: checks if the first-hop is banned before
      * dispatching the build, preventing wasted build slots on peers
      * that will reject the request.  Saves 12-18 build slots per minute.
@@ -3071,8 +3080,7 @@ public class BuildExecutor implements Runnable {
                 _context.statManager().addRateData("tunnel.buildPacedReselect", 1);
                 if (_log.shouldDebug()) {
                     Hash fresh = BuildRequestor.getBuildRequestPeer(retry);
-                    _log.debug("Re-picking a gated first hop -> " +
-                               (gate == FirstHopGate.RECENT_FAILURE ? "Failing hop" : "Busy hop") +
+                    _log.debug("Re-picking a gated first hop -> " + gateReason(gate) +
                                ": [" + gated.toShortBase64() + "] * New hop: " +
                                (fresh != null ? "[" + fresh.toShortBase64() + ']' : "none") +
                                " * Attempts: " + (attempt + 1));
@@ -3081,29 +3089,13 @@ public class BuildExecutor implements Runnable {
             }
         }
 
-        // Stagger: minimum 2s between dispatches to the same first hop
+        // Record where the request went, so the next build to this peer inside
+        // the spacing window is held by the gate above instead of stacked on top
+        // of this one. Emergency builds skip the guard but are still recorded:
+        // they are the dispatch a normal build has to space itself against.
         Hash firstHop = BuildRequestor.getBuildRequestPeer(cfg);
         if (firstHop != null) {
-            Long lastDispatch = _lastDispatchTime.get(firstHop);
             long now = System.currentTimeMillis();
-            long held = staggerHoldMs(lastDispatch == null ? 0L : lastDispatch.longValue(), now,
-                                      MIN_BUILD_SPACING_MS);
-            if (held > 0) {
-                if (_log.shouldDebug()) {
-                    _log.debug("Staggering a build -> First hop dispatched too recently" +
-                               " * Hop: [" + firstHop.toShortBase64() + "]" +
-                               " * Since: " + DataHelper.formatDuration(held) +
-                               " * Pool: " + cfg.getTunnelPool());
-                }
-                // Counted, not just logged: this guard drops the build outright
-                // rather than re-picking the hop, so without a stat it is the one
-                // build-loss path on the router nobody can price. Measured live on
-                // 2026-11-27 it dropped about 2,500 builds an hour, against 4,477
-                // dispatched.
-                _context.statManager().addRateData("tunnel.buildStaggeredOut", 1);
-                cfg.getTunnelPool().removeInProgress(cfg);
-                return;
-            }
             _lastDispatchTime.put(firstHop, now);
             if (_lastDispatchTime.size() > STAGGER_TRACK_MAX) {
                 // Drop only entries that can no longer suppress anything. The
@@ -3226,7 +3218,12 @@ public class BuildExecutor implements Runnable {
         /** Another build is already riding this same first hop. */
         IN_FLIGHT,
         /** This peer has failed as a first hop too often recently to try again. */
-        RECENT_FAILURE
+        RECENT_FAILURE,
+        /**
+         * A request went to this peer so recently that a second one would
+         * stack on top of the first.
+         */
+        STAGGERED
     }
 
     /**
@@ -3286,7 +3283,13 @@ public class BuildExecutor implements Runnable {
      */
     private void dropGatedBuild(TunnelPool pool, PooledTunnelCreatorConfig cfg,
                                 FirstHopGate gate, Set<Hash> gatedHops) {
-        _context.statManager().addRateData("tunnel.buildPacedOut", 1);
+        // Counted by reason: a build lost to a hop that is busy and one lost to
+        // a hop that is silent are different findings, and the pool's own refill
+        // rate cannot tell them apart. Measured live on 2026-11-27 the spacing
+        // guard alone discarded about 2,500 builds an hour against 4,477
+        // dispatched, and none of them were counted at all.
+        _context.statManager().addRateData(
+            gate == FirstHopGate.STAGGERED ? "tunnel.buildStaggeredOut" : "tunnel.buildPacedOut", 1);
         if (_log.shouldDebug()) {
             logFirstHopGate(gate, cfg, gatedHops != null ? gatedHops.size() : 0);
         }
@@ -3329,6 +3332,13 @@ public class BuildExecutor implements Runnable {
      * has already been re-selected away from as busy. Without that, a pool that
      * reuses a recent tunnel's peer sequence (75% of client builds) can hand
      * back the hop we just gated, and the walk would dispatch onto it.
+     * <p>A hop that was sent a build request inside {@link
+     * #MIN_BUILD_SPACING_MS} is held for the same reason the in-flight guard
+     * gives - a second request stacks on the first and slows it down - and it is
+     * held the same way now: re-pick the hop, and drop the build only when the
+     * pool has no other hop to offer. Dropped outright, this one guard discarded
+     * about 2,500 builds an hour against 4,477 dispatched, measured live on
+     * 2026-11-27, while every pool on the router sat in deficit.
      *
      * @param cfg the prospective build
      * @param alreadyTried hops this build has already given up on, may be null
@@ -3345,7 +3355,26 @@ public class BuildExecutor implements Runnable {
         if (countBuildsToFirstHop(_currentlyBuildingMap.values(), firstHop, cfg) > 0) {
             return FirstHopGate.IN_FLIGHT;
         }
+        if (staggerHoldMs(lastDispatchTo(firstHop), System.currentTimeMillis(),
+                         MIN_BUILD_SPACING_MS) > 0) {
+            return FirstHopGate.STAGGERED;
+        }
         return FirstHopGate.NONE;
+    }
+
+    /**
+     * When a build request was last dispatched to this peer, the timestamp the
+     * dispatch spacing guard is measured against.
+     *
+     * @param firstHop the peer the prospective build would be sent to, not null
+     * @return ms since the epoch of that peer's last dispatch, 0 if it never had
+     *         one
+     * @since 0.9.72+
+     */
+    private long lastDispatchTo(Hash firstHop) {
+        if (firstHop == null) {return 0L;}
+        Long last = _lastDispatchTime.get(firstHop);
+        return last != null ? last.longValue() : 0L;
     }
 
     /**
@@ -3388,10 +3417,32 @@ public class BuildExecutor implements Runnable {
             _log.debug("Build gated (first hop failures) -> " + hop + " has " +
                        getFirstHopFailureCount(firstHop) + " recent failures" + tried +
                        "\n* Tunnel: " + cfg);
+        } else if (gate == FirstHopGate.STAGGERED) {
+            long held = staggerHoldMs(lastDispatchTo(firstHop), System.currentTimeMillis(),
+                                      MIN_BUILD_SPACING_MS);
+            _log.debug("Build gated (dispatch spacing) -> A request went to " + hop + " " +
+                       DataHelper.formatDuration(MIN_BUILD_SPACING_MS - held) + " ago" + tried +
+                       "\n* Tunnel: " + cfg);
         } else {
             int shared = countBuildsToFirstHop(_currentlyBuildingMap.values(), firstHop, cfg);
             _log.debug("Build gated (pacing) -> First hop " + hop + " already has a build in flight" +
                        tried + "\n* Builds to it: " + shared + " * Tunnel: " + cfg);
+        }
+    }
+
+    /**
+     * The words for why a first hop held a build, shared by the gate's two log
+     * lines so a re-pick and a drop name the same reason.
+     *
+     * @param gate why the build was held
+     * @return a short label for the reason, never null
+     * @since 0.9.72+
+     */
+    private static String gateReason(FirstHopGate gate) {
+        switch (gate) {
+            case RECENT_FAILURE: return "Failing hop";
+            case STAGGERED:      return "Recent dispatch";
+            default:             return "Busy hop";
         }
     }
 
@@ -3412,7 +3463,9 @@ public class BuildExecutor implements Runnable {
 
     /**
      * Record a first-hop failure for a given peer hash.  Called from
-     * {@link #buildComplete} when a build fails due to first-hop issues.
+     * {@link #buildComplete} when a build came back bad and from
+     * {@link #handleExpiredBuild} when nobody answered at all - the second is
+     * the common case, and the only one the reply path never sees.
      * Uses exponential decay: old failure counts decay over time, so a
      * peer that failed once 10 minutes ago but succeeded since is not
      * penalized.
