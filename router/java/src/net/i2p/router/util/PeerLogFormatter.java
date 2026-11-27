@@ -44,6 +44,42 @@ public class PeerLogFormatter {
     private static final String EXCLUDING = "Excluding";
 
     /**
+     * What stands in for this router's own hash. The exposure is in log
+     * sharing: a log gets pasted into a bug report, a forum post or an IRC
+     * channel, and a hash is a permanent identifier, so one paste ties every
+     * line of it to this router for as long as that paste is read. Whoever can
+     * open the console can read the hash off it anyway, so local access is not
+     * what this protects. It is also a constant in the tunnel code, because we
+     * are the gateway of every tunnel we build and the owner of every lease in
+     * our own LeaseSet, so printing it names nothing.
+     */
+    public static final String US = "[Us]";
+
+    /**
+     * A router info hash in the form a log line should carry it: bracketed, so
+     * the console log viewer linkifies it, and six characters of Base64, the
+     * house truncation for a router. Our own hash is replaced by {@link #US},
+     * both because it is a constant in these lines and because a shared log
+     * would otherwise carry a permanent identifier for this router.
+     *
+     * @param hash the router to name, may be null
+     * @param us this router's own hash, may be null when the caller has no
+     *           context to ask
+     * @return {@code [Us]} for our own hash, {@code [none]} for null, otherwise
+     *         the bracketed six-character hash
+     * @since 0.9.72+
+     */
+    public static String routerHashTag(Hash hash, Hash us) {
+        if (hash == null) {
+            return "[none]";
+        }
+        if (us != null && us.equals(hash)) {
+            return US;
+        }
+        return "[" + hash.toShortBase64() + "]";
+    }
+
+    /**
      * Target width of a reason-tally bullet line, the logging guide's 80-90
      * range. A pair that would push the line past this starts a new line.
      */

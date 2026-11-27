@@ -300,6 +300,38 @@ public class PeerLogFormatterTest {
         assertEquals("some-new-reason", PeerLogFormatter.reasonLabel("some-new-reason"));
     }
 
+    /** Our own hash is never printed - a shared log would carry a permanent identifier for this router. */
+    @Test
+    public void testOwnHashIsMasked() {
+        assertEquals("[Us]", PeerLogFormatter.routerHashTag(hash(1), hash(1)));
+        assertEquals(PeerLogFormatter.US, PeerLogFormatter.routerHashTag(hash(1), hash(1)));
+    }
+
+    /** Any other router is named by its 6-character base64 form, bracketed so the log viewer links it. */
+    @Test
+    public void testOtherRouterIsBracketed() {
+        assertEquals("[" + shortHash(2) + "]", PeerLogFormatter.routerHashTag(hash(2), hash(1)));
+    }
+
+    /** A caller with no context to ask has no mask to apply, and a missing router is named none. */
+    @Test
+    public void testNoOwnHashAndNoRouter() {
+        assertEquals("[" + shortHash(1) + "]", PeerLogFormatter.routerHashTag(hash(1), null));
+        assertEquals("[none]", PeerLogFormatter.routerHashTag(null, hash(1)));
+        assertEquals("[none]", PeerLogFormatter.routerHashTag(null, null));
+    }
+
+    /**
+     * The mask is not a length the log linkifier parses as a hash - six
+     * characters of base64 for a router, eight of base32 for a lease set - so it
+     * stays plain text instead of becoming a broken link.
+     */
+    @Test
+    public void testMaskIsNotLinkified() {
+        int inner = PeerLogFormatter.US.length() - 2;
+        assertTrue("mask of " + inner + " characters would be linkified", inner != 6 && inner != 8);
+    }
+
     /**
      * The rendered lines, with the leading newline of the block dropped so
      * index 0 is the label line.
