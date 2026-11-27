@@ -308,25 +308,23 @@ test("a graph keeps the size of the axis a gesture never moved", async () => {
   const src = (w, h) => "http://127.0.0.1:7657/viewstat.jsp?stat=x&width=" + w + "&height=" + h;
   const plain = {src: src(496, 153), naturalWidth: 579, naturalHeight: 283};
   const tile = {src: src(496, 115), naturalWidth: 579, naturalHeight: 283};
-  // A ctrl-drag 121px wider says nothing about height. Every graph keeps the height it was
-  // drawn at: a page that pinned the box to the anchor graph's height instead would redraw
-  // every other graph at that height, and the graphs would change proportions rather than
-  // scale.
-  assert.deepEqual(m.requestedBoxFor([plain, tile], {width: 700}), {width: 700, height: 283});
-  assert.deepEqual(m.requestedBoxFor([plain, tile], {height: 400}), {width: 579, height: 400});
-  // Both axes: the biggest box on the page, so nothing is clipped by the single pin.
-  assert.deepEqual(m.requestedBoxFor([plain, tile], {width: 700, height: 400}), {width: 700, height: 400});
-  // A graph whose picture has not come back yet is sized like its neighbours, not at zero,
-  // or the pin would collapse to nothing while one tile is still loading.
+  const chrome = {width: 83, height: 130};
+  // A ctrl-drag 121px wider says nothing about height, so each graph keeps the height it was
+  // drawn at - and each is asked for its own plot, so both pictures still come out the same
+  // size. Redrawing every graph at the anchor's height instead would change proportions.
+  assert.deepEqual(m.sizeFor(plain, {width: 700}, chrome), {width: 617, height: 153});
+  assert.deepEqual(m.sizeFor(tile, {width: 700}, chrome), {width: 617, height: 115});
+  // A ctrl-roll says nothing about width, and the width each graph is drawn at is kept.
+  assert.deepEqual(m.sizeFor(plain, {height: 400}, chrome), {width: 496, height: 270});
+  assert.deepEqual(m.sizeFor(tile, {height: 400}, chrome), {width: 496, height: 232});
+  // Both axes.
+  assert.deepEqual(m.sizeFor(plain, {width: 700, height: 400}, chrome), {width: 617, height: 270});
+  // A graph whose picture has not come back is sized with the chrome its neighbours were
+  // drawn at, not with nothing, or it would be asked for a plot 130px taller than them.
   const loading = {src: src(496, 153), naturalWidth: 0, naturalHeight: 0};
-  assert.deepEqual(m.requestedBoxFor([plain, loading], {width: 700}), {width: 700, height: 283});
-  // Nothing on the page has a size at all - a graph pulled from another router's console -
-  // and there is no box to pin.
-  assert.equal(m.requestedBoxFor([{src: "http://127.0.0.1:7657/viewstat.jsp?stat=x"}], {width: 700}), null);
-  assert.equal(m.requestedBoxFor([], {width: 700}), null);
-  // A window that sized nothing leaves every graph where it is, so the box is simply the
-  // biggest picture on the page - which is what the page's own pin would have written.
-  assert.deepEqual(m.requestedBoxFor([plain, tile], {}), {width: 579, height: 283});
+  assert.deepEqual(m.sizeFor(loading, {width: 700}, chrome), {width: 617, height: 153});
+  // The clamp is on the plot, because that is what the console refuses to draw outside.
+  assert.deepEqual(m.sizeFor(plain, {width: 10}, chrome), {width: 160, height: 153});
 });
 
 test("a ctrl-roll sizes a graph by the same step a zoom moves time", async () => {
@@ -341,6 +339,43 @@ test("a ctrl-roll sizes a graph by the same step a zoom moves time", async () =>
   assert.equal(height, 4320, "the tallest graph the console draws");
   for (let step = 0; step < 400; step++) {height = m.sizeFromRoll(height, -1, 40, 4320);}
   assert.equal(height, 40, "the shortest graph the console draws");
+});
+
+test("a size a gesture settles on lands on the size grid", async () => {
+  const m = await load();
+  // A size has no natural unit the way a timeframe does, so the grid is what makes a saved
+  // one askable again: the width and height fields of the form are how you ask, and nobody
+  // types 1934 or 643.
+  assert.equal(m.snapSize(1934, 243, 7763), 1930);
+  assert.equal(m.snapSize(1936, 243, 7763), 1940);
+  assert.equal(m.snapSize(643, 96, 4450), 640);
+  // A size already on the grid is left exactly where it is, so a roll that lands on it does
+  // not move the graph a pixel either way, and repeated gestures converge instead of drifting.
+  assert.equal(m.snapSize(1930, 243, 7763), 1930);
+  // Half of a grid moves up, and the same size always goes the same way: a size between two
+  // lines is a size the gesture will ask for again, and one that alternates between them
+  // never settles.
+  assert.equal(m.snapSize(1935, 243, 7763), 1940);
+  assert.equal(m.snapSize(m.snapSize(1935, 243, 7763), 243, 7763), 1940, "and stays there");
+  // A gesture pushed past either end of the range stops on the last grid line inside it, not
+  // on the bound itself: the console's bounds are on the plot inside the graph, and this
+  // graph's chrome puts the picture's bounds (243 and 7763 here) between the lines.
+  assert.equal(m.snapSize(244, 243, 7763), 250, "the smallest size on the grid this graph allows");
+  assert.equal(m.snapSize(7762, 243, 7763), 7760, "the largest");
+  assert.equal(m.snapSize(10, 243, 7763), 250, "a drag that ran past the floor");
+  assert.equal(m.snapSize(99999, 243, 7763), 7760, "a drag that ran past the ceiling");
+  // Only what is published is snapped, never what the gesture accumulates: the pointer's
+  // travel is all kept, so a slow drag reaches every line of the grid rather than stalling
+  // below one, and the graph moves as soon as the travel passes the halfway point to it.
+  let raw = 1930;
+  const published = [];
+  for (let step = 0; step < 10; step++) {
+    raw += 1;
+    published.push(m.snapSize(raw, 243, 7763));
+  }
+  assert.deepEqual(published, [1930, 1930, 1930, 1930, 1940, 1940, 1940, 1940, 1940, 1940]);
+  assert.equal(raw, 1940, "and the pointer's travel is all kept, none of it thrown away");
+  assert.equal(m.snapSize(NaN, 243, 7763), 243, "a graph with no size of its own starts at the floor");
 });
 
 test("the size a gesture writes is named for the page that owns it", async () => {
@@ -486,6 +521,48 @@ test("a graph takes its drag gesture back from the page's own scrolling", async 
   // A touch or pen drag is a scroll gesture by default and the browser claims it, so
   // the pan never sees a move; touch-action has to be set before the surface is touched.
   assert.match(rules, /img\.statimage\s*\{\s*touch-action:\s*none/);
+  // The graph is held for the whole gesture, so the cursor that says so covers the box
+  // holding the graph and not just the picture, and the page's text cannot be dragged out
+  // from under a pointer that runs off the graph mid-drag.
+  assert.match(rules, /\.graphPanZoomGesture \.graphContainer[^\}]*cursor:\s*grabbing/);
+  assert.match(rules, /\.graphPanZoomGesture \.graphContainer[^\}]*user-select:\s*none/);
+});
+
+test("ctrl sizes the graph on the single-graph page and nowhere else", async () => {
+  const m = await load();
+  const img = {tagName: "IMG", classList: {contains: () => false},
+               closest: (sel) => (sel === "img.statimage" ? img : null),
+               getAttribute: () => null, addEventListener: () => {},
+               naturalWidth: 579, naturalHeight: 283,
+               src: "http://127.0.0.1:7657/viewstat.jsp?stat=router.activePeers" +
+                    "&period=60000&periodCount=480&width=496&height=153"};
+  // A pan needs the graph's plot geometry before it can turn pointer px into time, and a
+  // size gesture does not - so the fetch count says which gesture a press started.
+  let fetches = 0;
+  globalThis.fetch = () => {fetches++; return Promise.resolve({ok: false});};
+  // Which page this is, stated rather than assumed: the suites share one document, so what
+  // an absent id answers with is whichever suite ran last.
+  const byId = document.getElementById.bind(document);
+  const marker = document.createElement("span");
+  const single = () => {document.getElementById = (id) => (id === "graphSingle" ? marker : byId(id));};
+  const grid = () => {document.getElementById = (id) => (id === "graphSingle" ? null : byId(id));};
+
+  single();
+  await m.onPointerDown({button: 0, ctrlKey: true, target: img, clientX: 200, clientY: 50});
+  assert.equal(fetches, 0, "ctrl-drag sizes the one graph, and starts without a metadata read");
+  m.onWheel({target: img, deltaY: -120, deltaMode: 0, ctrlKey: true, clientX: 200, clientY: 50,
+             preventDefault: () => {}});
+  assert.equal(fetches, 0, "ctrl-roll does the same");
+
+  // On the graphs page the two dozen tiles are one size and the page's own form sets it, so
+  // a ctrl press there is the plain gesture with a modifier on it.
+  grid();
+  await m.onPointerDown({button: 0, ctrlKey: true, target: img, clientX: 200, clientY: 50});
+  assert.equal(fetches, 1, "ctrl-drag on the grid pans");
+  m.onWheel({target: img, deltaY: -120, deltaMode: 0, ctrlKey: true, clientX: 200, clientY: 50,
+             preventDefault: () => {}});
+  assert.equal(fetches, 2, "ctrl-roll on the grid zooms the timeframe");
+  document.getElementById = byId;
 });
 
 test("the native drag of a graph or of the link wrapped around it is cancelled", async () => {

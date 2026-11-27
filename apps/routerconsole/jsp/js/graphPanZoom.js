@@ -7,6 +7,11 @@
  * graph it started on and committed to every graph when it ends, so one page shows
  * one timeframe; on /graph it applies to the single graph only.
  *
+ * <p>Holding ctrl takes hold of the graph's own edge instead of its timeframe - and
+ * only on /graph. The graphs page draws two dozen tiles at one size, set by the width
+ * and height fields of its own form and set once; a ctrl press there is a pan with a
+ * modifier on it, not a request to resize the whole grid out from under the user.
+ *
  * <p>The window is carried as wall-clock - a span and an offset from now, in ms -
  * not as the URL's period counts. Each graph's period differs (a 1-minute rate and a
  * 5-minute rate are the same wall-clock window expressed in different counts), so a
@@ -22,7 +27,7 @@
  * @license AGPLv3 or later
  */
 
-import { freeGraphSize, graphBox, pinGraphBoxes, tallestBox } from "./graphBoxes.js";
+import { freeGraphSize, graphBox, tallestBox } from "./graphBoxes.js";
 
 /**
  * How long one graph may take to come back for the page to keep re-pointing every
@@ -38,12 +43,6 @@ const FAN_OUT_KEY = "i2p.graphRenderMs";
 
 /** ms of gesture silence after which the settled span is written to the config. */
 const CONFIG_SETTLE_MS = 1500;
-
-/**
- * ms of gesture silence after which the graph boxes are re-pinned from the pictures that
- * actually came back, rather than from the size the gesture asked for.
- */
-const PIN_SETTLE_MS = 600;
 
 /**
  * The page that owns the graph settings: it carries the form, and it is the only one
@@ -84,6 +83,13 @@ const MAX_GRAPH_W = 7680;
 const MIN_GRAPH_H = 40;
 /** Largest graph height the console draws, in px. */
 const MAX_GRAPH_H = 4320;
+
+/**
+ * px a size gesture moves in. A size, unlike a timeframe, has no natural unit to land on,
+ * so the grid is what makes a saved one reproducible: a graph left at 1934x643 is a graph
+ * nobody can ask for again, and the width and height fields of the form are the way to ask.
+ */
+const SIZE_GRID_PX = 10;
 
 /** Wheel notches that count as one step, so a fast flick moves several. */
 const WHEEL_PIXELS_PER_NOTCH = 100;
@@ -263,6 +269,40 @@ export function sizeFromRoll(size, notches, min, max) {
   const from = Number.isFinite(size) ? size : min;
   const next = notches ? from * Math.pow(ZOOM_STEP, notches) : from;
   return Math.min(max, Math.max(min, Math.round(next)));
+}
+
+/**
+ * A size a gesture settles on, moved to the nearest multiple of the size grid.
+ *
+ * <p>Only what the gesture publishes is snapped, never what it accumulates: a drag adds the
+ * pointer's raw travel and a roll multiplies the size it has, so the graph still answers to
+ * the finger one pixel at a time and a roll still undoes the roll before it, while the size
+ * that goes into the URL, into the container rule and into the saved settings lands on the
+ * grid. Snapping the accumulated value instead would throw away every part-step of a slow
+ * drag and stop the graph moving at all below the grid.
+ *
+ * <p>The bounds are applied by moving in to the nearest grid line, not to the bound itself:
+ * the console's bounds are on the plot inside the graph, and the graph's own chrome puts the
+ * picture's bounds between the lines, so a gesture pushed past either end stops on the last
+ * line that still draws what was asked for.
+ *
+ * @function snapSize
+ * @param {number} size the size the gesture settled on, in px
+ * @param {number} min the smallest size the console draws
+ * @param {number} max the largest size the console draws
+ * @returns {number} the size, on the grid and within what the console draws
+ * @since 0.9.72+
+ */
+export function snapSize(size, min, max) {
+  if (!Number.isFinite(size)) {return min;}
+  const whole = Math.round(size);
+  // Half up, in whole px: dividing by the grid would put 1935 / 10 at 193.50000000000003
+  // and round a size sitting exactly on a line the wrong way.
+  const over = whole % SIZE_GRID_PX;
+  let snapped = over < SIZE_GRID_PX / 2 ? whole - over : whole + (SIZE_GRID_PX - over);
+  if (snapped < min) {snapped = Math.ceil(min / SIZE_GRID_PX) * SIZE_GRID_PX;}
+  if (snapped > max) {snapped = Math.floor(max / SIZE_GRID_PX) * SIZE_GRID_PX;}
+  return snapped;
 }
 
 /**
@@ -525,8 +565,6 @@ let frame = null;
 let holdTimer = null;
 /** Timer that ends the claim a roll of the wheel holds over the page. */
 let claimTimer = null;
-/** Timer for the deferred re-pin of the graph boxes. */
-let pinTimer = null;
 /** ms after a pan's release during which the browser's own click is swallowed. */
 let suppressClickUntil = 0;
 /** ms the last graph render took, -1 until one has been timed. */
@@ -811,101 +849,9 @@ function boxFor(img, win, fallback) {
  *        picture has not been drawn
  * @returns {{width: number, height: number}} plot px, clamped to what the console draws
  */
-function sizeFor(img, win, fallback) {
+export function sizeFor(img, win, fallback) {
   const box = boxFor(img, win, fallback);
   return plotFor(box.chrome, box);
-}
-
-/**
- * The biggest box the page would hold if this window were written into every graph - the
- * size to pin the graph boxes to.
- *
- * <p>Measured from what each graph would be asked for rather than from the gesture's own
- * box, because the two differ whenever the gesture sized only one axis: a ctrl-drag has
- * nothing to say about height, and a page that pinned every box to the height of the graph
- * the drag happened to start on would shrink every other graph into a picture of different
- * proportions.
- *
- * @function requestedBox
- * @param {Object} win the window, carrying either axis of the box the gesture settled on
- * @returns {?{width: number, height: number}} the box, null if no graph has a size to go by
- */
-function requestedBox(win) {
-  return requestedBoxFor(graphs(), win);
-}
-
-/**
- * The biggest box a set of graphs would hold under this window.
- *
- * <p>The graphs are passed in rather than read off the page, so the rule the pin depends on
- * can be tested against graphs that are not on any page.
- *
- * @function requestedBoxFor
- * @param {HTMLImageElement[]} imgs the graphs to measure
- * @param {Object} win the window, carrying either axis of the box the gesture settled on
- * @returns {?{width: number, height: number}} the box, null if no graph has a size to go by
- * @since 0.9.72+
- */
-export function requestedBoxFor(imgs, win) {
-  const fallback = referenceChromeFor(imgs);
-  let width = 0;
-  let height = 0;
-  let sized = false;
-  for (const img of imgs) {
-    const box = boxFor(img, win, fallback);
-    if (!(box.width > 0) || !(box.height > 0)) {continue;}
-    sized = true;
-    width = Math.max(width, box.width);
-    height = Math.max(height, box.height);
-  }
-  return sized ? {width: width, height: height} : null;
-}
-
-/** The style element the graphs page pins its graph boxes in, null on the single-graph page. */
-function boxStyle() {
-  return document.getElementById("gwrap");
-}
-
-/**
- * Keeps the page's graph boxes the size of the pictures the gesture is asking for.
- *
- * <p>The graphs page pins every .graphContainer to one size and writes that pin once, when
- * the graphs first arrive. A gesture that changes the size of the pictures leaves the pin
- * behind: the box stays the old size, the theme's max-width:100% scales the new and larger
- * picture down into it, and the graph being resized appears not to resize at all.
- *
- * <p>Pinned from the biggest box the page would hold once the window is written into every
- * graph, not from the size the gesture named: a ctrl-drag says nothing about height, and a
- * page that pinned height to the height of the graph the drag happened to start on would
- * squash every other graph into different proportions. Pinned in the same frame as the
- * pictures rather than a render later, so the box grows with the pointer. The picture that
- * comes back is a few px off what was asked for, because the router's title and axis space
- * grows a little along with the plot, so the measured size follows once it is known.
- *
- * @function pinBoxes
- * @param {Object} win the window, carrying either axis of the box the gesture settled on
- * @returns {void}
- */
-function pinBoxes(win) {
-  if (!win.width && !win.height) {return;}
-  pinGraphBoxes(boxStyle(), requestedBox(win));
-}
-
-/**
- * Re-pins the graph boxes from the pictures that actually came back, a beat after the last
- * size change, so the boxes end up the size of the tallest graph rather than the size asked
- * for. Nothing happens on the single-graph page, which pins its own box as each picture
- * arrives.
- *
- * @function schedulePin
- * @returns {void}
- */
-function schedulePin() {
-  if (pinTimer) {clearTimeout(pinTimer);}
-  pinTimer = setTimeout(() => {
-    pinTimer = null;
-    pinGraphBoxes(boxStyle(), tallestBox(graphs()));
-  }, PIN_SETTLE_MS);
 }
 
 /**
@@ -932,7 +878,6 @@ function isSinglePage() {
 function commit(win) {
   const fallback = referenceChrome();
   graphs().forEach((img) => applyWindow(img, win, fallback));
-  if (win.width || win.height) {schedulePin();}
 }
 
 /**
@@ -1185,12 +1130,6 @@ function preview() {
     } else {
       timeAnchor(img, win, fallback);
     }
-    // A sizing gesture moves the boxes along with the pictures, in the same frame: a box
-    // left at the old size is a frame in which the graph being resized has not moved.
-    if (win.width || win.height) {
-      pinBoxes(win);
-      schedulePin();
-    }
     // The write is scheduled here rather than inside commit: a gesture that ends
     // between two frames has nothing left to re-point by then, but the window it
     // settled on is still worth keeping.
@@ -1235,7 +1174,11 @@ async function onPointerDown(event) {
   if (event.button !== 0) {return;}
   const img = graphUnder(event.target);
   if (!img) {return;}
-  if (event.ctrlKey || event.metaKey) {startSizeDrag(event, img); return;}
+  // Ctrl sizes the graph, and only the one the pointer is on. The graphs page draws two
+  // dozen tiles at one size the form's own width and height fields set, and a user sets
+  // that once; a ctrl press there is a pan with a modifier on it, not a request to resize
+  // the whole grid out from under them.
+  if ((event.ctrlKey || event.metaKey) && isSinglePage()) {startSizeDrag(event, img); return;}
   await startPan(event, img);
 }
 
@@ -1332,10 +1275,11 @@ async function startPan(event, img) {
    * @returns {void}
    */
   const onMove = (move) => {
-    // Travel is taken a step at a time rather than from where the press began, so the
-    // gesture outlives the graph's own width: the pointer can leave the image and keep
-    // winding the timeframe, at the same time-per-pixel rate the graph sets. A single
-    // span-wide measurement from the press would run out of page at the far edge.
+    // Travel is taken a step at a time rather than from where the press began, so the drag
+    // keeps taking effect while the pointer is held at the edge of the graph's box: a single
+    // span-wide measurement from the press would run out of page at the far edge. The
+    // pointer itself stays with the graph - the grabbing cursor and the selection rule cover
+    // the box holding it, so crossing its border never reads as the page taking it back.
     raw = panOffsetMs(raw, spanMs, area.width, move.clientX - lastX);
     offset = snapOffsetMs(raw, quantum);
     lastX = move.clientX;
@@ -1351,7 +1295,9 @@ async function startPan(event, img) {
 
 /**
  * Starts a size drag: with ctrl held, the graph's edge follows the pointer and its width
- * changes while the window it shows stays where it was.
+ * changes while the window it shows stays where it was. Only the single-graph page gets
+ * here - the graphs page sizes its tiles through the form, once, and a ctrl press on the
+ * grid is a pan with a modifier on it.
  *
  * <p>No plot geometry is asked for here. A pan has to turn pointer px into time using the
  * plot's width; a size drag's rate is one px of graph per px of pointer by definition, so
@@ -1376,9 +1322,13 @@ function startSizeDrag(event, img) {
   let dragged = false;
   let lastX = startX;
   let width = box.width;
+  // The bounds the picture may take: the console's plot bounds plus this graph's own chrome,
+  // so the plot inside it never leaves what the router will draw.
+  const min = MIN_GRAPH_W + chrome.width;
+  const max = MAX_GRAPH_W + chrome.width;
   // Only the axis the pointer moves. The other is left at whatever each graph is already
   // drawn at, so widening a graph never redraws it shorter.
-  pending = {spanMs: win.spanMs, offsetMs: win.offsetMs, width: width};
+  pending = {spanMs: win.spanMs, offsetMs: win.offsetMs, width: snapSize(width, min, max)};
   anchor = img;
   /**
    * Follows the pointer until it is released.
@@ -1387,12 +1337,11 @@ function startSizeDrag(event, img) {
    * @returns {void}
    */
   const onMove = (move) => {
-    width = sizeFromDrag(width, move.clientX - lastX,
-                         MIN_GRAPH_W + chrome.width, MAX_GRAPH_W + chrome.width);
+    width = sizeFromDrag(width, move.clientX - lastX, min, max);
     lastX = move.clientX;
     if (Math.abs(lastX - startX) < DRAG_SLOP_PX) {return;}
     dragged = true;
-    pending = {spanMs: win.spanMs, offsetMs: win.offsetMs, width: width};
+    pending = {spanMs: win.spanMs, offsetMs: win.offsetMs, width: snapSize(width, min, max)};
     preview();
   };
   /** Ends the size drag. @function onUp @returns {void} */
@@ -1448,7 +1397,9 @@ async function onWheel(event) {
   const periodMs = periodMsOf(params);
   const win = windowOf(params, periodMs);
   const notches = wheelNotches(event.deltaY, event.deltaMode);
-  if (event.ctrlKey || event.metaKey) {sizeRoll(img, win, notches); return;}
+  // Ctrl is the size modifier on the single-graph page only; on the grid it rolls the
+  // timeframe like an unmodified roll, because the grid's size belongs to its form.
+  if ((event.ctrlKey || event.metaKey) && isSinglePage()) {sizeRoll(img, win, notches); return;}
   const nextSpan = zoomSpan(win.spanMs, notches, MAX_PERIODS * periodMs);
   // At either end of the zoom the window cannot move, and the roll is spent on that.
   const rolls = notches !== 0 && nextSpan !== win.spanMs;
@@ -1505,7 +1456,8 @@ function scheduleRollCommit() {
 
 /**
  * Rolls the height of a graph: with ctrl held, the roll sizes the graph instead of
- * moving the timeframe through it.
+ * moving the timeframe through it. Only the single-graph page sizes this way; on the
+ * graphs page a ctrl roll moves the timeframe like an unmodified one.
  *
  * <p>Rolling up grows the graph, the direction a roll up on a timeframe zoom also brings
  * more detail in - which is the opposite sign to the span, where up shortens it.
@@ -1519,8 +1471,9 @@ function scheduleRollCommit() {
 function sizeRoll(img, win, notches) {
   const box = boxOf(img);
   const chrome = chromeOf(img) || referenceChrome();
-  const height = sizeFromRoll(box.height, -notches,
-                              MIN_GRAPH_H + chrome.height, MAX_GRAPH_H + chrome.height);
+  const min = MIN_GRAPH_H + chrome.height;
+  const max = MAX_GRAPH_H + chrome.height;
+  const height = snapSize(sizeFromRoll(box.height, -notches, min, max), min, max);
   // At either end of the size the graph cannot change, and the roll is spent on that.
   if (notches === 0 || height === box.height) {return;}
   beginGesture();
@@ -1599,6 +1552,13 @@ const STYLE = "\n" +
   // !important because the readout module takes the crosshair as an inline style on the
   // image, and an inline style outranks any selector a stylesheet can write.
   "." + GESTURE_CLASS + " img.statimage{cursor:grabbing !important}\n" +
+  // The graph is held for the whole gesture, so the cursor that says so covers the box
+  // holding the graph, not just the picture: an arrow the moment the pointer crosses the
+  // border or the link wrapped around the image reads as the page taking the pointer back.
+  // The selection rule is the same containment - a drag that runs off the graph across the
+  // page's text must not drag a selection out with it.
+  "." + GESTURE_CLASS + " .graphContainer," +
+  "." + GESTURE_CLASS + " .graphContainer a{cursor:grabbing !important;user-select:none}\n" +
   "." + GESTURE_CLASS + " .graphTooltip," +
   "." + GESTURE_CLASS + " .graphTooltipCrosshair," +
   "." + GESTURE_CLASS + " .graphTooltipMark," +
