@@ -298,6 +298,8 @@ class SoftFailureAttribution {
      * at the ceiling. Without the band, a working set at the ceiling means one
      * insert, one prune, one sort, per failure, for as long as the burst lasts.
      *
+     * @param <T> the tally's value type, a {@link Tracked} history record decayed
+     *            out of the map when it stops being used
      * @param map the tally to prune, keyed by destination or by hop
      * @param ceiling entries to keep once pruned
      * @param now current time in ms
@@ -313,6 +315,8 @@ class SoftFailureAttribution {
      * ceiling, the quietest ones. Only reached once a map passes its ceiling plus
      * the slack band, so the sort is not on the hot path.
      *
+     * @param <T> the tally's value type, a {@link Tracked} history record decayed
+     *            out of the map when it stops being used
      * @param map the tally to prune, keyed by destination or by hop
      * @param ceiling entries to keep
      * @param now current time in ms

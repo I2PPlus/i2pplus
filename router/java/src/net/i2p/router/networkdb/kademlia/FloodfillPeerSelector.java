@@ -841,6 +841,8 @@ public class FloodfillPeerSelector extends PeerSelector {
      * @param good hashes classified GOOD, listed first
      * @param ok hashes classified OK
      * @param bad hashes classified BAD, listed last
+     * @param rotated candidates left out of the list because this router queried
+     *                them recently enough to rotate them out of the selection
      * @param unqueryable candidates dropped for being peers this router cannot
      *                    ask at all - an old version or a key type it cannot
      *                    wrap a reply to
