@@ -263,6 +263,35 @@ public class HttpHeaderFormatterLogTest {
     }
 
     /**
+     * A request block a proxy rebuilt for its destination dumps the same way a
+     * header map does: the request line last with the authority in its target,
+     * the Host pair dropped as a repeat of it, and the boilerplate the tunnel
+     * adds left out.
+     */
+    @Test
+    public void testRequestBlockDumpsLikeTheMapForm() {
+        String out = HttpHeaderFormatter.formatBlockForLog("GET http://skank.i2p/a HTTP/1.1\r\n" +
+                                                           "Host: skank.i2p\r\n" +
+                                                           "Connection: close\r\n" +
+                                                           "Accept-Encoding: \r\n" +
+                                                           "User-Agent: I2P\r\n" +
+                                                           "\r\n");
+        assertEquals("\n* User-Agent: I2P\n* Request: GET skank.i2p/a HTTP/1.1", out);
+    }
+
+    /**
+     * A block with no headers at all still reports its request line, and an
+     * empty or missing block reports nothing rather than a blank line.
+     */
+    @Test
+    public void testBlockWithNoHeadersOrNoBlock() {
+        assertEquals("\n* Request: CONNECT skank.i2p:80 HTTP/1.1",
+                     HttpHeaderFormatter.formatBlockForLog("CONNECT skank.i2p:80 HTTP/1.1\r\n\r\n"));
+        assertEquals("", HttpHeaderFormatter.formatBlockForLog(null));
+        assertEquals("", HttpHeaderFormatter.formatBlockForLog(""));
+    }
+
+    /**
      * A distinct value of a fixed length, so the packing arithmetic is stable.
      *
      * @param i the index to vary the value by

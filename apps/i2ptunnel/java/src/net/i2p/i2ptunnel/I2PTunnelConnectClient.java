@@ -204,7 +204,8 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
                 }
                 line = line.trim();
                 if (_log.shouldDebug())
-                    _log.debug(getPrefix(requestId) + "Request: " + line);
+                    _log.debug(getPrefix(requestId) + "Request header -> " +
+                               HttpHeaderFormatter.shortValue(line));
 
                 if (method == null) { // first line CONNECT blah.i2p:80 HTTP/1.1
                     int pos = line.indexOf(' ');
@@ -285,12 +286,11 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
                     targetRequest = host;
 
                     if (_log.shouldDebug()) {
-                        _log.debug(getPrefix(requestId) + "METHOD:" + method + ":\n" +
-                                   "HOST:" + host + ":\n" +
-                                   "PORT:" + remotePort + ":\n" +
-                                   "REST:" + restofline + ":\n" +
-                                   "DEST:" + destination + ":\n" +
-                                   "WWW Proxy? " + usingWWWProxy + " Internal Proxy? " + usingInternalOutproxy);
+                        _log.debug(getPrefix(requestId) + "Parsed the proxy request -> " + method +
+                                   ' ' + targetRequest + " * Port: " + remotePort +
+                                   "\n* Destination: " + HttpHeaderFormatter.shortValue(destination) +
+                                   "\n* WWW proxy: " + usingWWWProxy + " * Internal outproxy: " +
+                                   usingInternalOutproxy);
                     }
                 } else if (line.toLowerCase(Locale.US).startsWith("proxy-authorization: ")) {
                     // strip Proxy-Authenticate from the response in HTTPResponseOutputStream

@@ -1,6 +1,8 @@
 package net.i2p.i2ptunnel;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -200,6 +202,38 @@ public class HttpHeaderFormatter {
         }
         buf.append("\n* Request: ").append(shortRequest(folded != null ? folded : request));
         return buf.toString();
+    }
+
+    /**
+     * The log form of a request block a tunnel rebuilt for its destination: the
+     * request line, then CRLF-terminated header lines. Parsed back into the
+     * pairs and formatted like the map form, so a proxied request and an
+     * eepsite request dump the same way - the authority named once, the request
+     * line last, and no value long enough to run a line out.
+     *
+     * @param block the rebuilt request, request line first, may be null
+     * @return a string of "\n* name: value" segments, empty if there is no block
+     * @since 0.9.72+
+     */
+    public static String formatBlockForLog(CharSequence block) {
+        if (block == null || block.length() == 0) {return "";}
+        String[] lines = NEWLINE_SPLIT.split(block.toString());
+        String command = lines.length > 0 ? lines[0] : "";
+        Map<String, List<String>> headers = new LinkedHashMap<String, List<String>>(lines.length * 2);
+        for (int i = 1; i < lines.length; i++) {
+            String line = lines[i];
+            int colon = line.indexOf(':');
+            if (colon <= 0) {continue;}
+            String name = line.substring(0, colon).trim();
+            String value = line.substring(colon + 1).trim();
+            List<String> values = headers.get(name);
+            if (values == null) {
+                values = new ArrayList<String>(2);
+                headers.put(name, values);
+            }
+            values.add(value);
+        }
+        return formatHeadersForLog(headers, new StringBuilder(command));
     }
 
     /**

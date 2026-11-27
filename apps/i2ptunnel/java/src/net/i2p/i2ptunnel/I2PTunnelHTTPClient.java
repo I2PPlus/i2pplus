@@ -894,7 +894,8 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             while((line = reader.readLine()) != null) {
                 line = line.trim();
                 if (_log.shouldDebug() && line != null) {
-                    _log.debug(getPrefix(requestId) + "Request header: " + line);
+                    _log.debug(getPrefix(requestId) + "Request header -> " +
+                               HttpHeaderFormatter.shortValue(line));
                 }
 
                 String lowercaseLine = line.toLowerCase(Locale.US);
@@ -902,7 +903,9 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 if (method == null) {
                     // first line GET/POST/etc.
                     if (_log.shouldDebug()) {
-                        _log.debug(getPrefix(requestId) + "Request [#" + requestCount + "] \n* First line: " + line);
+                        _log.debug(getPrefix(requestId) + "Starting request #" + requestCount +
+                                   " -> " + HttpHeaderFormatter.shortRequest(
+                                       HttpHeaderFormatter.stripLineBreaks(line)));
                     }
 
                     String[] params = DataHelper.split(line, " ", 3);
@@ -1343,12 +1346,11 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     }
 
                     if (_log.shouldDebug()) {
-                        _log.debug(getPrefix(requestId) + "Request: " + request );
-                        _log.debug(getPrefix(requestId) + "Request URI: " + requestURI );
-                        _log.debug(getPrefix(requestId) + "New request: " + line );
-                        _log.debug(getPrefix(requestId) + "Host: " + host );
-                        _log.debug(getPrefix(requestId) + "Remote port: " + remotePort );
-                        _log.debug(getPrefix(requestId) + "Destination: " + destination );
+                        _log.debug(getPrefix(requestId) + "Rewriting the request line -> " +
+                                   HttpHeaderFormatter.shortRequest(line) +
+                                   "\n* Original target: " + request + " * Request URI: " + requestURI +
+                                   "\n* Host: " + host + " * Remote port: " + remotePort +
+                                   " * Destination: " + destination);
                     }
 
                 // end first line processing
@@ -1546,7 +1548,8 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             } // end header processing
 
             if (newRequest.length() > 0 && _log.shouldDebug()) {
-                _log.debug(getPrefix(requestId) + "Received new request: " + newRequest);
+                _log.debug(getPrefix(requestId) + "Forwarding request headers" +
+                           HttpHeaderFormatter.formatBlockForLog(newRequest));
             }
 
             if (method == null || (destination == null && !usingInternalOutproxy)) {
@@ -1672,7 +1675,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     // remove bad entries
                     addressHelpers.remove(destination.toLowerCase(Locale.US));
                     if (_log.shouldWarn()) {
-                        _log.warn(getPrefix(requestId) + "[HTTPClient] Could not find destination for " + addressHelper);
+                        _log.warn(getPrefix(requestId) + "Could not find destination for " + addressHelper);
                     }
                     String header = getErrorPage("ahelper-notfound", ERR_AHELPER_NOTFOUND);
                     try {

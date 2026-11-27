@@ -200,15 +200,16 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
     /**
      * Generates a unique log prefix for request tracking.
      * <p>
-     * This method creates a consistent prefix string that includes the request ID
-     * for correlating log entries across multiple threads and connections.
+     * One leading tag naming the subsystem and the request, so every line for
+     * one proxied request carries the same greppable id and nothing else on the
+     * line has to be bracketed - the log viewer parses brackets as hashes.
      * </p>
      *
      * @param requestId the unique identifier for this request
-     * @return a formatted string suitable for logging
+     * @return a tag and a trailing space, suitable for prefixing a log message
      */
     protected String getPrefix(long requestId) {
-        return "[HTTPClient] [Request: " + _clientId + '/' + requestId + "] ";
+        return "[HTTPClient " + _clientId + '/' + requestId + "] ";
     }
 
 
@@ -745,14 +746,18 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
                 } catch (ArrayIndexOutOfBoundsException aioobe) {
                     // no ':' in response; never log the credential material itself
                     if (_log.shouldWarn()) {
-                        _log.warn(getPrefix(requestId) + "[HTTPClient] Bad auth B64 (" + authorization.length() + " bytes)", aioobe);
+                        _log.warn(getPrefix(requestId) +
+                                  "Proxy authorization rejected -> No user separator in the credentials" +
+                                  "\n* Length: " + authorization.length() + " bytes", aioobe);
                     }
                     return AuthResult.AUTH_BAD_REQ;
                 }
                 return AuthResult.AUTH_BAD;
             } else {
                 if (_log.shouldWarn()) {
-                    _log.warn(getPrefix(requestId) + "[HTTPClient] Bad auth B64 (" + authorization.length() + " bytes)");
+                    _log.warn(getPrefix(requestId) +
+                              "Proxy authorization rejected -> No user separator in the credentials" +
+                              "\n* Length: " + authorization.length() + " bytes");
                 }
                 return AuthResult.AUTH_BAD_REQ;
             }
