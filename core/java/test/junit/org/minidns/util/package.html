@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>MiniDNS utility tests</title>
+</head>
+<body>
+<p>
+    Tests for the small support classes the bundled MiniDNS resolver is built
+    on: {@code SafeCharSequence}, the base {@code DnsName} and {@code DnsLabel}
+    extend so a name can be logged or shown without a caller having to know
+    which of its forms is safe to print.
+</p>
+
+<p>
+    Only the parts of MiniDNS this router calls into are covered here — the
+    record parsing, wire format and DNSSEC machinery upstream keeps its own
+    suite and is not vendored in. {@code ant test} in <code>core/java</code>
+    runs each {@code *Test.java}.
+</p>
+</body>
+</html>

@@ -43,10 +43,14 @@ public class SafeCharSequence implements CharSequence {
 
     /**
      * Returns a safe substring of the safe string form.
+     *
+     * @param start the first character of the slice, inclusive
+     * @param end the character just past the last one, exclusive
+     * @return the characters of the safe string form from start up to end
      */
     @Override
     public final CharSequence subSequence(int start, int end) {
-        return toSafeString().subSequence(end, end);
+        return toSafeString().subSequence(start, end);
     }
 
     /**
