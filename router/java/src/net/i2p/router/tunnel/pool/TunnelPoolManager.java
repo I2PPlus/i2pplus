@@ -198,6 +198,9 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         // The batch-dispatch counters TestJob writes, registered alongside the
         // rest so addRateData() records them instead of reporting invalid names.
         TestJob.registerBatchStats(ctx.statManager(), RATES);
+        // The two samples that say what a failed round measured, as opposed to
+        // what the window it ran under was.
+        TestJob.registerFailureAttributionStats(ctx.statManager(), RATES);
         // Per-direction test outcomes: successful tests emit no log line, so
         // these are the only visibility into outbound test health.
         TestJob.registerDirectionStats(ctx.statManager(), RATES);

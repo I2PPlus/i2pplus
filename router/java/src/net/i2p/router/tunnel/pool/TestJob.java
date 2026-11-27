@@ -70,7 +70,7 @@ public class TestJob extends JobImpl {
      * True when the partner for the current round came from the exploratory
      * pool because the paired pool had nothing to offer.  A round routed
      * through a borrowed partner can fail for reasons that have nothing to do
-     * with the tunnel under test, so {@link #testFailed(long)} defers instead
+     * with the tunnel under test, so {@link #testFailed(long, boolean)} defers instead
      * of counting it.  Reset at the start of every selection.
      */
     private boolean _partnerFallback;
@@ -218,7 +218,7 @@ public class TestJob extends JobImpl {
      * one decision: a tunnel that has recently delivered real traffic is not
      * dropped on an uncorroborated test failure, and an unreachable far
      * endpoint is one of the two things that corroborate it - see
-     * {@link #independentFailureSignal}. It still runs only on rounds that have
+     * {@link #holdDataCarryingDrop(boolean, boolean, boolean)}. It runs only on rounds that have
      * already failed, so the counters describe the failure population only.
      * <p>Two signals are read rather than one, because
      * {@link CommSystemFacade#isEstablished} and
@@ -232,7 +232,6 @@ public class TestJob extends JobImpl {
      * lost reply, since both look the same from here.  Only failed rounds are
      * probed, so the counters describe the failure population only.
      *
-     * @param cfg the tunnel whose round failed
      * @param cfg the tunnel whose round failed
      * @return the verdict event written, e.g. {@code FarEndUnreachable}, or
      *         {@code null} if there was no far endpoint to probe
@@ -4428,6 +4427,65 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
     }
 
     /**
+     * The window a timed-out round ran under, from the deadline it was given and
+     * the instant it was dispatched.
+     * <p>Pure, and deliberately not the wall clock at detection:
+     * {@code tunnel.testFailedTime} feeds the rule that sizes the failure window,
+     * so a value that also carries how late the timeout job got to run sets the
+     * window from the job queue's own delay. A negative gap means the clock
+     * stepped backwards, and counts as no window.
+     *
+     * @param expirationMs when the round stopped being eligible for a reply
+     *                     ({@link RoundToken#expiration})
+     * @param startedMs when the round was dispatched
+     * @return the window that round ran under, in ms, at least 0
+     * @since 0.9.72+
+     */
+    static long testRoundDeadlineMs(long expirationMs, long startedMs) {
+        return Math.max(0, expirationMs - startedMs);
+    }
+
+    /**
+     * How long past its deadline a round's timeout job actually ran.
+     * <p>Pure. The registry's expire timer reschedules itself for the earliest
+     * pending deadline, and the timeout is an ordinary job queue entry, so the
+     * gap is timer plus queue: it says how late this router notices a dead
+     * tunnel, and under load it is seconds.
+     *
+     * @param nowMs when the timeout job ran
+     * @param expirationMs the round's reply deadline ({@link RoundToken#expiration})
+     * @return the detection lag in ms, 0 when the job ran on time
+     * @since 0.9.72+
+     */
+    static long testDetectionLagMs(long nowMs, long expirationMs) {
+        return Math.max(0, nowMs - expirationMs);
+    }
+
+    /**
+     * Declare the two stats that separate what a failed round actually measured.
+     * <p>{@code tunnel.testFailedTime} holds two populations at once: rounds that
+     * never answered, whose duration is the deadline they missed, and rounds
+     * answered after the window closed, whose duration is a real round trip. Read
+     * live on 2026-11-27 the aggregate averaged 4,820ms against a 3,001ms window
+     * in force, and nothing in the aggregate says which population produced the
+     * difference. The late-reply sample is the only failure duration carrying a
+     * network latency, and the detection lag says how late a dead tunnel is
+     * noticed, so each is counted on its own.
+     *
+     * @param stats the context's stat manager, never null
+     * @param periods the rate periods to record on, never null
+     * @since 0.9.72+
+     */
+    static void registerFailureAttributionStats(StatManager stats, long[] periods) {
+        stats.createRequiredRateStat("tunnel.testFailedLateReplyTime",
+                "Time to answer a tunnel test after the window closed (ms)",
+                "Tunnels", periods);
+        stats.createRequiredRateStat("tunnel.testTimeoutDetectionLag",
+                "Delay between a tunnel test deadline and its timeout job running (ms)",
+                "Tunnels", periods);
+    }
+
+    /**
      * Handles a test that timed out or failed.
      *
      * @param timeToFail ms spent before the failure was noticed
@@ -5399,7 +5457,11 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
                 testSuccessful((int) _successTime);
             } else {
                 // The far end did answer, after the window closed. That duration
-                // is a latency the pool can learn from, unlike a silent round.
+                // is a latency the pool can learn from, unlike a silent round, and
+                // it is the only failure duration that measures the network at all,
+                // so it is counted beside the aggregate that also holds the
+                // silent rounds' deadlines.
+                getContext().statManager().addRateData("tunnel.testFailedLateReplyTime", _successTime);
                 testFailed(_successTime, true);
             }
         }
@@ -5459,9 +5521,19 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
             if (!claimRound(_token)) {return;}
             clearTestTags();
             releaseRound(_token);
-            // Nothing ever answered: the elapsed time is the window this round
-            // ran under, not a latency, so it must not widen that window.
-            testFailed(getContext().clock().now() - _started, false);
+            // Nothing ever answered. What the round missed is its own deadline,
+            // not the instant the timer got round to noticing it: the wall clock
+            // here is that deadline plus the registry's expire scan and the job
+            // queue's own delay - 479 TestJob instances waiting in the queue was
+            // measured on this router - and a duration carrying that widens the
+            // very window the deadline governs. The gap is worth knowing on its
+            // own, since it is how late a dead tunnel is noticed.
+            long now = getContext().clock().now();
+            long lag = testDetectionLagMs(now, _token.expiration);
+            if (lag > 0) {
+                getContext().statManager().addRateData("tunnel.testTimeoutDetectionLag", lag);
+            }
+            testFailed(testRoundDeadlineMs(_token.expiration, _started), false);
         }
     }
 
