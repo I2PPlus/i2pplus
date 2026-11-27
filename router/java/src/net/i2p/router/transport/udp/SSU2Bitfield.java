@@ -468,7 +468,10 @@ class SSU2Bitfield {
     }
 
     /**
-     * String representation of this bitfield.
+     * String representation of this bitfield, with consecutive set bits written
+     * as one range. A window that is fully acked - the normal state of a busy
+     * peer - is a handful of ranges instead of one number per bit, so the
+     * diagnostic stays readable at {@link #MAX_ACK_SPAN} bits.
      */
     @Override
     public String toString() {
@@ -477,10 +480,27 @@ class SSU2Bitfield {
         sb.append(" offset: ").append(offset);
         sb.append(" highest set: ").append(getHighestSet());
         sb.append(" [");
+        long first = -1;
+        long last = -1;
+        // Whether anything has been written inside the brackets, so the
+        // separator goes between runs and nowhere else.
+        boolean any = false;
         for (long i = offset; i <= getHighestSet(); i++) {
-            if (get(i)) {sb.append(' ').append(i);}
+            if (!get(i)) {continue;}
+            if (last >= 0 && i == last + 1) {
+                last = i;
+                continue;
+            }
+            // a new run starts, so the one before it ends here
+            if (last >= 0 && last != first) {sb.append('-').append(last);}
+            if (any) {sb.append(' ');}
+            any = true;
+            first = i;
+            last = i;
+            sb.append(i);
         }
-        sb.append(" ]");
+        if (last >= 0 && last != first) {sb.append('-').append(last);}
+        sb.append(']');
         return sb.toString();
     }
 
