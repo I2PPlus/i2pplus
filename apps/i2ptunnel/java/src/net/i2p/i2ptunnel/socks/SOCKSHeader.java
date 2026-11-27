@@ -84,6 +84,14 @@ public class SOCKSHeader {
     /**
      * The requested address, as a hostname or an IP address string.
      * As of 0.9.53 the IP address types 1 and 4 are returned as a string.
+     * <p>
+     * The address field starts at offset 4 - three reserved bytes and the
+     * address type precede it - and is 4 bytes for type 1 and 16 for type 4,
+     * the same widths the constructor used to size the header and
+     * {@link #getPort()} uses to find the port behind it. A width short of the
+     * field is not a truncated address: {@link Addresses#toString(byte[])}
+     * rejects any length but 4 and 16, so both types used to report
+     * {@code Bad IP length 0} and {@code Bad IP length 12}.
      *
      * @return hostname or null for unknown address type
      */
@@ -94,9 +102,9 @@ public class SOCKSHeader {
             return DataHelper.getUTF8(header, 5, namelen);
         }
         if (addressType == AddressType.IPV4)
-            return Addresses.toString(Arrays.copyOfRange(header, 4, 4));
+            return Addresses.toString(Arrays.copyOfRange(header, 4, 8));
         if (addressType == AddressType.IPV6)
-            return Addresses.toString(Arrays.copyOfRange(header, 4, 16));
+            return Addresses.toString(Arrays.copyOfRange(header, 4, 20));
         return null;
     }
 
