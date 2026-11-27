@@ -11,6 +11,7 @@
 import "./pure/uiLogic.test.js";
 import "./pure/routerControlState.test.js";
 import "./pure/logTags.test.js";
+import "./pure/newHostsEsc.test.js";
 import "./pure/changelogColumns.test.js";
 import "./pure/snowBoot.test.js";
 import "./pure/snowGates.test.js";

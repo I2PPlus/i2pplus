@@ -19,17 +19,21 @@ let tooltipServices = null;
 /**
  * Escapes text for the tooltip's markup.
  * The hostnames this file lists come from the DNS log, not from us, and they are
- * shown as text: a stray angle bracket must not restructure the tooltip.
+ * shown as text: a stray angle bracket must not restructure the tooltip. The
+ * apostrophe is escaped as well so the result holds in a single-quoted attribute
+ * too, which is what "safe inside an attribute" has to mean before the next call
+ * site relies on it; viewprofile.js already escapes it this way.
  * @function esc
  * @param {string} value - Text to show in the tooltip
- * @returns {string} The same text, safe inside markup or inside an attribute
+ * @returns {string} The same text, safe inside markup or inside a quoted attribute
  */
-function esc(value) {
+export function esc(value) {
   return String(value)
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
 
 /**
