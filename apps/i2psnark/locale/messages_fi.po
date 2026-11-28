@@ -993,7 +993,7 @@ msgstr "Poistetaan <b>{0}</b> ja kaikki siihen liittyvät tiedot..."
 
 #, java-format
 msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
-msgstr "Haluatko varmasti poistaa tiedoston \\''{0}\\'' (ladattuja tietoja ei poisteta)?"
+msgstr "Haluatko varmasti poistaa tiedoston ''{0}'' (ladattuja tietoja ei poisteta)?"
 
 msgid "Note: Downloaded data will not be deleted."
 msgstr "Huomautus: Ladattuja tietoja ei poisteta."

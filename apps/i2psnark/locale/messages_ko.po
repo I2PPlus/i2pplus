@@ -993,7 +993,7 @@ msgstr "<b>{0}</b>과(와) 모든 관련 데이터를 삭제 중..."
 
 #, java-format
 msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
-msgstr "정말 \\''{0}\\'' 파일을 지우겠습니까? (다운로드된 데이터는 지워지지 않습니다) ?"
+msgstr "정말 ''{0}'' 파일을 지우겠습니까? (다운로드된 데이터는 지워지지 않습니다) ?"
 
 msgid "Note: Downloaded data will not be deleted."
 msgstr "참고: 다운로드된 데이터는 삭제되지 않습니다."

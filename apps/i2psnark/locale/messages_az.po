@@ -993,7 +993,7 @@ msgstr "<b>{0}</b> və bütün əlaqəli verilənlər silinir..."
 
 #, java-format
 msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
-msgstr "Fayl \\''{0}\\''ni silmək istədiyinizə əminsinizmi? (Endirilmiş məlumatlar silinməyəcək)"
+msgstr "Fayl ''{0}''ni silmək istədiyinizə əminsinizmi? (Endirilmiş məlumatlar silinməyəcək)"
 
 msgid "Note: Downloaded data will not be deleted."
 msgstr "Qeyd: Endirilən verilənlər silinməyəcək."

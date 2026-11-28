@@ -993,7 +993,7 @@ msgstr "Ștergând <b>{0}</b> și toate datele asociate..."
 
 #, java-format
 msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
-msgstr "Sigur doriți să ștergeți dosarul \\'' {0} \\'' (datele descărcate nu vor fi șterse)?"
+msgstr "Sigur doriți să ștergeți dosarul '' {0} '' (datele descărcate nu vor fi șterse)?"
 
 msgid "Note: Downloaded data will not be deleted."
 msgstr "Notă: Datelele descărcate nu vor fi șterse."

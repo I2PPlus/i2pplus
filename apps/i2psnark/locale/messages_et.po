@@ -993,7 +993,7 @@ msgstr "<b>{0}</b> ja kõik seotud andmed kustutatakse..."
 
 #, java-format
 msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
-msgstr "Kas oled kindel, et soovid faili \\''{0}\\'' kustutada (allalaaditud andmed ei kustutata)?"
+msgstr "Kas oled kindel, et soovid faili ''{0}'' kustutada (allalaaditud andmed ei kustutata)?"
 
 msgid "Note: Downloaded data will not be deleted."
 msgstr "Märkus: Allalaaditud andmeid ei kustutata."

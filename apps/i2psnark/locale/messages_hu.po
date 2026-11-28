@@ -993,7 +993,7 @@ msgstr "<b>{0}</b> és minden kapcsolódó adat törlő..."
 
 #, java-format
 msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
-msgstr "Biztosan törli a \\''{0}\\'' fájlt (a letöltött adatok nem törlődnek)?"
+msgstr "Biztosan törli a ''{0}'' fájlt (a letöltött adatok nem törlődnek)?"
 
 msgid "Note: Downloaded data will not be deleted."
 msgstr "Megjegyzés: A letöltött adatok nem lesznek törölve."

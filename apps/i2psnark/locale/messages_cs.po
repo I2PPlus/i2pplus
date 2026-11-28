@@ -993,7 +993,7 @@ msgstr "Mazání <b>{0}</b> a všech souvisejících dat..."
 
 #, java-format
 msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
-msgstr "Opravdu chcete smazat soubor \\''{0}\\'' (stažená data nebudou smazána)?"
+msgstr "Opravdu chcete smazat soubor ''{0}'' (stažená data nebudou smazána)?"
 
 msgid "Note: Downloaded data will not be deleted."
 msgstr "Poznámka: Stažená data nebudou smazána."

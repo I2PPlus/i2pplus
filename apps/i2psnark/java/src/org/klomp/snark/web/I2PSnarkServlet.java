@@ -1037,11 +1037,11 @@ public class I2PSnarkServlet extends BasicServlet {
 
         if (!isConfigure) {
             buf.append(ServletUtil.scriptOpen(cspNonce, "")).append("\n")
-               .append("  const deleteMsg = \"").append(_t("Are you sure you want to delete {0} and all downloaded data?")).append("\";\n")
-               .append("  const postDeleteMsg = \"").append(_t("Deleting <b>{0}</b> and all associated data...")).append("\";\n")
-               .append("  const removeMsg = \"").append(_t("Are you sure you want to delete torrent file {0} and associated metadata?")).append("\";\n")
-               .append("  const removeMsg2 = \"").append(_t("Note: Downloaded data will not be deleted.")).append("\";\n")
-               .append("  const postRemoveMsg = \"").append(_t("Deleting {0} and associated metadata only...")).append("\";\n")
+               .append(jsConst("deleteMsg", _t("Are you sure you want to delete {0} and all downloaded data?")))
+               .append(jsConst("postDeleteMsg", _t("Deleting <b>{0}</b> and all associated data...")))
+               .append(jsConst("removeMsg", _t("Are you sure you want to delete torrent file {0} and associated metadata?")))
+               .append(jsConst("removeMsg2", _t("Note: Downloaded data will not be deleted.")))
+               .append(jsConst("postRemoveMsg", _t("Deleting {0} and associated metadata only...")))
                .append("  const snarkPageSize = ").append(pageSize).append(";\n")
                .append("  const snarkRefreshDelay = ").append(delay).append(";\n")
                .append("  const totalSnarks = ").append(listedSnarks().size()).append(";\n")
@@ -5132,6 +5132,26 @@ public class I2PSnarkServlet extends BasicServlet {
      */
     static String escapeJSString(String s) {
         return Escapes.jsString(s);
+    }
+
+    /**
+     * Emit one <code>const name = "value";</code> declaration for the inline
+     * script at the top of the page, with the value escaped for a JavaScript
+     * string literal. The values here are translated messages, and the literal
+     * is JS source: a quote, a backslash or a newline in any of the 41
+     * translations ends the literal, the script fails to parse, and every
+     * message the page shows from that script is gone in that locale.
+     *
+     * Package-visible and static so the escaping can be tested without a
+     * servlet or a router.
+     *
+     * @param name the JavaScript identifier to declare
+     * @param value the message to put in the literal, escaped as needed
+     * @return the declaration, indented two spaces and terminated by a newline
+     * @since 0.9.72+
+     */
+    static String jsConst(String name, String value) {
+        return "  const " + name + " = \"" + escapeJSString(value) + "\";\n";
     }
 
     /**
