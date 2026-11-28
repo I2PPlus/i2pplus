@@ -517,7 +517,8 @@ class SAMv3Handler extends SAMv1Handler
      * Create and start the session object for the given style.
      * Blocks in the session constructors while tunnels are built.
      *
-     * @param style session style: RAW, DATAGRAM, STREAM, MASTER or PRIMARY
+     * @param style session style: RAW, DATAGRAM, DATAGRAM2, DATAGRAM3, STREAM,
+     *              MASTER or PRIMARY
      * @param nick session nickname, used as the session ID
      * @param allProps all message properties, handed to a MASTER session
      * @param props message properties, used to build the datagram server
@@ -532,14 +533,16 @@ class SAMv3Handler extends SAMv1Handler
                                      Properties allProps, Properties props)
             throws DataFormatException, I2PSessionException, IOException, SAMException {
         SAMv3DatagramServer dgs = style.equals("RAW") || style.equals("DATAGRAM") ||
+                                   style.equals("DATAGRAM2") || style.equals("DATAGRAM3") ||
                                    style.equals("MASTER") || style.equals("PRIMARY") ?
                                    bridge.getV3DatagramServer(props) : null;
         if (style.equals("RAW")) {
             SAMv3RawSession v3 = new SAMv3RawSession(nick, dgs);
             rawSession = v3; session = v3;
             v3.start();
-        } else if (style.equals("DATAGRAM")) {
-            SAMv3DatagramSession v3 = new SAMv3DatagramSession(nick, dgs);
+        } else if (style.equals("DATAGRAM") || style.equals("DATAGRAM2") || style.equals("DATAGRAM3")) {
+            int v = style.equals("DATAGRAM") ? 1 : style.equals("DATAGRAM2") ? 2 : 3;
+            SAMv3DatagramSession v3 = new SAMv3DatagramSession(nick, dgs, v);
             datagramSession = v3; session = v3;
             v3.start();
         } else if (style.equals("STREAM")) {

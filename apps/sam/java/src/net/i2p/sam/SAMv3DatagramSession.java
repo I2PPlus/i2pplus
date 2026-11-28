@@ -9,6 +9,7 @@ import net.i2p.client.I2PSessionException;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
+import net.i2p.data.Hash;
 
 /**
  * SAM v3 datagram session implementation.
@@ -43,18 +44,20 @@ class SAMv3DatagramSession extends SAMDatagramSession implements Session, SAMDat
      *
      * @param nick nickname of the session
      * @param dgServer the datagram server that dispatches datagrams to this session
+     * @param version datagram version 1/2/3
      * @throws IOException declared on this constructor, but not raised by the body
      * @throws DataFormatException likewise declared, but not raised by the body
      * @throws I2PSessionException if the session registered under nick cannot
      * be rebuilt from the record's destination
      * @throws SAMException if the nickname is no longer registered
      */
-    public SAMv3DatagramSession(String nick, SAMv3DatagramServer dgServer)
+    public SAMv3DatagramSession(String nick, SAMv3DatagramServer dgServer, int version)
             throws IOException, DataFormatException, I2PSessionException, SAMException {
         super(
                 getRec(nick).getDest(),
                 getRec(nick).getProps(),
-                null // to be replaced by this
+                null, // to be replaced by this
+                version
                 );
         this.nick = nick;
         this.recv = this; // replacement
@@ -96,6 +99,7 @@ class SAMv3DatagramSession extends SAMDatagramSession implements Session, SAMDat
      * @param listenProtocol datagram protocol number to listen for, 0 for any
      * @param listenPort local port to listen on, 0 for any
      * @param dgServer the datagram server that dispatches datagrams to this session
+     * @param version datagram version 1/2/3
      * @throws IOException declared on this constructor, but not raised by the body
      * @throws DataFormatException likewise declared, but not raised by the body
      * @throws I2PSessionException declared on this constructor, but not raised
@@ -109,9 +113,10 @@ class SAMv3DatagramSession extends SAMDatagramSession implements Session, SAMDat
             I2PSession isess,
             int listenProtocol,
             int listenPort,
-            SAMv3DatagramServer dgServer)
+            SAMv3DatagramServer dgServer,
+            int version)
             throws IOException, DataFormatException, I2PSessionException {
-        super(isess, props, listenProtocol, listenPort, null); // to be replaced by this
+        super(isess, props, listenProtocol, listenPort, null, version); // to be replaced by this
         this.nick = nick;
         this.recv = this; // replacement
         this.server = dgServer;
@@ -134,19 +139,57 @@ class SAMv3DatagramSession extends SAMDatagramSession implements Session, SAMDat
         if (this.clientAddress == null) {
             this.handler.receiveDatagramBytes(sender, data, proto, fromPort, toPort);
         } else {
-            StringBuilder buf = new StringBuilder(600);
-            buf.append(sender.toBase64());
-            if ((handler.verMajor == 3 && handler.verMinor >= 2) || handler.verMajor > 3) {
-                buf.append(" FROM_PORT=").append(fromPort).append(" TO_PORT=").append(toPort);
-            }
-            buf.append('\n');
-            String msg = buf.toString();
-            ByteBuffer msgBuf = ByteBuffer.allocate(msg.length() + data.length);
-            msgBuf.put(DataHelper.getASCII(msg));
-            msgBuf.put(data);
-            msgBuf.flip();
-            this.server.send(this.clientAddress, msgBuf);
+            receiveDatagramBytes(sender.toBase64(), data, proto, fromPort, toPort);
         }
+    }
+
+    /**
+     * Receive a datagram from I2P and forward to the SAM client, for DG3, where
+     * the sender is only known by hash.
+     *
+     * @param sender hash of the destination that sent the datagram
+     * @param data the datagram payload
+     * @param proto the I2CP protocol
+     * @param fromPort the I2CP from port
+     * @param toPort the I2CP to port
+     * @throws IOException if forwarding to the client fails
+     * @since 0.9.72+
+     */
+    public void receiveDatagramBytes(Hash sender, byte[] data, int proto, int fromPort, int toPort)
+            throws IOException {
+        if (this.clientAddress == null) {
+            this.handler.receiveDatagramBytes(sender, data, proto, fromPort, toPort);
+        } else {
+            receiveDatagramBytes(sender.toBase64(), data, proto, fromPort, toPort);
+        }
+    }
+
+    /**
+     * Writes one DATAGRAM REPLY to the UDP client: the sender, as base64 for
+     * DG1/DG2 or base32 for DG3, then the ports, then the payload.
+     *
+     * @param sender the sender, already encoded for the wire
+     * @param data the datagram payload
+     * @param proto the I2CP protocol
+     * @param fromPort the I2CP from port
+     * @param toPort the I2CP to port
+     * @throws IOException if forwarding to the client fails
+     * @since 0.9.72+ split out from the two methods above
+     */
+    private void receiveDatagramBytes(String sender, byte[] data, int proto, int fromPort, int toPort)
+            throws IOException {
+        StringBuilder buf = new StringBuilder(600);
+        buf.append(sender);
+        if ((handler.verMajor == 3 && handler.verMinor >= 2) || handler.verMajor > 3) {
+            buf.append(" FROM_PORT=").append(fromPort).append(" TO_PORT=").append(toPort);
+        }
+        buf.append('\n');
+        String msg = buf.toString();
+        ByteBuffer msgBuf = ByteBuffer.allocate(msg.length() + data.length);
+        msgBuf.put(DataHelper.getASCII(msg));
+        msgBuf.put(data);
+        msgBuf.flip();
+        this.server.send(this.clientAddress, msgBuf);
     }
 
     /**

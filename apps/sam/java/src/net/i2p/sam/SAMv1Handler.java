@@ -31,6 +31,7 @@ import net.i2p.data.Base64;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
+import net.i2p.data.Hash;
 import net.i2p.util.ThreadNames;
 
 /**
@@ -320,7 +321,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
                     rawSession = new SAMRawSession(destKeystream, props, this);
                     rawSession.start();
                 } else if (style.equals("DATAGRAM")) {
-                    datagramSession = new SAMDatagramSession(destKeystream, props,this);
+                    datagramSession = new SAMDatagramSession(destKeystream, props, this, 1);
                     datagramSession.start();
                 } else if (style.equals("STREAM")) {
                     String dir = (String) props.remove("DIRECTION");
@@ -965,6 +966,19 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
         msg.write(data);
         msg.flush();
         writeBytes(ByteBuffer.wrap(msg.toByteArray()));
+    }
+
+    /**
+     * Throws {@link UnsupportedOperationException} — a v1 or v2 handler only
+     * ever builds a DG1 datagram session, so a sender known only by hash, as
+     * DG3 delivers them, cannot arrive here.
+     *
+     * @throws UnsupportedOperationException always, on every call
+     * @since 0.9.72+
+     */
+    public void receiveDatagramBytes(Hash sender, byte[] data, int proto,
+                                     int fromPort, int toPort) {
+        throw new UnsupportedOperationException();
     }
 
     /**

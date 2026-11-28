@@ -16,6 +16,7 @@ import net.i2p.client.streaming.I2PServerSocket;
 import net.i2p.client.streaming.I2PSocket;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.Destination;
+import net.i2p.data.Hash;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
 
@@ -112,7 +113,8 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
      * subsessions may not listen on the same protocol and port.
      *
      * @param nick unique nickname for this subsession
-     * @param style protocol style: "STREAM", "DATAGRAM", or "RAW"
+     * @param style protocol style: "STREAM", "DATAGRAM", "DATAGRAM2",
+     *              "DATAGRAM3" or "RAW"
      * @param props session properties (PORT required for DATAGRAM/RAW;
      *              LISTEN_PORT, LISTEN_PROTOCOL optional)
      * @return null on success, or a descriptive error message
@@ -158,8 +160,11 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
                 if (spr != null) {
                     try {
                         listenProtocol = Integer.parseInt(spr);
-                        // RAW can't listen on streaming protocol
+                        // RAW can't listen on streaming or DG protocols
                         if (listenProtocol < 0 || listenProtocol > 255 ||
+                            listenProtocol == I2PSession.PROTO_DATAGRAM ||
+                            listenProtocol == I2PSession.PROTO_DATAGRAM2 ||
+                            listenProtocol == I2PSession.PROTO_DATAGRAM3 ||
                             listenProtocol == I2PSession.PROTO_STREAMING)
                             return "Bad RAW LISTEN_PPROTOCOL " + spr;
                     } catch (NumberFormatException nfe) {
@@ -169,12 +174,23 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
                 SAMv3RawSession ssess = new SAMv3RawSession(nick, props, handler, isess, listenProtocol, listenPort, dgs);
                 subhandler.setSession(ssess);
                 sess = ssess;
-            } else if (style.equals("DATAGRAM")) {
+            } else if (style.equals("DATAGRAM") || style.equals("DATAGRAM2") || style.equals("DATAGRAM3")) {
                 // codeql[java/toctou-race-condition] props is a per-call argument; no shared-state check-then-act
                 if (!props.containsKey("PORT"))
-                    return "DATAGRAM subsession must specify PORT";
-                listenProtocol = I2PSession.PROTO_DATAGRAM;
-                SAMv3DatagramSession ssess = new SAMv3DatagramSession(nick, props, handler, isess, listenProtocol, listenPort, dgs);
+                    return style + " subsession must specify PORT";
+                int v;
+                if (style.equals("DATAGRAM")) {
+                    listenProtocol = I2PSession.PROTO_DATAGRAM;
+                    v = 1;
+                } else if (style.equals("DATAGRAM2")) {
+                    listenProtocol = I2PSession.PROTO_DATAGRAM2;
+                    v = 2;
+                } else {
+                    listenProtocol = I2PSession.PROTO_DATAGRAM3;
+                    v = 3;
+                }
+                SAMv3DatagramSession ssess = new SAMv3DatagramSession(nick, props, handler, isess,
+                                                                      listenProtocol, listenPort, dgs, v);
                 subhandler.setSession(ssess);
                 sess = ssess;
             } else if (style.equals("STREAM")) {
@@ -252,6 +268,18 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
      * @throws IOException always, on every call
      */
     public void receiveDatagramBytes(Destination sender, byte[] data, int proto,
+                                     int fromPort, int toPort) throws IOException {
+        throw new IOException("master session");
+    }
+
+    /**
+     * Throws {@link IOException} — the master session does not handle
+     * datagram data directly; use a DATAGRAM subsession instead.
+     *
+     * @throws IOException always, on every call
+     * @since 0.9.72+
+     */
+    public void receiveDatagramBytes(Hash sender, byte[] data, int proto,
                                      int fromPort, int toPort) throws IOException {
         throw new IOException("master session");
     }
