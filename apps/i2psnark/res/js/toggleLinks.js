@@ -81,7 +81,6 @@
     async function scrollToTop(timeout) {
       const X = window.pageXOffset, Y = window.pageYOffset;
       const iframed = htmlTag.classList.contains("iframed") || window.top !== window.self;
-      const delay = iframed ? 3500 : 3750;
       return new Promise((resolve) => {
         window.scrollTo(0, 0);
         let parentX, parentY;

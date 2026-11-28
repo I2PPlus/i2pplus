@@ -176,7 +176,6 @@ function displayPeerCount() {
     const totalCount = totalCountCell.match(/\d+/)?.[0] || 0;
     const filterCount = d.querySelector("#filterCount") || d.createElement("span");
     const filterInput = d.getElementById("filterInput");
-    const filterValue = filterInput?.value || "";
     if (filterInput) {
       filterCount.id = "filterCount";
       if (displayed > 0) {

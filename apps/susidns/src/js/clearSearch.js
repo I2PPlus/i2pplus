@@ -25,7 +25,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const inputValue = searchInput.value.trim();
     const currentURL = new URL(window.location.href);
     const activeBook = currentURL.searchParams.get("book") || "router";
-    const isIframed = document.documentElement.classList.contains("iframed");
     const noFilterURL = `addressbook?book=${activeBook}&filter=none`;
 
     clearSearch.href = inputValue ? noFilterURL : "";

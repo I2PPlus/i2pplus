@@ -446,7 +446,6 @@ export function placeOverlay(parts, img, meta, hit) {
   // Image pixels to container pixels. The container's padding box is the origin, so the
   // crosshair and the marks land on the graph rather than a few pixels off.
   const plotX = m.rect.left - m.originX + left * m.scaleX;
-  const plotY = m.rect.top - m.originY + top * m.scaleY;
   const plotWidth = width * m.scaleX;
   const plotHeight = height * m.scaleY;
   const anchorX = m.rect.left - m.originX + hit.x * m.scaleX;

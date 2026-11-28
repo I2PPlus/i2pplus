@@ -10,12 +10,10 @@ import { refreshElements } from '/js/refreshElements.js';
 
 (function () {
   const ntcpConn = document.getElementById("ntcpconnections");
-  const ntcpH3 = document.getElementById("ntcpcon");
   const ntcpTfoot = document.querySelector("#ntcpconnections tfoot");
   const peersNTCP = document.getElementById("peersNTCP");
   const peersSSU = document.getElementById("peersSSU");
   const ssuConn = document.getElementById("udpconnections");
-  const ssuH3 = document.getElementById("udpcon");
   const ssuTfoot = document.querySelector("#udpconnections tfoot");
   const summary = document.getElementById("transportSummary");
   const url = document.location;

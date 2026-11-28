@@ -177,7 +177,6 @@
   function injectCss() {
     if (!graphImage) {return;}
     const graphWidth = graphImage.naturalWidth;
-    const graphHeight = graphImage.naturalHeight;
     const graphcss = document.getElementById("graphcss");
     if (graphcss) {graphcss.remove();}
     const s = document.createElement("style");

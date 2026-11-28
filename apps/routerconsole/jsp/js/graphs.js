@@ -16,7 +16,6 @@ import { pinGraphBoxes, tallestBox } from "./graphBoxes.js";
     query = (s) => d.querySelector(s);
 
   const form = $("gform"),
-    configs = $("graphConfigs"),
     allgraphs = $("allgraphs"),
     h3 = $("graphdisplay"),
     sb = $("sidebar");

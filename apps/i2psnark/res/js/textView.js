@@ -58,7 +58,6 @@ document.addEventListener("DOMContentLoaded", function () {
    * @type {?HTMLElement}
    * @description The text view content container element.
    */
-  const textviewContent = doc.getElementById("textview-content");
 
   /**
    * @type {Map<string, string>}

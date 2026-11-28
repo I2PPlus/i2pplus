@@ -24,18 +24,6 @@
               elements[i].classList.remove("tab2");
           }
       }
-
-      /**
-       * Attaches a click handler to the given element that clears selected tabs.
-       * @function addClickHandler1
-       * @param {HTMLElement} elem - The element to attach the click handler to
-       * @returns {void}
-       */
-      function addClickHandler1(elem) {
-          elem.addEventListener("click", function() {
-          clearSelected();
-          });
-      }
   }
 
   document.addEventListener("DOMContentLoaded", init);

@@ -38,7 +38,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    const toggle =  document.querySelector(".toggle");
     const headerLink =  document.querySelector(".toggle a");
     headerLink.addEventListener("mouseenter", function(event) {
       headerLink.style.zIndex = "99999";

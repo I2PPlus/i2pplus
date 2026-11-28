@@ -241,7 +241,6 @@ document.addEventListener("DOMContentLoaded", () => {
         row.id = "leasesetCounts";
 
         const cell = document.createElement("td");
-        const cell_r = document.createElement("td");
         cell.colSpan = 4;
         cell.style.textAlign = "center";
         cell.innerHTML = `

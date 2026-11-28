@@ -18,7 +18,6 @@
     const d = document;
 
     const query = selector => d.querySelector(selector);
-    const queryAll = selector => d.querySelectorAll(selector);
 
     const selectors = {
       container: query("td.tabletextarea"),
@@ -160,7 +159,6 @@
      */
     const submitNewKeyValue = () => {
       const newKey = newKeyCell.textContent.trim();
-      const existingKey = configItems.some(item => item[0] === newKey);
       const newValue = newValueCell.textContent.trim();
       if (newKey) {
         const newRow = createRow(newKey, newValue);

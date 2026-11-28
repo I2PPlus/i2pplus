@@ -121,7 +121,8 @@ document.addEventListener("DOMContentLoaded", function () {
     tableBody.appendChild(fragment);
   }
 
-  const initialState = initialize(), sections = [];
+  initialize();
+  const sections = [];
   let currentSection = null;
 
   document.querySelectorAll(".statgroup, .graphableStat").forEach(element => {

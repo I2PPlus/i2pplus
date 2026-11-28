@@ -230,7 +230,7 @@ const requestAnimationFramePromise = (callback) => {
     }
   };
 
-  const requestId = requestAnimationFrame(execCallback);
+  requestAnimationFrame(execCallback);
   return promise;
 };
 
@@ -620,7 +620,6 @@ async function refreshTorrents(payload) {
     if (!payload || typeof payload !== "object" || !("snarkTbody" in payload)) {
       payload = await fetchRefreshPayload(await getURL());
     }
-    const control = document.getElementById("torrentInfoControl");
     const dirlist = document.getElementById("dirlist");
     const down = document.getElementById("NotFound") || document.getElementById("down");
 

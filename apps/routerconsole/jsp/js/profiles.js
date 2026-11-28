@@ -9,12 +9,9 @@
 import { refreshElements } from "./refreshElements.js";
 
 (function() {
-  const banlist = document.getElementById("banlist");
   const banBody = document.getElementById("sessionBanlist");
-  const bfoot = document.getElementById("sessionBanlistFooter");
   const ff = document.getElementById("floodfills");
   const ffprofiles = document.getElementById("ffProfiles");
-  const main = document.getElementById("profiles");
   const pbody = document.getElementById("pbody");
   const plist = document.getElementById("profilelist");
   const rings = document.getElementById("profilestats");

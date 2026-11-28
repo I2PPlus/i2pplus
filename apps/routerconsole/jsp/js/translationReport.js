@@ -24,9 +24,7 @@
     toggleButtonCompiled.textContent = "Show complete translations";
     toggleButtonFiles.textContent = "Show complete translations";
     txTables.forEach(function(table) {
-      const tbodyElements = table.querySelectorAll("tbody");
       const incompleteRows = table.querySelectorAll(".incomplete");
-      const completeRows = table.querySelectorAll(".complete");
       if (incompleteRows.length === 0) {
         table.classList.add("hidden");
       }
@@ -44,7 +42,6 @@
     toggleButtonCompiled.textContent = "Hide complete translations";
     toggleButtonFiles.textContent = "Hide complete translations";
     txTables.forEach(function(table) {
-      const tbodyElements = table.querySelectorAll("tbody");
       table.classList.remove("hidden");
     });
     tx_summary.classList.add(showCompleteClass);

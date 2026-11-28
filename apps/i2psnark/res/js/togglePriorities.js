@@ -13,7 +13,6 @@ document.addEventListener("DOMContentLoaded", function() {
   const headerRow = dirNav ? document.querySelector("#dirInfo tbody tr:first-child") : document.querySelector("#dirInfo thead tr:last-child");
   const incomplete = document.querySelectorAll("#dirInfo tr.incomplete").length;
   if (!incomplete || incomplete < 2) {return;}
-  const priorityColumn = document.querySelector("#dirInfo td.priority");
   const columns = ["prihigh", "priskip"];
   const toggleRow = headerRow.cloneNode(false);
   const thSpacer = document.createElement("th");
