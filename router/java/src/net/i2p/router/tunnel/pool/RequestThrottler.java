@@ -840,8 +840,6 @@ public class RequestThrottler {
      * Tracks per-peer request counts using 1-second buckets in a 10-second window.
      */
     static class BurstWindowCounter {
-        /** Total length of the sliding window. */
-        private final long windowSizeMs;
         /** Buckets making up the window. */
         private final int bucketCount;
         /** Length of one bucket. */
@@ -858,7 +856,6 @@ public class RequestThrottler {
          * @param bucketCount equal time buckets covering the window
          */
         BurstWindowCounter(long windowSizeMs, int bucketCount) {
-            this.windowSizeMs = windowSizeMs;
             this.bucketCount = bucketCount;
             this.bucketSizeMs = windowSizeMs / bucketCount;
             this.peerBuckets = new ConcurrentHashMap<>();

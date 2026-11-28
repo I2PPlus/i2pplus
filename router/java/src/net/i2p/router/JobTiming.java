@@ -22,8 +22,6 @@ public class JobTiming implements Clock.ClockUpdateListener {
     private volatile long _actualStart;
     /** When the job really finished, in ms. */
     private volatile long _actualEnd;
-    /** Supplies the clock the times are taken on. */
-    private final RouterContext _context;
 
     /**
      * Create a JobTiming for the given context.
@@ -31,7 +29,6 @@ public class JobTiming implements Clock.ClockUpdateListener {
      * @param context the router context
      */
     public JobTiming(RouterContext context) {
-        _context = context;
         _start = context.clock().now();
     }
 

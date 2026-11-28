@@ -73,18 +73,6 @@ class SparseArray<E> implements Cloneable {
     }
 
     /**
-     * Copy constructor.
-     *
-     * @param source the array to copy
-     */
-    private SparseArray(SparseArray<E> source) {
-        mKeys = source.mKeys.clone();
-        mValues = source.mValues.clone();
-        mSize = source.mSize;
-        mGarbage = source.mGarbage;
-    }
-
-    /**
      * Returns a shallow copy of this SparseArray with deep-copied key and
      * value arrays so the clone's internal arrays are independent of the
      * original's.

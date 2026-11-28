@@ -93,8 +93,6 @@ public class BuildHandler implements Runnable {
     private final ConcurrentHashMap<Hash, AtomicInteger> _lookupKeys = new ConcurrentHashMap<>(32);
     /** FIFO of deferred lookups waiting for a concurrent-lookup slot. */
     private final ConcurrentLinkedDeque<PendingLookup> _pendingLookups = new ConcurrentLinkedDeque<>();
-    /** True while the handler is running. */
-    private volatile boolean _isRunning;
     /** Lock serializing handler startup. */
     private final Object _startupLock = new Object();
     /** Which exploratory tunnels exist, if any. */
@@ -753,7 +751,6 @@ public class BuildHandler implements Runnable {
      * @param numThreads the number of threads to be shut down
      */
     public synchronized void shutdown(int numThreads) {
-        _isRunning = false;
         _inboundBuildMessages.clear();
         BuildMessageState poison = new BuildMessageState(_context, null, null, null);
         for (int i = 0; i < numThreads; i++) {_inboundBuildMessages.offer(poison);}
@@ -768,13 +765,11 @@ public class BuildHandler implements Runnable {
      */
     @Override
     public void run() {
-        _isRunning = true;
         while (!_manager.isShutdown() && !Thread.currentThread().isInterrupted()) {
             try {handleInboundRequest();}
             catch (RuntimeException e) {_log.log(Log.CRIT, "Catastrophic tunnel build failure! -> " +  e.getMessage());}
         }
         if (_log.shouldDebug()) {_log.debug("Completed handling Inbound build requests");}
-        _isRunning = false;
     }
 
     /**

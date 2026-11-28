@@ -1157,15 +1157,6 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     protected static final int MIN_ACTIVE_PEERS = SystemVersion.isSlow() ? 16 : 32;
 
     /**
-     * Maximum database size before skipping exploratory searches.
-     * @since 0.8.7
-     */
-    private static final int MAX_DB_BEFORE_SKIPPING_SEARCH;
-        static {
-            MAX_DB_BEFORE_SKIPPING_SEARCH = SystemVersion.isSlow() ? 3000 : 5000;
-        }
-
-    /**
      * Search for a newer router info, drop it from the db if the search fails,
      * unless just started up or have bigger problems.
      */
@@ -1272,7 +1263,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         }
 
         // The following doesn't kick in most of the time, because of
-        // the MAX_DB_BEFORE_SKIPPING_SEARCH check above,
+        // the 2000-router threshold in the "uninteresting" test above,
         // that value is pretty small compared to typical netdb sizes.
 
         // Skip lookup for low tier routers - we ban them anyway

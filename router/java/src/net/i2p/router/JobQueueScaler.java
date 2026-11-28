@@ -157,8 +157,6 @@ class JobQueueScaler implements Runnable {
 
     /** When the current overload episode began. */
     private long _loadEpisodeStart;
-    /** When the queue last recovered from an overload. */
-    private long _lastRecoveryTime;
 
     /** Checks after a scale before judging its result. */
     private static final int FEEDBACK_CHECKS_AFTER_SCALE = 2; // Check 2 times after scaling (faster response)
@@ -893,7 +891,6 @@ class JobQueueScaler implements Runnable {
             long recoveryTime = now - _loadEpisodeStart;
             if (recoveryTime > 0) {
                 _context.statManager().addRateData("jobQueue.loadRecoveryTime", recoveryTime);
-                _lastRecoveryTime = recoveryTime;
                 if (_log.shouldInfo()) {
                     _log.info("Load episode recovered -> Duration: " + DataHelper.formatDuration(recoveryTime) +
                               " * Max lag: " + DataHelper.formatDuration(maxLag) +

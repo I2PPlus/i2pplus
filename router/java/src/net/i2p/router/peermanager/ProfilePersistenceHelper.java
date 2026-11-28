@@ -997,9 +997,9 @@ List<PeerProfile> profiles = new ArrayList<>(Math.min(LIMIT_PROFILES, freshFiles
             RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
             boolean absent = (info == null);
             if (readable && isGenuinelyStale(absent, lastActivity, now, STALE_PROFILE_AGE_MS)) {
-                stale.add(new FileMetadata(f, lastActivity, true));
+                stale.add(new FileMetadata(f, lastActivity));
             } else {
-                surplus.add(new FileMetadata(f, lastActivity, false));
+                surplus.add(new FileMetadata(f, lastActivity));
             }
         }
 
@@ -1055,20 +1055,16 @@ List<PeerProfile> profiles = new ArrayList<>(Math.min(LIMIT_PROFILES, freshFiles
         private final File file;
         /** Newest recorded activity, or 0 if the profile records none. */
         private final long lastActivity;
-        /** Whether the peer is genuinely stale rather than merely surplus. */
-        private final boolean stale;
 
         /**
          * Records one profile file's metadata.
          *
          * @param f the profile file
          * @param lastActivity the last activity time from the file
-         * @param stale true if the file is past its expiry
          */
-        FileMetadata(File f, long lastActivity, boolean stale) {
+        FileMetadata(File f, long lastActivity) {
             file = f;
             this.lastActivity = lastActivity;
-            this.stale = stale;
         }
     }
 

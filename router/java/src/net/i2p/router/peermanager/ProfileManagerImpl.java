@@ -10,26 +10,22 @@ package net.i2p.router.peermanager;
 import net.i2p.data.Hash;
 import net.i2p.router.ProfileManager;
 import net.i2p.router.RouterContext;
-import net.i2p.util.Log;
 
 /**
  * Methods to update profiles.
  * Unless otherwise noted, methods are blocking on the reorganize lock.
  */
 public class ProfileManagerImpl implements ProfileManager {
-    /** Logger for this class. */
-    private final Log _log;
     /** The router context the profiles belong to. */
     private final RouterContext _context;
 
     /**
-     * Creates the manager and its logger from the given context.
+     * Creates the manager from the given context.
      *
-     * @param context the router context whose log manager supplies our logger
+     * @param context the router context whose profiles are managed
      */
     public ProfileManagerImpl(RouterContext context) {
         _context = context;
-        _log = _context.logManager().getLog(ProfileManagerImpl.class);
     }
 
     /**
