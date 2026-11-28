@@ -857,8 +857,9 @@ public class GraphGenerator implements Runnable, ClientApp {
             if (coalesceStalled.count() > 0) {
                 if (_log.shouldError())
                     _log.error("Stat coalesce sweep has not completed for " + coalesceSweepAbsence(now) +
-                               " -> No rate is coalesced and every listener starves" +
-                               "\n* Check the router coalesce timer (SimpleTimer2), not a listener");
+                               " -> No rate is coalesced" +
+                               "\n* Every listener starves, check the router coalesce timer " +
+                               "(SimpleTimer2), not a listener");
             }
         }
     }

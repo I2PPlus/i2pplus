@@ -564,7 +564,7 @@ public abstract class TransportImpl implements Transport {
                            + "\n* Lifetime: " + DataHelper.formatDuration(lifetime)
                            + durationClause("Time taken", sendTime)
                            + " * Queued: " + DataHelper.formatDuration(queueTime)
-                           + " * " + msg.getMessageSize() + " byte " + msg.getMessageType()
+                           + "\n* " + msg.getMessageSize() + " byte " + msg.getMessageType()
                            + " [MsgID " + msg.getMessageId() + "] from [" + routerHash + "] to [" + peerHash + "]");
             }
         } else if (debug) {

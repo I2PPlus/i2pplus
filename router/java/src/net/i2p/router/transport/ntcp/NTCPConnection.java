@@ -1001,7 +1001,7 @@ void noteEstablishmentRtt(int rttMs) {
             try {
                 String writeStatus = _conKey != null ? String.valueOf((_conKey.interestOps() & SelectionKey.OP_WRITE) != 0) : "null_key";
                 _log.info("Outbound connection too backlogged -> Throttling the send"
-                          + " * Queued: " + size + " * Wants write: " + writeStatus
+                          + "\n* Queued: " + size + " * Wants write: " + writeStatus
                           + " * Peer: " + toShortString()
                           + "\n* Outbound set: " + currentOutboundSet
                           + " * Write buffers: " + writeBufs);

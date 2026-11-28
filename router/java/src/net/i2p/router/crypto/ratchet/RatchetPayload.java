@@ -164,9 +164,12 @@ class RatchetPayload {
                 // never in the exception message - callers print the message
                 // with the stack, which made one malformed packet 100 log lines.
                 if (_log.shouldDebug())
-                    _log.debug("Ratchet payload block " + blocks + " type " + type + " length " + len +
-                               " at offset " + (i - 3 - off) + " runs over frame of size " + length +
-                               '\n' + net.i2p.util.HexDump.dump(payload, off, length));
+                    _log.debug("Ratchet payload block runs over the frame -> Block " + blocks +
+                               " is malformed" +
+                               "\n* Type: " + type + " * Length: " + len + " bytes" +
+                               " * Offset: " + (i - 3 - off) + " bytes" +
+                               " * Frame size: " + length + " bytes" +
+                               "\n" + net.i2p.util.HexDump.dump(payload, off, length));
                 throw new IOException("Block " + blocks + " type " + type + " length " + len +
                                       " at offset " + (i - 3 - off) + " runs over frame of size " + length);
             }

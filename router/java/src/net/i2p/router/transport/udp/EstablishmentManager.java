@@ -2980,8 +2980,9 @@ public class EstablishmentManager {
             // is not using, and we use the source port. Expected, self-correcting,
             // and nothing for the operator to do.
             if (_log.shouldDebug()) {
-                _log.debug("[SSU] HolePunch from [" + id + "] published port " + port +
-                           " does not match the source -> Using the source port");
+                _log.debug("[SSU] HolePunch from [" + id + "] -> Published port " + port +
+                           " is not the source port" +
+                           "\n* Using the source port instead");
             }
             if (!TransportUtil.isValidPort(fromPort)) {
                 banAndFailState(state, "Bad Introduction data", 6*60*60*1000L);

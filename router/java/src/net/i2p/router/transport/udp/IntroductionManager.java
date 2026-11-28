@@ -1001,7 +1001,7 @@ class IntroductionManager {
                 // very rare
                 if (_log.shouldInfo())
                     _log.info("Dropping a duplicate relay response as Bob -> The introduction was already handled"
-                          + " * Charlie: " + peer.toShortString() + " * Nonce: " + nonce);
+                          + "\n* Charlie: " + peer.toShortString() + " * Nonce: " + nonce);
                 return;
             }
             // We are Alice, give to EstablishmentManager to check sig and process

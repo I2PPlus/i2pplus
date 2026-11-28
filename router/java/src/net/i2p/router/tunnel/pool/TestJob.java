@@ -5225,9 +5225,9 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
             ctx.statManager().addRateData("tunnel.pairedPoolKickExhausted", _cfg.getLength());
             ctx.statManager().addRateData("tunnel.postKickDeferralExhausted", _cfg.getLength());
             if (_log.shouldWarn()) {
-                _log.warn("Test deadlock after " + deferrals + " deferrals, no " +
-                          direction + " partner -> Kick and post-kick budgets spent, failing the tunnel" +
-                          "\n* Length: " + _cfg.getLength() + " hops" +
+                _log.warn("Test deadlock after " + deferrals + " deferrals" +
+                          " -> Failing the tunnel, no " + direction + " partner" +
+                          "\n* Kick and post-kick budgets spent * Length: " + _cfg.getLength() + " hops" +
                           " * Gateway: " + PeerLogFormatter.routerHashTag(_cfg.getGateway(), getContext().routerHash()));
             }
             _cfg.incrementTestFailures();

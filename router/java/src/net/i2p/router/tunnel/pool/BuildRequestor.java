@@ -468,9 +468,10 @@ public abstract class BuildRequestor {
         }
 
         if (log.shouldInfo()) {
-            log.info("Sending build request [MsgID " + msg.getUniqueId() + "] for " + cfg.toShortString() +
-                     " via [" + ibgw.toShortBase32() + "] -> Awaiting reply [MsgID " +
-                     cfg.getReplyMessageId() + "]");
+            log.info("Sending build request -> Awaiting the reply" +
+                     "\n* Request MsgID: " + msg.getUniqueId() +
+                     " * Reply MsgID: " + cfg.getReplyMessageId() +
+                     "\n* Tunnel: " + cfg.toShortString() + " * First hop: [" + ibgw.toShortBase32() + "]");
         }
         ctx.tunnelDispatcher().dispatchOutbound(msg, pairedTunnel.getSendTunnelId(0), ibgw);
         return true;

@@ -601,7 +601,7 @@ class OutboundMessageState implements CDPQEntry {
                 _log.warn("Fragment " + fragmentNum + " does not fit the output buffer -> Writing nothing" +
                           "\n* MsgID: " + getMessageId() + " * Fragment end: " + end + " bytes" +
                           " * Message size: " + _messageBuf.length + " bytes" +
-                          " * Buffer offset: " + outOffset + " * Buffer size: " + out.length + " bytes");
+                          "\n* Buffer offset: " + outOffset + " * Buffer size: " + out.length + " bytes");
         }
         return -1;
     }

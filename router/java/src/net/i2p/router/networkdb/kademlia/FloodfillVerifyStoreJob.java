@@ -950,8 +950,9 @@ class FloodfillVerifyStoreJob extends JobImpl {
                 LeaseSet ls = _facade.lookupLeaseSetLocally(_key);
                 String tunnelName = ls != null ? _facade.getTunnelName(ls.getDestination()) : "";
                 String name = !tunnelName.isEmpty() ? " for \'" + tunnelName + "\'" : "";
-                _log.warn("Floodfill Verify timed out" + name + " [" + _key.toShortBase32() + "] -> " +
-                          "Ignoring [" + _target.toShortBase64() + "] and selecting a different floodfill");
+                _log.warn("Floodfill Verify timed out -> Ignoring [" + _target.toShortBase64() +
+                          "] and selecting a different floodfill" +
+                          "\n* LeaseSet: [" + _key.toShortBase32() + "]" + name);
             }
             if (_attempted < MAX_PEERS_TO_TRY) {
                 // Don't resend, simply rerun FVSJ.this inline and chose somebody besides _target for verification

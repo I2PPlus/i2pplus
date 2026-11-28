@@ -4768,7 +4768,7 @@ public class TunnelPool {
                               + "\n* Destination: [" + dest.toShortBase32() + ']'
                               + " * Status: " + MessageStatusMessage.getStatusString(status) +
                               " (" + status + ')'
-                              + " * Timeouts / excused failures: " + _softAttribution.failuresFrom(dest, now)
+                              + "\n* Timeouts / excused failures: " + _softAttribution.failuresFrom(dest, now)
                               + describeHops(cfg, us) + " / " + _softAttribution.exemptFailuresThrough(hop, now));
                 }
             } else {
@@ -7291,7 +7291,7 @@ public class TunnelPool {
                           " replacements" + boost +
                           "\n* Safe: " + stats.safeActive + " (" + countHealthySafe(stats) + " healthy)" +
                           " * Expiring: " + stats.nearExpiry + " * Failing: " + stats.failingCount +
-                          " * Deficit: " + deficit + " * In progress: " + currentInProgress);
+                          "\n* Deficit: " + deficit + " * In progress: " + currentInProgress);
             }
             _lastDeficitBuildTime = now;
             // Collapsed pools (zero safe, tunnels expiring) are effectively

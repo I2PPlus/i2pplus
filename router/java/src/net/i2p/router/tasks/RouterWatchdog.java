@@ -166,7 +166,7 @@ public class RouterWatchdog implements Runnable {
                        "\n* Comm system: " + _context.commSystem().getStatus() +
                        " * Peers: " + _context.commSystem().countActivePeers() +
                        " * Part. tunnels: " + _context.tunnelManager().getParticipatingCount() +
-                       " * Send processing time: " + DataHelper.formatDuration((long)processTime) +
+                       "\n* Send processing time: " + DataHelper.formatDuration((long)processTime) +
                        " * Send rate: " + DataHelper.formatSize((long)bps) + "B/s" +
                        " * Memory: " + DataHelper.formatSize(used) + " of " + DataHelper.formatSize(max) + " bytes");
 

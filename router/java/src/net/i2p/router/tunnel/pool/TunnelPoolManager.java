@@ -2215,7 +2215,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         _log.info("Participation share limit raised -> From " + basePct + "% to " + max + "%"
                   + "\n* Build success: " + Math.round(buildSuccess * 100) + "%"
                   + " * Firewalled: " + firewalled
-                  + " * Incomplete LeaseSet: " + incompleteLeaseSet
+                  + "\n* Incomplete LeaseSet: " + incompleteLeaseSet
                   + " * Excluded peers: " + excluded);
     }
 
