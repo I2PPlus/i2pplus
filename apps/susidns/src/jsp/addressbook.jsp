@@ -29,11 +29,6 @@
 </c:forEach>
 <%  String importMessages = null;
     String query = request.getQueryString();
-    // The select-all box is written into the dead-hosts header cell, so that
-    // cell and the script that writes it are one feature: emit both or neither,
-    // or the script spends every other view looking for a cell that was never
-    // written. "dead" is the only filter that names the cell.
-    boolean deadHosts = book.isValidBook() && "dead".equals(book.getFilter());
     RequestWrapper bookRequest = new RequestWrapper(request);
     String here = bookRequest.getParameter("book");
     String formMessages = book.getMessages();
@@ -239,7 +234,7 @@
 <%  if (book.getEntries().length > 0) { /* Don't show if no results. Can't figure out how to do this with c:if */ %>
 <th class=info><%=intl._t("Info")%></th><th class=type><%=intl._t("Type")%></th><th class=names><%=intl._t("Hostname")%></th><th class=encryption><%=intl._t("Encryption")%></th><th class=b32link><%=intl._t("Link (b32)")%></th><th class=helper>Helper</th><th class=destinations><%=intl._t("Destination")%> (b64)</th><th class=source><%=intl._t("Source")%></th><th class=added><%=intl._t("Added")%></th><th class=status><%=intl._t("Status")%></th>
 <c:if test="${book.validBook}">
-<th class=checkbox <c:if test="<%=deadHosts%>">id=deadHosts</c:if> title="<%=intl._t("Select hosts for deletion from addressbook")%>">
+<th class=checkbox id=deleteHosts title="<%=intl._t("Select hosts for deletion from addressbook")%>">
 </th></c:if>
 </tr>
 <% /* limit iterator, or "Form too large" may result on submit, and is a huge web page if we don't */ %>
@@ -455,6 +450,10 @@
 <script src=/js/jdenticon.js></script>
 <script src=/susidns/js/clearSearch.js></script>
 <script nonce="<%=cspNonce%>">window.jdenticon_config = { padding: 0, saturation: {color: 1, grayscale: 0} };</script>
-<c:if test="<%=deadHosts%>"><script src=/susidns/js/toggleAllHosts.js></script></c:if>
+<%-- The select-all box is written into the delete column's header cell, so that
+     cell and the script that writes it are one feature: emit both or neither.
+     The cell goes out on every valid book, which is also every view that shows
+     the per-row delete boxes. --%>
+<c:if test="${book.validBook}"><script src=/susidns/js/toggleAllHosts.js></script></c:if>
 </body>
 </html>

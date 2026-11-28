@@ -1,10 +1,11 @@
 /**
  * @module toggleAllHosts
  * @file I2P+ SusiDNS select-all box for the address book.
- * Writes a master checkbox into the dead-hosts header cell, so every host the
- * dead-hosts filter lists can be marked for deletion at once. The address book
- * emits that cell, and this script, only while the dead-hosts filter is active
- * - see the deadHosts flag in addressbook.jsp.
+ * Writes a master checkbox into the delete column's header cell, so every host
+ * the address book lists can be marked for deletion at once. The book emits
+ * that cell, and this script, on every valid book view - the views that show
+ * the per-row delete boxes - and on no others; see the deleteHosts cell and the
+ * book.validBook gate in addressbook.jsp.
  * @author dr|z3d
  * @license AGPL3 or later
  */
@@ -52,9 +53,9 @@
   }
 
   /**
-   * Writes the master box into the dead-hosts header cell and wires it to the
-   * rows. A page without that cell has no dead-hosts filter in force, which is
-   * the normal state of the address book, so it is left alone quietly.
+   * Writes the master box into the delete column's header cell and wires it to
+   * the rows. A page without that cell is not a valid book, so it has no
+   * per-row delete boxes either, and is left alone quietly.
    *
    * @listens DOMContentLoaded
    * @returns {void}
@@ -62,7 +63,7 @@
   function createSelectAllCheckbox() {
     // The id is what marks the cell out, and ids are unique, so it needs no
     // table or class qualifiers to find it.
-    const cell = document.getElementById("deadHosts");
+    const cell = document.getElementById("deleteHosts");
     if (!cell) { return; }
 
     const master = document.createElement("input");

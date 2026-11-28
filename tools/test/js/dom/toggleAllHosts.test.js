@@ -1,13 +1,14 @@
 /**
  * Tier-2 DOM tests for apps/susidns/src/js/toggleAllHosts.js — the select-all
- * box the SusiDNS address book writes into its dead-hosts header cell.
+ * box the SusiDNS address book writes into the header cell of its delete column.
  *
- * The address book emits that cell, and this script, only while the dead-hosts
- * filter is active, so the contract these tests pin is the narrow one:
+ * The address book emits that cell, and this script, on every valid book view -
+ * the views that also show the per-row delete boxes - so the contract these
+ * tests pin is:
  *
  *   - with the cell, the master box appears in it;
- *   - without the cell the script stays silent — a page with no dead-hosts
- *     filter is the address book's normal state, not a failure to report;
+ *   - without the cell the script stays silent — a book that is not valid has
+ *     no delete column at all, which is not a failure to report;
  *   - the master box marks and clears every row box, and is left checked,
  *     never indeterminate, after doing so;
  *   - marking some but not all rows leaves the master indeterminate, all of
@@ -29,13 +30,13 @@ const SCRIPT = readFileSync(
 
 /**
  * @param {number} rows hosts the page lists
- * @param {boolean} dead true for the dead-hosts filter, which is the only view
- *   that carries the cell the script fills in
+ * @param {boolean} deletable true for a valid book, the only view that carries
+ *   the delete column and so the cell the script fills in
  * @returns {string} the table the address book emits
  */
-function book(rows, dead) {
-  const cell = dead
-    ? `<th class=checkbox id=deadHosts title="Select hosts for deletion from addressbook">
+function book(rows, deletable) {
+  const cell = deletable
+    ? `<th class=checkbox id=deleteHosts title="Select hosts for deletion from addressbook">
 </th>`
     : `<th class=checkbox title="Select hosts for deletion from addressbook">
 </th>`;
@@ -80,19 +81,19 @@ function click(el, window) {
   el.dispatchEvent(new window.Event("change", { bubbles: true }));
 }
 
-test("the master box is written into the dead-hosts cell", () => {
+test("the master box is written into the delete column's header cell", () => {
   const { document, window, warnings } = load(book(3, true));
   const master = document.getElementById("toggleAllHosts");
   assert.ok(master, "expected a checkbox with id toggleAllHosts");
   assert.equal(master.type, "checkbox");
-  assert.equal(master.parentElement.id, "deadHosts", "the box belongs in the header cell");
+  assert.equal(master.parentElement.id, "deleteHosts", "the box belongs in the header cell");
   assert.deepEqual(warnings, [], "a page that has the cell must not complain");
 });
 
-test("a page with no dead-hosts cell is left alone, silently", () => {
+test("a book with no delete column is left alone, silently", () => {
   const { document, window, warnings } = load(book(3, false));
   assert.equal(document.getElementById("toggleAllHosts"), null);
-  assert.deepEqual(warnings, [], "no dead-hosts filter is the address book's normal state");
+  assert.deepEqual(warnings, [], "an invalid book has no delete column to fill in");
 });
 
 test("the master box marks and clears every row", () => {

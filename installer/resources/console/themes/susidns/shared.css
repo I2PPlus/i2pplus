@@ -33,8 +33,8 @@ textarea{resize:vertical}
 #navi{position:relative;z-index:2000}
 #toggleAllHosts{margin:0;width:16px;height:16px;opacity:0}
 #toggleAllHosts:hover{cursor:pointer}
-#deadHosts:hover{background-size:18px!important}
-#deadHosts:active{background-size:16px!important}
+#deleteHosts:hover{background-size:18px!important}
+#deleteHosts:active{background-size:16px!important}
 #showing:empty{display:none}
 .info{width:1%;text-align:center}
 td.type,#categoryFilter a,#categoryFilter #activefilter{font-size:0}
