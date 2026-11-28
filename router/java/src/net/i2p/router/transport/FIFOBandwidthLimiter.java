@@ -1,7 +1,5 @@
 package net.i2p.router.transport;
 
-import java.io.IOException;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -965,18 +963,6 @@ public class FIFOBandwidthLimiter {
             _totalAllocatedOutboundBytes.addAndGet(requested);
         }
         return rv;
-    }
-
-    /**
-     * No-op, the HTML status page was not worth translating.
-     *
-     * @param out ignored, nothing is ever written
-     * @throws IOException declared for the interface, never thrown here
-     * @deprecated not worth translating
-     */
-    @Deprecated
-    public void renderStatusHTML(Writer out) throws IOException {
-        // no-op
     }
 
     /** One bandwidth capacity request. */

@@ -8,7 +8,6 @@ package net.i2p.router.client;
  */
 
 import java.io.IOException;
-import java.io.Writer;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -840,18 +839,6 @@ class ClientManager {
         } else {
             for (Destination d : _runners.keySet()) {reportAbuse(d, reason, severity);}
         }
-    }
-
-    /**
-     * Render client status as HTML.
-     *
-     * @deprecated unused
-     * @param out the writer the HTML would be written to, unused
-     * @throws IOException never thrown, the method body is empty
-     */
-    @Deprecated
-    public void renderStatusHTML(Writer out) throws IOException {
-        // intentionally empty - deprecated, rendering moved to router console
     }
 
     /**

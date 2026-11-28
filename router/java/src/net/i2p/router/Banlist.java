@@ -7,8 +7,6 @@ package net.i2p.router;
  * your children, but it might.  Use at your own risk.
  */
 
-import java.io.IOException;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -1546,18 +1544,6 @@ public class Banlist {
         if (entry == null || entry.expireOn <= _context.clock().now()) {return null;}
         if (entry.causeCode != null && !entry.causeCode.isEmpty()) {return entry.causeCode;}
         return entry.cause;
-    }
-
-    /**
-     * Render banlist status as HTML.
-     *
-     * @param out the writer the status would be rendered to, unused
-     * @throws IOException never thrown by this deprecated no-op
-     * @deprecated moved to router console
-     */
-    @Deprecated
-    public void renderStatusHTML(Writer out) throws IOException {
-        // intentionally empty - deprecated, moved to router console
     }
 
 }
