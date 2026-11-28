@@ -2,6 +2,7 @@ package net.i2p.router.networkdb.kademlia;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 
@@ -10,6 +11,7 @@ import net.i2p.crypto.SigType;
 import net.i2p.data.BlindData;
 import net.i2p.data.SigningPublicKey;
 import net.i2p.router.RouterContext;
+import net.i2p.stat.StatManager;
 
 import org.junit.Test;
 
@@ -42,6 +44,19 @@ public class BlindCacheRolloverTest {
 
     /** The context the fixtures' blind data is built in, for its clock. */
     private static final I2PAppContext APP = I2PAppContext.getGlobalContext();
+
+    /**
+     * A context the blind cache can build its counter on. The cache registers
+     * the counter it writes through the context's stat manager, so a bare mock,
+     * whose statManager() answers null, cannot construct one.
+     *
+     * @return a mocked router context carrying a real stat manager
+     */
+    private static RouterContext contextWithStats() {
+        RouterContext ctx = mock(RouterContext.class);
+        when(ctx.statManager()).thenReturn(new StatManager(APP));
+        return ctx;
+    }
 
     /**
      * Blind data whose blinded key can be armed to fail, so one entry in the
@@ -128,7 +143,7 @@ public class BlindCacheRolloverTest {
      */
     @Test
     public void rolloverDropsTheEntryThatCannotBeReKeyed() {
-        RouterContext ctx = mock(RouterContext.class);
+        RouterContext ctx = contextWithStats();
         BlindCache cache = new BlindCache(ctx);
         Fixture first = new Fixture((byte) 1);
         Fixture bad = new Fixture((byte) 2);
@@ -154,7 +169,7 @@ public class BlindCacheRolloverTest {
      */
     @Test
     public void rolloverKeepsEveryEntryItCanReKey() {
-        RouterContext ctx = mock(RouterContext.class);
+        RouterContext ctx = contextWithStats();
         BlindCache cache = new BlindCache(ctx);
         Fixture first = new Fixture((byte) 11);
         Fixture second = new Fixture((byte) 12);
@@ -175,7 +190,7 @@ public class BlindCacheRolloverTest {
      */
     @Test
     public void rolloverOnAnEmptyCacheDoesNothing() {
-        RouterContext ctx = mock(RouterContext.class);
+        RouterContext ctx = contextWithStats();
         BlindCache cache = new BlindCache(ctx);
         cache.rollover();
         Fixture absent = new Fixture((byte) 21);

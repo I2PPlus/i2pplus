@@ -27,6 +27,8 @@ import net.i2p.data.Hash;
 import net.i2p.data.PrivateKey;
 import net.i2p.data.SigningPublicKey;
 import net.i2p.router.RouterContext;
+import net.i2p.stat.RateConstants;
+import net.i2p.stat.StatManager;
 import net.i2p.util.Log;
 import net.i2p.util.SecureFileOutputStream;
 
@@ -58,6 +60,43 @@ class BlindCache {
     private static final int MAX_CACHE_SIZE = 32;
 
     /**
+     * Stat name for how many blind entries the cache held when it was shut down.
+     * Written once per netdb shutdown, so it reads as an absent stat for most of
+     * a router's life and only carries a value after a netdb restart.
+     */
+    static final String STAT_CACHE_SIZE = "netDb.blindCache.size";
+
+    /**
+     * Periods for {@link #STAT_CACHE_SIZE}. The value is written once, at netdb
+     * shutdown, so the day-long period is the one that still holds it when the
+     * console next asks.
+     */
+    private static final long[] RATES = RateConstants.STANDARD_RATES;
+
+    /**
+     * Create the one counter this class writes.
+     * <p>
+     * {@link net.i2p.stat.StatManager#addRateData(String, long)} looks the name
+     * up and drops the write when no such stat was created, so this counter
+     * reported nothing while looking like a working one. The name was also
+     * spelled <code>netdb.</code>, lower-case, while every other counter in the
+     * group is <code>netDb.</code>, so it sat outside the group the console and
+     * the Tuner rules read even in the runs where it did get written. The name
+     * is a constant shared by the write site and the registration so the two
+     * cannot drift apart.
+     * <p>
+     * Declared as required, not plain: {@code createRateStat()} is a no-op
+     * unless <code>stat.full</code> is set, and its default is false.
+     *
+     * @param stats the context's stat manager, never null
+     * @since 0.9.72+
+     */
+    static void registerStats(StatManager stats) {
+        stats.createRequiredRateStat(STAT_CACHE_SIZE, "Blind entries held at netdb shutdown",
+                                     "NetworkDatabase", RATES);
+    }
+
+    /**
      * Caller MUST call {@link #startup()} to load persistent cache from disk.
      *
      * @param ctx the router context
@@ -67,6 +106,7 @@ class BlindCache {
         _cache = new ConcurrentHashMap<>(32);
         _reverseCache = new ConcurrentHashMap<>(32);
         _hashCache = new ConcurrentHashMap<>(32);
+        registerStats(ctx.statManager());
     }
 
     /**
@@ -75,7 +115,7 @@ class BlindCache {
     public synchronized void shutdown() {
         if (_changed)
             store();
-        _context.statManager().addRateData("netdb.blindCache.size", _cache.size());
+        _context.statManager().addRateData(STAT_CACHE_SIZE, _cache.size());
         _cache.clear();
         _reverseCache.clear();
         _hashCache.clear();

@@ -63,6 +63,12 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
     private Hash _fromHash;
     /** The floodfill network database. */
     private final FloodfillNetworkDatabaseFacade _facade;
+    /**
+     * Stat name for a peer storing our own client's LeaseSet into the client
+     * subDB that owns it - the store is refused without blaming the peer, and
+     * this counter is the only record that it happened.
+     */
+    static final String STAT_LOCAL_LS_TO_LOCAL_CLIENT = "netDb.storeLocalLeaseSetToLocalClient";
     /** Time allowed for the sender's reply. */
     private static final int REPLY_TIMEOUT = (int) (60L * 1000);
     /** Send priority of the store replies. */
@@ -180,7 +186,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                      * they are equal, reject the store without blaming the peer.
                      */
                     if (getContext().netDbSegmentor().clientNetDB(ls.getHash()).equals(_facade)) {
-                        getContext().statManager().addRateData("netDb.storeLocalLeaseSetToLocalClient", 1, 0);
+                        getContext().statManager().addRateData(STAT_LOCAL_LS_TO_LOCAL_CLIENT, 1, 0);
                         dontBlamePeer = true;
                         throw new IllegalArgumentException("Peer attempted to store LOCAL LeaseSet [" +
                                                            key.toShortBase32() + "]" +

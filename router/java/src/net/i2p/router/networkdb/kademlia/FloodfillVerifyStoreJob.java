@@ -14,6 +14,7 @@ import net.i2p.data.LeaseSet2;
 import net.i2p.data.i2np.DatabaseLookupMessage;
 import net.i2p.data.i2np.DatabaseSearchReplyMessage;
 import net.i2p.stat.RateConstants;
+import net.i2p.stat.StatManager;
 import net.i2p.data.i2np.DatabaseStoreMessage;
 import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.data.router.RouterInfo;
@@ -121,6 +122,12 @@ class FloodfillVerifyStoreJob extends JobImpl {
     private static final int IP_CLOSE_BYTES = 3;
     /** Rate stat periods for the verification statistics. */
     private static final long[] RATES = RateConstants.TUNNEL_VERIFY_RATES;
+    /**
+     * Stat name for how long a verification waits before its flood check starts,
+     * in ms - the time from the store being accepted to phase 2 running, which is
+     * the only part of a verification the store peer is not involved in.
+     */
+    static final String STAT_PHASE2_DELAY = "netDb.floodfillVerifyPhase2";
 
     /**
      * Result of querying the store peer (phase 1).
@@ -270,15 +277,39 @@ class FloodfillVerifyStoreJob extends JobImpl {
             _phase = PHASE_FLOOD_CHECK;
             getTiming().setStartAfter(phase2StartTime(_created, _phase2DelayMs));
         }
-        getContext().statManager().createRequiredRateStat("netDb.floodfillVerifyOK", "Time for successful Floodfill verify (ms)", "NetworkDatabase", RATES);
-        getContext().statManager().createRequiredRateStat("netDb.floodfillVerifyFail", "Time for failed Floodfill verify (ms)", "NetworkDatabase", RATES);
-        getContext().statManager().createRateStat("netDb.floodfillVerifyTimeout", "Floodfill verify timeout (ms)", "NetworkDatabase", RATES);
-        getContext().statManager().createRateStat("netDb.floodfillVerifyPhase1OK", "Time to confirm store peer still has entry (ms)", "NetworkDatabase", RATES);
-        getContext().statManager().createRateStat("netDb.floodfillVerifyPhase1Fail", "Time until store peer missing or stale (ms)", "NetworkDatabase", RATES);
-        getContext().statManager().createRateStat("netDb.floodfillVerifyPhase1Timeout", "Store-peer check timeout (ms)", "NetworkDatabase", RATES);
-        getContext().statManager().createRateStat("netDb.floodfillVerifyFailNoKey", "Flood check missing key after retry (ms)", "NetworkDatabase", RATES);
-        getContext().statManager().createRateStat("netDb.floodfillVerifyFailStale", "Flood check stale key after retry (ms)", "NetworkDatabase", RATES);
-        getContext().statManager().createRateStat("netDb.floodfillVerifyRetry", "Flood check same-peer retries", "NetworkDatabase", RATES);
+        registerStats(getContext().statManager());
+    }
+
+    /**
+     * Create the counters the verification job writes.
+     * <p>
+     * {@link net.i2p.stat.StatManager#addRateData(String, long)} looks the name
+     * up and drops the write when no such stat was created, so a counter written
+     * without its registration reports nothing while looking like a working one.
+     * The phase-2 wait was in that state: every verification recorded how long
+     * it sat before the flood check started, and the sample was thrown away, so
+     * the one part of a verification the store peer is not involved in was the
+     * part nobody could see. The name is a constant shared by the write site and
+     * the registration so the two cannot drift apart.
+     * <p>
+     * The outcome pair and the phase-2 wait are declared as required; the
+     * per-reason breakdown stays plain, as it has always been, so a stock router
+     * keeps reporting what it reported before.
+     *
+     * @param stats the context's stat manager, never null
+     * @since 0.9.72+
+     */
+    static void registerStats(StatManager stats) {
+        stats.createRequiredRateStat("netDb.floodfillVerifyOK", "Time for successful Floodfill verify (ms)", "NetworkDatabase", RATES);
+        stats.createRequiredRateStat("netDb.floodfillVerifyFail", "Time for failed Floodfill verify (ms)", "NetworkDatabase", RATES);
+        stats.createRequiredRateStat(STAT_PHASE2_DELAY, "Time before the flood check starts (ms)", "NetworkDatabase", RATES);
+        stats.createRateStat("netDb.floodfillVerifyTimeout", "Floodfill verify timeout (ms)", "NetworkDatabase", RATES);
+        stats.createRateStat("netDb.floodfillVerifyPhase1OK", "Time to confirm store peer still has entry (ms)", "NetworkDatabase", RATES);
+        stats.createRateStat("netDb.floodfillVerifyPhase1Fail", "Time until store peer missing or stale (ms)", "NetworkDatabase", RATES);
+        stats.createRateStat("netDb.floodfillVerifyPhase1Timeout", "Store-peer check timeout (ms)", "NetworkDatabase", RATES);
+        stats.createRateStat("netDb.floodfillVerifyFailNoKey", "Flood check missing key after retry (ms)", "NetworkDatabase", RATES);
+        stats.createRateStat("netDb.floodfillVerifyFailStale", "Flood check stale key after retry (ms)", "NetworkDatabase", RATES);
+        stats.createRateStat("netDb.floodfillVerifyRetry", "Flood check same-peer retries", "NetworkDatabase", RATES);
     }
 
     /**
@@ -504,7 +535,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
         _attempted = 0;
         final long readyAt = phase2StartTime(_created, _phase2DelayMs);
         final long now = getContext().clock().now();
-        getContext().statManager().addRateData("netDb.floodfillVerifyPhase2", now - _created);
+        getContext().statManager().addRateData(STAT_PHASE2_DELAY, now - _created);
         if (now >= readyAt) {
             runJob();
             return;
