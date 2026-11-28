@@ -41,6 +41,7 @@ import net.i2p.router.tunnel.TunnelCreatorConfig;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateAverages;
 import net.i2p.stat.RateStat;
+import net.i2p.stat.StatManager;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 
@@ -931,6 +932,101 @@ public class TunnelPool {
     }
 
     /**
+     * Stat name prefix for a zombie tunnel - one whose local transport session
+     * died after the build completed - suffixed with the {@link SessionLoss}
+     * attribution. The suffix set is exactly the enum, so adding a cause without
+     * registering it would put the write back into the silent-drop path.
+     */
+    static final String STAT_ZOMBIE_SESSION_LOSS = "tunnel.poolZombieSessionLoss.";
+
+    /**
+     * Stat name for the tunnels dropped outright because their transport session
+     * had already been gone for the hysteresis window.
+     */
+    static final String STAT_LOST_SESSION_DROPPED = "tunnel.poolLostSessionDropped";
+
+    /**
+     * Stat name prefix for a zombie exclusion, suffixed with the transport the
+     * local hop used. The suffix set is {@link #TRANSPORT_BUCKETS}.
+     */
+    static final String STAT_ZOMBIE_TRANSPORT = "tunnel.poolZombieTransport.";
+
+    /**
+     * Stat name prefix for every pool tunnel's local-hop transport - the base
+     * rate the zombie split above is read against. Same suffix set, so the two
+     * families stay comparable.
+     */
+    static final String STAT_LOCAL_HOP_TRANSPORT = "tunnel.poolLocalHopTransport.";
+
+    /**
+     * Stat name for a pool rebuild declined because peer selection had no usable
+     * peers; the value written is the fast-peer count at decline time.
+     */
+    static final String STAT_STARVATION_DECLINED = "tunnel.poolStarvationDeclined";
+
+    /** Transport bucket for a peer publishing no address we can read. */
+    static final String BUCKET_UNKNOWN = "unknown";
+
+    /** Transport bucket for a peer whose local hop speaks NTCP. */
+    static final String BUCKET_NTCP = "NTCP";
+
+    /** Transport bucket for a peer whose local hop speaks NTCP2. */
+    static final String BUCKET_NTCP2 = "NTCP2";
+
+    /** Transport bucket for a peer whose local hop speaks SSU. */
+    static final String BUCKET_SSU = "SSU";
+
+    /** Transport bucket for a peer whose local hop speaks SSU2. */
+    static final String BUCKET_SSU2 = "SSU2";
+
+    /**
+     * Every bucket {@link #zombieTransportBucket(String)} can fold a transport
+     * style to, and therefore every suffix the two transport families use.
+     * Registration walks this list, so a style folded to a bucket missing here
+     * is the only way a transport counter can go unregistered.
+     */
+    static final String[] TRANSPORT_BUCKETS = {BUCKET_NTCP, BUCKET_NTCP2, BUCKET_SSU, BUCKET_SSU2,
+                                               BUCKET_UNKNOWN};
+
+    /**
+     * Register the pool-side counters written from the zombie, lost-session and
+     * starvation paths. None of them had ever been created: {@link
+     * StatManager#addRateData(String, long)} looks the name up and drops the
+     * write when no such stat exists, so all five recorded nothing while looking
+     * like working counters, and the console showed no row for them at all.
+     *
+     * <p>All of them are declared required - {@code createRateStat()} returns
+     * without creating anything unless <code>stat.full</code> is set, and that
+     * property defaults to false, so a plain declaration would have been the
+     * same silence under another name. They sit in the "Tunnels" group beside
+     * the pool's other counters, on the short-term periods those use.
+     *
+     * @param stats the context's stat manager
+     * @since 0.9.72+
+     */
+    static void registerStats(StatManager stats) {
+        for (SessionLoss loss : SessionLoss.values()) {
+            stats.createRequiredRateStat(STAT_ZOMBIE_SESSION_LOSS + loss.name(),
+                                         "Zombie tunnel, local transport session lost (" + loss.name() +
+                                         ")", "Tunnels", RateConstants.SHORT_TERM_RATES);
+        }
+        for (String bucket : TRANSPORT_BUCKETS) {
+            stats.createRequiredRateStat(STAT_ZOMBIE_TRANSPORT + bucket,
+                                         "Zombie tunnel excluded, local hop transport " + bucket,
+                                         "Tunnels", RateConstants.SHORT_TERM_RATES);
+            stats.createRequiredRateStat(STAT_LOCAL_HOP_TRANSPORT + bucket,
+                                         "Pool tunnels, local hop transport " + bucket,
+                                         "Tunnels", RateConstants.SHORT_TERM_RATES);
+        }
+        stats.createRequiredRateStat(STAT_LOST_SESSION_DROPPED,
+                                     "Tunnels dropped, transport session gone over the hysteresis window",
+                                     "Tunnels", RateConstants.SHORT_TERM_RATES);
+        stats.createRequiredRateStat(STAT_STARVATION_DECLINED,
+                                     "Pool rebuild declined, no usable peers (value: fast peer count)",
+                                     "Tunnels", RateConstants.SHORT_TERM_RATES);
+    }
+
+    /**
      * Tunnel pool.
      *
      * @param ctx the router context
@@ -964,6 +1060,7 @@ public class TunnelPool {
         refreshSettings();
         ctx.statManager().createRequiredRateStat("tunnel.matchLease", "How often our Outbound Endpoint matches their Inbound Gateway", "Tunnels",
                                          RateConstants.SHORT_TERM_RATES);
+        registerStats(ctx.statManager());
     }
 
     /**
@@ -2014,7 +2111,7 @@ public class TunnelPool {
             boolean failsafe = _context.commSystem().wasFailsafeClosed(hop, FAILSAFE_CLOSE_WINDOW_MS);
             loss = classifySessionLoss(true, established, failsafe);
         }
-        _context.statManager().addRateData("tunnel.poolZombieSessionLoss." + loss.name(), 1);
+        _context.statManager().addRateData(STAT_ZOMBIE_SESSION_LOSS + loss.name(), 1);
     }
 
     /**
@@ -2240,7 +2337,7 @@ public class TunnelPool {
             _log.info("Dropping " + dropped + " tunnels -> Transport session gone over " + secs +
                       "s [" + toString() + "]");
         }
-        _context.statManager().addRateData("tunnel.poolLostSessionDropped", dropped);
+        _context.statManager().addRateData(STAT_LOST_SESSION_DROPPED, dropped);
         return dropped;
     }
 
@@ -2260,12 +2357,12 @@ public class TunnelPool {
      * @since 0.9.71+
      */
     static String zombieTransportBucket(String style) {
-        if (style == null) {return "unknown";}
-        if ("NTCP2".equals(style)) {return "NTCP2";}
-        if ("NTCP".equals(style)) {return "NTCP";}
-        if ("SSU2".equals(style)) {return "SSU2";}
-        if ("SSU".equals(style)) {return "SSU";}
-        return "unknown";
+        if (style == null) {return BUCKET_UNKNOWN;}
+        if ("NTCP2".equals(style)) {return BUCKET_NTCP2;}
+        if ("NTCP".equals(style)) {return BUCKET_NTCP;}
+        if ("SSU2".equals(style)) {return BUCKET_SSU2;}
+        if ("SSU".equals(style)) {return BUCKET_SSU;}
+        return BUCKET_UNKNOWN;
     }
 
     /**
@@ -2283,7 +2380,7 @@ public class TunnelPool {
      */
     private String countZombieTransport(TunnelInfo t) {
         String bucket = localHopTransportBucket(t);
-        _context.statManager().addRateData("tunnel.poolZombieTransport." + bucket, 1);
+        _context.statManager().addRateData(STAT_ZOMBIE_TRANSPORT + bucket, 1);
         return bucket;
     }
 
@@ -2337,7 +2434,7 @@ public class TunnelPool {
     private void countLocalHopTransports(List<TunnelInfo> tunnels) {
         if (tunnels == null) {return;}
         for (TunnelInfo t : tunnels) {
-            _context.statManager().addRateData("tunnel.poolLocalHopTransport." +
+            _context.statManager().addRateData(STAT_LOCAL_HOP_TRANSPORT +
                                               localHopTransportBucket(t), 1);
         }
     }
@@ -7169,9 +7266,9 @@ public class TunnelPool {
         if (isDeficitThrottled(now, _lastDeficitBuildTime, healthySafe, stats.safeActive,
                                currentInProgress, _hasIncompleteLeaseSet || softDominated)) {
             if (_log.shouldDebug()) {
-                _log.debug(toString() + " -> Skipping the deficit build, rate limited"
-                           + "\n* Since last: " + DataHelper.formatDuration(now - _lastDeficitBuildTime)
-                           + "\n* In progress: " + currentInProgress + " * Safe: " + stats.safeActive +
+                _log.debug(toString() + " -> Skipping the deficit build, rate limited * Last build: " +
+                           DataHelper.formatDuration(now - _lastDeficitBuildTime) +
+                           "\n* In progress: " + currentInProgress + " * Safe: " + stats.safeActive +
                            " * Healthy: " + healthySafe);
             }
             return;
@@ -7538,7 +7635,7 @@ public class TunnelPool {
             // answers it over a window, which is what decides whether the gate is
             // reading a real supply or a profile that selection cannot use.
             int fastPeers = ctx.profileOrganizer().countFastPeers();
-            _context.statManager().addRateData("tunnel.poolStarvationDeclined", fastPeers);
+            _context.statManager().addRateData(STAT_STARVATION_DECLINED, fastPeers);
             if (_log.shouldWarn()) {
                 // One line, throttled. The threshold is a configured constant,
                 // the same on every entry, so it is not a fact about this event;
