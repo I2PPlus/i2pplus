@@ -914,7 +914,7 @@ public class SimpleTimer2 {
         RUNNING,
         /** Cancelled before it could run. */
         CANCELLED
-    };
+    }
 
 
     /**

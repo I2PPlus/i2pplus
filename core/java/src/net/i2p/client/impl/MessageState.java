@@ -50,7 +50,7 @@ class MessageState {
         FAIL,
         /** The message was sent. */
         SUCCESS
-    };
+    }
 
     /** Current status of the message. */
     private State _state = State.INIT;

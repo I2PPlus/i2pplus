@@ -1397,7 +1397,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      * @return 0 if never
      * @since 0.9.64
      */
-    long getLastLS2SignTime() {return _lastLS2SignTime.get();};
+    long getLastLS2SignTime() {return _lastLS2SignTime.get();}
 
     /**
      * The published timestamp of the last LS2 we signed.
@@ -1405,7 +1405,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      * @param now the timestamp to set
      * @since 0.9.64
      */
-    void setLastLS2SignTime(long now) {_lastLS2SignTime.set(now);};
+    void setLastLS2SignTime(long now) {_lastLS2SignTime.set(now);}
 
     /** Configure the listener. */
     @Override
