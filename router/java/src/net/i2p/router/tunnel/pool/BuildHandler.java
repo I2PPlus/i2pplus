@@ -1804,23 +1804,20 @@ public class BuildHandler implements Runnable {
         if (response == 0) {
             Properties props = req.readOptions();
             if (props != null && !props.isEmpty()) {
-                int min = 0;
-                int rqu = 0;
-                int ibgwmax = 0;
                 String smin = props.getProperty(BuildRequestor.PROP_MIN_BW);
                 if (smin != null) {
-                    try {min = 1000 * Integer.parseInt(smin);}
+                    try {Integer.parseInt(smin);}
                     catch (NumberFormatException nfe) {response = TunnelHistory.TUNNEL_REJECT_BANDWIDTH;}
                 }
                 String sreq = props.getProperty(BuildRequestor.PROP_REQ_BW);
                 if (sreq != null) {
-                    try {rqu = 1000 * Integer.parseInt(sreq);}
+                    try {Integer.parseInt(sreq);}
                     catch (NumberFormatException nfe) {response = TunnelHistory.TUNNEL_REJECT_BANDWIDTH;}
                 }
                 if (isInGW) {
                     String smax = props.getProperty(BuildRequestor.PROP_MAX_BW);
                     if (smax != null) {
-                        try {ibgwmax = 1000 * Integer.parseInt(smax);}
+                        try {Integer.parseInt(smax);}
                         catch (NumberFormatException nfe) {response = TunnelHistory.TUNNEL_REJECT_BANDWIDTH;}
                     }
                 }
