@@ -2305,22 +2305,25 @@ public class I2PSnarkUtil implements DisconnectListener, DestCache {
 
     /**
      * How long one <code>.b32.i2p</code> lookup waits for the router's answer, in millis. The
-     * router does not use the whole wait: its search asks the floodfills it is connected to and
-     * ends as soon as they have answered or run out, so a destination that is not published is
-     * reported as missing in seconds, not after the deadline. Measured on this router over 111
-     * lookups, the router answered in 1-5 s, and in 2-3 ms when it already held the answer. Ten
-     * seconds is what the DHT allows for the same lookup, and it is enough for one floodfill
-     * round trip, which is all the router ever spends.
+     * wait is also the deadline of the router's own search - <code>lookupDest()</code> passes it
+     * through as the search's expiration - and a search allows each floodfill it asks eight
+     * seconds, shortened to whatever is left of the deadline with a two-second floor. Ten
+     * seconds therefore bought one floodfill query and a two-second scrap for the rest, so a
+     * destination published on a later floodfill came back missing and the retry cycle started
+     * over. Sixty seconds covers a round of three floodfills with room to spare. Measured on
+     * this router over 111 lookups, the router answered in 1-5 s, and in 2-3 ms when it already
+     * held the answer, so the longer budget is only paid while a search is still running - the
+     * one moment at which giving up throws away the answer it is about to bring back.
      *
      * @since 0.9.72+
      */
-    static final long DEST_LOOKUP_TIMEOUT_MS = 10 * 1000L;
+    static final long DEST_LOOKUP_TIMEOUT_MS = 60 * 1000L;
 
     /**
      * How long a destination resolved for a <code>.b32.i2p</code> hash is reused, in millis.
      * A running destination keeps its key, and the tracker, the DHT and PEX all keep
      * re-advertising the same peers for the life of a torrent, so without a cache every dial
-     * to a hash-only peer id pays for the same lookup again - ten seconds of a connection
+     * to a hash-only peer id pays for the same lookup again - up to a minute of a connection
      * thread each time.
      * <p>Capped at the 10-minute lease-set lifetime, the spec value the router publishes its
      * leases for ({@code i2p.tunnel.leaseMaxDuration} defaults to it). The key survives that
@@ -2665,7 +2668,7 @@ public class I2PSnarkUtil implements DisconnectListener, DestCache {
         if (ip.endsWith(".i2p")) {
             if (ip.length() < 520) { // key + ".i2p"
                 // A .b32.i2p address is only a hash, so it has to be resolved, and the
-                // wait for it is up to ten seconds of whatever thread asked. The same peers
+                // wait for it is up to a minute of whatever thread asked. The same peers
                 // are re-advertised by the tracker, the DHT and PEX for the life of a
                 // torrent, so the answer - including "nothing" - is kept and reused, and a
                 // "nothing" is asked about four times on a backoff before it is left alone.

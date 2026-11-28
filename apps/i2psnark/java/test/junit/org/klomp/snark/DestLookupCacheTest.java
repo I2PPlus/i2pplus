@@ -164,18 +164,20 @@ public class DestLookupCacheTest {
     }
 
     /**
-     * One lookup waits long enough for one floodfill round trip and no longer. The router does
-     * not run its search for the whole wait: it ends as soon as the floodfills it asked have
-     * answered, measured at 1-5 s over 111 lookups on this router, so a longer wait only holds
-     * the dial thread. The quiet period after the attempts are used up stays shorter than the
-     * old flat hold.
+     * One lookup waits long enough for the router's own search to finish the floodfill
+     * round it starts. The wait is that search's deadline: the router allows each floodfill
+     * eight seconds, shortened to the time left with a two-second floor, so a ten-second
+     * wait bought one floodfill query and a two-second scrap for the rest, and a destination
+     * published on a later floodfill came back missing. The quiet period after the attempts
+     * are used up stays shorter than the old flat hold.
      */
     @Test
     public void testTheLookupBudgetAndTheQuietPeriod() {
-        // at least the router's own window for one floodfill to answer (8s), so a
-        // round trip can complete, and well under the deadline the router itself uses
-        assertTrue(I2PSnarkUtil.DEST_LOOKUP_TIMEOUT_MS >= 8 * 1000L);
-        assertTrue(I2PSnarkUtil.DEST_LOOKUP_TIMEOUT_MS <= 15 * 1000L);
+        // a round of three floodfills at the router's own eight seconds each, so the search
+        // the router starts on our behalf can actually finish
+        assertTrue(I2PSnarkUtil.DEST_LOOKUP_TIMEOUT_MS >= 3 * 8 * 1000L);
+        // and no longer: four attempts of it still fits inside one quiet period
+        assertTrue(I2PSnarkUtil.DEST_LOOKUP_TIMEOUT_MS <= 60 * 1000L);
         // four attempts inside the quiet period, so a peer that comes back is dialable again
         assertTrue(I2PSnarkUtil.DEST_CACHE_NEGATIVE_MS <= 5 * 60 * 1000L);
         assertTrue(I2PSnarkUtil.DEST_CACHE_NEGATIVE_MS
