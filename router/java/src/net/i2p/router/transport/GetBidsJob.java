@@ -25,6 +25,14 @@ import net.i2p.util.Log;
 class GetBidsJob {
 
     /**
+     * Stat name for a bid that failed because the message carried no target -
+     * it was queued against a peer it no longer holds, so no transport could be
+     * asked to bid at all. Registered by {@link TransportManager}, the class
+     * that owns the other bid-failure counters on this path.
+     */
+    static final String STAT_BID_FAIL_NULL_TARGET = "transport.bidFailNullTarget";
+
+    /**
      * Constructor. Bid collection is driven entirely by the static {@link #getBids}
      * from the context, transport manager and message it is handed, so an
      * instance carries no state.
@@ -53,7 +61,7 @@ class GetBidsJob {
         Log log = context.logManager().getLog(GetBidsJob.class);
         RouterInfo target = msg.getTarget();
         if (target == null) {
-            context.statManager().addRateData("transport.bidFailNullTarget", msg.getLifetime());
+            context.statManager().addRateData(STAT_BID_FAIL_NULL_TARGET, msg.getLifetime());
             fail(context, msg);
             return;
         }

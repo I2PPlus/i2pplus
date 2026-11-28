@@ -47,6 +47,7 @@ import net.i2p.router.transport.ntcp.NTCPTransport;
 import net.i2p.router.transport.udp.UDPTransport;
 import net.i2p.router.tunnel.pool.GhostPeerManager;
 import net.i2p.stat.RateConstants;
+import net.i2p.stat.StatManager;
 import net.i2p.util.Addresses;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
@@ -198,6 +199,44 @@ public class TransportManager implements TransportEventListener {
     private OutboundMaintainerEvent _outboundMaintainer;
 
     /**
+     * Create the counters the transport dispatch and banlisting paths write.
+     * <p>
+     * {@link net.i2p.stat.StatManager#addRateData(String, long)} looks the name
+     * up and drops the write when no such stat was created, so a counter written
+     * without its registration reports nothing while looking like a working one.
+     * The null-target bid failure was in that state: every message dispatched at
+     * a target the message no longer held was counted, and the sample was thrown
+     * away, while its neighbours on the same code path - banlisted, self, no
+     * transports, all transports - reported normally. The name is a constant on
+     * the job that writes it, shared with this registration, so the two cannot
+     * drift apart.
+     * <p>
+     * The bid failures on the two paths that end a message outright, and the
+     * dispatch-age drop, are declared required; the rest keep the plain
+     * declaration they have always had, so a stock router reports what it
+     * reported before.
+     *
+     * @param stats the context's stat manager, never null
+     * @since 0.9.72+
+     */
+    static void registerStats(StatManager stats) {
+        stats.createRateStat("transport.banlistOnUnreachable", "Add peer to banlist (unreachable on any transport)", "Transport", RATES);
+        // Spelling fixed from "Usupported" to "Unsupported". Two call sites below emit the
+        // correctly spelled name, so both were being dropped by StatManager for a name
+        // that had never been registered, and this counter sat at zero through every
+        // signature-type banlisting. Keep this spelling and the emission spelling in
+        // step: a single-character divergence here is invisible from the console.
+        stats.createRateStat("transport.banlistOnUnsupportedSigType", "Add peer to banlist (unsupported signature type)", "Transport", RATES);
+        stats.createRateStat("transport.noBidsYetNotAllUnreachable", "Add peer to banlist (unreachable on any transport)", "Transport", RATES);
+        stats.createRateStat("transport.bidFailBanlisted", "Failed to bid on message (banlisted peer)", "Transport", RATES);
+        stats.createRateStat("transport.bidFailSelf", "Failed to bid on message (self as target)", "Transport", RATES);
+        stats.createRateStat("transport.bidFailNoTransports", "Failed to bid on message (unreachable on any transport)", "Transport", RATES);
+        stats.createRequiredRateStat("transport.bidFailAllTransports", "Failed to bid on message (failed on all transports)", "Transport", RATES);
+        stats.createRequiredRateStat(GetBidsJob.STAT_BID_FAIL_NULL_TARGET, "Failed to bid on message (no target on the message)", "Transport", RATES);
+        stats.createRequiredRateStat("transport.dispatchExpired", "Messages dropped after exceeding max dispatch age", "Transport", RATES);
+    }
+
+    /**
      * Manager for all enabled transports.
      *
      * @param context the context whose transports this manager will create and own
@@ -207,19 +246,7 @@ public class TransportManager implements TransportEventListener {
         _log = _context.logManager().getLog(TransportManager.class);
         _banLogger = new BanLogger();
         _banLogger.initialize(context);
-        _context.statManager().createRateStat("transport.banlistOnUnreachable", "Add peer to banlist (unreachable on any transport)", "Transport", RATES);
-        _context.statManager().// Spelling fixed from "Usupported" to "Unsupported". Two call sites below emit the
-        // correctly spelled name, so both were being dropped by StatManager for a name
-        // that had never been registered, and this counter sat at zero through every
-        // signature-type banlisting. Keep this spelling and the emission spelling in
-        // step: a single-character divergence here is invisible from the console.
-        createRateStat("transport.banlistOnUnsupportedSigType", "Add peer to banlist (unsupported signature type)", "Transport", RATES);
-        _context.statManager().createRateStat("transport.noBidsYetNotAllUnreachable", "Add peer to banlist (unreachable on any transport)", "Transport", RATES);
-        _context.statManager().createRateStat("transport.bidFailBanlisted", "Failed to bid on message (banlisted peer)", "Transport", RATES);
-        _context.statManager().createRateStat("transport.bidFailSelf", "Failed to bid on message (self as target)", "Transport", RATES);
-        _context.statManager().createRateStat("transport.bidFailNoTransports", "Failed to bid on message (unreachable on any transport)", "Transport", RATES);
-        _context.statManager().createRequiredRateStat("transport.bidFailAllTransports", "Failed to bid on message (failed on all transports)", "Transport", RATES);
-        _context.statManager().createRequiredRateStat("transport.dispatchExpired", "Messages dropped after exceeding max dispatch age", "Transport", RATES);
+        registerStats(context.statManager());
         _transports = new ConcurrentHashMap<>(2);
         _pluggableTransports = new HashMap<>(2);
 

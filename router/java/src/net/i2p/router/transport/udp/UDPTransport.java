@@ -53,6 +53,7 @@ import net.i2p.router.transport.crypto.X25519KeyFactory;
 import net.i2p.router.util.EventLog;
 import net.i2p.router.util.RandomIterator;
 import net.i2p.stat.RateConstants;
+import net.i2p.stat.StatManager;
 import net.i2p.util.Addresses;
 import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.LHMCache;
@@ -65,6 +66,15 @@ import net.i2p.router.util.CoDelPriorityBlockingQueue;
 
 /** SSU/SSU2 transport implementation with UDP endpoint management and packet dispatch. */
 public class UDPTransport extends TransportImpl {
+
+    /**
+     * Stat name for the UDP connection cap the active peer count is measured
+     * against, written beside {@code udp.peerCount} by the expire pass. Without
+     * it the console shows how many peers are held with nothing to compare the
+     * number to.
+     */
+    static final String STAT_PEER_COUNT_MAX = "udp.peerCount.max";
+
     /** Logger for this class. */
     private final Log _log;
     /** Logger for peers banned by this transport. */
@@ -475,6 +485,62 @@ public class UDPTransport extends TransportImpl {
                                                                       Status.IPV4_SNAT_IPV6_UNKNOWN);
 
     /**
+     * Create the counters this transport writes.
+     * <p>
+     * {@link net.i2p.stat.StatManager#addRateData(String, long)} looks the name
+     * up and drops the write when no such stat was created, so a counter written
+     * without its registration reports nothing while looking like a working one.
+     * The peer-count cap was in that state: the expire pass records the active
+     * peer count and the connection cap it is measured against side by side, and
+     * only the first of the two survived, so the console could show how many UDP
+     * peers were held without showing how close that is to the limit the Tuner
+     * keeps moving. The name is a constant shared by the write site and this
+     * registration so the two cannot drift apart.
+     * <p>
+     * It is declared required, like its {@code udp.peerCount} sibling, so a stock
+     * router reports it; the rest of the family keeps the declaration it has
+     * always had.
+     *
+     * @param stats the context's stat manager, never null
+     * @since 0.9.72+
+     */
+    static void registerStats(StatManager stats) {
+        stats.createRateStat("udp.addressTestInsteadOfUpdate", "Number of times we fire off a peer test of ourselves instead of adjusting our own reachable address", "Transport [UDP]", RATES);
+        stats.createRateStat("udp.addressUpdated", "How often we adjust our own reachable IP address", "Transport [UDP]", RATES);
+        stats.createRateStat("udp.alreadyConnected", "Lifetime of a reestablished session", "Transport [UDP]", RATES);
+        stats.createRateStat("udp.droppedPeer", "How long ago dropped peer sent us a message (duration = session lifetime", "Transport [UDP]", RATES);
+        stats.createRateStat("udp.dropPeerConsecutiveFailures", "Consecutive failed sends to a peer before establishing new session (lifetime is inactivity period)", "Transport [UDP]", RATES);
+        stats.createRateStat("udp.dropPeerDroplist", "Number of current peers experiencing dropped packets when new peer is added to list", "Transport [UDP]", RATES);
+        stats.createRateStat("udp.inboundIPv4Conn", "Inbound IPv4 UDP Connection", "Transport [UDP]", RATES);
+        stats.createRateStat("udp.inboundIPv6Conn", "Inbound IPv6 UDP Connection", "Transport [UDP]", RATES);
+        stats.createRateStat("udp.inboundMessageEvicted",
+                                              "Partial inbound messages evicted",
+                                              "Transport [UDP]", RATES);
+        stats.createRateStat("udp.proactiveReestablish", "Time session was idle for when we proactively reestablished it", "Transport [UDP]", RATES);
+        // Required rate stats for tuner cross-refs (CoDel queue delay/drop stats)
+        stats.createRequiredRateStat("codel.UDP-Receiver.delay",
+            CoDelPriorityBlockingQueue.delayDescription("UDP-Receiver"), "Transport [UDP]", RATES);
+        stats.createRequiredRateStat("codel.UDP-Sender.delay",
+            CoDelPriorityBlockingQueue.delayDescription("UDP-Sender"), "Transport [UDP]", RATES);
+        stats.createRequiredRateStat("codel.UDP-Sender.drop", "Queue delay of dropped items (ms)", "Transport [UDP]", RATES);
+        // Aggregate transport stats for tuner visibility
+        stats.createRequiredRateStat("udp.avgSendWindow", "Average send window (CWIN) across peers (bytes)", "Transport [UDP]", RATES);
+        stats.createRequiredRateStat("udp.avgRTO", "Average retransmission timeout across peers (ms)", "Transport [UDP]", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
+        stats.createRequiredRateStat("udp.avgConcurrentMsgs", "Average concurrent messages allowed per peer", "Transport [UDP]", RATES);
+        // Event-count stat for retransmission storm detection (value=1 per event)
+        stats.createRequiredRateStat("udp.retransmitEvents", "Retransmission events (1 per retransmit)", "Transport [UDP]", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
+        // Outbound queue depth — total across all peers, for Tuner cross-references on outbound pressure
+        stats.createRequiredRateStat("udp.outboundQueueDepth", "Total outbound messages queued across all UDP peers", "Transport [UDP]", RATES);
+        // Peer-count / expiry / send-depth signals: read by the Tuner both as cross-references
+        // and as the primary stat for the peer-count and sent-messages-depth params. They are
+        // emitted via addRateData but were never registered, so the Tuner silently saw NaN.
+        stats.createRequiredRateStat("udp.peerCount", "Total active UDP peers", "Transport [UDP]", RATES);
+        stats.createRequiredRateStat(STAT_PEER_COUNT_MAX, "UDP connection cap the peer count is measured against", "Transport [UDP]", RATES);
+        stats.createRequiredRateStat("udp.peerExpired", "Peers expired in the last expire run", "Transport [UDP]", RATES);
+        stats.createRequiredRateStat("udp.sentMessagesDepth", "Average outbound messages in flight per peer (depth)", "Transport [UDP]", RATES);
+    }
+
+    /**
      * Create the UDP transport for the given router context and SSU2 XDH factory.
      *
      * @param ctx the router context
@@ -521,38 +587,7 @@ public class UDPTransport extends TransportImpl {
         _min_peers = _context.getProperty("i2np.udp.minpeers", MIN_PEERS);
         _min_v6_peers = _context.getProperty("i2np.udp.minv6peers", MIN_PEERS_IF_HAVE_V6);
 
-        _context.statManager().createRateStat("udp.addressTestInsteadOfUpdate", "Number of times we fire off a peer test of ourselves instead of adjusting our own reachable address", "Transport [UDP]", RATES);
-        _context.statManager().createRateStat("udp.addressUpdated", "How often we adjust our own reachable IP address", "Transport [UDP]", RATES);
-        _context.statManager().createRateStat("udp.alreadyConnected", "Lifetime of a reestablished session", "Transport [UDP]", RATES);
-        _context.statManager().createRateStat("udp.droppedPeer", "How long ago dropped peer sent us a message (duration = session lifetime", "Transport [UDP]", RATES);
-        _context.statManager().createRateStat("udp.dropPeerConsecutiveFailures", "Consecutive failed sends to a peer before establishing new session (lifetime is inactivity period)", "Transport [UDP]", RATES);
-        _context.statManager().createRateStat("udp.dropPeerDroplist", "Number of current peers experiencing dropped packets when new peer is added to list", "Transport [UDP]", RATES);
-        _context.statManager().createRateStat("udp.inboundIPv4Conn", "Inbound IPv4 UDP Connection", "Transport [UDP]", RATES);
-        _context.statManager().createRateStat("udp.inboundIPv6Conn", "Inbound IPv6 UDP Connection", "Transport [UDP]", RATES);
-        _context.statManager().createRateStat("udp.inboundMessageEvicted",
-                                              "Partial inbound messages evicted",
-                                              "Transport [UDP]", RATES);
-        _context.statManager().createRateStat("udp.proactiveReestablish", "Time session was idle for when we proactively reestablished it", "Transport [UDP]", RATES);
-        // Required rate stats for tuner cross-refs (CoDel queue delay/drop stats)
-        _context.statManager().createRequiredRateStat("codel.UDP-Receiver.delay",
-            CoDelPriorityBlockingQueue.delayDescription("UDP-Receiver"), "Transport [UDP]", RATES);
-        _context.statManager().createRequiredRateStat("codel.UDP-Sender.delay",
-            CoDelPriorityBlockingQueue.delayDescription("UDP-Sender"), "Transport [UDP]", RATES);
-        _context.statManager().createRequiredRateStat("codel.UDP-Sender.drop", "Queue delay of dropped items (ms)", "Transport [UDP]", RATES);
-        // Aggregate transport stats for tuner visibility
-        _context.statManager().createRequiredRateStat("udp.avgSendWindow", "Average send window (CWIN) across peers (bytes)", "Transport [UDP]", RATES);
-        _context.statManager().createRequiredRateStat("udp.avgRTO", "Average retransmission timeout across peers (ms)", "Transport [UDP]", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
-        _context.statManager().createRequiredRateStat("udp.avgConcurrentMsgs", "Average concurrent messages allowed per peer", "Transport [UDP]", RATES);
-        // Event-count stat for retransmission storm detection (value=1 per event)
-        _context.statManager().createRequiredRateStat("udp.retransmitEvents", "Retransmission events (1 per retransmit)", "Transport [UDP]", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
-        // Outbound queue depth — total across all peers, for Tuner cross-references on outbound pressure
-        _context.statManager().createRequiredRateStat("udp.outboundQueueDepth", "Total outbound messages queued across all UDP peers", "Transport [UDP]", RATES);
-        // Peer-count / expiry / send-depth signals: read by the Tuner both as cross-references
-        // and as the primary stat for the peer-count and sent-messages-depth params. They are
-        // emitted via addRateData but were never registered, so the Tuner silently saw NaN.
-        _context.statManager().createRequiredRateStat("udp.peerCount", "Total active UDP peers", "Transport [UDP]", RATES);
-        _context.statManager().createRequiredRateStat("udp.peerExpired", "Peers expired in the last expire run", "Transport [UDP]", RATES);
-        _context.statManager().createRequiredRateStat("udp.sentMessagesDepth", "Average outbound messages in flight per peer (depth)", "Transport [UDP]", RATES);
+        registerStats(ctx.statManager());
 
         new PingIntroducers().schedule(MIN_EXPIRE_TIMEOUT * 3 / 4);
 
@@ -4298,7 +4333,7 @@ public class UDPTransport extends TransportImpl {
             int maxConn = getMaxConnections();
             // Stats: peer counts and sent-messages backlog
             _context.statManager().addRateData("udp.peerCount", totalPeers);
-            _context.statManager().addRateData("udp.peerCount.max", maxConn);
+            _context.statManager().addRateData(STAT_PEER_COUNT_MAX, maxConn);
             if (!_peersByIdent.isEmpty()) {
                 // Sample sent-messages backlog across peers (every 4th peer for perf)
                 int sentTotal = 0;
