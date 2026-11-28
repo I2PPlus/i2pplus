@@ -273,7 +273,7 @@ class PacketDispatcher {
     private Worker[] newWorkers(int n) {
         Worker[] w = new Worker[n];
         for (int i = 0; i < n; i++) {
-            w[i] = new Worker(i, _queueCapacity, _processor, _context);
+            w[i] = new Worker(i, _queueCapacity, _processor);
         }
         for (Worker worker : w) {worker.start();}
         return w;
@@ -302,8 +302,6 @@ class PacketDispatcher {
         private final LinkedBlockingQueue<Entry> _queue;
         /** The processor handling the packets. */
         private final PacketProcessor _processor;
-        /** The app context. */
-        private final I2PAppContext _context;
         /**
          * Entries this worker has claimed from its queue and not finished
          * processing yet; raised in the claim block under the worker monitor,
@@ -331,14 +329,12 @@ class PacketDispatcher {
          * @param shard shard index, used only to name the thread
          * @param queueCapacity entries this shard holds before producers wait
          * @param processor how to process an entry, from the dispatcher
-         * @param context for the backlog and queue-depth rates, null in tests
          */
-        Worker(int shard, int queueCapacity, PacketProcessor processor, I2PAppContext context) {
+        Worker(int shard, int queueCapacity, PacketProcessor processor) {
             super("StrmPkt" + ThreadNames.idx(shard));
             setDaemon(true);
             _queue = new LinkedBlockingQueue<Entry>(queueCapacity);
             _processor = processor;
-            _context = context;
         }
 
         /**

@@ -30,7 +30,7 @@ public class DispatcherRetiredHandoffTest {
     public void testRetiredWorkerRefusesTheHandoff() {
         PacketDispatcher d = new PacketDispatcher(1, 100, null, null);
         try {
-            PacketDispatcher.Worker w = d.new Worker(0, 100, null, null);
+            PacketDispatcher.Worker w = d.new Worker(0, 100, null);
             assertTrue(w.offer(new PacketDispatcher.Entry(null, new ReleaseCountPacket("first"))));
             w.retire();
             assertFalse("retired worker still accepted an entry",
@@ -48,7 +48,7 @@ public class DispatcherRetiredHandoffTest {
     public void testRetireReleasesWhatIsAlreadyQueued() {
         PacketDispatcher d = new PacketDispatcher(1, 100, null, null);
         try {
-            PacketDispatcher.Worker w = d.new Worker(0, 100, null, null);
+            PacketDispatcher.Worker w = d.new Worker(0, 100, null);
             ReleaseCountPacket p1 = new ReleaseCountPacket("queued 1");
             ReleaseCountPacket p2 = new ReleaseCountPacket("queued 2");
             w.offer(new PacketDispatcher.Entry(null, p1));
@@ -85,11 +85,11 @@ public class DispatcherRetiredHandoffTest {
             final PacketDispatcher.Worker[] workers = readWorkers(d);
             // The state dispatch can observe mid-resize: the slot still names a
             // worker whose drain has already run.
-            PacketDispatcher.Worker dead = d.new Worker(0, 100, processor, null);
+            PacketDispatcher.Worker dead = d.new Worker(0, 100, processor);
             dead.retire();
             workers[0] = dead;
             // The replacement, installed a little later, as a resize would.
-            final PacketDispatcher.Worker live = d.new Worker(0, 100, processor, null);
+            final PacketDispatcher.Worker live = d.new Worker(0, 100, processor);
             live.start();
             Thread fixer = new Thread() {
                 @Override
