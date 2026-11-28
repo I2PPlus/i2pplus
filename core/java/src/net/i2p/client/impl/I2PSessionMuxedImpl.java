@@ -15,6 +15,8 @@ import net.i2p.data.Destination;
 import net.i2p.data.SessionKey;
 import net.i2p.data.SessionTag;
 import net.i2p.data.i2cp.MessagePayloadMessage;
+import net.i2p.stat.RateConstants;
+import net.i2p.stat.StatManager;
 import net.i2p.util.Log;
 
 import java.io.InputStream;
@@ -71,6 +73,63 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 class I2PSessionMuxedImpl extends I2PSessionImpl2 {
 
+    /**
+     * Stat name for the payload size as it leaves the session, in bytes - after
+     * compression when compression was applied, and the same size when it was
+     * not. Paired with {@link #STAT_TX_MSG_EXPANDED} so the ratio between them
+     * is the compression the session actually got.
+     */
+    static final String STAT_TX_MSG_COMPRESSED = "i2cp.tx.msgCompressed";
+
+    /**
+     * Stat name for the payload size the caller handed the session, in bytes,
+     * before any compression - the denominator of the ratio against
+     * {@link #STAT_TX_MSG_COMPRESSED}.
+     */
+    static final String STAT_TX_MSG_EXPANDED = "i2cp.tx.msgExpanded";
+
+    /**
+     * The rate periods the two outbound-size counters record on - the same three
+     * the other <code>i2cp.</code> counters in the ClientMessages group carry.
+     */
+    private static final long[] TX_RATES = {
+        RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR
+    };
+
+    /**
+     * Create the two outbound-message size counters this class writes.
+     * <p>
+     * {@link net.i2p.stat.StatManager#addRateData(String, long)} looks the name
+     * up and drops the write when no such stat was created, so a counter written
+     * without its registration reports nothing while looking like a working one.
+     * Both of these were in that state: every I2CP message reported its size,
+     * and neither number survived, so how much compression an application's
+     * traffic actually got was unmeasurable. The names are constants shared by
+     * the write sites and the registration so the two cannot drift apart.
+     * <p>
+     * They are declared as required, not plain: {@code createRateStat()} is a
+     * no-op unless <code>stat.full</code> is set, and its default is false, so a
+     * plain declaration would leave the same path dark on a stock router.
+     * <p>
+     * Registration runs from the session constructors rather than once at router
+     * startup, because these counters are written by the client library, which
+     * also runs in a standalone client's JVM where no router component exists to
+     * register anything. {@code createRequiredRateStat()} is a map probe, so
+     * running it on every session open costs nothing it has not already paid.
+     *
+     * @param stats the context's stat manager, never null
+     * @param periods the rate periods to record on, never null
+     * @since 0.9.72+
+     */
+    static void registerStats(StatManager stats, long[] periods) {
+        stats.createRequiredRateStat(STAT_TX_MSG_COMPRESSED,
+                                     "I2CP message payload size after compression (bytes)",
+                                     "ClientMessages", periods);
+        stats.createRequiredRateStat(STAT_TX_MSG_EXPANDED,
+                                     "I2CP message payload size before compression (bytes)",
+                                     "ClientMessages", periods);
+    }
+
     /** The demultiplexer delivering the messages. */
     private final I2PSessionDemultiplexer _demultiplexer;
 
@@ -92,6 +151,7 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
         super.setSessionListener(_demultiplexer);
         // discards the one in super(), sorry about that... (no it wasn't started yet)
         _availabilityNotifier = new MuxedAvailabilityNotifier();
+        registerStats(ctx.statManager(), TX_RATES);
     }
 
     /**
@@ -113,6 +173,7 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
         super.setSessionListener(_demultiplexer);
         // discards the one in super(), sorry about that... (no it wasn't started yet)
         _availabilityNotifier = new MuxedAvailabilityNotifier();
+        registerStats(primary.getContext().statManager(), TX_RATES);
     }
 
     /** Listen on all protocols and ports. */
@@ -330,8 +391,8 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
         setFromPort(payload, fromPort);
         setToPort(payload, toPort);
 
-        _context.statManager().addRateData("i2cp.tx.msgCompressed", payload.length);
-        _context.statManager().addRateData("i2cp.tx.msgExpanded", size);
+        _context.statManager().addRateData(STAT_TX_MSG_COMPRESSED, payload.length);
+        _context.statManager().addRateData(STAT_TX_MSG_EXPANDED, size);
         return payload;
     }
 
