@@ -72,8 +72,8 @@ class PartialPiece implements Comparable<PartialPiece> {
      */
     private volatile boolean _shared;
 
-    /** Offset of the next expected chunk start. */
-    private int off; // offset of next expected chunk start
+    /** Offset of the next expected chunk start, in bytes from the piece start. */
+    private int off;
 
     /**
      * BEP 47: sub-block granularity for requests that straddle padding files. A request is a run
@@ -87,8 +87,9 @@ class PartialPiece implements Comparable<PartialPiece> {
      * offsets out of step with the bitfields.
      *
      * <p>Next logical step: request the exact real sub-range of a straddling sub-block instead of
-     * the whole sub-block, eliminating the remaining pad waste entirely. Risk: arbitrary (non
-     * power-of-two) block sizes are rejected by a few strict peers; reward: up to ~2K average pad
+     * the whole sub-block, eliminating the remaining pad waste entirely. Risk: arbitrary
+     * (non power-of-two) block sizes are rejected by a few strict peers; reward: up to
+     * ~2K average pad
      * bytes per boundary, tens of MB on pad-heavy torrents. Would require a per-peer fallback to
      * sub-block requests.
      *
@@ -196,8 +197,8 @@ class PartialPiece implements Comparable<PartialPiece> {
      * wasting at most SUB_PARTSIZE bytes of padding.
      *
      * @param minOffset byte offset to start scanning at, rounded up to a sub-block boundary; the
-     *                  caller advances it past the last request (callers pass 0 or off + len, both already
-     *                  sub-block aligned) so in-flight chunks are not re-requested
+     *                  caller advances it past the last request, so in-flight chunks are not
+     *                  re-requested - callers pass 0 or off + len, both already sub-block aligned
      * @return the next Request for downloading or null if every chunk is present or claimed
      */
     public synchronized Request getRequest(int minOffset) {

@@ -31,8 +31,10 @@ import net.i2p.data.ByteArray;
  *   <li>type - The message type byte</li>
  *   <li>piece - The piece index (for have, request, piece, cancel)</li>
  *   <li>begin - The offset within the piece</li>
- *   <li>length - The data length</li>
+ *   <li>length - The transfer length the message declares</li>
  *   <li>data - Optional payload data</li>
+ *   <li>off, len - Where that payload starts in data, and how many bytes of it are
+ *       this message's</li>
  * </ul>
  *
  * @see PeerState
@@ -97,14 +99,25 @@ class Message {
      * The offset within the piece. Used for REQUEST, PIECE, CANCEL and REJECT messages.
      */
     final int begin;
-    /** The data length. */
+    /**
+     * The transfer length the message declares, in bytes: what a peer asked for, rejected
+     * or cancelled, or, for a PIECE whose data has not been loaded yet, what its loader
+     * must supply. A wire value, unlike {@link #len}.
+     */
     final int length;
 
     /** The data payload. Used for PIECE, BITFIELD and EXTENSION messages. */
     byte[] data;
-    /** The data offset. */
+    /**
+     * Index in {@link #data} where this message's payload starts. Every constructor passes
+     * zero; the field is there so a payload carved out of a larger buffer needs no copy.
+     */
     final int off;
-    /** The payload length. */
+    /**
+     * How many bytes of {@link #data} belong to this message, counting from {@link #off} -
+     * the payload actually written, and what the wire length prefix is recomputed from.
+     * Zero while the data has not been loaded yet, unlike {@link #length}.
+     */
     final int len;
 
     /** The loader for a deferred fetch of the message data. */

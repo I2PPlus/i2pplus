@@ -207,7 +207,11 @@ class PeerState implements DataLoader {
      * @since 0.9.71+
      */
     public static volatile int MAX_PARTSIZE = DEFAULT_MAX_PARTSIZE;
-    /** Sentinel meaning every piece rather than one. */
+    /**
+     * Stands for every piece at once, in the piece-number sets used to record that a
+     * peer has everything rather than listing all of them. Piece numbers are zero-based
+     * and never negative, so -1 cannot be mistaken for one.
+     */
     private static final Integer PIECE_ALL = Integer.valueOf(-1);
 
     /**
