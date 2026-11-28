@@ -167,8 +167,7 @@ public class EOFOnMatchInputStream extends PushbackInputStream implements ReadCo
     @Override
     public long skip(long n) throws IOException {
         long rv = 0;
-        int c;
-        while (rv < n && (c = read()) >= 0) {
+        while (rv < n && read() >= 0) {
             rv++;
         }
         return rv;

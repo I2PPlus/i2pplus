@@ -1231,7 +1231,7 @@ public class WebMail extends HttpServlet {
                 // Get through cache so we have the disk-only ones too
                 Folder<String> f = _mc.getFolder();
                 String[] uidls = _mc.getUIDLs();
-                int added = f.addElements(Arrays.asList(uidls));
+                f.addElements(Arrays.asList(uidls));
 
                 _so.notifyAll();
             }
