@@ -272,7 +272,7 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
         c = in.read();
         if ((c != 0x00) && (c != 0x02) && (c != 0x04)) throw new IOException("Invalid extended flags [" + c + "]");
 
-        c = in.read(); // ignore creator OS
+        in.read(); // ignore creator OS
 
         // handle flags...
         if (0 != (flags & (1 << 5))) {
