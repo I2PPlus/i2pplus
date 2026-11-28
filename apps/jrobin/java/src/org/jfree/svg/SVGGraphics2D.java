@@ -2743,16 +2743,12 @@ public final class SVGGraphics2D extends Graphics2D {
                     "[^\"]*?font-size:(\\d+)px[^\"]*\"");
 
     /**
-     * Regex pattern for merging adjacent {@code <text>} elements that are split across
-     * separate {@code <g>} groups by the font class extraction step. Matches the closing
-     * {@code </text></g>} followed by an opening {@code <g>} with an optional CSS class
-     * and/or {@code clip-path="url(#clip-2)"}, then another {@code <text>}. The replacement
-     * collapses the group boundary into a single {@code <text>} continuation.
+     * Matches one group boundary where the group before it ends with a {@code <text>}
+     * and the group after it opens with one - the boundary {@link #mergeAdjacentTexts(String)}
+     * considers collapsing. Group 1 is the second group's attributes.
      */
     private static final Pattern TEXT_MERGE_PATTERN =
-            Pattern.compile(
-                    "</text></g><g(?:\\s+class=\"[^\"]*\")?" +
-                    "(?:\\s+clip-path=\"url\\(#clip-2\\)\")?><text");
+            Pattern.compile("</text></g><g([^>]*)><text");
 
     /**
      * Detects the I2P console theme from the SVG content by matching background color RGB values.
@@ -3031,7 +3027,7 @@ public final class SVGGraphics2D extends Graphics2D {
                 .replace("  class=", " class=");
 
         // --- Merge adjacent text elements within clip groups ---
-        s = TEXT_MERGE_PATTERN.matcher(s).replaceAll("</text><text");
+        s = mergeAdjacentTexts(s);
 
         // --- Theme-specific CSS class overrides ---
         switch (theme) {
@@ -3075,6 +3071,43 @@ public final class SVGGraphics2D extends Graphics2D {
                 break;
         }
         return consolidateSvgGroups(s);
+    }
+
+    /**
+     * Collapses a group boundary between two adjacent text elements when doing so
+     * cannot change how either one renders.
+     *
+     * <p>The font-class step leaves each text in a group of its own, so a run of axis
+     * labels serialises as one group per label. Co-locating them is the size reduction;
+     * the boundary may only go when both groups carry the same attributes, because the
+     * group is what supplies the font class and the clip path. Dropping a second group
+     * that differs restyles the text inside it, and dropping its clip path lets text the
+     * plot clips escape the plot - the previous step did exactly that, unconditionally,
+     * while also moving any later children of the second group into the first.
+     *
+     * <p>Measured on a rendered graph before this change: the step never fired at all.
+     * Its pattern pinned the clip reference to {@code #clip-2} while the text groups
+     * carry {@code #clip-1}, so the reduction it claimed was not happening and the
+     * restyling risk was latent rather than live. Both halves are pinned by tests.
+     *
+     * @param svg the document to rewrite
+     * @return the document with safe boundaries collapsed; every text element of the
+     *         input survives, and no attribute is dropped from a group that keeps one
+     */
+    static String mergeAdjacentTexts(String svg) {
+        Matcher m = TEXT_MERGE_PATTERN.matcher(svg);
+        StringBuffer out = new StringBuffer(svg.length());
+        while (m.find()) {
+            String nextAttrs = m.group(1);
+            int open = svg.lastIndexOf("<g", m.start());
+            int openEnd = open < 0 ? -1 : svg.indexOf('>', open);
+            String currentAttrs = openEnd < 0 ? null : svg.substring(open + 2, openEnd);
+            String replacement = currentAttrs != null && currentAttrs.equals(nextAttrs)
+                                 ? "</text><text" : m.group(0);
+            m.appendReplacement(out, Matcher.quoteReplacement(replacement));
+        }
+        m.appendTail(out);
+        return out.toString();
     }
 
     /**
