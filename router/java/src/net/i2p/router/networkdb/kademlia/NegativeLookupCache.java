@@ -96,18 +96,35 @@ class NegativeLookupCache {
 
     /**
      * Pure decision: TTL for a key that has tripped the threshold
-     * {@code tripGeneration} times (1 = first trip). Doubling backoff,
-     * capped at {@link #ENTRY_TTL_MAX_MS} (overridable max applies at call).
+     * {@code tripGeneration} times (1 = first trip), using the built-in base
+     * and cap. Doubling backoff, capped at {@link #ENTRY_TTL_MAX_MS}.
      *
      * @param tripGeneration how many times this key has tripped (0 or less treated as 1)
      * @return hold time in ms for the first-trip base of 30s
      * @since 0.9.71+
      */
     static long entryTtlMs(int tripGeneration) {
+        return entryTtlMs(tripGeneration, ENTRY_TTL_BASE_MS, ENTRY_TTL_MAX_MS);
+    }
+
+    /**
+     * Pure decision: the same doubling backoff from a configured base and cap,
+     * so {@code netdb.negativeCache.entryTtlBase} and
+     * {@code netdb.negativeCache.entryTtlMax} both take effect. The shift is
+     * capped at {@link #MAX_TTL_SHIFT}, so the highest TTL reachable is
+     * {@code baseMs << MAX_TTL_SHIFT}, and the result is then held down by
+     * {@code maxMs}.
+     *
+     * @param tripGeneration how many times this key has tripped (0 or less treated as 1)
+     * @param baseMs first-trip hold in ms, from the config property
+     * @param maxMs cap on the backoff in ms, from the config property
+     * @return hold time in ms
+     */
+    static long entryTtlMs(int tripGeneration, long baseMs, long maxMs) {
         int gen = Math.max(tripGeneration, 1);
         int shift = Math.min(gen - 1, MAX_TTL_SHIFT);
-        long ttl = ENTRY_TTL_BASE_MS << shift;
-        return Math.min(ttl, ENTRY_TTL_MAX_MS);
+        long ttl = baseMs << shift;
+        return Math.min(ttl, maxMs);
     }
 
     /**
@@ -342,8 +359,20 @@ class NegativeLookupCache {
             return;
         }
         int gen = tripCount.merge(h, 1, Integer::sum);
-        long ttl = Math.min(entryTtlMs(gen), entryTtlMax);
+        long ttl = entryTtlMsConfigured(gen);
         cachedUntil.put(h, now + ttl);
+    }
+
+    /**
+     * This cache's TTL for one trip generation, from the configured base and
+     * cap. Package-visible so a test can prove the two config properties
+     * actually reach the backoff decision instead of being read and dropped.
+     *
+     * @param tripGeneration how many times this key has tripped (0 or less treated as 1)
+     * @return hold time in ms
+     */
+    long entryTtlMsConfigured(int tripGeneration) {
+        return entryTtlMs(tripGeneration, entryTtlBase, entryTtlMax);
     }
 
     /** Timer event expiring the cached lookups. */

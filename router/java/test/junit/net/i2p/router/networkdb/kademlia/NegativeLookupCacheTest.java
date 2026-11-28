@@ -241,6 +241,60 @@ public class NegativeLookupCacheTest {
     }
 
     @Test
+    public void testEntryTtlUsesConfiguredBaseAndCap() {
+        long base = 10 * 1000L;
+        long cap = 10 * 60 * 1000L;
+        assertEquals("Configured base is the first-trip hold",
+                     base,
+                     NegativeLookupCache.entryTtlMs(1, base, cap));
+        assertEquals("Configured base doubles like the built-in one",
+                     base * 2,
+                     NegativeLookupCache.entryTtlMs(2, base, cap));
+        assertEquals("A raised cap is not clamped by the built-in max",
+                     base << 3,
+                     NegativeLookupCache.entryTtlMs(4, base, cap));
+        assertEquals("A lowered cap still clamps",
+                     1000L,
+                     NegativeLookupCache.entryTtlMs(4, base, 1000L));
+    }
+
+    @Test
+    public void testConfiguredPropertiesReachTheBackoff() {
+        String baseKey = "netdb.negativeCache.entryTtlBase";
+        String capKey = "netdb.negativeCache.entryTtlMax";
+        String oldBase = System.getProperty(baseKey);
+        String oldCap = System.getProperty(capKey);
+        try {
+            System.setProperty(baseKey, "10000");
+            System.setProperty(capKey, "600000");
+            NegativeLookupCache cache = new NegativeLookupCache(_context);
+            assertEquals("entryTtlBase must drive the first-trip hold",
+                         10 * 1000L,
+                         cache.entryTtlMsConfigured(1));
+            assertEquals("entryTtlMax must lift the cap above the built-in 2m",
+                         10 * 1000L << 3,
+                         cache.entryTtlMsConfigured(4));
+        } finally {
+            restore(baseKey, oldBase);
+            restore(capKey, oldCap);
+        }
+    }
+
+    /**
+     * Put a system property back the way the test found it.
+     *
+     * @param key the property name
+     * @param old the value to restore, or null when it was unset
+     */
+    private static void restore(String key, String old) {
+        if (old == null) {
+            System.clearProperty(key);
+        } else {
+            System.setProperty(key, old);
+        }
+    }
+
+    @Test
     public void testIsEntryExpiredBoundary() {
         long until = 1_700_000_000_000L;
         assertFalse("One ms before until must not expire",
