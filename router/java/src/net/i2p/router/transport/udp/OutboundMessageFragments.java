@@ -354,8 +354,13 @@ class OutboundMessageFragments {
          *         as {@code addIfAbsent()} did before.
          */
         boolean add(T peer) {
-            _toRemove.remove(peer);
             synchronized (this) {
+                // Inside the monitor, not before it: flushRemovals() reads
+                // _toRemove twice, once to decide whether there is anything
+                // to do and once to apply it, so an un-queue that lands
+                // between the two is dropped along with the entry it was
+                // meant to cancel and the peer stays out of the pool.
+                _toRemove.remove(peer);
                 if (!_members.add(peer)) {
                     return false;
                 }
@@ -428,6 +433,18 @@ class OutboundMessageFragments {
         }
 
         /**
+         * The queued removals, applied to both views by the next
+         * {@link #flushRemovals()}.
+         *
+         * <p>Package-visible test seam, null in production: {@link
+         * #flushRemovals()} calls it between the two steps that read the queued
+         * set, which is the only window in which an un-queue can be applied
+         * half-way through a flush. Without it that window is a few instructions
+         * wide and no test can stop inside it.
+         */
+        static Runnable _betweenFlushStepsForTest;
+
+        /**
          * Apply every queued removal to both views and empty the queue; a
          * no-op when nothing is queued, so callers may call it on every
          * drain path without checking first. The ordered array is copied
@@ -442,6 +459,10 @@ class OutboundMessageFragments {
             }
             synchronized (this) {
                 _peers.removeAll(_toRemove);
+                Runnable between = _betweenFlushStepsForTest;
+                if (between != null) {
+                    between.run();
+                }
                 _members.removeAll(_toRemove);
                 _toRemove.clear();
             }
