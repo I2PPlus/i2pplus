@@ -764,10 +764,8 @@ public class IterativeSearchJob extends FloodSearchJob {
         if (_log.shouldInfo())
             _log.info("New IterativeSearch for " + (_isLease ? "LeaseSet" : "Router") +
                       " " + keyText() + " -> Routing key: [" + _rkey.toShortBase64() + "]" +
-                      " * Timeout: " + DataHelper.formatDuration(_timeoutMs) +
-                      "\n* DbId: " + _facade +
-                      PeerLogFormatter.peerList(_toTry, "Querying", _toTry.size(),
-                                                MAX_LOGGED_PEERS));
+                      " * Timeout: " + DataHelper.formatDuration(_timeoutMs) + " * DbId: " + _facade +
+                      PeerLogFormatter.peerList(_toTry, "Querying", _toTry.size(), MAX_LOGGED_PEERS));
         retry();
     }
 
