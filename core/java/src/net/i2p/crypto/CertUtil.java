@@ -758,7 +758,7 @@ public final class CertUtil {
                 }
             }
         }
-        System.out.println("Found " + good + " valid certs, " + bad + " bad certs, " + soon + " about to expire certs");
+        System.out.println("Found " + good + " valid certs, " + bad + " bad certs, " + soon + " soon to expire certs");
         return (bad > 0) ? 1 : 0;
     }
 }
