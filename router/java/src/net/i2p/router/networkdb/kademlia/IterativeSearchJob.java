@@ -749,7 +749,7 @@ public class IterativeSearchJob extends FloodSearchJob {
         }
         if (empty) {
             if (_log.shouldWarn()) {
-                _log.warn("IterativeSearch for " + (_isLease ? "LeaseSet" : "Router") +
+                _log.warn("Search for " + (_isLease ? "LeaseSet" : "Router") +
                           " [" + _key.toShortBase64() + "] failed -> No Floodfills in NetDb");
             }
             failed(); // No floodfill peers, fail
@@ -762,10 +762,12 @@ public class IterativeSearchJob extends FloodSearchJob {
         Job onTimeout = new FloodOnlyLookupTimeoutJob(getContext(), this);
         _out = getContext().messageRegistry().registerPending(replySelector, onReply, onTimeout);
         if (_log.shouldInfo())
-            _log.info("New IterativeSearch for " + (_isLease ? "LeaseSet" : "Router") +
+            _log.info("New Search for " + (_isLease ? "LeaseSet" : "Router") +
                       " " + keyText() + " -> Routing key: [" + _rkey.toShortBase64() + "]" +
-                      " * Timeout: " + DataHelper.formatDuration(_timeoutMs) + " * DbId: " + _facade +
-                      PeerLogFormatter.peerList(_toTry, "Querying", _toTry.size(), MAX_LOGGED_PEERS));
+                      " * Timeout: " + DataHelper.formatDuration(_timeoutMs) +
+                      "\n* DbId: " + _facade +
+                      PeerLogFormatter.peerList(_toTry, "Querying", _toTry.size(),
+                                                MAX_LOGGED_PEERS));
         retry();
     }
 
@@ -870,7 +872,7 @@ public class IterativeSearchJob extends FloodSearchJob {
             addClosest(_toTry, _facade.getAllRouters(), _rkey, getContext().routerHash(), _key,
                        2 * _totalSearchLimit);
             if (_log.shouldInfo()) {
-                _log.info("IterativeSearch for " + (_isLease ? "LeaseSet" : "Router") +
+                _log.info("Search for " + (_isLease ? "LeaseSet" : "Router") +
                           " " + keyText() + " widening candidates -> Beta confirmation");
             }
         }
@@ -1181,13 +1183,15 @@ public class IterativeSearchJob extends FloodSearchJob {
             // false on 63% of the 153k queries in two log files.
             int attempt = _queriesSent + 1;
             StringBuilder buf = new StringBuilder(96);
-            buf.append("IterativeSearch for ").append(_isLease ? "LeaseSet " : "Router ")
-               .append(keyText()).append(" -> Attempt ").append(attempt)
-               .append(" to [").append(peer.toShortBase64()).append(']');
-            if (isDirect || isClientReplyTunnel) {
-                buf.append("\n* Direct: ").append(isDirect)
-                   .append(" * Client reply tunnel: ").append(isClientReplyTunnel);
+            buf.append("Search");
+            if (isDirect) {
+                buf.append(" (direct)");
             }
+            buf.append(" for ")
+               .append(_isLease ? "LeaseSet" : "Router")
+               .append(isClientReplyTunnel ? " (via client reply tunnel)" : "")
+               .append(' ').append(keyText()).append(" -> Attempt ").append(attempt)
+               .append(" to [").append(peer.toShortBase64()).append(']');
             _log.debug(buf.toString());
         }
         if (peer != null) {_sentTime.put(peer, Long.valueOf(now));}
@@ -1366,8 +1370,8 @@ public class IterativeSearchJob extends FloodSearchJob {
             if (timedOut) {
                 getContext().profileManager().dbLookupFailed(peer);
                 if (_log.shouldInfo()) {
-                    if (peer != null) {_log.info("IterativeSearch for " + (isKnown ? "known " : "") + "Router [" + peer.toShortBase64() + "] timed out");}
-                    else {_log.info("IterativeSearch for Router [unknown] timed out");}
+                    if (peer != null) {_log.info("Search for " + (isKnown ? "known " : "") + "Router [" + peer.toShortBase64() + "] timed out");}
+                    else {_log.info("Search for Router [unknown] timed out");}
                 }
             } else {
                 // The peer answered and simply did not have the key - the
@@ -1624,7 +1628,7 @@ public class IterativeSearchJob extends FloodSearchJob {
         boolean neverQueried = _queriesSent == 0;
         if (neverQueried ? _log.shouldWarn() : _log.shouldInfo()) {
             long timeRemaining = _expiration - getContext().clock().now();
-            String msg = "IterativeSearch for " + (_isLease ? "LeaseSet" : "Router") +
+            String msg = "Search for " + (_isLease ? "LeaseSet" : "Router") +
                          " " + keyText() + " failed -> " +
                          failureReason(_giveUpReason, neverQueried) +
                          "\n* Peers queried: " + tries +
@@ -1789,7 +1793,7 @@ public class IterativeSearchJob extends FloodSearchJob {
         }
         long time = System.currentTimeMillis() - _created;
         if (_log.shouldInfo()) {
-            _log.info("IterativeSearch for " + (_isLease ? "LeaseSet" : "Router") +
+            _log.info("Search for " + (_isLease ? "LeaseSet" : "Router") +
                       " " + keyText() + " succeeded -> Peers queried: " + tries +
                       " * Elapsed: " + DataHelper.formatDuration(time));
         }

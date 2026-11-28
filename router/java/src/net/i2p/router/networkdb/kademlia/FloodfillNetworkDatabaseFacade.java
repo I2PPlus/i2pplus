@@ -1003,7 +1003,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             // independently; complete() is a safe no-op if the key is not
             // in the map or if it removes the floodfill search's entry.
             if (_log.shouldDebug()) {
-                _log.debug("Client IterativeSearch for key [" + key.toShortBase32() + "] -> " + this);
+                _log.debug("Client Search for key [" + key.toShortBase32() + "] -> " + this);
             }
             IterativeSearchJob job = new IterativeSearchJob(_context, this, key, onFindJob, onFailedLookupJob,
                                                             (int)timeoutMs, isLease, fromLocalDest);
@@ -1025,13 +1025,13 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
 
             if (isNew) {
                 if (_log.shouldDebug()) {
-                    _log.debug("New IterativeSearch via Exploratory tunnels" +
+                    _log.debug("New Search via Exploratory tunnels" +
                                " for key [" + key.toShortBase32() + "] -> " + this);
                 }
                 _context.jobQueue().addJob(searchJob);
             } else {
                 if (_log.shouldDebug()) {
-                    _log.debug("Deferred IterativeSearch for [" + key.toShortBase32() + "] with " +
+                    _log.debug("Deferred Search for [" + key.toShortBase32() + "] with " +
                                _activeFloodQueries.size() + " in progress...");
                 }
                 searchJob.addDeferred(onFindJob, onFailedLookupJob, timeoutMs, isLease);
