@@ -268,7 +268,6 @@ public class LogsHelper extends HelperBase {
      */
     public String getLogs() {
         String str = formatMessages(_context.logManager().getBuffer().getMostRecentMessages());
-        boolean embedApps = _context.getBooleanProperty(CSSHelper.PROP_EMBED_APPS);
         return "<p>" + _t("File location") + ": <a href=/router.log target=_blank>" +
                 DataHelper.escapeHTML(_context.logManager().currentFile()) + "</a></p>" +
                 "<span id=refreshPeriod style=display:none title=\"" + _t("Refresh interval (seconds)") +
@@ -378,7 +377,6 @@ public class LogsHelper extends HelperBase {
     public Object[] getServiceLogs(StringBuilder obuf) {
         File f = ConfigServiceHandler.wrapperLogFile(_context);
         String str;
-        boolean embedApps = _context.getBooleanProperty(CSSHelper.PROP_EMBED_APPS);
         long flastMod = f.lastModified();
         long lastMod = 0;
         long toSkip = 0;

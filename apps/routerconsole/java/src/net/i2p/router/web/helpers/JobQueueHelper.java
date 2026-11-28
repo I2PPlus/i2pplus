@@ -36,8 +36,6 @@ public class JobQueueHelper extends HelperBase {
 
     /** Most jobs listed on the page. */
     private static int MAX_JOBS_DISPLAYED = 30;
-    /** Window counting a job as recently run. */
-    private static final long RECENT_WINDOW_MS = (long) 10 * 1000;
 
     /** URI of the request being rendered. */
     private String _requestURI;
@@ -466,8 +464,6 @@ public class JobQueueHelper extends HelperBase {
         if (recentMode) {
             JobStats.enableRecentTracking();
         }
-        long now = System.currentTimeMillis();
-        long cutoff = now - RECENT_WINDOW_MS;
 
         buf.append("<div class=widescroll>\n");
         buf.append("<h3 id=totaljobstats>")

@@ -54,8 +54,6 @@ final class NetDbComparators {
             boolean nameR =  _context.namingService().reverseLookup(keyR) != null && !isMetaR;
             boolean publishedL = _context.clientManager().shouldPublishLeaseSet(keyL) && !isMetaL;
             boolean publishedR = _context.clientManager().shouldPublishLeaseSet(keyR) && !isMetaR;
-            boolean localL = _context.clientManager().isLocal(keyL) && !isMetaL;
-            boolean localR = _context.clientManager().isLocal(keyR) && !isMetaR;
             if (publishedL && !publishedR) return -1;
             if (publishedR && !publishedL) return 1;
             if (nicknameL && !nicknameR) return -1;

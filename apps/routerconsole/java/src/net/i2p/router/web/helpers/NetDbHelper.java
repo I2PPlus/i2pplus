@@ -562,9 +562,6 @@ public class NetDbHelper extends FormHandler {
         StringBuilder buf = new StringBuilder(1024);
         buf.append("<div class=confignav id=confignav>");
         int tab = getTab();
-        boolean isActive = false;
-        boolean isRendered = false;
-        if (isRendered) {return "";}
         for (int i = 0; i < titles.length; i++) {
             if (i == 1) {buf.append("<span class=tab><a href=/netdbmap>").append(_t("Router Map")).append("</a></span>\n");}
             if (i == 2 && tab != 2) {continue;} // can't nav to lookup
@@ -582,7 +579,6 @@ public class NetDbHelper extends FormHandler {
         buf.append("</div>\n");
         //_out.append(buf);
         //_out.flush();
-        isRendered = true;
         return buf.toString();
     }
 

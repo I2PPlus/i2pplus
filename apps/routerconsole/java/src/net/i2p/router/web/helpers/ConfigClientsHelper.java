@@ -397,7 +397,6 @@ public class ConfigClientsHelper extends HelperBase {
                 desc.append("</td></tr>\n");
                 s = stripHTML(appProps, "author");
                 if (s != null) {
-                    String[] authors = DataHelper.split(s, "[,; \r\n\t]");
                     Matcher m = VALID_EMAIL_ADDRESS_REGEX.matcher(s);
                     String author = m.find() ? m.group() : null;
                     desc.append("<tr><td class=right><b>").append(_t("Author")).append("</b></td><td class=left>");

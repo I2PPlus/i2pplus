@@ -1528,7 +1528,6 @@ public class SidebarHelper extends HelperBase {
         boolean avail = updateAvailable();
         boolean unsignedAvail = unsignedUpdateAvailable();
         boolean devSU3Avail = devSU3UpdateAvailable();
-        String constraint = avail ? NewsHelper.updateConstraint() : null;
         String unsignedConstraint = unsignedAvail ? NewsHelper.unsignedUpdateConstraint() : null;
         String devSU3Constraint = devSU3Avail ? NewsHelper.devSU3UpdateConstraint() : null;
         if (unsignedAvail && unsignedConstraint != null &&
@@ -1843,7 +1842,6 @@ public class SidebarHelper extends HelperBase {
             }
         }
 
-        String theme = _context.getProperty(CSSHelper.PROP_THEME_NAME, CSSHelper.DEFAULT_THEME);
         String imgPath = CSSHelper.BASE_THEME_PATH + "/images/";
 
         StringBuilder buf = new StringBuilder(2048);

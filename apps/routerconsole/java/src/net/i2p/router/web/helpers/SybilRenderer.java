@@ -28,7 +28,6 @@ import net.i2p.data.router.RouterInfo;
 import net.i2p.data.router.RouterKeyGenerator;
 import net.i2p.kademlia.XORComparator;
 import net.i2p.router.RouterContext;
-import net.i2p.router.crypto.FamilyKeyCrypto;
 import net.i2p.router.peermanager.DBHistory;
 import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.router.sybil.Analysis;
@@ -1142,8 +1141,6 @@ public class SybilRenderer {
            .append("</h3><div class=\"sybil_container\">\n");
         List<String> foo = new ArrayList<>(map.keySet());
         Collections.sort(foo, new FoofComparator(map));
-        FamilyKeyCrypto fkc = _context.router().getFamilyKeyCrypto();
-        String ourFamily = fkc != null ? fkc.getOurFamilyName() : null;
         boolean found = false;
         for (String s : foo) {
             List<RouterInfo> list = map.get(s);

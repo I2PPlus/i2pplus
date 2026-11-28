@@ -451,9 +451,6 @@ public class TuningHelper extends HelperBase {
 
         // Defer health rings for 5 min after restart so all have consistent data
         boolean deferRings = _context.router().getUptime() < 5 * 60 * 1000;
-        if (deferRings) {
-            healthScore = Double.NaN;
-        }
 
         // Subsystem ring chart dashboard
         buf.append(renderSubsystemRings(tuner, deferRings));

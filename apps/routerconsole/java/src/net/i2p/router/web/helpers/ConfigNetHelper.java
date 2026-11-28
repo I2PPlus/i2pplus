@@ -1,7 +1,5 @@
 package net.i2p.router.web.helpers;
 
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import net.i2p.data.DataHelper;
@@ -273,19 +271,12 @@ public class ConfigNetHelper extends HelperBase {
             if (ip == null || !TransportUtil.isPubliclyRoutable(ip, true))
                 iter.remove();
         }
-        Set<String> configs;
         String cs = getUdphostname();
-        if (cs.length() <= 0) {
-            configs = Collections.emptySet();
-        } else {
-            configs = new HashSet<>(4);
+        if (cs.length() > 0) {
             String[] ca = DataHelper.split(cs, "[,; \r\n\t]");
             for (int i = 0; i < ca.length; i++) {
                 String c = ca[i];
-                if (!c.isEmpty()) {
-                    configs.add(c);
-                    addrs.add(c);
-                }
+                if (!c.isEmpty()) {addrs.add(c);}
             }
         }
         StringBuilder buf = new StringBuilder(128);

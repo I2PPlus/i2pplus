@@ -431,7 +431,7 @@ class NetDbRenderer {
         List<RouterInfo> routersToRender = allRouters.subList(fromIndex, toIndex);
 
         // Reverse DNS lookups
-        Map<String, String> rdnsLookups = precacheReverseDNSLookups(routersToRender);
+        precacheReverseDNSLookups(routersToRender);
 
         renderRoutersToWriter(routersToRender, out, false, page, pageSize, false);
 
@@ -928,7 +928,6 @@ class NetDbRenderer {
             out.append(buf);
             return;
         }
-        boolean noLeasesets = _context.netDb().getLeases().size() <= 0;
         Hash ourRKey;
         DecimalFormat fmt;
         NetworkDatabaseFacade netdb;
@@ -1159,8 +1158,6 @@ class NetDbRenderer {
         if (type == DatabaseEntry.KEY_TYPE_LEASESET) {
             exp = ls.getLatestLeaseDate() - now;
         } else {
-            LeaseSet2 ls2 = (LeaseSet2) ls;
-            long pub = now - ls2.getPublished();
             exp = ((LeaseSet2)ls).getExpires() - now;
         }
         boolean isExpired = exp <= 0;
@@ -1300,7 +1297,6 @@ class NetDbRenderer {
         if (ls.getLeaseCount() > 0) {
             buf.append("<tr").append(debug ? " class=debugMode" : "").append(">")
                .append("<td colspan=2>\n<ul class=netdb_leases>\n");
-            boolean isMeta = ls.getType() == DatabaseEntry.KEY_TYPE_META_LS2;
             for (int i = 0; i < ls.getLeaseCount(); i++) {
                 Lease lease = ls.getLease(i);
                 long exl = lease.getEndTime() - now;
@@ -2076,8 +2072,6 @@ class NetDbRenderer {
                     listAddresses.sort(new NetDbComparators.RAComparator());
                 }
 
-                boolean hasSSU = false;
-                boolean hasNTCP = false;
                 int introducerTagCount = 0;
 
                 // Flag to determine if any address has displayable content
@@ -2086,9 +2080,6 @@ class NetDbRenderer {
 
                 for (RouterAddress address : listAddresses) {
                     String transportStyle = address.getTransportStyle();
-                    if (transportStyle.startsWith("SSU")) hasSSU = true;
-                    if (transportStyle.startsWith("NTCP")) hasNTCP = true;
-
                     Map<Object, Object> optionsMap = address.getOptionsMap();
                     StringBuilder details = new StringBuilder();
                     String host = null;
@@ -2160,18 +2151,15 @@ class NetDbRenderer {
         } else {
             buf.append("<tr><td><b>").append(_t("Introducers")).append(":</b></td><td colspan=2 class=netdb_introducers><ul>");
 
-            boolean hasIntroducer = false;
             Collection<RouterAddress> addresses = routerInfo.getAddresses();
             List<RouterAddress> listAddresses = new ArrayList<>(addresses);
             for (RouterAddress address : listAddresses) {
                 if (address == null) continue;
-                String transportStyle = address.getTransportStyle();
                 Map<Object, Object> optionsMap = address.getOptionsMap();
                 for (Map.Entry<Object, Object> entry : optionsMap.entrySet()) {
                     String key = (String) entry.getKey();
                     String value = (String) entry.getValue();
                     if (key != null && key.startsWith("ih")) {
-                        hasIntroducer = true;
                         // option value is attacker-controlled base64; getHash
                         // returns null for malformed values
                         Hash ihost = ConvertToHash.getHash(value);

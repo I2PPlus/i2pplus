@@ -101,7 +101,6 @@ public class NavHelper implements NavService, ClientApp {
             String tip = app.desc;
             buf.setLength(0);
             getClientAppImg(buf, appName, app.icon);
-            I2PAppContext ctx = I2PAppContext.getGlobalContext();
             buf.append(" <a target=_blank href=\"").append(path.replace(" ", "%20")).append("\"");
             if (tip != null) {
                 buf.append(" title=\"").append(tip).append("\"");

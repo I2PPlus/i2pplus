@@ -133,29 +133,24 @@ public class PeerHelper extends HelperBase {
 
         SortedMap<String, Transport> transports = _context.commSystem().getTransports();
         if (_transport != null) {
-            boolean rendered = false;
             for (Map.Entry<String, Transport> e : transports.entrySet()) {
                 String style = e.getKey();
                 Transport t = e.getValue();
                 if (style.equals("NTCP") && "ntcp".equals(_transport)) {
                     NTCPTransport nt = (NTCPTransport) t;
                     render(nt, out, sortFlags);
-                    rendered = true;
                     break;
                 } else if (style.contains("SSU") && "ssu".equals(_transport)) {
                     UDPTransport ut = (UDPTransport) t;
                     render(ut, out, urlBase, sortFlags, false);
-                    rendered = true;
                     break;
                 } else if (style.contains("SSU") && "ssudebug".equals(_transport)) {
                     UDPTransport ut = (UDPTransport) t;
                     render(ut, out, urlBase, sortFlags, true);
-                    rendered = true;
                     break;
                 } else if (style.equals(_transport)) {
                     // pluggable (none yet)
                     t.renderStatusHTML(out, urlBase, sortFlags);
-                    rendered = true;
                     break;
                 }
             }
@@ -374,8 +369,6 @@ public class PeerHelper extends HelperBase {
         int[] totalBw = new int[4];
         int totalLimits = 0;
         int rows = 0;
-        String bw = "";
-        String bwCounter = " <span class=bw>" + bw + "&thinsp;<span class=kbps>KB/s</span></span>";
 
         SortedMap<String, Transport> transports = _context.commSystem().getTransports();
         for (Map.Entry<String, Transport> e : transports.entrySet()) {
@@ -401,7 +394,6 @@ public class PeerHelper extends HelperBase {
 
                     int cnt = counts[idx + i];
                     int bps = bandwidths[i];
-                    bw = formatKBps(bps);
 
                     buf.append("<td");
                     if (cnt <= 0 && ((i & 0x01) != 0 || warnInbound)) {buf.append(" class=notice");}
@@ -434,8 +426,6 @@ public class PeerHelper extends HelperBase {
                 if (!showIPv6 && i >= 3) { break; }
 
                 int cnt = totals[i];
-                int bps = totalBw[i - 1];
-                bw = formatKBps(bps);
 
                 buf.append("</td><td");
                 if (cnt <= 0 && ((i & 0x01) == 0 || warnInbound)) {buf.append(" class=warn");}
@@ -444,7 +434,6 @@ public class PeerHelper extends HelperBase {
 
             int totalConnections = 0;
             for (int i = 1; i < 5; i++) {totalConnections += totals[i];}
-            int percentTotal = totalLimits > 0 ? (int) Math.min(100L * totalConnections / totalLimits, 100) : 0;
 
             buf.append("</td><td>").append(totalConnections).append(" / ").append(totalLimits).append("</td></tr></tfoot>\n");
         }

@@ -1057,7 +1057,6 @@ public class RouterConsoleRunner implements RouterApp {
         if (enable) {
             Map<String, String> userpw = mgr.getMD5(PROP_CONSOLE_PW);
             if (userpw.isEmpty()) {
-                enable = false;
                 ctx.router().saveConfig(PROP_PW_ENABLE, "false");
             } else {
                 HashLoginService realm = new CustomHashLoginService(JETTY_REALM, context.getContextPath(),

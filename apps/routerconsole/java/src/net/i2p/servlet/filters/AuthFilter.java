@@ -37,8 +37,6 @@ public class AuthFilter implements Filter {
     private static final String PROP_AUTH_TYPE = "routerconsole.auth.type";
     /** Auth type value selecting the custom handler. */
     private static final String AUTH_TYPE_CUSTOM = "custom";
-    /** Config key enabling the password authentication. */
-    private static final String PROP_PW_ENABLE = "routerconsole.auth.enable";
     /** Config key requiring the login for every page. */
     private static final String PROP_ENFORCE_LOGIN = "routerconsole.enforceLogin";
     /** Theme used when none is configured. */
@@ -81,7 +79,6 @@ public class AuthFilter implements Filter {
         RouterContext ctx = (RouterContext) I2PAppContext.getGlobalContext();
 
         String authType = ctx.getProperty(PROP_AUTH_TYPE, AUTH_TYPE_CUSTOM);
-        boolean authEnabled = ctx.getBooleanPropertyDefaultTrue(PROP_PW_ENABLE);
 
         boolean hasPasswords = hasAnyPassword(ctx);
         boolean enforceLogin = !ctx.getBooleanPropertyDefaultTrue(PROP_ENFORCE_LOGIN);

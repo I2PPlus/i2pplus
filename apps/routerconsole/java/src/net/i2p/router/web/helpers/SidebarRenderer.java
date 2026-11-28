@@ -116,7 +116,6 @@ class SidebarRenderer {
      */
     public void renderSummaryHTML(Writer out) throws IOException {
         String requestURI = _helper.getRequestURI();
-        boolean isXHR = requestURI.contains("/xhr1");
         String page = requestURI.replace("/", "").replace(".jsp", "");
         List<String> sections = _helper.getSummaryBarSections(page);
         boolean isUnified = _helper.unifiedSidebar();
@@ -879,7 +878,6 @@ class SidebarRenderer {
         RouterContext ctx = ContextHelper.getContext(null);
         boolean shuttingDown = ConfigRestartBean.isShuttingDown(ctx);
         boolean restarting = ConfigRestartBean.isRestarting(ctx);
-        long timeRemaining = ctx.router().getShutdownTimeRemaining();
         buf.append("<h4 id=sb_status><span id=sb_netstatus class=\"sb_netstatus volatile ");
         switch (reachability.getState()) {
             case VMCOMM:
@@ -928,7 +926,6 @@ class SidebarRenderer {
         }
 
         String buildStatus = _helper.getTunnelStatus();
-        String buildStatusText = buildStatus;
         String buildStatusTooltip = "";
         String buildStatusClass = "tunnelBuildStatus";
         int partTunnels = _helper.getParticipatingTunnels();
@@ -936,39 +933,30 @@ class SidebarRenderer {
         if (buildStatus.startsWith("[starting]")) {
             buildStatusClass += " starting";
             buildStatusTooltip = _t("Declining transit tunnel requests during startup phase");
-            buildStatusText = buildStatusText.substring(buildStatusText.indexOf(']') + 1).trim();
         } else if (buildStatus.startsWith("[shutdown]")) {
             buildStatusClass += " rejecting";
             buildStatusTooltip = _t("Declining transit tunnel requests as we are shutting down");
-            buildStatusText = buildStatusText.substring(buildStatusText.indexOf(']') + 1).trim();
         } else if (buildStatus.startsWith("[rejecting/overload]")) {
             buildStatusClass += " rejecting";
             buildStatusTooltip = _t("Router or network performance is impeding the building of transit tunnels");
-            buildStatusText = buildStatusText.substring(buildStatusText.indexOf(']') + 1).trim();
         } else if (buildStatus.startsWith("[rejecting/max]")) {
             buildStatusClass += " rejecting";
             buildStatusTooltip = _t("Router is currently hosting the configured maximum number of transit tunnels");
-            buildStatusText = buildStatusText.substring(buildStatusText.indexOf(']') + 1).trim();
         } else if (buildStatus.startsWith("[rejecting/bandwidth]")) {
             buildStatusClass += " rejecting";
             buildStatusTooltip = _t("Router is currently using the configured maximum share bandwidth");
-            buildStatusText = buildStatusText.substring(buildStatusText.indexOf(']') + 1).trim();
         } else if (buildStatus.startsWith("[ready]") || buildStatus.startsWith("[accepting]")  && partTunnels <= 0) {
             buildStatusClass += " accepting";
             buildStatusTooltip = _t("Router is ready to build participating tunnels");
-            buildStatusText = buildStatusText.substring(buildStatusText.indexOf(']') + 1).trim();
         } else if (buildStatus.startsWith("[accepting]")) {
             buildStatusClass += " active";
             buildStatusTooltip = _t("Accepting transit tunnel requests; hosting {0} tunnels", partTunnels);
-            buildStatusText = buildStatusText.substring(buildStatusText.indexOf(']') + 1).trim();
         } else if (buildStatus.startsWith("[hidden]")) {
             buildStatusClass += " hidden";
             buildStatusTooltip = _t("No transit tunnels are built when Hidden mode is active");
-            buildStatusText = buildStatusText.substring(buildStatusText.indexOf(']') + 1).trim();
         } else if (buildStatus.startsWith("[disabled]")) {
             buildStatusClass += " rejecting disabled";
             buildStatusTooltip = _t("Router is configured to reject all transit tunnel requests");
-            buildStatusText = buildStatusText.substring(buildStatusText.indexOf(']') + 1).trim();
         }
 
         buf.append(" <span id=sb_tunnelBuildStatus class=\"volatile ")
@@ -1198,10 +1186,6 @@ class SidebarRenderer {
     public String renderBandwidthGraphHTML() {
         if (_helper == null) {return "";}
         if (GraphGenerator.isDisabled(_context)) {return "";}
-        String r = _context.getProperty(CSSHelper.PROP_REFRESH, CSSHelper.DEFAULT_REFRESH);
-        int refreshPeriod = 3;
-        try {refreshPeriod = Integer.parseInt(r);}
-        catch (NumberFormatException nfe) { /* ignored */ }
         String t = "&amp;t=" + (_context.clock().now() / 1000);
         String g = "style=\"background-image:url(\'/viewstat.jsp?stat=bw.combined&amp;periodCount=20&amp;width=250&amp;height=50&amp;hideLegend=true&amp;hideGrid=true&amp;hideTitle=true" +
                     t + "\')\"";
