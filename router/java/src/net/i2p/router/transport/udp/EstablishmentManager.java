@@ -3206,7 +3206,7 @@ public class EstablishmentManager {
                 long budget = inboundEstablishBudget(isRetrySent, MAX_IB_ESTABLISH_TIME.get(),
                                                      IB_RETRY_SENT_MAX_TIME);
                 if (_log.shouldWarn() && shouldLogInboundGiveup(_context.clock().now())) {
-                    _log.warn("[SSU] Giving up on inbound establishment from ["
+                    _log.warn("[SSU] Giving up on inbound establishment -> From ["
                               + cur.getRemoteHostId() + "] after " + cur.getLifetime(now) + "ms"
                               + "\n* Budget: " + budget + "ms * State: " + istate
                               + " * Retried: " + isRetrySent

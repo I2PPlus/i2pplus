@@ -2212,7 +2212,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         long last = _lastShareLimitLog;
         if (now - last < SHARE_LIMIT_LOG_INTERVAL_MS) {return;}
         _lastShareLimitLog = now;
-        _log.info("Participation share limit raised from " + basePct + "% to " + max + "%"
+        _log.info("Participation share limit raised -> From " + basePct + "% to " + max + "%"
                   + "\n* Build success: " + Math.round(buildSuccess * 100) + "%"
                   + " * Firewalled: " + firewalled
                   + " * Incomplete LeaseSet: " + incompleteLeaseSet
