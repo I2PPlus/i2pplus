@@ -110,29 +110,6 @@ class Elligator2 {
     }
 
     /**
-     * Use for unit tests. Don't use for on-the-wire; use one-arg version.
-     * Output will look like 254 random bits.
-     * High two bits of rv[31] will be zero.
-     * <p>
-     * From javascript version documentation:
-     * <p>
-     * The algorithm can return two different values for a single x coordinate if it's not 0.
-     * Which one to return is determined by y coordinate.
-     * Since Curve25519 doesn't use y due to optimizations, you should specify a Boolean value
-     * as the second argument of the function.
-     * It should be unpredictable, because it's recoverable from the representative.
-     *
-     * @param point the public key whose x coordinate is converted
-     * @param alternative picks which of the two possible roots to encode
-     * @return "representative", little endian or null on failure
-     * @deprecated
-     */
-    @Deprecated
-    protected static byte[] encode(PublicKey point, boolean alternative) {
-        return encode(point, alternative, (byte) 0);
-    }
-
-    /**
      * Output will look like 254 random bits. High two bits of highBits will be ORed in.
      * <p>
      * From javascript version documentation:
