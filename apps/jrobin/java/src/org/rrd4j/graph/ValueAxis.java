@@ -140,6 +140,10 @@ class ValueAxis extends Axis {
                     // as a fallback, use the largest label factor of the selected label
                     labfact = selectedYLabel.labelFacts[3];
                 }
+                int pixelsPerGridline = getPixelsPerGridline(selectedYLabel);
+                int fontHeight = (int) Math.ceil(worker.getFontHeight(font));
+                labfact = keepTwoLabels(labfact, selectedYLabel.labelFacts, im.minval, im.maxval,
+                                        gridstep, pixelsPerGridline, fontHeight);
             }
         } else {
             gridstep = im.ygridstep;
@@ -313,6 +317,78 @@ class ValueAxis extends Axis {
             }
         }
         return -1;
+    }
+
+    /**
+     * Reduce the label factor when it would leave the value axis with a single label.
+     *
+     * <p>The factor is picked so that labels cannot overlap, which on a short graph pushes it
+     * to the largest factor the definition offers. Labels sit on multiples of the grid step
+     * counted from zero, and the console raises the axis floor whenever a series lives in a
+     * band away from zero, so the low multiples fall outside the window and a large factor
+     * can leave exactly one label inside it - the reader then sees one number and cannot read
+     * the scale of the graph at all.
+     * <p>Of the factors smaller than the chosen one, the largest that still puts two labels
+     * in the window is returned, and only if it leaves a line of text between adjacent
+     * labels: factors grow sparser as they grow, and printing labels on top of each other is
+     * worse than the single label it replaces.
+     * <p>Pure, so the decision can be unit tested without an RRD or a renderer.
+     *
+     * @param chosen the factor the spacing rule settled on
+     * @param labelFacts the factors the selected definition offers, in ascending order
+     * @param minval the axis minimum, in graph values
+     * @param maxval the axis maximum, in graph values
+     * @param gridstep distance between grid lines, in graph values
+     * @param pixelsPerGridline pixels between two grid lines under the selected definition
+     * @param fontHeight height of the axis font, in pixels
+     * @return a factor putting two or more labels in the window when one exists, otherwise
+     *         {@code chosen}, unchanged
+     * @since 0.9.72+
+     */
+    static int keepTwoLabels(int chosen, int[] labelFacts, double minval, double maxval,
+            double gridstep, int pixelsPerGridline, int fontHeight) {
+        if (labelFacts == null || countLabels(minval, maxval, gridstep, chosen) >= 2) {
+            return chosen;
+        }
+        // The factors are ascending and the labels they draw only get sparser as the factor
+        // grows, so scanning down from the largest and taking the first that reaches two
+        // labels gives the loosest spacing that still fixes the axis.
+        for (int i = labelFacts.length - 1; i >= 0; i--) {
+            int fact = labelFacts[i];
+            if (fact >= chosen || pixelsPerGridline * fact < fontHeight) {
+                continue;
+            }
+            if (countLabels(minval, maxval, gridstep, fact) >= 2) {
+                return fact;
+            }
+        }
+        return chosen;
+    }
+
+    /**
+     * Count the grid positions inside the window that would carry a label.
+     *
+     * <p>Arithmetic rather than a walk: a fine grid step across a wide window is millions of
+     * positions, and the count is only ever used as a threshold.
+     *
+     * @param minval the axis minimum, in graph values
+     * @param maxval the axis maximum, in graph values
+     * @param gridstep distance between grid lines, in graph values
+     * @param labfact only positions whose index divides by this carry a label
+     * @return how many labels fall inside the window, zero for a degenerate window or step
+     * @since 0.9.72+
+     */
+    static int countLabels(double minval, double maxval, double gridstep, int labfact) {
+        if (!(gridstep > 0) || labfact <= 0 || !(maxval >= minval)) {
+            return 0;
+        }
+        long first = (long) Math.ceil(minval / gridstep);
+        long last = (long) Math.floor(maxval / gridstep);
+        // ceil(first / labfact) and floor(last / labfact), both rounding away from the window
+        // rather than towards zero, so a window straddling zero counts position 0 once
+        long lo = -Math.floorDiv(-first, labfact);
+        long hi = Math.floorDiv(last, labfact);
+        return hi >= lo ? (int) Math.min(hi - lo + 1, Integer.MAX_VALUE) : 0;
     }
 
     /**
