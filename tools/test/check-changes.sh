@@ -167,6 +167,15 @@ case "$MODULE" in
         # build.xml normally supplies, and jettylib/ is generated from them
         ANTPROPS="-Djetty.ver=9.3.30.v20211001 -Dtomcat.ver=9.0.124"
         ;;
+    jrobin)
+        BUILD="apps/jrobin/java/build.xml"
+        REPORTS="/tmp/build-i2p/reports/jrobin/junit"
+        # the rrd4j fork stands on its own: no i2p.jar, no router, nothing vendored
+        # from another module
+        SOURCEPATH="apps/jrobin/java/src:apps/jrobin/java/test/junit"
+        CP="$(find tools/test -name '*.jar' | tr '\n' ':')"
+        LOGSCOPE="apps/jrobin/java/src"
+        ;;
     *)
         echo "check-changes.sh: no wiring for module '$MODULE' — add it above" >&2
         exit 1
