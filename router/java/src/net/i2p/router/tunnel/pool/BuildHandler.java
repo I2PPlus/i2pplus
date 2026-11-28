@@ -554,6 +554,23 @@ public class BuildHandler implements Runnable {
     private static final long[] RATES = RateConstants.SHORT_TERM_RATES;
 
     /**
+     * Stat name for a build request dropped because our own capability flags say
+     * we will not participate in tunnels - the reason is local congestion, not
+     * anything the requester did wrong, and this counter is the only record that
+     * the flag cost us a request.
+     */
+    static final String STAT_CONGESTION_DROP = "tunnel.dropTunnelFromCongestionCapability";
+
+    /**
+     * Stat name for the subset of those drops where the requester runs a version
+     * new enough to read our capability flags, so it should not have sent the
+     * request at all. Written instead of a name carrying the requester's hash or
+     * version: those names are unbounded, one per requester, and an unbounded
+     * name can never be registered, so the write would be dropped for ever.
+     */
+    static final String STAT_CONGESTION_DROP_RECENT_VERSION = "tunnel.dropTunnelFromCongestionCapabilityRecentVersion";
+
+    /**
      * Formats a rate for the stats display.
      *
      * @param bps the rate, in bytes per second
@@ -585,6 +602,84 @@ public class BuildHandler implements Runnable {
     public static void setMaxQueue(int val) { _maxQueue = Math.max(16, Math.min(2048, val)); }
 
     /**
+     * Create the counters this handler writes.
+     * <p>
+     * {@link net.i2p.stat.StatManager#addRateData(String, long)} looks the name
+     * up and drops the write when no such stat was created, so a counter written
+     * without its registration reports nothing while looking like a working one.
+     * The congestion-capability drop was in that state: every build request
+     * turned away because our own capability flags said "no tunnels" was counted,
+     * and the sample was thrown away, while the drop and reject counters for
+     * every other reason reported normally. The names are constants shared by the
+     * write sites and this registration so the two cannot drift apart.
+     * <p>
+     * All of them are required, not plain: {@code createRateStat()} is a no-op
+     * unless <code>stat.full</code> is set, and its default is false.
+     *
+     * @param stats the context's stat manager, never null
+     * @since 0.9.72+
+     */
+    static void registerStats(StatManager stats) {
+        stats.createRequiredRateStat("tunnel.buildLookupSuccess", "Confirmation of successful deferred lookup", "Tunnels", RATES);
+        stats.createRequiredRateStat("tunnel.buildLookupRetry", "Next-hop lookup retried after timeout", "Tunnels", RATES);
+        stats.createRequiredRateStat("tunnel.buildReplyTooSlow", "Received a tunnel build reply after timeout", "Tunnels", RATES);
+        stats.createRequiredRateStat("tunnel.corruptBuildReply", "Corrupt tunnel build replies received", "Tunnels", RATES);
+        stats.createRequiredRateStat("tunnel.dropConnLimits", "Dropped not rejected tunnel build (connection limits)", "Tunnels [Participating]", RATES);
+        stats.createRequiredRateStat("tunnel.dropDecryptFail", "Dropped tunnel build (decryption failed)", "Tunnels [Participating]", RATES);
+        // Dropped because our own capability flags say "no tunnels" - the reason is
+        // local congestion, not anything the requester did wrong. The two writes
+        // that used to append the peer hash and the peer version to this name could
+        // never be registered, one name per peer, so they recorded nothing at all;
+        // the cap-aware case below is the bounded form of what they were reaching
+        // for, and the peer hash is in the WARN line beside it.
+        stats.createRequiredRateStat(STAT_CONGESTION_DROP, "Dropped tunnel build (local congestion capability)", "Tunnels [Participating]", RATES);
+        stats.createRequiredRateStat(STAT_CONGESTION_DROP_RECENT_VERSION, "Congestion drop, requester was 0.9.58+ (should honour the cap)", "Tunnels [Participating]", RATES);
+        // Removed: tunnel.handleRemaining (the loop it described is gone). It was never emitted, so it read as an
+        // absent stat rather than a zero one, and every graph, Tuner rule and health
+        // check that referenced it silently no-oped. Nothing here ever measured.
+        stats.createRequiredRateStat("tunnel.nextHopLookupTimeout", "Timeout for next hop lookup (ms)", "Tunnels", RATES);
+        stats.createRequiredRateStat("tunnel.receiveRejectionBandwidth", "Received tunnel build rejection (bandwidth overload)", "Tunnels [Participating]", RATES);
+        stats.createRequiredRateStat("tunnel.receiveRejectionCritical", "Received tunnel build rejection (critical failure)", "Tunnels [Participating]", RATES);
+        stats.createRequiredRateStat("tunnel.receiveRejectionProbabalistic", "Received tunnel build rejection probabalistically", "Tunnels [Participating]", RATES);
+        stats.createRequiredRateStat("tunnel.receiveRejectionTransient", "Received tunnel build rejection (transient overload)", "Tunnels [Participating]", RATES);
+        // receiveRejection* above count rejections of our own builds; the reject*
+        // stats below are the ones we send back.
+        stats.createRequiredRateStat("tunnel.rejectConnLimits", "Rejected tunnel build (connection limits)", "Tunnels [Participating]", RATES);
+        stats.createRequiredRateStat("tunnel.rejectFuture", "Rejected tunnel build (time in future)", "Tunnels [Participating]", RATES);
+        stats.createRequiredRateStat("tunnel.rejectTimeout2", "Rejected tunnel build (can't contact next hop)", "Tunnels [Participating]", RATES);
+        stats.createRequiredRateStat("tunnel.rejectTimeout", "Rejected tunnel build (unknown next hop)", "Tunnels [Participating]", RATES);
+        stats.createRequiredRateStat("tunnel.preConnectFail", "Pre-connect probe failed", "Tunnels [Participating]", RATES);
+        stats.createRequiredRateStat("tunnel.firstHopRtt",
+                                               "First hop round trip time (ms)",
+                                               "Tunnels [Participating]", RATES);
+        stats.createRequiredRateStat("tunnel.dropLookupStale", "Dropped deferred next-hop lookup (expired in queue)", "Tunnels [Participating]", RATES);
+        stats.createRequiredRateStat("tunnel.rejectTooOld", "Rejected tunnel build (too old)", "Tunnels [Participating]", RATES);
+        stats.createRequiredRateStat("tunnel.buildHandler.queueSize", "Build handler inbound queue depth", "Tunnels", RATES);
+        stats.createRequiredRateStat("tunnel.acceptLoad", "Delay processing accepted request (ms)", "Tunnels [Participating]", RATES);
+        stats.createRequiredRateStat("tunnel.decryptRequestTime", "Time to decrypt a build request (ms)", "Tunnels [Participating]", RATES);
+        stats.createRequiredRateStat("tunnel.dropLoadBacklog", "Pending request count when dropped", "Tunnels [Participating]", RATES);
+        stats.createRequiredRateStat("tunnel.dropLoad", "Delay before dropping request (ms)", "Tunnels [Participating]", RATES);
+        stats.createRequiredRateStat("tunnel.dropLoadDelay", "Delay before abandoning request (ms)", "Tunnels [Participating]", RATES);
+        // Removed: tunnel.dropLoadProactiveAbort (name and description do not match each other). It was never emitted, so it read as an
+        // absent stat rather than a zero one, and every graph, Tuner rule and health
+        // check that referenced it silently no-oped. Nothing here ever measured.
+        stats.createRequiredRateStat("tunnel.dropLoadProactive", "Delay estimate when dropped (ms)", "Tunnels [Participating]", RATES);
+        stats.createRequiredRateStat("tunnel.dropLookupThrottle", "Dropped tunnel build (hop lookup limit)", "Tunnels [Participating]", RATES);
+        stats.createRequiredRateStat("tunnel.pendingLookupQueue", "Pending lookup queue size", "Tunnels [Participating]", RATES);
+        stats.createRequiredRateStat("tunnel.dropReqThrottle", "Dropped tunnel build (request limit)", "Tunnels [Participating]", RATES);
+        stats.createRequiredRateStat("tunnel.nextHopLookupSuccessTime", "Time taken for successful remote next hop lookup (ms)", "Tunnels", RATES);
+        stats.createRequiredRateStat("tunnel.buildBanHit", "Build request next-hop is banned", "Tunnels [Participating]", RATES);
+        stats.createRequiredRateStat("tunnel.rejectHopThrottle", "Rejected tunnel build (per-hop limit)", "Tunnels [Participating]", RATES);
+        stats.createRequiredRateStat("tunnel.rejectHostile", "Rejected malicious tunnel build", "Tunnels [Participating]", RATES);
+        stats.createRequiredRateStat("tunnel.rejectOverloaded", "Delay processing rejected request (ms)", "Tunnels [Participating]", RATES);
+        // The three reasons handleReq() can answer a request with: the two it
+        // picks itself, and the throttler's probabilistic reject from
+        // acceptTunnelRequest(). Registered here so the per-reason counts exist
+        // - see rejectStatName().
+        createRejectStats(stats, RATES);
+    }
+
+    /**
      * Wires up the pool manager, executor and ban logger, and registers the
      * tunnel build rate stats.
      * @param ctx the router context supplying properties, logging and statistics
@@ -601,55 +696,7 @@ public class BuildHandler implements Runnable {
         // Queue size = 12 * share BW / 48K
         int sz = ctx.getProperty(PROP_MAX_QUEUE, _maxQueue);
         _inboundBuildMessages = new LinkedBlockingQueue<>(sz);
-        ctx.statManager().createRequiredRateStat("tunnel.buildLookupSuccess", "Confirmation of successful deferred lookup", "Tunnels", RATES);
-        ctx.statManager().createRequiredRateStat("tunnel.buildLookupRetry", "Next-hop lookup retried after timeout", "Tunnels", RATES);
-        ctx.statManager().createRequiredRateStat("tunnel.buildReplyTooSlow", "Received a tunnel build reply after timeout", "Tunnels", RATES);
-        ctx.statManager().createRequiredRateStat("tunnel.corruptBuildReply", "Corrupt tunnel build replies received", "Tunnels", RATES);
-        ctx.statManager().createRequiredRateStat("tunnel.dropConnLimits", "Dropped not rejected tunnel build (connection limits)", "Tunnels [Participating]", RATES);
-        ctx.statManager().createRequiredRateStat("tunnel.dropDecryptFail", "Dropped tunnel build (decryption failed)", "Tunnels [Participating]", RATES);
-        // Removed: tunnel.handleRemaining (the loop it described is gone). It was never emitted, so it read as an
-        // absent stat rather than a zero one, and every graph, Tuner rule and health
-        // check that referenced it silently no-oped. Nothing here ever measured.
-        ctx.statManager().createRequiredRateStat("tunnel.nextHopLookupTimeout", "Timeout for next hop lookup (ms)", "Tunnels", RATES);
-        ctx.statManager().createRequiredRateStat("tunnel.receiveRejectionBandwidth", "Received tunnel build rejection (bandwidth overload)", "Tunnels [Participating]", RATES);
-        ctx.statManager().createRequiredRateStat("tunnel.receiveRejectionCritical", "Received tunnel build rejection (critical failure)", "Tunnels [Participating]", RATES);
-        ctx.statManager().createRequiredRateStat("tunnel.receiveRejectionProbabalistic", "Received tunnel build rejection probabalistically", "Tunnels [Participating]", RATES);
-        ctx.statManager().createRequiredRateStat("tunnel.receiveRejectionTransient", "Received tunnel build rejection (transient overload)", "Tunnels [Participating]", RATES);
-        // receiveRejection* above count rejections of our own builds; the reject*
-        // stats below are the ones we send back.
-        ctx.statManager().createRequiredRateStat("tunnel.rejectConnLimits", "Rejected tunnel build (connection limits)", "Tunnels [Participating]", RATES);
-        ctx.statManager().createRequiredRateStat("tunnel.rejectFuture", "Rejected tunnel build (time in future)", "Tunnels [Participating]", RATES);
-        ctx.statManager().createRequiredRateStat("tunnel.rejectTimeout2", "Rejected tunnel build (can't contact next hop)", "Tunnels [Participating]", RATES);
-        ctx.statManager().createRequiredRateStat("tunnel.rejectTimeout", "Rejected tunnel build (unknown next hop)", "Tunnels [Participating]", RATES);
-        ctx.statManager().createRequiredRateStat("tunnel.preConnectFail", "Pre-connect probe failed", "Tunnels [Participating]", RATES);
-        ctx.statManager().createRequiredRateStat("tunnel.firstHopRtt",
-                                               "First hop round trip time (ms)",
-                                               "Tunnels [Participating]", RATES);
-        ctx.statManager().createRequiredRateStat("tunnel.dropLookupStale", "Dropped deferred next-hop lookup (expired in queue)", "Tunnels [Participating]", RATES);
-        ctx.statManager().createRequiredRateStat("tunnel.rejectTooOld", "Rejected tunnel build (too old)", "Tunnels [Participating]", RATES);
-        ctx.statManager().createRequiredRateStat("tunnel.buildHandler.queueSize", "Build handler inbound queue depth", "Tunnels", RATES);
-        ctx.statManager().createRequiredRateStat("tunnel.acceptLoad", "Delay processing accepted request (ms)", "Tunnels [Participating]", RATES);
-        ctx.statManager().createRequiredRateStat("tunnel.decryptRequestTime", "Time to decrypt a build request (ms)", "Tunnels [Participating]", RATES);
-        ctx.statManager().createRequiredRateStat("tunnel.dropLoadBacklog", "Pending request count when dropped", "Tunnels [Participating]", RATES);
-        ctx.statManager().createRequiredRateStat("tunnel.dropLoad", "Delay before dropping request (ms)", "Tunnels [Participating]", RATES);
-        ctx.statManager().createRequiredRateStat("tunnel.dropLoadDelay", "Delay before abandoning request (ms)", "Tunnels [Participating]", RATES);
-        // Removed: tunnel.dropLoadProactiveAbort (name and description do not match each other). It was never emitted, so it read as an
-        // absent stat rather than a zero one, and every graph, Tuner rule and health
-        // check that referenced it silently no-oped. Nothing here ever measured.
-        ctx.statManager().createRequiredRateStat("tunnel.dropLoadProactive", "Delay estimate when dropped (ms)", "Tunnels [Participating]", RATES);
-        ctx.statManager().createRequiredRateStat("tunnel.dropLookupThrottle", "Dropped tunnel build (hop lookup limit)", "Tunnels [Participating]", RATES);
-        ctx.statManager().createRequiredRateStat("tunnel.pendingLookupQueue", "Pending lookup queue size", "Tunnels [Participating]", RATES);
-        ctx.statManager().createRequiredRateStat("tunnel.dropReqThrottle", "Dropped tunnel build (request limit)", "Tunnels [Participating]", RATES);
-        ctx.statManager().createRequiredRateStat("tunnel.nextHopLookupSuccessTime", "Time taken for successful remote next hop lookup (ms)", "Tunnels", RATES);
-        ctx.statManager().createRequiredRateStat("tunnel.buildBanHit", "Build request next-hop is banned", "Tunnels [Participating]", RATES);
-        ctx.statManager().createRequiredRateStat("tunnel.rejectHopThrottle", "Rejected tunnel build (per-hop limit)", "Tunnels [Participating]", RATES);
-        ctx.statManager().createRequiredRateStat("tunnel.rejectHostile", "Rejected malicious tunnel build", "Tunnels [Participating]", RATES);
-        ctx.statManager().createRequiredRateStat("tunnel.rejectOverloaded", "Delay processing rejected request (ms)", "Tunnels [Participating]", RATES);
-        // The three reasons handleReq() can answer a request with: the two it
-        // picks itself, and the throttler's probabilistic reject from
-        // acceptTunnelRequest(). Registered here so the per-reason counts exist
-        // - see rejectStatName().
-        createRejectStats(ctx.statManager(), RATES);
+        registerStats(ctx.statManager());
         _processor = new BuildMessageProcessor(ctx);
         boolean testMode = ctx.getBooleanProperty("i2np.allowLocal"); // previous hop, all requests
         boolean shouldThrottle = getShouldThrottle(_context);
@@ -1031,7 +1078,7 @@ public class BuildHandler implements Runnable {
         if (myRI != null) {
             String caps = myRI.getCapabilities();
             if (caps != null && caps.indexOf(Router.CAPABILITY_NO_TUNNELS) >= 0) {
-                    _context.statManager().addRateData("tunnel.dropTunnelFromCongestionCapability", 1);
+                    _context.statManager().addRateData(STAT_CONGESTION_DROP, 1);
                     if (_log.shouldWarn() && from != null) {
                         _log.warn("Dropped request from [" + from.toShortBase64() + "] -> Local congestion");
                     }
@@ -1040,11 +1087,11 @@ public class BuildHandler implements Runnable {
                     if (de != null && de.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO) {
                         RouterInfo fromRI = (RouterInfo) de;
                         String fromVersion = fromRI.getVersion();
-                        // If fromVersion is greater than 0.9.58, then then ban the router due to it
-                        // disrespecting our congestion flags
+                        // Count it when the requester is new enough to read our
+                        // capability flags, so it should not have sent the request
+                        // at all. Nothing is done to the requester beyond this count.
                         if (fromVersion != null && VersionComparator.comp(fromVersion, _minVersionHonorCaps) >= 0) {
-                            _context.statManager().addRateData("tunnel.dropTunnelFromCongestionCapability" + from, 1);
-                            _context.statManager().addRateData("tunnel.dropTunnelFromCongestionCapability" + fromVersion, 1);
+                            _context.statManager().addRateData(STAT_CONGESTION_DROP_RECENT_VERSION, 1);
                         }
                     }
                     return -1;

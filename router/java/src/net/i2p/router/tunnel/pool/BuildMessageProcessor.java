@@ -15,6 +15,8 @@ import net.i2p.data.i2np.ShortTunnelBuildMessage;
 import net.i2p.data.i2np.TunnelBuildMessage;
 import net.i2p.router.RouterContext;
 import net.i2p.router.util.DecayingBloomFilter;
+import net.i2p.stat.RateConstants;
+import net.i2p.stat.StatManager;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
@@ -30,6 +32,51 @@ import net.i2p.util.SystemVersion;
  * @since 0.9.51 moved to {@code tunnel.pool} package
  */
 class BuildMessageProcessor {
+
+    /**
+     * Stat name for a build request record whose reply key had already been seen
+     * by the duplicate filter - the same build arriving twice, from a retransmit
+     * or from a peer that did not get its reply.
+     */
+    static final String STAT_REQUEST_DUP = "tunnel.buildRequestDup";
+
+    /**
+     * Stat name for a build request record carrying the all-zero invalid reply
+     * key sentinel, which the spec forbids and only a buggy implementation
+     * sends - the in-tree comment names i2pd.
+     */
+    static final String STAT_REQUEST_BAD_REPLY_KEY = "tunnel.buildRequestBadReplyKey";
+
+    /** Rate stat periods for the two counters this class writes. */
+    private static final long[] RATES = RateConstants.SHORT_TERM_RATES;
+
+    /**
+     * Create the counters the decrypt path writes.
+     * <p>
+     * {@link net.i2p.stat.StatManager#addRateData(String, long)} looks the name
+     * up and drops the write when no such stat was created, so both of these
+     * reported nothing while looking like working counters: every duplicate
+     * build request and every request carrying the invalid reply key was counted
+     * and thrown away, while the drop and reject counters for the same requests,
+     * registered next door in {@link BuildHandler}, reported normally. The names
+     * are constants shared by the write sites and this registration so the two
+     * cannot drift apart.
+     * <p>
+     * Both are declared required, not plain: {@code createRateStat()} is a no-op
+     * unless <code>stat.full</code> is set, and its default is false.
+     *
+     * @param stats the context's stat manager, never null
+     * @since 0.9.72+
+     */
+    static void registerStats(StatManager stats) {
+        stats.createRequiredRateStat(STAT_REQUEST_DUP,
+                                     "Duplicate tunnel build request (reply key seen before)",
+                                     "Tunnels [Participating]", RATES);
+        stats.createRequiredRateStat(STAT_REQUEST_BAD_REPLY_KEY,
+                                     "Tunnel build request with the invalid reply key",
+                                     "Tunnels [Participating]", RATES);
+    }
+
     /** The router context the builds happen in. */
     private final RouterContext ctx;
     /** Logger for this class. */
@@ -45,7 +92,7 @@ class BuildMessageProcessor {
         this.ctx = ctx;
         log = ctx.logManager().getLog(getClass());
         _filter = selectFilter();
-        // all createRateStat in TunnelDispatcher
+        registerStats(ctx.statManager());
     }
 
     /**
@@ -139,7 +186,7 @@ class BuildMessageProcessor {
                         if (isDup) {
                             if (log.shouldWarn())
                                 log.warn("[MsgID " + msg.getUniqueId() + "] Duplicate " + privKey.getType() + " record received " + rv);
-                            ctx.statManager().addRateData("tunnel.buildRequestDup", 1);
+                            ctx.statManager().addRateData(STAT_REQUEST_DUP, 1);
                             return null;
                         }
                     } else {
@@ -148,7 +195,7 @@ class BuildMessageProcessor {
                         if (isBad) {
                             if (log.shouldWarn())
                                 log.warn("[MsgID " + msg.getUniqueId() + "] Bad reply key (i2pd bug) " + rv);
-                            ctx.statManager().addRateData("tunnel.buildRequestBadReplyKey", 1);
+                            ctx.statManager().addRateData(STAT_REQUEST_BAD_REPLY_KEY, 1);
                             return null;
                         }
 
@@ -161,7 +208,7 @@ class BuildMessageProcessor {
                         if (isDup) {
                             if (log.shouldWarn())
                                 log.warn("[MsgID " + msg.getUniqueId() + "] Duplicate " + privKey.getType() + " record received " + rv);
-                            ctx.statManager().addRateData("tunnel.buildRequestDup", 1);
+                            ctx.statManager().addRateData(STAT_REQUEST_DUP, 1);
                             return null;
                         }
                     }

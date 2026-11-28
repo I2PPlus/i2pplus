@@ -822,6 +822,29 @@ public class BuildExecutor implements Runnable {
     }
     /** Rate stat periods for the build statistics. */
     private static final long[] RATES = { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR };
+
+    /**
+     * Stat name for a build added to the building map whose first hop carried no
+     * creation timestamp, so the expiry scan's age would have been meaningless
+     * and the build would have held its slot for the life of the router. Each
+     * write means the timestamp was backfilled with the current time.
+     */
+    static final String STAT_BACKFILLED_CREATION = "tunnel.buildConfig.backfilledCreation";
+
+    /**
+     * Stat name for an expired build attributed to a first hop with no creation
+     * timestamp - the one expiry reason the eviction cannot be blamed on a peer,
+     * so it says the build was recorded wrong rather than answered late.
+     */
+    static final String STAT_EXPIRE_NO_CREATION = "tunnel.buildExpire.noCreation";
+
+    /**
+     * Stat name for an expired build whose reply message id was already in the
+     * recently-building map - the reply thread and the expiry scan both reached
+     * for the same id, so the build was already accounted for elsewhere.
+     */
+    static final String STAT_EXPIRE_ID_COLLISION = "tunnel.buildExpire.idCollision";
+
     /**
      * Check if full statistics are enabled.
      * @return true if full statistics are enabled
@@ -851,6 +874,97 @@ public class BuildExecutor implements Runnable {
     }
 
     /**
+     * Create the counters the build path writes.
+     * <p>
+     * {@link net.i2p.stat.StatManager#addRateData(String, long)} looks the name
+     * up and drops the write when no such stat was created, so a counter written
+     * without its registration reports nothing while looking like a working one.
+     * The three build-bookkeeping counters at the end of this list were in that
+     * state: each one records why a build slot was held, reclaimed or attributed
+     * the way it was, and every sample was thrown away while the outcome counters
+     * beside them reported normally. The names are constants shared by the write
+     * sites and this registration so the two cannot drift apart.
+     * <p>
+     * All of them are required, not plain: {@code createRateStat()} is a no-op
+     * unless <code>stat.full</code> is set, and its default is false.
+     *
+     * @param stats the context's stat manager, never null
+     * @since 0.9.72+
+     */
+    static void registerStats(StatManager stats) {
+        stats.createRequiredRateStat("tunnel.buildFailFirstHop", "OB tunnel build failures (can't contact 1st hop)", "Tunnels", RATES);
+        stats.createRequiredRateStat("tunnel.buildClientExpire", "No response to a client tunnel build request", "Tunnels [Participating]", RATES);
+        stats.createRequiredRateStat("tunnel.buildClientReject", "Response time for a client tunnel build rejection (ms)", "Tunnels [Participating]", RATES);
+        stats.createRequiredRateStat("tunnel.buildClientSuccess", "Response time for a successful client tunnel build (ms)", "Tunnels [Participating]", RATES);
+        stats.createRequiredRateStat("tunnel.buildClientSlow", "Client builds that took over 5s (the tail, not the mean)", "Tunnels [Participating]", RATES);
+        stats.createRequiredRateStat("tunnel.buildExploratoryExpire", "No response to an exploratory tunnel build request", "Tunnels [Exploratory]", RATES);
+        stats.createRequiredRateStat("tunnel.buildExploratoryReject", "Response time for an exploratory tunnel build rejection (ms)", "Tunnels [Exploratory]", RATES);
+        // Per-hop expiry attribution: which position failed to answer, split by the
+        // state it was in. Registered up front because addRateData drops names that
+        // were never created, so the name generator in BuildHopAttribution would
+        // otherwise record nothing at all.
+        for (int hop : BuildHopAttribution.registeredHopIndexes()) {
+            for (String classification : BuildHopAttribution.registeredClassifications()) {
+                stats.createRequiredRateStat(
+                    BuildHopAttribution.statName(hop, classification),
+                    "Expired builds: hop " + hop + " was " + classification,
+                    "Tunnels [Participating]", RATES);
+            }
+        }
+        stats.createRequiredRateStat("tunnel.buildExploratorySuccess", "Response time for a successful exploratory tunnel build (ms)", "Tunnels [Exploratory]", RATES);
+        stats.createRequiredRateStat("tunnel.buildExploratorySlow", "Exploratory builds that took over 5s (the tail, not the mean)", "Tunnels [Exploratory]", RATES);
+        stats.createRequiredRateStat("tunnel.buildRequestTime", "Time to build a tunnel request (ms)", "Tunnels [Participating]", RATES);
+        stats.createRequiredRateStat("tunnel.concurrentBuilds", "How many builds are going at once", "Tunnels", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
+        stats.createRequiredRateStat("tunnel.buildSuccessRate", "Tunnel build success rate (0-100)", "Tunnels", RATES);
+        stats.createRequiredRateStat("tunnel.buildFailureRate", "Tunnel build failure rate (0-100)", "Tunnels", RATES);
+        stats.createRequiredRateStat("tunnel.buildTimeoutRate", "Tunnel build timeout rate (0-100)", "Tunnels", RATES);
+        stats.createRequiredRateStat("tunnel.buildPacedOut", "Tunnel build skipped (1st hop busy)", "Tunnels", RATES);
+        stats.createRequiredRateStat("tunnel.buildPacedReselect", "Tunnel build kept by re-picking the 1st hop", "Tunnels", RATES);
+        stats.createRequiredRateStat("tunnel.buildStaggeredOut", "Tunnel build dropped (1st hop dispatched too recently)", "Tunnels", RATES);
+        stats.createRequiredRateStat("tunnel.buildStalePruned", "Builds pruned due to stale queue", "Tunnels", RATES);
+        stats.createRequiredRateStat("tunnel.buildNoSession", "Build abandoned (first hop has no session)", "Tunnels", RATES);
+        stats.createRequiredRateStat("tunnel.buildBanFiltered", "Tunnel build dropped (banlisted hop)", "Tunnels", RATES);
+        stats.createRequiredRateStat(buildDirectionStat(true, "Attempted"), "Inbound builds", "Tunnels", RATES);
+        stats.createRequiredRateStat(buildDirectionStat(false, "Attempted"), "Outbound builds", "Tunnels", RATES);
+        stats.createRequiredRateStat(buildDirectionStat(true, "Succeeded"), "Inbound builds OK", "Tunnels", RATES);
+        stats.createRequiredRateStat(buildDirectionStat(false, "Succeeded"), "Outbound builds OK", "Tunnels", RATES);
+        stats.createRequiredRateStat(buildDirectionStat(true, "Failed"), "Inbound builds failed", "Tunnels", RATES);
+        stats.createRequiredRateStat(buildDirectionStat(false, "Failed"), "Outbound builds failed", "Tunnels", RATES);
+        stats.createRequiredRateStat(buildDirectionStat(true, "TimedOut"), "Inbound builds timed out", "Tunnels", RATES);
+        stats.createRequiredRateStat(buildDirectionStat(false, "TimedOut"), "Outbound builds timed out", "Tunnels", RATES);
+        // Per-direction success rates, computed from the same sliding window as
+        // tunnel.buildSuccessRate so all three carry identical smoothing and the
+        // two directions reconcile with the aggregate. The aggregate alone cannot
+        // answer whether inbound or outbound is the failing direction, and the two
+        // do not fail for the same reasons; see buildDirectionStat.
+        stats.createRequiredRateStat(buildDirectionStat(true, "SuccessRate"), "Inbound build success rate (%)", "Tunnels", RATES);
+        stats.createRequiredRateStat(buildDirectionStat(false, "SuccessRate"), "Outbound build success rate (%)", "Tunnels", RATES);
+        stats.createRequiredRateStat("tunnel.buildTimeout", "Build timed out (count)", "Tunnels", RATES);
+        stats.createRequiredRateStat("tunnel.buildReject", "Build rejected (count)", "Tunnels", RATES);
+        stats.createRequiredRateStat("tunnel.buildNoTunnels", "Build returned NO_TUNNELS (count)", "Tunnels", RATES);
+        stats.createRequiredRateStat("tunnel.buildDupId", "Build duplicate ID (count)", "Tunnels", RATES);
+        // The build bookkeeping counters: a creation timestamp we had to backfill,
+        // and the two things the expiry scan attributes. Written for years with no
+        // registration at all, so addRateData() dropped every sample.
+        stats.createRequiredRateStat(STAT_BACKFILLED_CREATION, "Builds whose first hop had no creation time (stamped on add)", "Tunnels", RATES);
+        stats.createRequiredRateStat(STAT_EXPIRE_NO_CREATION, "Expired builds attributed to a first hop with no creation time", "Tunnels", RATES);
+        stats.createRequiredRateStat(STAT_EXPIRE_ID_COLLISION, "Expired builds whose reply id was already recently building", "Tunnels", RATES);
+
+        // One counter per recognised bandwidth tier, for the join tally by tier.
+        String bwTiers = RouterInfo.BW_CAPABILITY_CHARS; // For each bandwidth tier, create tunnel build agree/reject/expire stats
+        for (int i = 0; i < bwTiers.length(); i++) {
+            String bwTier = String.valueOf(bwTiers.charAt(i));
+            stats.createRequiredRateStat("tunnel.tierAgree" + bwTier, "Agreed joins from bandwidth tier " + bwTier, "Tunnels [Participating]", RATES);
+            stats.createRequiredRateStat("tunnel.tierReject" + bwTier, "Rejected joins from bandwidth tier " + bwTier, "Tunnels [Participating]", RATES);
+            stats.createRequiredRateStat("tunnel.tierExpire" + bwTier, "Expired joins from bandwidth tier " + bwTier, "Tunnels [Participating]", RATES);
+        }
+        // tunnel.firstHopUnreachableDemoted is registered and emitted by
+        // ProfileOrganizer, where the eviction happens, and is now retired: the
+        // build-timeout path and the pre-connect probe sweep both used to reach an
+        // eviction on a single event, and neither does any more.
+    }
+
+    /**
      * Create a new BuildExecutor.
      *
      * @param ctx the router context
@@ -871,70 +985,7 @@ public class BuildExecutor implements Runnable {
         int maxConcurrentBuilds = getMaxConcurrentBuilds();
         _currentlyBuildingMap = new ConcurrentHashMap<>(maxConcurrentBuilds);
         _recentlyBuildingMap = new ConcurrentHashMap<>(4 * maxConcurrentBuilds);
-        _context.statManager().createRequiredRateStat("tunnel.buildFailFirstHop", "OB tunnel build failures (can't contact 1st hop)", "Tunnels", RATES);
-        _context.statManager().createRequiredRateStat("tunnel.buildClientExpire", "No response to a client tunnel build request", "Tunnels [Participating]", RATES);
-        _context.statManager().createRequiredRateStat("tunnel.buildClientReject", "Response time for a client tunnel build rejection (ms)", "Tunnels [Participating]", RATES);
-        _context.statManager().createRequiredRateStat("tunnel.buildClientSuccess", "Response time for a successful client tunnel build (ms)", "Tunnels [Participating]", RATES);
-        _context.statManager().createRequiredRateStat("tunnel.buildClientSlow", "Client builds that took over 5s (the tail, not the mean)", "Tunnels [Participating]", RATES);
-        _context.statManager().createRequiredRateStat("tunnel.buildExploratoryExpire", "No response to an exploratory tunnel build request", "Tunnels [Exploratory]", RATES);
-        _context.statManager().createRequiredRateStat("tunnel.buildExploratoryReject", "Response time for an exploratory tunnel build rejection (ms)", "Tunnels [Exploratory]", RATES);
-        // Per-hop expiry attribution: which position failed to answer, split by the
-        // state it was in. Registered up front because addRateData drops names that
-        // were never created, so the name generator in BuildHopAttribution would
-        // otherwise record nothing at all.
-        for (int hop : BuildHopAttribution.registeredHopIndexes()) {
-            for (String classification : BuildHopAttribution.registeredClassifications()) {
-                _context.statManager().createRequiredRateStat(
-                    BuildHopAttribution.statName(hop, classification),
-                    "Expired builds: hop " + hop + " was " + classification,
-                    "Tunnels [Participating]", RATES);
-            }
-        }
-        _context.statManager().createRequiredRateStat("tunnel.buildExploratorySuccess", "Response time for a successful exploratory tunnel build (ms)", "Tunnels [Exploratory]", RATES);
-        _context.statManager().createRequiredRateStat("tunnel.buildExploratorySlow", "Exploratory builds that took over 5s (the tail, not the mean)", "Tunnels [Exploratory]", RATES);
-        _context.statManager().createRequiredRateStat("tunnel.buildRequestTime", "Time to build a tunnel request (ms)", "Tunnels [Participating]", RATES);
-        _context.statManager().createRequiredRateStat("tunnel.concurrentBuilds", "How many builds are going at once", "Tunnels", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
-        _context.statManager().createRequiredRateStat("tunnel.buildSuccessRate", "Tunnel build success rate (0-100)", "Tunnels", RATES);
-        _context.statManager().createRequiredRateStat("tunnel.buildFailureRate", "Tunnel build failure rate (0-100)", "Tunnels", RATES);
-        _context.statManager().createRequiredRateStat("tunnel.buildTimeoutRate", "Tunnel build timeout rate (0-100)", "Tunnels", RATES);
-        _context.statManager().createRequiredRateStat("tunnel.buildPacedOut", "Tunnel build skipped (1st hop busy)", "Tunnels", RATES);
-        _context.statManager().createRequiredRateStat("tunnel.buildPacedReselect", "Tunnel build kept by re-picking the 1st hop", "Tunnels", RATES);
-        _context.statManager().createRequiredRateStat("tunnel.buildStaggeredOut", "Tunnel build dropped (1st hop dispatched too recently)", "Tunnels", RATES);
-        _context.statManager().createRequiredRateStat("tunnel.buildStalePruned", "Builds pruned due to stale queue", "Tunnels", RATES);
-        _context.statManager().createRequiredRateStat("tunnel.buildNoSession", "Build abandoned (first hop has no session)", "Tunnels", RATES);
-        _context.statManager().createRequiredRateStat("tunnel.buildBanFiltered", "Tunnel build dropped (banlisted hop)", "Tunnels", RATES);
-        _context.statManager().createRequiredRateStat(buildDirectionStat(true, "Attempted"), "Inbound builds", "Tunnels", RATES);
-        _context.statManager().createRequiredRateStat(buildDirectionStat(false, "Attempted"), "Outbound builds", "Tunnels", RATES);
-        _context.statManager().createRequiredRateStat(buildDirectionStat(true, "Succeeded"), "Inbound builds OK", "Tunnels", RATES);
-        _context.statManager().createRequiredRateStat(buildDirectionStat(false, "Succeeded"), "Outbound builds OK", "Tunnels", RATES);
-        _context.statManager().createRequiredRateStat(buildDirectionStat(true, "Failed"), "Inbound builds failed", "Tunnels", RATES);
-        _context.statManager().createRequiredRateStat(buildDirectionStat(false, "Failed"), "Outbound builds failed", "Tunnels", RATES);
-        _context.statManager().createRequiredRateStat(buildDirectionStat(true, "TimedOut"), "Inbound builds timed out", "Tunnels", RATES);
-        _context.statManager().createRequiredRateStat(buildDirectionStat(false, "TimedOut"), "Outbound builds timed out", "Tunnels", RATES);
-        // Per-direction success rates, computed from the same sliding window as
-        // tunnel.buildSuccessRate so all three carry identical smoothing and the
-        // two directions reconcile with the aggregate. The aggregate alone cannot
-        // answer whether inbound or outbound is the failing direction, and the two
-        // do not fail for the same reasons; see buildDirectionStat.
-        _context.statManager().createRequiredRateStat(buildDirectionStat(true, "SuccessRate"), "Inbound build success rate (%)", "Tunnels", RATES);
-        _context.statManager().createRequiredRateStat(buildDirectionStat(false, "SuccessRate"), "Outbound build success rate (%)", "Tunnels", RATES);
-        _context.statManager().createRequiredRateStat("tunnel.buildTimeout", "Build timed out (count)", "Tunnels", RATES);
-        _context.statManager().createRequiredRateStat("tunnel.buildReject", "Build rejected (count)", "Tunnels", RATES);
-        _context.statManager().createRequiredRateStat("tunnel.buildNoTunnels", "Build returned NO_TUNNELS (count)", "Tunnels", RATES);
-        _context.statManager().createRequiredRateStat("tunnel.buildDupId", "Build duplicate ID (count)", "Tunnels", RATES);
-
-        StatManager statMgr = _context.statManager(); // Get stat manager, get recognized bandwidth tiers
-        String bwTiers = RouterInfo.BW_CAPABILITY_CHARS; // For each bandwidth tier, create tunnel build agree/reject/expire stats
-        for (int i = 0; i < bwTiers.length(); i++) {
-            String bwTier = String.valueOf(bwTiers.charAt(i));
-            statMgr.createRequiredRateStat("tunnel.tierAgree" + bwTier, "Agreed joins from bandwidth tier " + bwTier, "Tunnels [Participating]", RATES);
-            statMgr.createRequiredRateStat("tunnel.tierReject" + bwTier, "Rejected joins from bandwidth tier " + bwTier, "Tunnels [Participating]", RATES);
-            statMgr.createRequiredRateStat("tunnel.tierExpire" + bwTier, "Expired joins from bandwidth tier " + bwTier, "Tunnels [Participating]", RATES);
-        }
-        // tunnel.firstHopUnreachableDemoted is registered and emitted by
-        // ProfileOrganizer, where the eviction happens, and is now retired: the
-        // build-timeout path and the pre-connect probe sweep both used to reach an
-        // eviction on a single event, and neither does any more.
+        registerStats(_context.statManager());
     }
 
     /**
@@ -1638,7 +1689,7 @@ public class BuildExecutor implements Runnable {
      */
     private void countExpiryVeto(PooledTunnelCreatorConfig cfg) {
         if (cfg.getConfig(0).getCreation() <= 0) {
-            _context.statManager().addRateData("tunnel.buildExpire.noCreation", 1);
+            _context.statManager().addRateData(STAT_EXPIRE_NO_CREATION, 1);
         }
     }
 
@@ -3787,7 +3838,7 @@ public class BuildExecutor implements Runnable {
             HopConfig first = cfg.getConfig(0);
             if (first.getCreation() <= 0) {
                 first.setCreation(_context.clock().now());
-                _context.statManager().addRateData("tunnel.buildConfig.backfilledCreation", 1);
+                _context.statManager().addRateData(STAT_BACKFILLED_CREATION, 1);
             }
         }
         return refused;
@@ -3868,7 +3919,7 @@ public class BuildExecutor implements Runnable {
             if (!_currentlyBuildingMap.remove(key, cfg))
                 return false;
             if (_recentlyBuildingMap.putIfAbsent(key, cfg) != null)
-                _context.statManager().addRateData("tunnel.buildExpire.idCollision", 1);
+                _context.statManager().addRateData(STAT_EXPIRE_ID_COLLISION, 1);
             return true;
         }
     }
