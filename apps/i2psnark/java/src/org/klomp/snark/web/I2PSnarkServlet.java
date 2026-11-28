@@ -995,7 +995,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append(isStandalone() ? " class=standalone" : "")
            .append(" style=\"background:").append(pageBackground).append("\">\n<head>\n")
            .append("<meta charset=utf-8>\n<meta name=viewport content=\"width=device-width, initial-scale=1\">\n")
-           .append(ServletUtil.scriptOpen(cspNonce, "")).append("const theme = \"").append(theme).append("\";</script>\n");
+           .append(ServletUtil.scriptOpen(cspNonce, "")).append("const theme = \"").append(escapeJSString(theme)).append("\";</script>\n");
 
         if (!isConfigure && !isStandalone()) {
             buf.append("<link rel=preload as=script href=/js/iframeResizer/updatedEvent.js>\n")
@@ -6312,7 +6312,7 @@ public class I2PSnarkServlet extends BasicServlet {
             }
         }
 
-        buf.append(ServletUtil.scriptOpen(cspNonce, "")).append("const theme = \"").append(theme).append("\";</script>\n")
+        buf.append(ServletUtil.scriptOpen(cspNonce, "")).append("const theme = \"").append(escapeJSString(theme)).append("\";</script>\n")
            .append("<noscript><style>.script{display:none}</style></noscript>\n") // hide javascript-dependent buttons when js is unavailable
            .append("<link rel=\"shortcut icon\" href=\"")
            .append(_contextPath).append(WARBASE)
