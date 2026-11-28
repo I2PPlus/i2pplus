@@ -2592,12 +2592,11 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         long timeToHandle = afterHandle - afterAccept;
         getTunnel().getContext().statManager().addRateData("i2ptunnel.httpserver.blockingHandleTime", timeToHandle);
         if ((timeToHandle > 1500) && (_log.shouldInfo())) {
-            _log.info("[HTTPServer] Slow first request -> Total: " + timeToHandle + "ms" +
-                      "\n* Client: " + HttpHeaderFormatter.shortB32(peerB32) +
-                      " * Read headers: " + (afterHeaders-afterAccept) + "ms" +
+            _log.info("[HTTPServer] Slow first request (" + timeToHandle + "ms) from " + HttpHeaderFormatter.shortB32(peerB32) +
                       "\n* Socket create: " + (afterSocket-afterHeaders) +
-                      "ms * Start runners: " + (afterHandle-afterSocket) + "ms");
-         }
+                      "ms * Start runners: " + (afterHandle-afterSocket) +
+                      "ms * Read headers: " + (afterHeaders-afterAccept) + "ms");
+        }
     }
 
     /**
