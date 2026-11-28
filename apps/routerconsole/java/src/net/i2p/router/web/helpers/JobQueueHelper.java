@@ -20,7 +20,6 @@ import net.i2p.router.web.HelperBase;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateConstants;
 import net.i2p.stat.RateStat;
-import net.i2p.util.Log;
 import net.i2p.util.ObjectCounterUnsafe;
 
 /**

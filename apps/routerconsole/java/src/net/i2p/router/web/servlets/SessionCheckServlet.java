@@ -9,7 +9,6 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.web.ConsolePasswordManager;
 import net.i2p.router.web.RouterConsoleRunner;
 import net.i2p.servlet.filters.SessionManager;
-import net.i2p.util.Log;
 import java.util.Map.Entry;
 
 /**

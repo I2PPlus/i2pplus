@@ -6,7 +6,6 @@ import java.util.Iterator;
 import java.util.Set;
 import net.i2p.data.DataHelper;
 import net.i2p.data.router.RouterAddress;
-import net.i2p.router.CommSystemFacade.Status;
 import net.i2p.router.Router;
 import net.i2p.router.transport.TransportManager;
 import net.i2p.router.transport.TransportUtil;

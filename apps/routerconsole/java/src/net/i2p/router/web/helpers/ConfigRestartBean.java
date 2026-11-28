@@ -3,8 +3,6 @@ package net.i2p.router.web.helpers;
 import javax.servlet.http.HttpSession;
 
 import net.i2p.I2PAppContext;
-import net.i2p.app.ClientApp;
-import net.i2p.app.ClientAppManager;
 import net.i2p.data.DataHelper;
 import net.i2p.i2ptunnel.TunnelControllerGroup;
 import net.i2p.router.Router;
