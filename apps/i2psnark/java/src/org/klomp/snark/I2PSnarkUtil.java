@@ -798,7 +798,7 @@ public class I2PSnarkUtil implements DisconnectListener, DestCache {
      */
     public String getAPITarget() {
         return _apiTarget;
-    };
+    }
 
     /**
      * The API key, or null if not set.
@@ -808,7 +808,7 @@ public class I2PSnarkUtil implements DisconnectListener, DestCache {
      */
     public String getAPIKey() {
         return _apiKey;
-    };
+    }
 
     /**
      * Configure the API target and key.
