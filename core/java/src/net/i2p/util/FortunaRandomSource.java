@@ -14,9 +14,7 @@ import net.i2p.I2PAppContext;
 import net.i2p.crypto.EntropyHarvester;
 import net.i2p.data.DataHelper;
 
-import java.io.IOException;
 import java.security.SecureRandom;
-import java.util.Properties;
 
 /**
  * Wrapper around GNU-Crypto's Fortuna PRNG.  This seeds from /dev/urandom and
