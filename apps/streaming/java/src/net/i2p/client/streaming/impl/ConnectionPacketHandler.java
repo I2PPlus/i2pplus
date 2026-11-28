@@ -675,7 +675,6 @@ class ConnectionPacketHandler {
                         // we can't use newWindowSize += acked/(oldWindow*N) (where N = the cong. avoid. factor), since we're
                         // integers, so lets use a random distribution instead
                         int caFactor = con.getOptions().getCongestionAvoidanceGrowthRateFactor();
-                        int effAcked = acked;
                         int maxWin = ceiling;
                         if (newWindowSize < maxWin) {
                             // Deficit-driven growth: grow faster when well below max window
@@ -686,7 +685,7 @@ class ConnectionPacketHandler {
                             // At 25% maxWindow: ~13x.
                             int deficit = maxWin - newWindowSize;
                             int multiplier = 1 + (16 * deficit) / Math.max(1, maxWin);
-                            effAcked = Math.max(acked, acked * multiplier);
+                            int effAcked = Math.max(acked, acked * multiplier);
                             // Deterministic fixed-point ratchet instead of the old
                             // per-ACK random draw: accumulate credit proportional to
                             // effAcked / (caFactor * window) and harvest only the whole
