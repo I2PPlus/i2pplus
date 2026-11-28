@@ -19,7 +19,7 @@ public class ServletUtil {
     private static final int CSP_NONCE_BYTES = 18;
 
     /** Utility class, not intended for instantiation. */
-    private ServletUtil() {};
+    private ServletUtil() {}
 
     /**
      * Does the request come from a browser too small for the full
