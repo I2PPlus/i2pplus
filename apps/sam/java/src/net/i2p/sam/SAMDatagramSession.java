@@ -9,7 +9,6 @@ package net.i2p.sam;
  */
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Properties;
 import net.i2p.I2PAppContext;
 import net.i2p.client.I2PSession;
@@ -85,30 +84,6 @@ class SAMDatagramSession extends SAMMessageSession {
             throw new IllegalArgumentException("Bad version: " + v);
         }
         version = v;
-    }
-
-    /**
-     * Create a new SAM DATAGRAM session, DG1 only.
-     * Listens on ALL ports and protocols.
-     * <p>
-     * Caller MUST call start().
-     *
-     * @param destStream Input stream containing the destination keys
-     * @param props Properties to setup the I2P session
-     * @param recv Object that will receive incoming data
-     * @throws I2PSessionException if the I2P session cannot be created from the
-     *                             keys read out of destStream
-     * @deprecated unused
-     */
-    @Deprecated
-    public SAMDatagramSession(InputStream destStream, Properties props,
-                              SAMDatagramReceiver recv) throws
-                              I2PSessionException {
-        super(destStream, props);
-        this.recv = recv;
-        dgramMaker = new I2PDatagramMaker(getI2PSession());
-        dgramDissector = new I2PDatagramDissector();
-        version = 1;
     }
 
     /**
