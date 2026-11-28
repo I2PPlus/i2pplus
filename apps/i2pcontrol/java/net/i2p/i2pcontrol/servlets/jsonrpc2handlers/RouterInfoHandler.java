@@ -183,7 +183,7 @@ public class RouterInfoHandler implements RequestHandler {
         ERROR_NO_ACTIVE_PEERS_CHECK_CONNECTION_AND_FIREWALL,
         /** UDP disabled and the TCP address is unset. */
         ERROR_UDP_DISABLED_AND_TCP_UNSET,
-    };
+    }
 
     /**
      * Returns the router's network status.
