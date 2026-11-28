@@ -10,7 +10,7 @@
 <% updatehelper.storeSession(session); %>
 <jsp:setProperty name="updatehelper" property="contextId" value="<%=i2pcontextId%>"/>
 <%@include file="sidebar.jsi"%>
-<h1 class=home><%=intl._t("Router Console")%> <a href=/logout title="Log out"><span id=logout></span></a></h1>
+<h1 class=home><%=intl._t("Router Console")%> <a href="/logout?nonce=<%=consoleNonce%>" title="Log out"><span id=logout></span></a></h1>
 <%  if (newshelper.shouldShowNews()) { %>
 <div class=news id=news><jsp:getProperty name="newshelper" property="content"/><hr><jsp:getProperty name="updatehelper" property="newsStatus"/><br></div>
 <%  } %>
