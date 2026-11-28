@@ -30,13 +30,13 @@
 <% if (!net.i2p.router.web.ContentOnly.isContentOnly(request)) { %>
 <%=intl.title(pageTitle)%>
 <script nonce="<%=cspNonce%>">
-const translate_encType = "<%=intl._t("Encryption type")%>";
-const translate_encTypes = "<%=intl._t("Encryption types")%>";
-const translate_sigType = "<%=intl._t("Signature type")%>";
-const translate_sigTypes = "<%=intl._t("Signature types")%>";
-const translate_localPrivate = "<%=intl._t("Locally hosted private service")%>";
-const translate_localPublic = "<%=intl._t("Locally hosted public service")%>";
-const translate_requestedLS = "<%=intl._t("Requested client leaseset")%>";
+const translate_encType = "<%=net.i2p.util.Escapes.jsString(intl._t("Encryption type"))%>";
+const translate_encTypes = "<%=net.i2p.util.Escapes.jsString(intl._t("Encryption types"))%>";
+const translate_sigType = "<%=net.i2p.util.Escapes.jsString(intl._t("Signature type"))%>";
+const translate_sigTypes = "<%=net.i2p.util.Escapes.jsString(intl._t("Signature types"))%>";
+const translate_localPrivate = "<%=net.i2p.util.Escapes.jsString(intl._t("Locally hosted private service"))%>";
+const translate_localPublic = "<%=net.i2p.util.Escapes.jsString(intl._t("Locally hosted public service"))%>";
+const translate_requestedLS = "<%=net.i2p.util.Escapes.jsString(intl._t("Requested client leaseset"))%>";
 </script>
 <% String fParam = request.getParameter("f");
     if ("1".equals(fParam) || "2".equals(fParam)) {

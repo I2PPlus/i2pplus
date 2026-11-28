@@ -49,7 +49,7 @@
 <link href="<%=editBean.getTheme()%>../../fonts/OpenSans.css" rel=stylesheet><% } %>
 <link href="<%=editBean.getTheme()%>override.css" rel=stylesheet>
 <style>body{display:none;pointer-events:none}</style>
-<script nonce="<%=cspNonce%>">const theme = "<%=themeName%>";</script>
+<script nonce="<%=cspNonce%>">const theme = "<%=net.i2p.util.Escapes.jsString(themeName)%>";</script>
 </head>
 <body id=tunnelWizardPage>
 <form method=POST action="<%=(curPage == 7 ? "list" : "wizard") %>">

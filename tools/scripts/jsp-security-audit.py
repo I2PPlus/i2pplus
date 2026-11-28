@@ -41,6 +41,15 @@ Rules
                             names a fragment of the nonce the header holds whole,
                             and CSP blocks that inline script. A form field named
                             nonce is a value, not an attribute, and is not a finding.
+  js-literal-unescaped      a <%= %> written inside a JS string literal in a script
+                            block, holding a catalog string or request data, with no
+                            escaper around it. The literal is JS source: a quote, a
+                            backslash or a newline in any translation ends it, the
+                            inline script fails to parse, and every script on the
+                            page is gone in that locale. HTML escaping is the wrong
+                            context there - net.i2p.util.Escapes.jsString() is the
+                            right one. A number, or a value with no such character
+                            in it, is not a finding.
 
 Usage: jsp-security-audit.py [path ...] [--verbose] [--json] [--rule RULE]
        [--app APP] [--selftest]
@@ -66,10 +75,13 @@ REQUEST_ROOTS = ('param', 'paramValues', 'header', 'headerValues', 'cookie', 'in
 
 # something(...escape...) / EscapeUtil / StringEscapeUtils style helpers
 ESCAPER = re.compile(r'\b(esc|escape|escapeXml|escapeHtml4|filter|sanitize|'
-                     r'HTMLFilter|XSSFilter|net\.i2p\.util\.EscapeUtil)\w*\s*\(', re.I)
+                     r'HTMLFilter|XSSFilter|net\.i2p\.util\.EscapeUtil|'
+                     r'net.i2p.util.Escapes.jsString)\w*\s*\(', re.I)
 
 FORM = re.compile(r'<form\b(?P<attrs>[^>]*)>', re.I)
-SCRIPT = re.compile(r'<script\b[^>]*>(?P<body>.*?)</script\s*>', re.I | re.S)
+# A script tag carries a JSP expression in its attributes now (nonce="<%=cspNonce%>"),
+# and that expression ends with '%>' - a '>' the tag regex must not stop at.
+SCRIPT = re.compile(r'<script\b(?:<%.*?%>|[^>])*>(?P<body>.*?)</script\s*>', re.I | re.S)
 ORIGIN_TEST = re.compile(r'getHeader\(\s*"(?:Origin|Host)"|'
                          r'OriginCheck\s*\.\s*isAllowed\s*\(', re.I)
 ALLOW_INIT = re.compile(r'\bboolean\s+(?P<name>\w*[Aa]llowed\w*)\s*=\s*true\b')
@@ -98,6 +110,19 @@ ASSIGN = re.compile(r'\b(?P<name>[A-Za-z_$][\w$]*)\s*(?<![=!<>])=(?!=)\s*'
 
 # A translation catalog string is never request data.
 TRANSLATION = re.compile(r'\b(?:_t|_x|ngettext)\s*\(|\b(?:intl|messages)\s*\.\s*\w+')
+
+# A translated string written straight into a JS string literal. The catalog is
+# not the request, but the literal is JS source: a quote, a backslash or a
+# newline in any of the 41 translations ends the literal, the inline script
+# fails to parse, and every script on the page is gone in that locale. HTML
+# escaping is the wrong context there - Escapes.jsString() is the right one.
+# The quote count of the line before the expression says which context it is in:
+# an odd number of unescaped quotes means the expression sits inside a literal.
+JS_EXPR = re.compile(r'<%=\s*(?P<expr>.*?)%\>', re.S)
+JS_DQUOTE = re.compile(r'(?<!\\)"')
+JS_SQUOTE = re.compile(r"(?<!\\)'")
+# A number needs no escaping wherever it lands.
+JS_NUMBER = re.compile(r'^-?(?:0x[0-9a-fA-F]+|\d+(?:\.\d+)?)$')
 
 # Written in the page, so safe by construction.
 LITERAL = re.compile(r'''(?x) ^ (?: "[^"]*" | '[^']*' | -?\d+(?:\.\d+)?[lLfFdD]? |
@@ -130,6 +155,20 @@ def in_attribute(text, pos):
     if q > tag and ' ' in before[q + 1:pos]:
         return False
     return True
+
+
+def in_js_literal(text, pos):
+    """True if the expression at pos sits inside a JS string literal.
+
+    Counts the unescaped quotes between the start of the line and pos: an odd
+    count means one is still open, so the expression is being written into a
+    string, not as an expression of its own. A scriptlet on the same line is
+    dropped first - its quotes belong to Java, not to the script.
+    """
+    line_start = text.rfind('\n', 0, pos) + 1
+    prefix = re.sub(r'<%.*?%>', '', text[line_start:pos], flags=re.S)
+    return (len(JS_DQUOTE.findall(prefix)) % 2 == 1 or
+            len(JS_SQUOTE.findall(prefix)) % 2 == 1)
 
 
 def assignments(text):
@@ -227,6 +266,10 @@ def check_page(path, text, expanded, findings, blind):
             expr = em.group('expr').strip()
             if ESCAPER.search(expr):
                 continue
+            # inside a string literal it is the literal's escaping that matters,
+            # and js-literal-unescaped reports that
+            if in_js_literal(inner, em.start()):
+                continue
             state = provenance(expr, assigns)
             if state == 'unknown':
                 blind.add(expr)
@@ -239,6 +282,27 @@ def check_page(path, text, expanded, findings, blind):
     for m in NONCE_ATTR.finditer(body):
         findings.add('csp-nonce-unquoted', path, body, m.start('val'),
                      m.group('val'))
+
+    # js-literal-unescaped
+    for sm in SCRIPT.finditer(body):
+        inner = sm.group('body')
+        base = sm.start('body')
+        for em in JS_EXPR.finditer(inner):
+            expr = em.group('expr').strip()
+            if ESCAPER.search(expr) or JS_NUMBER.match(expr):
+                continue
+            if not in_js_literal(inner, em.start()):
+                continue
+            state = provenance(expr, assigns)
+            if state == 'unknown':
+                blind.add(expr)
+                continue
+            # A number or a value that is neither a catalog string nor request
+            # data carries no quote, backslash or newline to escape.
+            if state == 'server' and not TRANSLATION.search(expr):
+                continue
+            findings.add('js-literal-unescaped', path, body, base + em.start(),
+                         expr)
 
 
 # The CSRF rules, over pages short enough to read in one line each. A rule that
@@ -281,15 +345,37 @@ PAGE_FIXTURES = (
      ('csp-nonce-unquoted',)),
     ('a quoted CSP nonce is what the rule asks for and is not a finding',
      '<script nonce="<%=cspNonce%>">var x = 1;</script>', ()),
+    ('a catalog string written into a JS string literal is a finding',
+     '<script nonce="x">const msg = "<%=intl._t("Delete?")%>";</script>',
+     ('js-literal-unescaped',)),
+    ('so is one written into a single-quoted literal',
+     "<script nonce='x'>const msg = '<%=intl._t(\"Delete?\")%>';</script>",
+     ('js-literal-unescaped',)),
+    ('request data in a JS string literal is the literal rule, not the script one',
+     '<script nonce="x">var h = "<%=request.getParameter("h")%>";</script>',
+     ('js-literal-unescaped',)),
+    ('a JS-escaped catalog string is what the rule asks for',
+     '<script nonce="x">const msg = '
+     '"<%=net.i2p.util.Escapes.jsString(intl._t("Delete?"))%>";</script>', ()),
+    ('a number in a literal carries no quote to escape',
+     '<% int delay = 30; %><script nonce="x">const d = "<%=delay%>";</script>',
+     ()),
+    ('the same value outside a literal is an expression, not a string',
+     '<script nonce="x">document.title = <%=intl._t("Home")%>;</script>', ()),
+    ('a literal with no expression in it is not a finding',
+     '<script nonce="x">const msg = "Delete?";</script>', ()),
     ('a nonce in a form field is a value, not an attribute to quote',
      '<form method=POST action="save"><input type=hidden name=nonce '
      'value="<%=n%>"></form>', ()),
+    ('a script tag whose nonce attribute ends in percent-greater-than still has a body',
+     '<script nonce="<%=cspNonce%>">var msg = "<%=intl._t("Delete?")%>";</script>',
+     ('js-literal-unescaped',)),
 )
 
 
 def selftest():
     """
-    Run the CSRF rules and the CSP-nonce rule over PAGE_FIXTURES.
+    Run the CSRF, CSP-nonce and JS-literal rules over PAGE_FIXTURES.
 
     Each fixture names what the rule owes the reader, so a regex widened to fit one
     page is caught the moment it stops reporting another.

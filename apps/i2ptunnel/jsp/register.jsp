@@ -38,7 +38,7 @@
 <link href="<%=editBean.getTheme()%>../../fonts/OpenSans.css" rel=stylesheet><% } %>
 <link href="<%=editBean.getTheme()%>override.css" rel=stylesheet>
 <style>body{display:none;pointer-events:none}input.default{width:1px;height:1px;visibility:hidden}</style>
-<script nonce="<%=cspNonce%>">const theme = "<%=themeName%>";</script>
+<script nonce="<%=cspNonce%>">const theme = "<%=net.i2p.util.Escapes.jsString(themeName)%>";</script>
 </head>
 <body id=tunnelRegistration>
 <%

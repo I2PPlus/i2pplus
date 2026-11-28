@@ -41,8 +41,8 @@
 <script src="js/delete.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <style>body{display:none;pointer-events:none}input.default{width:1px;height:1px;visibility:hidden}</style>
 <script nonce="<%=cspNonce%>">
-  var deleteMessage = "<%=intl._t("Are you sure you want to delete?")%>";
-  const theme = "<%=themeName%>";
+  var deleteMessage = "<%=net.i2p.util.Escapes.jsString(intl._t("Are you sure you want to delete?"))%>";
+  const theme = "<%=net.i2p.util.Escapes.jsString(themeName)%>";
 </script>
 </head>
 <body id=tunnelEditPage>

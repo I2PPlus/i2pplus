@@ -13,7 +13,7 @@
 <jsp:useBean id="intl" class="i2p.susi.dns.Messages" scope="application"/>
 <%
     boolean overrideCssActive = base.isOverrideCssActive();
-    String theme = base.getTheme().replace("/themes/susidns/", "").replace("/", "");
+    String theme = net.i2p.util.Escapes.jsString(base.getTheme().replace("/themes/susidns/", "").replace("/", ""));
     theme = "\"" + theme + "\"";
 %>
 <!DOCTYPE HTML>
