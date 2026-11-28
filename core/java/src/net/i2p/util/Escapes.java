@@ -55,12 +55,6 @@ public class Escapes {
     /** JS short escape for a carriage return. */
     private static final String JS_CR = "\\r";
 
-    /** JS hex escape for a vertical tab. */
-    private static final String JS_VT = "\\x0b";
-
-    /** JS hex escape for a form feed. */
-    private static final String JS_FF = "\\x0c";
-
     /** JS unicode escape for the line separator U+2028, a line terminator in JS string literals. */
     private static final String JS_LS = "\\u2028";
 
