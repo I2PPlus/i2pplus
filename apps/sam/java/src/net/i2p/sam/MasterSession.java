@@ -18,7 +18,6 @@ import net.i2p.data.DataFormatException;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
 import net.i2p.util.I2PAppThread;
-import net.i2p.util.Log;
 
 /**
  * The primary (mux) session for a SAMv3 client, sharing a single I2P
@@ -265,6 +264,11 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
      * Throws {@link IOException} — the master session does not handle
      * datagram data directly; use a DATAGRAM subsession instead.
      *
+     * @param sender the destination the datagram arrived from, unused
+     * @param data the datagram payload, unused
+     * @param proto I2CP protocol, unused
+     * @param fromPort I2CP from port, unused
+     * @param toPort I2CP to port, unused
      * @throws IOException always, on every call
      */
     public void receiveDatagramBytes(Destination sender, byte[] data, int proto,
@@ -276,6 +280,11 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
      * Throws {@link IOException} — the master session does not handle
      * datagram data directly; use a DATAGRAM subsession instead.
      *
+     * @param sender hash of the destination the datagram arrived from, unused
+     * @param data the datagram payload, unused
+     * @param proto I2CP protocol, unused
+     * @param fromPort I2CP from port, unused
+     * @param toPort I2CP to port, unused
      * @throws IOException always, on every call
      * @since 0.9.72+
      */
