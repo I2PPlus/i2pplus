@@ -312,7 +312,6 @@ public class PersistentDataStore extends TransientDataStore {
 
             if (_keysToRemove.isEmpty()) {return;}
             int toRemove = 0;
-            StringBuilder sb = new StringBuilder();
             for (Iterator<Hash> iter = _keysToRemove.iterator(); iter.hasNext(); ) {
                 Hash key = iter.next();
                 iter.remove();

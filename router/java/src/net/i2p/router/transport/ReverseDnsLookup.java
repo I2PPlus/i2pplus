@@ -729,12 +729,10 @@ public class ReverseDnsLookup {
         // If still over budget after expired-entry cleanup, evict oldest entries
         if (rdnsCache.size() > MAX_RDNS_CACHE_SIZE) {
             int excess = rdnsCache.size() - MAX_RDNS_CACHE_SIZE;
-            long oldestTimestamp = Long.MAX_VALUE;
-            String oldestKey = null;
             // Iterate excess times to find and remove the oldest entries
             for (int i = 0; i < excess; i++) {
-                oldestTimestamp = Long.MAX_VALUE;
-                oldestKey = null;
+                long oldestTimestamp = Long.MAX_VALUE;
+                String oldestKey = null;
                 for (Map.Entry<String, CacheEntry> entry : rdnsCache.entrySet()) {
                     if (entry.getValue().getTimestamp() < oldestTimestamp) {
                         oldestTimestamp = entry.getValue().getTimestamp();

@@ -1387,7 +1387,6 @@ public class TunnelPool {
      */
     TunnelInfo selectTunnelForTest() {
         long now = _context.clock().now();
-        long uptime = _context.router().getUptime();
         boolean avoidZeroHop = !_settings.getAllowZeroHop();
         _tunnelsLock.lock();
         try {

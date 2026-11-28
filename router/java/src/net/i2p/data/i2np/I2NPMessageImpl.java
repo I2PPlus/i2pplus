@@ -261,7 +261,6 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
      * @since 0.9.36 with off param
      */
     public int toByteArray(byte[] buffer, int off) {
-        int start = off;
         try {
             int rv = writeMessageBody(buffer, off + HEADER_LENGTH);
             int payloadLen = rv - (off + HEADER_LENGTH);

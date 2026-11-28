@@ -322,7 +322,6 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                         shouldStore = false;
                         wasNew = false;
                         if (_log.shouldDebug()) {
-                            logged = true;
                             _log.debug("Dropping unsolicited store of banned " + cap +
                                       (isFF ? " Floodfill" : " Router") + " [" +
                                       key.toShortBase64() + "]");
@@ -339,13 +338,11 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                             _banLogger.logBan(key, _riIP, "Invalid Router version (" + v + ")", 24L * 60 * 60 * 1000, ri);
                         }
                         if (ban && _log.shouldWarn()) {
-                            logged = true;
                             _log.warn("Dropping unsolicited NetDbStore of " + cap + (isFF ? " Floodfill" : " Router") +
                                       " [" + key.toShortBase64() + "]" +
                                       " and banning for 24h" +
                                       "\n* Invalid Router version: " + v);
                         } else if (!ban && _log.shouldInfo()) {
-                            logged = true;
                             _log.info("Dropping unsolicited NetDbStore of " + cap + (isFF ? " Floodfill" : " Router") +
                                       " [" + key.toShortBase64() + "]" +
                                       "\n* Invalid Router version: " + v);
@@ -415,7 +412,6 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                                         else if (notFrom) {pdrop *= 10;}
                                         if (pdrop > 0 && (pdrop >= 128 || getContext().random().nextInt(128) < pdrop)) {
                                             if (_log.shouldDebug() && !logged) {
-                                                logged = true;
                                                 int percentage = Math.min(pdrop * 100 / 128, 100);
                                                 _log.debug("Dropping unsolicited store of new " +
                                                           cap + (isFF ? " Floodfill" : " Router") +
@@ -484,7 +480,6 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                                 else if (notFrom) {pdrop *= 10;}
                                 if (pdrop > 0 && (pdrop >= 128 || getContext().random().nextInt(128) < pdrop)) {
                                     if (_log.shouldDebug() && !logged) {
-                                        logged = true;
                                         int percentage = Math.min(pdrop * 100 / 128, 100);
                                         _log.debug("Dropping unsolicited store of new " + cap +
                                                   (isFF ? " Floodfill" : " Router") +
@@ -600,7 +595,6 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                 getContext().statManager().addRateData("netDb.storeHandled", ackEnd-recvEnd);
             } else {
                 if (invalidMessage.contains("published over")) {
-                    dontBlamePeer = true;
                     if (_log.shouldDebug()) {
                         _log.debug("Stale RouterInfo from [" +
                                    _fromHash.toShortBase64() + "] -> " +

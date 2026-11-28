@@ -452,7 +452,6 @@ import net.i2p.util.SystemVersion;
                 rv.add(0, closestHop);
             else
                 rv.add(closestHop);
-            length++;
         }
         if (furthestHop != null) {
             // always OBEP for now, nothing special for IBGW

@@ -844,8 +844,6 @@ public abstract class TransportImpl implements Transport {
             return;
         }
         msg.setTransportQueued(_context.clock().now());
-        int evictedBefore = _sendPool.getEvictedCount();
-        int droppedBefore = _sendPool.getDroppedCount();
         if (!_sendPool.offer(msg)) {
             _context.statManager().addRateData("transport.sendPool.full", 1);
             afterSend(msg, false);

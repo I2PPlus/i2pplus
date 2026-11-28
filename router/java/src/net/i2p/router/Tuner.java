@@ -8093,7 +8093,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 return Math.min(cap, current + growth);
             double transitBps = getAdditionalStat(_context, "tunnel.participating InBps");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
-            double hourlyBps = getAdditionalStatHourly(_context, "tunnel.participating InBps");
             double msgRxQueue = getAdditionalStat(_context, "udp.msgRx.queueSize");
             double queueDepth = getAdditionalStat(_context, "udp.outboundQueueDepth");
             boolean highLoad = !headroom;
@@ -11988,7 +11987,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean handlerBackedUp = !Double.isNaN(handlerQueue) && handlerQueue > 50;
             double lookupTime = getAdditionalStat(_context, "tunnel.nextHopLookupSuccessTime");
             boolean lookupsSlow = !Double.isNaN(lookupTime) && lookupTime > 10000;
-            double tunnelBacklog = getAdditionalStat(_context, "router.tunnelBacklog");
             double banHits = getAdditionalEventCount(_context, "tunnel.buildBanHit");
             double testFails = getAdditionalStat(_context, "tunnel.testFailedTime");
             double buildRejects = getAdditionalEventCount(_context, "tunnel.buildClientReject");

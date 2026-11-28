@@ -2881,7 +2881,6 @@ public class BuildExecutor implements Runnable {
                             }
                             _lastConfigureTime.put(pool, nowCfg);
 
-                            long bef = System.currentTimeMillis();
                             PooledTunnelCreatorConfig cfg = pool.configureNewTunnel(false, batchFirstHops);
                             if (cfg != null) {
                                 if (cfg.getLength() <= 1 && !pool.needFallback()) {

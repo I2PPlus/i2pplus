@@ -590,7 +590,6 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             if (t != null && now - t <= window) {
                 continue; // fresh proof: keep
             }
-            boolean swapped = false;
             while (replacements.hasNext()) {
                 Hash cand = replacements.next();
                 if (!taken.contains(cand)) {
@@ -598,7 +597,6 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
                     taken.remove(h);
                     taken.add(cand);
                     swaps++;
-                    swapped = true;
                     break;
                 }
             }

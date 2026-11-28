@@ -176,7 +176,6 @@ class ExpireLeasesJob extends JobImpl {
      */
     private List<Hash> selectKeysToExpire() {
         RouterContext ctx = getContext();
-        long now = ctx.clock().now();
         boolean isClient = _facade.isClientDb();
         boolean isFFDB = _facade.floodfillEnabled() && !isClient;
         Set<Map.Entry<Hash, DatabaseEntry>> entries =  _facade.getDataStore().getMapEntries();

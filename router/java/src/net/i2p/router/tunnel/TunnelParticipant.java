@@ -356,7 +356,6 @@ class TunnelParticipant {
         _context.messageHistory().wrap("TunnelDataMessage", oldId, "TunnelDataMessage", newId);
         msg.setUniqueId(newId);
         boolean shouldLogInfo = _log.shouldInfo();
-        boolean shouldLogWarn = _log.shouldWarn();
 
         long originalExpiration = msg.getMessageExpiration();
 

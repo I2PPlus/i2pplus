@@ -287,7 +287,6 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
                 if (!rv.isEmpty()) {
                     rv = finalizeSelection(settings, rv, isInbound);
                 }
-                ex = retry;
             }
         } else {
             rv = new ArrayList<>(1);

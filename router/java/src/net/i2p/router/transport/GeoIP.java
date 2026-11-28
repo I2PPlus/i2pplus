@@ -1111,7 +1111,7 @@ public class GeoIP {
         if (allWordScore > bestScore) {best = allWordResult; bestScore = allWordScore;}
         if (wordOrderScore > bestScore) {best = wordOrderResult; bestScore = wordOrderScore;}
         if (combinedScore > bestScore) {best = combinedResult; bestScore = combinedScore;}
-        if (asTradingScore > bestScore) {best = asTradingResult; bestScore = asTradingScore;}
+        if (asTradingScore > bestScore) {best = asTradingResult;}
 
         // Fallback: if any pass detected reversed words, accept even without known-word matches
         if (best.equals(name) && !wordResult.isEmpty()) {return wordResult;}
