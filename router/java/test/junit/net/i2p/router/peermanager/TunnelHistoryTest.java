@@ -200,6 +200,8 @@ public class TunnelHistoryTest {
      * The test counters and their timestamps survive a restart, the way the
      * build counters do, so a peer's record is not rebuilt from nothing every
      * boot.
+     *
+     * @throws Exception on a stream the store or the load cannot use
      */
     @Test
     public void testTestCountersSurviveStoreAndLoad() throws Exception {

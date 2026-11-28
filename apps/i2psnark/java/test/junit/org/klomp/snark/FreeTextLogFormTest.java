@@ -39,7 +39,11 @@ public class FreeTextLogFormTest {
     public FreeTextLogFormTest() {
     }
 
-    /** A 32-byte destination hash, the shortest thing worth naming. */
+    /**
+     * A 32-byte destination hash, the shortest thing worth naming.
+     *
+     * @return the hash, filled with a counting pattern
+     */
     private static Hash hash() {
         byte[] data = new byte[Hash.HASH_LENGTH];
         for (int i = 0; i < data.length; i++) {

@@ -26,9 +26,8 @@ public class AuthFilterPathTest {
      * The eleven URIs the assessment sent at the console: the request target as
      * the client sent it, the path the container hands the filter once it has
      * decoded and resolved it, and the page that path names. A null page means
-     * the path carries a path parameter and is refused outright.
-     *
-     * @return raw URI, decoded path, canonical page
+     * the path carries a path parameter and is refused outright. Each row is
+     * raw URI, decoded path, canonical page.
      */
     private static final String[][] TRAVERSALS = {
         {"/js/../configclients", "/js/../configclients", "/configclients"},

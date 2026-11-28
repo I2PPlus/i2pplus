@@ -59,9 +59,9 @@ public class AddURLPrefillTest {
     }
 
     /**
-     * What a browser's parser makes of an attribute value, for the entities
-     * escapeHTML() emits: &amp;, &quot;, &lt;, &gt;, &apos; and the numeric
-     * backtick.
+     * What a browser's parser makes of an attribute value: turns each entity
+     * escapeHTML() emits back into the character it stands for, the apostrophe
+     * entity and the numeric backtick included.
      *
      * @param escaped the attribute value as written
      * @return the string the form submits back

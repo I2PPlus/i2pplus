@@ -70,7 +70,12 @@ public class UnchokeRankingTest {
         return rv;
     }
 
-    /** The fixture metainfo, rebuilt per call so each test owns its own copy. */
+    /**
+     * The fixture metainfo, rebuilt per call so each test owns its own copy.
+     *
+     * @return the metainfo parsed from the fixture torrent
+     * @throws Throwable on a torrent the parser rejects
+     */
     private static MetaInfo metainfo() throws Throwable {
         return new MetaInfo(new ByteArrayInputStream(torrentBytes(PIECES)));
     }

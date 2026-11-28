@@ -242,6 +242,9 @@ public class TunnelPoolReportSendFailureTest {
     /**
      * A distinct unreachable peer per index — the attribution tally is keyed by
      * Hash, so the instances must not be equal.
+     *
+     * @param i the index, written into the first two bytes of the hash
+     * @return a hash no other index produces
      */
     private static Hash peer(int i) {
         byte[] data = new byte[Hash.HASH_LENGTH];

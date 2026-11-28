@@ -67,7 +67,12 @@ public class SamePassUnchokeTest {
         return rv;
     }
 
-    /** The fixture metainfo, rebuilt per call so callers own their own copy. */
+    /**
+     * The fixture metainfo, rebuilt per call so callers own their own copy.
+     *
+     * @return the metainfo parsed from the fixture torrent
+     * @throws Throwable on a torrent the parser rejects
+     */
     private static MetaInfo metainfo() throws Throwable {
         return new MetaInfo(new ByteArrayInputStream(torrentBytes(PIECES)));
     }

@@ -21,7 +21,11 @@ import org.klomp.snark.bencode.BEValue;
  */
 public class MetaInfoSummaryTest {
 
-    /** A single-file info dictionary as a torrent writer would build it. */
+    /**
+     * A single-file info dictionary as a torrent writer would build it.
+     *
+     * @return the info dict, 930 pieces of a 30 MB file
+     */
     private static Map<String, BEValue> singleFile() {
         Map<String, BEValue> info = new HashMap<>();
         info.put("name", new BEValue("OReillyProgrammingEbooks.tar.gz".getBytes()));
@@ -32,7 +36,12 @@ public class MetaInfoSummaryTest {
         return info;
     }
 
-    /** The message as the call site builds it. */
+    /**
+     * The message as the call site builds it.
+     *
+     * @param info the info dict to summarise
+     * @return the two-line message the formatter emits
+     */
     private static String message(Map<String, BEValue> info) {
         return "Torrent info dictionary built for: " + MetaInfo.dictName(info)
                + "\n* " + MetaInfo.infoSummary(info);

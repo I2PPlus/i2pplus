@@ -77,7 +77,14 @@ public class RouterInfoPeersTest {
         return ri;
     }
 
-    /** Writes and re-reads a router info with the signature verified. */
+    /**
+     * Writes and re-reads a router info with the signature verified.
+     *
+     * @param ri the router info to serialise
+     * @param baos the buffer to write it into, reset first and reused per call
+     * @return the router info read back from that buffer
+     * @throws Exception on a stream the writer or the reader cannot use
+     */
     private static RouterInfo roundTrip(RouterInfo ri, ByteArrayOutputStream baos)
                                        throws Exception {
         baos.reset();

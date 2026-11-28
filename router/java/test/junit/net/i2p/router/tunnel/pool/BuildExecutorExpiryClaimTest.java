@@ -208,6 +208,7 @@ public class BuildExecutorExpiryClaimTest {
     /**
      * Read one of the executor's private building maps.
      *
+     * @param exec the executor whose map is read
      * @param name the field name on BuildExecutor
      * @return the live map, mutable
      * @throws Exception if the field is missing or not accessible

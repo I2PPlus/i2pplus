@@ -41,7 +41,13 @@ public class SnarkLogFormatterTest {
     public SnarkLogFormatterTest() {
     }
 
-    /** A hash whose bytes vary with the seed, so two of them never collide. */
+    /**
+     * A 32-byte destination hash whose bytes vary with the seed, so two of them
+     * never collide.
+     *
+     * @param seed the pattern to build the hash from
+     * @return a 32-byte hash built from the seed
+     */
     private static Hash hash(int seed) {
         byte[] buf = new byte[32];
         for (int i = 0; i < buf.length; i++) {
@@ -50,7 +56,12 @@ public class SnarkLogFormatterTest {
         return new Hash(buf);
     }
 
-    /** A list of n distinct destination hashes. */
+    /**
+     * Destination hashes for a list line, each one distinct.
+     *
+     * @param n how many hashes to build
+     * @return the list, in seed order
+     */
     private static List<Hash> hashes(int n) {
         List<Hash> rv = new ArrayList<>(n);
         for (int i = 0; i < n; i++) {
@@ -471,7 +482,13 @@ public class SnarkLogFormatterTest {
         assertEquals(" * Error: Not reported", SnarkLogFormatter.error(null));
     }
 
-    /** Pieces named by a tally line. */
+    /**
+     * How many pieces a tally line names, counted from the emitted text rather
+     * than the formatter's own count.
+     *
+     * @param line the formatted line
+     * @return the number of <code>Piece </code> mentions in it
+     */
     private static int countPieces(String line) {
         int n = 0;
         for (int i = line.indexOf("Piece "); i >= 0; i = line.indexOf("Piece ", i + 1)) {
@@ -495,7 +512,12 @@ public class SnarkLogFormatterTest {
         return new PeerID(buf, (I2PSnarkUtil) null);
     }
 
-    /** Entries on one list line, each a bracketed identity. */
+    /**
+     * How many bracketed identities one list line carries.
+     *
+     * @param line the formatted line
+     * @return the count of 8-character base32 identities in it
+     */
     private static int countEntries(String line) {
         int n = 0;
         for (int i = 0; i < line.length() - 1; i++) {

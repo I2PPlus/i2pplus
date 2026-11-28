@@ -344,6 +344,12 @@ public class ConnectFailoverDecisionTest {
      * the loop in createI2PSocketWithFailover: size the leg from the share of the
      * budget left, stop when the walk says the leg is not startable, and charge
      * the leg's real cost against the clock.
+     *
+     * @param startMs when the walk begins, on an arbitrary clock
+     * @param deadlineMs when the whole connect attempt ends, same clock
+     * @param legDeathMs how long a leg survives before the walk gives it up
+     * @param tunnelCount how many tunnels the client may try, the walk's cap
+     * @return the number of legs the walk starts before the deadline
      */
     private static int walkLegs(long startMs, long deadlineMs, long legDeathMs,
                                 int tunnelCount) {

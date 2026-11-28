@@ -160,12 +160,20 @@ public class FloodfillNetworkDatabaseFacadeTest {
         assertEquals(4, rv.size());
     }
 
-    /** A RouterInfo entry, enough for the type test the decisions make. */
+    /**
+     * A RouterInfo entry, enough for the type test the decisions make.
+     *
+     * @return an unsigned router info with no peers
+     */
     private static RouterInfo ri() {
         return new RouterInfo();
     }
 
-    /** A LeaseSet2 entry, enough for the type test the decisions make. */
+    /**
+     * A LeaseSet2 entry, enough for the type test the decisions make.
+     *
+     * @return an empty lease set
+     */
     private static LeaseSet2 ls2() {
         return new LeaseSet2();
     }

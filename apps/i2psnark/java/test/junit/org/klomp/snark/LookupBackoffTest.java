@@ -67,7 +67,13 @@ public class LookupBackoffTest {
         FileUtil.rmdir(baseDir, false);
     }
 
-    /** A 20-byte info hash of the given fill byte. */
+    /**
+     * A 20-byte info hash, distinct for each fill byte, so two torrents with
+     * different fills never share a cache entry.
+     *
+     * @param fill the byte to fill the hash with, in the first position only
+     * @return a 20-byte hash with the fill in its first byte and zeros after
+     */
     private static byte[] hash(byte fill) {
         byte[] rv = new byte[20];
         rv[0] = fill;
