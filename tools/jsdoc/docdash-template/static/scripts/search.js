@@ -1,4 +1,10 @@
-
+/**
+ * @module docdash-search
+ * @description Filters the nav as the reader types: matching entries stay, the rest are
+ * hidden, and clearing the box hands the nav back to collapse.js.
+ * @see {@link https://github.com/clenemt/docdash}
+ * @license Apache-2.0 (upstream docdash)
+ */
 const searchAttr = 'data-search-mode';
 function contains(a,m){
     return (a.textContent || "").toUpperCase().indexOf(m) !== -1;

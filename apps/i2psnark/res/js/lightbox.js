@@ -6,6 +6,7 @@
  * Based on jsOnlyLightbox by Felix Hagspiel.
  * @author dr|z3d
  * @see {@link https://github.com/felixhagspiel/jsOnlyLightbox}
+ * @license MIT (upstream jsOnlyLightbox), AGPL3 or later (I2P+ fork)
  */
 
 /**

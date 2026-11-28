@@ -1,3 +1,10 @@
+/**
+ * @module docdash-commonNav
+ * @description Fetches the nav partial publish.js writes and appends it to this page's
+ * nav, then scrolls to the current item, waiting up to 30s for nav.js to arrive first.
+ * @see {@link https://github.com/clenemt/docdash}
+ * @license Apache-2.0 (upstream docdash)
+ */
 if (typeof fetch === 'function') {
   const init = () => {
     if (typeof scrollToNavItem !== 'function') return false

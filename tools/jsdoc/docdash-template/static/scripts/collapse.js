@@ -1,3 +1,11 @@
+/**
+ * @module docdash-collapse
+ * @description Keeps the generated nav short: every submenu starts hidden, a collapsed
+ * section header toggles its own list, and only the branch holding the page just loaded
+ * is opened. Re-runs after a search, which leaves every item visible.
+ * @see {@link https://github.com/clenemt/docdash}
+ * @license Apache-2.0 (upstream docdash)
+ */
 function hideAllButCurrent(){
     //by default all submenut items are hidden
     //but we need to rehide them for search

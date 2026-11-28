@@ -1,3 +1,10 @@
+/**
+ * @module docdash-linenumber
+ * @description Numbers the source-view pages jsdoc generates: each line gets an id of
+ * the form lineN, and the one named by the URL fragment is marked selected.
+ * @see {@link https://github.com/clenemt/docdash}
+ * @license Apache-2.0 (upstream docdash)
+ */
 /*global document */
 (function() {
     const source = document.getElementsByClassName('prettyprint source linenums');

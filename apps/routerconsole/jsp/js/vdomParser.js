@@ -14,6 +14,7 @@
  * evaluated directly in the Node test harness; attaches self.VdomParser.
  *
  * Original license: MIT (c) thednp, https://github.com/thednp/domparser
+ * @license MIT (upstream domparser), AGPL3 or later (I2P+ fork)
  */
 "use strict";
 

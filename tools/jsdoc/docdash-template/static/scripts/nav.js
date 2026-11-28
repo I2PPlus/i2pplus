@@ -1,3 +1,11 @@
+/**
+ * @module docdash-nav
+ * @description Scrolls the shared nav to the entry for the page just loaded. Compares
+ * file names, not whole hrefs: publish.js writes folder-prefixed links while the page's
+ * own URL is only the last segment.
+ * @see {@link https://github.com/clenemt/docdash}
+ * @license Apache-2.0 (upstream docdash)
+ */
 function scrollToNavItem() {
     const path = window.location.href.split('/').pop().replace(/\.html/, '');
     document.querySelectorAll('nav a').forEach(function(link) {

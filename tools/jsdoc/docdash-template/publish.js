@@ -1,3 +1,11 @@
+/**
+ * @module docdash-publish
+ * @description Renders the jsdoc parse data into the docdash page set: the folder
+ * tree, the nav partial, and one page per symbol. The nav links it writes are
+ * folder-prefixed, which is what nav.js and collapse.js have to match against.
+ * @see {@link https://github.com/clenemt/docdash}
+ * @license Apache-2.0 (upstream docdash)
+ */
 /*global env: true */
 'use strict';
 
