@@ -153,8 +153,6 @@ public class ConfigUIHelper {
                 buf.append(CHECKED);
             }
             buf.append("value=\"").append(lang).append("\">");
-            int under = lang.indexOf('_');
-            String slang = (under > 0) ? lang.substring(0, under) : lang;
             buf.append(langs[i][2]);
             String name = langs[i][3];
             if (name != null) {
