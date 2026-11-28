@@ -6,7 +6,6 @@
 
 package org.klomp.snark.bencode;
 
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Map;
 import net.i2p.data.Base64;
