@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import net.i2p.I2PAppContext;
 import net.i2p.util.Log;
-import net.i2p.I2PAppContext;
 
 /**
  * A wrapper for addressbook to allow it to be started as a web application.
