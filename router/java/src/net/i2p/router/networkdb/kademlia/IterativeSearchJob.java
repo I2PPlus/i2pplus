@@ -32,7 +32,6 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelInfo;
 import net.i2p.router.TunnelManagerFacade;
 import net.i2p.router.peermanager.PeerProfile;
-import net.i2p.router.util.MaskedIPSet;
 import net.i2p.router.util.PeerLogFormatter;
 import net.i2p.router.util.RandomIterator;
 import net.i2p.stat.Rate;

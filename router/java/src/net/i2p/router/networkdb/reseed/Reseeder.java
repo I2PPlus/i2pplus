@@ -1,7 +1,6 @@
 package net.i2p.router.networkdb.reseed;
 
 import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,16 +10,11 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.*;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-import net.i2p.I2PAppContext;
 import net.i2p.crypto.SU3File;
-import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterInfo;
@@ -38,7 +32,6 @@ import net.i2p.util.SecureDirectory;
 import net.i2p.util.SecureFileOutputStream;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.Translate;
-import net.i2p.util.VersionComparator;
 
 /**
  * Reseed handler that fetches router infos from configured seed URLs.

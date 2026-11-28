@@ -11,8 +11,6 @@ package net.i2p.router.transport;
  * Tracks the status of outbound messages.
  */
 
-import java.io.IOException;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;

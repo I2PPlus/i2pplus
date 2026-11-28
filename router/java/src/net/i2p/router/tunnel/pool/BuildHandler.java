@@ -46,7 +46,6 @@ import net.i2p.router.networkdb.kademlia.MessageWrapper;
 import net.i2p.router.peermanager.TunnelHistory;
 import net.i2p.router.BanLogger;
 import net.i2p.router.tunnel.HopConfig;
-import net.i2p.router.tunnel.TunnelDispatcher;
 import net.i2p.router.util.CDQEntry;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
